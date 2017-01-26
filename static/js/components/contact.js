@@ -15,7 +15,11 @@ module.exports = (c, state, prev, send) => {
         <div class="call__contact__image"><div class="crop"><img src="${photoURL}"/></div></div>
         <p class="call__contact__type">Call this office:</p>
         <p class="call__contact__name">${c.name} ${repID}</p>
-        <p class="call__contact__phone">${c.phone}</p>
+        <p class="call__contact__phone">
+          <a href="tel:${c.phone}">
+            ${c.phone}
+          </a>
+        </p>
         <p class="call__contact__reason"><strong>Why you're calling this office:</strong> ${reason}</p>
       </div>
 	`;
