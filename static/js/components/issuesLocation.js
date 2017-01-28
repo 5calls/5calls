@@ -12,9 +12,9 @@ module.exports = (state, prev, send) => {
       return html`<p><form onsubmit=${submitAddress}>Enter an address or zip code: <input autofocus="true" name="address" /><button>Go</button></form></p>`
     } else {
       if (state.address != '') {
-        return html`<p>Included reps for ${state.address} • <a href="#" onclick=${unsetLocation}>Change</a></p>`
+        return html`<p><strong>${state.address}</strong> • <a href="#" onclick=${unsetLocation}>Change</a></p>`
       } else if (state.cachedCity != '') {
-        return html`<p>We've included reps for ${state.cachedCity} • <a href="#" onclick=${enterLocation}>Change</a> ${debugText(state.debug)}</p>`
+        return html`<p><strong>${state.cachedCity}</strong> • <a href="#" onclick=${enterLocation}>Change</a> ${debugText(state.debug)}</p>`
       } else {
         return html`<p>Couldn't find your location. <a href="#" onclick=${enterLocation}>Change</a></p>`
       }      
