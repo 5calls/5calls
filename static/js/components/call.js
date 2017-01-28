@@ -10,7 +10,7 @@ module.exports = (state, prev, send) => {
     return html`<section class="call">
       <div class="call_complete">
         <h2 class="call__complete__title">No issue here</h2>
-        <p class="call__complete__text">I couldn't find the issue for this url, it may have expired. Pick one of our current issues on the left side.</p>
+        <p class="call__complete__text">I couldn’t find the issue for this url, it may have expired. Pick one of our current issues on the left side.</p>
       </div>
     </section>`;
   }

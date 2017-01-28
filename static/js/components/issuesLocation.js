@@ -14,10 +14,10 @@ module.exports = (state, prev, send) => {
       if (state.address != '') {
         return html`<p>Included reps for ${state.address} • <a href="#" onclick=${unsetLocation}>Change</a></p>`
       } else if (state.cachedCity != '') {
-        return html`<p>We've included reps for ${state.cachedCity} • <a href="#" onclick=${enterLocation}>Change</a> ${debugText(state.debug)}</p>`
+        return html`<p>We’ve included reps for ${state.cachedCity} • <a href="#" onclick=${enterLocation}>Change</a> ${debugText(state.debug)}</p>`
       } else {
-        return html`<p>Couldn't find your location. <a href="#" onclick=${enterLocation}>Change</a></p>`
-      }      
+        return html`<p>Couldn’t find your location. <a href="#" onclick=${enterLocation}>Change</a></p>`
+      }
     }
   }
 

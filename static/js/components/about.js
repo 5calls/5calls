@@ -14,11 +14,11 @@ module.exports = (state, prev, send) => {
       <li><a href="https://twitter.com/costareports/status/816373917900161024">"Most members tell me blizzard of angry constituent calls were most impt factor in getting the House to sideline the amdt"</a> <span class="about__source">— Robert Costa</span></li>
       </ul>
       <p>We do the research for each issue, determining out which representatives are most influential for which topic, collecting phone numbers for those offices and writing scripts that clearly articulate a progressive position. You just have to call.</p>
-      <p>If there's a current or upcoming topic that isn't covered that should be, please <a href="mailto:make5calls@gmail.com">reach out</a>.</p>
+      <p>If there’s a current or upcoming topic that isn’t covered that should be, please <a href="mailto:make5calls@gmail.com">reach out</a>.</p>
 
       <h3 class="about__subtitle">Calling Tips</h3>
-      <p>Calls should take a minute or less. You'll be speaking to a staffer, so make your point clearly so they can tally your opinion correctly. The provided scripts are useful but you can add your own words.</p>
-      <p>Be respectful. The staffers that pick up the phone aren't looking to challenge you and you should treat them with the same respect you expect from them, regardless of which party they work for.</p>
+      <p>Calls should take a minute or less. You’ll be speaking to a staffer, so make your point clearly so they can tally your opinion correctly. The provided scripts are useful but you can add your own words.</p>
+      <p>Be respectful. The staffers that pick up the phone aren’t looking to challenge you and you should treat them with the same respect you expect from them, regardless of which party they work for.</p>
 
       <h3 class="about__subtitle">Who we are</h3>
       <p>We’re a group of like-minded volunteers who want to make advocacy accessible. We hope 5 Calls will make it effortless for regular people to have a voice when it’s needed most.</p>

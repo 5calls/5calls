@@ -102,8 +102,8 @@ app.model({
           Raven.captureMessage("Location with no city: "+response.loc, { level: 'warning' });
         }
       } catch(e) {
-        Raven.captureMessage("Couldn't parse ipinfo json", { level: 'error' });
-      } 
+        Raven.captureMessage("Couldn’t parse ipinfo json", { level: 'error' });
+      }
     },
     changeActiveIssue: (state, issueId) => {
       return { contactIndex: 0 }
@@ -185,7 +185,7 @@ app.model({
         // console.log("geo fetch time",geoFetchTime, cachePlusHours)
         now = new Date()
 
-        // only fetch geo if it's 24 hours old
+        // only fetch geo if it’s 24 hours old
         if (state.geolocation == '' || now.valueOf() > cachePlusHours.valueOf()) {
           http('https://ipinfo.io/json', (err, res, body) => {
             if (res.statusCode == 200) {
@@ -216,7 +216,7 @@ app.model({
     callComplete: (state, data, send, done) => {
       const body = queryString.stringify({ location: state.zip, result: data.result, contactid: data.contactid, issueid: data.issueid })
       http.post(appURL+'/report', { body: body, headers: {"Content-Type": "application/x-www-form-urlencoded"} }, (err, res, body) => {
-        // don't really care about the result
+        // don’t really care about the result
       })
       send('incrementContact', data, done);
     },
