@@ -5,10 +5,7 @@
 body {
   color: $color-text;
   font-family: $font-sans;
-  background-color: $blue-darker;
-  background-image: url(/img/5calls_bgd.jpg);
-  background-size: cover;
-  background-position: 50% 50%;
+  background: $blue-darker url(/img/5calls_bgd.jpg) center/cover no-repeat fixed;
   min-height: 100vh;
 }
 

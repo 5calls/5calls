@@ -81,7 +81,13 @@
     </div>
     <footer>
       <div class="tinyletter__form">
-        <form action="https://tinyletter.com/five_calls" method="post" target="popupwindow" onsubmit="window.open('https://tinyletter.com/five_calls', 'popupwindow', 'scrollbars=yes,width=800,height=600');return true"><label for="tlemail">Get email alerts once a week:</label><input type="text" style="width:140px" name="email" id="tlemail" /><input type="hidden" value="1" name="embed"/><input type="submit" value="Subscribe" /></form>
+        <form action="https://tinyletter.com/five_calls" method="post" target="popupwindow" onsubmit="window.open('https://tinyletter.com/five_calls', 'popupwindow', 'scrollbars=yes,width=800,height=600');return true">
+          <label for="tlemail">Get email alerts once a week:</label>
+          <input type="hidden" value="1" name="embed"/>
+          <span class="text-nowrap">
+            <input type="text" style="width:140px" name="email" id="tlemail" /><input type="submit" value="Subscribe" />
+          </span>
+        </form>
       </div>
       <a href="https://github.com/5calls/5calls"><i class="fa fa-github" aria-hidden="true"></i> Open Source</a>&nbsp;&nbsp;and&nbsp;&nbsp;<a href="https://twitter.com/make5calls"><i class="fa fa-twitter" aria-hidden="true"></i> Updates on Twitter</a>
     </footer>

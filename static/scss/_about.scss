@@ -1,6 +1,10 @@
 .about {
   background-color: fade-out(#fff, 0.3);
-  padding: 2rem;
+  padding: 1.5rem;
+
+  @media (min-width: $bp-medium) {
+    padding: 2rem;
+  }
 
   &__title {
   	margin: 0;

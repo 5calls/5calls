@@ -14,13 +14,17 @@ $font-sans: 'Roboto Condensed', sans-serif;
 
 // SIZES
 
-$bp-large:  85rem;
-$bp-medium: 45rem;
-$bp-small:  28rem;
+$bp-xlarge:  85rem;
+$bp-large:   65rem;
+$bp-medium:  45rem;
+$bp-small:   28rem;
 
 // mixin to reduce amount of code for responsive design tweaks
 @mixin bp($point) {
 
+  @if $point == xlarge {
+    @media only screen and (min-width: $bp-xlarge) { @content; }
+  }
   @if $point == large {
     @media only screen and (min-width: $bp-large) { @content; }
   }
