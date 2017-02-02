@@ -27,7 +27,7 @@ module.exports = (state, prev, send) => {
 
   function contactArea() {
     if (currentContact != null) {
-      return contact(currentContact, state, prev, send)    
+      return contact(currentContact, state, prev, send)
     } else {
       return noContact(state, prev, send)
     }
@@ -46,7 +46,7 @@ module.exports = (state, prev, send) => {
 
     ${outcomes(state, prev, send)}
 
-    ${promote(state, prev, send)}
+    ${promote(state, prev, send, issue)}
 
   </section>
   `;

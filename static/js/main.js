@@ -211,7 +211,7 @@ app.model({
       } else {
         scrollIntoView(document.querySelector('#content'));
         store.add("org.5calls.completed", issue.id, () => {})
-        send('location:set', "/#done", done)
+        send('location:set', "/#done/" + issue.id, done)
         send('setContactIndex', { newIndex: 0, issueid: issue.id }, done)
       }
     },
@@ -241,8 +241,10 @@ app.router({ default: '/404' }, [
   ['/issue', require('./pages/mainView.js'),
     [':issueid', require('./pages/mainView.js')]
   ],
+  ['/done', require('./pages/doneView.js'),
+    [':issueid', require('./pages/doneView.js')]
+  ],
   ['/about', require('./pages/aboutView.js')],
-  ['/done', require('./pages/doneView.js')],
 ]);
 
 const tree = app.start();
