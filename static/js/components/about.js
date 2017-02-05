@@ -20,7 +20,7 @@ module.exports = (state, prev, send) => {
       <p>Are we not covering an issue we should be?  <a href="mailto:make5calls@gmail.com">Please reach out.</a></p>
 
       <h3 class="about__subtitle">Calling Tips</h3>
-      <p>Calls should take less than a minute. You’ll be speaking to a staffer, so make your point clearly so they can tally your opinion correctly. The provided scripts are useful but you can add your own words.</p>
+      <p>Calls should take less than a minute. You’ll be speaking to a staffer, so make your point clearly so they can tally your opinion correctly. The provided scripts are useful but you can add your own words. We've broken the calls up by issue rather than representative because staffers have told us that they'll only tally your position on one issue per call.</p>
       <p>Be respectful. The staffers that pick up the phone aren’t looking to challenge you and you should treat them with the same respect you expect from them, regardless of which party they work for.</p>
 
       <h3 class="about__subtitle">Who made 5 Calls?</h3>
