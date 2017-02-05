@@ -45,7 +45,9 @@
     }
 
     &__show-field-offices {
-      font-size: $font-small;
+      font-size: $font-large;
+      cursor: pointer;
+      margin-top: 5px;
     }
 
     &__field-office-list {
