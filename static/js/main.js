@@ -93,7 +93,8 @@ app.model({
     contactIndex: 0,
     completedIssues: completedIssues,
 
-    showFieldOfficeNumbers: false,
+    currentIssueID: null,
+    currentPhoneNumber: null,
 
     debug: debug,
   },
@@ -176,8 +177,8 @@ app.model({
     home: (state, data) => {
       return { activeIssue: false, getInfo: false }
     },
-    toggleFieldOfficeNumbers: (state, data) => ({ showFieldOfficeNumbers: !state.showFieldOfficeNumbers }),
-    hideFieldOfficeNumbers: (state, data) => ({ showFieldOfficeNumbers: false }),
+    setCurrentIssueID: (state, { currentIssueID }) => ({ currentIssueID }),
+    setCurrentPhoneNumber: (state, { currentPhoneNumber }) => ({ currentPhoneNumber }),
   },
 
   effects: {
@@ -306,31 +307,37 @@ app.model({
       }
     },
     callComplete: (state, data, send, done) => {
-      send('hideFieldOfficeNumbers', data, done);
-
       if (data.result == 'unavailable') {
-        ga('send', 'event', 'call_result', 'unavailable', 'unavailable');        
+        ga('send', 'event', 'call_result', 'unavailable', 'unavailable');
       } else {
         ga('send', 'event', 'call_result', 'success', data.result);
       }
 
-      const body = queryString.stringify({ location: state.zip, result: data.result, contactid: data.contactid, issueid: data.issueid })
+      const body = queryString.stringify({
+        location: state.zip,
+        result: data.result,
+        contactid: data.contactid,
+        issueid: state.currentIssueID,
+        contactPhone: state.currentPhoneNumber,
+      })
       http.post(appURL+'/report', { body: body, headers: {"Content-Type": "application/x-www-form-urlencoded"} }, (err, res, body) => {
         // don’t really care about the result
       })
+
       send('incrementContact', data, done);
+      send('setCurrentPhoneNumber', { currentPhoneNumber: null }, done);
     },
     skipCall: (state, data, send, done) => {
-      send('hideFieldOfficeNumbers', data, done);
-      
       ga('send', 'event', 'call_result', 'skip', 'skip');
 
       send('incrementContact', data, done);
+      send('setCurrentPhoneNumber', { currentPhoneNumber: null }, done);
     },
     activateIssue: (state, data, send, done) => {
-      send('hideFieldOfficeNumbers', data, done);
-
       ga('send', 'event', 'issue_flow', 'select', 'select');
+
+      send('setCurrentIssueID', { currentIssueID: data.id }, done);
+      send('setCurrentPhoneNumber', { currentPhoneNumber: null }, done);
 
       scrollIntoView(document.querySelector('#content'));
       location.hash = "issue/" + data.id;
