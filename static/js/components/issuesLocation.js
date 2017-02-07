@@ -15,7 +15,9 @@ module.exports = (state, prev, send) => {
     else if (state.askingLocation) {
       return html``;
     } else {
-      if (state.address != '') {
+      if (state.invalidAddress) {
+        return html`<p><a href="#" onclick=${enterLocation}>That address is invalid, please try again</a></p>`
+      } else if (state.address != '') {
         return html`<p>for <a href="#" onclick=${enterLocation}>${state.address}</a></p>`
       } else if (state.cachedCity != '') {
         return html`<p>for <a href="#" onclick=${enterLocation}> ${state.cachedCity}</a> ${debugText(state.debug)}</p>`
@@ -43,6 +45,10 @@ module.exports = (state, prev, send) => {
 
   function enterLocation(e) {
     e.preventDefault();
+    // Clear previously invalid address to reinforce entering a new one
+    if (state.invalidAddress) {
+      document.getElementById("address").value = "";
+    }
     send('enterLocation');
   }
 

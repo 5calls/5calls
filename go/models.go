@@ -2,6 +2,7 @@ package main
 
 type IssueResponse struct {
 	SplitDistrict      bool    `json:"splitDistrict"`
+	InvalidAddress     bool    `json:"invalidAddress"`
 	NormalizedLocation string  `json:"normalizedLocation"`
 	Issues             []Issue `json:"issues"`
 }

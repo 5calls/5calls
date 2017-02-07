@@ -13,12 +13,12 @@ module.exports = (c, state, prev, send) => {
   let fieldOffices
   if (!!~c.field_offices) {
     fieldOffices = html`
-      <p class="call__contact__show-field-offices"><a onclick=${() => {send('toggleFieldOfficeNumbers')}}>D.C. office busy? Call a local office</a></p>
+      <p class="call__contact__show-field-offices">Busy line? <a onclick=${() => {send('toggleFieldOfficeNumbers')}}>Call a local office</a></p>
     `
     if (state.showFieldOfficeNumbers) {
       fieldOffices = html`
         <div>
-          <h3 class="call__contact__field-offices__header">Field offices for ${c.name}:</h3>
+          <h3 class="call__contact__field-offices__header">Local office numbers:</h3>
           <ul class="call__contact__field-office-list">
             ${c.field_offices.map(office => html`
               <li><a href="tel:+1${office.phone.replace(/-/g, '')}">${office.phone}</a> - ${office.city}, ${c.state}</li>

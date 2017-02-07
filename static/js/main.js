@@ -102,7 +102,7 @@ app.model({
     receiveIssues: (state, data) => {
       response = JSON.parse(data)
       issues = response.issues //.filter((v) => { return v.contacts.length > 0 });
-      return { issues: issues, splitDistrict: response.splitDistrict }
+      return { issues: issues, splitDistrict: response.splitDistrict, invalidAddress: response.invalidAddress }
     },
     receiveTotals: (state, data) => {
       totals = JSON.parse(data);
@@ -307,7 +307,12 @@ app.model({
     },
     callComplete: (state, data, send, done) => {
       send('hideFieldOfficeNumbers', data, done);
-      ga('send', 'called', data.result);
+
+      if (data.result == 'unavailable') {
+        ga('send', 'event', 'call_result', 'unavailable', 'unavailable');        
+      } else {
+        ga('send', 'event', 'call_result', 'success', data.result);
+      }
 
       const body = queryString.stringify({ location: state.zip, result: data.result, contactid: data.contactid, issueid: data.issueid })
       http.post(appURL+'/report', { body: body, headers: {"Content-Type": "application/x-www-form-urlencoded"} }, (err, res, body) => {
@@ -317,11 +322,16 @@ app.model({
     },
     skipCall: (state, data, send, done) => {
       send('hideFieldOfficeNumbers', data, done);
-      ga('send', 'called', 'skip');
+      
+      ga('send', 'event', 'call_result', 'skip', 'skip');
+
       send('incrementContact', data, done);
     },
     activateIssue: (state, data, send, done) => {
       send('hideFieldOfficeNumbers', data, done);
+
+      ga('send', 'event', 'issue_flow', 'select', 'select');
+
       scrollIntoView(document.querySelector('#content'));
       location.hash = "issue/" + data.id;
     }

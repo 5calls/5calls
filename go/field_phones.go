@@ -86,7 +86,11 @@ var senateFieldOffices = map[string][]FieldOffice{
 		FieldOffice{Phone: "213-894-5000", City: "Los Angeles"},
 		FieldOffice{Phone: "916-448-2787", City: "Sacramento"},
 		FieldOffice{Phone: "619-239-3884", City: "San Diego"},
-		FieldOffice{Phone: "213-894-5000", City: "San Francisco"},
+		FieldOffice{Phone: "415-355-9041", City: "San Francisco"},
+	},
+	// Pelosi, Nancy (California)
+	"2022254965": []FieldOffice{
+		FieldOffice{Phone: "415-556-4862", City: "San Francisco"},
 	},
 	// Bennet, Michael (Colorado)
 	"2022245852": []FieldOffice{

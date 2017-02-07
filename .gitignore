@@ -91,6 +91,7 @@ ENV/
 # Node modules and other frontend settings
 node_modules/
 app/static/
+static/html/VERSION
 
 .DS_Store
 
