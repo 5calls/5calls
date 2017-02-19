@@ -38,6 +38,7 @@
   "dependencies": {
     "choo": "^4.1.0",
     "connect-logger": "0.0.1",
+    "gender-detection": "0.0.5",
     "gulp-util": "^3.0.8",
     "http-server": "^0.9.0",
     "lodash": "^4.17.2",

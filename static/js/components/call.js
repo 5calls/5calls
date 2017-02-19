@@ -42,7 +42,7 @@ module.exports = (state, prev, send) => {
 
     ${contactArea()}
 
-    ${script(state, prev, send)}
+    ${script(currentContact, state, prev, send)}
 
     ${outcomes(state, prev, send)}
 
