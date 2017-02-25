@@ -6,6 +6,7 @@ const logger = require('loglevel');
 const queryString = require('query-string');
 const store = require('./utils/localstorage.js');
 const scrollIntoView = require('scroll-into-view');
+const onHashChange = require('sheet-router/hash');
 
 const app = choo();
 const appURL = 'https://5calls.org';
@@ -370,15 +371,27 @@ app.model({
       ga('send', 'event', 'issue_flow', 'select', 'select');
 
       scrollIntoView(document.querySelector('#content'));
-
-      // Use Choo's internal model to control Window.location. Fixes issue #161
-      // For more information, see: https://github.com/yoshuawuyts/choo/blob/f84ec43fa58508cc20fe537d752a14901339f0cd/README.md#router
-      // this strips the query string which breaks hashes, so temp workaround
-      send('location:set', "/#issue/" + data.id, done)
-      // location = location.origin + "#issue/" + data.id;
-      // location.hash = "issue/" + data.id;
     }
   },
+  subscriptions: {
+    // Workaround for bugs in choo and IE when using hash routes.
+    // Problem: Choo's internal handlers for updating the internal location model
+    // do not work properly with hash routes on IE, due to two separate bugs:
+    //  1. popstate event is not fired when only the hash changes (https://developer.microsoft.com/en-us/microsoft-edge/platform/issues/3740423/)
+    //     meaning the internal history handler doesn't fire.
+    //  2. the href handling logic has a bug (https://github.com/yoshuawuyts/sheet-router/issues/82)
+    //     so the internal href handler also doesn't fire
+    // The result of these two issues is that when a user clicks on an issue
+    // in our app on IE, the URL in the browser changes, but the app doesn't
+    // update to render the new view.
+    // Solution: We explicitly esnure choo's internal location model is correct
+    // by forcing it to update any time the hash in the route changes.
+    handleHashChange: function (send, done) {
+      onHashChange(function navigate (href) {
+        send('location:touch', href, done);
+      });
+    }
+  }
 });
 
 app.router({ default: '/' }, [

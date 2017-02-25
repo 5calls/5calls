@@ -22,11 +22,7 @@ module.exports = (issue, state, prev, send) => {
   }
 
   function issueIsCompleted(state, issue) {
-    if (state.completedIssues.indexOf(issue.id) != -1) {
-      return true;
-    } else {
-      return false;
-    }
+    return state.completedIssues.indexOf(issue.id) != -1;
   }
 
   let statusText = "";
