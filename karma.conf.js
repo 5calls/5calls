@@ -12,6 +12,7 @@ module.exports = function (config) {
 
     // list of files / patterns to load in the browser
     files: [
+      'static/test/setupUnitTests.js',
       'static/js/**/*_test.js'
     ],
 

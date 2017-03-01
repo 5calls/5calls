@@ -2,6 +2,7 @@ const choo = require('choo');
 const html = require('choo/html');
 const http = require('xhr');
 const find = require('lodash/find');
+const logger = require('loglevel');
 const queryString = require('query-string');
 const store = require('./utils/localstorage.js');
 const scrollIntoView = require('./utils/scrollIntoView.js');
@@ -13,8 +14,9 @@ const appURL = 'https://5calls.org';
 // use localStorage directly to set this value *before* bootstrapping the app.
 const debug = (localStorage['org.5calls.debug'] === 'true');
 
-if (!debug) {
-  console.debug = () => {};
+if (debug) {
+  // we don't need loglevel's built-in persistence; we do it ourselves above ^
+  logger.setLevel(logger.levels.TRACE, false);
 }
 
 // get the stored zip location
@@ -29,7 +31,7 @@ store.getAll('org.5calls.location', (location) => {
 cachedGeo = '';
 store.getAll('org.5calls.geolocation', (geo) => {
   if (geo.length > 0) {
-    console.debug("geo get", geo[0]);
+    logger.debug("geo get", geo[0]);
     cachedGeo = geo[0]
   }
 });
@@ -40,7 +42,7 @@ let cachedFetchingLocation = (cachedGeo === '') ? true : false;
 cachedAllowBrowserGeo = true;
 store.getAll('org.5calls.allow_geolocation', (allowGeo) => {
   if (allowGeo.length > 0) {
-    console.debug("allowGeo get", allowGeo[0]);
+    logger.debug("allowGeo get", allowGeo[0]);
     cachedAllowBrowserGeo = allowGeo[0]
   }
 });
@@ -51,7 +53,7 @@ let cachedLocationFetchType = (cachedAllowBrowserGeo) ? 'browserGeolocation' : '
 cachedGeoTime = '';
 store.getAll('org.5calls.geolocation_time', (geo) => {
   if (geo.length > 0) {
-    console.debug("geo time get", geo[0]);
+    logger.debug("geo time get", geo[0]);
     cachedGeoTime = geo[0]
   }
 });
@@ -59,7 +61,7 @@ store.getAll('org.5calls.geolocation_time', (geo) => {
 cachedCity = '';
 store.getAll('org.5calls.geolocation_city', (city) => {
   if (city.length > 0) {
-    console.debug("city get", city[0]);
+    logger.debug("city get", city[0]);
     cachedCity = city[0]
   }
 });
@@ -164,7 +166,6 @@ app.model({
       return { allowBrowserGeo: data }
     },
     enterLocation: (state, data) => {
-      scrollIntoView(document.querySelector('#address'));
       return { askingLocation: true }
     },
     setLocationFetchType: (state, data) => {
@@ -199,7 +200,7 @@ app.model({
       }
 
       const issueURL = appURL+'/issues/'+address
-      // console.debug("fetching url",issueURL);
+      logger.debug("fetching url",issueURL);
       http(issueURL, (err, res, body) => {
         send('setCachedCity', body, done)
         send('receiveIssues', body, done)
@@ -271,11 +272,11 @@ app.model({
             send('allowBrowserGeolocation', true, done);
             send('setBrowserGeolocation', geo, done);
           } else {
-            console.warn("Error: bad browser location results");
+            logger.warn("Error: bad browser location results");
             send('fetchLocationBy', 'ipAddress', done);
           }
         } else {
-          console.warn("Error: bad browser location results");
+          logger.warn("Error: bad browser location results");
           send('fetchLocationBy', 'ipAddress', done);
         }
       }
@@ -284,7 +285,7 @@ app.model({
 
         // We need the most current state, so we need another effect call.
         send('handleBrowserLocationError', error, done)
-        console.warn("Error with browser location (code: " + error.code + ")");
+        logger.warn("Error with browser location (code: " + error.code + ")");
       }
       let handleSlowResponse = function() {
         send('fetchLocationBy', 'ipAddress', done);
@@ -296,6 +297,16 @@ app.model({
       // provide a response when they do not permit browser location.
       // After 5s, try IP-based location, but let browser-based continue.
       let slowResponseTimeout = window.setTimeout(handleSlowResponse, 5000);
+    },
+    // If appropriate, focus and select the text for the location input element
+    // in the issuesLocation component.
+    focusLocation: (state, data, send, done) => {
+      let addressElement = document.querySelector('#address')
+      scrollIntoView(addressElement);
+      addressElement.focus();
+      // Clear previous address to show placeholder text to
+      // reinforce entering a new one.
+      addressElement.value = "";
     },
     startup: (state, data, send, done) => {
       // sometimes we trigger this again when reloading mainView, check for issues
@@ -370,7 +381,7 @@ app.model({
   },
 });
 
-app.router({ default: '/404' }, [
+app.router({ default: '/' }, [
   ['/', require('./pages/mainView.js')],
   ['/issue', require('./pages/mainView.js'),
     [':issueid', require('./pages/mainView.js')]

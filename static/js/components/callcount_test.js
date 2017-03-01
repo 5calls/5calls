@@ -14,7 +14,6 @@ describe('callcount component', () => {
     const totals = '123';
     let state = {totalCalls: totals};
     let result = callcount(state);
-    // console.log('Result: ', result.childNodes);
     expect(result.textContent).to.contain(totals);
     expect(result.textContent).to.not.contain(',');
   });
@@ -23,10 +22,21 @@ describe('callcount component', () => {
     const totals = '0';
     let state = {totalCalls: totals};
     let result = callcount(state);
-    // console.log('Result: ', result.childNodes);
-    // expect(result.childNodes[1].data).to.contain('123');
     expect(result.textContent).to.contain(totals);
     expect(result.textContent).to.not.contain(',');
   });
 
+  it('should properly handle undefined state', () => {
+    let state = {totalCalls: undefined};
+    let result = callcount(state);
+    expect(result.textContent).to.contain('0');
+    expect(result.textContent).not.to.not.contain('NaN');
+  });
+
+  it('should properly handle empty state', () => {
+    let state = {totalCalls: ""};
+    let result = callcount(state);
+    expect(result.textContent).to.contain('0');
+    expect(result.textContent).not.to.not.contain('NaN');
+  });
 });

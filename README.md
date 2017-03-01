@@ -53,67 +53,19 @@ localStorage['org.5calls.debug'] = 'false' // turn off debug mode
 
 ### Application Server
 
-If you need to make any changes to the back end code, you'll need to set up
-your environment for Go development -- see [How to Write Go
-Code](https://golang.org/doc/code.html) for more information on this.
-
-With your environment set up, you should first start by installing
-dependencies. In the `go/` path, this will install these dependencies for you:
-
-`make deps`
-
-To build the application code to a binary file:
-
-`make`
-
-To build and run the application code:
-
-`make run`
-
-Or to connect to an alternative Airtable database, such as the development
-database:
-
-`make run AIRTABLE_DATABASE=appZ8ITCpRa5YCCN7`
-
-The following environment variables can be set on the application, both with
-`make run` and by calling the binary directly:
-
-* **AIRTABLE_API_KEY** *(required)* Airtable API key
-* **CIVIC_API_KEY** *(required)* Google Civic Information API key
-
-You will need to manually create an [Airtable][airtable] API key, a [Google
-Civic Information API][civic-api] API key, and access to the development
-Airtable database.
-
-##### Set Up [Airtable][airtable]
-
-* Make an account on [Airtable][airtable]
-* Go to the [Account](https://airtable.com/account) page and generate an API key.
-* [Request an invitation][airtable-invite] to the dev Airtable database for this
-  project
-
-##### Get a Google Civic API Key
-
-Follow the instructions [here][civic-api] to get an API key for the Google Civic Information API.
-
-##### Point to Local Back End
-
-Edit the `appUrl` variable in `static/js/main.js` to be `http://localhost:8090` to point the front end at your local back end.
-
-[airtable]: https://airtable.com
-[airtable-invite]: https://airtable.com/invite/l?inviteId=invo1EhjdkkkdjcxX&inviteToken=94e26833a508997c003b8908eebe4bb1
-[civic-api]: https://developers.google.com/civic-information/docs/using_api
+If you'd like to help us work on the backend code as well (written in Go), please reach out to join our Slack!
 
 ## Unit tests
 
 #### JavaScript 
-JavaScript unit tests are written using ```Mocha``` and ```Chai``` and run in the ```Karma``` test runner.
+
+JavaScript unit tests are written using ```Mocha``` and ```Chai``` and run in the ```Karma``` test runner. You must have the Google Chrome browser installed to run them.
 
 Run the unit tests with:
 
 ```npm test```
 
-Run the unit tests in watch mode with:
+If you are working on JavaScript code, you can make the tests automatically re-run whenever you change a relevant file with:
 
 ```npm run test:watch```
 

@@ -19,7 +19,6 @@ describe('contact component', () => {
       showFieldOfficeNumbers: false
     };
     let result = contact(contactData, state);
-    // console.log("RESULT", result);
     expect(result.querySelector('.call__contact__name').textContent).to.contain(contactData.name);
   });
 
@@ -80,5 +79,28 @@ describe('contact component', () => {
     let content = result.querySelectorAll('ul.call__contact__field-office-list li')[0].textContent;
     expect(content).to.contain(field_offices[0].phone);
     expect(content).to.contain(field_offices[0].city);
+    expect(content).to.contain(contactData.state);
+  });
+
+  it('should display field office data without city if present', () => {
+    let field_offices = [
+      {phone: '212-123-1234', city: ''}
+    ];
+    let contactData = {
+      name: 'Big Whig',
+      state: 'PZ',
+      phone: '202-123-1234',
+      party: '',
+      photoURL: '',
+      reason: '',
+      field_offices: field_offices
+    };
+    let state = {
+      showFieldOfficeNumbers: true
+    };
+    let result = contact(contactData, state);
+    let content = result.querySelectorAll('ul.call__contact__field-office-list li')[0].textContent;
+    expect(content).to.contain(field_offices[0].phone);
+    expect(content).to.not.contain(contactData.state);
   });
 });

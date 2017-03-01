@@ -112,29 +112,74 @@ gulp.task('extra', function() {
     .pipe(gulp.dest(DEST.html));
 });
 
-gulp.task('test', function(done) {
-  const karmaArguments = ['start'];
-  if (!process.argv.includes('--watch')) {
-    karmaArguments.push('--single-run');
-  }
+function runKarmaTests ({singleRun, configFile} = {}) {
+  return new Promise((resolve, reject) => {
+    const karmaArguments = ['start'];
 
-  // Karma has a nice public API, but has issues where it can hang when trying to shut down after completing tests, so
-  // run it as a separate process instead. See:
-  // https://github.com/karma-runner/karma/issues/1693
-  // https://github.com/karma-runner/karma/issues/1035
-  const karma = spawn('./node_modules/.bin/karma', karmaArguments, {
-    cwd: process.cwd(),
-    stdio: 'inherit'
-  });
-
-  karma.on('close', code => {
-    if (code) {
-      done(new util.PluginError('Karma', `JS unit tests failed (code ${code})`));
-      return
+    if (configFile) {
+      karmaArguments.push(configFile);
     }
-    done();
+
+    if (singleRun) {
+      karmaArguments.push('--single-run');
+    }
+
+    // Karma has a nice public API, but has issues where it can hang when
+    // trying to shut down after completing tests, so run it as a separate
+    // process instead. See:
+    // https://github.com/karma-runner/karma/issues/1693
+    // https://github.com/karma-runner/karma/issues/1035
+    const karma = spawn('./node_modules/.bin/karma', karmaArguments, {
+      cwd: __dirname,
+      stdio: 'inherit'
+    });
+
+    karma.on('close', code => {
+      if (code) {
+        reject(new util.PluginError('Karma', `JS unit tests failed (code ${code})`));
+        return;
+      }
+      resolve();
+    });
   });
+}
+
+gulp.task('test:js-unit', function() {
+  return runKarmaTests({singleRun: true});
 });
+
+gulp.task('test:watch', function() {
+  return runKarmaTests({singleRun: false});
+});
+
+// Designed for running tests in continuous integration. The main difference
+// here is that browser tests are run across a gamut of browsers/platforms via
+// Sauce Labs instead of just a few locally.
+gulp.task('test:ci', ['eslint'], function() {
+  return runKarmaTests({configFile: 'karma.ci.conf.js'});
+});
+
+gulp.task('eslint', function() {
+  const eslint = require('eslint');
+  const linter = new eslint.CLIEngine();
+  const report = linter.executeOnFiles(['./static']);
+  
+  // customize messages to be a little more helpful/friendly
+  report.results.forEach(result => {
+    result.messages.forEach(message => {
+      if (message.ruleId === 'no-console') {
+        message.message = 'Please use the `loglevel` module for logging instead of the browser `console` object';
+      }
+    });
+  });
+
+  process.stdout.write(linter.getFormatter()(report.results));
+  if (report.errorCount) {
+    throw new util.PluginError('ESLint', 'Found problems with JS coding style.');
+  }
+});
+
+gulp.task('test', ['eslint', 'test:js-unit']);
 
 gulp.task('default', ['html', 'html:watch', 'html:serve', 'sass', 'sass:watch', 'copy-images', 'copy-images:watch', 'scripts', 'scripts:watch', 'extra']);
 gulp.task('deploy', ['html', 'sass', 'build-scripts', 'extra', 'copy-images']);
