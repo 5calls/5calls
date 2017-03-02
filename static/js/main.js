@@ -75,6 +75,21 @@ store.getAll('org.5calls.completed', (completed) => {
   completedIssues = completed == null ? [] : completed;
 });
 
+// get stored user stats
+localStats = {};
+store.getAll('org.5calls.userStats', (stats) => {
+  if (stats.length > 0) {
+    localStats = stats[0];
+  } else {
+    localStats = {
+      all: [],
+      contacted: 0,
+      vm: 0,
+      unavailable: 0,
+    }
+  }
+});
+
 app.model({
   state: {
     // remote data
@@ -90,6 +105,9 @@ app.model({
     geoCacheTime: cachedGeoTime,
     allowBrowserGeo: cachedAllowBrowserGeo,
     cachedCity: cachedCity,
+
+    // local user stats
+    userStats: localStats,
 
     // view state
     // getInfo: false,
@@ -139,6 +157,17 @@ app.model({
         return { contactIndices: contactIndices, completedIssues: state.completedIssues.concat(data.issueid) }
       }
     },
+    setUserStats: (state, data) => {
+      stats = state.userStats;
+      stats['all'].push({
+        contactid: data.contactid,
+        issueid: data.issueid,
+        result: data.result   // not sure if necessary
+      });
+      stats[data.result] = stats[data.result] + 1;
+      store.replace("org.5calls.userStats", 0, stats, () => {});
+      return { userStats: stats }
+    },
     setAddress: (state, address) => {
       Raven.setExtraContext({ address: address })
       store.replace("org.5calls.location", 0, address, () => {});
@@ -182,6 +211,16 @@ app.model({
     resetCompletedIssues: (state, data) => {
       store.remove("org.5calls.completed", () => {});
       return { completedIssues: [] }
+    },
+    resetUserStats: (state, data) => {
+      store.remove("org.5calls.userStats", () => {});
+      defaultStats = {
+        all: [],
+        contacted: 0,
+        vm: 0,
+        unavailable: 0,
+      }
+      return { userStats: defaultStats }
     },
     home: (state, data) => {
       return { activeIssue: false, getInfo: false }
@@ -350,6 +389,8 @@ app.model({
       } else {
         ga('send', 'event', 'call_result', 'success', data.result);
       }
+
+      send('setUserStats', data, done);
 
       const body = queryString.stringify({ location: state.zip, result: data.result, contactid: data.contactid, issueid: data.issueid })
       http.post(appURL+'/report', { body: body, headers: {"Content-Type": "application/x-www-form-urlencoded"} }, (err, res, body) => {

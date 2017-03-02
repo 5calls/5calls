@@ -10,6 +10,7 @@ module.exports = (state, prev, send) => {
 
   function resetCompletedIssues() {
     send('resetCompletedIssues');
+    send('resetUserStats');
   }
 
   return html`
