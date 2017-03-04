@@ -51,7 +51,7 @@ describe('done component', () => {
       let location = {params: {issueId: 88}};
       let state = {totalCalls, location, userStats};
       let result = done(state);
-      expect(result.textContent).to.contain('Your impact is '+userCalls+' calls!');
+      expect(result.textContent).to.contain('Your impact is '+userCalls+' call!');
     });
   });
 });
