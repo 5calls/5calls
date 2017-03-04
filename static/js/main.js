@@ -384,7 +384,7 @@ app.model({
     // The result of these two issues is that when a user clicks on an issue
     // in our app on IE, the URL in the browser changes, but the app doesn't
     // update to render the new view.
-    // Solution: We explicitly esnure choo's internal location model is correct
+    // Solution: We explicitly ensure choo's internal location model is correct
     // by forcing it to update any time the hash in the route changes.
     handleHashChange: function (send, done) {
       onHashChange(function navigate (href) {
