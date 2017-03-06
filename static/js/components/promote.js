@@ -2,7 +2,7 @@ const html = require('choo/html');
 
 module.exports = (state, prev, send, issue) => {
   if (issue) {
-    const url = encodeURIComponent('http://5calls.org/#issue/' + issue.id + '?utm_campaign=twshare');
+    const url = encodeURIComponent('http://5calls.org/issue/' + issue.id + '?utm_campaign=twshare');
     const tweet = encodeURIComponent('I just called my rep to ' + issue.name.substring(0, 72) +
     ' — you should too:');
     return html`
