@@ -76,18 +76,14 @@ store.getAll('org.5calls.completed', (completed) => {
 });
 
 // get stored user stats
-localStats = {};
+let localStats = defaultStats = {
+  all: [],
+  contacted: 0,
+  vm: 0,
+  unavailable: 0,
+};
 store.getAll('org.5calls.userStats', (stats) => {
-  if (stats.length > 0) {
-    localStats = stats[0];
-  } else {
-    localStats = {
-      all: [],
-      contacted: 0,
-      vm: 0,
-      unavailable: 0,
-    }
-  }
+  localStats = stats[0];
 });
 
 app.model({
@@ -214,12 +210,6 @@ app.model({
     },
     resetUserStats: (state, data) => {
       store.remove("org.5calls.userStats", () => {});
-      defaultStats = {
-        all: [],
-        contacted: 0,
-        vm: 0,
-        unavailable: 0,
-      }
       return { userStats: defaultStats }
     },
     home: (state, data) => {

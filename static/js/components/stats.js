@@ -1,7 +1,7 @@
 const html = require('choo/html');
 
 module.exports = (state, prev, send) => {
-  const userCalls = (state.userStats) ? state.userStats.all.length : 0;
+  const userCalls = state.userStats.all.length;
 
   if (userCalls > 0) {
     return html`
