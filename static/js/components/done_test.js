@@ -41,12 +41,12 @@ describe('done component', () => {
 
     it('should display user calls count', () => {
       let totalCalls = 123;
-      let userStats = {all: []}
-      userStats['all'].push({
+      let all = [{
         contactid: 123,
         issueid: 456,
         result: 'contacted'
-      });
+      }];
+      let userStats = {all: all}
       let userCalls = userStats.all.length;
       let location = {params: {issueId: 88}};
       let state = {totalCalls, location, userStats};

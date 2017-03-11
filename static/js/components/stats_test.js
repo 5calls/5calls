@@ -4,27 +4,39 @@ const chai = require('chai');
 const expect = chai.expect;
 
 describe('stats component', () => {
-  it('should display stats when total calls greater than 0', () => {
-    let userStats = {all: []}
-    userStats['all'].push({
+  it('should display singular stats', () => {
+    let all = [{
       contactid: 123,
       issueid: 456,
-      result: 'contacted'   // not sure if necessary
-    });
+      result: 'contacted'
+    }];
+    let userStats = {all: all}
+    let userCalls = userStats.all.length;
     let state = {userStats};
     let result = stats(state);
-    expect(result).to.be.defined;
+    expect(result.textContent).to.contain('Your impact is '+userCalls+' call!');
+  });
+
+  it('should display pluralized stats', () => {
+   let all = [{
+      contactid: 123,
+      issueid: 456,
+      result: 'contacted'
+    },{
+      contactid: 345,
+      issueid: 678,
+      result: 'vm'
+    }];
+    let userStats = {all: all}
+    let userCalls = userStats.all.length;
+    let state = {userStats};
+    let result = stats(state);
+    expect(result.textContent).to.contain('Your impact is '+userCalls+' calls!');
   });
 
   it('should NOT display stats when total calls equals 0', () => {
     let userStats = {all: []}
     let state = {userStats};
-    let result = stats(state);
-    expect(result).to.be.undefined;
-  });
-
-  it('should NOT display stats when undefined', () => {
-    let state = {};
     let result = stats(state);
     expect(result).to.be.undefined;
   });
