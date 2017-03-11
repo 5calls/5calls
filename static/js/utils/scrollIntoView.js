@@ -1,6 +1,5 @@
-
-const raf = require('raf').polyfill();
-const smoothscroll = require('smoothscroll-polyfill').polyfill();
+require('raf').polyfill();
+require('smoothscroll-polyfill').polyfill();
 
 // Uses window scroll instead of element.scrollIntoView
 function scrollIntoView (element) {
