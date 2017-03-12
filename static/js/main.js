@@ -83,7 +83,9 @@ let localStats = defaultStats = {
   unavailable: 0,
 };
 store.getAll('org.5calls.userStats', (stats) => {
-  localStats = stats[0];
+  if (stats.length > 0) {
+    localStats = stats[0];
+  }
 });
 
 app.model({
