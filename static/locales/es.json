@@ -1,0 +1,118 @@
+{
+    "common": {
+      "reset": "reiniciar",
+      "go": "Vaya",
+      "5Calls": "$t(common.callWithCount, {'count': 5})",
+      "done": "Terminado",
+      "call": "llamada",
+      "call_plural": "llamadas",
+      "callWithCount": "{{count}} llamada",
+      "callWithCount_plural": "{{count}} llamadas",
+      "person": "persona",
+      "person_plural": "gente",
+      "personWithCount": "{{count}} persona",
+      "personWithCount_plural": "{{count}} gente"
+    },
+    "about": {
+      "title": "Alrededor de 5 Calls",
+      "whyCallingWorks": {
+        "title": "Por qué la llamada funciona",
+        "justificationForCalling": "",
+        "justificationArticlesListHeader": "No lo tome de nosotros:",
+        "article1":"<a href='https://www.nytimes.com/2016/11/22/us/politics/heres-why-you-should-call-not-email-your-legislators.html'>'Here’s Why You Should Call, Not Email, Your Legislators'</a> <span class='about__source'>NY Times</span>",
+        "article2":"<a href='http://www.vox.com/policy-and-politics/2016/11/15/13641920/trump-resist-congress'>'Don’t just write to your representatives. Call them — and go to town halls.'</a> <span class='about__source'>Vox</span>",
+        "article3":"<a href='https://www.washingtonpost.com/powerpost/a-day-of-chaos-at-the-capitol-as-house-republicans-back-down-on-ethics-changes/2017/01/03/50e392ac-d1e6-11e6-9cb0-54ab630851e8_story.html?utm_term=.86c8d3a06832'>'I can tell you the calls we’ve gotten in my district office and here in Washington surprised me, meaning the numbers of calls.'</a> <span class='about__source'> Washington Post</span>",
+        "article4":"<a href='https://twitter.com/costareports/status/816373917900161024'>'Most members tell me blizzard of angry constituent calls were most impt factor in getting the House to sideline the amdt'</a> <span class='about__source'>Robert Costa</span>",
+        "weDoTheResearch": "5 Calls hace la investigación para cada tema, determinando qué representantes son los más influyentes para qué tema, recopilando números de teléfono para esas oficinas y escribiendo guiones que claramente articulan una posición progresiva. Sólo tienes que llamar.",
+        "sendYourIssues": "¿No estamos cubriendo un tema que debemos ser?<a href='mailto:{{contactEmail}}'>Por favor contáctenos.</a>"
+      },
+      "callingTips": {
+        "title": "Consejos para llamadas",
+        "callTechnique": "Las llamadas deben durar menos de un minuto. Estará hablando con un miembro del personal, así que haga su punto claramente para que puedan contar su opinión correctamente. Los scripts proporcionados son útiles pero puedes agregar tus propias palabras.",
+        "callEtiquette": "Se respetuoso. Los empleados que recogen el teléfono no están buscando desafiarlos y deben tratarlos con el mismo respeto que esperan de ellos, independientemente de la partido en la que trabajen."
+      },
+      "whoIs5Calls": {
+        "title": "¿Quién hizo 5 llamadas?",
+        "whyWeWorkOnIt": "Somos un grupo de voluntarios de ideas afines que quieren hacer accesible la incidencia. Esperamos que 5 llamadas hará que sea fácil para las personas regulares a tener una voz cuando más se necesita.",
+        "broughtToYouBy": "5 llamadas es traído a usted por",
+        "andMoreSupporters": " y más partidarios."
+      },
+      "joinUs": {
+        "title": "Únete a nosotros",
+        "contactInvite": "Este proyecto es <a href='https://github.com/5calls'>Fuente Abierta</a> y realizado por voluntarios. Si quieres unirte a nosotros para desarrollar herramientas útiles para los ciudadanos, ponte en contacto con <a href='https://twitter.com/make5calls'> Twitter </a> o <a href = 'mailto: { {ContactEmail} '> correo electrónico </a>."
+      }
+    },    
+    "callCount": {
+      "callCountPhrase": "Juntos hemos hecho {{formattedCallsTotal}} $t(common.call,{'count': {{totalCalls}}})"
+    },
+    "contact": {
+      "localOfficeNumbers": "Números de oficinas locales:",
+      "busyLine": "Linea ocupada",
+      "busyLineGuidance": "Haga clic aquí para ver los números de oficinas locales",
+      "callThisOffice": "Llame a esta oficina:",
+      "whyYouAreCallingThisOffice": "La razón por la que llamas a esta oficina:"
+    },
+    "callComplete": {
+      "title":"¡Buen trabajo!",
+      "pickAnotherIssue": "Escoja otro tema para seguir llamando, o difundir la palabra compartiendo su trabajo con amigos:",
+      "learnWhyCallingIsGreat":"<a href='#about'> Aprenda por qué llamar a </a> representantes es la manera más efectiva de hacer que su voz sea escuchada."
+    },
+    "hypothesis": {
+      "title": "Haga que su voz sea escuchada",
+      "p1": "Convierta su participación pasiva en resistencia activa. Facebook le gusta y Twitter retweets no puede crear el cambio que desea ver. Llamar a su Gobierno en el teléfono puede.",
+      "p2": "Pase 5 minutos, haga 5 llamadas.",
+      "p3": "Llamar es la forma más efectiva de influir en su representante. Lea más sobre <a href='#about'> por qué la llamada funciona.",
+      "featuresTitle": "$t(common.5Calls):",
+      "feature1": "Proporciona números de teléfono y secuencias de comandos para llamar es rápido y fácil",
+      "feature2": "Utiliza su ubicación para encontrar a sus representantes locales para que sus llamadas tengan más impacto",
+      "getApp": "Obtenga la aplicación de 5 llamadas:"
+    },
+    "issues":{
+      "whatsImportantToYou": "¿Qué es importante para usted?",
+      "issuesListItemSummary": "$t(common.callWithCount,{'count': {{callsToMake}}}) para hacer"
+    },
+    "location": {
+      "gettingYourLocation": "Cómo obtener su ubicación",
+      "invalidAddress": "Esa dirección no es válida. Vuelve a intentarlo.",
+      "chooseALocation": "Elija una ubicación",
+      "enterAnAddressOrZipCode": "Ingrese una dirección o código postal"
+    },
+    "call": {
+      "title": "No hay llamadas para hacer",
+      "reason": "Este problema ya no es relevante, o la URL que usaste para llegar aquí estaba equivocada. Si has hecho clic en un enlace de este sitio para llegar aquí, <a href='mailto:{{contactEmail}}'> por favor díganos </a> para que podamos arreglarlo!",
+      "nextStep":"A continuación, elija un tema diferente de la lista para realizar llamadas."
+    },
+    "noContact":{
+      "oneOfTwoDistricts":"La ubicación que usted proporcionó podría estar en uno de los dos distritos del Congreso.",
+      "enterYourLocation":"<a id='lnkEnterAddress'> Ingrese su dirección </a> para identificar a su representante en la Cámara.",
+      "setYourLocation":"<a id='lnkSetYourLocation'> Establezca su ubicación </a> para encontrar a sus representantes"
+    },
+    "outcomes":{
+      "enterYourCallResult":"Ingrese el resultado de su llamada para obtener la siguiente llamada:",
+      "unavailable":"Indisponible",
+      "voicemail":"Dejé un buzón de voz",
+      "madeContact":"Contacto hecho",
+      "skip":"Omitir",
+      "contactsLeft": "{{contactsRemaining}} mas $t(common.person, {'count': {{contactsRemaining}}}) para llamar a este problema."
+    },
+    "script": {
+      "yourScript": "Su guión:"
+    },
+    "footer": {
+      "emailLabel": "Recibe alertas por email una vez por semana",
+      "subscribe": "Subscribir",
+      "twitter": "Actualizaciones en Twitter",
+      "ipGeolocation": "Geolocalización IP por ipinfo.io",
+      "about": "Acerca de",
+      "privacy": "Privada",
+      "faq": "Preguntas más frecuentes",
+      "contact": "Contacto",
+      "openSource":  "Fuente Abierta"
+    }, 
+    "promote": {
+      "iJustCalled": "Acabo de llamar a mi representante para ",
+      "youShouldToo": " -- tu también deberías:",
+      "tweetThisIssue": "Tweet esta cuestión",
+      "shareThisIssue": "Comparte esta cuestión"
+    }
+}

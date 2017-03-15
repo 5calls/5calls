@@ -55,7 +55,6 @@
     <header class="logo__header" role="banner"></header>
 
     <div id="root" class="layout">
-
       <aside id="nav" role="contentinfo" class="layout__side">
         <div class="issues">
           <header class="issues__header" role="banner">
@@ -69,7 +68,6 @@
           </ul>
         </div>
       </aside>
-
       <main id="content" role="main" class="layout__main">
         <div class="hypothesis">
           <header class="hypothesis__header">
@@ -94,34 +92,34 @@
     <footer>
       <div class="tinyletter__form">
         <form action="https://my.sendinblue.com/users/subscribe/js_id/2p22o/id/1" method="get" target="popupwindow" onsubmit="window.open('https://my.sendinblue.com/users/subscribe/js_id/2p22o/id/1', 'popupwindow', 'scrollbars=yes,width=800,height=600');return true">
-          <label for="email">Get email alerts once a week</label>
+          <label for="email" id="footer-emailLabel">Get email alerts once a week</label>
           <span class="emailform">
             <input type="text" style="width:140px" name="email" id="email" />
-            <input type="submit" value="Subscribe" />
+            <input type="submit" value="Subscribe" id="footer-btnSubscribe" />
           </span>
         </form>
       </div>
       <div class="colophon">
         <a href="https://github.com/5calls/5calls">
-          <i class="fa fa-github" aria-hidden="true"></i> Open Source
+          <i class="fa fa-github" aria-hidden="true"></i> <span id="footer-openSource">openSource<span>
         </a>
         <a href="https://twitter.com/make5calls">
-          <i class="fa fa-twitter" aria-hidden="true"></i> Updates on Twitter
+          <i class="fa fa-twitter" aria-hidden="true"></i> <span id="footer-twitter">Updates on Twitter<span>
         </a>
         <a href="https://5calls.org/privacy.html" data-no-routing>
-          <i class="fa fa-shield" aria-hidden="true"></i> Privacy
+          <i class="fa fa-shield" aria-hidden="true"></i> <span id="foote-privacy">Privacy<span>
         </a>
         <a href="mailto:make5calls@gmail.com">
-          <i class="fa fa-envelope" aria-hidden="true"></i> Contact
+          <i class="fa fa-envelope" aria-hidden="true"></i> <span id="footer-contact">Contact<span>
         </a>
         <a href="#about">
-          <i class="fa fa-heart" aria-hidden="true"></i> About
+          <i class="fa fa-heart" aria-hidden="true"></i> <span id="footer-about">About<span>
         </a>
         <a href="https://5calls.zendesk.com/hc/en-us/sections/115000760947-FAQ">
-          <i class="fa fa-question-circle" aria-hidden="true"></i> FAQ
+          <i class="fa fa-question-circle" aria-hidden="true"></i> <span id="footer-faq">FAQ<span>
         </a>
         <br />
-        <a href="http://ipinfo.io">IP geolocation by ipinfo.io</a>
+        <a href="http://ipinfo.io"><span id="footer-ipGeolocation">IP geolocation by ipinfo.io<span></a>
       </div>
     </footer>
 
@@ -139,6 +137,18 @@
       ga('create', 'UA-90915119-1', 'auto');
       ga('send', 'pageview');
 
+    </script>
+    <script>
+      function translateFooter(i18n){
+        keys = ['openSource', 'twitter', 'privacy', 'contact', 'about', 'faq','ipGeolocation', 'emailLabel', 'btnSubscribe'];
+        keys.map((k) => {
+          let el = document.getElementById(`footer-${k}`);
+          if (el){
+            let val = i18n.t(`footer.${k}`);
+            k == 'btnSubscribe' ? el.val = val : el.innerText = val;
+          }
+        });
+      }
     </script>
   </body>
 </html>

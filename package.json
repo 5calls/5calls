@@ -9,7 +9,7 @@
     "test": "gulp test",
     "test:watch": "gulp test:watch",
     "test:e2e": "gulp test:e2e",
-    "start": "gulp"
+    "test:windows": "gulp test:windows"
   },
   "repository": {
     "type": "git",
@@ -48,6 +48,8 @@
     "connect-logger": "0.0.1",
     "gulp-util": "^3.0.8",
     "http-server": "^0.9.0",
+    "i18next": "^7.1.1",
+    "i18next-xhr-backend": "^1.3.0",
     "lodash": "^4.17.2",
     "loglevel": "^1.4.1",
     "query-string": "^4.2.3",

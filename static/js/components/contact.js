@@ -1,4 +1,6 @@
 const html = require('choo/html');
+const t = require('../utils/translation');
+
 const find = require('lodash/find');
 const logger = require('loglevel');
 
@@ -16,12 +18,12 @@ module.exports = (c, state, prev, send) => {
   let fieldOffices
   if (c.field_offices) {
     fieldOffices = html`
-      <p class="call__contact__show-field-offices">Busy line? <a onclick=${() => {send('toggleFieldOfficeNumbers')}}>Click here to see local office numbers</a></p>
+      <p class="call__contact__show-field-offices">${t.getText('contact.busyLine')}  <a onclick=${() => {send('toggleFieldOfficeNumbers')}}>${t.getText('contact.busyLineGuidance')}</a></p>
     `
     if (state.showFieldOfficeNumbers) {
       fieldOffices = html`
         <div>
-          <h3 class="call__contact__field-offices__header">Local office numbers:</h3>
+          <h3 class="call__contact__field-offices__header">${t.getText('contact.localOfficeNumbers')}</h3>
           <ul class="call__contact__field-office-list">
             ${c.field_offices.map(office => html`
               <li><a href="tel:+1${office.phone.replace(/-/g, '')}">${office.phone}</a> ${cityFormat(office,c)}</li>
@@ -43,13 +45,13 @@ module.exports = (c, state, prev, send) => {
   return html`
       <div class="call__contact" id="contact">
         <div class="call__contact__image"><img alt="" src="${photoURL}"/></div>
-        <h3 class="call__contact__type">Call this office:</h3>
+        <h3 class="call__contact__type">${t.getText('contact.callThisOffice')}</h3>
         <p class="call__contact__name">${c.name} ${repID}</p>
         <p class="call__contact__phone">
           <a href="tel:+1${c.phone}">+1 ${c.phone}</a>
         </p>
         ${fieldOffices}
-        <h3 class="call__contact__reason__header">Why you’re calling this office:</h3>
+        <h3 class="call__contact__reason__header">${t.getText('contact.whyYouAreCallingThisOffice')}</h3>
         <p class="call__contact__reason">${c.reason}</p>
       </div>
   `;

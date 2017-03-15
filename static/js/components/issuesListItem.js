@@ -1,4 +1,5 @@
 const html = require('choo/html');
+const t = require('../utils/translation');
 
 module.exports = (issue, state, prev, send) => {
   function classString(state, baseAddition) {
@@ -31,7 +32,7 @@ module.exports = (issue, state, prev, send) => {
 
   let statusText = "";
   if(issueIsCompleted(state, issue)) {
-    statusText = "Done";
+    statusText = t.getText("common.done");
   }
 
   return html`
@@ -39,7 +40,7 @@ module.exports = (issue, state, prev, send) => {
       <a aria-controls="content" class="${classString(state, '')}" href="#issue/${issue.id}">
         <span aria-live="polite" class="${classString(state, '__status')}"><span class="visually-hidden">${statusText}</span></span>
         <span class="${classString(state, '__title')}">${issue.name}</span>
-        <span class="${classString(state, '__summary')}">${issue.contacts.length} call${ issue.contacts.length > 1 ? "s" : "" } to make</span>
+        <span class="${classString(state, '__summary')}">${t.getText('issues.issuesListItemSummary', {callsToMake: issue.contacts.length})} </span>
       </a>
     </li>
   `;

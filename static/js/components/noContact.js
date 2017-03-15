@@ -1,7 +1,19 @@
 const html = require('choo/html');
+const t = require('../utils/translation');
+
 const find = require('lodash/find');
 
 module.exports = (state, prev, send) => {
+  function initializeFragment(e) {
+    keys = ['lnkEnterAddress', 'lnkSetYourLocation'];
+    keys.map((k) => {
+      let el = document.getElementById(`${k}`);
+      if (el) {
+        el.addEventListener("click", (e)=>enterLocation(e), false);
+      }
+    });
+  }
+
   function enterLocation(e) {
     e.preventDefault();
     send('enterLocation');
@@ -9,17 +21,17 @@ module.exports = (state, prev, send) => {
 
   function noContactsMessage(state) {
     if (state.splitDistrict && (state.address || state.cachedCity)) {
-      return html`<div>
-                    <p>The location you provided could be in one of two congressional districts.</p>
-                    <p><a onclick=${(e) => enterLocation(e)}>Enter your address</a> to identify your representative in the House.</p>
+      return html`<div onload=${(e) => initializeFragment(e)}>
+                    <p>${t.getText("noContact.oneOfTwoDistricts")}</p>
+                    <p>${t.getText("noContact.enterYourLocation")}</p>
                   </div>`
     }
     else {
-      return html`<h2><a onclick=${(e) => enterLocation(e)}>Set your location</a> to find your representatives</h2>`
+      return html`<h2 onload=${(e) => initializeFragment(e)}>${t.getText("noContact.setYourLocation")}</h2>`
     }
   }
 
-	return html`
+  return html`
     <div class="call__nocontact">
 		  ${noContactsMessage(state)}
 	  </div>`

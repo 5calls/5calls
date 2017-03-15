@@ -1,4 +1,6 @@
 const html = require('choo/html');
+const t = require('../utils/translation');
+
 const find = require('lodash/find');
 const promote = require('./promote.js');
 const callcount = require('./callcount.js');
@@ -11,13 +13,11 @@ module.exports = (state, prev, send) => {
     <main role="main" class="layout__main" onload=${(e) => send('startup')}>
     <section class="call">
       <div class="call_complete">
-        <h2 class="call__title">Great work!</h2>
-        <p class="call__text">
-          Pick another issue to keep calling, or spread the word by sharing your work with friends:
-        </p>
+        <h2 class="call__title">${t.getText('callComplete.title')}</h2>
+        <p class="call__text">${t.getText('callComplete.pickAnotherIssue')}</p>
         ${promote(state, prev, send)}
 
-        <p class="call__text"> <a href="#about">Learn why calling</a> representatives is the most effective way of making your voice heard.</p>
+        <p class="call__text"> ${t.getText('callComplete.learnWhyCallingIsGreat')}</p>
 
         ${callcount(state, prev, send)}
 

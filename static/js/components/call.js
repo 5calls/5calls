@@ -1,4 +1,7 @@
 const html = require('choo/html');
+const t = require('../utils/translation');
+const constants = require('../constants');
+
 const find = require('lodash/find');
 const contact = require('./contact.js');
 const noContact = require('./noContact.js');
@@ -15,13 +18,9 @@ module.exports = (state, prev, send) => {
       send('oldcall')
     }}>
       <div class="call_complete">
-        <h2 class="call__title">No calls to make</h2>
-        <p class="call__text">
-          This issue is no longer relevant, or the URL you used to get here was wrong. If you clicked a link on this site to get here, <a href="mailto:make5calls@gmail.com">please tell us</a> so we can fix it!
-        </p>
-        <p class="call__text">
-          Next choose a different issue from the list to make calls about.
-        </p>
+        <h2 class="call__title">${t.getText('call.title')}</h2>
+        <p class="call__text">${t.getText('call.reason', { contactEmail: constants.contact.email})}</p>
+        <p class="call__text">${t.getText('call.nextStep')}</p>
       </div>
     </section>`;
   }

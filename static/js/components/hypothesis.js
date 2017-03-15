@@ -1,4 +1,6 @@
 const html = require('choo/html');
+const t = require('../utils/translation');
+
 const callcount = require('./callcount.js');
 const promote = require('./promote.js');
 
@@ -7,26 +9,23 @@ module.exports = (state, prev, send) => {
   return html`
     <div class="hypothesis" onload=${(e) => send('getTotals')}>
       <header class="hypothesis__header">
-        <h2 class="hypothesis__title">Make your voice heard</h2>
-        <p>Turn your passive participation into active resistance. Facebook likes and Twitter retweets can’t create the change you want to see. Calling your Government on the phone can.</p>
-
-        <p><strong>Spend 5 minutes, make 5 calls.</strong></p>
+        <h2 class="hypothesis__title">${t.getText('hypothesis.title')}</h2>
+        <p>${t.getText('hypothesis.p1')}</p>
+        <p><strong>${t.getText('hypothesis.p2')}</strong></p>
 
         ${promote(state, prev, send)}
       </header>
 
       <div class="hypothesis__text">
-        <p>Calling is the most effective way to influence your representative. Read more about <a href="#about">why calling works.</a>
-        </p>
-
-        <h3 class="hypothesis__subtitle">5 Calls:</h3>
+        <p>${t.getText('hypothesis.p3')}</p>
+        <h3 class="hypothesis__subtitle">${t.getText('hypothesis.featuresTitle')}</h3>
 
         <ul class="hypothesis__list">
-        <li>provides phone numbers and scripts so calling is quick and easy</li>
-        <li>uses your location to find your local representatives so your calls have more impact</li>
+        <li>${t.getText('hypothesis.feature1')}</li>
+        <li>${t.getText('hypothesis.feature2')}</li>
         </ul>
 
-        <h3 class="hypothesis__subtitle">Get the 5 Calls app:</h3>
+        <h3 class="hypothesis__subtitle">${t.getText('hypothesis.getApp')}</h3>
 
         <ul class="hypothesis__apps">
         <li><a href="https://itunes.apple.com/us/app/5-calls/id1202558609?mt=8"><img class="ios" src="/img/app-store.svg" alt="5 Calls on the App Store" /></a></li>

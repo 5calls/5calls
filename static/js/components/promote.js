@@ -1,4 +1,5 @@
 const html = require('choo/html');
+const t = require('../utils/translation');
 const find = require('lodash/find');
 
 module.exports = (state, prev, send) => {
@@ -7,9 +8,9 @@ module.exports = (state, prev, send) => {
   // if no issue is selected, use these default parameters
   let url = encodeURIComponent("https://5calls.org")
   let additionalTwitterComps = "&via=make5calls"
-  let tweet = encodeURIComponent("Spend 5 minutes. Make 5 calls. Make your voice heard.")
-  let twitterTitle = "Share on Twitter"
-  let facebookTitle = "Share on Facebook"
+  let tweet = encodeURIComponent(t.getText("promote.motto", null, true))
+  let twitterTitle = t.getText("promote.shareOnTwitter", null, true)
+  let facebookTitle = t.getText("promote.shareOnTwitter", null, true)
 
   const issue = find(state.issues, ['id', state.location.params.issueid]);
 
@@ -18,10 +19,9 @@ module.exports = (state, prev, send) => {
     url = encodeURIComponent('http://5calls.org/#issue/' + issue.id)
     // the additional "via @make5calls" text that the via param introduces doesn't fit with issue titles, remove it
     additionalComps = ""
-    tweet = encodeURIComponent('I just called my rep to ' + issue.name.substring(0, 72) +
-    ' — you should too:')
-    twitterTitle = "Tweet this issue"
-    facebookTitle = "Share this issue"
+    tweet = encodeURIComponent(t.getText("promote.iJustCalled", null, true) + issue.name.substring(0, 72) + t.getText("promote.youShouldToo", null , true))
+    twitterTitle = t.getText("promote.tweetThisIssue", null , true)
+    facebookTitle = t.getText("promote.shareThisIssue", null , true)
   }
 
   // is this new window behavior the best? Nope, but it matches the default behavior in both share widgets

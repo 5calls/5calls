@@ -1,17 +1,24 @@
 const html = require('choo/html');
+const t = require('../utils/translation');
+const constants = require('../constants');
 
 module.exports = (state, prev, send) => {
   return html`
   <h2 class="callcount" onload=${(e) => send('getTotals')}>
-    Together we’ve made ${callCount(state)} calls
+      ${t.getText("callCount.callCountPhrase", {formattedCallsTotal: callCount(state), totalCalls: callCountAsNumber(state)})}
   </h2>
   `;
 
-  function callCount(state) {
+  function callCountAsNumber(state){
     let calls = Number(state.totalCalls);
     // Handle undefined input.
     // Number(undefined) is NaN, while Number("") is 0
-    calls = isNaN(calls) ? 0 : calls;
+    return isNaN(calls) ? 0 : calls;    
+  }
+
+
+  function callCount(state) {
+    let calls = callCountAsNumber(state);
     // Number.toLocaleString() doesn't work on Safari 9 (see https://github.com/5calls/5calls/issues/197)
     if (window.Intl && typeof Intl.NumberFormat == 'function') {
       return calls.toLocaleString();

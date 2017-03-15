@@ -6,6 +6,10 @@ const find = require('lodash/find');
 const logger = require('loglevel');
 const queryString = require('query-string');
 const store = require('./utils/localstorage.js');
+const i18n = require('i18next');
+const XHR = require('i18next-xhr-backend');
+const constants = require('./constants');
+const t = require('./utils/translation');
 const scrollIntoView = require('./utils/scrollIntoView.js');
 
 const app = choo();
@@ -429,6 +433,27 @@ app.router({ default: '/' }, [
   ['/issues', require('./pages/issuesView.js')],
 ]);
 
-const tree = app.start();
-const rootNode = document.getElementById('root');
-document.body.replaceChild(tree, rootNode);
+let startApp = () => {
+  const tree = app.start();
+  const rootNode = document.getElementById('root');
+  document.body.replaceChild(tree, rootNode);
+}
+
+// get the user's locale
+let locale = t.getLocaleFromBrowserLanguage(navigator.language || navigator.userLanguage);
+
+// need to get the localization resource file before bootstrapping the app's rendering process
+i18n.use(XHR)
+    .init({
+    //'debug': true,
+    'lng': locale,
+    'backend': {
+      'loadPath': 'locales/{{lng}}.json'
+    },
+    'fallbackLng' : constants.localization.fallbackLocale
+}, (t) => {
+  startApp();
+  translateFooter(i18n);
+});
+
+

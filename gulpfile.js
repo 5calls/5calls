@@ -21,14 +21,16 @@ var SRC = {
   scss:    './static/scss',
   img:     './static/img',
   js:      './static/js',
-  extra:   './static/rootExtra'
+  extra:   './static/rootExtra',
+  locales: './static/locales'
 };
 
 var DEST = {
   html:'./app/static',
   css: './app/static/css',
   img: './app/static/img',
-  js:  './app/static/js'
+  js:  './app/static/js',
+  locales: './app/static/locales'
 };
 
 gulp.task('html', function() {
@@ -113,6 +115,11 @@ gulp.task('extra', function() {
     .pipe(gulp.dest(DEST.html));
 });
 
+gulp.task('locales', function() {
+  gulp.src(SRC.locales + '/*.json')
+    .pipe(gulp.dest(DEST.locales));
+});
+
 function runKarmaTests ({singleRun, configFile} = {}) {
   return new Promise((resolve, reject) => {
     const karmaArguments = ['start'];
@@ -145,8 +152,15 @@ function runKarmaTests ({singleRun, configFile} = {}) {
   });
 }
 
+var Server = require("karma").Server;
+var path = require("path");
+
 gulp.task('test:js-unit', function() {
   return runKarmaTests({singleRun: true});
+});
+
+gulp.task('test:js-unit-windows', function() {
+    new Server({configFile: path.join(__dirname, "/karma.conf.js")}).start();
 });
 
 gulp.task('test:watch', function() {
@@ -192,6 +206,7 @@ gulp.task('eslint', function() {
 });
 
 gulp.task('test', ['eslint', 'test:js-unit']);
+gulp.task('test:windows', ['eslint', 'test:js-unit-windows']);
 
-gulp.task('default', ['html', 'html:watch', 'html:serve', 'sass', 'sass:watch', 'copy-images', 'copy-images:watch', 'scripts', 'scripts:watch', 'extra']);
+gulp.task('default', ['html', 'html:watch', 'html:serve', 'sass', 'sass:watch', 'copy-images', 'copy-images:watch', 'scripts', 'scripts:watch', 'extra', 'locales']);
 gulp.task('deploy', ['html', 'sass', 'build-scripts', 'extra', 'copy-images']);
