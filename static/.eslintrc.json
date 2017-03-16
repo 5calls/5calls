@@ -1,13 +1,9 @@
 {
-  "parserOptions": {
-    "ecmaVersion": 7,
-    "sourceType": "module"
-  },
   "env": {
     "browser": true,
-    "commonjs": true
-  },
-  "rules": {
-    "no-console": "error"
+    "commonjs": true,
+    "mocha": true,
+    // turn node off in this directory because this content is all browser-only
+    "node": false
   }
 }

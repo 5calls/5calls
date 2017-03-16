@@ -6,7 +6,7 @@ Currently this repo contains both frontend and backend development pieces.
 
 ## Running the app for local development
 
-* Site front end, written in Javascript, using Choo
+* Site front end, written in Javascript, using [Choo](https://choo.io/)
 * Application server back end, for data processing, written in Go
 
 To make display changes, you likely won't need to handle the application
@@ -27,22 +27,21 @@ Front end requirements must first be installed with:
 
 `npm install`
 
-Gulp is used to compile front end static assets. If you do not have Gulp
-installed globally, you can install this with:
+To start developing:
 
-`npm install -g gulp`
+`npm start`
 
-Gulp is configured, by default, to watch and recompile front end files when
-any changes are detected. You can run Gulp in this mode with:
+This command will:
 
-`gulp`
+* compile front end static assets
+* spin up an HTTP server for serving the site files on port `tcp/8000`.
+* watch and recompile front end files when any changes are detected
 
-This default command will also spin up an HTTP server for serving the site
-files on port `tcp/8000`.
+To package assets for deployment:
 
-The other main Gulp task is the `deploy` task, which does not watch for
-changes, and applies additional transforms on the assets -- such as an uglify
-transform on Javascript sources.
+`npm run deploy`
+
+This command also builds the assets, applies additional transforms on the assets (such as minification of the JavaScript sources), but does not watch for changes.
 
 To turn on/off debug mode, which adds some reset buttons throughout the interface, run the following in your console:
 
@@ -55,9 +54,9 @@ localStorage['org.5calls.debug'] = 'false' // turn off debug mode
 
 If you'd like to help us work on the backend code as well (written in Go), please reach out to join our Slack!
 
-## Unit tests
+## Testing
 
-#### JavaScript 
+#### JavaScript Unit Tests
 
 JavaScript unit tests are written using ```Mocha``` and ```Chai``` and run in the ```Karma``` test runner. You must have the Google Chrome browser installed to run them.
 
@@ -69,9 +68,17 @@ If you are working on JavaScript code, you can make the tests automatically re-r
 
 ```npm run test:watch```
 
+#### End-to-end Integration Tests
+
+End-to-end (e2e) integration testing is done using ```Selenium``` with ```Mocha``` and ```Chai```.
+
+To run the e2e tests:
+1. Start the front end application in a command window with the ```npm start``` command.
+2. In a second command window run the tests using the command ```npm run test:e2e```.
+
 ## Deployment
 
-Use the makefile in the go folder. You can `make deploy` to update the go server or `make deploy_static` to update the site.
+Use the makefile in the go project's folder. You can `make deploy` to update the go server or `make deploy_static` to update the site.
 
 When updating the go server, remember to log in, connect to the screen instance (`screen -r`) and stop the go process before replacing it via the deploy, otherwise you get "text file busy" errors in scp.
 
@@ -82,7 +89,8 @@ When updating the go server, remember to log in, connect to the screen instance 
  - [James Home](https://github.com/jameshome)
  - [Beau Smith](https://github.com/beausmith)
  - [Anthony Johnson](https://github.com/agjohnson)
- - [All contriubtors](https://github.com/5calls/5calls/graphs/contributors)
+ - [Craig Doremus](https://github.com/cdoremus)
+ - [All contributors](https://github.com/5calls/5calls/graphs/contributors)
 
 ## Other client projects
  - [Android](https://github.com/5calls/android)

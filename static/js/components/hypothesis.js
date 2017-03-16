@@ -1,5 +1,6 @@
 const html = require('choo/html');
 const callcount = require('./callcount.js');
+const promote = require('./promote.js');
 
 module.exports = (state, prev, send) => {
   // TODO: separate this out into straight up content and stats
@@ -10,6 +11,8 @@ module.exports = (state, prev, send) => {
         <p>Turn your passive participation into active resistance. Facebook likes and Twitter retweets can’t create the change you want to see. Calling your Government on the phone can.</p>
 
         <p><strong>Spend 5 minutes, make 5 calls.</strong></p>
+
+        ${promote(state, prev, send)}
       </header>
 
       <div class="hypothesis__text">
@@ -30,7 +33,7 @@ module.exports = (state, prev, send) => {
         <li><a href="https://play.google.com/store/apps/details?id=org.a5calls.android.a5calls&hl=en"><img class="play" src="/img/google-play-badge.png" alt="5 Calls on Google Play" /></a></li>
         </ul>
       </div>
-      
+
       ${callcount(state, prev, send)}
 
     </div>

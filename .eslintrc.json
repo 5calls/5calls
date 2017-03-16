@@ -1,0 +1,17 @@
+{
+  "parserOptions": {
+    "ecmaVersion": 7,
+    "sourceType": "module"
+  },
+  "env": {
+    "es6": true,
+    // things at the root run in node, like karma conf, gulp, etc.
+    "node": true
+  },
+  "extends": "eslint:recommended",
+  "rules": {
+    "no-unused-vars": "warn",
+    "no-undef":  "warn",
+    "no-console": "error"
+  }
+}

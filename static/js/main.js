@@ -1,5 +1,6 @@
+/* global Raven, ga */
+
 const choo = require('choo');
-const html = require('choo/html');
 const http = require('xhr');
 const find = require('lodash/find');
 const logger = require('loglevel');
@@ -20,7 +21,7 @@ if (debug) {
 }
 
 // get the stored zip location
-cachedAddress = '';
+let cachedAddress = '';
 store.getAll('org.5calls.location', (location) => {
   if (location.length > 0) {
    cachedAddress = location[0]
@@ -28,7 +29,7 @@ store.getAll('org.5calls.location', (location) => {
 });
 
 // get the stored geo location
-cachedGeo = '';
+let cachedGeo = '';
 store.getAll('org.5calls.geolocation', (geo) => {
   if (geo.length > 0) {
     logger.debug("geo get", geo[0]);
@@ -39,7 +40,7 @@ store.getAll('org.5calls.geolocation', (geo) => {
 let cachedFetchingLocation = (cachedGeo === '') ? true : false;
 
 // get the stored geo location
-cachedAllowBrowserGeo = true;
+let cachedAllowBrowserGeo = true;
 store.getAll('org.5calls.allow_geolocation', (allowGeo) => {
   if (allowGeo.length > 0) {
     logger.debug("allowGeo get", allowGeo[0]);
@@ -50,7 +51,7 @@ store.getAll('org.5calls.allow_geolocation', (allowGeo) => {
 let cachedLocationFetchType = (cachedAllowBrowserGeo) ? 'browserGeolocation' : 'ipAddress';
 
 // get the time the geo was last fetched
-cachedGeoTime = '';
+let cachedGeoTime = '';
 store.getAll('org.5calls.geolocation_time', (geo) => {
   if (geo.length > 0) {
     logger.debug("geo time get", geo[0]);
@@ -58,7 +59,7 @@ store.getAll('org.5calls.geolocation_time', (geo) => {
   }
 });
 
-cachedCity = '';
+let cachedCity = '';
 store.getAll('org.5calls.geolocation_city', (city) => {
   if (city.length > 0) {
     logger.debug("city get", city[0]);
@@ -70,7 +71,7 @@ cachedFetchingLocation  = (cachedCity !== '') ? true : cachedFetchingLocation;
 cachedLocationFetchType = (cachedAddress !== '') ? 'address' : cachedLocationFetchType;
 
 // get the stored completed issues
-completedIssues = [];
+let completedIssues = [];
 store.getAll('org.5calls.completed', (completed) => {
   completedIssues = completed == null ? [] : completed;
 });
@@ -79,6 +80,8 @@ app.model({
   state: {
     // remote data
     issues: [],
+    activeIssues: [],
+    inactiveIssues: [],
     totalCalls: 0,
     splitDistrict: false,
 
@@ -107,30 +110,46 @@ app.model({
   },
 
   reducers: {
-    receiveIssues: (state, data) => {
-      response = JSON.parse(data)
-      issues = response.issues //.filter((v) => { return v.contacts.length > 0 });
-      contactIndices = {};
-      issues.forEach(function(item, index) {
-         contactIndices[item.id] = 0;
-      });
-      return { issues: issues, splitDistrict: response.splitDistrict, invalidAddress: response.invalidAddress, contactIndices: contactIndices }
+    receiveActiveIssues: (state, data) => {
+      const response = JSON.parse(data)
+      return {
+        activeIssues: response.issues,
+        splitDistrict: response.splitDistrict,
+        invalidAddress: response.invalidAddress,
+      }
+    },
+    receiveInactiveIssues: (state, data) => {
+      const response = JSON.parse(data)
+      return {
+        inactiveIssues: response.issues,
+      }
+    },
+    mergeIssues: (state) => {
+      let issues = state.activeIssues.concat(state.inactiveIssues)
+      let contactIndices = state.contactIndices
+      issues.forEach(issue => {
+        contactIndices[issue.id] = contactIndices[issue.id] || 0;
+      })
+      return {
+        issues,
+        contactIndices,
+      }
     },
     receiveTotals: (state, data) => {
-      totals = JSON.parse(data);
+      const totals = JSON.parse(data);
       return { totalCalls: totals.count }
     },
     receiveIPInfoLoc: (state, data) => {
-      geo = data.loc
-      city = data.city
-      time = new Date().valueOf()
+      const geo = data.loc
+      const city = data.city
+      const time = new Date().valueOf()
       store.replace("org.5calls.geolocation", 0, geo, () => {});
       store.replace("org.5calls.geolocation_city", 0, city, () => {});
       store.replace("org.5calls.geolocation_time", 0, time, () => {});
       return { geolocation: geo, cachedCity: city, geoCacheTime: time, fetchingLocation: false, askingLocation: false }
     },
     setContactIndices: (state, data) => {
-      contactIndices = state.contactIndices;
+      let contactIndices = state.contactIndices;
       if (data.newIndex != 0) {
         contactIndices[data.issueid] = data.newIndex;
         return { contactIndices: contactIndices }
@@ -150,7 +169,7 @@ app.model({
       return { geolocation: data, fetchingLocation: false }
     },
     setCachedCity: (state, data) => {
-      response = JSON.parse(data);
+      const response = JSON.parse(data);
       if (response.normalizedLocation && state.cachedCity == '') {
         store.replace("org.5calls.geolocation_city", 0, response.normalizedLocation, () => {});
         return { cachedCity: response.normalizedLocation }
@@ -165,45 +184,60 @@ app.model({
       store.replace("org.5calls.allow_geolocation", 0, data, () => {})
       return { allowBrowserGeo: data }
     },
-    enterLocation: (state, data) => {
+    enterLocation: () => {
       return { askingLocation: true }
     },
     setLocationFetchType: (state, data) => {
       let askingLocation = (data === 'address');
       return { locationFetchType: data, askingLocation: askingLocation, fetchingLocation: !askingLocation }
     },
-    resetLocation: (state, data) => {
+    resetLocation: () => {
       store.remove("org.5calls.location", () => {});
       store.remove("org.5calls.geolocation", () => {});
       store.remove("org.5calls.geolocation_city", () => {});
       store.remove("org.5calls.geolocation_time", () => {});
       return { address: '', geolocation: '', cachedCity: '', geoCacheTime: '' }
     },
-    resetCompletedIssues: (state, data) => {
+    resetCompletedIssues: () => {
       store.remove("org.5calls.completed", () => {});
       return { completedIssues: [] }
     },
-    home: (state, data) => {
+    home: () => {
       return { activeIssue: false, getInfo: false }
     },
-    toggleFieldOfficeNumbers: (state, data) => ({ showFieldOfficeNumbers: !state.showFieldOfficeNumbers }),
-    hideFieldOfficeNumbers: (state, data) => ({ showFieldOfficeNumbers: false }),
+    toggleFieldOfficeNumbers: (state) => ({ showFieldOfficeNumbers: !state.showFieldOfficeNumbers }),
+    hideFieldOfficeNumbers: () => ({ showFieldOfficeNumbers: false }),
+    setCacheDate: (state, data) => ({ [data]: Date.now() })
   },
 
   effects: {
-    fetch: (state, data, send, done) => {
-      address = "?address="
+    fetchActiveIssues: (state, data, send, done) => {
+      let address = "?address="
       if (state.address !== '') {
         address += state.address
       } else if (state.geolocation !== "") {
         address += state.geolocation
       }
-
       const issueURL = appURL+'/issues/'+address
-      logger.debug("fetching url",issueURL);
+      logger.debug("fetching url", issueURL);
       http(issueURL, (err, res, body) => {
         send('setCachedCity', body, done)
-        send('receiveIssues', body, done)
+        send('receiveActiveIssues', body, done)
+        send('mergeIssues', body, done)
+      })
+    },
+    fetchInactiveIssues: (state, data, send, done) => {
+      let address = "?inactive=true&address="
+      if (state.address !== '') {
+        address += state.address
+      } else if (state.geolocation !== "") {
+        address += state.geolocation
+      }
+      const issueURL = appURL+'/issues/'+address
+      logger.debug("fetching url", issueURL);
+      http(issueURL, (err, res, body) => {
+        send('receiveInactiveIssues', body, done)
+        send('mergeIssues', body, done)
       })
     },
     getTotals: (state, data, send, done) => {
@@ -213,11 +247,11 @@ app.model({
     },
     setLocation: (state, data, send, done) => {
       send('setAddress', data, done);
-      send('fetch', {}, done);
+      send('fetchActiveIssues', {}, done);
     },
     setBrowserGeolocation: (state, data, send, done) => {
       send('setGeolocation', data, done);
-      send('fetch', {}, done);
+      send('fetchActiveIssues', {}, done);
     },
     unsetLocation: (state, data, send, done) => {
       send('resetLocation', data, done)
@@ -231,10 +265,10 @@ app.model({
       http('https://ipinfo.io/json', (err, res, body) => {
         if (res.statusCode == 200) {
           try {
-            response = JSON.parse(body)
+            const response = JSON.parse(body)
             if (response.city != "") {
               send('receiveIPInfoLoc', response, done);
-              send('fetch', {}, done);
+              send('fetchActiveIssues', {}, done);
             } else {
               send('fetchLocationBy', 'address', done);
               Raven.captureMessage("Location with no city: "+response.loc, { level: 'warning' });
@@ -307,10 +341,11 @@ app.model({
       // Clear previous address to show placeholder text to
       // reinforce entering a new one.
       addressElement.value = "";
+      done();
     },
     startup: (state, data, send, done) => {
       // sometimes we trigger this again when reloading mainView, check for issues
-      if (state.issues.length == 0 || state.geolocation == '') {
+      if (state.activeIssues.length == 0 || state.geolocation == '') {
         // Check for browser support of geolocation
         if ((state.allowBrowserGeo !== false && navigator.geolocation) &&
           state.locationFetchType === 'browserGeolocation' && state.geolocation == '') {
@@ -321,17 +356,18 @@ app.model({
         }
         else if (state.address !== '' || state.geolocation !== '') {
           send('fetchingLocation', false, done);
-          send('fetch', {}, done);
+          send('fetchActiveIssues', {}, done);
         }
       }
     },
     oldcall: (state, data, send, done) => {
       ga('send', 'event', 'issue_flow', 'old', 'old');
+      done();
     },
     incrementContact: (state, data, send, done) => {
       const issue = find(state.issues, ['id', data.issueid]);
 
-      currentIndex = state.contactIndices[issue.id];
+      const currentIndex = state.contactIndices[issue.id];
       if (currentIndex < issue.contacts.length - 1) {
         scrollIntoView(document.querySelector('#contact'));
         send('setContactIndices', { newIndex: currentIndex + 1, issueid: issue.id }, done);
@@ -352,7 +388,7 @@ app.model({
       }
 
       const body = queryString.stringify({ location: state.zip, result: data.result, contactid: data.contactid, issueid: data.issueid })
-      http.post(appURL+'/report', { body: body, headers: {"Content-Type": "application/x-www-form-urlencoded"} }, (err, res, body) => {
+      http.post(appURL+'/report', { body: body, headers: {"Content-Type": "application/x-www-form-urlencoded"} }, () => {
         // don’t really care about the result
       })
       send('incrementContact', data, done);
@@ -390,6 +426,7 @@ app.router({ default: '/' }, [
     [':issueid', require('./pages/doneView.js')]
   ],
   ['/about', require('./pages/aboutView.js')],
+  ['/issues', require('./pages/issuesView.js')],
 ]);
 
 const tree = app.start();

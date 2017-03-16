@@ -9,9 +9,11 @@ const promote = require('./promote.js');
 
 module.exports = (state, prev, send) => {
   const issue = find(state.issues, ['id', state.location.params.issueid]);
-
   if (issue == null) {
-    return html`<section class="call" onload=${(e) => send('oldcall')}>
+    return html`<section class="call" onload=${(e) => {
+      send('fetchInactiveIssues')
+      send('oldcall')
+    }}>
       <div class="call_complete">
         <h2 class="call__title">No calls to make</h2>
         <p class="call__text">

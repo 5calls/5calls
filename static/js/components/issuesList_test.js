@@ -12,8 +12,8 @@ describe('issuesList component', () => {
   });
 
   it('should display issues if they exist', () => {
-    let issue1 = {id: 98, contacts:[{id:88,name:'mccain'}], name: 'Trump'};
-    let issue2 = {id: 99, contacts:[{id:88,name:'ryan'}], name: 'DeVos'};
+    let issue1 = {id: 98, inactive: false, contacts:[{id:88,name:'mccain'}], name: 'Trump'};
+    let issue2 = {id: 99, inactive: false, contacts:[{id:88,name:'ryan'}], name: 'DeVos'};
     let location = {params:[{issueId:undefined}]};
     let state = {
       completedIssues: [],

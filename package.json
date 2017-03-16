@@ -4,8 +4,12 @@
   "description": "",
   "main": "gulpfile.js",
   "scripts": {
+    "start": "gulp",
+    "deploy": "gulp deploy",
     "test": "gulp test",
-    "test:watch": "gulp test:watch"
+    "test:watch": "gulp test:watch",
+    "test:e2e": "gulp test:e2e",
+    "start": "gulp"
   },
   "repository": {
     "type": "git",
@@ -16,6 +20,8 @@
   "devDependencies": {
     "browserify": "^13.1.1",
     "chai": "^3.5.0",
+    "chai-as-promised": "^6.0.0",
+    "chromedriver": "^2.27.3",
     "es2040": "^1.2.4",
     "eslint": "^3.15.0",
     "gulp": "^3.9.1",
@@ -31,6 +37,7 @@
     "karma-mocha-reporter": "^2.2.2",
     "karma-sauce-launcher": "^1.1.0",
     "mocha": "^3.2.0",
+    "selenium-webdriver": "^3.1.0",
     "sinon": "^1.17.7",
     "vinyl-buffer": "^1.0.0",
     "vinyl-source-stream": "^1.1.0",

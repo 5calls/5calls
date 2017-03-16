@@ -59,13 +59,13 @@ module.exports = function (configuration) {
       browserName: 'Safari',
       version: 'latest'
     },
-    sauce_safari: {
+    sauce_safari_9: {
       base: 'SauceLabs',
       browserName: 'Safari',
       platform: 'OS X 10.11',
       version: '9.0'
     },
-    
+
     // Disable device simulators for now as they are slow and flakey :\
     // sauce_ios_safari: {
     //   base: 'SauceLabs',
@@ -92,12 +92,12 @@ module.exports = function (configuration) {
     //   browserName: 'Browser'
     // }
   };
-  
+
   const browsers = Object.keys(browserConfiguration);
-  
+
   // start with basic karma config
   require('./karma.conf.js')(configuration);
-  
+
   // and override for CI/Sauce-specific settings
   configuration.set({
     sauceLabs: {
@@ -108,7 +108,7 @@ module.exports = function (configuration) {
     frameworks: ['mocha', 'browserify'],
     reporters: ['mocha', 'saucelabs'],
     singleRun: true,
-    
+
     // Since tests are remote, give a little extra time
     captureTimeout: 300000,
     browserNoActivityTimeout: 30000
