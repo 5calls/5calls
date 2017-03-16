@@ -8,7 +8,7 @@ module.exports = (state, prev, send) => {
     const issue = find(state.issues, ['id', state.location.params.issueid]);
 
   return html`
-    <main role="main" class="layout__main" onload=${(e) => send('startup')}>
+    <main id="content" role="main" class="layout__main" onload=${(e) => send('startup')}>
     <section class="call">
       <div class="call_complete">
         <h2 class="call__title">Great work!</h2>
