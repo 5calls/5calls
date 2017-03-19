@@ -52,6 +52,18 @@
       text-decoration: underline;
     }
   }
+
+  &__footer-link {
+    display: block;
+    text-align: center;
+    background-color: $gray-xlight;
+    border-bottom: 1px solid $gray-light;
+    color: $blue;
+    padding: 10px;
+    &:hover {
+      background-color: $white;
+    }
+  }
 }
 
 .issues-list {
