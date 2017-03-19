@@ -5,7 +5,7 @@ module.exports = (state, prev, send) => {
 
   if (userCalls > 0) {
     return html`
-      <h2 class="userstats">
+      <h2 class="impactTotals">
         Your impact is ${userCalls} call${ userCalls > 1 ? "s" : "" }!
       </h2>
     `;

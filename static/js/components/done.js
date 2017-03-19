@@ -2,7 +2,7 @@ const html = require('choo/html');
 const find = require('lodash/find');
 const promote = require('./promote.js');
 const callcount = require('./callcount.js');
-const stats = require('./stats.js');
+const impactTotal = require('./impactTotal.js');
 
 
 module.exports = (state, prev, send) => {
@@ -13,7 +13,7 @@ module.exports = (state, prev, send) => {
     <section class="call">
       <div class="call_complete">
         <h2 class="call__title">Great work!</h2>
-        ${stats(state, prev, send)}
+        ${impactTotal(state, prev, send)}
         <p class="call__text">
           Pick another issue to keep calling, or spread the word by sharing your work with friends:
         </p>

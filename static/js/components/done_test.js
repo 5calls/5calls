@@ -37,7 +37,7 @@ describe('done component', () => {
     });
   });
 
-  describe('stats include', () => {
+  describe('impactTotal include', () => {
 
     it('should display user calls count', () => {
       let totalCalls = 123;

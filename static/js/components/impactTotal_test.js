@@ -1,10 +1,10 @@
 const html = require('choo/html');
-const stats = require('./stats.js');
+const impactTotal = require('./impactTotal.js');
 const chai = require('chai');
 const expect = chai.expect;
 
-describe('stats component', () => {
-  it('should display singular stats', () => {
+describe('impactTotal component', () => {
+  it('should display singular total', () => {
     let all = [{
       contactid: 123,
       issueid: 456,
@@ -13,11 +13,11 @@ describe('stats component', () => {
     let userStats = {all: all}
     let userCalls = userStats.all.length;
     let state = {userStats};
-    let result = stats(state);
+    let result = impactTotal(state);
     expect(result.textContent).to.contain('Your impact is '+userCalls+' call!');
   });
 
-  it('should display pluralized stats', () => {
+  it('should display pluralized total', () => {
    let all = [{
       contactid: 123,
       issueid: 456,
@@ -30,14 +30,14 @@ describe('stats component', () => {
     let userStats = {all: all}
     let userCalls = userStats.all.length;
     let state = {userStats};
-    let result = stats(state);
+    let result = impactTotal(state);
     expect(result.textContent).to.contain('Your impact is '+userCalls+' calls!');
   });
 
-  it('should NOT display stats when total calls equals 0', () => {
+  it('should NOT display total when total calls equals 0', () => {
     let userStats = {all: []}
     let state = {userStats};
-    let result = stats(state);
+    let result = impactTotal(state);
     expect(result).to.be.undefined;
   });
 });

@@ -1,5 +1,5 @@
 const html = require('choo/html');
-const stats = require('./stats.js');
+const impactTotal = require('./impactTotal.js');
 
 module.exports = (state, prev, send) => {
   return html`
@@ -7,7 +7,7 @@ module.exports = (state, prev, send) => {
     <section class="impact">
       <h2 class="impact__title">My Impact</h2>
 
-      ${stats(state, prev, send)}
+      ${impactTotal(state, prev, send)}
     </section>
     </main>
   `;
