@@ -160,7 +160,7 @@ app.model({
       stats['all'].push({
         contactid: data.contactid,
         issueid: data.issueid,
-        result: data.result   // not sure if necessary
+        result: data.result
       });
       stats[data.result] = stats[data.result] + 1;
       store.replace("org.5calls.userStats", 0, stats, () => {});
@@ -423,6 +423,7 @@ app.router({ default: '/' }, [
     [':issueid', require('./pages/doneView.js')]
   ],
   ['/about', require('./pages/aboutView.js')],
+  ['/impact', require('./pages/impactView.js')],
 ]);
 
 const tree = app.start();
