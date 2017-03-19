@@ -33,11 +33,4 @@ describe('impactTotal component', () => {
     let result = impactTotal(state);
     expect(result.textContent).to.contain('Your impact is '+userCalls+' calls!');
   });
-
-  it('should NOT display total when total calls equals 0', () => {
-    let userStats = {all: []}
-    let state = {userStats};
-    let result = impactTotal(state);
-    expect(result).to.be.undefined;
-  });
 });

@@ -14,6 +14,8 @@ module.exports = (state, prev, send) => {
       <div class="call_complete">
         <h2 class="call__title">Great work!</h2>
         ${impactTotal(state, prev, send)}
+        <h2>See more stats on <a href="#impact">your impact</a>.</h2>
+
         <p class="call__text">
           Pick another issue to keep calling, or spread the word by sharing your work with friends:
         </p>
