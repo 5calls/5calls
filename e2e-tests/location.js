@@ -1,5 +1,5 @@
 /**
- *
+ * End-to-end tests for location-related content.
  */
 const webdriver = require('selenium-webdriver');
 const test = require('selenium-webdriver/testing');
@@ -12,17 +12,12 @@ const config = require('./support/e2e-tests.config.js');
 const url = config.getBaseUrl();
 const By = webdriver.By;
 const until = webdriver.until;
-const Key = webdriver.Key;
-const util = require('./support/webdriverjs-util');
-const LocalStorage = util.LocalStorageKey;
 
 test.describe('location lookup', function() {
   let page = undefined;
   test.beforeEach(function() {
     this.driver.get(url);
     page = new LookupLocationPage(this.driver);
-    // printLocalStorageLocationData(this.driver);
-    // clearLocalStorageLocationData(this.driver);
   });
 
   test.afterEach(function() {
@@ -49,21 +44,11 @@ test.describe('location lookup', function() {
 
 });
 
-function clearLocalStorageLocationData(driver) {
-  const locationKeys = util.getLocalStorageLocationKeys();
-  promises = '';
-  locationKeys.forEach(key => {
-    promises += `window.localStorage.removeItem("${key}"),`;
-  });
-  driver.executeScript(`return Promise.all([${promises}])`)
-}
-
-function printLocalStorageLocationData(driver) {
-  util.logLocalStorageData(driver, LocalStorage.LOCATION);
-  util.logLocalStorageData(driver, LocalStorage.GEOLOCATION);
-  util.logLocalStorageData(driver, LocalStorage.GEOLOCATION_CITY);
-}
-
+/**
+ * Page object for location-related content.
+ *
+ * @class LookupLocationPage
+ */
 class LookupLocationPage {
   constructor(driver) {
     this.driver = driver;

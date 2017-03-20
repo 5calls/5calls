@@ -13,7 +13,6 @@ const config = require('./support/e2e-tests.config.js');
 
 const url = config.getBaseUrl();
 const By = webdriver.By;
-const until = webdriver.until;
 
 test.describe('home page', function() {
   let home = undefined;

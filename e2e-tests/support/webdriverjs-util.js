@@ -30,7 +30,7 @@ function getLocalStorageLocationKeys() {
  * @param {string} screenshotPath the path to the screenshot file (default===process.cwd())
  */
 function takeScreenshot(driver, fileName = 'screenshot.png', screenshotPath) {
-  var screenshotPath = screenshotPath || process.cwd();
+  screenshotPath = screenshotPath || process.cwd();
   driver.takeScreenshot().then(function(data) {
     fs.writeFileSync(path.join(screenshotPath, fileName), data, 'base64');
   });
@@ -42,6 +42,8 @@ function takeScreenshot(driver, fileName = 'screenshot.png', screenshotPath) {
  * @param {webdriver.WebDriver} driver an instance of Selenium web driver
  * @param {string} key a localStorage key
  */
+
+/*eslint no-console:  */
 function logLocalStorageData(driver, key) {
   // driver.executeScript(`return window.localStorage.getItem("${key}")`)
   getLocalStorageData(driver, key)
