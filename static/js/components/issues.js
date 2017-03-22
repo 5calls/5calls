@@ -1,5 +1,5 @@
 const html = require('choo/html');
-const scrollIntoView = require('scroll-into-view');
+const scrollIntoView = require('../utils/scrollIntoView.js');
 
 const issuesHeader = require('./issuesHeader.js');
 const issuesList = require('./issuesList.js');
