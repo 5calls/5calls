@@ -17,7 +17,7 @@ module.exports = (issue, state, prev, send) => {
     return classes.join(' ');
   }
 
-  function handleClick(e) {
+  function handleClick() {
     send("activateIssue", { id: issue.id });
   }
 

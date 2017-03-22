@@ -1,11 +1,9 @@
-const html = require('choo/html');
 const promote = require('./promote');
 const chai = require('chai');
 const expect = chai.expect;
 
 describe('promote component', () => {
   it('should display generic tweet link if issue does not exist', () => {
-    let issue = undefined;
     let state = {location: {params: {issueid: null}}};
     let result = promote(state, null, null);
     let element = result.querySelector('a');

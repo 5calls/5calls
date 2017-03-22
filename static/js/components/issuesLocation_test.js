@@ -1,4 +1,3 @@
-const html = require('choo/html');
 const issuesLocation = require('./issuesLocation');
 const chai = require('chai');
 const expect = chai.expect;

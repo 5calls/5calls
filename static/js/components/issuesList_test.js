@@ -1,4 +1,3 @@
-const html = require('choo/html');
 const issuesList = require('./issuesList.js');
 const chai = require('chai');
 const expect = chai.expect;
@@ -20,7 +19,7 @@ describe('issuesList component', () => {
       location,
       issues: [issue1, issue2]
     };
-    let send = (name, objWithId) =>  'stub';
+    let send = () =>  'stub';
     let results = issuesList(state, null, send);
     let lis = results.getElementsByTagName('li');
     // two issues should display
