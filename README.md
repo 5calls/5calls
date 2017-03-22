@@ -10,7 +10,6 @@ This is where development of the [5calls.org](http://5calls.org) frontend happen
         * [JavaScript Unit Tests](#JavaScript_Unit_Tests)
         * [End-to-end Integration Tests](#End-to-end_Integration_Tests)
         * [JavaScript Linting](#ESLint)
-* [Deployment](#Deployment)
 * [Contributor Guidelines](#Contributor_Guidelines)
 * [Contributors](#Contributors)
 * [Other Client Projects](#Other_Client_Projects)
@@ -92,13 +91,6 @@ To run the e2e tests:
 #### JavaScript Linting
 
 Linting of the 5 Calls JavaScript code is done using [ESLint](http://eslint.org/) with rules defined in ```.eslintrc.json```. The following command runs ESLint: ```gulp eslint```
-
-<a id="Deployment"></a>
-## Deployment
-
-Use the makefile in the backend project's folder. You can `make deploy` to update the go server or `make deploy_static` to update the site.
-
-When updating the go server, remember to log in, connect to the screen instance (`screen -r`) and stop the go process before replacing it via the deploy, otherwise you get "text file busy" errors in scp.
 
 <a id="Contributor_Guidelines"></a>
 ## Contributor Guidelines
