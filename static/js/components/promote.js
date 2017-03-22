@@ -1,7 +1,7 @@
 const html = require('choo/html');
 const find = require('lodash/find');
 
-module.exports = (state, prev, send) => {
+module.exports = (state) => {
   // share widgets for both platforms don't play well with dom manipulation so we'll make our own
 
   // if no issue is selected, use these default parameters
@@ -17,7 +17,7 @@ module.exports = (state, prev, send) => {
   if (issue) {
     url = encodeURIComponent('http://5calls.org/#issue/' + issue.id)
     // the additional "via @make5calls" text that the via param introduces doesn't fit with issue titles, remove it
-    additionalComps = ""
+    additionalTwitterComps = ""
     tweet = encodeURIComponent('I just called my rep to ' + issue.name.substring(0, 72) +
     ' — you should too:')
     twitterTitle = "Tweet this issue"

@@ -20,7 +20,7 @@ module.exports = {
     })
   },
   remove: (storeName, cb) => {
-    module.exports.getAll(storeName, (items) => {
+    module.exports.getAll(storeName, () => {
       window.localStorage.removeItem(storeName)
       cb()
     })

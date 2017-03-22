@@ -1,12 +1,11 @@
 const html = require('choo/html');
-const find = require('lodash/find');
 
 const issuesListInactive = require('./issuesListInactive.js');
 
 module.exports = (state, prev, send) => {
 
   return html`
-    <main role="main" id="content" class="layout__main" onload=${(e) => {
+    <main role="main" id="content" class="layout__main" onload=${() => {
       send('startup')
       send('fetchInactiveIssues')
     }}>

@@ -1,4 +1,3 @@
-const html = require('choo/html');
 const contact = require('./contact');
 const chai = require('chai');
 const expect = chai.expect;

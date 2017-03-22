@@ -10,7 +10,7 @@ const promote = require('./promote.js');
 module.exports = (state, prev, send) => {
   const issue = find(state.issues, ['id', state.location.params.issueid]);
   if (issue == null) {
-    return html`<section class="call" onload=${(e) => {
+    return html`<section class="call" onload=${() => {
       send('fetchInactiveIssues')
       send('oldcall')
     }}>

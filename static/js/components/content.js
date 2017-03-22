@@ -16,7 +16,7 @@ module.exports = (state, prev, send) => {
   }
 
   return html`
-    <main id="content" role="main" aria-live="polite" class="layout__main" onload=${(e) => send('startup')}>
+    <main id="content" role="main" aria-live="polite" class="layout__main" onload=${() => send('startup')}>
       ${currentView(state, prev, send)}
     </main>
   `;

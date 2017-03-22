@@ -431,4 +431,7 @@ app.router({ default: '/' }, [
 
 const tree = app.start();
 const rootNode = document.getElementById('root');
-document.body.replaceChild(tree, rootNode);
+
+if (rootNode != null) {
+  document.body.replaceChild(tree, rootNode);
+}

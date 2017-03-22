@@ -1,5 +1,4 @@
 const html = require('choo/html');
-const store = require('../utils/localstorage.js');
 
 const sidebar = require('../components/sidebar.js');
 const content = require('../components/content.js');

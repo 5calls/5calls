@@ -1,14 +1,12 @@
 const html = require('choo/html');
-const find = require('lodash/find');
 const promote = require('./promote.js');
 const callcount = require('./callcount.js');
 
 
 module.exports = (state, prev, send) => {
-    const issue = find(state.issues, ['id', state.location.params.issueid]);
 
   return html`
-    <main id="content" role="main" class="layout__main" onload=${(e) => send('startup')}>
+    <main id="content" role="main" class="layout__main" onload=${() => send('startup')}>
     <section class="call">
       <div class="call_complete">
         <h2 class="call__title">Great work!</h2>
