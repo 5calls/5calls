@@ -39,7 +39,7 @@ describe('done component', () => {
 
   describe('impactTotal include', () => {
 
-    it('should display user calls count', () => {
+    it('should display impact preview if more than 0 calls', () => {
       let totalCalls = 123;
       let all = [{
         contactid: 123,
@@ -52,6 +52,19 @@ describe('done component', () => {
       let state = {totalCalls, location, userStats};
       let result = done(state);
       expect(result.textContent).to.contain('You have made '+userCalls+' call!');
+      expect(result.textContent).to.contain('See more stats on your impact');
+    });
+
+    it('should not display impact preview if 0 calls', () => {
+      let totalCalls = 123;
+      let all = [];
+      let userStats = {all: all}
+      let userCalls = userStats.all.length;
+      let location = {params: {issueId: 88}};
+      let state = {totalCalls, location, userStats};
+      let result = done(state);
+      expect(result.textContent).to.not.contain('You have made '+userCalls+' call!');
+      expect(result.textContent).to.not.contain('See more stats on your impact');
     });
   });
 });
