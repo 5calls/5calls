@@ -8,4 +8,12 @@
   &_total {
     color: $color-link;
   }
+
+  &_result {
+    font-size: $font-large;
+    line-height: 1.4em;
+    span {
+      font-weight: bold;
+    }
+  }
 }

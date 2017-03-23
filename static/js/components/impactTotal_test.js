@@ -14,7 +14,7 @@ describe('impactTotal component', () => {
     let userCalls = userStats.all.length;
     let state = {userStats};
     let result = impactTotal(state);
-    expect(result.textContent).to.contain('Your impact is '+userCalls+' call!');
+    expect(result.textContent).to.contain('You have made '+userCalls+' call!');
   });
 
   it('should display pluralized total', () => {
@@ -31,6 +31,6 @@ describe('impactTotal component', () => {
     let userCalls = userStats.all.length;
     let state = {userStats};
     let result = impactTotal(state);
-    expect(result.textContent).to.contain('Your impact is '+userCalls+' calls!');
+    expect(result.textContent).to.contain('You have made '+userCalls+' calls!');
   });
 });

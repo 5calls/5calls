@@ -179,7 +179,8 @@ app.model({
       stats['all'].push({
         contactid: data.contactid,
         issueid: data.issueid,
-        result: data.result
+        result: data.result,
+        time: new Date().valueOf()
       });
       stats[data.result] = stats[data.result] + 1;
       store.replace("org.5calls.userStats", 0, stats, () => {});

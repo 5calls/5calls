@@ -6,10 +6,10 @@ module.exports = (state, prev, send) => {
   const unavailableCalls = state.userStats.unavailable;
 
   return html`
-    <div class="impact_result">
-      <h2>Made Contact: ${contactedCalls} time${ contactedCalls != 1 ? "s" : "" }</h2>
-      <h2>Left Voicemail: ${vmCalls} time${ vmCalls != 1 ? "s" : "" }</h2>
-      <h2>Unavailable: ${unavailableCalls} time${ unavailableCalls != 1 ? "s" : "" }</h2>
-    </div>
+    <p class="impact_result">
+      You have <span>made contact ${contactedCalls} time${ contactedCalls != 1 ? "s" : "" }</span>
+      and left <span>${vmCalls} voicemail${ vmCalls != 1 ? "s" : "" }</span>.
+      Your representatives have been unavailable <span>${unavailableCalls} time${ unavailableCalls != 1 ? "s" : "" }</span>.
+    </p>
   `;
 }

@@ -16,9 +16,9 @@ describe('impactResult component', () => {
     let unavailableCalls = userStats.unavailable;
     let state = {userStats};
     let result = impactResult(state);
-    expect(result.textContent).to.contain('Made Contact: '+contactedCalls+' times');
-    expect(result.textContent).to.contain('Left Voicemail: '+vmCalls+' times');
-    expect(result.textContent).to.contain('Unavailable: '+unavailableCalls+' times');
+    expect(result.textContent).to.contain('You have made contact '+contactedCalls+' times');
+    expect(result.textContent).to.contain('and left '+vmCalls+' voicemails');
+    expect(result.textContent).to.contain('Your representatives have been unavailable '+unavailableCalls+' times');
   });
 
   it('should have correct singular and pluralization', () => {
@@ -32,8 +32,8 @@ describe('impactResult component', () => {
     let unavailableCalls = userStats.unavailable;
     let state = {userStats};
     let result = impactResult(state);
-    expect(result.textContent).to.contain('Made Contact: '+contactedCalls+' times');
-    expect(result.textContent).to.contain('Left Voicemail: '+vmCalls+' time');
-    expect(result.textContent).to.contain('Unavailable: '+unavailableCalls+' times');
+    expect(result.textContent).to.contain('You have made contact '+contactedCalls+' times');
+    expect(result.textContent).to.contain('and left '+vmCalls+' voicemail');
+    expect(result.textContent).to.contain('Your representatives have been unavailable '+unavailableCalls+' times');
   });
 });

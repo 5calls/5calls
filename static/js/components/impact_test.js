@@ -21,7 +21,7 @@ describe('impact component', () => {
       let userCalls = userStats.all.length;
       let state = {userStats};
       let result = impact(state);
-      expect(result.textContent).to.contain('Your impact is '+userCalls+' call!');
+      expect(result.textContent).to.contain('You have made '+userCalls+' call!');
     });
   });
 
@@ -33,9 +33,9 @@ describe('impact component', () => {
       let location = {params: {issueId: 88}};
       let state = {userStats};
       let result = impact(state);
-      expect(result.textContent).to.contain('Made Contact: '+contactedCalls+' times');
-      expect(result.textContent).to.contain('Left Voicemail: '+vmCalls+' time');
-      expect(result.textContent).to.contain('Unavailable: '+unavailableCalls+' times');
+      expect(result.textContent).to.contain('You have made contact '+contactedCalls+' times');
+      expect(result.textContent).to.contain('and left '+vmCalls+' voicemail');
+      expect(result.textContent).to.contain('Your representatives have been unavailable '+unavailableCalls+' times');
     });
   });
 

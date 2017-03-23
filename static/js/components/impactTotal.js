@@ -5,7 +5,7 @@ module.exports = (state, prev, send) => {
 
   return html`
     <h2 class="impact_total">
-      Your impact is ${userCalls} call${ userCalls != 1 ? "s" : "" }!
+      You have made <span>${userCalls} call${ userCalls != 1 ? "s" : "" }</span>!
     </h2>
   `;
 }
