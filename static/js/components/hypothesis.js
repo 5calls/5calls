@@ -16,7 +16,7 @@ module.exports = (state, prev, send) => {
       </header>
 
       <div class="hypothesis__text">
-        <p>Calling is the most effective way to influence your representative. Read more about <a href="#about">why calling works.</a>
+        <p>Calling is the most effective way to influence your representative. Read more about <a href="/about">why calling works.</a>
         </p>
 
         <h3 class="hypothesis__subtitle">5 Calls:</h3>
