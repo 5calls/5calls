@@ -76,11 +76,6 @@ store.getAll('org.5calls.completed', (completed) => {
   completedIssues = completed == null ? [] : completed;
 });
 
-let impactLink = document.querySelector('#impact__link');
-impactLink.addEventListener('click', () => {
-  scrollIntoView(document.querySelector('#content'));
-})
-
 // get stored user stats
 let defaultStats = {
   all: [],
@@ -93,6 +88,7 @@ store.getAll('org.5calls.userStats', (stats) => {
   if (stats.length > 0) {
     localStats = stats[0];
   } else {
+    let impactLink = document.querySelector('#impact__link');
     impactLink.classList.add('hidden');
   }
 });

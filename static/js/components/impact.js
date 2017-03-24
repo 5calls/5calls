@@ -2,11 +2,17 @@ const html = require('choo/html');
 const impactTotal = require('./impactTotal.js');
 const impactResult= require('./impactResult.js');
 const callcount = require('./callcount.js');
+const scrollIntoView = require('../utils/scrollIntoView.js');
 
 module.exports = (state, prev, send) => {
 
+  function load() {
+    scrollIntoView(document.querySelector('#content'));
+    send('startup');
+  }
+
   return html`
-    <main id="content" role="main" aria-live="polite" class="layout__main" onload=${() => send('startup')}>
+    <main id="content" role="main" aria-live="polite" class="layout__main" onload=${load}>
     <section class="impact">
       <h2 class="impact__title">My Impact</h2>
 
