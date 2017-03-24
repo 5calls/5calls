@@ -4,16 +4,12 @@
 const test = require('selenium-webdriver/testing');
 const chai = require('chai');
 const expect = chai.expect;
-const chaiAsPromised = require('chai-as-promised');
-chai.use(chaiAsPromised);
-const config = require('./support/e2e-tests.config.js');
 const LocationLookupPage = require('./location-lookup-page');
-const url = config.getBaseUrl();
 
 test.describe('location lookup', function() {
   let page = undefined;
   test.beforeEach(function() {
-    this.driver.get(url);
+    this.driver.get(this.baseUrl);
     page = new LocationLookupPage(this.driver);
   });
 

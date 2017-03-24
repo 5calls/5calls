@@ -4,6 +4,10 @@
  *
  */
 const webdriver = require('selenium-webdriver');
+const chai = require('chai');
+const chaiAsPromised = require('chai-as-promised');
+chai.use(chaiAsPromised);
+const config = require('./e2e-tests.config');
 const test = require('selenium-webdriver/testing');
 const chrome = require('selenium-webdriver/chrome');
 const chromedriver = require('chromedriver');
@@ -21,6 +25,7 @@ test.before(function() {
       }
     })
     .build();
+    this.baseUrl = config.getBaseUrl();
 });
 
 test.after(function() {

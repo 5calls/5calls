@@ -5,18 +5,12 @@
 const test = require('selenium-webdriver/testing');
 const chai = require('chai');
 const expect = chai.expect;
-const chaiAsPromised = require('chai-as-promised');
-chai.use(chaiAsPromised);
-const config = require('./support/e2e-tests.config.js');
-
-const url = config.getBaseUrl();
-
 const HomePage = require('./home-page');
 
 test.describe('home page', function() {
   let page = undefined;
   test.beforeEach(function() {
-    this.driver.get(url);
+    this.driver.get(this.baseUrl);
     page = new HomePage(this.driver);
   });
 
