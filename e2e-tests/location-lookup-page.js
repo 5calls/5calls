@@ -1,7 +1,4 @@
 const webdriver = require('selenium-webdriver');
-const chai = require('chai');
-const chaiAsPromised = require('chai-as-promised');
-chai.use(chaiAsPromised);
 const By = webdriver.By;
 const until = webdriver.until;
 
