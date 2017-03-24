@@ -1,26 +1,33 @@
 # 5calls
 
-This is where development for [5calls.org](http://5calls.org) happens. Please check the issue list and pull requests before starting work so we can ensure you're not duplicating work! We're all volunteers and want to treat the time you dedicate to the site with respect. Ping  [@make5calls](https://twitter.com/make5calls) on twitter with an email to get an invite to our Slack.
+This is where development of the [5calls.org](http://5calls.org) frontend happens. Please check the issue list, pull requests and contributor guidelines before starting work so we can ensure you're not duplicating work! We're all volunteers and want to treat the time you dedicate to the site with respect. Ping  [@make5calls](https://twitter.com/make5calls) on Twitter with your email to get an invite to our Slack.
 
-Currently this repo contains both frontend and backend development pieces.
+# Table of Contents
+* [Development](#Development)
+    * [Front End](#Front_End)
+    * [Application Server](#Application_Server)
+    * [Quality Assurance](#QA)
+        * [JavaScript Unit Tests](#JavaScript_Unit_Tests)
+        * [End-to-end Integration Tests](#End-to-end_Integration_Tests)
+        * [JavaScript Linting](#ESLint)
+* [Contributor Guidelines](#Contributor_Guidelines)
+* [Contributors](#Contributors)
+* [Other Client Projects](#Other_Client_Projects)
 
-## Running the app for local development
-
-* Site front end, written in Javascript, using [Choo](https://choo.io/)
-* Application server back end, for data processing, written in Go
-
-To make display changes, you likely won't need to handle the application
-server, and can instead rely on the production version of 5calls, running at
-5calls.org -- more on this below.
-
+<a id="Development"></a>
 ## Development
 
-5calls requires [Node.js][nodejs] and [Go][golang] version 1.7+. If you are on a
-Mac you'll need to install XCode and the CLI tools as well.
+To make display changes, you likely won't need to handle the application
+server, and can instead rely on the production version of 5calls, running at [5calls.org](https://5calls.org) -- more on this below.
+
+The front end is written in Javascript using the [Choo](https://choo.io/) framework. The application server back end -- for data processing -- is written in [Go](https://golang.org/).
+
+5calls requires [Node.js][nodejs] and [Go][golang] version 1.7+. If you are on a Mac you'll need to install XCode and the CLI tools as well.
 
 [nodejs]: https://nodejs.org/en/
 [golang]: https://golang.org/
 
+<a id="Front_End"></a>
 ### Front End
 
 Front end requirements must first be installed with:
@@ -50,12 +57,15 @@ localStorage['org.5calls.debug'] = 'true' // turn on debug mode
 localStorage['org.5calls.debug'] = 'false' // turn off debug mode
 ```
 
+<a id="Application_Server"></a>
 ### Application Server
 
 If you'd like to help us work on the backend code as well (written in Go), please reach out to join our Slack!
 
-## Testing
+<a id="QA"></a>
+## Quality Assurance
 
+<a id="JavaScript_Unit_Tests"></a>
 #### JavaScript Unit Tests
 
 JavaScript unit tests are written using ```Mocha``` and ```Chai``` and run in the ```Karma``` test runner. You must have the Google Chrome browser installed to run them.
@@ -68,20 +78,32 @@ If you are working on JavaScript code, you can make the tests automatically re-r
 
 ```npm run test:watch```
 
+<a id="End-to-end_Integration_Tests"></a>
 #### End-to-end Integration Tests
 
-End-to-end (e2e) integration testing is done using ```Selenium``` with ```Mocha``` and ```Chai```.
+End-to-end (e2e) integration testing is done using ```Selenium``` with ```Mocha``` and ```Chai``` using the [```WebdriverJS```](http://seleniumhq.github.io/selenium/docs/api/javascript/module/selenium-webdriver/) API.
 
 To run the e2e tests:
 1. Start the front end application in a command window with the ```npm start``` command.
 2. In a second command window run the tests using the command ```npm run test:e2e```.
 
-## Deployment
+<a id="ESLint"></a>
+#### JavaScript Linting
 
-Use the makefile in the go project's folder. You can `make deploy` to update the go server or `make deploy_static` to update the site.
+Linting of the 5 Calls JavaScript code is done using [ESLint](http://eslint.org/) with rules defined in ```.eslintrc.json```. The following command runs ESLint: ```gulp eslint```
 
-When updating the go server, remember to log in, connect to the screen instance (`screen -r`) and stop the go process before replacing it via the deploy, otherwise you get "text file busy" errors in scp.
+<a id="Contributor_Guidelines"></a>
+## Contributor Guidelines
 
+Contributions to the 5 Calls frontend repository (5calls/5calls) are always welcome, but to make sure changes are properly discussed and prioritized, and that there is no duplication of work, the following steps should be followed:
+1. An Issue should be created to discuss a proposed change before it is implemented. If the change is an emergency bug fix, the Issue creation and discussion steps can be skipped, but note that in the PR submission comment. Make sure the PR branch is rebased if it becomes out-of-date with the 5 Calls repo's master branch.
+2. A Pull Request (PR) can be submitted if there is no Issue discussion after a few days or when the Issue discussion arrives at a consensus.
+3. A unit or end-to-end test (or tests) should be included with the Pull Request covering the changes. If tests are not possible, an explanation should be included with the PR.
+4. Our continuous integration system will run ESLint, and all unit and end-to-end tests when a PR is submitted. Fixing any failing tests or ESLint rule violations is the responsibility of the person submitting the PR.
+5. A 5 Calls team member needs to review and approve the PR before it can be merged into the master branch. The reviewer should clone the PR branch locally and make sure that the code can build and has no eslint or unit/e2e test failures before approving the PR. It is the responsibility of the PR submitter to make changes suggested by the reviewer or to explain why the proposed changes are not necessary or should be modified.
+6. Merging of the PR into the master branch after approval can be done by the PR reviewer or any other 5 Calls team member including the submitter if he/she is a team member.
+
+<a id="Contributors"></a>
 ## Contributors
  - [Nick O'Neill](https://github.com/nickoneill)
  - [Matt Jacobs](https://github.com/capndesign)
@@ -92,6 +114,7 @@ When updating the go server, remember to log in, connect to the screen instance 
  - [Craig Doremus](https://github.com/cdoremus)
  - [All contributors](https://github.com/5calls/5calls/graphs/contributors)
 
-## Other client projects
+ <a id="Other_Client_Projects"></a>
+## Other Client Projects
  - [Android](https://github.com/5calls/android)
  - [iOS](https://github.com/5calls/ios)
