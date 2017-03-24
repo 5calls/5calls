@@ -76,11 +76,6 @@ store.getAll('org.5calls.completed', (completed) => {
   completedIssues = completed == null ? [] : completed;
 });
 
-let aboutLink = document.querySelector('#about__link');
-aboutLink.addEventListener('click', () => {
-  scrollIntoView(document.querySelector('#content'));
-});
-
 app.model({
   state: {
     // remote data
