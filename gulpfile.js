@@ -14,6 +14,7 @@ var gulp = require('gulp')
   , connect_logger = require('connect-logger')
   , spawn = require('child_process').spawn
   , mocha = require('gulp-mocha')
+  , path = require('path')
   ;
 
 var SRC = {
@@ -41,9 +42,17 @@ gulp.task('html:watch', function() {
 });
 
 gulp.task('html:serve', function (cb) {
+
+  function alwaysServeIndex(req, res, next) {
+    if(!(path.extname(req.url))) {
+      req.url = "/";
+    }
+    next();
+  }  
+
   var server = new http_server.HttpServer({
     root: 'app/static',
-    before: [connect_logger()]
+    before: [connect_logger(), alwaysServeIndex]
   });
   server.listen(8000, function () {
     util.log('HTTP server started on port 8000');
