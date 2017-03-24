@@ -5,7 +5,7 @@ const promote = require('./promote.js');
 module.exports = (state, prev, send) => {
   // TODO: separate this out into straight up content and stats
   return html`
-    <div class="hypothesis" onload=${(e) => send('getTotals')}>
+    <div class="hypothesis" onload=${() => send('getTotals')}>
       <header class="hypothesis__header">
         <h2 class="hypothesis__title">Make your voice heard</h2>
         <p>Turn your passive participation into active resistance. Facebook likes and Twitter retweets can’t create the change you want to see. Calling your Government on the phone can.</p>

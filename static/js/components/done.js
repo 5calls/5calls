@@ -1,5 +1,4 @@
 const html = require('choo/html');
-const find = require('lodash/find');
 const promote = require('./promote.js');
 const callcount = require('./callcount.js');
 const impactTotal = require('./impactTotal.js');
@@ -19,7 +18,7 @@ module.exports = (state, prev, send) => {
   }
 
   return html`
-    <main role="main" class="layout__main" onload=${(e) => send('startup')}>
+    <main role="main" class="layout__main" onload=${() => send('startup')}>
     <section class="call">
       <div class="call_complete">
         <h2 class="call__title">Great work!</h2>

@@ -2,7 +2,7 @@ const html = require('choo/html');
 
 module.exports = (state, prev, send) => {
   return html`
-    <main role="main" class="layout__main" onload=${(e) => send('startup')}>
+    <main role="main" class="layout__main" onload=${() => send('startup')}>
     <section class="about">
       <h2 class="about__title">About 5 Calls</h2>
 

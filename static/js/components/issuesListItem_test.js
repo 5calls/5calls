@@ -1,4 +1,3 @@
-const html = require('choo/html');
 const issuesListItem = require('./issuesListItem.js');
 const chai = require('chai');
 const expect = chai.expect;
@@ -13,8 +12,7 @@ describe('issuesListItem component', () => {
     };
     let location = {params:[{issueId:100}]};
     let state = {completedIssues: [], location};
-    let sendCalled = false;
-    let send = (name, objWithId) =>  sendCalled = true;
+    let send = () =>  true;
     let results = issuesListItem(issue, state, null, send);
     let spans = results.querySelectorAll('span');
 
@@ -36,8 +34,7 @@ describe('issuesListItem component', () => {
     };
     let location = {params:[{issueId:100}]};
     let state = {completedIssues: [99], location};
-    let sendCalled = false;
-    let send = (name, objWithId) =>  sendCalled = true;
+    let send = () =>  true;
     let results = issuesListItem(issue, state, null, send);
     let span = results.querySelector('span.visually-hidden');
     expect(span.textContent).to.contain("Done");

@@ -13,7 +13,8 @@ module.exports = function (config) {
     // list of files / patterns to load in the browser
     files: [
       'static/test/setupUnitTests.js',
-      'static/js/**/*_test.js'
+      'static/js/**/*_test.js',
+      'static/js/*/*.js'
     ],
 
     // list of files to exclude
@@ -29,13 +30,24 @@ module.exports = function (config) {
 
     browserify: {
       debug: true,
-      transform: ['es2040'],
+      transform: [
+        [
+          'browserify-istanbul',
+          {
+            ignore: ["**/*_test.js"],
+            instrumenterConfig: {
+              embedSource: true
+            }
+          }
+        ],
+        ['es2040']
+       ],
     },
 
     // test results reporter to use
     // possible values: 'dots', 'progress'
     // available reporters: https://npmjs.org/browse/keyword/karma-reporter
-    reporters: ['mocha'],
+    reporters: ['mocha', 'coverage'],
 
     // web server port
     port: 9876,

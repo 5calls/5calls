@@ -1,5 +1,4 @@
 const html = require('choo/html');
-const find = require('lodash/find');
 
 module.exports = (state, prev, send) => {
   function enterLocation(e) {
