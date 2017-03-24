@@ -1,4 +1,3 @@
-const html = require('choo/html');
 const impact = require('./impact.js');
 const chai = require('chai');
 const expect = chai.expect;
@@ -30,7 +29,6 @@ describe('impact component', () => {
       let contactedCalls = userStats.contacted;
       let vmCalls = userStats.vm;
       let unavailableCalls = userStats.unavailable;
-      let location = {params: {issueId: 88}};
       let state = {userStats};
       let result = impact(state);
       expect(result.textContent).to.contain('You have made contact '+contactedCalls+' times');

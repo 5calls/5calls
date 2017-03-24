@@ -82,12 +82,13 @@ impactLink.addEventListener('click', () => {
 })
 
 // get stored user stats
-let localStats = defaultStats = {
+let defaultStats = {
   all: [],
   contacted: 0,
   vm: 0,
   unavailable: 0,
 };
+let localStats = defaultStats;
 store.getAll('org.5calls.userStats', (stats) => {
   if (stats.length > 0) {
     localStats = stats[0];
@@ -182,7 +183,7 @@ app.model({
       }
     },
     setUserStats: (state, data) => {
-      stats = state.userStats;
+      let stats = state.userStats;
       stats['all'].push({
         contactid: data.contactid,
         issueid: data.issueid,
@@ -237,7 +238,7 @@ app.model({
       store.remove("org.5calls.completed", () => {});
       return { completedIssues: [] }
     },
-    resetUserStats: (state, data) => {
+    resetUserStats: () => {
       store.replace("org.5calls.userStats", 0, defaultStats, () => {});
       return { userStats: defaultStats }
     },

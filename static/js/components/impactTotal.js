@@ -1,6 +1,6 @@
 const html = require('choo/html');
 
-module.exports = (state, prev, send) => {
+module.exports = (state) => {
   const userCalls = state.userStats.all.length;
 
   return html`

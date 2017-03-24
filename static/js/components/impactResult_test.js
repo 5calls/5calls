@@ -1,4 +1,3 @@
-const html = require('choo/html');
 const impactResult = require('./impactResult.js');
 const chai = require('chai');
 const expect = chai.expect;

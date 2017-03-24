@@ -1,6 +1,6 @@
 const html = require('choo/html');
 
-module.exports = (state, prev, send) => {
+module.exports = (state) => {
   const contactedCalls = state.userStats.contacted;
   const vmCalls = state.userStats.vm;
   const unavailableCalls = state.userStats.unavailable;

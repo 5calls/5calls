@@ -6,7 +6,6 @@ const impactTotal = require('./impactTotal.js');
 
 
 module.exports = (state, prev, send) => {
-  const issue = find(state.issues, ['id', state.location.params.issueid]);
   const userCalls = state.userStats.all.length;
 
   let impactPreview = html``;
