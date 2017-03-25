@@ -13,10 +13,6 @@ test.describe('location lookup', function() {
     page = new LocationLookupPage(this.driver);
   });
 
-  test.afterEach(function() {
-    page = undefined;
-  });
-
   test.it('Should lookup location by zip code', function() {
     const location = '12222';
 

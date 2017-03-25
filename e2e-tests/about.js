@@ -13,10 +13,6 @@ test.describe('about page', function() {
     page = new AboutPage(this.driver);
   });
 
-  test.afterEach(function() {
-    page = undefined;
-  });
-
   test.it('should display about page when "why calling works." link is clicked on home page', function() {
     const expected = page.getAboutPageText();
 

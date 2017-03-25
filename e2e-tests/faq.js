@@ -13,10 +13,6 @@ test.describe('faq page', function() {
     page = new FaqPage(this.driver);
   });
 
-  test.afterEach(function() {
-    page = undefined;
-  });
-
   test.it('should display FAQ page when "FAQ" link is clicked on home page', function() {
     // FAQ page can be flaky, so catch any errors
     try {

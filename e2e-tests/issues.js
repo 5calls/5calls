@@ -14,10 +14,6 @@ test.describe('issues page', function() {
     page = new IssuesPage(this.driver);
   });
 
-  test.afterEach(function() {
-    page = undefined;
-  });
-
   test.it('should display issue details when an issue is clicked', function() {
     const expected = page.getIssueDetailsPageText();
 

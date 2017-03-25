@@ -14,10 +14,6 @@ test.describe('home page', function() {
     page = new HomePage(this.driver);
   });
 
-  test.afterEach(function() {
-    page = undefined;
-  });
-
   test.it('should show correct page title', function() {
     const expected = page.getWindowTitleText();
 
