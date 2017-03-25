@@ -16,11 +16,6 @@ module.exports = (issue, state, prev, send) => {
 
     return classes.join(' ');
   }
-
-  function handleClick() {
-    send("activateIssue", { id: issue.id });
-  }
-
   function issueIsCompleted(state, issue) {
     if (state.completedIssues.indexOf(issue.id) != -1) {
       return true;
@@ -35,8 +30,8 @@ module.exports = (issue, state, prev, send) => {
   }
 
   return html`
-    <li onclick=${handleClick}>
-      <a aria-controls="content" class="${classString(state, '')}" href="/issue/${issue.id}">
+    <li>
+      <a aria-controls="content" class="${classString(state, '')}" href="/issue/${issue.id}" onclick=${() => send('trackSwitchIssue')}>
         <span aria-live="polite" class="${classString(state, '__status')}"><span class="visually-hidden">${statusText}</span></span>
         <span class="${classString(state, '__title')}">${issue.name}</span>
         <span class="${classString(state, '__summary')}">${issue.contacts.length} call${ issue.contacts.length > 1 ? "s" : "" } to make</span>

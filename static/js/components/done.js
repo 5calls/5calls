@@ -15,7 +15,7 @@ module.exports = (state, prev, send) => {
         </p>
         ${promote(state, prev, send)}
 
-        <p class="call__text"> <a href="#about">Learn why calling</a> representatives is the most effective way of making your voice heard.</p>
+        <p class="call__text"> <a href="/about">Learn why calling</a> representatives is the most effective way of making your voice heard.</p>
 
         ${callcount(state, prev, send)}
 
