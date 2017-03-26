@@ -77,7 +77,7 @@ store.getAll('org.5calls.completed', (completed) => {
 });
 
 // get stored user stats
-let defaultStats = {
+const defaultStats = {
   all: [],
   contacted: 0,
   vm: 0,

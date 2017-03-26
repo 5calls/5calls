@@ -12,7 +12,7 @@ module.exports = (state, prev, send) => {
     impactPreview = html`
       <div>
         ${impactTotal(state, prev, send)}
-        <h2>See more stats on <a href="#impact">your impact</a>.</h2>
+        <h2>See more stats on <a href="/impact">your impact</a>.</h2>
       </div
     `;
   }
