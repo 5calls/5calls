@@ -1,8 +1,15 @@
 const html = require('choo/html');
+const scrollIntoView = require('../utils/scrollIntoView.js');
 
 module.exports = (state, prev, send) => {
+
+  function load() {
+    scrollIntoView(document.querySelector('#content'));
+    send('startup');
+  }
+
   return html`
-    <main role="main" class="layout__main" onload=${() => send('startup')}>
+    <main id="content" role="main" class="layout__main" onload=${load}>
     <section class="about">
       <h2 class="about__title">About 5 Calls</h2>
 

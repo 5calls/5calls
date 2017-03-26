@@ -410,7 +410,7 @@ app.model({
       } else {
         scrollIntoView(document.querySelector('#content'));
         store.add("org.5calls.completed", issue.id, () => {})
-        send('location:set', "/#done/" + issue.id, done)
+        send('location:set', "/done/" + issue.id, done)
         send('setContactIndices', { newIndex: 0, issueid: issue.id }, done);
       }
     },
@@ -438,19 +438,12 @@ app.model({
 
       send('incrementContact', data, done);
     },
-    activateIssue: (state, data, send, done) => {
+    trackSwitchIssue: (state, data, send, done) => {
       send('hideFieldOfficeNumbers', data, done);
 
       ga('send', 'event', 'issue_flow', 'select', 'select');
 
       scrollIntoView(document.querySelector('#content'));
-
-      // Use Choo's internal model to control Window.location. Fixes issue #161
-      // For more information, see: https://github.com/yoshuawuyts/choo/blob/f84ec43fa58508cc20fe537d752a14901339f0cd/README.md#router
-      // this strips the query string which breaks hashes, so temp workaround
-      send('location:set', "/#issue/" + data.id, done)
-      // location = location.origin + "#issue/" + data.id;
-      // location.hash = "issue/" + data.id;
     }
   },
 });
@@ -465,7 +458,7 @@ app.router({ default: '/' }, [
   ],
   ['/about', require('./pages/aboutView.js')],
   ['/impact', require('./pages/impactView.js')],
-  ['/issues', require('./pages/issuesView.js')]
+  ['/more', require('./pages/issuesView.js')],
 ]);
 
 const tree = app.start();

@@ -54,7 +54,6 @@
     "loglevel": "^1.4.1",
     "query-string": "^4.2.3",
     "raf": "^3.3.0",
-    "scroll-into-view": "^1.7.5",
     "smoothscroll-polyfill": "^0.3.4",
     "xhr": "^2.3",
     "xtend": "^4.0.1"
