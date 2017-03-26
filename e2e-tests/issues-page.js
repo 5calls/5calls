@@ -1,6 +1,7 @@
 const webdriver = require('selenium-webdriver');
 const By = webdriver.By;
 const until = webdriver.until;
+const config = require('./support/e2e-tests.config');
 
 /**
  * Page object for issues-related content.
@@ -27,7 +28,7 @@ class IssuesPage {
    */
   getFirstIssue() {
     const issueSelector = By.css(this.firstIssueSelector);
-    this.driver.wait(until.elementLocated(issueSelector), 3000);
+    this.driver.wait(until.elementLocated(issueSelector), config.defaultTimeout);
     return this.driver.findElement(issueSelector);
   }
 
@@ -41,7 +42,7 @@ class IssuesPage {
   getViewMoreIssuesLink() {
     const linkText = By.linkText(this.viewMoreIssuesLinkText);
     // click on linkText after page has rendered
-    this.driver.wait(until.elementLocated(linkText), 5000);
+    this.driver.wait(until.elementLocated(linkText), config.defaultTimeout * 2);
     return this.driver.findElement(linkText);
   }
   /**
@@ -53,7 +54,7 @@ class IssuesPage {
    */
   getIssueDetailsPageElement() {
     //  make sure issue details page has displayed
-     this.driver.wait(until.elementLocated(By.css(this.issueDetailsPageSelector)), 3000);
+     this.driver.wait(until.elementLocated(By.css(this.issueDetailsPageSelector)), config.defaultTimeout);
     // find element on page
     const element = this.driver.findElement(By.css(this.issueDetailsPageSelector));
     return element;
@@ -78,7 +79,7 @@ class IssuesPage {
    */
   getMoreIssuesPageTextElement() {
     const selector = By.css(this.moreIssuesPageTextElement);
-    this.driver.wait(until.elementLocated(selector), 5000);
+    this.driver.wait(until.elementLocated(selector), config.defaultTimeout);
     return this.driver.findElement(selector);
   }
 

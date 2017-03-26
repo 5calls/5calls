@@ -1,6 +1,7 @@
 const webdriver = require('selenium-webdriver');
 const By = webdriver.By;
 const until = webdriver.until;
+const config = require('./support/e2e-tests.config');
 
 /**
  * Page object encapsulating FAQ page-related behaviors.
@@ -24,7 +25,7 @@ class FaqPage {
    */
   getFaqLink() {
     const selector = By.css(this.faqLinkSelector);
-    this.driver.wait(until.elementLocated(selector), 5000);
+    this.driver.wait(until.elementLocated(selector), config.defaultTimeout);
     return this.driver.findElement(selector);
   }
 
@@ -37,7 +38,7 @@ class FaqPage {
    */
   getFaqPageElement() {
     const selector = By.css(this.faqPageSelector);
-    this.driver.wait(until.elementLocated(selector), 7000);
+    this.driver.wait(until.elementLocated(selector), config.defaultTimeout * 2);
     return this.driver.findElement(selector);
   }
 

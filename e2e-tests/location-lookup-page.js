@@ -1,6 +1,7 @@
 const webdriver = require('selenium-webdriver');
 const By = webdriver.By;
 const until = webdriver.until;
+const config = require('./support/e2e-tests.config');
 
 /**
  * Page object for location-related content.
@@ -25,7 +26,7 @@ class LocationLookupPage {
    */
   displayLocationInputBox() {
     const selector = By.css(this.locationButtonSelector);
-    this.driver.wait(until.elementLocated(selector), 5000);
+    this.driver.wait(until.elementLocated(selector), config.defaultTimeout);
     const addressButton = this.driver.findElement(selector);
     addressButton.click();
   }
@@ -41,7 +42,7 @@ class LocationLookupPage {
   enterAndSubmitNewLocation(location) {
     const inputSelector = By.css(this.locationInputSelector);
     const submitSelector = By.css(this.locationSubmitSelector);
-    this.driver.wait(until.elementLocated(inputSelector), 10000);
+    this.driver.wait(until.elementLocated(inputSelector), config.defaultTimeout * 2);
     this.driver.findElement(inputSelector).sendKeys(location);
     // this.driver.findElement(submitSelector).sendKeys(Key.ENTER);
     this.driver.findElement(submitSelector).click();
@@ -58,10 +59,10 @@ class LocationLookupPage {
    */
   getNewLocationElement(location) {
     const selector = By.css(this.locationButtonSelector);
-    this.driver.wait(until.elementLocated(selector), 6000);
+    this.driver.wait(until.elementLocated(selector), config.defaultTimeout);
     const addressButton = this.driver.findElement(selector);
     // make sure button contains the new location text
-    this.driver.wait(until.elementTextIs(addressButton, location), 2000);
+    this.driver.wait(until.elementTextIs(addressButton, location), config.defaultTimeout);
     return addressButton;
   }
 

@@ -3,6 +3,7 @@
  */
 
 const defaultBaseUrl = 'http://localhost:8000/';
+const defaultTimeout = 3000;
 
 /**
  * Gets the base Url to run the tests,
@@ -17,5 +18,6 @@ function getBaseUrl() {
 }
 
 module.exports = {
-  getBaseUrl: getBaseUrl
+  getBaseUrl: getBaseUrl,
+  defaultTimeout: defaultTimeout
 }

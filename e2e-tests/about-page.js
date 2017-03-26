@@ -1,6 +1,7 @@
 const webdriver = require('selenium-webdriver');
 const By = webdriver.By;
 const until = webdriver.until;
+const config = require('./support/e2e-tests.config');
 
 /**
  * Page object encapsulating about page-related behaviors.
@@ -25,7 +26,7 @@ class AboutPage {
  */
   getWhyCallingWorksLinkElement() {
     const linkTextBy = By.linkText(this.whyCallingWorksLinkText);
-    this.driver.wait(until.elementLocated(linkTextBy), 5000);
+    this.driver.wait(until.elementLocated(linkTextBy), config.defaultTimeout);
     return this.driver.findElement(linkTextBy);
   }
 
@@ -38,7 +39,7 @@ class AboutPage {
  */
   getAboutPageTextElement() {
     const aboutPageSelectorBy = By.css(this.aboutPageSelector);
-    this.driver.wait(until.elementLocated(aboutPageSelectorBy), 3000);
+    this.driver.wait(until.elementLocated(aboutPageSelectorBy), config.defaultTimeout);
     return this.driver.findElement(aboutPageSelectorBy);
   }
 
@@ -51,7 +52,7 @@ class AboutPage {
  */
   getAboutPageLinkElement() {
     const aboutPageLinkTextBy = By.linkText(this.aboutPageLinkText);
-    this.driver.wait(until.elementLocated(aboutPageLinkTextBy), 2000);
+    this.driver.wait(until.elementLocated(aboutPageLinkTextBy), config.defaultTimeout);
     return this.driver.findElement(aboutPageLinkTextBy);
   }
 
