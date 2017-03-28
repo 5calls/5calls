@@ -426,7 +426,7 @@ app.model({
       send('setUserStats', data, done);
       
       // This parameter will indicate to the backend api where this call report came from
-      // A value of test indicates that it did not come the production environment
+      // A value of test indicates that it did not come from the production environment
       const viaParameter = window.location.host === "5calls.org" ? 'web' : 'test';
       
       const body = queryString.stringify({ location: state.zip, result: data.result, contactid: data.contactid, issueid: data.issueid, via: viaParameter })
