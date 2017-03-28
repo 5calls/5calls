@@ -424,8 +424,8 @@ app.model({
       }
 
       send('setUserStats', data, done);
-
-      const viaParameter = debug ? 'test' : 'web';
+      
+      const viaParameter = window.location.host === "5calls.org" ? 'web' : 'test';
       const body = queryString.stringify({ location: state.zip, result: data.result, contactid: data.contactid, issueid: data.issueid, via: viaParameter })
       http.post(appURL+'/report', { body: body, headers: {"Content-Type": "application/x-www-form-urlencoded"} }, () => {
         // don’t really care about the result
