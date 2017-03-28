@@ -6,8 +6,9 @@
   "scripts": {
     "start": "gulp",
     "deploy": "gulp deploy",
-    "test": "gulp test",
-    "test:watch": "gulp test:watch",
+    "test": "gulp eslint && karma start --single-run",
+    "test:watch": "karma start --no-single-run",
+    "test:ci": "gulp eslint && karma start karma.ci.conf.js",
     "test:e2e": "gulp test:e2e"
   },
   "repository": {

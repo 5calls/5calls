@@ -12,7 +12,6 @@ var gulp = require('gulp')
   , uglify = require('gulp-uglify')
   , http_server = require('http-server')
   , connect_logger = require('connect-logger')
-  , spawn = require('child_process').spawn
   , mocha = require('gulp-mocha')
   , path = require('path')
   ;
@@ -127,46 +126,6 @@ gulp.task('extra', function() {
     .pipe(gulp.dest(DEST.html));
 });
 
-function runKarmaTests ({singleRun, configFile} = {}) {
-  return new Promise((resolve, reject) => {
-    const karmaArguments = ['start'];
-
-    if (configFile) {
-      karmaArguments.push(configFile);
-    }
-
-    if (singleRun) {
-      karmaArguments.push('--single-run');
-    }
-
-    // Karma has a nice public API, but has issues where it can hang when
-    // trying to shut down after completing tests, so run it as a separate
-    // process instead. See:
-    // https://github.com/karma-runner/karma/issues/1693
-    // https://github.com/karma-runner/karma/issues/1035
-    const karma = spawn('./node_modules/.bin/karma', karmaArguments, {
-      cwd: __dirname,
-      stdio: 'inherit'
-    });
-
-    karma.on('close', code => {
-      if (code) {
-        reject(new util.PluginError('Karma', `JS unit tests failed (code ${code})`));
-        return;
-      }
-      resolve();
-    });
-  });
-}
-
-gulp.task('test:js-unit', function() {
-  return runKarmaTests({singleRun: true});
-});
-
-gulp.task('test:watch', function() {
-  return runKarmaTests({singleRun: false});
-});
-
 gulp.task('test:e2e', function() {
   return gulp.src([
     './e2e-tests/support/setupEndToEndTests.js',
@@ -176,13 +135,6 @@ gulp.task('test:e2e', function() {
       reporter: 'spec',
       timeout: 6000
     }));
-});
-
-// Designed for running tests in continuous integration. The main difference
-// here is that browser tests are run across a gamut of browsers/platforms via
-// Sauce Labs instead of just a few locally.
-gulp.task('test:ci', ['eslint'], function() {
-  return runKarmaTests({configFile: 'karma.ci.conf.js'});
 });
 
 gulp.task('eslint', function() {
@@ -204,8 +156,6 @@ gulp.task('eslint', function() {
     throw new util.PluginError('ESLint', 'Found problems with JS coding style.');
   }
 });
-
-gulp.task('test', ['eslint', 'test:js-unit']);
 
 gulp.task('default', ['html', 'html:watch', 'html:serve', 'sass', 'sass:watch', 'copy-images', 'copy-images:watch', 'scripts', 'scripts:watch', 'extra']);
 gulp.task('deploy', ['html', 'sass', 'build-scripts', 'extra', 'copy-images']);
