@@ -5,7 +5,7 @@
 const test = require('selenium-webdriver/testing');
 const chai = require('chai');
 const expect = chai.expect;
-const HomePage = require('./home-page');
+const HomePage = require('./support/home-page');
 
 test.describe('home page', function() {
   let page = undefined;
@@ -15,7 +15,7 @@ test.describe('home page', function() {
   });
 
   test.it('should show correct page title', function() {
-    const expected = page.getWindowTitleText();
+    const expected = '5 Calls: Make your voice heard';
 
     const title = page.getWindowTitle();
 
@@ -23,9 +23,12 @@ test.describe('home page', function() {
   });
 
   test.it('should display call count line', function() {
+    // regex matching call count line
     const expected = page.getCallCountLineRegex();
 
-    return expect(page.getCallCountLineElement()).to.eventually.match(expected);
+    // check call count element text against regex
+    const element = page.getCallCountLineElement();
+    return expect(element.getText()).to.eventually.match(expected);
   });
 
 });

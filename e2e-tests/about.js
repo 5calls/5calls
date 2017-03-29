@@ -4,36 +4,32 @@
 const test = require('selenium-webdriver/testing');
 const chai = require('chai');
 const expect = chai.expect;
-const AboutPage = require('./about-page');
+const AboutPage = require('./support/about-page');
+const HomePage = require('./support/home-page');
 
 test.describe('about page', function() {
-  let page = undefined;
+  let aboutPage = undefined;
+  let homePage = undefined;
   test.beforeEach(function() {
     this.driver.get(this.baseUrl);
-    page = new AboutPage(this.driver);
+    aboutPage = new AboutPage(this.driver);
+    homePage = new HomePage(this.driver);
   });
 
   test.it('should display about page when "why calling works." link is clicked on home page', function() {
-    const expected = page.getAboutPageText();
-
-    // click on home page link
-    page.getWhyCallingWorksLinkElement().click();
+    // click on 'why calling works' home page link
+    homePage.getWhyCallingWorksLink().click();
 
     // verify that About page renders
-    const element = page.getAboutPageTextElement();
-    return expect(element.getText()).to.eventually.equal(expected);
+    return expect(aboutPage.isAboutPage()).to.eventually.equal(true);
   });
 
   test.it('should display about page when "About" link is clicked on home page', function() {
-    const expected = page.getAboutPageText();
-
-    // click on home page link
-    page.getAboutPageLinkElement().click();
+    // click on home page 'About' link
+    homePage.getAboutPageLink().click();
 
     // verify that About page renders
-    const element = page.getAboutPageTextElement();
-
-    return expect(element.getText()).to.eventually.equal(expected);
+    return expect(aboutPage.isAboutPage()).to.eventually.be.true;
   });
 
 });

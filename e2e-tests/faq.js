@@ -4,26 +4,26 @@
 const test = require('selenium-webdriver/testing');
 const chai = require('chai');
 const expect = chai.expect;
-const FaqPage = require('./faq-page');
+const FaqPage = require('./support/faq-page');
+const HomePage = require('./support/home-page');
 
 test.describe('faq page', function() {
-  let page = undefined;
+  let faqPage = undefined;
+  let homePage = undefined;
   test.beforeEach(function() {
     this.driver.get(this.baseUrl);
-    page = new FaqPage(this.driver);
+    faqPage = new FaqPage(this.driver);
+    homePage = new HomePage(this.driver);
   });
 
   test.it('should display FAQ page when "FAQ" link is clicked on home page', function() {
     // FAQ page can be flaky, so catch any errors
     try {
-      const expected = page.getExpectedFaqPageText();
-
       // Click on icon inside FAQ link
-      page.getFaqLink().click();
+      homePage.getFaqLink().click();
 
       // verify that FAQ page is rendered
-      let element = page.getFaqPageElement();
-      return expect(element.getText()).to.eventually.equal(expected);
+      return expect(faqPage.isFaqPage()).to.eventually.be.true;
     } catch( error ) {
       error.message = 'Problem getting FAQ page';
       return Promise.reject(error);
