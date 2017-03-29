@@ -25,8 +25,8 @@ test.describe('faq page', function() {
       let element = page.getFaqPageElement();
       return expect(element.getText()).to.eventually.equal(expected);
     } catch( error ) {
-      /*eslint no-console: */
-      return Promise.resolve(error => console.log('Problem getting FAQ page', error))
+      error.message = 'Problem getting FAQ page';
+      return Promise.reject(error);
     }
 
   });
