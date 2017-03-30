@@ -1,14 +1,13 @@
 const webdriver = require('selenium-webdriver');
 const By = webdriver.By;
 const until = webdriver.until;
-const config = require('./support/e2e-tests.config');
+const config = require('./e2e-tests.config');
 
 /**
  * Page object for location-related content.
  *
- * @class LocationLookupPage
  */
-class LocationLookupPage {
+class LocationPage {
   constructor(driver) {
     this.driver = driver;
     // define selectors and other locators
@@ -21,8 +20,6 @@ class LocationLookupPage {
   /**
    * Displays the location text box.
    *
-   *
-   * @memberOf LocationLookupPage
    */
   displayLocationInputBox() {
     const selector = By.css(this.locationButtonSelector);
@@ -37,14 +34,12 @@ class LocationLookupPage {
    *
    * @param {string} location the location to submit
    *
-   * @memberOf LocationLookupPage
    */
   enterAndSubmitNewLocation(location) {
     const inputSelector = By.css(this.locationInputSelector);
     const submitSelector = By.css(this.locationSubmitSelector);
     this.driver.wait(until.elementLocated(inputSelector), config.defaultTimeout * 2);
     this.driver.findElement(inputSelector).sendKeys(location);
-    // this.driver.findElement(submitSelector).sendKeys(Key.ENTER);
     this.driver.findElement(submitSelector).click();
   }
 
@@ -53,9 +48,8 @@ class LocationLookupPage {
    * text after it has been entered and submitted.
    *
    * @param {string} location the entered location
-   * @returns the new location
+   * @returns {WebElementPromise} resolves to the new location element
    *
-   * @memberOf LocationLookupPage
    */
   getNewLocationElement(location) {
     const selector = By.css(this.locationButtonSelector);
@@ -66,6 +60,14 @@ class LocationLookupPage {
     return addressButton;
   }
 
+  /**
+   * Accessor for the error message used if an
+   * unknown address was submitted.
+   *
+   * @returns {string} the location error message.
+   *
+   * @memberOf LocationPage
+   */
   getLocationErrorMessage() {
     return this.locationErrorMessage;
   }
@@ -73,4 +75,4 @@ class LocationLookupPage {
 
 }
 
-module.exports = LocationLookupPage;
+module.exports = LocationPage;

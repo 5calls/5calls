@@ -4,13 +4,13 @@
 const test = require('selenium-webdriver/testing');
 const chai = require('chai');
 const expect = chai.expect;
-const LocationLookupPage = require('./location-lookup-page');
+const LocationPage = require('./support/location-page');
 
 test.describe('location lookup', function() {
   let page = undefined;
   test.beforeEach(function() {
     this.driver.get(this.baseUrl);
-    page = new LocationLookupPage(this.driver);
+    page = new LocationPage(this.driver);
   });
 
   test.it('Should lookup location by zip code', function() {
