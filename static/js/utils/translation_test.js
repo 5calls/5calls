@@ -60,7 +60,7 @@ describe('translation', () => {
         let key = 'common.go';
         let expected = '<span>Go</span>';
         let result = t(key, null, false);
-        expect(result).to.equal(expected);
+        expect(result.outerHTML).to.equal(expected);
       });
 
       // it('should return the phrase in a "span" tag when fourth, "useDiv", argument is false', () => {
