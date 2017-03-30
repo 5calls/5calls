@@ -1,8 +1,8 @@
-const callcount = require('./callcount.js');
-const chai = require('chai');
-const expect = chai.expect;
+//const callcount = require('./callcount.js');
+//const chai = require('chai');
+//const expect = chai.expect;
 
-describe('callcount component', () => {
+//describe('callcount component', () => {
   // it('should properly format call total >=1000 with commas', () => {
   //   let state = {totalCalls: '123456789'};
   //   let result = callcount(state);
@@ -38,4 +38,4 @@ describe('callcount component', () => {
   //   expect(result.textContent).to.contain('0');
   //   expect(result.textContent).not.to.not.contain('NaN');
   // });
-});
+//});
