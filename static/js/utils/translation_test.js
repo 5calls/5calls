@@ -49,19 +49,19 @@ describe('translation', () => {
         expect(result.outerHTML).to.equal(expected);
       });
 
-      // it('should not return the localized phrase in a "span" tag when third argument is true', () => {
-      //   let key = 'common.go';
-      //   let expected = 'Go';
-      //   let result = t(key, null, true);
-      //   expect(result).to.equal(expected);
-      // });
+      it('should not return the localized phrase in a "span" tag when third argument is true', () => {
+        let key = 'common.go';
+        let expected = 'Go';
+        let result = t(key, null, true);
+        expect(result).to.equal(expected);
+      });
 
-      // it('should return the phrase in a "span" tag when fourth, "useDiv", argument is false', () => {
-      //   let key = 'common.go';
-      //   let expected = '<span>Go</span>';
-      //   let result = t(key, null, false, false);
-      //   expect(result.outerHTML).to.equal(expected);
-      // });
+      it('should return the phrase in a "span" tag when fourth, "useDiv", argument is false', () => {
+        let key = 'common.go';
+        let expected = '<span>Go</span>';
+        let result = t(key, null, false, false);
+        expect(result.outerHTML).to.equal(expected);
+      });
 
       // it('should return the phrase in no tag when third argument(justText) is true and fourth(useDiv) argument is true', () => {
       //   let key = 'common.go';
