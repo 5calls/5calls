@@ -23,7 +23,8 @@ class FaqPage {
    */
   getFaqPageElement() {
     const selector = By.css(this.faqPageSelector);
-    this.driver.wait(until.elementLocated(selector), config.defaultTimeout * 2);
+    this.driver.wait(until.elementLocated(selector),
+      config.defaultTimeout * 2, 'FAQ page element not found');
     return this.driver.findElement(selector);
   }
 

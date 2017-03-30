@@ -26,7 +26,7 @@ class CallsPage {
     const callsPageSelectorBy = By.css(this.callsPageSelector);
     //  make sure calls page has displayed
     this.driver.wait(until.elementLocated(callsPageSelectorBy),
-      config.defaultTimeout);
+      config.defaultTimeout, 'Calls page element not found');
     // find element on page
     const element = this.driver.findElement(callsPageSelectorBy);
     return element;

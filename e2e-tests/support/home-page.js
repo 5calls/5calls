@@ -39,7 +39,8 @@ class HomePage {
    */
   getAboutPageLink() {
     const aboutPageLinkTextBy = By.linkText(this.aboutPageLinkText);
-    this.driver.wait(until.elementLocated(aboutPageLinkTextBy), config.defaultTimeout);
+    this.driver.wait(until.elementLocated(aboutPageLinkTextBy),
+    config.defaultTimeout, 'About page link not found');
     return this.driver.findElement(aboutPageLinkTextBy);
   }
 
@@ -50,7 +51,8 @@ class HomePage {
  */
   getWhyCallingWorksLink() {
     const linkTextBy = By.linkText(this.whyCallingWorksLinkText);
-    this.driver.wait(until.elementLocated(linkTextBy), config.defaultTimeout);
+    this.driver.wait(until.elementLocated(linkTextBy),
+      config.defaultTimeout, 'Why Calling Works link not found');
     return this.driver.findElement(linkTextBy);
   }
 
@@ -61,7 +63,8 @@ class HomePage {
    */
   getFaqLink() {
     const selector = By.css(this.faqLinkSelector);
-    this.driver.wait(until.elementLocated(selector), config.defaultTimeout);
+    this.driver.wait(until.elementLocated(selector),
+      config.defaultTimeout, 'FAQ link not found');
     return this.driver.findElement(selector);
   }
 

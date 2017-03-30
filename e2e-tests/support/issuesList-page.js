@@ -31,7 +31,8 @@ class IssuesListPage {
    */
   getFirstIssue() {
     const issueSelector = By.css(this.firstIssueSelector);
-    this.driver.wait(until.elementLocated(issueSelector), config.defaultTimeout);
+    this.driver.wait(until.elementLocated(issueSelector),
+      config.defaultTimeout, 'First issue in list not found');
     return this.driver.findElement(issueSelector);
   }
 
@@ -44,7 +45,8 @@ class IssuesListPage {
   getViewMoreIssuesLink() {
     const linkText = By.linkText(this.viewMoreIssuesLinkText);
     // click on linkText after page has rendered
-    this.driver.wait(until.elementLocated(linkText), config.defaultTimeout * 2);
+    this.driver.wait(until.elementLocated(linkText),
+      config.defaultTimeout * 2, 'View More Issues link not found');
     return this.driver.findElement(linkText);
   }
 
@@ -57,7 +59,8 @@ class IssuesListPage {
    */
   getMoreIssuesPageTextElement() {
     const selector = By.css(this.moreIssuesPageTextElement);
-    this.driver.wait(until.elementLocated(selector), config.defaultTimeout);
+    this.driver.wait(until.elementLocated(selector),
+      config.defaultTimeout, 'More Issues page element not found');
     return this.driver.findElement(selector);
   }
 

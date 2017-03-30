@@ -24,7 +24,8 @@ class AboutPage {
  */
   getAboutPageTextElement() {
     const aboutPageSelectorBy = By.css(this.aboutPageSelector);
-    this.driver.wait(until.elementLocated(aboutPageSelectorBy), config.defaultTimeout);
+    this.driver.wait(until.elementLocated(aboutPageSelectorBy),
+      config.defaultTimeout, 'About page element not found');
     return this.driver.findElement(aboutPageSelectorBy);
   }
 

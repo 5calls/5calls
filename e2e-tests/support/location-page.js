@@ -18,12 +18,14 @@ class LocationPage {
   }
 
   /**
-   * Displays the location text box.
+   * Displays the location text box after clicking
+   * on the location button.
    *
    */
   displayLocationInputBox() {
     const selector = By.css(this.locationButtonSelector);
-    this.driver.wait(until.elementLocated(selector), config.defaultTimeout);
+    this.driver.wait(until.elementLocated(selector),
+      config.defaultTimeout, 'Location button not found');
     const addressButton = this.driver.findElement(selector);
     addressButton.click();
   }
@@ -38,7 +40,8 @@ class LocationPage {
   enterAndSubmitNewLocation(location) {
     const inputSelector = By.css(this.locationInputSelector);
     const submitSelector = By.css(this.locationSubmitSelector);
-    this.driver.wait(until.elementLocated(inputSelector), config.defaultTimeout * 2);
+    this.driver.wait(until.elementLocated(inputSelector),
+      config.defaultTimeout * 2, 'Location input text box not found');
     this.driver.findElement(inputSelector).sendKeys(location);
     this.driver.findElement(submitSelector).click();
   }
@@ -53,10 +56,12 @@ class LocationPage {
    */
   getNewLocationElement(location) {
     const selector = By.css(this.locationButtonSelector);
-    this.driver.wait(until.elementLocated(selector), config.defaultTimeout);
+    this.driver.wait(until.elementLocated(selector),
+      config.defaultTimeout, 'Button with new location text not found');
     const addressButton = this.driver.findElement(selector);
     // make sure button contains the new location text
-    this.driver.wait(until.elementTextIs(addressButton, location), config.defaultTimeout);
+    this.driver.wait(until.elementTextIs(addressButton, location),
+      config.defaultTimeout, 'New location button text not found');
     return addressButton;
   }
 
