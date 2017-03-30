@@ -56,6 +56,13 @@ describe('translation', () => {
         expect(result).to.equal(expected);
       });
 
+      it('should return the localized phrase in a "span" tag when third argument is false 2', () => {
+        let key = 'common.go';
+        let expected = '<span>Go</span>';
+        let result = t(key, null, false);
+        expect(result).to.equal(expected);
+      });
+
       // it('should return the phrase in a "span" tag when fourth, "useDiv", argument is false', () => {
       //   let key = 'common.go';
       //   let expected = '<span>Go</span>';
