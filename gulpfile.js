@@ -144,7 +144,8 @@ function runKarmaTests ({singleRun, configFile} = {}) {
     // process instead. See:
     // https://github.com/karma-runner/karma/issues/1693
     // https://github.com/karma-runner/karma/issues/1035
-    const karma = spawn('./node_modules/.bin/karma', karmaArguments, {
+    const karma = spawn(path.join(__dirname, 'node_modules', '.bin', 'karma'), karmaArguments, {
+      shell: true,
       cwd: __dirname,
       stdio: 'inherit'
     });
