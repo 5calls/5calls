@@ -20,20 +20,20 @@ describe('translation', () => {
         expect(result.outerHTML).to.equal(expected);
       });
 
-      // it('should return the localized phrase when an empty object is passed for the second, or options, argument', () => {
-      //   let key = 'common.go';
-      //   let expected = '<span>Go</span>';
-      //   let result = t(key, {});
-      //   expect(result.outerHTML).to.equal(expected);
-      // });
+      it('should return the localized phrase when an empty object is passed for the second, or options, argument', () => {
+        let key = 'common.go';
+        let expected = '<span>Go</span>';
+        let result = t(key, {});
+        expect(result.outerHTML).to.equal(expected);
+      });
 
-      // it('should return the localized phrase when properties that are not used are passed in the object for the second, or options, argument', () => {
-      //   let key = 'common.go';
-      //   let options = { notUsed: 1 };
-      //   let expected = '<span>Go</span>';
-      //   let result = t(key, options);
-      //   expect(result.outerHTML).to.equal(expected);
-      // });
+      it('should return the localized phrase when properties that are not used are passed in the object for the second, or options, argument', () => {
+        let key = 'common.go';
+        let options = { notUsed: 1 };
+        let expected = '<span>Go</span>';
+        let result = t(key, options);
+        expect(result.outerHTML).to.equal(expected);
+      });
 
       // it('should return the localized phrase in a "span" tag when third argument to getText() is missing', () => {
       //   let key = 'common.go';
