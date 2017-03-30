@@ -78,14 +78,14 @@ describe('translation', () => {
       });
     });
 
-    describe('simple localization', () => {
-      it('should return the english localized string when given the key', () => {
-        let key = 'common.go';
-        let expected = 'Go';
-        let result = t(key, null, true);
-        expect(result).to.equal(expected);
-      });
-    });
+    // describe('simple localization', () => {
+    //   it('should return the english localized string when given the key', () => {
+    //     let key = 'common.go';
+    //     let expected = 'Go';
+    //     let result = t(key, null, true);
+    //     expect(result).to.equal(expected);
+    //   });
+    // });
 
     // describe('change locales', () => {
     //   it('should return the spanish localized string when the locale is changed to spanish', (done) => {
