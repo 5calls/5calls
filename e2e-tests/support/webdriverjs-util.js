@@ -4,6 +4,8 @@
 const fs = require('fs');
 const path = require('path');
 
+// TODO:  include other local storage keys
+// and move to /static/js/util/localStorage.js.
 const LocalStorageKey = {
   LOCATION: 'org.5calls.location',
   GEOLOCATION: 'org.5calls.geolocation',
@@ -12,6 +14,7 @@ const LocalStorageKey = {
   GEOLOCATION_CITY: 'org.5calls.geolocation_city'
 }
 
+// TODO: Move to /static/js/util/localStorage.js.
 function getLocalStorageLocationKeys() {
   return [
     LocalStorageKey.LOCATION,
@@ -29,7 +32,7 @@ function getLocalStorageLocationKeys() {
  * @param {string} fileName the name of the screehshot file (default==='screenshot.png')
  * @param {string} screenshotPath the path to the screenshot file (default===process.cwd())
  */
-function takeScreenshot(driver, fileName = 'screenshot.png', screenshotPath) {
+function saveScreenshot(driver, fileName = 'screenshot.png', screenshotPath) {
   screenshotPath = screenshotPath || process.cwd();
   driver.takeScreenshot().then(function(data) {
     fs.writeFileSync(path.join(screenshotPath, fileName), data, 'base64');
@@ -75,7 +78,7 @@ function setLocalStorageData(driver, key, value) {
 module.exports = {
   LocalStorage: LocalStorageKey,
   getLocalStorageLocationKeys: getLocalStorageLocationKeys,
-  takeScreenshot: takeScreenshot,
+  saveScreenshot: saveScreenshot,
   getLocalStorageData: getLocalStorageData,
   setLocalStorageData: setLocalStorageData,
   logLocalStorageData: logLocalStorageData
