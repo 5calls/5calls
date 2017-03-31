@@ -109,6 +109,16 @@ module.exports = function (configuration) {
     reporters: ['mocha', 'saucelabs'],
     singleRun: true,
 
+    // don't apply code coverage transformation, it breaks things on sauce
+    // for edge and safari browsers. See:
+    // https://github.com/karma-runner/karma-sauce-launcher/issues/95#issuecomment-255020888
+    // https://github.com/istanbuljs/babel-plugin-istanbul/issues/81
+    browserify: {
+      debug: true,
+      transform: ['es2040']
+    },
+
+
     // Since tests are remote, give a little extra time
     captureTimeout: 300000,
     browserNoActivityTimeout: 30000
