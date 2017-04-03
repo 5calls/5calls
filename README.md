@@ -95,13 +95,7 @@ Linting of the 5 Calls JavaScript code is done using [ESLint](http://eslint.org/
 <a id="Contributor_Guidelines"></a>
 ## Contributor Guidelines
 
-Contributions to the 5 Calls frontend repository (5calls/5calls) are always welcome, but to make sure changes are properly discussed and prioritized, and that there is no duplication of work, the following steps should be followed:
-1. An Issue should be created to discuss a proposed change before it is implemented. If the change is an emergency bug fix, the Issue creation and discussion steps can be skipped, but note that in the PR submission comment. Make sure the PR branch is rebased if it becomes out-of-date with the 5 Calls repo's master branch.
-2. A Pull Request (PR) can be submitted if there is no Issue discussion after a few days or when the Issue discussion arrives at a consensus.
-3. A unit or end-to-end test (or tests) should be included with the Pull Request covering the changes. If tests are not possible, an explanation should be included with the PR.
-4. Our continuous integration system will run ESLint, and all unit and end-to-end tests when a PR is submitted. Fixing any failing tests or ESLint rule violations is the responsibility of the person submitting the PR.
-5. A 5 Calls team member needs to review and approve the PR before it can be merged into the master branch. The reviewer should clone the PR branch locally and make sure that the code can build and has no eslint or unit/e2e test failures before approving the PR. It is the responsibility of the PR submitter to make changes suggested by the reviewer or to explain why the proposed changes are not necessary or should be modified.
-6. Merging of the PR into the master branch after approval can be done by the PR reviewer or any other 5 Calls team member including the submitter if he/she is a team member.
+For the guide to contributing to this repository, please see [CONTRIBUTING.md](./CONTRIBUTING.md) file.
 
 <a id="Contributors"></a>
 ## Contributors
