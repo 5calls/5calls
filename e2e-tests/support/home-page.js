@@ -1,33 +1,25 @@
 const webdriver = require('selenium-webdriver');
 const By = webdriver.By;
-const until = webdriver.until;
-const config = require('./e2e-tests.config');
+
+const BasePage = require('./base-page');
+const AboutPage = require('./about-page');
+const FaqPage = require('./faq-page');
 
 /**
  * Page object for the Home page.
  *
  */
-class HomePage {
-  constructor(driver) {
-    this.driver = driver;
-    // call count related selectors and search text
-    this.callCountSelector = 'h2.callcount';
-    this.callCountLineRegex = /^TOGETHER WE’VE MADE \d{1,3}(,\d{3})*(\.\d+)? CALLS$/;
-    // about page links
-    this.aboutPageLinkText = 'About';
-    this.whyCallingWorksLinkText = 'why calling works.';
-    // FAQ page link selector
-    this.faqLinkSelector = 'i.fa-question-circle'
-  }
+class HomePage extends BasePage {
+  isInitialized() {
+    const pageTitleSelector = By.css('h2.hypothesis__title');
+    const pageTitleText = "MAKE YOUR VOICE HEARD";
 
-  /**
-   * Obtains the window title text.
-   *
-   * @returns {Promise<string>} resolves to the window
-   * title text.
-   */
-  getWindowTitle() {
-    return this.driver.getTitle();
+    return this.waitForElement(pageTitleSelector,
+                               "Home page isn't loaded")
+      .getText()
+      .then(text => {
+        return text === pageTitleText;
+      });
   }
 
   /**
@@ -37,23 +29,21 @@ class HomePage {
    * web element containing the About link to the
    * about page.
    */
-  getAboutPageLink() {
-    const aboutPageLinkTextBy = By.linkText(this.aboutPageLinkText);
-    this.driver.wait(until.elementLocated(aboutPageLinkTextBy),
-    config.defaultTimeout, 'About page link not found');
-    return this.driver.findElement(aboutPageLinkTextBy);
+  followAboutPageLink() {
+    const aboutPageLinkSelector = By.partialLinkText("About");
+    this.waitForElement(aboutPageLinkSelector).click();
+    return new AboutPage(this.driver);
   }
 
-/**
- * Obtains the Why Calling Works link element.
- *
- * @returns {WebElementPromise} resolves to the link element
- */
-  getWhyCallingWorksLink() {
-    const linkTextBy = By.linkText(this.whyCallingWorksLinkText);
-    this.driver.wait(until.elementLocated(linkTextBy),
-      config.defaultTimeout, 'Why Calling Works link not found');
-    return this.driver.findElement(linkTextBy);
+  /**
+   * Obtains the Why Calling Works link element.
+   *
+   * @returns {WebElementPromise} resolves to the link element
+   */
+  followWhyCallingWorksLink() {
+    const linkSelector = By.partialLinkText('why calling works');
+    this.waitForElement(linkSelector).click();
+    return new AboutPage(this.driver);
   }
 
   /**
@@ -61,11 +51,10 @@ class HomePage {
    *
    * @returns {WebElementPromise} resolves to the FAQ link element
    */
-  getFaqLink() {
-    const selector = By.css(this.faqLinkSelector);
-    this.driver.wait(until.elementLocated(selector),
-      config.defaultTimeout, 'FAQ link not found');
-    return this.driver.findElement(selector);
+  followFaqLink() {
+    const selector = By.css('i.fa-question-circle');
+    this.waitForElement(selector).click();
+    return new FaqPage(this.driver);
   }
 
 
@@ -74,19 +63,14 @@ class HomePage {
    *
    * @returns {WebElementPromise} resolves to the call count element
    */
-  getCallCountLineElement() {
-    const selector = By.css(this.callCountSelector);
-    return this.driver.findElement(selector);
-  }
-
-  /**
-   * Obtains a regex corresponding to the call count line text.
-   *
-   * @returns {RegExp} a regular expression for
-   * the call count line.
-   */
-  getCallCountLineRegex() {
-    return this.callCountLineRegex;
+  getCallCount() {
+    const selector = By.css('h2.callcount');
+    const callCountRegex = /^TOGETHER WE’VE MADE ([\d,.]*) CALLS$/;
+    return this.waitForElement(selector).getText()
+      .then(text => {
+        const match = text.match(callCountRegex);
+        return match === null ? "" : match[1];
+      });
   }
 
 }

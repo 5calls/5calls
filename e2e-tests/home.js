@@ -14,22 +14,8 @@ test.describe('home page', function() {
     page = new HomePage(this.driver);
   });
 
-  test.it('should show correct page title', function() {
-    const expected = '5 Calls: Make your voice heard';
-
-    const title = page.getWindowTitle();
-
-    return expect(title).to.eventually.equal(expected);
-  });
-
   test.it('should display call count line', function() {
-    // regex matching call count line
-    const expected = page.getCallCountLineRegex();
-
-    // check call count element text against regex
-    const element = page.getCallCountLineElement();
-    return expect(element.getText()).to.eventually.match(expected);
+    return expect(page.getCallCount()).to.eventually.not.be.empty;
   });
 
 });
-

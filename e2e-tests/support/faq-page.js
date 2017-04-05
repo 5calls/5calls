@@ -8,11 +8,16 @@ const config = require('./e2e-tests.config');
  *
  */
 class FaqPage {
-  constructor(driver) {
-    this.driver = driver;
-    // FAQ page element selector and text
-    this.faqPageSelector = 'header.page-header > h1';
-    this.faqPageText = 'FAQ';
+  isInitialized() {
+    const pageTitleSelector = By.css('header.page-header > h1');
+    const pageTitleText = "FAQ";
+
+    return this.waitForElement(pageTitleSelector,
+                               "InactiveIssues page isn't loaded")
+      .getText()
+      .then(text => {
+        return text === pageTitleText;
+      });
   }
 
   /**
@@ -22,9 +27,8 @@ class FaqPage {
    * from the FAQ page.
    */
   getFaqPageElement() {
-    const selector = By.css(this.faqPageSelector);
-    this.driver.wait(until.elementLocated(selector),
-      config.defaultTimeout * 2, 'FAQ page element not found');
+    const selector = By.css('header.page-header > h1');
+    this.driver.wait(until.elementLocated(selector), config.defaultTimeout * 2);
     return this.driver.findElement(selector);
   }
 
