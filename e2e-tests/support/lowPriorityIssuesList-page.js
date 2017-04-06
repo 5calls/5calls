@@ -5,15 +5,16 @@ const BasePage = require('./base-page');
 const CallsPage = require('./calls-page');
 
 /**
- * Page object for the page listing non-important issues.
+ * Page object for the More Issues page that holds
+ * a list of low priority issues.
  */
-class InactiveIssuesPage extends BasePage {
+class LowPriorityIssuesListPage extends BasePage {
   isInitialized() {
     const moreIssuesTitleSelector = By.css('main .call__title');
     const moreIssuesTitleText = "MORE ISSUES";
 
     return this.waitForElement(moreIssuesTitleSelector,
-                               "InactiveIssues page isn't loaded")
+                               "More Issues page isn't loaded")
       .getText()
       .then(text => {
         return text === moreIssuesTitleText;
@@ -28,11 +29,11 @@ class InactiveIssuesPage extends BasePage {
    * issue element
    */
   followFirstIssue() {
-    const firstIssueSelector = By.css('ul.issues-list li:nth-child(1)');
+    const firstIssueSelector = By.css('section.call ul.issues-list li:nth-child(1)');
     this.waitForElement(firstIssueSelector).click();
     return new CallsPage(this.driver);
   }
 
 }
 
-module.exports = InactiveIssuesPage;
+module.exports = LowPriorityIssuesListPage;

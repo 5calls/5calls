@@ -6,7 +6,7 @@ const config = require('./e2e-tests.config');
 
 const BasePage = require('./base-page');
 const CallsPage = require('./calls-page');
-const InactiveIssuesPage = require('./inactiveIssues-page');
+const LowPriorityIssuesListPage = require('./lowPriorityIssuesList-page');
 
 /**
  * Page object for issues list related content,
@@ -41,7 +41,7 @@ class IssuesListPage extends BasePage {
    * issue element
    */
   followFirstIssue() {
-    const firstIssueSelector = By.css('ul.issues-list li:nth-child(1)');
+    const firstIssueSelector = By.css('aside.layout__side ul.issues-list li:nth-child(1)');
     this.waitForElement(firstIssueSelector).click();
     return new CallsPage(this.driver);
   }
@@ -52,10 +52,10 @@ class IssuesListPage extends BasePage {
    * @returns {WebElementPromise} resolves to the
    * 'view more issues' link element
    */
-  followViewInactiveIssuesLink() {
+  followLowPriorityIssuesListLink() {
     const linkText = By.linkText('view more issues');
     this.waitForElement(linkText).click();
-    return new InactiveIssuesPage(this.driver);
+    return new LowPriorityIssuesListPage(this.driver);
   }
 }
 

@@ -6,7 +6,7 @@ const test = require('selenium-webdriver/testing');
 
 const HomePage = require('./support/home-page');
 const IssuesListPage = require('./support/issuesList-page');
-const InactiveIssuesPage = require('./support/inactiveIssues-page');
+const LowPriorityIssuesListPage = require('./support/lowPriorityIssuesList-page');
 const CallsPage = require('./support/calls-page');
 
 test.describe('Should be able to navigate', function() {
@@ -42,9 +42,9 @@ test.describe('Should be able to navigate', function() {
       page.followFirstIssue();
     });
 
-    test.it('to inactive issues page', function() {
+    test.it('to low priority issues list page', function() {
       page = new IssuesListPage(this.driver);
-      page.followViewInactiveIssuesLink();
+      page.followLowPriorityIssuesListLink();
     });
 
     test.describe("via footer links", function() {
@@ -89,7 +89,7 @@ test.describe('Should be able to navigate', function() {
 
     // Navigate to inactive issues page.
     page = new IssuesListPage(this.driver);
-    page = page.followViewInactiveIssuesLink();
+    page = page.followLowPriorityIssuesListLink();
 
     this.driver.navigate().refresh();
 
@@ -97,7 +97,7 @@ test.describe('Should be able to navigate', function() {
     page.followFirstIssue();
 
     // Now go back to inactive issues page
-    goBackTo(driver => {return new InactiveIssuesPage(driver);});
+    goBackTo(driver => {return new LowPriorityIssuesListPage(driver);});
 
     // Now go back to first active issue page.
     goBackTo(driver => {return new CallsPage(driver);});
