@@ -11,15 +11,20 @@ const FaqPage = require('./faq-page');
  */
 class HomePage extends BasePage {
   isInitialized() {
+    return this.isHome();
+  }
+
+  isHome() {
     const pageTitleSelector = By.css('h2.hypothesis__title');
     const pageTitleText = "MAKE YOUR VOICE HEARD";
-
     return this.waitForElement(pageTitleSelector,
                                "Home page isn't loaded")
       .getText()
       .then(text => {
         return text === pageTitleText;
       });
+
+
   }
 
   /**

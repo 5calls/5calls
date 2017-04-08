@@ -3,10 +3,8 @@ const until = webdriver.until;
 const config = require('./e2e-tests.config');
 
 /**
- * Page object for issues list related content,
- * which includes the issues list in the
- * sidebar and the list on the 'more issues' page.
- *
+ * Base page object extended by all other page
+ * objects.
  */
 class BasePage {
   constructor(driver) {
@@ -20,8 +18,20 @@ class BasePage {
                      "Page-Object page never loaded");
   }
 
+  /*
+  * Each subclass needs to implement this method to ensure proper
+  * functioning of the page object. The isInitialized() implementation
+  * should contain logic to determine that the page/container
+  * under test is fully loaded and initialized. Typically, this is
+  * done by looking for one or more elements to be present on the page
+  * containing some expected text. Every page object extending this base
+  * class needs to implement this method
+  *
+  * @returns {Promise<boolean>} A Promise which will resolve to true
+  * once page is loaded and initialized.
+  */
   isInitialized() {
-    throw new TypeError("need to implement isInitialized method!");
+    throw new TypeError("Subclasses of BasePageObject need to implement isInitialized method!");
   }
 
   /**

@@ -1,5 +1,5 @@
 /**
- * End-to-end tests for home page
+ * Application navigation end-to-end tests
  *
  */
 const test = require('selenium-webdriver/testing');
@@ -67,7 +67,7 @@ test.describe('Should be able to navigate', function() {
     test.it("to another issue page");
     test.it("to inactive issues page");
   });
-  test.describe("from inactive issues page", function() {
+  test.describe("from low priority issues list page", function() {
     test.it("to home page");
     test.it("to an issue page");
   });
