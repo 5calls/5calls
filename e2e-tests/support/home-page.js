@@ -36,7 +36,7 @@ class HomePage extends BasePage {
    */
   followAboutPageLink() {
     const aboutPageLinkSelector = By.partialLinkText("About");
-    this.waitForElement(aboutPageLinkSelector).click();
+    this.waitForElement(aboutPageLinkSelector, 'About page cannot be loaded').click();
     return new AboutPage(this.driver);
   }
 
