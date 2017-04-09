@@ -195,27 +195,6 @@ gulp.task('test:e2e', function() {
     .pipe(mocha(mochaOptions));
 });
 
-// Task for running a single end-to-end test.
-// This task requires an environmental variable
-// TEST_FILE to be set, which is the name of the
-// file to be tested in the e2e-tests folder.
-// TEST_FILE needs to be set before
-// running this task (gulp test-one:e2e).
-// Set TEST_FILE using these commands:
-// Mac/Linux: export TEST_FILE=<test file name>
-// Windows: set TEST_FILE=<test file name>
-gulp.task('test-one:e2e', function() {
-  var testFile = process.env.TEST_FILE;
-  return gulp.src([
-    './e2e-tests/support/setupEndToEndTests.js',
-    `./e2e-tests/${testFile}`
-  ])
-  .pipe(mocha({
-    reporter: 'spec',
-    timeout: 6000
-  }));
-});
-
 // Designed for running tests in continuous integration. The main difference
 // here is that browser tests are run across a gamut of browsers/platforms via
 // Sauce Labs instead of just a few locally.
