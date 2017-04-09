@@ -44,16 +44,16 @@ gulp.task('html:watch', function() {
 gulp.task('html:serve', function (cb) {
 
   function alwaysServeIndex(req, res, next) {
-  
+
     // Allow the development server to respond to URLs defined in the front end application.
     // Assume that any URL without a file extension can be handled by the client side code
     // and serve index.html (instead of 404).
-  
+
     if(!(path.extname(req.url))) {
       req.url = "/";
     }
     next();
-  }  
+  }
 
   var server = new http_server.HttpServer({
     root: 'app/static',
@@ -169,15 +169,30 @@ gulp.task('test:watch', function() {
   return runKarmaTests({singleRun: false});
 });
 
+/**
+ * Task that runs selenium webdriverjs end-to-end tests.
+ *
+ * Individual e2e tests can be run using the --grep argument
+ * with a substring of the name of the test's describe block.
+ * Example:
+ * gulp test:e2e --grep 'from issue page'
+ */
 gulp.task('test:e2e', function() {
+  const mochaOptions = {
+    reporter: 'spec',
+    timeout: 6000
+  };
+
+  if (process.argv.includes('--grep')) {
+    const grepValue = process.argv[process.argv.indexOf('--grep') + 1];
+    mochaOptions.grep = new RegExp(grepValue);
+  }
+
   return gulp.src([
     './e2e-tests/support/setupEndToEndTests.js',
     './e2e-tests/{*,!(support)/*}.js'
   ])
-    .pipe(mocha({
-      reporter: 'spec',
-      timeout: 6000
-    }));
+    .pipe(mocha(mochaOptions));
 });
 
 // Task for running a single end-to-end test.
