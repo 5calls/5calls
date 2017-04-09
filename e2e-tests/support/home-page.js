@@ -14,6 +14,12 @@ class HomePage extends BasePage {
     return this.isHome();
   }
 
+  /**
+   *
+   *
+   * @returns
+   *
+   */
   isHome() {
     const pageTitleSelector = By.css('h2.hypothesis__title');
     const pageTitleText = "MAKE YOUR VOICE HEARD";
@@ -77,6 +83,7 @@ class HomePage extends BasePage {
         return match === null ? "" : match[1];
       });
   }
+
 
 }
 

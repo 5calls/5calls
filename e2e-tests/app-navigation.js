@@ -3,6 +3,8 @@
  *
  */
 const test = require('selenium-webdriver/testing');
+const chai = require('chai');
+const expect = chai.expect;
 
 const HomePage = require('./support/home-page');
 const IssuesListPage = require('./support/issuesList-page');
@@ -56,6 +58,7 @@ test.describe('Should be able to navigate', function() {
         page.followFaqLink();
       });
 
+      // TODO: Implement these tests
       test.it('to Github page');
       test.it('to Twitter page');
       test.it('to Privacy page');
@@ -63,13 +66,45 @@ test.describe('Should be able to navigate', function() {
   });
 
   test.describe("from issue page", function() {
-    test.it("to home page");
-    test.it("to another issue page");
-    test.it("to inactive issues page");
+    test.it("to home page", function() {
+      page = new IssuesListPage(this.driver);
+      page.followFirstIssue();
+      this.driver.navigate().refresh();
+      page.followHomeLink();
+    });
+    test.it("to another issue page", function() {
+      page = new IssuesListPage(this.driver);
+      // navigate to 1st issue
+      page.followFirstIssue();
+      this.driver.navigate().refresh();
+      let callsPage = new CallsPage(this.driver);
+      callsPage.getCallTitle().getText().then(text => {
+        // navigate to 2nd issue
+        page.followIssue(2);
+        const callsPage2 = new CallsPage(this.driver);
+        expect(text).to.not.equal(callsPage2.getCallTitle().getText());
+      });
+    });
+    test.it("to low priority issues page", function() {
+      page = new IssuesListPage(this.driver);
+      page.followIssue(1);
+      this.driver.navigate().refresh();
+      page.followLowPriorityIssuesListLink();
+    });
   });
-  test.describe("from low priority issues list page", function() {
-    test.it("to home page");
-    test.it("to an issue page");
+  test.describe("from low priority issues page", function() {
+    test.it("to home page", function() {
+      page = new IssuesListPage(this.driver);
+      page.followLowPriorityIssuesListLink();
+      this.driver.navigate().refresh();
+      page.followHomeLink();
+    });
+    test.it("to an issue page", function() {
+      page = new IssuesListPage(this.driver);
+      page.followLowPriorityIssuesListLink();
+      this.driver.navigate().refresh();
+      page.followFirstIssue();
+    });
   });
 
   test.it("home page -> issue -> more issues -> issue, and then back " +"through history to home page", function() {

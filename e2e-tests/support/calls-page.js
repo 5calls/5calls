@@ -19,6 +19,18 @@ class CallsPage extends BasePage {
         return text === expectedElementText;
       });
   }
+
+  /**
+   * Accessor for the element holding the calls page title.
+   *
+   * @returns {WebElementPromise} the element holding
+   * the calls page title
+   *
+   */
+  getCallTitle() {
+    const selector = By.css('h2.call__title');
+    return this.waitForElement(selector, 'Calls page header is not loaded');
+  }
 }
 
 module.exports = CallsPage;

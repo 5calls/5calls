@@ -6,8 +6,8 @@ const config = require('./e2e-tests.config');
 
 const BasePage = require('./base-page');
 const CallsPage = require('./calls-page');
+const HomePage = require('./home-page');
 const LowPriorityIssuesListPage = require('./lowPriorityIssuesList-page');
-
 /**
  * Page object for issues list related content,
  * which includes the issues list in the
@@ -34,29 +34,57 @@ class IssuesListPage extends BasePage {
   }
 
   /**
-   * Obtains the element containing the first issue
-   * on the sidebar.
+   * Navigates to the calls page after clicking on the first link
+   * in the issues list.
    *
-   * @returns {WebElementPromise} resolves to the first
-   * issue element
+   * @returns {CallsPage} The call page navigated to by clicking
+   * the first issue link
    */
   followFirstIssue() {
-    const firstIssueSelector = By.css('aside.layout__side ul.issues-list li:nth-child(1)');
-    this.waitForElement(firstIssueSelector).click();
+    return this.followIssue(1);
+  }
+
+  /**
+   * Navigates to the calls page after clicking on the nth link
+   * (issueNumber argument) in the issues list.
+   *
+   * @param {number} issueNumber The nth issue that is being
+   * followed.
+   * @returns {CallsPage} The call page navigated to by clicking
+   * the issue link
+   */
+  followIssue(issueNumber) {
+    const issueSelector = By.css(`aside.layout__side ul.issues-list li:nth-child(${issueNumber})`);
+    this.waitForElement(issueSelector).click();
     return new CallsPage(this.driver);
   }
 
   /**
-   * Obtains the 'view more issues' link element
+   * Navigates using the 'view more issues' link
    *
-   * @returns {WebElementPromise} resolves to the
-   * 'view more issues' link element
+   * @returns {LowPriorityIssuesListPage} the page object
+   * representing the 'View More Issues' page holding
+   * low priority issues
    */
   followLowPriorityIssuesListLink() {
     const linkText = By.linkText('view more issues');
     this.waitForElement(linkText).click();
     return new LowPriorityIssuesListPage(this.driver);
   }
+
+  /**
+   * Navigates to the home page
+   *
+   * @returns {HomePage} the page object encapsulating
+   * the site's home page.
+   *
+   */
+  followHomeLink() {
+    const selector = By.css('a > img.issues__logo');
+    this.waitForElement(selector).click();
+    return new HomePage(this.driver);
+  }
+
 }
 
 module.exports = IssuesListPage;

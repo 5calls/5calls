@@ -3,6 +3,7 @@ const By = webdriver.By;
 
 const BasePage = require('./base-page');
 const CallsPage = require('./calls-page');
+const HomePage = require('./home-page');
 
 /**
  * Page object for the More Issues page that holds
@@ -32,6 +33,12 @@ class LowPriorityIssuesListPage extends BasePage {
     const firstIssueSelector = By.css('section.call ul.issues-list li:nth-child(1)');
     this.waitForElement(firstIssueSelector).click();
     return new CallsPage(this.driver);
+  }
+
+  followHomeLink() {
+    const selector = By.css('img.issues__logo');
+    this.waitForElement(selector).click();
+    return new HomePage(this.driver);
   }
 
 }
