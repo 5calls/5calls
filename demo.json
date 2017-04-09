@@ -9,6 +9,6 @@
 	},
 	{"name": "Call the Justice department and ask that they audit the vote.",
 	 "script": "Hi, my name is [Your Name], and I'm calling to ask that the Justice Department audit the results of the 2016 presidential election to validate the vote count and look into charges of voter suppression and possible tampering by foreign powers.",
-	 "contacts": [{"Name": "U.S. Department of Justice", "Phone": "(202) 353-1555", "PhotoURL": null, "Area": "Other"},{"Name":"Nancy Pelosi","Phone":"(202) 225-4965","PhotoURL":"http://bioguide.congress.gov/bioguide/photo/P/P000197.jpg","Area":"House"},{"Name":"Dianne Feinstein","Phone":"(202) 224-3841","PhotoURL":"http://feinstein.senate.gov/public/_images/aboutdianne/officiaphoto-thumbl.jpg","Area":"Senate"},{"Name":"Barbara Boxer","Phone":"(202) 224-3553","PhotoURL":"http://bioguide.congress.gov/bioguide/photo/B/B000711.jpg","Area":"Senate"}]
+	 "contacts": [{"Name": "U.S. Department of Justice", "Phone": "(202) 353-1556", "PhotoURL": null, "Area": "Other"},{"Name":"Nancy Pelosi","Phone":"(202) 225-4965","PhotoURL":"http://bioguide.congress.gov/bioguide/photo/P/P000197.jpg","Area":"House"},{"Name":"Dianne Feinstein","Phone":"(202) 224-3841","PhotoURL":"http://feinstein.senate.gov/public/_images/aboutdianne/officiaphoto-thumbl.jpg","Area":"Senate"},{"Name":"Barbara Boxer","Phone":"(202) 224-3553","PhotoURL":"http://bioguide.congress.gov/bioguide/photo/B/B000711.jpg","Area":"Senate"}]
 	}
 ]}
