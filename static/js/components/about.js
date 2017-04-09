@@ -41,7 +41,6 @@ module.exports = (state, prev, send) => {
       
       <h3 class="about__subtitle">${t("about.joinUs.title")}</h3>
       <p>${t("about.joinUs.contactInvite", { contactEmail: constants.contact.email})}</p>
-
     </section>
     </main>
   `;

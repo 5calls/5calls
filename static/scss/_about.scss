@@ -1,7 +1,7 @@
 .about {
 
   &__title {
-    font-size: $font-xxlarge;
+    font-size: 40px;
     text-transform: uppercase;
   }
 
@@ -18,13 +18,21 @@
     white-space: nowrap;
   }
 
+  .callout {
+    text-align: center;
+  }
+
   p {
   	font-size: $font-normal;
   }
 
+  h3 {
+    font-size: 28px;
+  }
+
   li {
-    font-size: 1.3rem;
-    line-height: 1.3em;
+    font-size: $font-normal;
+    line-height: 1.2em;
     margin: 0 0 0.5rem 0;
   }
 
