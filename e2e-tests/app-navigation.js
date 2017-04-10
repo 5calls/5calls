@@ -66,14 +66,15 @@ test.describe('Should be able to navigate', function() {
   });
 
   test.describe("from issue page", function() {
-    test.it("to home page", function() {
+    test.beforeEach(function() {
       page = new IssuesListPage(this.driver);
+    });
+    test.it("to home page", function() {
       page.followFirstIssue();
       this.driver.navigate().refresh();
       page.followHomeLink();
     });
     test.it("to another issue page", function() {
-      page = new IssuesListPage(this.driver);
       // navigate to 1st issue
       page.followFirstIssue();
       this.driver.navigate().refresh();
@@ -82,11 +83,10 @@ test.describe('Should be able to navigate', function() {
         // navigate to 2nd issue
         page.followIssue(2);
         const callsPage2 = new CallsPage(this.driver);
-        expect(text).to.not.equal(callsPage2.getCallTitle().getText());
+        return expect(text).to.not.equal(callsPage2.getCallTitle().getText());
       });
     });
     test.it("to low priority issues page", function() {
-      page = new IssuesListPage(this.driver);
       page.followIssue(1);
       this.driver.navigate().refresh();
       page.followLowPriorityIssuesListLink();
