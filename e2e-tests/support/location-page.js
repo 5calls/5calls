@@ -2,19 +2,18 @@ const webdriver = require('selenium-webdriver');
 const By = webdriver.By;
 const until = webdriver.until;
 const config = require('./e2e-tests.config');
+const BasePage = require('./base-page');
 
 /**
  * Page object for location-related content.
  *
  */
-class LocationPage {
-  constructor(driver) {
-    this.driver = driver;
-    // define selectors and other locators
-    this.locationButtonSelector = 'button.subtle-button';
-    this.locationInputSelector = '#address';
-    this.locationSubmitSelector = 'p > form > button';
-    this.locationErrorMessage = 'That address is invalid, please try again';
+class LocationPage extends BasePage {
+  isInitialized() {
+    const locationButtonSelector = By.css('button.subtle-button');
+    return this.waitForElement(locationButtonSelector,
+      'Location input button cannot be located')
+      .then(() => Promise.resolve(true));
   }
 
   /**
@@ -23,7 +22,7 @@ class LocationPage {
    *
    */
   displayLocationInputBox() {
-    const selector = By.css(this.locationButtonSelector);
+    const selector = By.css('button.subtle-button');
     this.driver.wait(until.elementLocated(selector),
       config.defaultTimeout, 'Location button not found');
     const addressButton = this.driver.findElement(selector);
@@ -38,12 +37,14 @@ class LocationPage {
    *
    */
   enterAndSubmitNewLocation(location) {
-    const inputSelector = By.css(this.locationInputSelector);
-    const submitSelector = By.css(this.locationSubmitSelector);
-    this.driver.wait(until.elementLocated(inputSelector),
-      config.defaultTimeout * 2, 'Location input text box not found');
-    this.driver.findElement(inputSelector).sendKeys(location);
-    this.driver.findElement(submitSelector).click();
+    const inputSelector = By.css('#address');
+    const submitSelector = By.css('p > form > button');
+    const input = this.waitForElement(inputSelector,
+      'Location input text box not found', config.defaultTimeout * 2);
+    const submit = this.waitForElement(submitSelector,
+      'Location submit button not found');
+    input.sendKeys(location);
+    submit.click();
   }
 
   /**
@@ -55,15 +56,17 @@ class LocationPage {
    *
    */
   getNewLocationElement(location) {
-    const selector = By.css(this.locationButtonSelector);
-    this.driver.wait(until.elementLocated(selector),
-      config.defaultTimeout, 'Button with new location text not found');
-    const addressButton = this.driver.findElement(selector);
+    const selector = By.css('button.subtle-button');
+    // find button
+    const addressButton = this.waitForElement(selector,
+      'Location button not found',
+      config.defaultTimeout);
     // make sure button contains the new location text
     this.driver.wait(until.elementTextIs(addressButton, location),
       config.defaultTimeout, 'New location button text not found');
     return addressButton;
   }
+
 
   /**
    * Accessor for the error message used if an
@@ -71,10 +74,10 @@ class LocationPage {
    *
    * @returns {string} the location error message.
    *
-   * @memberOf LocationPage
    */
   getLocationErrorMessage() {
-    return this.locationErrorMessage;
+    const locationErrorMessage = 'That address is invalid, please try again';
+    return locationErrorMessage;
   }
 
 
