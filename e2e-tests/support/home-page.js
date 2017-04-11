@@ -15,10 +15,10 @@ class HomePage extends BasePage {
   }
 
   /**
+   * Checks that the current document is the home page.
    *
-   *
-   * @returns
-   *
+   * @returns {Promise<boolean>} resolves to true if the
+   * Home page exists containing the proper title text.
    */
   isHome() {
     const pageTitleSelector = By.css('h2.hypothesis__title');
@@ -34,11 +34,12 @@ class HomePage extends BasePage {
   }
 
   /**
-   * Obtains the About link element in the home page footer
+   * Responds to clicking on the About link which navigates
+   * to the About page.
    *
-   * @returns {WebElementPromise} resolves to the
-   * web element containing the About link to the
-   * about page.
+   * @returns {AboutPage} resolves to the about page object,
+   * which internally checks that the current page is the
+   * About page.
    */
   followAboutPageLink() {
     const aboutPageLinkSelector = By.partialLinkText("About");
@@ -47,9 +48,12 @@ class HomePage extends BasePage {
   }
 
   /**
-   * Obtains the Why Calling Works link element.
+   * Responds to clicking on the Why Calling Works link
+   * which navigates to the about page.
    *
-   * @returns {WebElementPromise} resolves to the link element
+   * @returns {AboutPage} resolves to the about page object,
+   * which internally checks that the current page is the
+   * About page.
    */
   followWhyCallingWorksLink() {
     const linkSelector = By.partialLinkText('why calling works');
@@ -58,9 +62,11 @@ class HomePage extends BasePage {
   }
 
   /**
-   * Encapsulates link to FAQ page.
+   * Responds to click on the FAQ page link.
    *
-   * @returns {WebElementPromise} resolves to the FAQ link element
+   * @returns {FaqPage} resolves to the FAQ page object,
+   * which internally checks that the current page is the
+   * FAQ page.
    */
   followFaqLink() {
     const selector = By.css('i.fa-question-circle');
@@ -70,9 +76,9 @@ class HomePage extends BasePage {
 
 
   /**
-   * Obtains the element containing the call count
+   * Obtains the call count text including the actual count
    *
-   * @returns {WebElementPromise} resolves to the call count element
+   * @returns {Promise<string>} resolves to the call count text
    */
   getCallCount() {
     const selector = By.css('h2.callcount');

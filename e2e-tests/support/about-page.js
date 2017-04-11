@@ -19,10 +19,6 @@ class AboutPage extends BasePage {
         return text === aboutPageTitleText;
       });
   }
-
-  getContactLink() {
-    return this.driver.findElement(By.partialLinkText("reach out"));
-  }
 }
 
 module.exports = AboutPage;

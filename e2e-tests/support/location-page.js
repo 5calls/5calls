@@ -30,7 +30,7 @@ class LocationPage extends BasePage {
   }
 
   /**
-   * Inputs location into the input text box
+   * Enters a location into the input text box
    * and submits the location lookup form.
    *
    * @param {string} location the location to submit
@@ -52,7 +52,8 @@ class LocationPage extends BasePage {
    * text after it has been entered and submitted.
    *
    * @param {string} location the entered location
-   * @returns {WebElementPromise} resolves to the new location element
+   * @returns {WebElementPromise} resolves to the new
+   * location element
    *
    */
   getNewLocationElement(location) {

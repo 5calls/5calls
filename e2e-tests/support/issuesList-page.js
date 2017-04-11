@@ -50,8 +50,9 @@ class IssuesListPage extends BasePage {
    *
    * @param {number} issueNumber The nth issue that is being
    * followed.
-   * @returns {CallsPage} The call page navigated to by clicking
-   * the issue link
+   * @returns {CallsPage} The calls page object,
+   * which internally checks that the current page is
+   * the calls page.
    */
   followIssue(issueNumber) {
     const issueSelector = By.css(`aside.layout__side ul.issues-list li:nth-child(${issueNumber})`);

@@ -11,7 +11,7 @@ class FaqPage {
     const pageTitleText = "FAQ";
 
     return this.waitForElement(pageTitleSelector,
-                               "InactiveIssues page isn't loaded")
+                               "FAQ page hasn't loaded")
       .getText()
       .then(text => {
         return text === pageTitleText;

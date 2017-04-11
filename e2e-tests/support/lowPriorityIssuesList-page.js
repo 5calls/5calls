@@ -23,11 +23,11 @@ class LowPriorityIssuesListPage extends BasePage {
   }
 
   /**
-   * navigate the browser to the first first issue
-   * in the list of inactive issues.
+   * Navigates to the first issue in the list of low-priority issues.
    *
-   * @returns {WebElementPromise} resolves to the first
-   * issue element
+   * @returns {CallsPage} resolves to the calls page object,
+   * which internally checks that the current page is the
+   * Calls page.
    */
   followFirstIssue() {
     const firstIssueSelector = By.css('section.call ul.issues-list li:nth-child(1)');
@@ -35,6 +35,14 @@ class LowPriorityIssuesListPage extends BasePage {
     return new CallsPage(this.driver);
   }
 
+  /**
+   * Navigates to the home page from the low priority
+   * issues page.
+   *
+   * @returns {HomePage} resolves to the home page object,
+   * which internally checks that the current page is the
+   * Home page.
+   */
   followHomeLink() {
     const selector = By.css('img.issues__logo');
     this.waitForElement(selector).click();
