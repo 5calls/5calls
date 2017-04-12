@@ -7,7 +7,8 @@ describe('issuesLocation component', () => {
     const testCases = [
       {state: {askingLocation: true, fetchingLocation: false}, shouldSend: true},
       {state: {askingLocation: true, fetchingLocation: true}, shouldSend: false},
-      {state: {askingLocation: false, fetchingLocation: false}, shouldSend: false}
+      {state: {askingLocation: false, fetchingLocation: false}, shouldSend: false},
+      {state: {askingLocation: false, fetchingLocation: false, invalidAddress: true}, shouldSend: true}
     ];
     testCases.forEach(({state, shouldSend}) => {
       it('should' + (shouldSend ? '' : ' not') + ' send "focusLocation" when ' +
@@ -46,7 +47,7 @@ describe('issuesLocation component', () => {
       expect(result.querySelectorAll("p")).to.have.length(2);
       let formElement = result.querySelector('form');
       expect(formElement.classList.contains('hidden')).to.be.false;
-      let messageElement = result.querySelector('.locationMessage')
+      let messageElement = result.querySelector('#locationMessage')
       expect(messageElement.innerText).to.contain(expected)
     });
     it('should tell user when validating location and still show form', () => {
@@ -57,7 +58,7 @@ describe('issuesLocation component', () => {
       expect(result.querySelectorAll("p")).to.have.length(2);
       let formElement = result.querySelector('form');
       expect(formElement.classList.contains('hidden')).to.be.false;
-      let messageElement = result.querySelector('.locationMessage')
+      let messageElement = result.querySelector('#locationMessage')
       expect(messageElement.innerText).to.contain(expected)
     });
     it('should prompt user for another address when address is invalid', () => {
@@ -68,7 +69,7 @@ describe('issuesLocation component', () => {
       expect(result.querySelectorAll("p")).to.have.length(2);
       let formElement = result.querySelector('form');
       expect(formElement.classList.contains('hidden')).to.be.false;
-      let messageElement = result.querySelector('.locationMessage')
+      let messageElement = result.querySelector('#locationMessage')
       expect(messageElement.innerText).to.contain(expected)
     });
     it('should reflect the current address if available', () => {
@@ -80,7 +81,7 @@ describe('issuesLocation component', () => {
       expect(result.querySelectorAll("p")).to.have.length(2);
       let buttonElement = result.querySelector('button');
       expect(buttonElement.classList.contains('hidden')).to.be.false;
-      let messageElement = result.querySelector('.locationMessage')
+      let messageElement = result.querySelector('#locationMessage')
       expect(messageElement.innerText).to.contain(address)
     });
     it('should reflect the current cached city if available', () => {
@@ -92,7 +93,7 @@ describe('issuesLocation component', () => {
       expect(result.querySelectorAll("p")).to.have.length(2);
       let buttonElement = result.querySelector('button');
       expect(buttonElement.classList.contains('hidden')).to.be.false;
-      let messageElement = result.querySelector('.locationMessage')
+      let messageElement = result.querySelector('#locationMessage')
       expect(messageElement.innerText).to.contain(cachedCity)
     });
     it('should prompt for an address if nothing else', () => {
@@ -102,7 +103,7 @@ describe('issuesLocation component', () => {
       expect(result.querySelectorAll("p")).to.have.length(2);
       let formElement = result.querySelector('form');
       expect(formElement.classList.contains('hidden')).to.be.false;
-      let messageElement = result.querySelector('.locationMessage')
+      let messageElement = result.querySelector('#locationMessage')
       expect(messageElement.innerText).to.contain(expected)
     });
   });

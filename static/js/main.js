@@ -369,8 +369,10 @@ app.model({
     // in the issuesLocation component.
     focusLocation: (state, data, send, done) => {
       let addressElement = document.querySelector('#address')
-      scrollIntoView(addressElement);
       addressElement.focus();
+      //feedback test above form should also be visible
+      let addressLabel = document.querySelector("#locationMessage")
+      scrollIntoView(addressLabel)
       // Clear previous address to show placeholder text to
       // reinforce entering a new one.
       addressElement.value = "";
