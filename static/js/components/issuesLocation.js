@@ -8,29 +8,38 @@ module.exports = (state, prev, send) => {
   return html`
     <div class="issues__location">
     ${pretext(state)}
-    ${addressForm(state)}
+    ${addressFormOrButton(state)}
     </div>
   `;
 
   function pretext(state) {
-    if (state.fetchingLocation) {
-      return html`<p class="loadingAnimation">Getting your location</p>`;
+    if (state.fetchingLocation || state.validatingLocation) {
+      return html`<p class="locationMessage loadingAnimation">Getting your location</p>`;
     } else if (state.askingLocation) {
-      return html``;
+      return html`<p class="locationMessage">Choose a location</p>`;
     } else if (state.invalidAddress) {
-      return html`<p><button class="subtle-button" onclick=${enterLocation}>That address is invalid, please try again</button></p>`;
+      return html`<p class="locationMessage">That address is invalid, please try again</p>`;
     } else if (state.address) {
-      return html`<p>for <button class="subtle-button" onclick=${enterLocation}>${state.address}</button></p>`;
+      return html`<p class="locationMessage">Your location: <span>${state.address}</span></p>`;
     } else if (state.cachedCity) {
-      return html`<p>for <button class="subtle-button" onclick=${enterLocation}> ${state.cachedCity}</button> ${debugText(state.debug)}</p>`;
+      return html`<p class="locationMessage">Your location: <span>${state.cachedCity}</span> ${debugText(state.debug)}</p>`;
     } else {
-      return html`<p><button class="subtle-button" onclick=${enterLocation}>Choose a location</button></p>`;
+      return html`<p class="locationMessage">Choose a location</p>`;
     }
   }
 
-  function addressForm(state) {
-    const className = (state.askingLocation && !state.fetchingLocation) ? '' : 'hidden';
-    return html`<p><form onsubmit=${submitAddress} class=${className}><input type="text" autofocus="true" id="address" name="address" placeholder="Enter an address or zip code" /> <button>Go</button></form></p>`;
+  function addressFormOrButton(state) {
+    if (!state.askingLocation &&
+        !state.fetchingLocation &&
+        !state.invalidAddress &&
+        !state.validatingLocation &&
+        (state.address ||
+         state.cachedCity)) {
+          return html`<p><button onclick=${enterLocation}>Change location</button></p>`
+    } else {
+      const className = (state.fetchingLocation) ? 'hidden' : '';
+      return html`<p><form onsubmit=${submitAddress} class=${className}><input type="text" autofocus="true" id="address" name="address" placeholder="Enter an address or zip code" /> <button>Go</button></form></p>`;
+    }
   }
 
   function debugText(debug) {
