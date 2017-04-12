@@ -370,7 +370,7 @@ app.model({
     focusLocation: (state, data, send, done) => {
       let addressElement = document.querySelector('#address')
       addressElement.focus();
-      //feedback test above form should also be visible
+      //feedback message above form should also be visible
       let addressLabel = document.querySelector("#locationMessage");
       scrollIntoView(addressLabel);
       // Clear previous address to show placeholder text to
