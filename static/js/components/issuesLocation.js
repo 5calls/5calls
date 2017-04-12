@@ -36,7 +36,7 @@ module.exports = (state, prev, send) => {
         !state.validatingLocation &&
         (state.address ||
          state.cachedCity)) {
-          return html`<p><button onclick=${enterLocation}>Change location</button></p>`
+      return html`<p><button onclick=${enterLocation}>Change location</button></p>`;
     } else {
       const className = (state.fetchingLocation) ? 'hidden' : '';
       return html`<p>

@@ -42,59 +42,59 @@ describe('issuesLocation component', () => {
     });
     it('should prompt user for address when askingLocation', () => {
       const state = {fetchingLocation: false, askingLocation:true};
-      const expected = "Choose a location"
+      const expected = "Choose a location";
       let result = issuesLocation(state, null, () => {});
       expect(result.querySelectorAll("p")).to.have.length(2);
       let formElement = result.querySelector('form');
       expect(formElement.classList.contains('hidden')).to.be.false;
-      let messageElement = result.querySelector('#locationMessage')
-      expect(messageElement.innerText).to.contain(expected)
+      let messageElement = result.querySelector('#locationMessage');
+      expect(messageElement.innerText).to.contain(expected);
     });
     it('should tell user when validating location and still show form', () => {
       const expected = 'Getting your location';
       const state = {fetchingLocation: false, askingLocation:false,
-        validatingLocation: true}
+        validatingLocation: true};
       let result = issuesLocation(state, null, () => {});
       expect(result.querySelectorAll("p")).to.have.length(2);
       let formElement = result.querySelector('form');
       expect(formElement.classList.contains('hidden')).to.be.false;
-      let messageElement = result.querySelector('#locationMessage')
-      expect(messageElement.innerText).to.contain(expected)
+      let messageElement = result.querySelector('#locationMessage');
+      expect(messageElement.innerText).to.contain(expected);
     });
     it('should prompt user for another address when address is invalid', () => {
       const expected = 'address is invalid';
       const state = {fetchingLocation: false, askingLocation:false,
-                     invalidAddress: true};
+        invalidAddress: true};
       let result = issuesLocation(state, null, () => {});
       expect(result.querySelectorAll("p")).to.have.length(2);
       let formElement = result.querySelector('form');
       expect(formElement.classList.contains('hidden')).to.be.false;
-      let messageElement = result.querySelector('#locationMessage')
-      expect(messageElement.innerText).to.contain(expected)
+      let messageElement = result.querySelector('#locationMessage');
+      expect(messageElement.innerText).to.contain(expected);
     });
     it('should reflect the current address if available', () => {
       const address = '123 Main St. 12345';
       const state = {fetchingLocation: false, askingLocation:false,
-                     validatingLocation: false, invalidAddress: false,
-                     address};
+        validatingLocation: false, invalidAddress: false,
+        address};
       let result = issuesLocation(state, null, () => {});
       expect(result.querySelectorAll("p")).to.have.length(2);
       let buttonElement = result.querySelector('button');
       expect(buttonElement.classList.contains('hidden')).to.be.false;
-      let messageElement = result.querySelector('#locationMessage')
-      expect(messageElement.innerText).to.contain(address)
+      let messageElement = result.querySelector('#locationMessage');
+      expect(messageElement.innerText).to.contain(address);
     });
     it('should reflect the current cached city if available', () => {
       const cachedCity = 'Munroe';
       const state = {fetchingLocation: false, askingLocation:false,
-                     validatingLocation: false,
-                     invalidAddress: false, cachedCity};
+        validatingLocation: false,
+        invalidAddress: false, cachedCity};
       let result = issuesLocation(state, null, () => {});
       expect(result.querySelectorAll("p")).to.have.length(2);
       let buttonElement = result.querySelector('button');
       expect(buttonElement.classList.contains('hidden')).to.be.false;
-      let messageElement = result.querySelector('#locationMessage')
-      expect(messageElement.innerText).to.contain(cachedCity)
+      let messageElement = result.querySelector('#locationMessage');
+      expect(messageElement.innerText).to.contain(cachedCity);
     });
     it('should prompt for an address if nothing else', () => {
       const expected = 'Choose a location';
@@ -103,8 +103,8 @@ describe('issuesLocation component', () => {
       expect(result.querySelectorAll("p")).to.have.length(2);
       let formElement = result.querySelector('form');
       expect(formElement.classList.contains('hidden')).to.be.false;
-      let messageElement = result.querySelector('#locationMessage')
-      expect(messageElement.innerText).to.contain(expected)
+      let messageElement = result.querySelector('#locationMessage');
+      expect(messageElement.innerText).to.contain(expected);
     });
   });
 });
