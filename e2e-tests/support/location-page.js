@@ -23,9 +23,8 @@ class LocationPage extends BasePage {
    */
   displayLocationInputBox() {
     const selector = By.css('button.subtle-button');
-    this.driver.wait(until.elementLocated(selector),
-      config.defaultTimeout, 'Location button not found');
-    const addressButton = this.driver.findElement(selector);
+    const addressButton = this.waitForElement(selector,
+      'Location button not found');
     addressButton.click();
   }
 

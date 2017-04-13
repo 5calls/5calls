@@ -11,16 +11,6 @@ const FaqPage = require('./faq-page');
  */
 class HomePage extends BasePage {
   isInitialized() {
-    return this.isHome();
-  }
-
-  /**
-   * Checks that the current document is the home page.
-   *
-   * @returns {Promise<boolean>} resolves to true if the
-   * Home page exists containing the proper title text.
-   */
-  isHome() {
     const pageTitleSelector = By.css('h2.hypothesis__title');
     const pageTitleText = "MAKE YOUR VOICE HEARD";
     return this.waitForElement(pageTitleSelector,
@@ -29,7 +19,6 @@ class HomePage extends BasePage {
       .then(text => {
         return text === pageTitleText;
       });
-
 
   }
 

@@ -79,11 +79,11 @@ test.describe('Should be able to navigate', function() {
       page.followFirstIssue();
       this.driver.navigate().refresh();
       let callsPage = new CallsPage(this.driver);
-      callsPage.getCallTitle().getText().then(text => {
+      return callsPage.getCallTitle().getText().then(text => {
         // navigate to 2nd issue
         page.followIssue(2);
         const callsPage2 = new CallsPage(this.driver);
-        return expect(text).to.not.equal(callsPage2.getCallTitle().getText());
+        return expect(callsPage2.getCallTitle().getText()).to.eventually.not.equal(text);
       });
     });
     test.it("to low priority issues page", function() {
