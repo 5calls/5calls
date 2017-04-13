@@ -35,7 +35,7 @@ describe('issuesLocation component', () => {
     });
     it('should prompt user for address when askingLocation', () => {
       const state = {fetchingLocation: false, askingLocation:true};
-      const expected = "Choose a location";
+      const expected = "Enter your location";
       let result = issuesLocation(state, null, () => {});
       expect(result.innerText).to.contain(expected);
       let formElement = result.querySelector('form');
@@ -80,7 +80,7 @@ describe('issuesLocation component', () => {
       expect(buttonElement.classList.contains('hidden')).to.be.false;
     });
     it('should prompt for an address if nothing else', () => {
-      const expected = 'Choose a location';
+      const expected = 'Enter your location';
       const state = {};
       let result = issuesLocation(state, null, () => {});
       expect(result.innerText).to.contain(expected);
