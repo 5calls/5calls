@@ -18,7 +18,7 @@ module.exports = (state, prev, send) => {
     if (state.fetchingLocation || state.validatingLocation) {
       return html`<p id="locationMessage" class="loadingAnimation">${t("location.gettingYourLocation")}</p>`;
     } else if (state.askingLocation) {
-      return html`<p id="locationMessage">Enter your location</p>`;
+      return html`<p id="locationMessage">${t("location.chooseALocation")}</p>`;
     } else if (state.invalidAddress) {
       return html`<p id="locationMessage" role="alert">${t("location.invalidAddress")}</p>`;
     } else if (state.address) {

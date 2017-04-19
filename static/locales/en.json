@@ -91,7 +91,8 @@
     "location": {
       "gettingYourLocation": "Getting your location",
       "invalidAddress": "That address is invalid, please try again",
-      "chooseALocation": "Choose a location",
+      "chooseALocation": "Enter your location",
+      "changeLocation": "Change location",
       "enterAnAddressOrZipCode": "Enter an address or zip code"
     },
     "noCalls": {

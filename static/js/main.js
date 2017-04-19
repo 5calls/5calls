@@ -362,7 +362,7 @@ app.model({
       let geoError = function(error) {
         window.clearTimeout(slowResponseTimeout);
 
-        // We need the most current state, so we need another effect call.
+         // We need the most current state, so we need another effect call.
         send('handleBrowserLocationError', error, done)
         logger.warn("Error with browser location (code: " + error.code + ")");
       }
