@@ -86,13 +86,15 @@
     },
     "issues":{
       "whatsImportantToYou": "What’s important to you?",
-      "issuesListItemSummary": "$t(common.callWithCount,{'count': {{callsToMake}}}) to make"
+      "issuesListItemSummary": "$t(common.callWithCount,{'count': {{callsToMake}}}) to make",
+      "viewMoreIssues":"View more issues"
     },
     "location": {
       "gettingYourLocation": "Getting your location",
       "invalidAddress": "That address is invalid, please try again",
       "chooseALocation": "Enter your location",
       "changeLocation": "Change location",
+      "yourLocation": "Your location",
       "enterAnAddressOrZipCode": "Enter an address or zip code"
     },
     "noCalls": {

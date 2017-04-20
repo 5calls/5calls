@@ -22,9 +22,9 @@ module.exports = (state, prev, send) => {
     } else if (state.invalidAddress) {
       return html`<p id="locationMessage" role="alert">${t("location.invalidAddress")}</p>`;
     } else if (state.address) {
-      return html`<p id="locationMessage">Your location: <span>${state.address}</span></p>`;
+      return html`<p id="locationMessage">${t("location.yourLocation")}: <span>${state.address}</span></p>`;
     } else if (state.cachedCity) {
-      return html`<p id="locationMessage">Your location: <span>${state.cachedCity}</span> ${debugText(state.debug)}</p>`;
+      return html`<p id="locationMessage">${t("location.yourLocation")}: <span>${state.cachedCity}</span> ${debugText(state.debug)}</p>`;
     } else {
       return html`<p id="locationMessage">${t("location.chooseALocation")}</p>`;
     }

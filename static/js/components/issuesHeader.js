@@ -7,7 +7,7 @@ module.exports = (state, prev, send) => {
   return html`
     <header class="${classString(state)}" role="banner">
       <h1 class="issues__title">
-        <a href="/" onclick=${() => send('home')}><img class="issues__logo" src="/img/5calls-logotype.png" alt="${t("common.5Calls")}">${t("common.5Calls")}</a>
+        <a href="/" onclick=${() => send('home')}><img class="issues__logo" src="/img/5calls-logotype.png" alt="${t("common.AppName")}">${t("common.AppName")}</a>
       </h1>
       ${issuesLocation(state, prev, send)}
       ${issueExplain(state)}

@@ -38,7 +38,7 @@
       },
       "whoIs5Calls": {
         "title": "¿Quiénes crearon a $t(common.AppName)?",
-        "overview": "$t(common.5Calls) es un esfuerzo voluntario, fundado y dirigido por el equipo de marido y mujer <a href='https://twitter.com/nickoneill'> Nick </a> y <a href='https://twitter.com/syntheticmethod'> Rebecca </a>. Muchos voluntarios dedicados mantienen al diseño, código y resúmenes del sitio, incluyendo:<a href='https://twitter.com/monteiro'>@monteiro</a>, <a href='https://twitter.com/stewartsc'>@stewartsc</a>, <a href='https://twitter.com/liamdanger'>@liamdanger</a>, <a href='https://twitter.com/capndesign'>@capndesign</a>, <a href='https://twitter.com/jameshome'>@jameshome</a>, <a href='https://twitter.com/beau'>@beau</a>, <a href='https://twitter.com/cdoremus'>@cdoremus</a>, <a href='https://twitter.com/ocderby'>@ocderby</a>, <a href='https://twitter.com/mr0grog'>@mr0grog</a> y <a href='https://github.com/5calls/5calls/graphs/contributors'> más partidarios.</a>",
+        "overview": "$t(common.AppName) es un esfuerzo voluntario, fundado y dirigido por el equipo de marido y mujer <a href='https://twitter.com/nickoneill'> Nick </a> y <a href='https://twitter.com/syntheticmethod'> Rebecca </a>. Muchos voluntarios dedicados mantienen al diseño, código y resúmenes del sitio, incluyendo:<a href='https://twitter.com/monteiro'>@monteiro</a>, <a href='https://twitter.com/stewartsc'>@stewartsc</a>, <a href='https://twitter.com/liamdanger'>@liamdanger</a>, <a href='https://twitter.com/capndesign'>@capndesign</a>, <a href='https://twitter.com/jameshome'>@jameshome</a>, <a href='https://twitter.com/beau'>@beau</a>, <a href='https://twitter.com/cdoremus'>@cdoremus</a>, <a href='https://twitter.com/ocderby'>@ocderby</a>, <a href='https://twitter.com/mr0grog'>@mr0grog</a> y <a href='https://github.com/5calls/5calls/graphs/contributors'> más partidarios.</a>",
         "iOSApp": "Nuestra aplicación de iOS es hecho por <a href='https://twitter.com/subdigital'>@subdigital</a>, <a href='https://twitter.com/mccarron'>@mccarron</a>, <a href='https://twitter.com/chrisbrandow'>@chrisbrandow</a> y <a href='https://github.com/5calls/ios/graphs/contributors'> más partidarios.</a>",
         "androidApp":"Nuestra Android aplicación es hecho por <a href='https://github.com/dektar'>dektar</a>, gregliest y <a href='https://github.com/5calls/android/graphs/contributors'> más partidarios.</a>",
         "contentAndSocial": "Nuestros resúmenes, textos, y contenido de redes sociales se escriben por <a href='https://twitter.com/charmbtrippin'>@charmbtrippin</a>, <a href='https://www.instagram.com/sara.n.g/'>sara.n.g</a>, amanda.l, <a href='https://twitter.com/djpiebob'>@djpiebob</a>, <a href='https://twitter.com/theRati'>@theRati</a>, <a href='https://twitter.com/Lhhargrave'>@lhhargrave</a>, amanda.n, <a href='https://twitter.com/sagerke'>@sagerke</a>, Eleanor Wertman, y otros partidarios.",
@@ -74,7 +74,7 @@
       "featuresTitle": "$t(common.AppName):",
       "feature1": "Proporciona números de teléfono y textos para que llamar sea rápido y fácil",
       "feature2": "Usa su ubicación para encontrar a sus representantes locales para que sus llamadas tengan más impacto",
-      "getApp": "Obtenga la aplicación de $t(common.5Calls):",
+      "getApp": "Obtenga la aplicación de $t(common.AppName):",
       "onAppStore": "$t(common.AppName) en Apple App Store",
       "onGooglePlay": "$t(common.AppName) en Google Play"
     },
@@ -86,12 +86,15 @@
     },
     "issues":{
       "whatsImportantToYou": "¿Qué importa para usted?",
-      "issuesListItemSummary": "$t(common.callWithCount,{'count': {{callsToMake}}}) para hacer"
+      "issuesListItemSummary": "$t(common.callWithCount,{'count': {{callsToMake}}}) para hacer",
+      "viewMoreIssues":"Ver más temas"
     },
     "location": {
       "gettingYourLocation": "Obtener su ubicación",
       "invalidAddress": "Esta dirección no es válida. Por favor actualice su dirección e intente de nuevo.",
       "chooseALocation": "Elija una ubicación",
+      "changeLocation": "Cambiar su ubicación",
+      "yourLocation": "Su ubicación",
       "enterAnAddressOrZipCode": "Entre una dirección o código postal"
     },
     "noCalls": {
@@ -110,7 +113,7 @@
       "voicemail":"dejé mensaje de voz",
       "madeContact":"contacto hecho",
       "skip":"omitir",
-      "contactsLeft": "quedan {{contactsRemaining}} $t(common.person, {'count': {{contactsRemaining}}}) para llamar sobre este tema."
+      "contactsLeft": "Quedan {{contactsRemaining}} $t(common.person, {'count': {{contactsRemaining}}}) para llamar sobre este tema."
     },
     "script": {
       "yourScript": "Su texto:"
