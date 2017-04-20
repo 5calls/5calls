@@ -99,9 +99,6 @@ let localStats = defaultStats;
 store.getAll('org.5calls.userStats', (stats) => {
   if (stats.length > 0) {
     localStats = stats[0];
-  } else {
-    let impactLink = document.querySelector('#impact__link');
-    impactLink.classList.add('hidden');
   }
 });
 
