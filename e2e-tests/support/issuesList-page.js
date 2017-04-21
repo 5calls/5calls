@@ -68,7 +68,7 @@ class IssuesListPage extends BasePage {
    * low priority issues
    */
   followLowPriorityIssuesListLink() {
-    const linkText = By.linkText('view more issues');
+    const linkText = By.linkText('View more issues');
     this.waitForElement(linkText).click();
     return new LowPriorityIssuesListPage(this.driver);
   }
