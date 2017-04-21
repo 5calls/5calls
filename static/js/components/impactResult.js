@@ -10,4 +10,4 @@ module.exports = (state) => {
      ${t('impact.callSummaryText', {contactedCalls: contactedCalls, vmCalls: vmCalls, unavailableCalls: unavailableCalls}, false, true)}
     </div>
   `;
-}
+};

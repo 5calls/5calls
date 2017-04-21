@@ -14,25 +14,25 @@ const es = require('../locales/es.json');
 // put the locale into the correct namespace for the i18n cache.
 // Because we are adding it to the cache manually, we have to give it the hierarchy manually
 const namespacedLocaleObject = {
-    "en": {
-        "translation": en
-    },
-    "es": {
-        "translation": es
-    }
-}
+  "en": {
+    "translation": en
+  },
+  "es": {
+    "translation": es
+  }
+};
 
 const options = {
     // turn on this flag to see if you're localization keys are not correct.  It will log a message
-    'debug': false,
+  'debug': false,
     // the localized data, adding directly to the cache
-    'resources': namespacedLocaleObject,
+  'resources': namespacedLocaleObject,
     // the language we're using for all of the regular tests.
     // There are some tests specific to localization where we reload the cache with another locale, at that point we re-initialize 
-    'lng': 'en',
+  'lng': 'en',
     // if an unsupported locale is selected, it will fall back to this locale
-    'fallbackLng' : 'en'
-}
+  'fallbackLng' : 'en'
+};
 
 // initialize the i18n cache
 i18n.init(options);

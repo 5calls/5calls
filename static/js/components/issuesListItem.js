@@ -39,4 +39,4 @@ module.exports = (issue, state, prev, send) => {
       </a>
     </li>
   `;
-}
+};

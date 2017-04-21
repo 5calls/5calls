@@ -25,7 +25,7 @@ test.before(function() {
       }
     })
     .build();
-    this.baseUrl = config.getBaseUrl();
+  this.baseUrl = config.getBaseUrl();
 });
 
 test.after(function() {

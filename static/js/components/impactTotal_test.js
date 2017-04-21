@@ -9,7 +9,7 @@ describe('impactTotal component', () => {
       issueid: 456,
       result: 'contacted'
     }];
-    let userStats = {all: all}
+    let userStats = {all: all};
     let userCalls = userStats.all.length;
     let state = {userStats};
     let result = impactTotal(state);
@@ -17,7 +17,7 @@ describe('impactTotal component', () => {
   });
 
   it('should display pluralized total', () => {
-   let all = [{
+    let all = [{
       contactid: 123,
       issueid: 456,
       result: 'contacted'
@@ -26,7 +26,7 @@ describe('impactTotal component', () => {
       issueid: 678,
       result: 'vm'
     }];
-    let userStats = {all: all}
+    let userStats = {all: all};
     let userCalls = userStats.all.length;
     let state = {userStats};
     let result = impactTotal(state);

@@ -6,8 +6,8 @@ module.exports = (state, prev, send) => {
 
   return html`
     <main role="main" id="content" class="layout__main" onload=${() => {
-      send('startup')
-      send('fetchInactiveIssues')
+      send('startup');
+      send('fetchInactiveIssues');
     }}>
       <section class="call">
         <div class="call_complete">
@@ -17,4 +17,4 @@ module.exports = (state, prev, send) => {
       </section>
     </main>
   `;
-}
+};

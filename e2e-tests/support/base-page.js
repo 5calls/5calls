@@ -60,7 +60,7 @@ class BasePage {
       driver,
       driver.wait(until.elementLocated(selector),
                   wait, opt_message)
-        .then(() => {return driver.findElement(selector);}));
+        .then(() => {return driver.findElement(selector)}));
   }
 }
 

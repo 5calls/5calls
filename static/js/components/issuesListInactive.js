@@ -8,4 +8,4 @@ module.exports = (state, prev, send) => {
       ${state.issues.filter((issue) => issue.inactive === true).map((issue) => issuesListItem(issue, state, prev, send))}
     </ul>
   `;
-}
+};

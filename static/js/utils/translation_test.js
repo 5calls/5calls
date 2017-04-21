@@ -90,9 +90,9 @@ describe('translation', () => {
     describe('change locales', () => {
       afterEach((done) => {
           // change the language back to english so the rest of the tests will be set for that language
-          i18n.changeLanguage('en', () => {
-            done();
-          });
+        i18n.changeLanguage('en', () => {
+          done();
+        });
       });
 
       it('should return the spanish localized string when the locale is changed to spanish', (done) => {
@@ -105,7 +105,7 @@ describe('translation', () => {
         });
       });
       it('should return the spanish localized string when the country is changed to spanish-mexican', (done) => {
-         i18n.changeLanguage('es-mx', () => {
+        i18n.changeLanguage('es-mx', () => {
           let key = 'common.go';
           let expected = 'envíe';
           let result = t(key, null, true);

@@ -20,15 +20,15 @@ module.exports = (state, prev, send) => {
       return html`<div onload=${() => initializeLocalizedAnchors(targetClassName)}>
                     <p>${t("noContact.oneOfTwoDistricts")}</p>
                     <p>${t("noContact.enterYourLocation")}</p>
-                  </div>`
+                  </div>`;
     }
     else {
-      return html`<h2 onload=${() => initializeLocalizedAnchors(targetClassName)}>${t("noContact.setYourLocation")}</h2>`
+      return html`<h2 onload=${() => initializeLocalizedAnchors(targetClassName)}>${t("noContact.setYourLocation")}</h2>`;
     }
   }
 
   return html`
     <div class="call__nocontact">
 		  ${noContactsMessage(state)}
-	  </div>`
-}
+	  </div>`;
+};

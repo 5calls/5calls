@@ -13,26 +13,26 @@ const i18n = require('i18next');
 *   Note: if the third parameter is true, this fourth parameter will be ignored because the text will not be wrapped at all.
 */
 function getText(key, variableObject, justText, useDiv) {
-    variableObject = variableObject || {};
-    justText = justText || false;
-    useDiv = useDiv || false;
+  variableObject = variableObject || {};
+  justText = justText || false;
+  useDiv = useDiv || false;
 
     //get the localized string from the i18n cache
-    let template = i18n.t(key, variableObject);
+  let template = i18n.t(key, variableObject);
 
-    if (justText) {
-        return template;
-    }
+  if (justText) {
+    return template;
+  }
 
-    const parser = new DOMParser();
+  const parser = new DOMParser();
 
-    template = useDiv
+  template = useDiv
         ? "<div>" + template + "</div>"
-        : "<span>" + template + "</span>"
+        : "<span>" + template + "</span>";
 
-    let doc = parser.parseFromString(template, "text/html");
-    let node = useDiv ? doc.querySelector("div") : doc.querySelector("span");
-    return node;
+  let doc = parser.parseFromString(template, "text/html");
+  let node = useDiv ? doc.querySelector("div") : doc.querySelector("span");
+  return node;
 }
 
 module.exports = getText;

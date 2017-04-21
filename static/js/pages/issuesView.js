@@ -14,4 +14,4 @@ module.exports = (state, prev, send) => {
       ${footer(state, prev, send)}
     </div>
   `;
-}
+};

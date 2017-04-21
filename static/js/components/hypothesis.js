@@ -43,4 +43,4 @@ module.exports = (state, prev, send) => {
 
     </div>
   `;
-}
+};

@@ -12,7 +12,7 @@ let userStats = {
   contacted: 4,
   vm: 1,
   unavailable: 0
-}
+};
 
 describe('impact component', () => {
   describe('impactTotal include', () => {

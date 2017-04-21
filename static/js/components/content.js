@@ -20,4 +20,4 @@ module.exports = (state, prev, send) => {
       ${currentView(state, prev, send)}
     </main>
   `;
-}
+};

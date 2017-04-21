@@ -14,8 +14,8 @@ module.exports = (state, prev, send) => {
   const issue = find(state.issues, ['id', state.location.params.issueid]);
   if (issue == null) {
     return html`<section class="call" onload=${() => {
-      send('fetchInactiveIssues')
-      send('oldcall')
+      send('fetchInactiveIssues');
+      send('oldcall');
     }}>
       <div class="call_complete">
         <h2 class="call__title">${t('noCalls.title')}</h2>
@@ -29,9 +29,9 @@ module.exports = (state, prev, send) => {
 
   function contactArea() {
     if (currentContact != null) {
-      return contact(currentContact, state, prev, send)
+      return contact(currentContact, state, prev, send);
     } else {
-      return noContact(state, prev, send)
+      return noContact(state, prev, send);
     }
   }
 
@@ -52,4 +52,4 @@ module.exports = (state, prev, send) => {
 
   </section>
   `;
-}
+};

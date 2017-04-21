@@ -32,4 +32,4 @@ module.exports = (state, prev, send) => {
     </section>
     </main>
   `;
-}
+};

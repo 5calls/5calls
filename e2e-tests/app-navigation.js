@@ -14,7 +14,7 @@ const CallsPage = require('./support/calls-page');
 test.describe('Should be able to navigate', function() {
   let page = undefined;
   let goBackTo = undefined;
-  const makeHomePage = (driver) => {return new HomePage(driver);};
+  const makeHomePage = (driver) => {return new HomePage(driver)};
 
   test.before(function() {
     goBackTo = function(makeExpectedPage) {
@@ -132,10 +132,10 @@ test.describe('Should be able to navigate', function() {
     page.followFirstIssue();
 
     // Now go back to inactive issues page
-    goBackTo(driver => {return new LowPriorityIssuesListPage(driver);});
+    goBackTo(driver => {return new LowPriorityIssuesListPage(driver)});
 
     // Now go back to first active issue page.
-    goBackTo(driver => {return new CallsPage(driver);});
+    goBackTo(driver => {return new CallsPage(driver)});
 
     // Finally, go back to home page.
     goBackTo(makeHomePage);

@@ -9,4 +9,4 @@ module.exports = (state) => {
       ${t('impact.totalCallCountText', {myTotalCalls: userCalls})}
     </h2>
   `;
-}
+};

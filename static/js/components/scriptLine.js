@@ -4,4 +4,4 @@ module.exports = (scriptLine) => {
   return html`
   	<p>${scriptLine}</p>
   `;
-}
+};

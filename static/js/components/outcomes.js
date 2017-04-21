@@ -20,7 +20,7 @@ module.exports = (state, prev, send) => {
       send('callComplete', { result: result, contactid: currentContact.id, issueid: issue.id });
     }
 
-    return true
+    return true;
   }
 
   if (currentContact != null) {
@@ -34,8 +34,8 @@ module.exports = (state, prev, send) => {
       </div>
 
       ${contactsLeft > 0 ? html`<h3 aria-live="polite" class="call__contacts__left" >${contactsLeftText}</h3>` : null}
-    </div>`
+    </div>`;
   } else {
-    return html``
+    return html``;
   }
-}
+};

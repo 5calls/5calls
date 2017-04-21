@@ -6,7 +6,7 @@ const issuesHeader = require('./issuesHeader.js');
 const issuesList = require('./issuesList.js');
 
 module.exports = (state, prev, send) => {
-	function debugText(debug) {
+  function debugText(debug) {
     return debug ? html`<a href="/" onclick=${resetCompletedIssues}>reset</a>` : html``;
   }
 
@@ -16,7 +16,7 @@ module.exports = (state, prev, send) => {
   }
 
   function scrollToTop () {
-    scrollIntoView(document.querySelector('#content'))
+    scrollIntoView(document.querySelector('#content'));
   }
 
   return html`
@@ -27,4 +27,4 @@ module.exports = (state, prev, send) => {
       ${debugText(state.debug)}
     </div>
   `;
-}
+};

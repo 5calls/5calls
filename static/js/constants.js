@@ -9,4 +9,4 @@ module.exports = {
     fallbackLocale: 'en',
     loadPath: '/locales/{{lng}}.json'
   }
-}
+};

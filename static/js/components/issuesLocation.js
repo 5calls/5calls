@@ -70,4 +70,4 @@ module.exports = (state, prev, send) => {
   function unsetLocation() {
     send('unsetLocation');
   }
-}
+};

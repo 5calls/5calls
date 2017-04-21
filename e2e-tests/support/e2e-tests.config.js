@@ -20,4 +20,4 @@ function getBaseUrl() {
 module.exports = {
   getBaseUrl: getBaseUrl,
   defaultTimeout: defaultTimeout
-}
+};

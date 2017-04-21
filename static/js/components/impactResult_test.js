@@ -9,7 +9,7 @@ describe('impactResult component', () => {
       contacted: 2,
       vm: 2,
       unavailable: 2
-    }
+    };
     let contactedCalls = userStats.contacted;
     let vmCalls = userStats.vm;
     let unavailableCalls = userStats.unavailable;
@@ -25,7 +25,7 @@ describe('impactResult component', () => {
       contacted: 2,
       vm: 1,
       unavailable: 0
-    }
+    };
     let contactedCalls = userStats.contacted;
     let vmCalls = userStats.vm;
     let unavailableCalls = userStats.unavailable;

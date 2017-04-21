@@ -7,4 +7,4 @@ module.exports = (state, prev, send) => {
       ${issues(state, prev, send)}
     </aside>
   `;
-}
+};

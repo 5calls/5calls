@@ -41,7 +41,7 @@ module.exports = function (config) {
           }
         ],
         ['es2040', {global: true}]
-       ],
+      ],
     },
 
     // test results reporter to use

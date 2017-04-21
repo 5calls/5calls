@@ -27,4 +27,4 @@ module.exports = (state, prev, send) => {
       return calls.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     }
   }
-}
+};

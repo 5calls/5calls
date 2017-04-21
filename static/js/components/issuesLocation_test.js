@@ -14,14 +14,14 @@ describe('issuesLocation component', () => {
       it('should' + (shouldSend ? '' : ' not') + ' send "focusLocation" when ' +
          'askingLocation is ' + state.askingLocation + ' and ' +
          'fetchingLocation is ' + state.fetchingLocation, () => {
-           let didSend = false;
+        let didSend = false;
            // mock impl to test that it is being called in component
-           let send = (msg) => {
-             if (msg == 'focusLocation') didSend = true;
-           };
-           issuesLocation(state, null, send);
-           expect(didSend).to.equal(shouldSend);
-         });
+        let send = (msg) => {
+          if (msg == 'focusLocation') didSend = true;
+        };
+        issuesLocation(state, null, send);
+        expect(didSend).to.equal(shouldSend);
+      });
     });
   });
   describe('html content', () => {

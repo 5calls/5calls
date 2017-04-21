@@ -10,7 +10,7 @@ describe('done component', () => {
       let issue = {id: 88, name: 'impeach trump'};
       let issues = [issue];
       let totalCalls = 123;
-      let userStats = {all: []}
+      let userStats = {all: []};
       let location = {params: {issueid: 88}};
       let state = {totalCalls, location, issues, userStats};
       let result = done(state);
@@ -24,7 +24,7 @@ describe('done component', () => {
 
     it('should display call count total', () => {
       let totalCalls = 123;
-      let userStats = {all: []}
+      let userStats = {all: []};
       let location = {params: {issueId: 88}};
       let state = {totalCalls, location, userStats};
       let result = done(state);
@@ -45,7 +45,7 @@ describe('done component', () => {
         issueid: 456,
         result: 'contacted'
       }];
-      let userStats = {all: all}
+      let userStats = {all: all};
       let userCalls = userStats.all.length;
       let location = {params: {issueId: 88}};
       let state = {totalCalls, location, userStats};
@@ -57,7 +57,7 @@ describe('done component', () => {
     it('should not display impact preview if 0 calls', () => {
       let totalCalls = 123;
       let all = [];
-      let userStats = {all: all}
+      let userStats = {all: all};
       let userCalls = userStats.all.length;
       let location = {params: {issueId: 88}};
       let state = {totalCalls, location, userStats};

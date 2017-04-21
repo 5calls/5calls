@@ -39,4 +39,4 @@ module.exports = () => {
         <a href="http://ipinfo.io"> ${t('footer.ipGeolocation')}</a>
       </div></footer>
   `;
-}
+};

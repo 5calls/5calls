@@ -5,19 +5,19 @@ const logger = require('loglevel');
 module.exports = (c, state, prev, send) => {
   const photoURL = c.photoURL == "" ? "/img/5calls-icon-office.png" : c.photoURL;
   if (c.reason == "") {
-    logger.debug("Missing reason for contact " + c.name)
+    logger.debug("Missing reason for contact " + c.name);
   }
 
-  let repID = ""
+  let repID = "";
   if (c.party != "") {
     repID = c.party.substring(0,1) + "-" + c.state;
   }
 
-  let fieldOffices
+  let fieldOffices;
   if (c.field_offices) {
     fieldOffices = html`
       <p class="call__contact__show-field-offices">${t('contact.busyLine')}  <a onclick=${() => {send('toggleFieldOfficeNumbers')}}>${t('contact.busyLineGuidance')}</a></p>
-    `
+    `;
     if (state.showFieldOfficeNumbers) {
       fieldOffices = html`
         <div>
@@ -28,15 +28,15 @@ module.exports = (c, state, prev, send) => {
             `)}
           </ul>
         </div>
-      `
+      `;
     }
   }
 
   function cityFormat(office, c) {
     if (office.city) {
-      return "- " + office.city + ", " + c.state
+      return "- " + office.city + ", " + c.state;
     } else {
-      return ""
+      return "";
     }
   }
 
@@ -53,4 +53,4 @@ module.exports = (c, state, prev, send) => {
         <p class="call__contact__reason">${c.reason}</p>
       </div>
   `;
-}
+};

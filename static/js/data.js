@@ -24,4 +24,4 @@ module.exports = {
   getIssues: () => {
     return JSON.parse(sampleData);
   }
-}
+};

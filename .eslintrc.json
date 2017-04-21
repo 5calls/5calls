@@ -12,6 +12,8 @@
   "rules": {
     "no-unused-vars": "error",
     "no-undef":  "error",
-    "no-console": "error"
+    "no-console": "error",
+    "indent": ["error", 2],
+    "semi": ["error", "always", { "omitLastInOneLineBlock": true }]
   }
 }

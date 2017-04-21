@@ -12,7 +12,7 @@ const LocalStorageKey = {
   ALLOW_GEOLOCATION: 'org.5calls.allow_geolocation',
   GEOLOCATION_TIME: 'org.5calls.geolocation_time',
   GEOLOCATION_CITY: 'org.5calls.geolocation_city'
-}
+};
 
 // TODO: Move to /static/js/util/localStorage.js.
 function getLocalStorageLocationKeys() {
@@ -82,5 +82,5 @@ module.exports = {
   getLocalStorageData: getLocalStorageData,
   setLocalStorageData: setLocalStorageData,
   logLocalStorageData: logLocalStorageData
-}
+};
 
