@@ -13,7 +13,7 @@ module.exports = (state, prev, send) => {
         <li>Make calls!</li>
       </ul>
       <ul>
-        <li>You have three members of Congress –- two senators and a House rep.</li> 
+        <li>You have three members of Congress – two senators and a House rep.</li> 
         <ul>
           <li>Some issues need calls to all three (we’ll tell you when they do). For those, call the first person on the list. When you’re done, enter your call results and then move to the next person on your list. Lather, rinse, repeat until you’re done.</li>
           <li>Some issues only need a call to your House rep; for others, just your senators. Again, we’ll make it clear who you should call.</li>
@@ -26,7 +26,7 @@ module.exports = (state, prev, send) => {
       <h3>Why should I call my congressperson?</h3>
       <p>It’s the fastest way to speak your mind. Call tallies are given to your member of Congress (MoC) on the regular, so the earlier you call about an issue, the more likely you are to sway them. If you can, call before your MoC takes a public stance on the issue, because once they do, they don't like to walk it back.</p>
       <h3>Can't I send an email/fax/letter/postcard instead?</h3>
-      <p>Nope. Phone calls are tallied right away, so they have by far the most immediate impact. Faxes these days are typically rendered digitally via email. Emails and postal mail must be read, batched by issue and THEN tallied. Physical letters and postcards –- yes, postcards too –- may also be quarantined for safety inspections. (And if you think all that happens quickly, it … doesn’t.) </p>
+      <p>Nope. Phone calls are tallied right away, so they have by far the most immediate impact. Faxes these days are typically rendered digitally via email. Emails and postal mail must be read, batched by issue and THEN tallied. Physical letters and postcards – yes, postcards too – may also be quarantined for safety inspections. (And if you think all that happens quickly, it …doesn’t.) </p>
       <h3>Do I need to make a separate call for each issue I care about?</h3>
       <p>Yes. Congressional insiders tell us call volume really matters. But because we know it seems weird to hang up and call right back about another issue, we’ve added reps’ district office numbers, too. That way you can at least talk to a different staffer.</p>
       <h3>What if the line is busy or the voicemail is full?</h3>
@@ -58,9 +58,9 @@ module.exports = (state, prev, send) => {
         <li><strong>On the website:</strong> Your current city or ZIP code is under the 5 Calls logo on the top left of the page. Click and you’ll be able to enter new information.</li>
         <li><strong>On the apps:</strong> Your current city or ZIP code is under the 5 Calls logo on the top of the screen. Tap and you’ll be able to enter new information.</li>
       </ul>
-      <h3>Do you have a Facebook page?</h3>
-      <p>Yep. Like us on Facebook at <a href="https://www.facebook.com/make5calls">https://www.facebook.com/make5calls</a>. It’d be great if you’d share the page on your timeline and invite your friends to like us too, but you know, no pressure. We’re not your mom.</p>
+      <h3>Do you have Facebook and Twitter pages?</h3>
+      <p>Yep. Follow us on <a href="https://www.facebook.com/make5calls">Facebook</a> and <a href="https://twitter.com/make5calls">Twitter</a> to get updates every day for what you should be calling about. It’d be great if you’d share the page on your timeline and invite your friends to like us too, but you know, no pressure. We’re not your mom.</p>
     </div>
     </main>
   `;
-}
+};

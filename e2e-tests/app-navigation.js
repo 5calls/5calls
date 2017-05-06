@@ -58,9 +58,8 @@ test.describe('Should be able to navigate', function() {
         page.followFaqLink();
       });
 
-      // TODO: Implement these tests
+      // TODO: Implement these external page tests
       test.it('to Github page');
-      test.it('to Twitter page');
       test.it('to Privacy page');
     });
   });

@@ -10,4 +10,4 @@ module.exports = (state, prev, send) => {
       ${faq(state, prev, send)}
     </div>
   `;
-}
+};

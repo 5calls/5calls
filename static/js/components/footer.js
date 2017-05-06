@@ -31,14 +31,11 @@ module.exports = (state) => {
         <a href="https://github.com/5calls/5calls">
           <i class="fa fa-github" aria-hidden="true"></i> ${t('footer.openSource')}
         </a>
-        <a href="https://twitter.com/make5calls">
-          <i class="fa fa-twitter" aria-hidden="true"></i> ${t('footer.twitter')}
-        </a>
         <a href="https://5calls.org/privacy.html" data-no-routing>
           <i class="fa fa-shield" aria-hidden="true"></i> ${t('footer.privacy')}
         </a>
-        <a href="mailto:make5calls@gmail.com">
-          <i class="fa fa-envelope" aria-hidden="true"></i> ${t('footer.contact')}
+        <a href="/faq">
+          <i class="fa fa-question-circle" aria-hidden="true"></i> ${t('footer.faq')}
         </a>
         <a href="#about">
           <i class="fa fa-heart" aria-hidden="true"></i> ${t('footer.about')}
@@ -46,9 +43,6 @@ module.exports = (state) => {
 
         ${impactLink(state.userStats)}
 
-        <a href="https://5calls.zendesk.com/hc/en-us/sections/115000760947-FAQ">
-          <i class="fa fa-question-circle" aria-hidden="true"></i> ${t('footer.faq')}
-        </a>
         <br />
         <a href="http://ipinfo.io"> ${t('footer.ipGeolocation')}</a>
       </div></footer>
