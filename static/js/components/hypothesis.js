@@ -13,6 +13,11 @@ module.exports = (state, prev, send) => {
         <p>${t('hypothesis.p1')}</p>
         <p><strong>${t('hypothesis.p2')}</strong></p>
 
+        <figure>
+          <img src="/img/onecall.jpg" alt="Phone Call" style="border-style: groove;"  />
+          <figcaption style="font-size:10px">Picture credit: <a href="http://www.freeimages.com/photographer/lusi-46247">sanja gjenero</a></figcaption>
+        </figure>
+
         ${promote(state, prev, send)}
       </header>
 
