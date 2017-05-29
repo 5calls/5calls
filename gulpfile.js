@@ -125,7 +125,7 @@ gulp.task('scripts:watch', function() {
 });
 
 gulp.task('extra', function() {
-  gulp.src(SRC.extra + '/*.+(ico|xml|json)')
+  gulp.src(SRC.extra + '/*.+(ico|xml|json|txt)')
     .pipe(gulp.dest(DEST.html));
 });
 
