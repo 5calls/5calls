@@ -88,6 +88,11 @@
   }
 
   &__script {
+    &__link {
+      font-size: 36px;
+      margin: 20px 0 10px 0;
+    }
+
     &__body {
       background-color: $gray-xlight;
       color: $gray;

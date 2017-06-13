@@ -3,6 +3,7 @@ const t = require('../utils/translation');
 
 const find = require('lodash/find');
 const scriptFormat = require('./scriptFormat.js');
+const issuesLink = require('./issuesLink.js');
 
 module.exports = (state, prev, send) => {
   const issue = find(state.issues, ['id', state.location.params.issueid]);
@@ -13,8 +14,9 @@ module.exports = (state, prev, send) => {
     return html`
       <div class="call__script">
         <h3 class="call__script__header">${t("script.yourScript")}</h3>
-        ${scriptFormat(issue, state, prev, send)}
-      </div>`;      
+        ${scriptFormat(state, prev, send)}
+        ${issuesLink(state, prev, send)}
+      </div>`;
   } else {
     return html``;
   }

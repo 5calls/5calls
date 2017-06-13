@@ -1,7 +1,11 @@
 const html = require('choo/html');
 const scriptLine = require('./scriptLine.js');
 
-module.exports = (issue, state) => {
+const find = require('lodash/find');
+
+module.exports = (state) => {
+  const issue = find(state.issues, ['id', state.location.params.issueid]);
+
   const currentIndex = state.contactIndices[issue.id];
   const currentContact = issue.contacts[currentIndex];
 
