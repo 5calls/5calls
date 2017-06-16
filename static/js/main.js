@@ -275,7 +275,7 @@ app.model({
       let lng = false;
       if (cachedGeo != ''){
         // lat/long
-        let geo = cachedGeo.replace(new RegExp(/\]|\[|"/, 'g'),'');
+        let geo = cachedGeo.replace(/\]|\[|"/g,'');
         if (geo.split(",").length == 2) {
           lat = geo.split(",")[0];
           lng = geo.split(",")[1];
