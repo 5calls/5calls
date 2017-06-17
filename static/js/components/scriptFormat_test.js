@@ -29,8 +29,8 @@ describe('scriptFormatter', () => {
       let state = stateDefault;
       issue['contacts'] = [contact];
       issue['script'] = script;
-      state['issues'] = issue;
-      let result = scriptFormat(issue, state);
+      state['issues'] = [issue];
+      let result = scriptFormat(state);
       expect(result.textContent).to.contain('Please vote against Senator Bozo B. Blowhart. It will be bad if you dont vote against Senator Bozo B. Blowhart.');
     });
     it('should replace with rep title', () => {
@@ -44,8 +44,8 @@ describe('scriptFormatter', () => {
       let state = stateDefault;
       issue['contacts'] = [contact];
       issue['script'] = script;
-      state['issues'] = issue;
-      let result = scriptFormat(issue, state);
+      state['issues'] = [issue];
+      let result = scriptFormat(state);
       expect(result.textContent).to.contain('Please vote against Rep. Bozo B. Blowhart. It will be bad if you dont vote against Rep. Bozo B. Blowhart.');
     });
     it('should not replace title when not house or senate', () => {
@@ -59,8 +59,8 @@ describe('scriptFormatter', () => {
       let state = stateDefault;
       issue['contacts'] = [contact];
       issue['script'] = script;
-      state['issues'] = issue;
-      let result = scriptFormat(issue, state);
+      state['issues'] = [issue];
+      let result = scriptFormat(state);
       expect(result.textContent).to.contain(script);
     }); 
     it('should not replace when no valid replacement string', () => {
@@ -74,8 +74,8 @@ describe('scriptFormatter', () => {
       let state = stateDefault;
       issue['contacts'] = [contact];
       issue['script'] = script;
-      state['issues'] = issue;
-      let result = scriptFormat(issue, state);
+      state['issues'] = [issue];
+      let result = scriptFormat(state);
       expect(result.textContent).to.contain(script);
     }); 
   });
@@ -91,9 +91,9 @@ describe('scriptFormatter', () => {
       let state = stateDefault;
       issue['contacts'] = [contact];
       issue['script'] = script;
-      state['issues'] = issue;
+      state['issues'] = [issue];
       state['cachedCity'] = 'Oakland';
-      let result = scriptFormat(issue, state);
+      let result = scriptFormat(state);
       expect(result.textContent).to.contain('I am from Oakland. I love Oakland.');
     });
     it('should not replace with invalid location replacement string', () => {
@@ -107,9 +107,9 @@ describe('scriptFormatter', () => {
       let state = stateDefault;
       issue['contacts'] = [contact];
       issue['script'] = script;
-      state['issues'] = issue;
+      state['issues'] = [issue];
       state['cachedCity'] = 'Oakland';
-      let result = scriptFormat(issue, state);
+      let result = scriptFormat(state);
       expect(result.textContent).to.contain(script);
     });    
     it('should not replace if no cached city', () => {
@@ -123,9 +123,9 @@ describe('scriptFormatter', () => {
       let state = stateDefault;
       issue['contacts'] = [contact];
       issue['script'] = script;
-      state['issues'] = issue;
+      state['issues'] = [issue];
       state['cachedCity'] = '';
-      let result = scriptFormat(issue, state);
+      let result = scriptFormat(state);
       expect(result.textContent).to.contain(script);
     });
   });
