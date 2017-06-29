@@ -297,9 +297,9 @@ app.model({
         };
       }
     },
-  },
-  receiveTownHallDataError: () => {
-    return { localEvents: [] };
+    receiveTownHallDataError: () => {
+      return { localEvents: [] };
+    }
   },
   effects: {
     fetchTownHallData: (state, data, send, done) => {
