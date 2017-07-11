@@ -47,10 +47,10 @@ module.exports = (state, prev, send) => {
 
   return html`
       <footer><div class="tinyletter__form">
-        <form action="https://my.sendinblue.com/users/subscribe/js_id/2p22o/id/1" method="get" target="popupwindow" onsubmit="window.open('https://my.sendinblue.com/users/subscribe/js_id/2p22o/id/1', 'popupwindow', 'scrollbars=yes,width=800,height=600');return true">
+        <form action="//5calls.us16.list-manage.com/subscribe/post?u=82a164d5fe7f51f4a4efb1f83&amp;id=624ef52208" method="post" target="popupwindow" onsubmit="window.open('https://my.sendinblue.com/users/subscribe/js_id/2p22o/id/1', 'popupwindow', 'scrollbars=yes,width=800,height=600');return true">
           <label for="email">${t('footer.emailLabel')}</label>
           <span class="emailform">
-            <input type="text" style="width:140px" name="email" id="email" />
+            <input type="text" style="width:140px" name="EMAIL" id="email" />
             <input type="submit" value="${t('footer.subscribe', null, true)}" />
           </span>
         </form>
