@@ -109,12 +109,25 @@
       "enterYourLocation":"<a class='location-link'>Enter your address</a> to identify your representative in the House.",
       "setYourLocation":"<a class='location-link'>Set your location</a> to find your representatives"
     },
+    "tracker": {
+      "title": "Trumpcare Votes",
+      "noTracker": "We'll be right back with updated vote tally counts.",
+      "required": "50 Yes votes needed to pass",
+      "no": "No",
+      "yes": "Yes",
+      "noVotes": "No Votes ({{count}})",
+      "yesVotes": "Yes Votes ({{count}})",
+      "unknownVotes": "Unknown Votes ({{count}})"
+    },
     "outcomes":{
       "enterYourCallResult":"Enter your call result to get the next call:",
-      "unavailable":"Unavailable",
-      "voicemail":"Left Voicemail",
-      "madeContact":"Made Contact",
-      "skip":"Skip",
+      "outcome_unavailable":"Unavailable",
+      "outcome_voicemail":"Left Voicemail",
+      "outcome_contact":"Made Contact",
+      "outcome_yes":"Supports",
+      "outcome_no":"Opposes",
+      "outcome_unknown":"No stance",
+      "outcome_skip":"Skip",
       "contactsLeft": "{{contactsRemaining}} more $t(common.person, {'count': {{contactsRemaining}}}) to call for this issue."
     },
     "script": {

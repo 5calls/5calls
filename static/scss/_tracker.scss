@@ -1,0 +1,100 @@
+.tracker {
+  h3 {
+    font-size: $font-xxlarge;
+    text-align: center;
+  }
+
+  &__required {
+    color: #989898;
+    text-align: center;
+    font-weight: bold;
+  }
+
+  &__votes {
+    display: block;
+    position: relative;
+    height: 75px;
+    width: 100%;
+    background-color: #D8D8D8;
+
+    &__yes {
+      position: absolute;
+      top: 0;
+      right: 0;
+      height: 100%;
+      width: 200px;
+      background-color: #D11521;
+
+      color: #fff;
+      text-align: center;
+      line-height: 75px;
+      font-size: $font-large;
+    }
+
+    &__no {
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 100%;
+      width: 200px;
+      background-color: #165DC6;
+
+      color: #fff;
+      text-align: center;
+      line-height: 75px;
+      font-size: $font-large;
+    }
+
+    &__pass {
+      position: absolute;
+      top: 0;
+      left: 50%;
+      height: 100%;
+      width: 1px;
+
+      border-left: 1px dashed #000;
+    }
+  }
+
+  &__lists {
+    ul {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+    li {
+      padding: 10px 10px 0 10px;
+      font-size: 18px;
+    }
+    .header {
+      font-weight: bold;
+      padding-bottom: 13px;
+    }
+    .party_R {
+      color: #e53935;
+    }
+    .party_D {
+      // color: blue;
+    }
+    .party_I {
+      // color: green;
+    }
+
+    &__no {
+      float: left;
+      width: 33%;
+    }
+    &__yes {
+      float: right;
+      width: 33%;
+
+      text-align: right;
+    }
+    &__undecided {
+      display: inline-block;
+      width: 34%;
+
+      text-align: center;
+    }
+  }
+}

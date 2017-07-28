@@ -110,7 +110,9 @@ exports.state = {
   activeIssues: [],
   inactiveIssues: [],
   totalCalls: 0,
+  ahcaCounts: {},
   splitDistrict: false,
+  donations: {},
 
   // manual input address
   address: cachedAddress,
@@ -177,7 +179,28 @@ app.model({
     },
     receiveTotals: (state, data) => {
       const totals = JSON.parse(data);
-      return { totalCalls: totals.count };
+      var totalCalls = 0;
+      var ahcaCounts = {};
+      if (totals != null) {
+        if (totals.count != null) {
+          totalCalls = totals.count;
+        }
+
+        if (totals.ahcaCounts != null) {
+          ahcaCounts = totals.ahcaCounts;
+        }
+      }
+      return { totalCalls: totalCalls, ahcaCounts: ahcaCounts };
+    },
+    receiveDonations: (state, data) => {
+      const donations = JSON.parse(data);
+
+      if (donations != null && donations.goal != undefined) {
+        const goal = donations.goal.amount;
+        const total = donations.goal.total;
+        return { donations: {goal: goal, total: total} };
+      }
+      return {};
     },
     receiveIPInfoLoc: (state, data) => {
       const geo = data.loc;
@@ -344,6 +367,13 @@ app.model({
         send('mergeIssues', body, done);
       });
     },
+    fetchDonations: (state, data, send, done) => {
+      let donationURL = "https://pgb84kuy7a.execute-api.us-east-2.amazonaws.com/production/donations";
+      logger.debug("fetching donations url", donationURL);
+      http(donationURL, (err, res, body) => {
+        send('receiveDonations', body, done);
+      });
+    },
     getTotals: (state, data, send, done) => {
       http(appURL+'/report/', (err, res, body) => {
         send('receiveTotals', body, done);
@@ -461,6 +491,8 @@ app.model({
           send('fetchActiveIssues', {}, done);
         }
       }
+
+      send('fetchDonations', {}, done);
     },
     oldcall: (state, data, send, done) => {
       ga('send', 'event', 'issue_flow', 'old', 'old');

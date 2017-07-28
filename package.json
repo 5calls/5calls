@@ -10,10 +10,6 @@
     "test:watch": "gulp test:watch",
     "test:e2e": "gulp test:e2e"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/capndesign/5calls.git"
-  },
   "author": "",
   "license": "UNLICENSED",
   "devDependencies": {
@@ -55,6 +51,7 @@
     "i18next-xhr-backend": "^1.3.0",
     "lodash": "^4.17.2",
     "loglevel": "^1.4.1",
+    "node-sass": "^4.5.3",
     "query-string": "^4.2.3",
     "raf": "^3.3.0",
     "smoothscroll-polyfill": "^0.3.4",

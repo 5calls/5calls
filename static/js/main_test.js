@@ -37,6 +37,7 @@ function getDefaultState() {
     showFieldOfficeNumbers: false,
     selectedLanguage:"en",
     splitDistrict: false,
+    donations: {},
     totalCalls: 0,
     userStats: {
       all: [],
