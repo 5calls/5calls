@@ -8,27 +8,65 @@ module.exports = (state) => {
 
   const currentIndex = state.contactIndices[issue.id];
   const currentContact = issue.contacts[currentIndex];
+  let script = issue.script;
 
   // Replacement regexes, ideally standardize copy to avoid complex regexs
-  const titleReg = /\[REP\/SEN NAME\]|\[SENATOR\/REP NAME\]/gi;
-  const locationReg = /\[CITY,\s?ZIP\]|\[CITY,\s?STATE\]/gi;
+  // location - [CITY, ZIP], [CITY, STATE]
+  // title - [REP/SEN NAME], [SENATOR/REP NAME], [SEN/REP NAME]
+  // sen - [SEN NAME], [SENATOR NAME]
+  // rep - [REP NAME], [REP'S NAME]
+  // attgen - [Attorney General Name]
+  // bill1 - [Senate: S. 823; House- HR 1899]
+  // bill2 - [House- H.R. 1180, Senate: S 801]
+  // committee - [IF COMMITTEE, ADD: Please pass my message along to the Chairman.]
+
+  const reg = {
+    location: /\[CITY,\s?ZIP\]|\[CITY,\s?STATE\]/gi,
+    title: /\[REP\/SEN NAME\]|\[SENATOR\/REP NAME\]|\[SEN\/REP NAME\]/gi,
+    sen: /\[SEN NAME\]|\[SENATOR NAME\]/gi,
+    rep: /\[REP NAME\]|\[REP'S NAME\]/gi,
+    attgen: /\[ATTORNEY GENERAL NAME\]/gi,
+    bill1: /\[SENATE[:|-]\s?(S.?\s?\d+)[;|,]\s?HOUSE[:|-]\s?(H.?R.?\s?\d+)\]/gi,
+    bill2: /\[HOUSE[:|-]\s?(H.?R.?\s?\d+)[;|,]\s?SENATE[:|-]\s?(S.?\s?\d+)\]/gi,
+    committee: /\[IF (?:CALLING )?COMMITTEE, ADD:\s?(.*?)\]/gi,
+  };
 
   function format() {
-    let script = issue.script;
+    let replace = {
+      location: state.cachedCity,
+      sen: '',
+      rep: '',
+      attgen: '',
+    };
 
-    let location = state.cachedCity;
-    let title = '';
     if (currentContact.area == 'House') {
-      title = 'Rep. ' + currentContact.name;
+      replace.rep = 'Rep. ' + currentContact.name;
     } else if (currentContact.area == 'Senate') {
-      title = 'Senator ' + currentContact.name;
+      replace.sen = 'Senator ' + currentContact.name;
+    } else if (currentContact.area == 'AttorneyGeneral') {
+      replace.attgen = 'Attorney General ' + currentContact.name;
     }
 
-    if (title) {
-      script = script.replace(titleReg, title);
+    if (replace.location) {
+      script = script.replace(reg.location, replace.location);
     }
-    if (location) {
-      script = script.replace(locationReg, location);
+    if (replace.rep) {
+      script = script.replace(reg.title, replace.rep);
+      script = script.replace(reg.rep, replace.rep);
+      script = script.replace(reg.bill1, "$2");
+      script = script.replace(reg.bill2, "$1");
+      script = script.replace(reg.committee, "");
+    } else if (replace.sen) {
+      script = script.replace(reg.title, replace.sen);
+      script = script.replace(reg.sen, replace.sen);
+      script = script.replace(reg.bill1, "$1");
+      script = script.replace(reg.bill2, "$2");
+      script = script.replace(reg.committee, "");
+    } else if (replace.attgen) {
+      script = script.replace(reg.attgen, replace.attgen);
+      script = script.replace(reg.committee, "");
+    } else {
+      script = script.replace(reg.committee, "$1");
     }
 
     return script.split('\n').map((line) => scriptLine(line));

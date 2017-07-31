@@ -9,7 +9,7 @@ module.exports = (state, prev, send) => {
   const issue = find(state.issues, ['id', state.location.params.issueid]);
   const currentIndex = state.contactIndices[issue.id];
   const currentContact = issue.contacts[currentIndex];
-    
+
   if (currentContact != null) {
     return html`
       <div class="call__script">
