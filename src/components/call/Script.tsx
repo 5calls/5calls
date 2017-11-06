@@ -1,4 +1,5 @@
 import * as React from 'react';
+import * as ReactMarkdown from 'react-markdown';
 import { TranslationFunction } from 'i18next';
 import { translate } from 'react-i18next';
 import { Contact, Issue } from '../../common/model';
@@ -37,6 +38,7 @@ function scriptFormat(issue: Issue, locationState: LocationState, contactIndex: 
 
 export const Script: React.StatelessComponent<Props> = ({ issue, contactIndex = 0, locationState, t }: Props) => {
   if (issue && issue.contacts && issue.contacts.length !== 0) {
+    let formattedScript = scriptFormat(issue, locationState, contactIndex);
     return (
       <div className="call__script">
         <IssueLink
@@ -44,9 +46,7 @@ export const Script: React.StatelessComponent<Props> = ({ issue, contactIndex = 
         />
         <h3 className="call__script__header">{t('script.yourScript')}</h3>
         <div className="call__script__body">
-          {scriptFormat(issue, locationState, contactIndex).split('\n').map((line, index) =>
-          <p key={index}>{line}</p>
-          )}
+          <ReactMarkdown source={formattedScript}/>
         </div>
       </div>
     );
