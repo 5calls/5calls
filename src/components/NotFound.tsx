@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { bindActionCreators } from 'redux';
 import { connect, Dispatch } from 'react-redux';
+import { Link } from 'react-router-dom';
 
 import { Helmet } from 'react-helmet';
 import { find } from 'lodash';
@@ -42,7 +43,9 @@ const NotFound: React.StatelessComponent<AllProps> = (props: AllProps) => {
           </div>
         </aside>
         <main id="content" role="main" aria-live="polite" className="layout__main">
-          <h1>There's nothing here :|</h1>
+          <h1>There's nothing here 😢</h1>
+          {/*tslint:disable-next-line:max-line-length*/}
+          <p>Looks like you visited a page that doesn't exist. Pick one of the issues on the sidebar or <Link to="/">go back to the homepage</Link>.</p>
         </main>
       </div>
       <Footer
