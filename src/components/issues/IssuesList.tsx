@@ -12,7 +12,7 @@ interface Props {
   readonly currentGroup?: string;
   readonly completedIssueIds: string[];
   readonly t: TranslationFunction;
-  readonly onSelectIssue: (issueId: string) => Function;
+  readonly onSelectIssue: (issueId: string) => void;
 }
 
 export const IssuesList: React.StatelessComponent<Props> = (props: Props) => {

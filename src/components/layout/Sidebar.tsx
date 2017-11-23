@@ -8,7 +8,7 @@ interface Props {
   readonly currentIssue?: Issue;
   readonly currentGroup?: string;
   readonly completedIssueIds: string[];
-  readonly onSelectIssue: (issueId: string) => Function;
+  readonly onSelectIssue: (issueId: string) => void;
 }
 
 const Sidebar: React.StatelessComponent<Props> = (props: Props) => {

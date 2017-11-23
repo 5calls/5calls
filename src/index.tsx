@@ -13,6 +13,7 @@ import { getAll } from './services/localStorage';
 import { transform, LegacyUserStatsState } from './services/legacyStats';
 import { setUserStatsActionCreator } from './redux/userStats';
 
+import NotFound from './components/NotFound';
 import { HomePageContainer } from './components/home';
 import { AboutPage } from './components/about';
 import { PhonebanksPage } from './components/phonebanks';
@@ -68,7 +69,7 @@ ReactDOM.render(
           <Route path="/about" exact={true} component={AboutPage} />
           <Route path="/phonebanks" exact={true} component={PhonebanksPage} />
           <Route path="/postcards" exact={true} component={PostcardsPage} />
-          <Route path="*" component={HomePageContainer} />
+          <Route path="*" component={NotFound} />
         </Switch>
       </ConnectedRouter>
     </Provider>

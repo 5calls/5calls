@@ -59,7 +59,6 @@ const Layout: React.StatelessComponent<Props> = (props: Props) => (
       t={i18n.t}
     />
   </div>
-
 );
 
 export default Layout;
