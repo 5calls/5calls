@@ -18,7 +18,7 @@ import { SidebarHeader, Sidebar, Footer, Header } from './layout';
 
 type AllProps = Props & DispatchProps;
 
-const NotFound: React.StatelessComponent<AllProps> = (props: AllProps) => {
+const NotFoundPage: React.StatelessComponent<AllProps> = (props: AllProps) => {
   return (
     <div>
       <Helmet>
@@ -104,4 +104,4 @@ const mapDispatchToProps = (dispatch: Dispatch<ApplicationState>): DispatchProps
     dispatch);
 };
 
-export default connect<Props, DispatchProps, OwnProps>(mapStateToProps, mapDispatchToProps)(NotFound);
+export default connect<Props, DispatchProps, OwnProps>(mapStateToProps, mapDispatchToProps)(NotFoundPage);
