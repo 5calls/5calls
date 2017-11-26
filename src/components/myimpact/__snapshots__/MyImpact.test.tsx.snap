@@ -1,176 +1,25 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`MyImpact component snapshot renders correctly 1`] = `
-ShallowWrapper {
-  "complexSelector": ComplexSelector {
-    "buildPredicate": [Function],
-    "childrenOfNode": [Function],
-    "findWhereUnwrapped": [Function],
-  },
-  "length": 1,
-  "node": <section
-    className="impact"
+<section
+  className="impact"
 >
-    <h1
-        className="impact__title"
-    />
-    <div>
-        <h2
-            className="impact_total"
-            dangerouslySetInnerHTML={
-                Object {
-                    "__html": undefined,
-                  }
-            }
-        />
-    </div>
-    <Translate(Component)
-        t={[Function]}
-        totalCount={1000}
-    />
-</section>,
-  "nodes": Array [
-    <section
-      className="impact"
->
-      <h1
-            className="impact__title"
-      />
-      <div>
-            <h2
-                  className="impact_total"
-                  dangerouslySetInnerHTML={
-                        Object {
-                              "__html": undefined,
-                            }
-                  }
-            />
-      </div>
-      <Translate(Component)
-            t={[Function]}
-            totalCount={1000}
-      />
-</section>,
-  ],
-  "options": Object {},
-  "renderer": ReactShallowRenderer {
-    "_instance": ShallowComponentWrapper {
-      "_calledComponentWillUnmount": false,
-      "_compositeType": 2,
-      "_context": Object {},
-      "_currentElement": <Unknown
-        t={[Function]}
-        totalCount={1000}
-        userStats={
-                Object {
-                        "all": Array [],
-                        "contact": 0,
-                        "unavailable": 0,
-                        "voicemail": 0,
-                      }
+  <h1
+    className="impact__title"
+  />
+  <div>
+    <h2
+      className="impact_total"
+      dangerouslySetInnerHTML={
+        Object {
+          "__html": undefined,
         }
-/>,
-      "_debugID": 1,
-      "_hostContainerInfo": null,
-      "_hostParent": null,
-      "_instance": StatelessComponent {
-        "_reactInternalInstance": [Circular],
-        "context": Object {},
-        "props": Object {
-          "t": [Function],
-          "totalCount": 1000,
-          "userStats": Object {
-            "all": Array [],
-            "contact": 0,
-            "unavailable": 0,
-            "voicemail": 0,
-          },
-        },
-        "refs": Object {},
-        "state": null,
-        "updater": Object {
-          "enqueueCallback": [Function],
-          "enqueueCallbackInternal": [Function],
-          "enqueueElementInternal": [Function],
-          "enqueueForceUpdate": [Function],
-          "enqueueReplaceState": [Function],
-          "enqueueSetState": [Function],
-          "isMounted": [Function],
-          "validateCallback": [Function],
-        },
-      },
-      "_mountOrder": 1,
-      "_pendingCallbacks": null,
-      "_pendingElement": null,
-      "_pendingForceUpdate": false,
-      "_pendingReplaceState": false,
-      "_pendingStateQueue": null,
-      "_renderedComponent": NoopInternalComponent {
-        "_currentElement": <section
-          className="impact"
->
-          <h1
-                    className="impact__title"
-          />
-          <div>
-                    <h2
-                              className="impact_total"
-                              dangerouslySetInnerHTML={
-                                        Object {
-                                                  "__html": undefined,
-                                                }
-                              }
-                    />
-          </div>
-          <Translate(Component)
-                    t={[Function]}
-                    totalCount={1000}
-          />
-</section>,
-        "_debugID": 2,
-        "_renderedOutput": <section
-          className="impact"
->
-          <h1
-                    className="impact__title"
-          />
-          <div>
-                    <h2
-                              className="impact_total"
-                              dangerouslySetInnerHTML={
-                                        Object {
-                                                  "__html": undefined,
-                                                }
-                              }
-                    />
-          </div>
-          <Translate(Component)
-                    t={[Function]}
-                    totalCount={1000}
-          />
-</section>,
-      },
-      "_renderedNodeType": 0,
-      "_rootNodeID": 0,
-      "_topLevelWrapper": null,
-      "_updateBatchNumber": null,
-      "_warnedAboutRefsInRender": false,
-    },
-    "getRenderOutput": [Function],
-    "render": [Function],
-  },
-  "root": [Circular],
-  "unrendered": <Unknown
+      }
+    />
+  </div>
+  <Translate(Component)
     t={[Function]}
     totalCount={1000}
-    userStats={
-        Object {
-            "all": Array [],
-            "contact": 0,
-            "unavailable": 0,
-            "voicemail": 0,
-          }
-    }
-/>,
-}
+  />
+</section>
 `;

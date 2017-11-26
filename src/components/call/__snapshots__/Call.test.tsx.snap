@@ -1,606 +1,106 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Call component should be rendered if passed a valid object 1`] = `
-ShallowWrapper {
-  "complexSelector": ComplexSelector {
-    "buildPredicate": [Function],
-    "childrenOfNode": [Function],
-    "findWhereUnwrapped": [Function],
-  },
-  "length": 1,
-  "node": <section
-    className="call"
+<section
+  className="call"
 >
-    <Translate(Component)
-        currentIssue={
-            Object {
-                "categories": Array [],
-                "id": "1",
-                "inactive": false,
-                "link": "",
-                "linkTitle": "",
-                "name": "testName",
-                "outcomeModels": Array [],
-                "reason": "",
-                "script": "",
-                "slug": "",
-              }
-        }
-        t={[Function]}
-    />
-    <Translate(ContactDetails)
-        contactIndex={0}
-        currentIssue={
-            Object {
-                "categories": Array [],
-                "id": "1",
-                "inactive": false,
-                "link": "",
-                "linkTitle": "",
-                "name": "testName",
-                "outcomeModels": Array [],
-                "reason": "",
-                "script": "",
-                "slug": "",
-              }
-        }
-        t={[Function]}
-    />
-    <IssueLink
-        issue={
-            Object {
-                "categories": Array [],
-                "id": "1",
-                "inactive": false,
-                "link": "",
-                "linkTitle": "",
-                "name": "testName",
-                "outcomeModels": Array [],
-                "reason": "",
-                "script": "",
-                "slug": "",
-              }
-        }
-    />
-    <Translate(Component)
-        contactIndex={0}
-        issue={
-            Object {
-                "categories": Array [],
-                "id": "1",
-                "inactive": false,
-                "link": "",
-                "linkTitle": "",
-                "name": "testName",
-                "outcomeModels": Array [],
-                "reason": "",
-                "script": "",
-                "slug": "",
-              }
-        }
-        locationState={
-            Object {
-                "address": "1234",
-                "cachedCity": "Anytown",
-                "locationFetchType": "BROWSER_GEOLOCATION",
-                "splitDistrict": false,
-                "uiState": "LOCATION_FOUND",
-              }
-        }
-        t={[Function]}
-    />
-    <Translate(withRouter(Outcomes))
-        currentContactId=""
-        currentIssue={
-            Object {
-                "categories": Array [],
-                "id": "1",
-                "inactive": false,
-                "link": "",
-                "linkTitle": "",
-                "name": "testName",
-                "outcomeModels": Array [],
-                "reason": "",
-                "script": "",
-                "slug": "",
-              }
-        }
-        numberContactsLeft={0}
-        onSubmitOutcome={[Function]}
-        t={[Function]}
-    />
-    
-</section>,
-  "nodes": Array [
-    <section
-      className="call"
->
-      <Translate(Component)
-            currentIssue={
-                  Object {
-                        "categories": Array [],
-                        "id": "1",
-                        "inactive": false,
-                        "link": "",
-                        "linkTitle": "",
-                        "name": "testName",
-                        "outcomeModels": Array [],
-                        "reason": "",
-                        "script": "",
-                        "slug": "",
-                      }
-            }
-            t={[Function]}
-      />
-      <Translate(ContactDetails)
-            contactIndex={0}
-            currentIssue={
-                  Object {
-                        "categories": Array [],
-                        "id": "1",
-                        "inactive": false,
-                        "link": "",
-                        "linkTitle": "",
-                        "name": "testName",
-                        "outcomeModels": Array [],
-                        "reason": "",
-                        "script": "",
-                        "slug": "",
-                      }
-            }
-            t={[Function]}
-      />
-      <IssueLink
-            issue={
-                  Object {
-                        "categories": Array [],
-                        "id": "1",
-                        "inactive": false,
-                        "link": "",
-                        "linkTitle": "",
-                        "name": "testName",
-                        "outcomeModels": Array [],
-                        "reason": "",
-                        "script": "",
-                        "slug": "",
-                      }
-            }
-      />
-      <Translate(Component)
-            contactIndex={0}
-            issue={
-                  Object {
-                        "categories": Array [],
-                        "id": "1",
-                        "inactive": false,
-                        "link": "",
-                        "linkTitle": "",
-                        "name": "testName",
-                        "outcomeModels": Array [],
-                        "reason": "",
-                        "script": "",
-                        "slug": "",
-                      }
-            }
-            locationState={
-                  Object {
-                        "address": "1234",
-                        "cachedCity": "Anytown",
-                        "locationFetchType": "BROWSER_GEOLOCATION",
-                        "splitDistrict": false,
-                        "uiState": "LOCATION_FOUND",
-                      }
-            }
-            t={[Function]}
-      />
-      <Translate(withRouter(Outcomes))
-            currentContactId=""
-            currentIssue={
-                  Object {
-                        "categories": Array [],
-                        "id": "1",
-                        "inactive": false,
-                        "link": "",
-                        "linkTitle": "",
-                        "name": "testName",
-                        "outcomeModels": Array [],
-                        "reason": "",
-                        "script": "",
-                        "slug": "",
-                      }
-            }
-            numberContactsLeft={0}
-            onSubmitOutcome={[Function]}
-            t={[Function]}
-      />
-      
-</section>,
-  ],
-  "options": Object {},
-  "renderer": ReactShallowRenderer {
-    "_instance": ShallowComponentWrapper {
-      "_calledComponentWillUnmount": false,
-      "_compositeType": 0,
-      "_context": Object {},
-      "_currentElement": <Call
-        callState={
-                Object {
-                        "completedIssueIds": Array [
-                          "test1",
-                          "test2",
-                        ],
-                        "contactIndexes": Object {
-                          "test1": 2,
-                          "test2": 1,
-                        },
-                        "currentIssueId": "test1",
-                        "group": undefined,
-                      }
-        }
-        clearLocation={[Function]}
-        issue={
-                Object {
-                        "categories": Array [],
-                        "id": "1",
-                        "inactive": false,
-                        "link": "",
-                        "linkTitle": "",
-                        "name": "testName",
-                        "outcomeModels": Array [],
-                        "reason": "",
-                        "script": "",
-                        "slug": "",
-                      }
-        }
-        locationState={
-                Object {
-                        "address": "1234",
-                        "cachedCity": "Anytown",
-                        "locationFetchType": "BROWSER_GEOLOCATION",
-                        "splitDistrict": false,
-                        "uiState": "LOCATION_FOUND",
-                      }
-        }
-        onSubmitOutcome={[Function]}
-        t={[Function]}
-/>,
-      "_debugID": 1,
-      "_hostContainerInfo": null,
-      "_hostParent": null,
-      "_instance": Call {
-        "_reactInternalInstance": [Circular],
-        "context": Object {},
-        "props": Object {
-          "callState": Object {
-            "completedIssueIds": Array [
-              "test1",
-              "test2",
-            ],
-            "contactIndexes": Object {
-              "test1": 2,
-              "test2": 1,
-            },
-            "currentIssueId": "test1",
-            "group": undefined,
-          },
-          "clearLocation": [Function],
-          "issue": Object {
-            "categories": Array [],
-            "id": "1",
-            "inactive": false,
-            "link": "",
-            "linkTitle": "",
-            "name": "testName",
-            "outcomeModels": Array [],
-            "reason": "",
-            "script": "",
-            "slug": "",
-          },
-          "locationState": Object {
-            "address": "1234",
-            "cachedCity": "Anytown",
-            "locationFetchType": "BROWSER_GEOLOCATION",
-            "splitDistrict": false,
-            "uiState": "LOCATION_FOUND",
-          },
-          "onSubmitOutcome": [Function],
-          "t": [Function],
-        },
-        "refs": Object {},
-        "state": Object {
-          "currentContact": undefined,
-          "currentContactIndex": 0,
-          "issue": Object {
-            "categories": Array [],
-            "id": "1",
-            "inactive": false,
-            "link": "",
-            "linkTitle": "",
-            "name": "testName",
-            "outcomeModels": Array [],
-            "reason": "",
-            "script": "",
-            "slug": "",
-          },
-          "numberContactsLeft": 0,
-        },
-        "updater": Object {
-          "enqueueCallback": [Function],
-          "enqueueCallbackInternal": [Function],
-          "enqueueElementInternal": [Function],
-          "enqueueForceUpdate": [Function],
-          "enqueueReplaceState": [Function],
-          "enqueueSetState": [Function],
-          "isMounted": [Function],
-          "validateCallback": [Function],
-        },
-      },
-      "_mountOrder": 1,
-      "_pendingCallbacks": null,
-      "_pendingElement": null,
-      "_pendingForceUpdate": false,
-      "_pendingReplaceState": false,
-      "_pendingStateQueue": null,
-      "_renderedComponent": NoopInternalComponent {
-        "_currentElement": <section
-          className="call"
->
-          <Translate(Component)
-                    currentIssue={
-                              Object {
-                                        "categories": Array [],
-                                        "id": "1",
-                                        "inactive": false,
-                                        "link": "",
-                                        "linkTitle": "",
-                                        "name": "testName",
-                                        "outcomeModels": Array [],
-                                        "reason": "",
-                                        "script": "",
-                                        "slug": "",
-                                      }
-                    }
-                    t={[Function]}
-          />
-          <Translate(ContactDetails)
-                    contactIndex={0}
-                    currentIssue={
-                              Object {
-                                        "categories": Array [],
-                                        "id": "1",
-                                        "inactive": false,
-                                        "link": "",
-                                        "linkTitle": "",
-                                        "name": "testName",
-                                        "outcomeModels": Array [],
-                                        "reason": "",
-                                        "script": "",
-                                        "slug": "",
-                                      }
-                    }
-                    t={[Function]}
-          />
-          <IssueLink
-                    issue={
-                              Object {
-                                        "categories": Array [],
-                                        "id": "1",
-                                        "inactive": false,
-                                        "link": "",
-                                        "linkTitle": "",
-                                        "name": "testName",
-                                        "outcomeModels": Array [],
-                                        "reason": "",
-                                        "script": "",
-                                        "slug": "",
-                                      }
-                    }
-          />
-          <Translate(Component)
-                    contactIndex={0}
-                    issue={
-                              Object {
-                                        "categories": Array [],
-                                        "id": "1",
-                                        "inactive": false,
-                                        "link": "",
-                                        "linkTitle": "",
-                                        "name": "testName",
-                                        "outcomeModels": Array [],
-                                        "reason": "",
-                                        "script": "",
-                                        "slug": "",
-                                      }
-                    }
-                    locationState={
-                              Object {
-                                        "address": "1234",
-                                        "cachedCity": "Anytown",
-                                        "locationFetchType": "BROWSER_GEOLOCATION",
-                                        "splitDistrict": false,
-                                        "uiState": "LOCATION_FOUND",
-                                      }
-                    }
-                    t={[Function]}
-          />
-          <Translate(withRouter(Outcomes))
-                    currentContactId=""
-                    currentIssue={
-                              Object {
-                                        "categories": Array [],
-                                        "id": "1",
-                                        "inactive": false,
-                                        "link": "",
-                                        "linkTitle": "",
-                                        "name": "testName",
-                                        "outcomeModels": Array [],
-                                        "reason": "",
-                                        "script": "",
-                                        "slug": "",
-                                      }
-                    }
-                    numberContactsLeft={0}
-                    onSubmitOutcome={[Function]}
-                    t={[Function]}
-          />
-          
-</section>,
-        "_debugID": 2,
-        "_renderedOutput": <section
-          className="call"
->
-          <Translate(Component)
-                    currentIssue={
-                              Object {
-                                        "categories": Array [],
-                                        "id": "1",
-                                        "inactive": false,
-                                        "link": "",
-                                        "linkTitle": "",
-                                        "name": "testName",
-                                        "outcomeModels": Array [],
-                                        "reason": "",
-                                        "script": "",
-                                        "slug": "",
-                                      }
-                    }
-                    t={[Function]}
-          />
-          <Translate(ContactDetails)
-                    contactIndex={0}
-                    currentIssue={
-                              Object {
-                                        "categories": Array [],
-                                        "id": "1",
-                                        "inactive": false,
-                                        "link": "",
-                                        "linkTitle": "",
-                                        "name": "testName",
-                                        "outcomeModels": Array [],
-                                        "reason": "",
-                                        "script": "",
-                                        "slug": "",
-                                      }
-                    }
-                    t={[Function]}
-          />
-          <IssueLink
-                    issue={
-                              Object {
-                                        "categories": Array [],
-                                        "id": "1",
-                                        "inactive": false,
-                                        "link": "",
-                                        "linkTitle": "",
-                                        "name": "testName",
-                                        "outcomeModels": Array [],
-                                        "reason": "",
-                                        "script": "",
-                                        "slug": "",
-                                      }
-                    }
-          />
-          <Translate(Component)
-                    contactIndex={0}
-                    issue={
-                              Object {
-                                        "categories": Array [],
-                                        "id": "1",
-                                        "inactive": false,
-                                        "link": "",
-                                        "linkTitle": "",
-                                        "name": "testName",
-                                        "outcomeModels": Array [],
-                                        "reason": "",
-                                        "script": "",
-                                        "slug": "",
-                                      }
-                    }
-                    locationState={
-                              Object {
-                                        "address": "1234",
-                                        "cachedCity": "Anytown",
-                                        "locationFetchType": "BROWSER_GEOLOCATION",
-                                        "splitDistrict": false,
-                                        "uiState": "LOCATION_FOUND",
-                                      }
-                    }
-                    t={[Function]}
-          />
-          <Translate(withRouter(Outcomes))
-                    currentContactId=""
-                    currentIssue={
-                              Object {
-                                        "categories": Array [],
-                                        "id": "1",
-                                        "inactive": false,
-                                        "link": "",
-                                        "linkTitle": "",
-                                        "name": "testName",
-                                        "outcomeModels": Array [],
-                                        "reason": "",
-                                        "script": "",
-                                        "slug": "",
-                                      }
-                    }
-                    numberContactsLeft={0}
-                    onSubmitOutcome={[Function]}
-                    t={[Function]}
-          />
-          
-</section>,
-      },
-      "_renderedNodeType": 0,
-      "_rootNodeID": 0,
-      "_topLevelWrapper": null,
-      "_updateBatchNumber": null,
-      "_warnedAboutRefsInRender": false,
-    },
-    "getRenderOutput": [Function],
-    "render": [Function],
-  },
-  "root": [Circular],
-  "unrendered": <Call
-    callState={
-        Object {
-            "completedIssueIds": Array [
-              "test1",
-              "test2",
-            ],
-            "contactIndexes": Object {
-              "test1": 2,
-              "test2": 1,
-            },
-            "currentIssueId": "test1",
-            "group": undefined,
-          }
+  <Translate(Component)
+    currentIssue={
+      Object {
+        "categories": Array [],
+        "id": "1",
+        "inactive": false,
+        "link": "",
+        "linkTitle": "",
+        "name": "testName",
+        "outcomeModels": Array [],
+        "reason": "",
+        "script": "",
+        "slug": "",
+      }
     }
-    clearLocation={[Function]}
+    t={[Function]}
+  />
+  <Translate(ContactDetails)
+    contactIndex={0}
+    currentIssue={
+      Object {
+        "categories": Array [],
+        "id": "1",
+        "inactive": false,
+        "link": "",
+        "linkTitle": "",
+        "name": "testName",
+        "outcomeModels": Array [],
+        "reason": "",
+        "script": "",
+        "slug": "",
+      }
+    }
+    t={[Function]}
+  />
+  <IssueLink
     issue={
-        Object {
-            "categories": Array [],
-            "id": "1",
-            "inactive": false,
-            "link": "",
-            "linkTitle": "",
-            "name": "testName",
-            "outcomeModels": Array [],
-            "reason": "",
-            "script": "",
-            "slug": "",
-          }
+      Object {
+        "categories": Array [],
+        "id": "1",
+        "inactive": false,
+        "link": "",
+        "linkTitle": "",
+        "name": "testName",
+        "outcomeModels": Array [],
+        "reason": "",
+        "script": "",
+        "slug": "",
+      }
+    }
+  />
+  <Translate(Component)
+    contactIndex={0}
+    issue={
+      Object {
+        "categories": Array [],
+        "id": "1",
+        "inactive": false,
+        "link": "",
+        "linkTitle": "",
+        "name": "testName",
+        "outcomeModels": Array [],
+        "reason": "",
+        "script": "",
+        "slug": "",
+      }
     }
     locationState={
-        Object {
-            "address": "1234",
-            "cachedCity": "Anytown",
-            "locationFetchType": "BROWSER_GEOLOCATION",
-            "splitDistrict": false,
-            "uiState": "LOCATION_FOUND",
-          }
+      Object {
+        "address": "1234",
+        "cachedCity": "Anytown",
+        "locationFetchType": "BROWSER_GEOLOCATION",
+        "splitDistrict": false,
+        "uiState": "LOCATION_FOUND",
+      }
     }
+    t={[Function]}
+  />
+  <Translate(withRouter(Outcomes))
+    currentContactId=""
+    currentIssue={
+      Object {
+        "categories": Array [],
+        "id": "1",
+        "inactive": false,
+        "link": "",
+        "linkTitle": "",
+        "name": "testName",
+        "outcomeModels": Array [],
+        "reason": "",
+        "script": "",
+        "slug": "",
+      }
+    }
+    numberContactsLeft={0}
     onSubmitOutcome={[Function]}
     t={[Function]}
-/>,
-}
+  />
+</section>
 `;

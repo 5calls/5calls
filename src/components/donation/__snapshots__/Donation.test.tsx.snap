@@ -1,18 +1,24 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`should render Donation component properly 1`] = `
-ShallowWrapper {
-  "complexSelector": ComplexSelector {
-    "buildPredicate": [Function],
-    "childrenOfNode": [Function],
-    "findWhereUnwrapped": [Function],
-  },
-  "length": 1,
-  "node": <div
-    className="logo__header__donate"
+<div
+  className="logo__header__donate"
 >
+  <div
+    className="layout"
+  >
+    <p
+      className="logo__header__donatetext"
+    >
+      <a
+        href="https://secure.actblue.com/donate/5calls-donate"
+        target="_blank"
+      >
+        5 Calls is powered by donations from members like you
+      </a>
+    </p>
     <div
-        className="layout"
+      className="logo__header__donatebutton"
     >
         <p
             className="logo__header__donatetext"
@@ -77,13 +83,12 @@ ShallowWrapper {
             </p>
         </div>
     </div>
-</div>,
-  "nodes": Array [
     <div
-      className="logo__header__donate"
->
-      <div
-            className="layout"
+      className="logo__header__donatebutton"
+    >
+      <a
+        href="https://secure.actblue.com/donate/5calls-donate?amount=15"
+        target="_blank"
       >
             <p
                   className="logo__header__donatetext"

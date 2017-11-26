@@ -4,6 +4,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@types/enzyme-adapter-react-16": "^1.0.1",
     "axios": "^0.16.2",
     "i18next": "^8.4.3",
     "i18next-browser-languagedetector": "^2.0.0",
@@ -27,7 +28,7 @@
   },
   "devDependencies": {
     "@types/axios": "^0.14.0",
-    "@types/enzyme": "^2.8.4",
+    "@types/enzyme": "^3.1.5",
     "@types/i18next": "^8.4.1",
     "@types/jest": "^19.2.3",
     "@types/moxios": "^0.4.3",
@@ -50,12 +51,13 @@
     "css-loader": "0.28.1",
     "dotenv": "4.0.0",
     "enzyme": "^3.0.0",
+    "enzyme-adapter-react-16": "^1.1.0",
+    "enzyme-to-json": "^3.2.2",
     "extract-text-webpack-plugin": "2.1.0",
     "file-loader": "0.11.1",
     "fs-extra": "3.0.1",
     "html-webpack-plugin": "2.28.0",
-    "jest": "20.0.3",
-    "jest-serializer-enzyme": "^1.0.0",
+    "jest": "21.0.0",
     "moxios": "^0.4.0",
     "node-sass-chokidar": "^0.0.2",
     "object-assign": "4.1.1",
@@ -64,12 +66,11 @@
     "promise": "7.1.1",
     "react-dev-utils": "^2.0.1",
     "react-error-overlay": "^1.0.6",
-    "react-test-renderer": "^15.6.1",
     "redux-mock-store": "^1.2.3",
     "source-map-loader": "^0.2.1",
     "style-loader": "0.17.0",
     "sw-precache-webpack-plugin": "0.9.1",
-    "ts-jest": "^20.0.10",
+    "ts-jest": "21.0.0",
     "ts-loader": "^2.0.3",
     "tslint": "^5.2.0",
     "tslint-loader": "^3.5.3",
@@ -100,13 +101,17 @@
       "src/**/*.{js,jsx,ts,tsx}"
     ],
     "setupFiles": [
-      "<rootDir>/config/polyfills.js"
+      "<rootDir>/config/polyfills.js",
+      "<rootDir>/config/testSetup.ts"
     ],
     "moduleFileExtensions": [
       "ts",
       "tsx",
       "js",
       "jsx"
+    ],
+    "snapshotSerializers": [
+      "enzyme-to-json/serializer"
     ],
     "testMatch": [
       "<rootDir>/src/**/__tests__/**/*.ts?(x)",

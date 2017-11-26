@@ -1,345 +1,59 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Done component snapshot renders correctly 1`] = `
-ShallowWrapper {
-  "complexSelector": ComplexSelector {
-    "buildPredicate": [Function],
-    "childrenOfNode": [Function],
-    "findWhereUnwrapped": [Function],
-  },
-  "length": 1,
-  "node": <section
-    className="call"
+<section
+  className="call"
 >
-    <div
-        className="call_complete"
-    >
-        <h1
-            className="call__title"
-        />
-        <p
-            className="call__text"
-        />
-        <Translate(Promotion)
-            currentIssue={
-                Object {
-                    "categories": Array [],
-                    "id": 3,
-                    "inactive": false,
-                    "link": "",
-                    "linkTitle": "",
-                    "name": "",
-                    "outcomeModels": Array [
-                      Object {
-                        "label": "contact",
-                        "status": "contact",
-                      },
-                    ],
-                    "reason": "",
-                    "script": "",
-                    "slug": "",
-                  }
-            }
-            t={[Function]}
-        />
-        <p
-            className="call__text"
-        >
-            <Trans
-                i18nKey="callComplete.learnWhyCallingIsGreat"
-                parent="span"
-            >
-                <Link
-                    replace={false}
-                    to="/about"
-                >
-                    about-link-text-stub
-                </Link>
-            </Trans>
-        </p>
-        <Translate(Component)
-            t={[Function]}
-            totalCount={10000}
-        />
-    </div>
-</section>,
-  "nodes": Array [
-    <section
-      className="call"
->
-      <div
-            className="call_complete"
-      >
-            <h1
-                  className="call__title"
-            />
-            <p
-                  className="call__text"
-            />
-            <Translate(Promotion)
-                  currentIssue={
-                        Object {
-                              "categories": Array [],
-                              "id": 3,
-                              "inactive": false,
-                              "link": "",
-                              "linkTitle": "",
-                              "name": "",
-                              "outcomeModels": Array [
-                                Object {
-                                  "label": "contact",
-                                  "status": "contact",
-                                },
-                              ],
-                              "reason": "",
-                              "script": "",
-                              "slug": "",
-                            }
-                  }
-                  t={[Function]}
-            />
-            <p
-                  className="call__text"
-            >
-                  <Trans
-                        i18nKey="callComplete.learnWhyCallingIsGreat"
-                        parent="span"
-                  >
-                        <Link
-                              replace={false}
-                              to="/about"
-                        >
-                              about-link-text-stub
-                        </Link>
-                  </Trans>
-            </p>
-            <Translate(Component)
-                  t={[Function]}
-                  totalCount={10000}
-            />
-      </div>
-</section>,
-  ],
-  "options": Object {},
-  "renderer": ReactShallowRenderer {
-    "_instance": ShallowComponentWrapper {
-      "_calledComponentWillUnmount": false,
-      "_compositeType": 2,
-      "_context": Object {},
-      "_currentElement": <Unknown
-        currentIssue={
-                Object {
-                        "categories": Array [],
-                        "id": 3,
-                        "inactive": false,
-                        "link": "",
-                        "linkTitle": "",
-                        "name": "",
-                        "outcomeModels": Array [
-                          Object {
-                            "label": "contact",
-                            "status": "contact",
-                          },
-                        ],
-                        "reason": "",
-                        "script": "",
-                        "slug": "",
-                      }
-        }
-        t={[Function]}
-        totalCount={10000}
-/>,
-      "_debugID": 1,
-      "_hostContainerInfo": null,
-      "_hostParent": null,
-      "_instance": StatelessComponent {
-        "_reactInternalInstance": [Circular],
-        "context": Object {},
-        "props": Object {
-          "currentIssue": Object {
-            "categories": Array [],
-            "id": 3,
-            "inactive": false,
-            "link": "",
-            "linkTitle": "",
-            "name": "",
-            "outcomeModels": Array [
-              Object {
-                "label": "contact",
-                "status": "contact",
-              },
-            ],
-            "reason": "",
-            "script": "",
-            "slug": "",
-          },
-          "t": [Function],
-          "totalCount": 10000,
-        },
-        "refs": Object {},
-        "state": null,
-        "updater": Object {
-          "enqueueCallback": [Function],
-          "enqueueCallbackInternal": [Function],
-          "enqueueElementInternal": [Function],
-          "enqueueForceUpdate": [Function],
-          "enqueueReplaceState": [Function],
-          "enqueueSetState": [Function],
-          "isMounted": [Function],
-          "validateCallback": [Function],
-        },
-      },
-      "_mountOrder": 1,
-      "_pendingCallbacks": null,
-      "_pendingElement": null,
-      "_pendingForceUpdate": false,
-      "_pendingReplaceState": false,
-      "_pendingStateQueue": null,
-      "_renderedComponent": NoopInternalComponent {
-        "_currentElement": <section
-          className="call"
->
-          <div
-                    className="call_complete"
-          >
-                    <h1
-                              className="call__title"
-                    />
-                    <p
-                              className="call__text"
-                    />
-                    <Translate(Promotion)
-                              currentIssue={
-                                        Object {
-                                                  "categories": Array [],
-                                                  "id": 3,
-                                                  "inactive": false,
-                                                  "link": "",
-                                                  "linkTitle": "",
-                                                  "name": "",
-                                                  "outcomeModels": Array [
-                                                    Object {
-                                                      "label": "contact",
-                                                      "status": "contact",
-                                                    },
-                                                  ],
-                                                  "reason": "",
-                                                  "script": "",
-                                                  "slug": "",
-                                                }
-                              }
-                              t={[Function]}
-                    />
-                    <p
-                              className="call__text"
-                    >
-                              <Trans
-                                        i18nKey="callComplete.learnWhyCallingIsGreat"
-                                        parent="span"
-                              >
-                                        <Link
-                                                  replace={false}
-                                                  to="/about"
-                                        >
-                                                  about-link-text-stub
-                                        </Link>
-                              </Trans>
-                    </p>
-                    <Translate(Component)
-                              t={[Function]}
-                              totalCount={10000}
-                    />
-          </div>
-</section>,
-        "_debugID": 2,
-        "_renderedOutput": <section
-          className="call"
->
-          <div
-                    className="call_complete"
-          >
-                    <h1
-                              className="call__title"
-                    />
-                    <p
-                              className="call__text"
-                    />
-                    <Translate(Promotion)
-                              currentIssue={
-                                        Object {
-                                                  "categories": Array [],
-                                                  "id": 3,
-                                                  "inactive": false,
-                                                  "link": "",
-                                                  "linkTitle": "",
-                                                  "name": "",
-                                                  "outcomeModels": Array [
-                                                    Object {
-                                                      "label": "contact",
-                                                      "status": "contact",
-                                                    },
-                                                  ],
-                                                  "reason": "",
-                                                  "script": "",
-                                                  "slug": "",
-                                                }
-                              }
-                              t={[Function]}
-                    />
-                    <p
-                              className="call__text"
-                    >
-                              <Trans
-                                        i18nKey="callComplete.learnWhyCallingIsGreat"
-                                        parent="span"
-                              >
-                                        <Link
-                                                  replace={false}
-                                                  to="/about"
-                                        >
-                                                  about-link-text-stub
-                                        </Link>
-                              </Trans>
-                    </p>
-                    <Translate(Component)
-                              t={[Function]}
-                              totalCount={10000}
-                    />
-          </div>
-</section>,
-      },
-      "_renderedNodeType": 0,
-      "_rootNodeID": 0,
-      "_topLevelWrapper": null,
-      "_updateBatchNumber": null,
-      "_warnedAboutRefsInRender": false,
-    },
-    "getRenderOutput": [Function],
-    "render": [Function],
-  },
-  "root": [Circular],
-  "unrendered": <Unknown
-    currentIssue={
+  <div
+    className="call_complete"
+  >
+    <h1
+      className="call__title"
+    />
+    <p
+      className="call__text"
+    />
+    <Translate(Promotion)
+      currentIssue={
         Object {
-            "categories": Array [],
-            "id": 3,
-            "inactive": false,
-            "link": "",
-            "linkTitle": "",
-            "name": "",
-            "outcomeModels": Array [
-              Object {
-                "label": "contact",
-                "status": "contact",
-              },
-            ],
-            "reason": "",
-            "script": "",
-            "slug": "",
-          }
-    }
-    t={[Function]}
-    totalCount={10000}
-/>,
-}
+          "categories": Array [],
+          "id": 3,
+          "inactive": false,
+          "link": "",
+          "linkTitle": "",
+          "name": "",
+          "outcomeModels": Array [
+            Object {
+              "label": "contact",
+              "status": "contact",
+            },
+          ],
+          "reason": "",
+          "script": "",
+          "slug": "",
+        }
+      }
+      t={[Function]}
+    />
+    <p
+      className="call__text"
+    >
+      <Trans
+        i18nKey="callComplete.learnWhyCallingIsGreat"
+        parent="span"
+      >
+        <Link
+          replace={false}
+          to="/about"
+        >
+          about-link-text-stub
+        </Link>
+      </Trans>
+    </p>
+    <Translate(Component)
+      t={[Function]}
+      totalCount={10000}
+    />
+  </div>
+</section>
 `;
