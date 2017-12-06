@@ -160,6 +160,14 @@
 }
 
 .voter {
+  .call__reason {
+    li {
+      font-size: 18px;
+      line-height: 1.4em;
+      margin-bottom: 12px;
+    }  
+  }
+
   .call__outcomes {
     &__items {
       button {

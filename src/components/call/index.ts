@@ -11,9 +11,10 @@ import { Script, ScriptTranslatable } from './Script';
 import IssueLink from './IssueLink';
 import NoContactSplitDistrict from './NoContactSplitDistrict';
 import SupportOutcomes from './SupportOutcomes';
+import ACAOutcomes from './ACAOutcomes';
 
 export {
   Call, FetchCall, CallTranslatable, CallPageContainer, CallDetail, CallHeader, CallHeaderTranslatable,
   CallPage, ContactDetails, ContactOffices, ContactOfficesTranslatable, Outcomes, Script, ScriptTranslatable,
-  IssueLink, NoContactSplitDistrict, SupportOutcomes
+  IssueLink, NoContactSplitDistrict, SupportOutcomes, ACAOutcomes
 };

@@ -26,7 +26,7 @@ export default class SupportOutcomes extends React.Component<Props, State> {
       {title: 'Out of Service', emoji: '📵', key: 'disconnected'},
       {title: 'Wrong Number', emoji: '👽', key: 'wrongnumber'},
     ];
-
+  
     return (
       <div className="call__outcomes">
         <h3 className="call__outcomes__header">
@@ -52,7 +52,7 @@ export default class SupportOutcomes extends React.Component<Props, State> {
         </h3>
         {this.nextButton()}
       </div>
-    )
+    );
   }
 
   buttonClass(key: string) {
@@ -154,7 +154,7 @@ export default class SupportOutcomes extends React.Component<Props, State> {
 
   nextContact(e: React.MouseEvent<HTMLButtonElement>) {
     e.currentTarget.blur();
-        
+
     let outcomeState = '';
     if (this.state.outcomeState) {
       outcomeState += this.state.outcomeState;
@@ -164,6 +164,6 @@ export default class SupportOutcomes extends React.Component<Props, State> {
       }
     }
 
-    this.props.onNextContact(outcomeState)
+    this.props.onNextContact(outcomeState);
   }
 }

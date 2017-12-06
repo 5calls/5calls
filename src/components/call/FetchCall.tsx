@@ -5,7 +5,7 @@ import { TranslationFunction } from 'i18next';
 import * as ReactMarkdown from 'react-markdown';
 
 import { Issue, VoterContact } from '../../common/model';
-import { CallHeaderTranslatable, SupportOutcomes } from './index';
+import { CallHeaderTranslatable, SupportOutcomes, ACAOutcomes } from './index';
 import { CallState, OutcomeData } from '../../redux/callState';
 import { LocationState } from '../../redux/location/reducer';
 import { getNextContact } from '../../services/apiServices';
@@ -77,6 +77,12 @@ export default class FetchCall extends React.Component<Props, State> {
     this.fillContact();
   }
 
+  formatScript(script: string, contact: VoterContact): string {
+    const nameReg = /\[NAME\]/gi;
+
+    return script.replace(nameReg, '**' + contact.name + '**');
+  }
+
   contactArea() {
     if (this.state.currentContact) {
       return (
@@ -93,11 +99,17 @@ export default class FetchCall extends React.Component<Props, State> {
           </div>
           <h3 className="call__script__header">{i18n.t('script.yourScript')}</h3>
           <div className="call__script__body">
-            <ReactMarkdown source={this.props.issue.script}/>
+            <ReactMarkdown source={this.formatScript(this.props.issue.script, this.state.currentContact)}/>
           </div>
-          <SupportOutcomes
-            onNextContact={this.nextContact.bind(this)}
-          />
+          { this.props.issue.id === '51' ?
+            <ACAOutcomes
+              onNextContact={(outcome) => this.nextContact(outcome)}
+            />
+            :
+            <SupportOutcomes
+              onNextContact={(outcome) => this.nextContact(outcome)}
+            />
+          }
         </div>
       );
     }
