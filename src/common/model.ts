@@ -62,14 +62,6 @@ export class CategoryMap {
 
 export type Party = 'Democrat' | 'Republican' | 'Independent' | '';
 
-// export const DefaultContact: Contact = {
-//   name: '',
-//   phone: '',
-//   party: '',
-//   state: '',
-//   reason: ''
-// };
-
 export const DefaultContact: Contact = {} as Contact;
 
 export interface FieldOffice {

@@ -127,7 +127,7 @@ class CallPage extends React.Component<Props, State> {
     if (currentGroup && currentGroup.group.photoURL) {
       groupImage = currentGroup.group.photoURL;
     }
-    
+
     if (this.props.currentIssue &&
         this.props.currentIssue.contactType &&
         this.props.currentIssue.contactType === 'FETCH') {
@@ -137,7 +137,7 @@ class CallPage extends React.Component<Props, State> {
           issueId={this.props.currentIssue ? this.props.currentIssue.id : undefined}
           currentGroup={currentGroup}
         >
-          { currentGroup ? 
+          { currentGroup ?
           <div className="page__group">
             <div className="page__header">
               <div className="page__header__image"><img alt={currentGroup.group.name} src={groupImage}/></div>
@@ -182,7 +182,7 @@ class CallPage extends React.Component<Props, State> {
               '5 Calls: Make your voice heard'}
             </title>
           </Helmet>
-          { currentGroup ? 
+          { currentGroup ?
           <div className="page__group">
             <div className="page__header">
               <div className="page__header__image"><img alt={currentGroup.group.name} src={groupImage}/></div>

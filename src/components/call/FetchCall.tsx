@@ -4,7 +4,7 @@ import i18n from '../../services/i18n';
 import { TranslationFunction } from 'i18next';
 import * as ReactMarkdown from 'react-markdown';
 
-import { Issue, VoterContact, CacheableGroup } from '../../common/model';
+import { Issue, VoterContact, Group } from '../../common/model';
 import { CallHeaderTranslatable, SupportOutcomes, ACAOutcomes } from './index';
 import { CallState, OutcomeData } from '../../redux/callState';
 import { LocationState } from '../../redux/location/reducer';
@@ -14,7 +14,7 @@ import { queueUntilRehydration } from '../../redux/rehydrationUtil';
 // This defines the props that we must pass into this component.
 export interface Props {
   readonly issue: Issue;
-  readonly currentGroup?: CacheableGroup;
+  readonly currentGroup?: Group;
   readonly callState: CallState;
   readonly locationState: LocationState;
   readonly t: TranslationFunction;
