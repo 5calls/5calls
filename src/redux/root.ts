@@ -1,10 +1,11 @@
 import { ApplicationState } from './root';
 import { routerReducer, RouterState } from 'react-router-redux';
 import { Reducer, combineReducers } from 'redux';
-import { LocationState, locationStateReducer } from './location/reducer';
-import { CallState, callStateReducer } from './callState/reducer';
-import { RemoteDataState, remoteDataReducer } from './remoteData/reducer';
-import { UserStatsState, userStatsReducer } from './userStats/reducer';
+import { LocationState, locationStateReducer } from './location';
+import { CallState, callStateReducer } from './callState';
+import { RemoteDataState, remoteDataReducer } from './remoteData';
+import { UserStatsState, userStatsReducer } from './userStats';
+import { AppCache, appCacheReducer } from './cache';
 
 export enum OutcomeType {
   UNAVAILABLE = 'unavailable',
@@ -18,6 +19,7 @@ export interface ApplicationState {
   callState: CallState;
   locationState: LocationState;
   userStatsState: UserStatsState;
+  appCache: AppCache;
 }
 
 export const DefaultApplicationState: ApplicationState = {
@@ -25,6 +27,7 @@ export const DefaultApplicationState: ApplicationState = {
   callState: {} as CallState,
   locationState: {} as LocationState,
   userStatsState: {} as UserStatsState,
+  appCache: {} as AppCache
 };
 
 // DANGER: TypeScript magic ahead!!
@@ -45,6 +48,7 @@ export const ApplicationStateKey: ApplicationStateKeyTypes = {
   remoteDataState: 'remoteDataState',
   callState: 'callState',
   userStatsState: 'userStatsState',
+  appCache: 'appCache'
 };
 
 const rootReducer = combineReducers({
@@ -53,6 +57,7 @@ const rootReducer = combineReducers({
   callState: callStateReducer,
   locationState: locationStateReducer,
   userStatsState: userStatsReducer,
+  appCacheReducer: appCacheReducer
 });
 
 export default rootReducer;
