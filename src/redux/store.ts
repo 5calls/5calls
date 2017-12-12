@@ -41,7 +41,8 @@ export default (initialState) => {
   const localPersistKeys: ApplicationStateKeyType[] = [
     ApplicationStateKey.locationState,
     ApplicationStateKey.userStatsState,
-    ApplicationStateKey.callState
+    ApplicationStateKey.callState,
+    ApplicationStateKey.appCache
   ];
   persistor = persistStore(
     store,
