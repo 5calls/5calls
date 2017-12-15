@@ -1,9 +1,11 @@
+import { cacheTimeout } from './../../common/constants';
 import { Group } from '../../common/model';
 import {
   CacheableGroup,
-  GroupCache,
   AppCache,
-  findCacheableGroup } from './cache';
+  findCacheableGroup,
+  hasCacheTimeoutExceeded,
+  hasGroupCacheTimeoutExceeded } from './cache';
 
 const group1: Group = {
   id: 'craig',
@@ -23,31 +25,55 @@ const group2: Group = {
 };
 
 test('test cache creation', () => {
-  const cgroup1: CacheableGroup = { group: { craig: group1 }, timestamp: 1234567 };
-  const cgroup2: CacheableGroup = { group: { nick: group2 }, timestamp: 987654 };
+  const cgroup1: CacheableGroup = { group: group1 , timestamp: 1234567 };
+  const cgroup2: CacheableGroup = { group: group2 , timestamp: 987654 };
   const cache = new AppCache([cgroup1, cgroup2]);
 
   expect(cache.groups.length).toBe(2);
-  expect(cache.groups[0].group.craig).toBeDefined();
-  expect(cache.groups[1].group.nick).toBeDefined();
+  expect(cache.groups[0].group.id).toBe('craig');
+  expect(cache.groups[1].group.id).toBe('nick');
 });
 
 test('findCachableGroup() should work', () => {
-  const cgroup1: CacheableGroup = { group: { craig: group1 }, timestamp: 1234567 };
-  const cgroup2: CacheableGroup = { group: { nick: group2 }, timestamp: 987654 };
+  const cgroup1: CacheableGroup = { group: group1 , timestamp: 1234567 };
+  const cgroup2: CacheableGroup = { group: group2 , timestamp: 987654 };
   const cache = new AppCache([cgroup1, cgroup2]);
 
   const cgroup = findCacheableGroup('nick', cache);
-  expect(cgroup.group.nick).toBeDefined();
-  expect(cgroup.group.nick.name).toBe(group2.name);
-  expect(cgroup.group.foobar).toBeUndefined();
+  expect(cgroup).toBeDefined();
+  if (cgroup) {
+    expect(cgroup.group).toBeDefined();
+    expect(cgroup.group.name).toBe(group2.name);
+  }
 });
 
 test('findCachableGroup() should return undefined if it does not contain a group with the id param', () => {
-  const cgroup1: CacheableGroup = { group: { craig: group1 }, timestamp: 1234567 };
-  const cgroup2: CacheableGroup = { group: { nick: group2 }, timestamp: 987654 };
+  const cgroup1: CacheableGroup = { group: group1 , timestamp: 1234567 };
+  const cgroup2: CacheableGroup = { group: group2 , timestamp: 987654 };
   const cache = new AppCache([cgroup1, cgroup2]);
 
   const cgroup = findCacheableGroup('foobar', cache);
   expect(cgroup).toBeUndefined();
+});
+
+test('hasTimeoutExceeded() returns false', () => {
+  const now = 120;
+  const timestamp = 50;
+  const timeout = 100;
+
+  expect(hasCacheTimeoutExceeded({ timestamp, now, timeout })).toBeFalsy();
+});
+
+test('hasTimeoutExceeded() returns true', () => {
+  const now = 1000;
+  const timestamp = 880;
+  const timeout = 100;
+
+  expect(hasCacheTimeoutExceeded({ timestamp, now, timeout })).toBeTruthy();
+});
+
+test('hasGroupTimeoutExceeded() returns true using only a timestamp argument', () => {
+  const timestamp = new Date().getTime() - (1.4 * cacheTimeout.groups);
+
+  expect(hasGroupCacheTimeoutExceeded({ timestamp })).toBeTruthy();
 });

@@ -14,6 +14,11 @@ export const DONATE_URL = 'https://secure.actblue.com/donate/5calls-donate';
 
 export const zipCodeRegex: RegExp = /^\d{5}(-\d{4})?$/;
 
+export const cacheTimeout = {
+  default:  24 * 60 * 60 * 1000, // 1 day
+  groups: 24 * 60 * 60 * 1000 // 1 day
+};
+
 export const contact = {
   email: 'make5calls@gmail.com',
   github: 'https://github.com/5calls',

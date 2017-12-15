@@ -1,9 +1,8 @@
-import { Group } from '../../common/model';
-import { CacheGroupAction, AppCacheActionType } from './';
+import { CacheGroupAction, AppCacheActionType, CacheableGroup } from './';
 
-export const cacheGroupActionCreator = (group: Group): CacheGroupAction => {
+export const cacheGroupActionCreator = (cgroup: CacheableGroup): CacheGroupAction => {
   return {
     type: AppCacheActionType.CACHE_GROUP,
-    payload: group
+    payload: cgroup
   };
 };
