@@ -5,7 +5,7 @@ import { Helmet } from 'react-helmet';
 
 import { CallTranslatable, FetchCall } from './index';
 import { LayoutContainer } from '../layout';
-import { Issue } from '../../common/model';
+import { Issue, Group } from '../../common/model';
 import { CallState, OutcomeData } from '../../redux/callState';
 import { LocationState } from '../../redux/location/reducer';
 import { queueUntilRehydration } from '../../redux/rehydrationUtil';
@@ -52,6 +52,8 @@ interface Props extends RouteProps {
   readonly onSelectIssue: (issueId: string) => Function;
   readonly onGetIssuesIfNeeded: () => Function;
   readonly clearLocation: () => void;
+  readonly pageGroup: Group;
+
 }
 
 export interface State {
@@ -122,8 +124,8 @@ class CallPage extends React.Component<Props, State> {
   }
 
   getView() {
-    if (this.props.currentIssue && 
-        this.props.currentIssue.contactType && 
+    if (this.props.currentIssue &&
+        this.props.currentIssue.contactType &&
         this.props.currentIssue.contactType === 'FETCH') {
       return (
         <LayoutContainer
@@ -166,7 +168,7 @@ class CallPage extends React.Component<Props, State> {
             t={i18n.t}
           />
         </LayoutContainer>
-      );  
+      );
     }
   }
 

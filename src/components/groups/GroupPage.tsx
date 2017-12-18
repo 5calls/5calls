@@ -5,17 +5,15 @@ import { Link, RouteComponentProps } from 'react-router-dom';
 import * as ReactMarkdown from 'react-markdown';
 
 import { Group, Issue } from '../../common/model';
-// import { formatNumber } from '../shared/utils';
-import { getGroup } from '../../services/apiServices';
 import { LocationState } from '../../redux/location/reducer';
 import { CallState } from '../../redux/callState/reducer';
 import { CallCount } from '../shared';
 import { queueUntilRehydration } from '../../redux/rehydrationUtil';
+import { getGroup } from '../../services/apiServices';
 
 interface RouteProps extends RouteComponentProps<{ groupid: string, issueid: string }> { }
 
 interface Props extends RouteProps {
-  readonly activeGroup?: Group; 
   readonly issues: Issue[];
   readonly currentIssue?: Issue;
   readonly completedIssueIds: string[];
@@ -26,11 +24,13 @@ interface Props extends RouteProps {
   readonly onSelectIssue: (issueId: string) => Function;
   readonly onGetIssuesIfNeeded: (groupid: string) => Function;
   readonly onJoinGroup: (group: Group) => Function;
+  readonly pageGroup?: Group;
+  readonly cacheGroup: (group: Group) => Function;
 }
 
 export interface State {
   loadingState: GroupLoadingState;
-  pageGroup?: Group;
+  pageGroupState?: Group;
 }
 
 enum GroupLoadingState {
@@ -44,22 +44,35 @@ class GroupPage extends React.Component<Props, State> {
     super(props);
     // set initial state
     this.state = this.setStateFromProps(props);
+    this.setGroup(props);
   }
 
   setStateFromProps(props: Props): State {
     return {
       loadingState: GroupLoadingState.LOADING,
-      pageGroup: undefined,
+      pageGroupState: props.pageGroup ? props.pageGroup : undefined
     };
   }
 
+  setGroup(props: Props) {
+    if (!this.state.pageGroupState) {
+      getGroup(props.match.params.groupid)
+        .then(group => {
+          this.setState({pageGroupState: group});
+          // Dispatch call to add to cache
+          this.props.cacheGroup(group);
+        })
+        // tslint:disable-next-line:no-console
+        .catch(error => console.log('Problem calling cache/asyncActionCreator.getGroup()', error));
+    }
+
+  }
+
   componentWillReceiveProps(newProps: Props) {
-    if (this.state.pageGroup) {
-      if (newProps.match.params.groupid !== this.state.pageGroup.id) {
+      if (newProps.match.params.groupid) {
         this.setState({ loadingState: GroupLoadingState.LOADING });
         this.getGroupDetails(newProps.match.params.groupid);
-      }      
-    }
+      }
   }
 
   componentDidMount() {
@@ -69,20 +82,20 @@ class GroupPage extends React.Component<Props, State> {
   }
 
   getGroupDetails = (groupid: string) => {
-    getGroup(groupid).then((response: Group) => {      
-      this.props.onGetIssuesIfNeeded(groupid);
+      if (this.props.pageGroup) {
+        this.props.onGetIssuesIfNeeded(this.props.pageGroup.id);
 
-      this.setState({ loadingState: GroupLoadingState.FOUND, pageGroup: response });
-    }).catch((e) => {
-      this.setState({ loadingState: GroupLoadingState.NOTFOUND });
-    });  
+        this.setState({ loadingState: GroupLoadingState.FOUND });
+      } else {
+        this.setState({ loadingState: GroupLoadingState.NOTFOUND });
+      }
   }
 
   joinTeam = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.currentTarget.blur();
 
-    if (this.state.pageGroup) {
-      this.props.onJoinGroup(this.state.pageGroup); 
+    if (this.props.pageGroup) {
+      this.props.onJoinGroup(this.props.pageGroup);
     }
   }
 
@@ -105,8 +118,8 @@ class GroupPage extends React.Component<Props, State> {
 
         // I hate handling optionals this way, swift is so much better on this
         let group: Group;
-        if (this.state.pageGroup) {
-          group = this.state.pageGroup;
+        if (this.state.pageGroupState) {
+          group = this.state.pageGroupState;
         } else {
           return <span/>;
         }
@@ -114,7 +127,7 @@ class GroupPage extends React.Component<Props, State> {
         const groupImage = group.photoURL ? group.photoURL : '/img/5calls-stars.png';
 
         return (
-          <LayoutContainer 
+          <LayoutContainer
             currentGroupId={this.props.match.params.groupid}
             issues={this.props.issues}
             issueId={this.props.match.params.issueid}
@@ -153,7 +166,7 @@ class GroupPage extends React.Component<Props, State> {
             currentGroupId={this.props.match.params.groupid}
             issues={this.props.issues}
             issueId={this.props.match.params.issueid}
-          >          
+          >
             <div className="page__group">
               <h2 className="page__title">There's no team here 😢</h2>
             </div>

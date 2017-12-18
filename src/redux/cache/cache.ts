@@ -55,8 +55,7 @@ export function addOrReplaceCacheableGroup(groups: CacheableGroup[], group: Grou
     const newGroups = groups.filter(cgroup => {
         return cgroup.group.id !== group.id;
     });
-    newGroups.push(cacheableGroupFactory(group));
-    return newGroups;
+    return [...newGroups, cacheableGroupFactory(group)];
 }
 
 /**

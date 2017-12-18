@@ -57,7 +57,7 @@ const rootReducer = combineReducers({
   callState: callStateReducer,
   locationState: locationStateReducer,
   userStatsState: userStatsReducer,
-  appCacheReducer: appCacheReducer
+  appCache: appCacheReducer
 });
 
 export default rootReducer;
