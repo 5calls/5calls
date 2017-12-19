@@ -8,7 +8,7 @@ import { Group, Issue } from '../../common/model';
 import { LocationState } from '../../redux/location/reducer';
 import { CallState } from '../../redux/callState/reducer';
 import { CallCount } from '../shared';
-// import { queueUntilRehydration } from '../../redux/rehydrationUtil';
+import { queueUntilRehydration } from '../../redux/rehydrationUtil';
 import { getGroup } from '../../services/apiServices';
 
 interface RouteProps extends RouteComponentProps<{ groupid: string, issueid: string }> { }
@@ -74,31 +74,16 @@ class GroupPage extends React.Component<Props, State> {
 
   }
 
-  componentWillReceiveProps(newProps: Props) {
-      // if (newProps.match.params.groupid) {
-      //   this.setState({ loadingState: GroupLoadingState.LOADING });
-        // this.getGroupDetails(newProps.match.params.groupid);
-      // }
-  }
-
   componentDidMount() {
     if (this.state.pageGroupState) {
       this.setState({loadingState: GroupLoadingState.FOUND});
+      queueUntilRehydration(() => {
+        this.props.onGetIssuesIfNeeded(this.props.match.params.groupid);
+      });
+    } else {
+      this.setState({loadingState: GroupLoadingState.NOTFOUND});
     }
-    // queueUntilRehydration(() => {
-    //   this.getGroupDetails(this.props.match.params.groupid);
-    // });
   }
-
-  // getGroupDetails = (groupid: string) => {
-  //     if (this.state.pageGroupState && this.state.loadingState !== GroupLoadingState.LOADING) {
-  //       this.props.onGetIssuesIfNeeded(groupid);
-
-  //       // this.setState({ loadingState: GroupLoadingState.FOUND });
-  //     // } else {
-  //     //   this.setState({ loadingState: GroupLoadingState.NOTFOUND });
-  //     }
-  // }
 
   joinTeam = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.currentTarget.blur();
