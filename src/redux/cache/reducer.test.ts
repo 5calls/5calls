@@ -1,5 +1,5 @@
 import { Group } from './../../common/model';
-import { cacheGroup, appCacheReducer, CacheGroupAction,
+import { appCacheReducer, CacheGroupAction,
   AddToCacheAction, AppCacheActionType, AppCache, CacheableGroup } from './index';
 
 let groups: CacheableGroup[];
