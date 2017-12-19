@@ -32,14 +32,14 @@ test('fetchGroup() action creator functions correctly', ( ) => {
   const appCache = new AppCache([cgroup1]);
   initialState.appCache = appCache;
   const store = mockStore(initialState);
-  console.log('Store actions', store.getActions());
+  // console.log('Store actions', store.getActions());
   store.dispatch(cacheGroup(groupId))
     .then(() => {
       const actions = store.getActions();
-      console.log('Actions', actions);
+      // console.log('Actions', actions);
       expect(actions[0].type).toEqual(expectedType);
       expect(actions[0].payload.group).toEqual(group);
-      console.log('App Cache', initialState.appCache);
+      // console.log('App Cache', initialState.appCache);
     })
     .catch((error) => {
       // tslint:disable-next-line:no-console

@@ -20,7 +20,6 @@ export const cacheGroup = (groupId: string) => {
         hasGroupCacheTimeoutExceeded({ timestamp: cacheable.timestamp })) {
         return api.getGroup(groupId)
           .then(group => {
-            console.log('Group looked up', group);
             const cacheableGroup = cacheableGroupFactory(group);
             dispatch(cacheGroupActionCreator(cacheableGroup));
             // TODO: dispatch an action???
