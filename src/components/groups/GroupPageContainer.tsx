@@ -32,7 +32,6 @@ const mapStateToProps = (state: ApplicationState, ownProps: OwnProps): StateProp
   // set group if in cache
   const groupId = ownProps.match.params.groupid;
   const cgroup = findCacheableGroup(groupId, state.appCache);
-  console.log('Found CachableGroup', cgroup)
   let group: Group | undefined = undefined;
   if (cgroup) {
     group = cgroup.group;
