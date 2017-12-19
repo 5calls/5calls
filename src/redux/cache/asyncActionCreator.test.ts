@@ -32,6 +32,7 @@ test('fetchGroup() action creator functions correctly', ( ) => {
   const appCache = new AppCache([cgroup1]);
   initialState.appCache = appCache;
   const store = mockStore(initialState);
+  console.log('Store actions', store.getActions());
   store.dispatch(cacheGroup(groupId))
     .then(() => {
       const actions = store.getActions();
@@ -40,10 +41,10 @@ test('fetchGroup() action creator functions correctly', ( ) => {
       expect(actions[0].payload.group).toEqual(group);
       console.log('App Cache', initialState.appCache);
     })
-    // tslint:disable-next-line:no-console
     .catch((error) => {
+      // tslint:disable-next-line:no-console
       console.log('Test Failure: ', error);
-      // done();
+      throw new Error(error.message);
     });
 });
 
