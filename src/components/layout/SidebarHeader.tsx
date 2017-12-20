@@ -5,26 +5,26 @@ import i18n from '../../services/i18n';
 import { LocationState } from '../../redux/location/reducer';
 import { CallState } from '../../redux/callState/reducer';
 import { LocationTranslatable } from '../location';
+import { Group } from '../../common/model';
 
 interface Props {
   readonly callState: CallState;
-  readonly currentGroupId?: string;
+  readonly currentGroup?: Group;
   readonly locationState: LocationState;
-  readonly setLocation: (location: string) => void;  
-  readonly clearLocation: () => void;  
+  readonly setLocation: (location: string) => void;
+  readonly clearLocation: () => void;
 }
 
 const SidebarHeader: React.StatelessComponent<Props> = (props: Props) => {
   let headerIntro = <h2>{i18n.t('issues.whatsImportantToYou')}</h2>;
 
-  if (props.currentGroupId) {
+  if (props.currentGroup) {
     headerIntro = (
       <h3>
-        Your&nbsp;
-        <Link to={`/team/${props.currentGroupId}`}>team page</Link>
+        <Link to={`/team/${props.currentGroup.id}`}>{props.currentGroup.name} Home</Link>
       </h3>
     );
-  }  
+  }
 
   return (
     <header className="issues__header" role="banner">

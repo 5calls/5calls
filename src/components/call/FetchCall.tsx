@@ -4,7 +4,7 @@ import i18n from '../../services/i18n';
 import { TranslationFunction } from 'i18next';
 import * as ReactMarkdown from 'react-markdown';
 
-import { Issue, VoterContact } from '../../common/model';
+import { Issue, VoterContact, Group } from '../../common/model';
 import { CallHeaderTranslatable } from './index';
 import { CallState, OutcomeData } from '../../redux/callState';
 import { LocationState } from '../../redux/location/reducer';
@@ -14,7 +14,7 @@ import { queueUntilRehydration } from '../../redux/rehydrationUtil';
 // This defines the props that we must pass into this component.
 export interface Props {
   readonly issue: Issue;
-  readonly currentGroupId?: string;
+  readonly currentGroup?: Group;
   readonly callState: CallState;
   readonly locationState: LocationState;
   readonly t: TranslationFunction;
@@ -119,7 +119,7 @@ export default class FetchCall extends React.Component<Props, State> {
     if (this.supportEnabled()) {
       return (
       <div className="call__outcomes__items call__outcomes__support">
-        {buttons.map((button, index) => 
+        {buttons.map((button, index) =>
           <button key={index} onClick={(e) => this.setSupport(e, button.key)} className={this.buttonClass(button.key)}>
             {button.title}<br/>{button.emoji}
           </button>
@@ -130,7 +130,7 @@ export default class FetchCall extends React.Component<Props, State> {
 
     return (
       <div className="call__outcomes__items call__outcomes__support disabled">
-        {buttons.map((button, index) => 
+        {buttons.map((button, index) =>
           <button key={index} disabled={true}>{button.title}<br/>{button.emoji}</button>
         )}
       </div>
@@ -237,11 +237,11 @@ export default class FetchCall extends React.Component<Props, State> {
             )}
           </div>
           <h3 className="call__outcomes__header">
-            If contacted: do they support Danica? Use your judgment.    
+            If contacted: do they support Danica? Use your judgment.
           </h3>
           {this.supportButtons()}
           <h3 className="call__outcomes__header">
-            Done? Move on to the next voter           
+            Done? Move on to the next voter
           </h3>
           {this.nextButton()}
         </div>
@@ -250,7 +250,7 @@ export default class FetchCall extends React.Component<Props, State> {
     }
 
     if (!this.state.checkedForContact) {
-      return <h3 className="call__outcomes__header">Getting your next contact...</h3>;      
+      return <h3 className="call__outcomes__header">Getting your next contact...</h3>;
     } else {
       return (
         <blockquote>
@@ -258,7 +258,7 @@ export default class FetchCall extends React.Component<Props, State> {
           {/*tslint:disable-next-line:max-line-length*/}
           <p>Looks like we're all out of calls to make for today, or we're outside of normal calling hours (9am-9pm in the local time zone). Come back tomorrow for more calls!</p>
         </blockquote>
-      );      
+      );
     }
   }
 

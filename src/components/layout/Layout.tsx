@@ -4,7 +4,7 @@ import { Helmet } from 'react-helmet';
 import i18n from '../../services/i18n';
 import { LocationState } from '../../redux/location/reducer';
 import { CallState } from '../../redux/callState/reducer';
-import { Issue } from '../../common/model';
+import { Issue, Group } from '../../common/model';
 import { SidebarHeader, Sidebar, Footer, Header } from './index';
 
 interface Props {
@@ -14,7 +14,7 @@ interface Props {
   readonly issueId: string;
   readonly issues: Issue[];
   readonly currentIssue?: Issue;
-  readonly currentGroupId?: string;
+  readonly currentGroup?: Group;
   readonly completedIssueIds: string[];
   readonly callState: CallState;
   readonly locationState: LocationState;
@@ -36,7 +36,7 @@ const Layout: React.StatelessComponent<Props> = (props: Props) => (
         <div className="issues">
           <SidebarHeader
             callState={props.callState}
-            currentGroupId={props.currentGroupId}
+            currentGroup={props.currentGroup}
             locationState={props.locationState}
             setLocation={props.setLocation}
             clearLocation={props.clearLocation}
@@ -44,7 +44,7 @@ const Layout: React.StatelessComponent<Props> = (props: Props) => (
           <Sidebar
             issues={props.issues}
             currentIssue={props.currentIssue ? props.currentIssue : undefined}
-            currentGroup={props.currentGroupId}
+            currentGroup={props.currentGroup}
             completedIssueIds={props.completedIssueIds}
             onSelectIssue={props.onSelectIssue}
           />

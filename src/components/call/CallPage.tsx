@@ -45,7 +45,7 @@ interface RouteProps extends RouteComponentProps<any> { }
 interface Props extends RouteProps {
   readonly issues: Issue[];
   readonly currentIssue: Issue;
-  readonly currentGroupId?: string;
+  readonly currentGroup?: Group;
   readonly callState: CallState;
   readonly locationState: LocationState;
   readonly onSubmitOutcome: (data: OutcomeData) => Function;
@@ -131,11 +131,11 @@ class CallPage extends React.Component<Props, State> {
         <LayoutContainer
           issues={this.props.issues}
           issueId={this.props.currentIssue ? this.props.currentIssue.id : undefined}
-          currentGroupId={this.props.currentGroupId ? this.props.currentGroupId : undefined}
+          currentGroup={this.props.currentGroup ? this.props.currentGroup : undefined}
         >
           <FetchCall
             issue={this.props.currentIssue}
-            currentGroupId={this.props.currentGroupId}
+            currentGroup={this.props.currentGroup}
             callState={this.props.callState}
             locationState={this.props.locationState}
             clearLocation={this.props.clearLocation}
@@ -149,7 +149,7 @@ class CallPage extends React.Component<Props, State> {
         <LayoutContainer
           issues={this.props.issues}
           issueId={this.props.currentIssue ? this.props.currentIssue.id : undefined}
-          currentGroupId={this.props.currentGroupId ? this.props.currentGroupId : undefined}
+          currentGroup={this.props.currentGroup ? this.props.currentGroup : undefined}
         >
           <Helmet>
             <title>

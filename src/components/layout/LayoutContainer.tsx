@@ -7,12 +7,12 @@ import { newLocationLookup, clearAddress } from '../../redux/location';
 import { LocationState } from '../../redux/location/reducer';
 import { CallState } from '../../redux/callState/reducer';
 import { Layout } from './index';
-import { Issue } from '../../common/model';
+import { Issue, Group } from '../../common/model';
 
 interface OwnProps {
   readonly issueId?: string;
   readonly issues?: Issue[];
-  readonly currentGroupId?: string;
+  readonly currentGroup?: Group;
   readonly children?: {};
   readonly postcards?: boolean;
   readonly extraComponent?: {};
@@ -22,7 +22,7 @@ interface StateProps {
   readonly children?: {};
   readonly issues: Issue[];
   readonly currentIssue?: Issue;
-  readonly currentGroupId?: string;
+  readonly currentGroup?: Group;
   readonly completedIssueIds: string[];
   readonly callState: CallState;
   readonly locationState: LocationState;
@@ -47,7 +47,7 @@ function mapStateToProps(state: ApplicationState, ownProps: OwnProps): StateProp
   return {
     issues: issues,
     currentIssue: currentIssue,
-    currentGroupId: ownProps.currentGroupId,
+    currentGroup: ownProps.currentGroup,
     completedIssueIds: state.callState.completedIssueIds,
     callState: state.callState,
     locationState: state.locationState,

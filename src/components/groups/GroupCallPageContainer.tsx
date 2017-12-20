@@ -17,7 +17,7 @@ interface OwnProps extends RouteComponentProps<{ groupid: string, issueid: strin
 interface StateProps {
   readonly issues: Issue[];
   readonly currentIssue?: Issue;
-  readonly currentGroupId?: String;
+  readonly currentGroup?: Group;
   readonly callState: CallState;
   readonly locationState: LocationState;
   readonly pageGroup: Group;
@@ -50,7 +50,7 @@ const mapStateToProps = (state: ApplicationState, ownProps: OwnProps): StateProp
     group = cgroup.group;
   }
   return {
-    currentGroupId: groupId,
+    currentGroup: group,
     pageGroup: group,
     issues: groupPageIssues,
     currentIssue: currentIssue,

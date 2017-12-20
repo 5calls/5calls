@@ -98,7 +98,7 @@ class GroupPage extends React.Component<Props, State> {
       case GroupLoadingState.LOADING:
         return (
           <LayoutContainer
-            currentGroupId={this.props.match.params.groupid}
+            currentGroup={this.state.pageGroupState}
             issues={this.props.issues}
             issueId={this.props.match.params.issueid}
           >
@@ -122,7 +122,7 @@ class GroupPage extends React.Component<Props, State> {
 
         return (
           <LayoutContainer
-            currentGroupId={this.props.match.params.groupid}
+            currentGroup={this.state.pageGroupState}
             issues={this.props.issues}
             issueId={this.props.match.params.issueid}
           >
@@ -144,7 +144,7 @@ class GroupPage extends React.Component<Props, State> {
       default:
         return (
           <LayoutContainer
-            currentGroupId={this.props.match.params.groupid}
+            currentGroup={this.state.pageGroupState}
             issues={this.props.issues}
             issueId={this.props.match.params.issueid}
           >

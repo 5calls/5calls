@@ -12,7 +12,7 @@ import { newLocationLookup, clearAddress } from '../redux/location';
 import { CallState } from '../redux/callState/reducer';
 import { selectIssueActionCreator } from '../redux/callState';
 import { ApplicationState } from '../redux/root';
-import { Issue } from '../common/model';
+import { Issue, Group } from '../common/model';
 
 import { SidebarHeader, Sidebar, Footer, Header } from './layout';
 
@@ -51,14 +51,14 @@ const NotFoundPage: React.StatelessComponent<AllProps> = (props: AllProps) => {
       <Footer
         t={i18n.t}
       />
-    </div>    
+    </div>
   );
 };
 
 interface OwnProps {
   readonly issueId?: string;
   readonly issues?: Issue[];
-  readonly currentGroupId?: string;
+  readonly currentGroup?: Group;
 }
 
 interface Props {
