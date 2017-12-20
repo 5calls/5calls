@@ -11,7 +11,7 @@ let nameMap = {
   'AR-JohnBoozman': { 'name': 'John Boozman (R-AR)', 'party': 'R', 'state': 'AR' },
   'AR-TomCotton': { 'name': 'Tom Cotton (R-AR)', 'party': 'R', 'state': 'AR' },
   'AZ-JeffFlake': { 'name': 'Jeff Flake (R-AZ)', 'party': 'R', 'state': 'AZ' },
-  'AZ-JohnMcCain': { 'name': 'John McCain (R-AZ)', 'party': 'R', 'state': 'AZ' },
+  'AZ-JohnMcCain': { 'name': 'John McCain (not voting)', 'party': 'R', 'state': 'AZ' },
   'CA-DianneFeinstein': { 'name': 'Dianne Feinstein (D-CA)', 'party': 'D', 'state': 'CA' },
   'CA-KamalaDHarris': { 'name': 'Kamala Harris (D-CA)', 'party': 'D', 'state': 'CA' },
   'CO-CoryGardner': { 'name': 'Cory Gardner (R-CO)', 'party': 'R', 'state': 'CO' },
@@ -138,7 +138,6 @@ let unknownReps: string[] = [];
 let unknownVotes: string[] = unknownReps.sort(sortByParty);
 
 let definitelyNo: string[] = [
-  'TN-BobCorker',  
 ];
 for (let senatorName in nameMap) {
   if (nameMap[senatorName].party !== 'R') {
@@ -180,6 +179,7 @@ definitelyYes.forEach((senator) => {
 });
 
 let definitelyUnknown = [
+  'AZ-JohnMcCain',
 ];
 definitelyUnknown.forEach((senator) => {
   // add to hard list
@@ -199,7 +199,8 @@ definitelyUnknown.forEach((senator) => {
 export const Tracker: React.StatelessComponent<Props> = (props: Props) => {
   return (
     <div className="tracker">
-      <h3>Tax Scam Tracker (passed Senate)</h3>
+      <h3>Tax Scam Tracker</h3>
+      <h3>Senate Conference Committee</h3>
       <p className="tracker__required">50 Yes votes needed to pass</p>
       <div className="tracker__votes">
         <div className="tracker__votes__no" style={{width: `${noVotes.length}%`}}>No</div>

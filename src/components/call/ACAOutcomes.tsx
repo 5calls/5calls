@@ -53,7 +53,7 @@ export default class ACAOutcomes extends React.Component<Props, State> {
         </h3>
         {this.scheduledButtons()}
         <h3 className="call__outcomes__header">
-          Done? Move on to the next voter           
+          Done? Move on to the next person           
         </h3>
         {this.nextButton()}
       </div>
