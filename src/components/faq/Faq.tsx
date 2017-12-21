@@ -19,8 +19,6 @@ const Faq: React.StatelessComponent<Props> = (props: Props) => {
             <li>Type in your ZIP code (or let your browser or the app find your location for you).</li>
             <li>Choose an issue that’s important to you.</li>
             <li>Make calls!</li>
-          </ul>
-          <ul>
             <li>You have three members of Congress – two senators and a House rep.</li>
             <ul>
               <li>
@@ -38,8 +36,6 @@ const Faq: React.StatelessComponent<Props> = (props: Props) => {
               You may also see issues that ask you to call a non-Congressional entity, office, etc.
               Those calls work the same way.
             </li>
-          </ul>
-          <ul>
             <li>Don’t forget to congratulate yourself for being an awesome citizen!</li>
           </ul>
           <h3>Why should I call my congressperson?</h3>
@@ -147,11 +143,13 @@ const Faq: React.StatelessComponent<Props> = (props: Props) => {
           </ul>
           <h3>Do you have Facebook and Twitter pages?</h3>
           <p>
-            Yep. Follow us on <a href={Constants.contact.facebook}>Facebook</a>
-            and <a href={Constants.contact.twitter}>Twitter</a>
-            to get updates every day for what you should be calling about.
-            It’d be great if you’d share the page on your timeline and
-            invite your friends to like us too, but you know, no pressure. We’re not your mom.
+            {/*tslint:disable-next-line:max-line-length*/}
+            Yep. Follow us on <a href={Constants.contact.facebook}>Facebook</a> and <a href={Constants.contact.twitter}>Twitter</a> to get updates every day for what you should be calling about. It’d be great if you’d share the page on your timeline and invite your friends to like us too, but you know, no pressure. We’re not your mom.
+          </p>
+          <h3>If my representation is doing the right thing, should I still call?</h3>
+          <p>
+            {/*tslint:disable-next-line:max-line-length*/}
+            Yes! Your legislators need to know you support them, and they often use the tally of calls from their constituents to support their position when speaking to their colleagues in Congress. It's particularly helpful in some cases for them to have personal stories from constituents to add to their discussion, so if something affects you or your family and friends directly, share your story when you call!
           </p>
         </div>
       </main>
