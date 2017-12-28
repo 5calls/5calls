@@ -52,8 +52,6 @@ interface Props extends RouteProps {
   readonly onSelectIssue: (issueId: string) => Function;
   readonly onGetIssuesIfNeeded: () => Function;
   readonly clearLocation: () => void;
-  readonly pageGroup: Group;
-
 }
 
 export interface State {
@@ -124,18 +122,19 @@ class CallPage extends React.Component<Props, State> {
   }
 
   getView() {
+    const currentGroup = this.props.currentGroup ? this.props.currentGroup : undefined;
     if (this.props.currentIssue &&
         this.props.currentIssue.contactType &&
         this.props.currentIssue.contactType === 'FETCH') {
-      return (
+        return (
         <LayoutContainer
           issues={this.props.issues}
           issueId={this.props.currentIssue ? this.props.currentIssue.id : undefined}
-          currentGroup={this.props.currentGroup ? this.props.currentGroup : undefined}
+          currentGroup={currentGroup}
         >
           <FetchCall
             issue={this.props.currentIssue}
-            currentGroup={this.props.currentGroup}
+            currentGroup={currentGroup}
             callState={this.props.callState}
             locationState={this.props.locationState}
             clearLocation={this.props.clearLocation}
@@ -149,7 +148,7 @@ class CallPage extends React.Component<Props, State> {
         <LayoutContainer
           issues={this.props.issues}
           issueId={this.props.currentIssue ? this.props.currentIssue.id : undefined}
-          currentGroup={this.props.currentGroup ? this.props.currentGroup : undefined}
+          currentGroup={currentGroup}
         >
           <Helmet>
             <title>

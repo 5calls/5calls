@@ -9,8 +9,8 @@ import { getGroupIssuesIfNeeded } from '../../redux/remoteData';
 import { LocationState } from '../../redux/location/reducer';
 import { CallState, OutcomeData, submitOutcome, selectIssueActionCreator } from '../../redux/callState';
 import { clearAddress } from '../../redux/location';
-import { cacheGroup } from '../../redux/cache/asyncActionCreator';
 import { findCacheableGroup } from '../../redux/cache';
+import { hasGroupCacheTimeoutExceeded } from '../../redux/cache/cache';
 
 interface OwnProps extends RouteComponentProps<{ groupid: string, issueid: string }> { }
 
@@ -20,7 +20,6 @@ interface StateProps {
   readonly currentGroup?: Group;
   readonly callState: CallState;
   readonly locationState: LocationState;
-  readonly pageGroup: Group;
 }
 
 interface DispatchProps {
@@ -43,15 +42,18 @@ const mapStateToProps = (state: ApplicationState, ownProps: OwnProps): StateProp
   const currentIssue: Issue | undefined = getIssue(state.remoteDataState, ownProps.match.params.issueid);
 
   const groupId = ownProps.match.params.groupid;
-  cacheGroup(groupId);
   const cgroup = findCacheableGroup(groupId, state.appCache);
-  let group: Group = {} as Group;
+  let group: Group | undefined;
   if (cgroup) {
     group = cgroup.group;
+    // If cached group has timed-out, than set group to
+    // undefined so an API call will be done to refresh the data
+    if (hasGroupCacheTimeoutExceeded({ timestamp: cgroup.timestamp})) {
+      group = undefined;
+    }
   }
   return {
     currentGroup: group,
-    pageGroup: group,
     issues: groupPageIssues,
     currentIssue: currentIssue,
     callState: state.callState,

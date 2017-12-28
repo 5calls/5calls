@@ -10,7 +10,7 @@ import { selectIssueActionCreator, joinGroupActionCreator } from '../../redux/ca
 
 import { RouteComponentProps } from 'react-router-dom';
 import { addToCache } from '../../redux/cache/asyncActionCreator';
-import { findCacheableGroup } from '../../redux/cache/cache';
+import { findCacheableGroup, CacheableGroup } from '../../redux/cache/cache';
 
 interface OwnProps extends RouteComponentProps<{ groupid: string, issueid: string }> { }
 
@@ -18,7 +18,7 @@ interface StateProps {
   readonly issues: Issue[];
   readonly callState: CallState;
   readonly locationState: LocationState;
-  readonly pageGroup?: Group;
+  readonly currentGroup?: CacheableGroup;
 }
 
 interface DispatchProps {
@@ -32,10 +32,6 @@ const mapStateToProps = (state: ApplicationState, ownProps: OwnProps): StateProp
   // set group if in cache
   const groupId = ownProps.match.params.groupid;
   const cgroup = findCacheableGroup(groupId, state.appCache);
-  let group: Group | undefined = undefined;
-  if (cgroup) {
-    group = cgroup.group;
-  }
 
   let groupPageIssues: Issue[] = [];
 
@@ -47,7 +43,7 @@ const mapStateToProps = (state: ApplicationState, ownProps: OwnProps): StateProp
   }
 
   return {
-    pageGroup: group,
+    currentGroup: cgroup,
     issues: groupPageIssues,
     callState: state.callState,
     locationState: state.locationState,

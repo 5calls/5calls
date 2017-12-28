@@ -3,13 +3,13 @@ import i18n from '../../services/i18n';
 import { LayoutContainer } from '../layout';
 import { RouteComponentProps } from 'react-router-dom';
 import * as ReactMarkdown from 'react-markdown';
-
 import { Group, Issue } from '../../common/model';
 import { LocationState } from '../../redux/location/reducer';
 import { CallState } from '../../redux/callState/reducer';
 import { CallCount } from '../shared';
 import { queueUntilRehydration } from '../../redux/rehydrationUtil';
 import { getGroup } from '../../services/apiServices';
+import { CacheableGroup, hasGroupCacheTimeoutExceeded, cacheableGroupFactory } from '../../redux/cache/cache';
 
 interface RouteProps extends RouteComponentProps<{ groupid: string, issueid: string }> { }
 
@@ -24,19 +24,20 @@ interface Props extends RouteProps {
   readonly onSelectIssue: (issueId: string) => Function;
   readonly onGetIssuesIfNeeded: (groupid: string) => Function;
   readonly onJoinGroup: (group: Group) => Function;
-  readonly pageGroup?: Group;
+  readonly currentGroup?: CacheableGroup;
   readonly cacheGroup: (group: Group) => Function;
 }
 
 export interface State {
   loadingState: GroupLoadingState;
-  pageGroupState?: Group;
+  pageGroupState?: CacheableGroup;
 }
 
 enum GroupLoadingState {
   LOADING = 'LOADING',
   FOUND = 'FOUND',
   NOTFOUND = 'NOTFOUND',
+  ERROR = 'ERROR',
 }
 
 class GroupPage extends React.Component<Props, State> {
@@ -50,16 +51,19 @@ class GroupPage extends React.Component<Props, State> {
   setStateFromProps(props: Props): State {
     return {
       loadingState: GroupLoadingState.LOADING,
-      pageGroupState: props.pageGroup ? props.pageGroup : undefined
+      pageGroupState: props.currentGroup ? props.currentGroup : undefined
     };
   }
 
   setGroup(props: Props) {
-    if (!this.state.pageGroupState) {
+    let cgroup = this.state.pageGroupState;
+    // Call the API when page first loads and group
+    // is not in the cache or if the cached value has timed out
+    if (!cgroup || hasGroupCacheTimeoutExceeded({timestamp: cgroup.timestamp})) {
       getGroup(props.match.params.groupid)
         .then(group => {
-          this.setState({pageGroupState: group});
           if (group) {
+            this.setState({pageGroupState: cacheableGroupFactory(group)});
             this.setState({loadingState: GroupLoadingState.FOUND});
           } else {
             this.setState({loadingState: GroupLoadingState.NOTFOUND});
@@ -68,8 +72,16 @@ class GroupPage extends React.Component<Props, State> {
           this.props.cacheGroup(group);
           this.props.onGetIssuesIfNeeded(group.id);
         })
-        // tslint:disable-next-line:no-console
-        .catch(error => console.log('Problem calling cache/asyncActionCreator.getGroup()', error));
+        .catch((error: Error) =>  {
+          // If 404 error, set loading state to NOTFOUND
+          if (error.message.includes('404')) {
+            this.setState({loadingState: GroupLoadingState.NOTFOUND});
+          } else {
+            // tslint:disable-next-line:no-console
+            console.error('Problem calling cache/asyncActionCreator.getGroup()', error);
+            this.setState({loadingState: GroupLoadingState.ERROR});
+          }
+        });
     }
 
   }
@@ -81,15 +93,15 @@ class GroupPage extends React.Component<Props, State> {
         this.props.onGetIssuesIfNeeded(this.props.match.params.groupid);
       });
     } else {
-      this.setState({loadingState: GroupLoadingState.NOTFOUND});
+      this.setState({loadingState: GroupLoadingState.LOADING});
     }
   }
 
   joinTeam = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.currentTarget.blur();
 
-    if (this.props.pageGroup) {
-      this.props.onJoinGroup(this.props.pageGroup);
+    if (this.props.currentGroup) {
+      this.props.onJoinGroup(this.props.currentGroup.group);
     }
   }
 
@@ -98,7 +110,7 @@ class GroupPage extends React.Component<Props, State> {
       case GroupLoadingState.LOADING:
         return (
           <LayoutContainer
-            currentGroup={this.state.pageGroupState}
+            currentGroup={this.state.pageGroupState ? this.state.pageGroupState.group : undefined}
             issues={this.props.issues}
             issueId={this.props.match.params.issueid}
           >
@@ -108,12 +120,10 @@ class GroupPage extends React.Component<Props, State> {
           </LayoutContainer>
         );
       case GroupLoadingState.FOUND:
-        // const groupId = this.props.activeGroup ? this.props.activeGroup.id : 'nogroup';
-
         // I hate handling optionals this way, swift is so much better on this
         let group: Group;
         if (this.state.pageGroupState) {
-          group = this.state.pageGroupState;
+          group = this.state.pageGroupState.group;
         } else {
           return <span/>;
         }
@@ -122,7 +132,7 @@ class GroupPage extends React.Component<Props, State> {
 
         return (
           <LayoutContainer
-            currentGroup={this.state.pageGroupState}
+            currentGroup={this.state.pageGroupState ? this.state.pageGroupState.group : undefined}
             issues={this.props.issues}
             issueId={this.props.match.params.issueid}
           >
@@ -141,18 +151,32 @@ class GroupPage extends React.Component<Props, State> {
             </div>
           </LayoutContainer>
         );
-      default:
+      case GroupLoadingState.NOTFOUND:
         return (
           <LayoutContainer
-            currentGroup={this.state.pageGroupState}
+            currentGroup={this.state.pageGroupState ? this.state.pageGroupState.group : undefined}
             issues={this.props.issues}
             issueId={this.props.match.params.issueid}
           >
             <div className="page__group">
-              <h2 className="page__title">There's no team here 😢</h2>
+              <h2 className="page__title">There's no team with an ID of '{this.props.match.params.groupid}' 😢</h2>
             </div>
           </LayoutContainer>
         );
+        default:
+          return (
+            <LayoutContainer
+              currentGroup={this.state.pageGroupState ? this.state.pageGroupState.group : undefined}
+              issues={this.props.issues}
+              issueId={this.props.match.params.issueid}
+            >
+              <div className="page__group">
+                { // tslint:disable-next-line:max-line-length
+                }
+                <h2 className="page__title">An error occurred during a request for team '{this.props.match.params.groupid}' 😢</h2>
+              </div>
+            </LayoutContainer>
+          );
     }
   }
 }

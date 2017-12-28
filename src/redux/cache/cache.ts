@@ -43,11 +43,15 @@ export function findCacheableGroup(id: string, cache: AppCache): CacheableGroup 
  *
  * @export
  * @param {Group} group - group to be cached
- * @returns {CacheableGroup}
+ * @returns {CacheableGroup | undefined}
  */
-export function cacheableGroupFactory(group: Group): CacheableGroup {
+export function cacheableGroupFactory(group: Group): CacheableGroup | undefined {
     const now = new Date().getTime();
-    return { group, timestamp: now };
+    if (group) {
+      return { group, timestamp: now };
+    } else {
+      return undefined;
+    }
 }
 
 export function addOrReplaceCacheableGroup(groups: CacheableGroup[], group: Group): CacheableGroup[] {
@@ -55,7 +59,12 @@ export function addOrReplaceCacheableGroup(groups: CacheableGroup[], group: Grou
     const newGroups = groups.filter(cgroup => {
         return cgroup.group.id !== group.id;
     });
-    return [...newGroups, cacheableGroupFactory(group)];
+    const newcgroup = cacheableGroupFactory(group);
+    if (newGroups && newcgroup) {
+        return [...newGroups, newcgroup];
+    } else {
+        return groups;
+    }
 }
 
 /**
