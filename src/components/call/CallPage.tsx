@@ -5,7 +5,7 @@ import { Helmet } from 'react-helmet';
 
 import { CallTranslatable, FetchCall } from './index';
 import { LayoutContainer } from '../layout';
-import { Issue, Group } from '../../common/model';
+import { Issue, CacheableGroup } from '../../common/model';
 import { CallState, OutcomeData } from '../../redux/callState';
 import { LocationState } from '../../redux/location/reducer';
 import { queueUntilRehydration } from '../../redux/rehydrationUtil';
@@ -45,7 +45,7 @@ interface RouteProps extends RouteComponentProps<any> { }
 interface Props extends RouteProps {
   readonly issues: Issue[];
   readonly currentIssue: Issue;
-  readonly currentGroup?: Group;
+  readonly currentGroup?: CacheableGroup;
   readonly callState: CallState;
   readonly locationState: LocationState;
   readonly onSubmitOutcome: (data: OutcomeData) => Function;

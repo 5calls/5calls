@@ -45,8 +45,8 @@ export const getGroupIssuesIfNeeded = (groupid: string) => {
     // This method is primarily for when a user has navigated
     // directly to a route with an issue id
     if (!state.remoteDataState.groupIssues || state.remoteDataState.groupIssues.length === 0 ||
-        state.remoteDataState.currentGroup !== groupid) {
-        
+        state.remoteDataState.currentGroupId !== groupid) {
+
       const loc = state.locationState.address;
       if (loc) {
         dispatch(fetchGroupIssues(groupid, loc));
@@ -223,10 +223,10 @@ export const startup = () => {
         }
     }
     window.history.replaceState(null, '', window.location.pathname);
-    
+
     const state = getState();
     const loc = state.locationState.address;
-    
+
     if (loc) {
       // console.log('Using cached address');
       dispatch(fetchAllIssues(loc))

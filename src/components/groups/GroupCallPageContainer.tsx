@@ -3,21 +3,20 @@ import { bindActionCreators } from 'redux';
 import { RouteComponentProps } from 'react-router-dom';
 import { ApplicationState } from '../../redux/root';
 import { CallPage } from '../call/index';
-import { Issue, Group } from '../../common/model';
+import { Issue, CacheableGroup } from '../../common/model';
 import { getIssue } from '../shared/utils';
 import { getGroupIssuesIfNeeded } from '../../redux/remoteData';
 import { LocationState } from '../../redux/location/reducer';
 import { CallState, OutcomeData, submitOutcome, selectIssueActionCreator } from '../../redux/callState';
 import { clearAddress } from '../../redux/location';
 import { findCacheableGroup } from '../../redux/cache';
-import { hasGroupCacheTimeoutExceeded } from '../../redux/cache/cache';
 
 interface OwnProps extends RouteComponentProps<{ groupid: string, issueid: string }> { }
 
 interface StateProps {
   readonly issues: Issue[];
   readonly currentIssue?: Issue;
-  readonly currentGroup?: Group;
+  readonly currentGroup?: CacheableGroup;
   readonly callState: CallState;
   readonly locationState: LocationState;
 }
@@ -43,17 +42,9 @@ const mapStateToProps = (state: ApplicationState, ownProps: OwnProps): StateProp
 
   const groupId = ownProps.match.params.groupid;
   const cgroup = findCacheableGroup(groupId, state.appCache);
-  let group: Group | undefined;
-  if (cgroup) {
-    group = cgroup.group;
-    // If cached group has timed-out, than set group to
-    // undefined so an API call will be done to refresh the data
-    if (hasGroupCacheTimeoutExceeded({ timestamp: cgroup.timestamp})) {
-      group = undefined;
-    }
-  }
+
   return {
-    currentGroup: group,
+    currentGroup: cgroup,
     issues: groupPageIssues,
     currentIssue: currentIssue,
     callState: state.callState,
