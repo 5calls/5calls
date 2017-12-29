@@ -2,10 +2,10 @@ import { Dispatch } from 'react-redux';
 import { ApplicationState } from '../root';
 import { cacheGroupActionCreator, addGroupToCache } from './actionCreator';
 import {
-  CacheableGroup, hasGroupCacheTimeoutExceeded,
+  hasGroupCacheTimeoutExceeded,
   findCacheableGroup, cacheableGroupFactory } from './cache';
 import * as api from '../../services/apiServices';
-import { Group } from '../../common/model';
+import { Group, CacheableGroup } from '../../common/model';
 
 export const cacheGroup = (groupId: string) => {
   return (

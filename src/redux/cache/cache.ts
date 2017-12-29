@@ -1,16 +1,6 @@
-import { CacheTimeoutData, CacheableGroup } from './cache';
-import { Group } from '../../common/model';
+import { CacheTimeoutData } from './cache';
+import { Group, CacheableGroup } from '../../common/model';
 import { cacheTimeout } from './../../common/constants';
-/**
- * Group data to be cached, which includes a
- * timestamp to determine if the cache needs
- * to be refreshed.
- *
- */
-export interface CacheableGroup {
-  group: Group;
-  timestamp: number;
-}
 
 export type GroupCache = CacheableGroup[];
 

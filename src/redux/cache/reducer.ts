@@ -1,9 +1,8 @@
 import { Reducer } from 'redux';
 import {
-  CacheableGroup, AppCache,
-  AppCacheAction, AppCacheActionType,
+  AppCache, AppCacheAction, AppCacheActionType,
   addOrReplaceCacheableGroup } from './';
-import { Group } from '../../common/model';
+import { Group, CacheableGroup } from '../../common/model';
 
 export const appCacheReducer: Reducer<AppCache> = (
   state: AppCache = {groups: []} as AppCache,

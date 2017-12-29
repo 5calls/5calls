@@ -1,6 +1,5 @@
-import { Group } from './../../common/model';
+import { Group, CacheableGroup } from './../../common/model';
 import { Action } from 'redux';
-import { CacheableGroup } from './';
 
 export enum AppCacheActionType {
   CACHE_GROUP = 'CACHE_GROUP',

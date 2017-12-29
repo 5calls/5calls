@@ -3,13 +3,13 @@ import i18n from '../../services/i18n';
 import { LayoutContainer } from '../layout';
 import { RouteComponentProps } from 'react-router-dom';
 import * as ReactMarkdown from 'react-markdown';
-import { Group, Issue } from '../../common/model';
+import { Group, Issue, CacheableGroup } from '../../common/model';
 import { LocationState } from '../../redux/location/reducer';
 import { CallState } from '../../redux/callState/reducer';
 import { CallCount } from '../shared';
 import { queueUntilRehydration } from '../../redux/rehydrationUtil';
 import { getGroup } from '../../services/apiServices';
-import { CacheableGroup, hasGroupCacheTimeoutExceeded, cacheableGroupFactory } from '../../redux/cache/cache';
+import { hasGroupCacheTimeoutExceeded, cacheableGroupFactory } from '../../redux/cache/cache';
 
 interface RouteProps extends RouteComponentProps<{ groupid: string, issueid: string }> { }
 

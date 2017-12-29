@@ -1,6 +1,6 @@
-import { Group } from './../../common/model';
+import { Group, CacheableGroup } from './../../common/model';
 import { appCacheReducer, CacheGroupAction,
-  AddToCacheAction, AppCacheActionType, AppCache, CacheableGroup } from './index';
+  AddToCacheAction, AppCacheActionType, AppCache } from './index';
 
 let groups: CacheableGroup[];
 beforeEach(() => {

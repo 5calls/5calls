@@ -1,7 +1,6 @@
 import { cacheTimeout } from './../../common/constants';
-import { Group } from '../../common/model';
+import { Group, CacheableGroup } from '../../common/model';
 import {
-  CacheableGroup,
   AppCache,
   findCacheableGroup,
   hasCacheTimeoutExceeded,

@@ -2,7 +2,7 @@ import { connect, Dispatch } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { ApplicationState } from '../../redux/root';
 import GroupPage from './GroupPage';
-import { Group, Issue } from '../../common/model';
+import { Group, Issue, CacheableGroup } from '../../common/model';
 import { getGroupIssuesIfNeeded } from '../../redux/remoteData';
 import { LocationState } from '../../redux/location/reducer';
 import { CallState } from '../../redux/callState/reducer';
@@ -10,7 +10,7 @@ import { selectIssueActionCreator, joinGroupActionCreator } from '../../redux/ca
 
 import { RouteComponentProps } from 'react-router-dom';
 import { addToCache } from '../../redux/cache/asyncActionCreator';
-import { findCacheableGroup, CacheableGroup } from '../../redux/cache/cache';
+import { findCacheableGroup } from '../../redux/cache/cache';
 
 interface OwnProps extends RouteComponentProps<{ groupid: string, issueid: string }> { }
 

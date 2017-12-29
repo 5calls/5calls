@@ -1,10 +1,9 @@
 import thunk from 'redux-thunk';
 import configureStore from 'redux-mock-store';
 import * as moxios from 'moxios';
-import { Group } from './../../common/model';
+import { Group, CacheableGroup } from './../../common/model';
 import {
-  CacheableGroup, AppCache,
-  cacheGroup, AppCacheActionType } from './';
+  AppCache, cacheGroup, AppCacheActionType } from './';
 import { ApplicationState } from './../root';
 
 const middlewares = [thunk];

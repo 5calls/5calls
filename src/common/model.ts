@@ -94,6 +94,17 @@ export interface Group {
 }
 
 /**
+ * Group data to be cached, which includes a
+ * timestamp to determine if the cache needs
+ * to be refreshed.
+ *
+ */
+export interface CacheableGroup {
+  group: Group;
+  timestamp: number;
+}
+
+/**
  * Represents the place used to get location.
  * It may be one of three options:
  * 1. CACHED_ADDRESS - address stored in local storage

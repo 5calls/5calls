@@ -1,5 +1,5 @@
-import { Group } from './../../common/model';
-import { CacheGroupAction, AppCacheActionType, CacheableGroup } from './';
+import { Group, CacheableGroup } from './../../common/model';
+import { CacheGroupAction, AppCacheActionType } from './';
 
 export const cacheGroupActionCreator = (cgroup: CacheableGroup): CacheGroupAction => {
   return {
