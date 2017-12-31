@@ -40,6 +40,10 @@
   min-height: 12px;
   border-bottom: solid 8px $red;
 
+  @include bp(small) {
+    border-bottom: solid 2px $red;
+  }
+
   &__logo {
     position: relative;
     padding: 10px 30px 0px 30px;
@@ -62,7 +66,7 @@
         @include bp(medium) {
           margin-right: 20px;
         }
-        
+
         a {
           font-size: 20px;
           font-weight: 600;
@@ -98,28 +102,30 @@
       @include bp(medium) {
         display: inline-block;
         width: 100%;
-      }  
+      }
+
     }
 
-    // @include bp(medium) {
-    //   padding: 14px 10px 0 10px;
-    // }
   }
 
   &__donatebutton {
     max-width: 200px;
     margin-right: 10px;
-    // float: left;
 
     @include bp(medium) {
       max-width: 100%;
       margin: 0 20px;
-      // float: none;
+    }
+
+    @include bp(small) {
+      float: left;
+      width: 100%;
+      max-width: 400px;
+      margin-bottom: 8px;
     }
 
     a {
       float: left;
-      display: inline-block;
       width: 60px;
       background-color: #fff;
       margin: 6px 5px 0 0;
@@ -128,17 +134,44 @@
       border-radius: 5px;
       color: $blue;
       text-align: center;
-      font-size: 18px;
+      font-size: $font-normal;
 
       @include bp(medium) {
         width: 100%;
       }
+
+      @include bp(small) {
+        display: block;
+        width: 35%;
+        margin-right: 5px;
+        border: 1px solid $blue;
+        border-radius: 0;
+        padding: 6px 0;
+      }
+
     }
 
     p {
       margin: 7px 0 0 0;
-      color: #fff;      
+      color: #fff;
       font-size: 14px;
+
+      @include bp(small) {
+        margin: 7px auto 0 0;
+        font-size: $font-small;
+      }
+    }
+
+    &:after {
+      @include bp(small) {
+        clear: left;
+      }
+    }
+
+    &:last-child {
+      @include bp(small) {
+        margin-bottom: 2px;
+      }
     }
   }
 
@@ -150,6 +183,12 @@
     @include bp(medium) {
       width: 100%;
       max-width: inherit;
+    }
+
+    @include bp(small) {
+      width: 80%;
+      text-align: center;
+      margin: 4px 10px;
     }
 
     a {
@@ -186,7 +225,7 @@
   &__title {
     margin: 24px auto 48px auto;
     max-width: 700px;
-  
+
     font-size: 32px;
     font-weight: 100;
     font-style: italic;
@@ -224,33 +263,33 @@
       height: 70px;
     }
   }
-  
+
   .explainer {
     &__pick img {
       width: 250px;
       height: 69px;
       margin-top: 7px;
     }
-  
+
     &__call img {
       width: 250px;
       height: 85px;
     }
-  
+
     &__result img {
       width: 290px;
       height: 71px;
       margin-top: 7px;
     }
   }
-  
+
   .articles {
     li {
       width: 25%;
-  
+
       @include bp(medium) {
         width: inherit;
-      }      
+      }
     }
     li img {
       width: 260px;
@@ -266,7 +305,7 @@
         padding: 0 30px;
         @include bp(medium) {
           margin: 30px 0;
-        }          
+        }
 
         img {
           float: left;
@@ -306,11 +345,11 @@
         @include bp(medium) {
           width: inherit;
           margin: 20px 0;
-        }      
-  
+        }
+
         img {
           width: 250px;
-        }  
+        }
       }
     }
   }
