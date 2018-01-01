@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { Button } from '../../common/model';
+import { OutcomeButton } from '../../common/model';
 
 export interface Props {
   readonly onNextContact: (outcome: string) => void;
@@ -19,7 +19,7 @@ export default class SupportOutcomes extends React.Component<Props, State> {
   }
 
   render() {
-    const outcomeButtons: Button[] = [
+    const outcomeButtons: OutcomeButton[] = [
       {title: 'Contacted', emoji: '😀', key: 'contacted'},
       {title: 'Not Available / VM', emoji: '😕', key: 'nothome'},
       {title: 'Refused', emoji: '🤐', key: 'refused'},
@@ -68,7 +68,7 @@ export default class SupportOutcomes extends React.Component<Props, State> {
   }
 
   supportButtons() {
-    const buttons: Button[] = [
+    const buttons: OutcomeButton[] = [
       {title: 'Strong Support', emoji: '🎉', key: 'strongsupport'},
       {title: 'Lean Support', emoji: '⭐', key: 'leansupport'},
       {title: 'Undecided', emoji: '🌀', key: 'undecided'},

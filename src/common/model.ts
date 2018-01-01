@@ -168,7 +168,7 @@ export interface Donations {
     kind: string; // denomincation (dollars)
 }
 
-export interface Button {
+export interface OutcomeButton {
   title: string;
   emoji: string;
   key: string;

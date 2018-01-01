@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { Button } from '../../common/model';
+import { OutcomeButton } from '../../common/model';
 
 export interface Props {
   readonly onNextContact: (outcome: string) => void;
@@ -12,7 +12,7 @@ export interface State {
   scheduledState?: string;
 }
 
-const outcomeButtons: Button[] = [
+const outcomeButtons: OutcomeButton[] = [
   {title: 'Contacted', emoji: '😀', key: 'contacted'},
   {title: 'Not Available / VM', emoji: '😕', key: 'nothome'},
   {title: 'Refused', emoji: '🤐', key: 'refused'},
@@ -34,9 +34,9 @@ export default class ACAOutcomes extends React.Component<Props, State> {
           How did the call go?
         </h3>
         <div className="call__outcomes__items">
-          {outcomeButtons.map((button, index) =>
+          {outcomeButtons.map((button) =>
             <button
-              key={index}
+              key={button.key}
               onClick={(e) => this.setOutcome(e, button.key)}
               className={this.buttonClass(button.key)}
             >
@@ -110,7 +110,7 @@ export default class ACAOutcomes extends React.Component<Props, State> {
   // has insurance buttons
 
   insuranceButtons() {
-    const buttons: Button[] = [
+    const buttons: OutcomeButton[] = [
       {title: 'Has Insurance', emoji: '🎉', key: 'insured'},
       {title: 'No Insurance', emoji: '🤒', key: 'noinsurance'},
     ];
@@ -147,7 +147,7 @@ export default class ACAOutcomes extends React.Component<Props, State> {
   // scheduled buttons
 
   scheduledButtons() {
-    const buttons: Button[] = [
+    const buttons: OutcomeButton[] = [
       {title: 'Yes, Scheduled', emoji: '📆', key: 'scheduled'},
       {title: 'No, Couldn\'t Schedule', emoji: '🤷‍♂️', key: 'notscheduled'},
     ];
