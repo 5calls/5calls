@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Faq component snapshot renders correctly 1`] = `
+exports[`Terms component snapshot renders correctly 1`] = `
 <main
   className="layout__main"
   id="content"

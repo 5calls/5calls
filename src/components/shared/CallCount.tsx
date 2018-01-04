@@ -39,6 +39,9 @@ export const CallCount: React.StatelessComponent<Props> = (props: Props) => {
   if (props.totalCount >= 1000000) {
     callGoal = 2000000;
   }
+  if (props.totalCount >= 2000000) {
+    callGoal = 5000000;
+  }
 
   const pctDone = (props.totalCount / callGoal) * 100;
   const pctStyle = {width: `${pctDone}%`};    

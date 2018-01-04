@@ -47,7 +47,7 @@ export interface Contact {
 export interface VoterContact {
   id: string;
   name: string;
-  city: string;
+  location: string;
   phone: string;
 }
 
@@ -177,4 +177,10 @@ export interface Donations {
     amount: number; // total collected (api===amount)
     total: number; // goal (api===total)
     kind: string; // denomincation (dollars)
+}
+
+export interface OutcomeButton {
+  title: string;
+  emoji: string;
+  key: string;
 }

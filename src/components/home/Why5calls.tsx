@@ -3,7 +3,6 @@ import i18n from '../../services/i18n';
 import { TranslationFunction } from 'i18next';
 import { translate } from 'react-i18next';
 import { CallCount } from '../shared';
-import { Tracker } from '../stance/Tracker';
 import * as Constants from '../../common/constants';
 
 interface Props {
@@ -28,9 +27,6 @@ export const Why5calls: React.StatelessComponent<Props> = (props: Props) => (
         totalCount={props.totalCount}
         t={i18n.t}
       />
-      <hr />
-      <Tracker />
-      <div style={{'clear': 'both'}} />
       <hr />
       <a href={Constants.contact.apps}><img src="/img/5calls-apps.png" className="hypothesis__text__mobile" /></a>
       <p dangerouslySetInnerHTML={{ __html: props.t('hypothesis.p3') }} />

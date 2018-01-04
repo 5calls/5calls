@@ -17,22 +17,23 @@ const titleReg = /\[REP\/SEN NAME\]|\[SENATOR\/REP NAME\]/gi;
 const locationReg = /\[CITY,\s?ZIP\]|\[CITY,\s?STATE\]/gi;
 
 function getContactNameWithTitle(contacts: Contact[], contactIndex: number) {
-    const currentContact = contacts[contactIndex];
-    const title = currentContact.area === 'House' ? 'Rep. ' : 'Senator ';
-    return title + currentContact.name;
+  const currentContact = contacts[contactIndex];
+  const title = currentContact.area === 'House' ? 'Rep. ' : 'Senator ';
+  return title + currentContact.name;
 }
 
 function scriptFormat(issue: Issue, locationState: LocationState, contactIndex: number) {
-    const location = locationState.cachedCity;
-    let script = issue.script;
-    if (location) {
-         script = script.replace(locationReg, location);
-    }
-    if (issue.contacts) {
-        const title = getContactNameWithTitle(issue.contacts, contactIndex);
-        script = script.replace(titleReg, title);
-    }
-    return script;
+  const location = locationState.cachedCity;
+  let script = issue.script;
+  if (location) {
+    script = script.replace(locationReg, location);
+  }
+  if (issue.contacts) {
+    // try title replacement
+    const title = getContactNameWithTitle(issue.contacts, contactIndex);
+    script = script.replace(titleReg, title);
+  }
+  return script;
 }
 
 export const Script: React.StatelessComponent<Props> = ({ issue, contactIndex = 0, locationState, t }: Props) => {

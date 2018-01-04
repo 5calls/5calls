@@ -19,6 +19,7 @@ import { AboutPage } from './components/about';
 import { PhonebanksPage } from './components/phonebanks';
 import { PostcardsPage } from './components/postcards';
 import { FaqPage } from './components/faq';
+import { PrivacyPage } from './components/privacy';
 import { DonePageContainer } from './components/done';
 import { MoreIssuesContainer } from './components/issues';
 import { CallPageContainer } from './components/call';
@@ -66,6 +67,7 @@ ReactDOM.render(
           <Route path="/team/:groupid" exact={true} component={GroupPageContainer} />
           <Route path="/team/:groupid/:issueid" exact={true} component={GroupCallPageContainer} />
           <Route path="/faq" exact={true} component={FaqPage} />
+          <Route path="/privacy" exact={true} component={PrivacyPage} />
           <Route path="/about" exact={true} component={AboutPage} />
           <Route path="/phonebanks" exact={true} component={PhonebanksPage} />
           <Route path="/postcards" exact={true} component={PostcardsPage} />

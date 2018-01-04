@@ -29,7 +29,7 @@ const Navigation: React.StatelessComponent<Props> = (props: Props) => {
         </li>
         <li>
           {/*tslint:disable-next-line:max-line-length*/}
-          <a href="/privacy.html" data-no-routing="data-no-routing"><i aria-hidden="true" className="fa fa-shield" />
+          <a href="/privacy" data-no-routing="data-no-routing"><i aria-hidden="true" className="fa fa-shield" />
             <span>{props.t('footer.privacy')}</span>
           </a>
         </li>
@@ -48,7 +48,7 @@ const Navigation: React.StatelessComponent<Props> = (props: Props) => {
         </li>
       </ul>
       <div className="colophon__center">
-        <p>© 2017 5 Calls Civic Action is a 501(c)4 non-profit that helps citizens make their voices heard.</p>
+        <p>© 2018 5 Calls Civic Action is a 501(c)4 non-profit that helps citizens make their voices heard.</p>
         <p><a href="http://ipinfo.io" target="_blank">{props.t('footer.ipGeolocation')}</a></p>
       </div>
       <div style={{'clear': 'both'}} />

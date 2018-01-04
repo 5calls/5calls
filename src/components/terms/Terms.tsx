@@ -5,7 +5,7 @@ export interface Props {
 }
 
 // TODO: Add internationalization
-const Faq: React.StatelessComponent<Props> = (props: Props) => {
+const Terms: React.StatelessComponent<Props> = (props: Props) => {
     return (
       <main id="content" role="main" className="layout__main">
         <div className="about">
@@ -156,4 +156,4 @@ const Faq: React.StatelessComponent<Props> = (props: Props) => {
     );
 };
 
-export default Faq;
+export default Terms;

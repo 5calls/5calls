@@ -46,7 +46,6 @@ footer {
 
     &__left {
       float: left;
-      height: 100%;
 
       @include bp(medium) {
         float: none;
@@ -63,7 +62,6 @@ footer {
 
     &__right {
       float: right;
-      height: 100%;
 
       @include bp(medium) {
         float: none;
