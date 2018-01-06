@@ -1,12 +1,12 @@
 import * as React from 'react';
 import { Link } from 'react-router-dom';
-import { Issue, CacheableGroup } from '../../common/model';
+import { Issue, Group } from '../../common/model';
 
 interface Props {
   readonly issue: Issue;
   readonly isIssueComplete: boolean;
   readonly isIssueActive: boolean;
-  readonly currentGroup?: CacheableGroup;
+  readonly currentGroup?: Group;
   readonly onSelectIssue: (issueId: string) => void;
 }
 
@@ -21,7 +21,7 @@ export class IssuesListItem extends React.Component<Props, State> {
 
     // need to provide alternative links for on group page
     const issueLink = this.props.currentGroup ?
-      `/team/${this.props.currentGroup.group.id}/${issueID}` : `/issue/${issueID}`;
+      `/team/${this.props.currentGroup.id}/${issueID}` : `/issue/${issueID}`;
     return (
       <li>
         <Link

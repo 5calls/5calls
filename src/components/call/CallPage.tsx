@@ -5,7 +5,7 @@ import { Helmet } from 'react-helmet';
 
 import { CallTranslatable, FetchCall } from './index';
 import { LayoutContainer } from '../layout';
-import { Issue, CacheableGroup } from '../../common/model';
+import { Issue, Group } from '../../common/model';
 import { CallState, OutcomeData } from '../../redux/callState';
 import { LocationState } from '../../redux/location/reducer';
 import { queueUntilRehydration } from '../../redux/rehydrationUtil';
@@ -45,7 +45,7 @@ interface RouteProps extends RouteComponentProps<any> { }
 interface Props extends RouteProps {
   readonly issues: Issue[];
   readonly currentIssue: Issue;
-  readonly currentGroup?: CacheableGroup;
+  readonly currentGroup?: Group;
   readonly callState: CallState;
   readonly locationState: LocationState;
   readonly onSubmitOutcome: (data: OutcomeData) => Function;
@@ -124,8 +124,8 @@ class CallPage extends React.Component<Props, State> {
   getView() {
     const currentGroup = this.props.currentGroup ? this.props.currentGroup : undefined;
     let groupImage = '/img/5calls-stars.png';
-    if (currentGroup && currentGroup.group.photoURL) {
-      groupImage = currentGroup.group.photoURL;
+    if (currentGroup && currentGroup.photoURL) {
+      groupImage = currentGroup.photoURL;
     }
 
     if (this.props.currentIssue &&
@@ -140,9 +140,9 @@ class CallPage extends React.Component<Props, State> {
           { currentGroup ?
           <div className="page__group">
             <div className="page__header">
-              <div className="page__header__image"><img alt={currentGroup.group.name} src={groupImage}/></div>
-              <h1 className="page__title">{currentGroup.group.name}</h1>
-              <h2 className="page__subtitle">{currentGroup.group.subtitle}&nbsp;</h2>
+              <div className="page__header__image"><img alt={currentGroup.name} src={groupImage}/></div>
+              <h1 className="page__title">{currentGroup.name}</h1>
+              <h2 className="page__subtitle">{currentGroup.subtitle}&nbsp;</h2>
             </div>
             <FetchCall
               issue={this.props.currentIssue}
@@ -185,9 +185,9 @@ class CallPage extends React.Component<Props, State> {
           { currentGroup ?
           <div className="page__group">
             <div className="page__header">
-              <div className="page__header__image"><img alt={currentGroup.group.name} src={groupImage}/></div>
-              <h1 className="page__title">{currentGroup.group.name}</h1>
-              <h2 className="page__subtitle">{currentGroup.group.subtitle}&nbsp;</h2>
+              <div className="page__header__image"><img alt={currentGroup.name} src={groupImage}/></div>
+              <h1 className="page__title">{currentGroup.name}</h1>
+              <h2 className="page__subtitle">{currentGroup.subtitle}&nbsp;</h2>
             </div>
             <CallTranslatable
               issue={this.props.currentIssue}

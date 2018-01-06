@@ -1,12 +1,12 @@
 import * as React from 'react';
 import i18n from '../../services/i18n';
-import { Issue, CacheableGroup } from '../../common/model';
+import { Issue, Group } from '../../common/model';
 import { IssuesListTranslatable } from '../issues';
 
 interface Props {
   readonly issues: Issue[];
   readonly currentIssue?: Issue;
-  readonly currentGroup?: CacheableGroup;
+  readonly currentGroup?: Group;
   readonly completedIssueIds: string[];
   readonly onSelectIssue: (issueId: string) => void;
 }

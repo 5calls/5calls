@@ -4,7 +4,7 @@ import { Helmet } from 'react-helmet';
 import i18n from '../../services/i18n';
 import { LocationState } from '../../redux/location/reducer';
 import { CallState } from '../../redux/callState/reducer';
-import { Issue, CacheableGroup } from '../../common/model';
+import { Issue, Group } from '../../common/model';
 import { SidebarHeader, Sidebar, Footer, Header } from './index';
 
 interface Props {
@@ -14,7 +14,7 @@ interface Props {
   readonly issueId: string;
   readonly issues: Issue[];
   readonly currentIssue?: Issue;
-  readonly currentGroup?: CacheableGroup;
+  readonly currentGroup?: Group;
   readonly completedIssueIds: string[];
   readonly callState: CallState;
   readonly locationState: LocationState;

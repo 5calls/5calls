@@ -3,20 +3,19 @@ import { bindActionCreators } from 'redux';
 import { RouteComponentProps } from 'react-router-dom';
 import { ApplicationState } from '../../redux/root';
 import { CallPage } from '../call/index';
-import { Issue, CacheableGroup } from '../../common/model';
+import { Issue, Group } from '../../common/model';
 import { getIssue } from '../shared/utils';
 import { getGroupIssuesIfNeeded } from '../../redux/remoteData';
 import { LocationState } from '../../redux/location/reducer';
 import { CallState, OutcomeData, submitOutcome, selectIssueActionCreator } from '../../redux/callState';
 import { clearAddress } from '../../redux/location';
-import { findCacheableGroup } from '../../redux/cache';
 
 interface OwnProps extends RouteComponentProps<{ groupid: string, issueid: string }> { }
 
 interface StateProps {
   readonly issues: Issue[];
   readonly currentIssue?: Issue;
-  readonly currentGroup?: CacheableGroup;
+  readonly currentGroup?: Group;
   readonly callState: CallState;
   readonly locationState: LocationState;
 }
@@ -40,11 +39,10 @@ const mapStateToProps = (state: ApplicationState, ownProps: OwnProps): StateProp
 
   const currentIssue: Issue | undefined = getIssue(state.remoteDataState, ownProps.match.params.issueid);
 
-  const groupId = ownProps.match.params.groupid;
-  const cgroup = findCacheableGroup(groupId, state.appCache);
+  const group: Group | undefined = state.groupState.currentGroup;
 
   return {
-    currentGroup: cgroup,
+    currentGroup: group,
     issues: groupPageIssues,
     currentIssue: currentIssue,
     callState: state.callState,

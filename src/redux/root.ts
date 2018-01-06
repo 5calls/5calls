@@ -6,6 +6,7 @@ import { CallState, callStateReducer } from './callState';
 import { RemoteDataState, remoteDataReducer } from './remoteData';
 import { UserStatsState, userStatsReducer } from './userStats';
 import { AppCache, appCacheReducer } from './cache';
+import { GroupState, groupStateReducer } from '../redux/group';
 
 export enum OutcomeType {
   UNAVAILABLE = 'unavailable',
@@ -20,6 +21,7 @@ export interface ApplicationState {
   locationState: LocationState;
   userStatsState: UserStatsState;
   appCache: AppCache;
+  groupState: GroupState;
 }
 
 export const DefaultApplicationState: ApplicationState = {
@@ -27,7 +29,8 @@ export const DefaultApplicationState: ApplicationState = {
   callState: {} as CallState,
   locationState: {} as LocationState,
   userStatsState: {} as UserStatsState,
-  appCache: {} as AppCache
+  appCache: {} as AppCache,
+  groupState: {} as GroupState
 };
 
 // DANGER: TypeScript magic ahead!!
@@ -48,7 +51,8 @@ export const ApplicationStateKey: ApplicationStateKeyTypes = {
   remoteDataState: 'remoteDataState',
   callState: 'callState',
   userStatsState: 'userStatsState',
-  appCache: 'appCache'
+  appCache: 'appCache',
+  groupState: 'groupState'
 };
 
 const rootReducer = combineReducers({
@@ -57,7 +61,8 @@ const rootReducer = combineReducers({
   callState: callStateReducer,
   locationState: locationStateReducer,
   userStatsState: userStatsReducer,
-  appCache: appCacheReducer
+  appCache: appCacheReducer,
+  groupState: groupStateReducer
 });
 
 export default rootReducer;

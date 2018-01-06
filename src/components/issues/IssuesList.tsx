@@ -3,13 +3,13 @@ import { TranslationFunction } from 'i18next';
 import { translate } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import { find } from 'lodash';
-import { Issue, CacheableGroup } from '../../common/model';
+import { Issue, Group } from '../../common/model';
 import { IssuesListItem } from './index';
 
 interface Props {
   readonly issues: Issue[];
   readonly currentIssue?: Issue;
-  readonly currentGroup?: CacheableGroup;
+  readonly currentGroup?: Group;
   readonly completedIssueIds: string[];
   readonly t: TranslationFunction;
   readonly onSelectIssue: (issueId: string) => void;

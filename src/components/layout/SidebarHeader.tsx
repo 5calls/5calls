@@ -5,11 +5,11 @@ import i18n from '../../services/i18n';
 import { LocationState } from '../../redux/location/reducer';
 import { CallState } from '../../redux/callState/reducer';
 import { LocationTranslatable } from '../location';
-import { CacheableGroup } from '../../common/model';
+import { Group } from '../../common/model';
 
 interface Props {
   readonly callState: CallState;
-  readonly currentGroup?: CacheableGroup;
+  readonly currentGroup?: Group;
   readonly locationState: LocationState;
   readonly setLocation: (location: string) => void;
   readonly clearLocation: () => void;
@@ -21,7 +21,7 @@ const SidebarHeader: React.StatelessComponent<Props> = (props: Props) => {
   if (props.currentGroup) {
     headerIntro = (
       <h3>
-        <Link to={`/team/${props.currentGroup.group.id}`}>{props.currentGroup.group.name} Home</Link>
+        <Link to={`/team/${props.currentGroup.id}`}>{props.currentGroup.name} Home</Link>
       </h3>
     );
   }

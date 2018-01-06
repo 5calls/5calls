@@ -1,4 +1,3 @@
-import { CacheTimeoutData } from './cache';
 import { Group, CacheableGroup } from '../../common/model';
 import { cacheTimeout } from './../../common/constants';
 

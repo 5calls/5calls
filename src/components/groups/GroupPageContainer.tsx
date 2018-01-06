@@ -2,15 +2,15 @@ import { connect, Dispatch } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { ApplicationState } from '../../redux/root';
 import GroupPage from './GroupPage';
-import { Group, Issue, CacheableGroup } from '../../common/model';
+import { Group, Issue, getDefaultGroup } from '../../common/model';
 import { getGroupIssuesIfNeeded } from '../../redux/remoteData';
 import { LocationState } from '../../redux/location/reducer';
 import { CallState } from '../../redux/callState/reducer';
 import { selectIssueActionCreator, joinGroupActionCreator } from '../../redux/callState';
 
 import { RouteComponentProps } from 'react-router-dom';
-import { addToCache } from '../../redux/cache/asyncActionCreator';
-import { findCacheableGroup } from '../../redux/cache/cache';
+import { cacheGroup, findCacheableGroup } from '../../redux/cache';
+import { GroupLoadingActionStatus } from '../../redux/group/action';
 
 interface OwnProps extends RouteComponentProps<{ groupid: string, issueid: string }> { }
 
@@ -18,7 +18,8 @@ interface StateProps {
   readonly issues: Issue[];
   readonly callState: CallState;
   readonly locationState: LocationState;
-  readonly currentGroup?: CacheableGroup;
+  readonly currentGroup?: Group;
+  readonly loadingStatus: GroupLoadingActionStatus;
 }
 
 interface DispatchProps {
@@ -29,6 +30,7 @@ interface DispatchProps {
 }
 
 const mapStateToProps = (state: ApplicationState, ownProps: OwnProps): StateProps => {
+  let loadingStatus: GroupLoadingActionStatus = GroupLoadingActionStatus.LOADING;
   // set group if in cache
   const groupId = ownProps.match.params.groupid;
   const cgroup = findCacheableGroup(groupId, state.appCache);
@@ -38,6 +40,7 @@ const mapStateToProps = (state: ApplicationState, ownProps: OwnProps): StateProp
     issues: state.remoteDataState.groupIssues,
     callState: state.callState,
     locationState: state.locationState,
+    loadingStatus: loadingStatus,
   };
 };
 
@@ -54,7 +57,17 @@ const mapDispatchToProps = (dispatch: Dispatch<ApplicationState>, ownProps: OwnP
         };
       },
       onJoinGroup: joinGroupActionCreator,
-      cacheGroup: addToCache
+      // cacheGroup: addToCache
+      cacheGroup: (group) => {
+        return (
+          nextDispatch: Dispatch<ApplicationState>,
+          getState: () => ApplicationState) => {
+            // test whether group.name is set and
+            // whether timeout has exceeded
+            dispatch(cacheGroup(group.id));
+            // dispatch(updateCurrentGroup(group));
+        };
+      }
     },
     dispatch);
 };
