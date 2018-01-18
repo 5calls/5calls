@@ -3,12 +3,14 @@ import { bindActionCreators } from 'redux';
 import { RouteComponentProps } from 'react-router-dom';
 import { ApplicationState } from '../../redux/root';
 import { CallPage } from '../call/index';
-import { Issue, Group } from '../../common/model';
+import { Issue, Group, getDefaultGroup } from '../../common/model';
 import { getIssue } from '../shared/utils';
 import { getGroupIssuesIfNeeded } from '../../redux/remoteData';
 import { LocationState } from '../../redux/location/reducer';
 import { CallState, OutcomeData, submitOutcome, selectIssueActionCreator } from '../../redux/callState';
 import { clearAddress } from '../../redux/location';
+import { findCacheableGroup } from '../../redux/cache/cache';
+import { cacheGroup } from '../../redux/cache/asyncActionCreator';
 
 interface OwnProps extends RouteComponentProps<{ groupid: string, issueid: string }> { }
 
@@ -25,11 +27,16 @@ interface DispatchProps {
   readonly onGetIssuesIfNeeded: () => void;
   readonly onSelectIssue: (issueId: string) => void;
   readonly clearLocation: () => void;
+  readonly cacheGroup: (group: Group) => Function;
 }
 
 const mapStateToProps = (state: ApplicationState, ownProps: OwnProps): StateProps => {
-  let groupPageIssues: Issue[] = [];
+  // set group if in cache
+  const groupId = ownProps.match.params.groupid;
+  const cgroup = findCacheableGroup(groupId, state.appCache);
+  let currentGroup = cgroup ? cgroup.group : getDefaultGroup(groupId);
 
+  let groupPageIssues: Issue[] = [];
   // send group issues if they exist, normal active ones if they don't
   if (state.remoteDataState.groupIssues && state.remoteDataState.groupIssues.length !== 0) {
     groupPageIssues = state.remoteDataState.groupIssues;
@@ -39,10 +46,8 @@ const mapStateToProps = (state: ApplicationState, ownProps: OwnProps): StateProp
 
   const currentIssue: Issue | undefined = getIssue(state.remoteDataState, ownProps.match.params.issueid);
 
-  const group: Group | undefined = state.groupState.currentGroup;
-
   return {
-    currentGroup: group,
+    currentGroup: currentGroup,
     issues: groupPageIssues,
     currentIssue: currentIssue,
     callState: state.callState,
@@ -76,6 +81,15 @@ const mapDispatchToProps = (dispatch: Dispatch<ApplicationState>, ownProps: OwnP
         };
       },
       clearLocation: clearAddress,
+      cacheGroup: (group) => {
+        return (
+          nextDispatch: Dispatch<ApplicationState>,
+          getState: () => ApplicationState) => {
+            // test whether group.name is set and
+            // whether timeout has exceeded
+            dispatch(cacheGroup(group.id));
+        };
+      }
     },
     dispatch);
 };

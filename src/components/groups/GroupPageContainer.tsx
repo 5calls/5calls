@@ -65,7 +65,6 @@ const mapDispatchToProps = (dispatch: Dispatch<ApplicationState>, ownProps: OwnP
             // test whether group.name is set and
             // whether timeout has exceeded
             dispatch(cacheGroup(group.id));
-            // dispatch(updateCurrentGroup(group));
         };
       }
     },

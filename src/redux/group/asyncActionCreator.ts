@@ -9,7 +9,7 @@ export const updateLoadingStatus = (loadingStatus: GroupLoadingActionStatus) => 
     dispatch: Dispatch<ApplicationState>,
     getState: () => ApplicationState
   ) => {
-    console.log('updateLoadingStatus() called with param: ', loadingStatus);
+    // console.log('updateLoadingStatus() called with param: ', loadingStatus);
     dispatch(setLoadingStatusAction(loadingStatus));
   };
 };
@@ -19,7 +19,7 @@ export const updateCurrentGroup = (group: Group) => {
     dispatch: Dispatch<ApplicationState>,
     getState: () => ApplicationState
   ) => {
-    console.log('updateCurrentGroup() called with param :', group);
+    // console.log('updateCurrentGroup() called with param :', group);
     dispatch(setCurrentGroupAction(group));
   };
 };

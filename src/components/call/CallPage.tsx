@@ -52,11 +52,13 @@ interface Props extends RouteProps {
   readonly onSelectIssue: (issueId: string) => Function;
   readonly onGetIssuesIfNeeded: () => Function;
   readonly clearLocation: () => void;
+  readonly cacheGroup: (group: Group) => Function;
 }
 
 export interface State {
   currentIssue: Issue;
   callState: CallState;
+  hasBeenCached: boolean;
 }
 
 /*
@@ -85,6 +87,7 @@ class CallPage extends React.Component<Props, State> {
     return {
       currentIssue: props.currentIssue,
       callState: props.callState,
+      hasBeenCached: props.currentGroup !== undefined
     };
   }
 
@@ -103,6 +106,23 @@ class CallPage extends React.Component<Props, State> {
        || (newProps.currentIssue && this.props.callState.currentIssueId !== newProps.currentIssue.id)) {
       this.props.onSelectIssue(newProps.currentIssue.id);
     }
+
+    if (this.props.currentGroup
+      && newProps.currentGroup &&
+      this.props.currentGroup.id !== newProps.currentGroup.id) {
+        // console.log('CallPage Resetting hasBeenCached');
+        this.setState({...this.state, hasBeenCached: false});
+    }
+    if (!this.state.hasBeenCached && newProps.currentGroup) {
+      // cache group and assigned it to currentGroup
+      queueUntilRehydration(() => {
+        let group = newProps.currentGroup as Group;
+        // console.log('CallPage Calling cachedGroup with group: ', group);
+        this.props.cacheGroup(group);
+        this.setState({...this.state, hasBeenCached: true});
+      });
+    }
+
   }
 
   componentDidMount() {
