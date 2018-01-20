@@ -34,10 +34,26 @@ const mapStateToProps = (state: ApplicationState, ownProps: OwnProps): StateProp
   // set group if in cache
   const groupId = ownProps.match.params.groupid;
   const cgroup = findCacheableGroup(groupId, state.appCache);
+  if (cgroup) {
+    loadingStatus = GroupLoadingActionStatus.FOUND;
+  }
+  let currentGroup = cgroup ? cgroup.group : getDefaultGroup(groupId);
+  let groupPageIssues: Issue[] = [];
+
+  // send group issues if they exist, normal active ones if they don't
+  if (state.remoteDataState.groupIssues && state.remoteDataState.groupIssues.length !== 0) {
+    groupPageIssues = state.remoteDataState.groupIssues;
+  } else {
+    groupPageIssues = state.remoteDataState.issues;
+  }
+
+  if (loadingStatus !== GroupLoadingActionStatus.FOUND && state.groupState.groupLoadingStatus) {
+    loadingStatus = state.groupState.groupLoadingStatus;
+  }
 
   return {
-    currentGroup: cgroup,
-    issues: state.remoteDataState.groupIssues,
+    currentGroup: currentGroup,
+    issues: groupPageIssues,
     callState: state.callState,
     locationState: state.locationState,
     loadingStatus: loadingStatus,

@@ -86,6 +86,24 @@ export interface Group {
 }
 
 /**
+ *
+ * @param {string} groupId - the group id
+ * @returns {Group} - a group object with the id set as the
+ *  argument and other properties set to an empty string
+ *  or 0 (totalCalls).
+ */
+export const getDefaultGroup = (groupId: string): Group => {
+  return {
+    id: groupId,
+    name: '',
+    subtitle: '',
+    description: '',
+    totalCalls: 0,
+    photoURL: ''
+  };
+};
+
+/**
  * Group data to be cached, which includes a
  * timestamp to determine if the cache needs
  * to be refreshed.
