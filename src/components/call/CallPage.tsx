@@ -93,8 +93,9 @@ class CallPage extends React.Component<Props, State> {
   }
 
   componentWillReceiveProps(newProps: Props) {
-    // this.setState(this.setStateFromProps(newProps));
-    this.setState({...this.state, hasBeenCached: newProps.hasBeenCached });
+    if (newProps.hasBeenCached) {
+      this.setState({...this.state, hasBeenCached: true });
+    }
     // in the case that we have come here directly by the url(not first to home page)
     // the issues won't be loaded when first rendered.
     // On the second render, we'll have the issues and the current issue will have been identified
@@ -122,7 +123,6 @@ class CallPage extends React.Component<Props, State> {
       // cache group and assigned it to currentGroup
       queueUntilRehydration(() => {
         let group = newProps.currentGroup as Group;
-        console.log('CallPage Calling cachedGroup with group: ', group);
         this.props.cacheGroup(group);
       });
     }

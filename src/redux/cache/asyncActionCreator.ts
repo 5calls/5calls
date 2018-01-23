@@ -29,7 +29,7 @@ export const cacheGroup = (groupId: string) => {
         dispatch(setDefaultGroupLoadingAction());
         return api.getGroup(groupId)
           .then(group => {
-            console.log('Group found in cacheGroup() api.getGroup() call', group);
+            // console.log('Group found in cacheGroup() api.getGroup() call', group);
             // set group to current group
             dispatch(setCurrentGroupAction(group));
             const cacheableGroup = cacheableGroupFactory(group);

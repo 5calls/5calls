@@ -89,7 +89,6 @@ const mapDispatchToProps = (dispatch: Dispatch<ApplicationState>, ownProps: OwnP
             const state = getState();
             // test whether group.name is set and
             // whether timeout has exceeded
-            console.log(`Dispaching group to cacheGroup() thunk with loading status ${state.groupState.groupLoadingStatus}`, group);
             if (state.groupState.groupLoadingStatus === GroupLoadingActionStatus.LOADING) {
               dispatch(cacheGroup(group.id));
             }
