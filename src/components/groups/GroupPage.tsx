@@ -89,14 +89,17 @@ class GroupPage extends React.Component<Props, State> {
     }
   }
 
-  wrapWithLayout(wrapped: JSX.Element, group?: Group) {
+  wrapWithLayout(wrappedHeader: JSX.Element, group?: Group, ...additionalComponents: JSX.Element[]) {
     return (
       <LayoutContainer
         currentGroup={group ? group : undefined}
         issues={this.props.issues}
         issueId={this.props.match.params.issueid}
       >
-        {wrapped}
+        <div className="page__group">
+          {wrappedHeader}
+          {...additionalComponents}
+        </div>
       </LayoutContainer>
     );
   }
@@ -106,9 +109,8 @@ class GroupPage extends React.Component<Props, State> {
     switch (this.state.loadingState) {
       case GroupLoadingActionStatus.LOADING:
         const wrappedLoading = (
-          <div className="page__group">
-            <h2 className="page__title">Getting team...</h2>
-          </div> );
+          <h2 className="page__title">Getting team...</h2>
+        );
         return (
           this.wrapWithLayout(wrappedLoading, group)
         );
@@ -116,43 +118,40 @@ class GroupPage extends React.Component<Props, State> {
 
         const groupImage = group && group.photoURL ? group.photoURL : '/img/5calls-stars.png';
         const wrappedFound = (
-          <div className="page__group">
           <div className="page__header">
             <div className="page__header__image"><img alt={group ? group.name : ''} src={groupImage}/></div>
             <h1 className="page__title">{group ? group.name : ''}</h1>
             <h2 className="page__subtitle">{group ? group.subtitle : ''}&nbsp;</h2>
           </div>
+        );
+        const additional: JSX.Element[] = ([
+          // tslint:disable-next-line:jsx-wrap-multiline
           <CallCount
             totalCount={group ? group.totalCalls : 0}
             minimal={true}
             t={i18n.t}
-          />
+          />,
           <ReactMarkdown source={group ? group.description : ''}/>
-        </div>
-
-        );
+        ]);
         return (
-          this.wrapWithLayout(wrappedFound, group)
+          this.wrapWithLayout(wrappedFound, group, ...additional)
         );
       case GroupLoadingActionStatus.NOTFOUND:
         const wrappedNotFound = (
-          <div className="page__group">
-            <h2 className="page__title">There's no team with an ID of '{this.props.match.params.groupid}' 😢</h2>
-          </div>);
+          <h2 className="page__title">There's no team with an ID of '{this.props.match.params.groupid}' 😢</h2>
+        );
         return (
-            this.wrapWithLayout(wrappedNotFound, group)
-          );
+          this.wrapWithLayout(wrappedNotFound, group)
+        );
       default:
-          const wrappedDefault = (
-            <div className="page__group">
-              <h2 className="page__title">
-                An error occurred during a request for team '{this.props.match.params.groupid}' 😢
-              </h2>
-          </div>
-          );
-          return (
-            this.wrapWithLayout(wrappedDefault, group)
-          );
+        const wrappedDefault = (
+          <h2 className="page__title">
+            An error occurred during a request for team '{this.props.match.params.groupid}' 😢
+          </h2>
+        );
+        return (
+          this.wrapWithLayout(wrappedDefault, group)
+        );
     }
   }
 }
