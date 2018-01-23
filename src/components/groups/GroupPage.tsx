@@ -89,78 +89,69 @@ class GroupPage extends React.Component<Props, State> {
     }
   }
 
+  wrapWithLayout(wrapped: JSX.Element, group?: Group) {
+    return (
+      <LayoutContainer
+        currentGroup={group ? group : undefined}
+        issues={this.props.issues}
+        issueId={this.props.match.params.issueid}
+      >
+        {wrapped}
+      </LayoutContainer>
+    );
+  }
+
   render() {
     let group = this.state.group;
     switch (this.state.loadingState) {
       case GroupLoadingActionStatus.LOADING:
+        const wrappedLoading = (
+          <div className="page__group">
+            <h2 className="page__title">Getting team...</h2>
+          </div> );
         return (
-          <LayoutContainer
-            currentGroup={group ? group : undefined}
-            issues={this.props.issues}
-            issueId={this.props.match.params.issueid}
-          >
-            <div className="page__group">
-              <h2 className="page__title">Getting team...</h2>
-            </div>
-          </LayoutContainer>
+          this.wrapWithLayout(wrappedLoading, group)
         );
       case GroupLoadingActionStatus.FOUND:
-        // // I hate handling optionals this way, swift is so much better on this
-        // let group: Group;
-        // if (this.state.pageGroupState) {
-        //   group = this.state.pageGroupState;
-        // } else {
-        //   return <span/>;
-        // }
 
         const groupImage = group && group.photoURL ? group.photoURL : '/img/5calls-stars.png';
+        const wrappedFound = (
+          <div className="page__group">
+          <div className="page__header">
+            <div className="page__header__image"><img alt={group ? group.name : ''} src={groupImage}/></div>
+            <h1 className="page__title">{group ? group.name : ''}</h1>
+            <h2 className="page__subtitle">{group ? group.subtitle : ''}&nbsp;</h2>
+          </div>
+          <CallCount
+            totalCount={group ? group.totalCalls : 0}
+            minimal={true}
+            t={i18n.t}
+          />
+          <ReactMarkdown source={group ? group.description : ''}/>
+        </div>
 
+        );
         return (
-          <LayoutContainer
-            currentGroup={group ? group : undefined}
-            issues={this.props.issues}
-            issueId={this.props.match.params.issueid}
-          >
-            <div className="page__group">
-              <div className="page__header">
-                <div className="page__header__image"><img alt={group ? group.name : ''} src={groupImage}/></div>
-                <h1 className="page__title">{group ? group.name : ''}</h1>
-                <h2 className="page__subtitle">{group ? group.subtitle : ''}&nbsp;</h2>
-              </div>
-              <CallCount
-                totalCount={group ? group.totalCalls : 0}
-                minimal={true}
-                t={i18n.t}
-              />
-              <ReactMarkdown source={group ? group.description : ''}/>
-            </div>
-          </LayoutContainer>
+          this.wrapWithLayout(wrappedFound, group)
         );
       case GroupLoadingActionStatus.NOTFOUND:
+        const wrappedNotFound = (
+          <div className="page__group">
+            <h2 className="page__title">There's no team with an ID of '{this.props.match.params.groupid}' 😢</h2>
+          </div>);
         return (
-          <LayoutContainer
-            currentGroup={group ? group : undefined}
-            issues={this.props.issues}
-            issueId={this.props.match.params.issueid}
-          >
+            this.wrapWithLayout(wrappedNotFound, group)
+          );
+      default:
+          const wrappedDefault = (
             <div className="page__group">
-              <h2 className="page__title">There's no team with an ID of '{this.props.match.params.groupid}' 😢</h2>
-            </div>
-          </LayoutContainer>
-        );
-        default:
+              <h2 className="page__title">
+                An error occurred during a request for team '{this.props.match.params.groupid}' 😢
+              </h2>
+          </div>
+          );
           return (
-            <LayoutContainer
-              currentGroup={group ? group : undefined}
-              issues={this.props.issues}
-              issueId={this.props.match.params.issueid}
-            >
-              <div className="page__group">
-                { // tslint:disable-next-line:max-line-length
-                }
-                <h2 className="page__title">An error occurred during a request for team '{this.props.match.params.groupid}' 😢</h2>
-              </div>
-            </LayoutContainer>
+            this.wrapWithLayout(wrappedDefault, group)
           );
     }
   }
