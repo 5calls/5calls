@@ -63,11 +63,11 @@ class GroupPage extends React.Component<Props, State> {
     }
     if (!this.state.hasBeenCached && nextProps.currentGroup) {
       // cache group and assigned it to currentGroup
+      this.setState({...this.state, hasBeenCached: true});
       queueUntilRehydration(() => {
         let group = nextProps.currentGroup as Group;
         // console.log('Calling cachedGroup with group: ', group);
         this.props.cacheGroup(group);
-        this.setState({...this.state, hasBeenCached: true});
       });
     }
   }

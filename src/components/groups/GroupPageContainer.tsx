@@ -1,14 +1,13 @@
 import { connect, Dispatch } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import { RouteComponentProps } from 'react-router-dom';
 import { ApplicationState } from '../../redux/root';
 import GroupPage from './GroupPage';
 import { Group, Issue, getDefaultGroup } from '../../common/model';
 import { getGroupIssuesIfNeeded } from '../../redux/remoteData';
-import { LocationState } from '../../redux/location/reducer';
-import { CallState } from '../../redux/callState/reducer';
-import { selectIssueActionCreator, joinGroupActionCreator } from '../../redux/callState';
-
-import { RouteComponentProps } from 'react-router-dom';
+import { LocationState } from '../../redux/location';
+import { CallState, selectIssueActionCreator,
+  joinGroupActionCreator } from '../../redux/callState';
 import { cacheGroup, findCacheableGroup } from '../../redux/cache';
 import { GroupLoadingActionStatus } from '../../redux/group/action';
 
@@ -78,9 +77,13 @@ const mapDispatchToProps = (dispatch: Dispatch<ApplicationState>, ownProps: OwnP
         return (
           nextDispatch: Dispatch<ApplicationState>,
           getState: () => ApplicationState) => {
+            const state = getState();
             // test whether group.name is set and
             // whether timeout has exceeded
-            dispatch(cacheGroup(group.id));
+            console.log(`Dispaching group to cacheGroup() thunk with loading status ${state.groupState.groupLoadingStatus}`, group);
+            if (state.groupState.groupLoadingStatus === GroupLoadingActionStatus.LOADING) {
+              dispatch(cacheGroup(group.id));
+            }
         };
       }
     },

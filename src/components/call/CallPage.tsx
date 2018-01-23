@@ -53,6 +53,7 @@ interface Props extends RouteProps {
   readonly onGetIssuesIfNeeded: () => Function;
   readonly clearLocation: () => void;
   readonly cacheGroup: (group: Group) => Function;
+  readonly hasBeenCached: boolean;
 }
 
 export interface State {
@@ -87,13 +88,13 @@ class CallPage extends React.Component<Props, State> {
     return {
       currentIssue: props.currentIssue,
       callState: props.callState,
-      hasBeenCached: props.currentGroup !== undefined
+      hasBeenCached: props.hasBeenCached,
     };
   }
 
   componentWillReceiveProps(newProps: Props) {
-    this.setState(this.setStateFromProps(newProps));
-
+    // this.setState(this.setStateFromProps(newProps));
+    this.setState({...this.state, hasBeenCached: newProps.hasBeenCached });
     // in the case that we have come here directly by the url(not first to home page)
     // the issues won't be loaded when first rendered.
     // On the second render, we'll have the issues and the current issue will have been identified
@@ -107,19 +108,22 @@ class CallPage extends React.Component<Props, State> {
       this.props.onSelectIssue(newProps.currentIssue.id);
     }
 
+    // if group has changed, then reset the hasBeenCached flag
     if (this.props.currentGroup
       && newProps.currentGroup &&
       this.props.currentGroup.id !== newProps.currentGroup.id) {
         // console.log('CallPage Resetting hasBeenCached');
         this.setState({...this.state, hasBeenCached: false});
     }
+
     if (!this.state.hasBeenCached && newProps.currentGroup) {
+      // cache group and assigned it to currentGroup
+      this.setState({...this.state, hasBeenCached: true});
       // cache group and assigned it to currentGroup
       queueUntilRehydration(() => {
         let group = newProps.currentGroup as Group;
-        // console.log('CallPage Calling cachedGroup with group: ', group);
+        console.log('CallPage Calling cachedGroup with group: ', group);
         this.props.cacheGroup(group);
-        this.setState({...this.state, hasBeenCached: true});
       });
     }
 

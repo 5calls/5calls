@@ -2,15 +2,14 @@ import { connect, Dispatch } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { RouteComponentProps } from 'react-router-dom';
 import { ApplicationState } from '../../redux/root';
-import { CallPage } from '../call/index';
+import { CallPage } from '../call';
 import { Issue, Group, getDefaultGroup } from '../../common/model';
 import { getIssue } from '../shared/utils';
 import { getGroupIssuesIfNeeded } from '../../redux/remoteData';
-import { LocationState } from '../../redux/location/reducer';
+import { LocationState, clearAddress } from '../../redux/location';
 import { CallState, OutcomeData, submitOutcome, selectIssueActionCreator } from '../../redux/callState';
-import { clearAddress } from '../../redux/location';
-import { findCacheableGroup } from '../../redux/cache/cache';
-import { cacheGroup } from '../../redux/cache/asyncActionCreator';
+import { findCacheableGroup, cacheGroup } from '../../redux/cache';
+import { GroupLoadingActionStatus } from '../../redux/group';
 
 interface OwnProps extends RouteComponentProps<{ groupid: string, issueid: string }> { }
 
@@ -20,6 +19,7 @@ interface StateProps {
   readonly currentGroup?: Group;
   readonly callState: CallState;
   readonly locationState: LocationState;
+  readonly hasBeenCached: boolean;
 }
 
 interface DispatchProps {
@@ -45,13 +45,14 @@ const mapStateToProps = (state: ApplicationState, ownProps: OwnProps): StateProp
   }
 
   const currentIssue: Issue | undefined = getIssue(state.remoteDataState, ownProps.match.params.issueid);
-
+  const groupState = state.groupState;
   return {
     currentGroup: currentGroup,
     issues: groupPageIssues,
     currentIssue: currentIssue,
     callState: state.callState,
     locationState: state.locationState,
+    hasBeenCached: groupState.currentGroup !== undefined && groupState.currentGroup.name !== ''
   };
 };
 
@@ -85,9 +86,13 @@ const mapDispatchToProps = (dispatch: Dispatch<ApplicationState>, ownProps: OwnP
         return (
           nextDispatch: Dispatch<ApplicationState>,
           getState: () => ApplicationState) => {
+            const state = getState();
             // test whether group.name is set and
             // whether timeout has exceeded
-            dispatch(cacheGroup(group.id));
+            console.log(`Dispaching group to cacheGroup() thunk with loading status ${state.groupState.groupLoadingStatus}`, group);
+            if (state.groupState.groupLoadingStatus === GroupLoadingActionStatus.LOADING) {
+              dispatch(cacheGroup(group.id));
+            }
         };
       }
     },
