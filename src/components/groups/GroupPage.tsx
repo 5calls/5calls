@@ -118,23 +118,33 @@ class GroupPage extends React.Component<Props, State> {
 
         const groupImage = group && group.photoURL ? group.photoURL : '/img/5calls-stars.png';
         const wrappedFound = (
-          <div className="page__header">
-            <div className="page__header__image"><img alt={group ? group.name : ''} src={groupImage}/></div>
-            <h1 className="page__title">{group ? group.name : ''}</h1>
-            <h2 className="page__subtitle">{group ? group.subtitle : ''}&nbsp;</h2>
+          <div>
+            <div className="page__header">
+              <div className="page__header__image"><img alt={group ? group.name : ''} src={groupImage}/></div>
+              <h1 className="page__title">{group ? group.name : ''}</h1>
+              <h2 className="page__subtitle">{group ? group.subtitle : ''}&nbsp;</h2>
+            </div>
           </div>
         );
-        const additional: JSX.Element[] = ([
-          // tslint:disable-next-line:jsx-wrap-multiline
-          <CallCount
-            totalCount={group ? group.totalCalls : 0}
-            minimal={true}
-            t={i18n.t}
-          />,
-          <ReactMarkdown source={group ? group.description : ''}/>
-        ]);
+        // Keys are needed to prevent React key warnings
+        // when wrapWithLayout() is called.
+        const count: JSX.Element = (
+          <span key={1}>
+            <CallCount
+              totalCount={group ? group.totalCalls : 0}
+              minimal={true}
+              t={i18n.t}
+            />
+          </span>
+        );
+        const markdown: JSX.Element =  (
+          <div key={2}>
+            <ReactMarkdown source={group ? group.description : ''}/>
+          </div>
+        );
+
         return (
-          this.wrapWithLayout(wrappedFound, group, ...additional)
+          this.wrapWithLayout(wrappedFound, group, count, markdown)
         );
       case GroupLoadingActionStatus.NOTFOUND:
         const wrappedNotFound = (

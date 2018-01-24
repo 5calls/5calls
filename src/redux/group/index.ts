@@ -11,4 +11,4 @@ export {
   setCurrentGroupAction
 } from './actionCreator';
 export { GroupState, groupStateReducer } from './reducer';
-export { updateLoadingStatus, updateCurrentGroup } from './asyncActionCreator';
+export { updateGroup } from './asyncActionCreator';

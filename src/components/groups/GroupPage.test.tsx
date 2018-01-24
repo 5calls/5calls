@@ -57,7 +57,7 @@ test('Test Group Page error', () => {
 
 const initPage = () => {
   const id = 'craig';
-  const group = getDefaultGroup(id);
+  const group: Group = getDefaultGroup(id);
   return {
     match: {params: {groupid: id, issueid: '100'}, isExact: true, path: '', url: ''},
     location: {} as Location,

@@ -8,8 +8,9 @@ import { getGroupIssuesIfNeeded } from '../../redux/remoteData';
 import { LocationState } from '../../redux/location';
 import { CallState, selectIssueActionCreator,
   joinGroupActionCreator } from '../../redux/callState';
-import { cacheGroup, findCacheableGroup } from '../../redux/cache';
+import { findCacheableGroup } from '../../redux/cache';
 import { GroupLoadingActionStatus } from '../../redux/group/action';
+import { updateGroup } from '../../redux/group/index';
 
 interface OwnProps extends RouteComponentProps<{ groupid: string, issueid: string }> { }
 
@@ -72,19 +73,7 @@ const mapDispatchToProps = (dispatch: Dispatch<ApplicationState>, ownProps: OwnP
         };
       },
       onJoinGroup: joinGroupActionCreator,
-      // cacheGroup: addToCache
-      cacheGroup: (group) => {
-        return (
-          nextDispatch: Dispatch<ApplicationState>,
-          getState: () => ApplicationState) => {
-            const state = getState();
-            // test whether group.name is set and
-            // whether timeout has exceeded
-            if (state.groupState.groupLoadingStatus === GroupLoadingActionStatus.LOADING) {
-              dispatch(cacheGroup(group.id));
-            }
-        };
-      }
+      cacheGroup: updateGroup
     },
     dispatch);
 };
