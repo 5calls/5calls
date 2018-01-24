@@ -54,7 +54,8 @@ const getMockGroup = (groupId): Group => {
     description: `${groupId} description`,
     photoURL: `http://${groupId}.com`,
     subtitle: `${groupId} subtitle`,
-    totalCalls: 99
+    totalCalls: 99,
+    customCalls: false
   };
   return mockResponse;
 };

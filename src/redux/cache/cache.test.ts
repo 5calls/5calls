@@ -12,7 +12,8 @@ const group1: Group = {
   description: 'Craig\'s issues',
   photoURL: 'http://craig.com/img',
   subtitle: 'Nick for Prez!',
-  totalCalls: 999
+  totalCalls: 999,
+  customCalls: false
 };
 const group2: Group = {
   id: 'nick',
@@ -20,7 +21,8 @@ const group2: Group = {
   description: 'Nick\'s issues',
   photoURL: 'http://nick.com/img',
   subtitle: 'I miss Swift!',
-  totalCalls: 888
+  totalCalls: 888,
+  customCalls: false
 };
 
 test('test cache creation', () => {
