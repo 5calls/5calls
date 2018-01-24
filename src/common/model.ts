@@ -100,7 +100,8 @@ export const getDefaultGroup = (groupId: string): Group => {
     subtitle: '',
     description: '',
     totalCalls: 0,
-    photoURL: ''
+    photoURL: '',
+    customCalls: false,
   };
 };
 

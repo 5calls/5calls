@@ -44,7 +44,7 @@ function mapStateToProps(state: ApplicationState, ownProps: OwnProps): StateProp
   // overrise issues from above the layout container if needed and not on a group page
   // group pages will load issues themselves, and shouldn't default to normal issues
   if (ownProps.currentGroup) {
-    if (ownProps.currentGroup.group.customCalls) {
+    if (ownProps.currentGroup.customCalls) {
       // groups wanting custom calls should only test if their group issues exist
       if (ownProps.issues && ownProps.issues.length > 0) {
         issues = ownProps.issues;
