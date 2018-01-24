@@ -4,6 +4,7 @@ exports[`Test Group Page error 1`] = `
 <Connect(Layout)
   currentGroup={
     Object {
+      "customCalls": false,
       "description": "",
       "id": "craig",
       "name": "",
@@ -37,6 +38,7 @@ exports[`Test Group Page found 1`] = `
   completedIssueIds={Array []}
   currentGroup={
     Object {
+      "customCalls": false,
       "description": "",
       "id": "craig",
       "name": "",
@@ -73,6 +75,7 @@ exports[`Test Group Page loading 1`] = `
 <Connect(Layout)
   currentGroup={
     Object {
+      "customCalls": false,
       "description": "",
       "id": "craig",
       "name": "",
@@ -100,6 +103,7 @@ exports[`Test Group Page not found 1`] = `
 <Connect(Layout)
   currentGroup={
     Object {
+      "customCalls": false,
       "description": "",
       "id": "craig",
       "name": "",
