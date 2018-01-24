@@ -2,7 +2,16 @@
 
 exports[`Test Group Page error 1`] = `
 <Connect(Layout)
-  currentGroup={Object {}}
+  currentGroup={
+    Object {
+      "description": "",
+      "id": "craig",
+      "name": "",
+      "photoURL": "",
+      "subtitle": "",
+      "totalCalls": 0,
+    }
+  }
   issueId="100"
   issues={Array []}
 >
@@ -21,48 +30,57 @@ exports[`Test Group Page error 1`] = `
 `;
 
 exports[`Test Group Page found 1`] = `
-<Connect(Layout)
-  currentGroup={Object {}}
-  issueId="100"
+<GroupPage
+  cacheGroup={[Function]}
+  callState={Object {}}
+  clearLocation={[Function]}
+  completedIssueIds={Array []}
+  currentGroup={
+    Object {
+      "description": "",
+      "id": "craig",
+      "name": "",
+      "photoURL": "",
+      "subtitle": "",
+      "totalCalls": 0,
+    }
+  }
+  currentIssue={Object {}}
+  history={Object {}}
   issues={Array []}
->
-  <div
-    className="page__group"
-  >
-    <div
-      className="page__header"
-    >
-      <div
-        className="page__header__image"
-      >
-        <img
-          src="/img/5calls-stars.png"
-        />
-      </div>
-      <h1
-        className="page__title"
-      />
-      <h2
-        className="page__subtitle"
-      >
-         
-      </h2>
-    </div>
-    <Translate(Component)
-      minimal={true}
-      t={[Function]}
-    />
-    <ReactMarkdown
-      containerTagName="div"
-      parserOptions={Object {}}
-    />
-  </div>
-</Connect(Layout)>
+  loadingStatus="FOUND"
+  location={Object {}}
+  locationState={Object {}}
+  match={
+    Object {
+      "isExact": true,
+      "params": Object {
+        "groupid": "craig",
+        "issueid": "100",
+      },
+      "path": "",
+      "url": "",
+    }
+  }
+  onGetIssuesIfNeeded={[Function]}
+  onJoinGroup={[Function]}
+  onSelectIssue={[Function]}
+  setLocation={[Function]}
+/>
 `;
 
 exports[`Test Group Page loading 1`] = `
 <Connect(Layout)
-  currentGroup={Object {}}
+  currentGroup={
+    Object {
+      "description": "",
+      "id": "craig",
+      "name": "",
+      "photoURL": "",
+      "subtitle": "",
+      "totalCalls": 0,
+    }
+  }
   issueId="100"
   issues={Array []}
 >
@@ -80,7 +98,16 @@ exports[`Test Group Page loading 1`] = `
 
 exports[`Test Group Page not found 1`] = `
 <Connect(Layout)
-  currentGroup={Object {}}
+  currentGroup={
+    Object {
+      "description": "",
+      "id": "craig",
+      "name": "",
+      "photoURL": "",
+      "subtitle": "",
+      "totalCalls": 0,
+    }
+  }
   issueId="100"
   issues={Array []}
 >
