@@ -1,0 +1,99 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Test Group Page error 1`] = `
+<Connect(Layout)
+  currentGroup={Object {}}
+  issueId="100"
+  issues={Array []}
+>
+  <div
+    className="page__group"
+  >
+    <h2
+      className="page__title"
+    >
+      An error occurred during a request for team '
+      craig
+      ' 😢
+    </h2>
+  </div>
+</Connect(Layout)>
+`;
+
+exports[`Test Group Page found 1`] = `
+<Connect(Layout)
+  currentGroup={Object {}}
+  issueId="100"
+  issues={Array []}
+>
+  <div
+    className="page__group"
+  >
+    <div
+      className="page__header"
+    >
+      <div
+        className="page__header__image"
+      >
+        <img
+          src="/img/5calls-stars.png"
+        />
+      </div>
+      <h1
+        className="page__title"
+      />
+      <h2
+        className="page__subtitle"
+      >
+         
+      </h2>
+    </div>
+    <Translate(Component)
+      minimal={true}
+      t={[Function]}
+    />
+    <ReactMarkdown
+      containerTagName="div"
+      parserOptions={Object {}}
+    />
+  </div>
+</Connect(Layout)>
+`;
+
+exports[`Test Group Page loading 1`] = `
+<Connect(Layout)
+  currentGroup={Object {}}
+  issueId="100"
+  issues={Array []}
+>
+  <div
+    className="page__group"
+  >
+    <h2
+      className="page__title"
+    >
+      Getting team...
+    </h2>
+  </div>
+</Connect(Layout)>
+`;
+
+exports[`Test Group Page not found 1`] = `
+<Connect(Layout)
+  currentGroup={Object {}}
+  issueId="100"
+  issues={Array []}
+>
+  <div
+    className="page__group"
+  >
+    <h2
+      className="page__title"
+    >
+      There's no team with an ID of '
+      craig
+      ' 😢
+    </h2>
+  </div>
+</Connect(Layout)>
+`;
