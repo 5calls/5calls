@@ -77,10 +77,17 @@ class GroupPage extends React.Component<Props, State> {
         this.props.cacheGroup(group);
       });
     }
+
+    if (!this.props.issues || this.props.issues.length === 0) {
+      queueUntilRehydration(() => {
+        this.props.onGetIssuesIfNeeded();
+      });
+    }
+
   }
 
   componentDidMount() {
-    if (!this.props.issues) {
+    if (!this.props.issues || this.props.issues.length === 0) {
       queueUntilRehydration(() => {
         this.props.onGetIssuesIfNeeded();
       });
