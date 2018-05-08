@@ -10,12 +10,15 @@ exports[`MyImpact component snapshot renders correctly 1`] = `
   <div>
     <h2
       className="impact_total"
-      dangerouslySetInnerHTML={
-        Object {
-          "__html": undefined,
-        }
-      }
     />
+    <p>
+      <a
+        onClick={[Function]}
+      >
+        Sign in
+      </a>
+       to save your calls across devices, and track your weekly call streaks!
+    </p>
   </div>
   <Translate(Component)
     t={[Function]}

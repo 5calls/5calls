@@ -9,7 +9,8 @@ import { issuesActionCreator, groupIssuesActionCreator, callCountActionCreator }
 import { clearContactIndexes } from '../callState/';
 import { ApplicationState } from '../root';
 import { LocationUiState } from '../../common/model';
-import Auth from '../../components/shared/loginUtil';
+// import Auth from '../../components/shared/loginUtil';
+import { LoginService } from '@5calls/react-components';
 import { UserContactEvent } from '../userStats';
 import { setUploadedActionCreator } from '../userStats/actionCreator';
 
@@ -236,7 +237,7 @@ export const startup = () => {
     dispatch(clearContactIndexes());
 
     // check expired login and handle or logout
-    const auth = new Auth();
+    const auth = new LoginService();
     auth.checkAndRenewSession(state.userState.profile);
 
     // if a location is passed as a query, override or set the location address manually

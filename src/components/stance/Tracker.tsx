@@ -210,20 +210,20 @@ export const Tracker: React.StatelessComponent<Props> = (props: Props) => {
       <div className="tracker__lists">
         <ul className="tracker__lists__no">
           <li className="header">No Votes {noVotes.length}</li>
-          {noVotes.map(senator => 
-            <li className={`party_${nameMap[senator].party}`}>{nameMap[senator].name}</li>
+          {noVotes.map(senator =>
+            <li key={nameMap[senator].name} className={`party_${nameMap[senator].party}`}>{nameMap[senator].name}</li>
           )}
         </ul>
         <ul className="tracker__lists__yes">
           <li className="header">Yes Votes {yesVotes.length}</li>
-          {yesVotes.map(senator => 
-            <li className={`party_${nameMap[senator].party}`}>{nameMap[senator].name}</li>
+          {yesVotes.map(senator =>
+            <li key={nameMap[senator].name} className={`party_${nameMap[senator].party}`}>{nameMap[senator].name}</li>
           )}
         </ul>
         <ul className="tracker__lists__undecided">
           <li className="header">Undecided Votes {unknownVotes.length}</li>
-          {unknownVotes.map(senator => 
-            <li className={`party_${nameMap[senator].party}`}>{nameMap[senator].name}</li>
+          {unknownVotes.map(senator =>
+            <li key={nameMap[senator].name} className={`party_${nameMap[senator].party}`}>{nameMap[senator].name}</li>
           )}
         </ul>
       </div>
