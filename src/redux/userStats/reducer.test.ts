@@ -62,5 +62,6 @@ const getUserContactObject = (result: UserOutcomeResult) => {
     contactid: 'fake-contact-id',
     issueid: 'fake-issue-id',
     time: Date.now(),
+    uploaded: false,
   };
 };

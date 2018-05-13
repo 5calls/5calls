@@ -6,6 +6,7 @@ import { ApplicationState } from '../../redux/root';
 import { newLocationLookup, clearAddress } from '../../redux/location';
 import { LocationState } from '../../redux/location/reducer';
 import { CallState } from '../../redux/callState/reducer';
+import { UserState } from '../../redux/userState/reducer';
 import { Layout } from './index';
 import { Issue, Group } from '../../common/model';
 
@@ -23,6 +24,7 @@ interface StateProps {
   readonly issues: Issue[];
   readonly currentIssue?: Issue;
   readonly currentGroup?: Group;
+  readonly currentUser?: UserState;
   readonly completedIssueIds: string[];
   readonly callState: CallState;
   readonly locationState: LocationState;
@@ -63,6 +65,7 @@ function mapStateToProps(state: ApplicationState, ownProps: OwnProps): StateProp
     issues: issues,
     currentIssue: currentIssue,
     currentGroup: ownProps.currentGroup ? ownProps.currentGroup : undefined,
+    currentUser: state.userState,
     completedIssueIds: state.callState.completedIssueIds,
     callState: state.callState,
     locationState: state.locationState,

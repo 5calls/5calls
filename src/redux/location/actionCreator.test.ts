@@ -1,4 +1,4 @@
-import configureStore from 'redux-mock-store';
+const configureStore = require('redux-mock-store');
 import { setLocation, clearAddress, LocationActionType } from './index';
 
 const middlewares = [];

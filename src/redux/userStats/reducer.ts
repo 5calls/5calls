@@ -16,6 +16,7 @@ export interface UserContactEvent {
   issueid: string;
   result: UserOutcomeResult;
   time: number;
+  uploaded: boolean;
 }
 
 export interface UserStatsState {
@@ -45,6 +46,20 @@ export const userStatsReducer: Reducer<UserStatsState> = (
       //  overwrite the "all" property with the new all array, made above
       //  otherwise the "all" array would be a reference to the old/existing "all" array
       const newState: UserStatsState = { ...userStats, all: all };
+
+      return newState;
+    }
+    case UserStatsActionType.SET_UPLOADED: {
+      const eventTime: number = action.payload as number;
+
+      let newEvents = state.all;
+      for (let i = 0; i < state.all.length; i++) {
+        if (state.all[i].time === eventTime) {
+          newEvents[i].uploaded = true;
+        }
+      }
+
+      const newState: UserStatsState = { ...state, all: newEvents };
 
       return newState;
     }

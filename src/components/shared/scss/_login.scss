@@ -1,0 +1,57 @@
+#root {
+  position: relative;
+}
+
+.login-modal {
+  position: absolute;
+  top: 200px;
+  left: 40%;
+  z-index: 999;
+  background-color: white;
+  border: 2px solid black;
+  padding: 25px;
+  border-radius: 5%;
+  box-shadow: 8px 8px #888888;
+}
+
+.login-header {
+  padding-bottom: 10px;
+  margin: 0 auto;
+  img {
+    width: 30px;
+    height: 30px;
+    margin: 0 20px;
+  }
+  .login-title {
+    display: inline;
+    text-align: center;
+    font-size: 30px;
+    font-weight: bold;
+    color: #000;
+  }
+}
+
+.login-error-message {
+  color: red;
+}
+
+.login-fieldset {
+  display: block;
+}
+
+.btn-block:first-child {
+  display: inline;
+  color: red;
+}
+
+.login-signup-container {
+  margin: 0 auto;
+}
+
+.login-button {
+  width: 47%;
+}
+
+.app-login-button {
+  width: 100%;
+}

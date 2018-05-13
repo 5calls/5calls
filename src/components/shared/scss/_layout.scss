@@ -45,6 +45,7 @@
   }
 
   &__logo {
+    justify-content: space-between;
     position: relative;
     padding: 10px 30px 0px 30px;
 
@@ -53,11 +54,8 @@
     }
 
     ul {
-      position: absolute;
-      top: 16px;
-      right: 50px;
       list-style: none;
-      margin: 0;
+      margin: 5px 0 0 0;
 
       li {
         float: left;
@@ -84,12 +82,78 @@
       height: 36px;
     }
 
-    img.stars {
-      position: absolute;
-      right: 0;
-      margin-right: 20px;
-      width: 33px;
-      height: 33px;
+    .userHeader {
+      position: relative;
+      float: right;
+
+      p {
+        float: right;
+        margin: 8px 0 0 0;
+
+        height: 20px;
+        max-width: 120px;
+        overflow: hidden;
+
+        line-height: 1em;
+        text-align: right;
+
+        a {
+          color: $blue;
+          &:hover {
+            cursor: pointer;
+            text-decoration: none;
+          }
+        }
+      }
+
+      &__menu {
+        // display: none;
+        position: absolute;
+        top: 33px;
+        right: 0;
+        width: 150px;
+        padding: 4px 0;
+        background-color: #fff;
+        border-radius: 3px;
+        box-shadow: 1px 1px 3px rgba(0, 0, 0, .3);
+
+        ul {
+          width: 100%;
+          margin: 0;
+          padding: 0;
+        }
+        li {
+          width: 100%;
+          margin: 0;
+          padding: 4px 10px;
+          text-align: right;
+
+          a {
+            font-size: 15px;
+            font-weight: normal;
+          }
+        }
+        li.line {
+          width: 100%;
+          height: 1px;
+          margin: 3px 0;
+          padding: 0;
+          background-color: rgba(0, 0, 0, .1);
+        }
+      }
+
+      .stars {
+        float: right;
+        margin-left: 6px;
+
+        width: 33px;
+        height: 33px;
+        border-radius: 17px;
+
+        &:hover {
+          cursor: pointer;
+        }
+      }
     }
   }
 

@@ -15,6 +15,7 @@ export const transform = (legacyStats: LegacyUserStatsState): UserStatsState => 
         issueid: i.issueid,
         result: i.result,
         time: i.time,
+        uploaded: false,
       };
     }),
     unavailable: legacyStats.unavailable,

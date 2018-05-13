@@ -81,8 +81,8 @@
     "impact": {
         "title": "My Impact",
         "text": "You're making a difference! Calling is the most effective way to influence your representatives, and here is what you've achieved:",
-        "callSummaryText": "You have <span>made contact $t(common.timeWithCount,{'count': {{contactedCalls}}})</span> and left <span>$t(common.voicemailWithCount,{'count': {{vmCalls}}})</span>.  Your representatives have been unavailable <span>$t(common.timeWithCount,{'count': {{unavailableCalls}}})</span>.",
-        "totalCallCountText": "You have made <span>$t(common.callWithCount,{'count': {{myTotalCalls}}})</span>!",
+        "callSummaryText": "You have made contact $t(common.timeWithCount,{'count': {{contactedCalls}}}) and left $t(common.voicemailWithCount,{'count': {{vmCalls}}}).  Your representatives have been unavailable $t(common.timeWithCount,{'count': {{unavailableCalls}}}).",
+        "totalCallCountText": "You have made $t(common.callWithCount,{'count': {{myTotalCalls}}})!",
         "noCallsYet": "No calls made yet."
     },
     "issues": {

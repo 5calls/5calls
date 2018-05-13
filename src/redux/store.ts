@@ -1,6 +1,6 @@
-import { applyMiddleware, createStore, compose, Middleware } from 'redux';
+import { applyMiddleware, createStore, Store, compose, Middleware } from 'redux';
 import { autoRehydrate, persistStore, Persistor } from 'redux-persist';
-import rootReducer from './root';
+import rootReducer, { ApplicationState } from './root';
 // import { createLogger, ReduxLoggerOptions } from 'redux-logger';
 import thunk from 'redux-thunk';
 import { ApplicationStateKeyType, ApplicationStateKey } from '../redux/root';
@@ -12,13 +12,14 @@ import { onStorageRehydrated } from './rehydrationUtil';
 const middlewares: Middleware[] = [thunk];
 
 export let persistor = {} as Persistor;
+export let store = {} as Store<ApplicationState>;
 
 // NOTE: uncomment these to show the redux log statements
 // const options: ReduxLoggerOptions = {};
 // middlewares.push(createLogger(options));
 
 export default (initialState) => {
-  const store = createStore(
+  store = createStore(
     rootReducer,
     initialState,
     compose(
@@ -41,6 +42,7 @@ export default (initialState) => {
   const localPersistKeys: ApplicationStateKeyType[] = [
     ApplicationStateKey.locationState,
     ApplicationStateKey.userStatsState,
+    ApplicationStateKey.userState,
     ApplicationStateKey.callState,
     ApplicationStateKey.appCache
   ];

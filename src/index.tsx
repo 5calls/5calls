@@ -27,6 +27,8 @@ import { MyImpactPageContainer } from './components/myimpact';
 import { GroupPageContainer, GroupCallPageContainer } from './components/groups';
 import './components/bundle.css';
 import * as ReactGA from 'react-ga';
+// import Auth0Callback from './components/Auth0Callback';
+import { Auth0CallbackContainer } from './components/shared';
 
 ReactGA.initialize('UA-90915119-1');
 const trackPageView = location => {
@@ -42,7 +44,7 @@ history.listen(trackPageView);
 
 const store = createStore({});
 
-// check for existing user stats in persisted redux store 
+// check for existing user stats in persisted redux store
 if (store.getState().userStatsState.all.length === 0) {
   // check for user stats from legacy choo app
   const legacyStatsStore = getAll('org.5calls.userStats');
@@ -71,6 +73,7 @@ ReactDOM.render(
           <Route path="/about" exact={true} component={AboutPage} />
           <Route path="/phonebanks" exact={true} component={PhonebanksPage} />
           <Route path="/postcards" exact={true} component={PostcardsPage} />
+          <Route path="/auth0callback" exact={true} component={Auth0CallbackContainer} />
           <Route path="*" component={NotFoundPage} />
         </Switch>
       </ConnectedRouter>

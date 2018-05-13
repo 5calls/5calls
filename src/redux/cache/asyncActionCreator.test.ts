@@ -1,5 +1,5 @@
 import thunk from 'redux-thunk';
-import configureStore from 'redux-mock-store';
+const configureStore = require('redux-mock-store');
 import * as moxios from 'moxios';
 import { Group, CacheableGroup } from './../../common/model';
 import {

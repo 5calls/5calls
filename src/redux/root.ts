@@ -5,6 +5,7 @@ import { LocationState, locationStateReducer } from './location';
 import { CallState, callStateReducer } from './callState';
 import { RemoteDataState, remoteDataReducer } from './remoteData';
 import { UserStatsState, userStatsReducer } from './userStats';
+import { UserState, userStateReducer } from './userState';
 import { AppCache, appCacheReducer } from './cache';
 import { GroupState, groupStateReducer } from '../redux/group';
 
@@ -20,6 +21,7 @@ export interface ApplicationState {
   callState: CallState;
   locationState: LocationState;
   userStatsState: UserStatsState;
+  userState: UserState;
   appCache: AppCache;
   groupState: GroupState;
 }
@@ -29,6 +31,7 @@ export const DefaultApplicationState: ApplicationState = {
   callState: {} as CallState,
   locationState: {} as LocationState,
   userStatsState: {} as UserStatsState,
+  userState: {} as UserState,
   appCache: {} as AppCache,
   groupState: {} as GroupState
 };
@@ -51,6 +54,7 @@ export const ApplicationStateKey: ApplicationStateKeyTypes = {
   remoteDataState: 'remoteDataState',
   callState: 'callState',
   userStatsState: 'userStatsState',
+  userState: 'userState',
   appCache: 'appCache',
   groupState: 'groupState'
 };
@@ -61,6 +65,7 @@ const rootReducer = combineReducers({
   callState: callStateReducer,
   locationState: locationStateReducer,
   userStatsState: userStatsReducer,
+  userState: userStateReducer,
   appCache: appCacheReducer,
   groupState: groupStateReducer
 });

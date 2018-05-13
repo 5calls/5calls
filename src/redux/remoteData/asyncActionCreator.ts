@@ -1,7 +1,7 @@
 import { Dispatch } from 'redux';
 import { ApiData, GroupIssues, IpInfoData, LocationFetchType,
   CountData } from './../../common/model';
-import { getAllIssues, getGroupIssues, getCountData } from '../../services/apiServices';
+import { getAllIssues, getGroupIssues, getCountData, postBackfillOutcomes } from '../../services/apiServices';
 import { setCachedCity, setLocation, setLocationFetchType,
   setSplitDistrict, setUiState } from '../location/index';
 import { getLocationByIP, getBrowserGeolocation, GEOLOCATION_TIMEOUT } from '../../services/geolocationServices';
@@ -9,6 +9,10 @@ import { issuesActionCreator, groupIssuesActionCreator, callCountActionCreator }
 import { clearContactIndexes } from '../callState/';
 import { ApplicationState } from '../root';
 import { LocationUiState } from '../../common/model';
+import { LoginService } from '@5calls/react-components';
+import { Auth0Config } from '../../common/constants';
+import { UserContactEvent } from '../userStats';
+import { setUploadedActionCreator } from '../userStats/actionCreator';
 
 /**
  * Timer for calling fetchLocationByIP() if
@@ -201,16 +205,43 @@ export const fetchBrowserGeolocation = () => {
   };
 };
 
+export const uploadStatsIfNeeded = () => {
+  return (dispatch: Dispatch<ApplicationState>,
+          getState: () => ApplicationState) => {
+    const state: ApplicationState = getState();
+
+    if (state.userState.idToken) {
+      let unuploadedStats: UserContactEvent[] = [];
+
+      for (let i = 0; i < state.userStatsState.all.length; i++) {
+        if (!state.userStatsState.all[i].uploaded) {
+          unuploadedStats.push(state.userStatsState.all[i]);
+          dispatch(setUploadedActionCreator(state.userStatsState.all[i].time));
+        }
+      }
+
+      if (unuploadedStats.length > 0) {
+        postBackfillOutcomes(unuploadedStats, state.userState.idToken);
+      }
+    }
+  };
+};
+
 export const startup = () => {
   return (dispatch: Dispatch<ApplicationState>,
           getState: () => ApplicationState) => {
-    // dispatch donations
-    dispatch(fetchDonations());
+    const state = getState();
+
     dispatch(setUiState(LocationUiState.FETCHING_LOCATION));
     // clear contact indexes loaded from local storage
     dispatch(clearContactIndexes());
 
+    // check expired login and handle or logout
+    const auth = new LoginService(Auth0Config);
+    auth.checkAndRenewSession(state.userState.profile);
+
     // if a location is passed as a query, override or set the location address manually
+    // this will remove hashes, so... don't use them? Or fix this.
     let addressQuery = 'forceAddress';
     let query = window.location.search.substring(1);
     let vars = query.split('&');
@@ -223,7 +254,6 @@ export const startup = () => {
     }
     window.history.replaceState(null, '', window.location.pathname);
 
-    const state = getState();
     const loc = state.locationState.address;
 
     if (loc) {

@@ -4,6 +4,7 @@ import { Helmet } from 'react-helmet';
 import i18n from '../../services/i18n';
 import { LocationState } from '../../redux/location/reducer';
 import { CallState } from '../../redux/callState/reducer';
+import { UserState } from '../../redux/userState/reducer';
 import { Issue, Group } from '../../common/model';
 import { SidebarHeader, Sidebar, Footer, Header } from './index';
 
@@ -15,6 +16,7 @@ interface Props {
   readonly issues: Issue[];
   readonly currentIssue?: Issue;
   readonly currentGroup?: Group;
+  readonly currentUser?: UserState;
   readonly completedIssueIds: string[];
   readonly callState: CallState;
   readonly locationState: LocationState;
@@ -30,6 +32,7 @@ const Layout: React.StatelessComponent<Props> = (props: Props) => (
     </Helmet>
     <Header
       postcards={props.postcards}
+      currentUser={props.currentUser}
     />
     <div className="layout">
       <aside id="nav" role="contentinfo" className="layout__side">

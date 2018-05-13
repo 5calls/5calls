@@ -12,6 +12,7 @@ export const Postcards: React.StatelessComponent<Props> = (props: Props) => (
     <p>Support the upcoming <strong>special election in Alabama on December 12th, 2017</strong> with handwritten postcards to help get out the vote in this critical Senate race!</p>
     {/*tslint:disable-next-line:max-line-length*/}
     <p>We specifically designed our postcards to help voters make a plan to vote, which research has shown to increase voter turnout.</p>
+    {/*tslint:disable-next-line:max-line-length*/}
     {/* <p><strong>For $5, you'll get 5 pre-stamped, pre-addressed postcards to critical voters in Alabama</strong>. After receiving your set of 5 cards in the mail, simply add your own personal message and put them right back in the mail. No need to get supplies or even leave your home!</p> */}
     <h2>Postcard Program Ended 11/27</h2>
     {/*tslint:disable-next-line:max-line-length*/}
@@ -31,6 +32,7 @@ export const Postcards: React.StatelessComponent<Props> = (props: Props) => (
       <li>Polling locations can be found at <a href="http://www.alabamavotes.gov" target="_blank">www.alabamavotes.gov</a></li>
       {/*tslint:disable-next-line:max-line-length*/}
       <li>Since 2014, voters in Alabama have been required to bring ID to the polls. They can find information on acceptable ID or how to get a free ID at <a href="http://www.alabamavotes.gov" target="_blank">www.alabamavotes.gov</a></li>
+      {/*tslint:disable-next-line:max-line-length*/}
       <li>Keep messaging positive and encouraging. The best way to connect with other voters is to be sincere and authentic.</li>
     </ul>
     <h3>Postcard message examples:</h3>
