@@ -1,0 +1,124 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`snapshot should render correctly with an issue and NO group 1`] = `
+<CallPage
+  cacheGroup={[Function]}
+  callState={Object {}}
+  clearLocation={[Function]}
+  currentIssue={
+    Object {
+      "categories": Array [],
+      "id": "1",
+      "inactive": false,
+      "link": "",
+      "linkTitle": "",
+      "name": "testName",
+      "outcomeModels": Array [],
+      "reason": "",
+      "script": "",
+      "slug": "",
+    }
+  }
+  hasBeenCached={false}
+  history={Object {}}
+  issues={
+    Array [
+      Object {
+        "categories": Array [],
+        "id": "1",
+        "inactive": false,
+        "link": "",
+        "linkTitle": "",
+        "name": "testName",
+        "outcomeModels": Array [],
+        "reason": "",
+        "script": "",
+        "slug": "",
+      },
+    ]
+  }
+  location={Object {}}
+  locationState={Object {}}
+  match={
+    Object {
+      "isExact": true,
+      "params": Object {
+        "groupid": undefined,
+        "issueid": "1",
+      },
+      "path": "",
+      "url": "",
+    }
+  }
+  onGetIssuesIfNeeded={[Function]}
+  onSelectIssue={[Function]}
+  onSubmitOutcome={[Function]}
+/>
+`;
+
+exports[`snapshot should render correctly with an issue and group 1`] = `
+<CallPage
+  cacheGroup={[Function]}
+  callState={Object {}}
+  clearLocation={[Function]}
+  currentGroup={
+    Object {
+      "customCalls": false,
+      "description": "",
+      "id": "craig",
+      "name": "",
+      "photoURL": "",
+      "subtitle": "",
+      "totalCalls": 0,
+    }
+  }
+  currentIssue={
+    Object {
+      "categories": Array [],
+      "id": "1",
+      "inactive": false,
+      "link": "",
+      "linkTitle": "",
+      "name": "testName",
+      "outcomeModels": Array [],
+      "reason": "",
+      "script": "",
+      "slug": "",
+    }
+  }
+  hasBeenCached={false}
+  history={Object {}}
+  issues={
+    Array [
+      Object {
+        "categories": Array [],
+        "id": "1",
+        "inactive": false,
+        "link": "",
+        "linkTitle": "",
+        "name": "testName",
+        "outcomeModels": Array [],
+        "reason": "",
+        "script": "",
+        "slug": "",
+      },
+    ]
+  }
+  location={Object {}}
+  locationState={Object {}}
+  match={
+    Object {
+      "isExact": true,
+      "params": Object {
+        "groupid": "craig",
+        "issueid": "1",
+      },
+      "path": "",
+      "url": "",
+    }
+  }
+  onGetIssuesIfNeeded={[Function]}
+  onSelectIssue={[Function]}
+  onSubmitOutcome={[Function]}
+/>
+`;

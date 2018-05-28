@@ -114,8 +114,13 @@ class CallPage extends React.Component<Props, State> {
     if (this.props.currentGroup
       && newProps.currentGroup &&
       this.props.currentGroup.id !== newProps.currentGroup.id) {
-        // console.log('CallPage Resetting hasBeenCached');
         this.setState({...this.state, hasBeenCached: false});
+    }
+
+    if (!this.props.issues) {
+      queueUntilRehydration(() => {
+        this.props.onGetIssuesIfNeeded();
+      });
     }
 
     if (!this.state.hasBeenCached && newProps.currentGroup) {
@@ -131,18 +136,9 @@ class CallPage extends React.Component<Props, State> {
   }
 
   componentDidMount() {
-    if (!this.props.issues) {
-      // On the first render, if the issues haven't been loaded(came here directly, not first to home page)
-      // here we'll check to see if issues are in the redux store and if not we'll load them
-      // if we have to load them, the component will be re-rendered after the issues are retrieved
-      queueUntilRehydration(() => {
-        this.props.onGetIssuesIfNeeded();
-      });
-    } else {
-      // this is the case where the user has clicked on an issue from the sidebar
-      if (!this.props.callState.currentIssueId && this.props.currentIssue) {
-        this.props.onSelectIssue(this.props.currentIssue.id);
-      }
+    // the user has clicked on an issue from the sidebar
+    if (!this.props.callState.currentIssueId && this.props.currentIssue) {
+      this.props.onSelectIssue(this.props.currentIssue.id);
     }
   }
 
