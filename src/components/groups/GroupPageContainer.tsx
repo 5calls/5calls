@@ -41,7 +41,10 @@ const mapStateToProps = (state: ApplicationState, ownProps: OwnProps): StateProp
   let groupPageIssues: Issue[] = [];
 
   // send group issues if they exist, normal active ones if they don't
-  if (state.remoteDataState.groupIssues && state.remoteDataState.groupIssues.length !== 0) {
+  if (state.remoteDataState.groupIssues &&
+    state.remoteDataState.groupIssues.length !== 0 &&
+    currentGroup.customCalls
+  ) {
     groupPageIssues = state.remoteDataState.groupIssues;
   } else {
     groupPageIssues = state.remoteDataState.issues;
