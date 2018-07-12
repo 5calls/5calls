@@ -13,6 +13,8 @@ export const CONTACTS_API_URL = `${API_URL}/contacts`;
 export const IP_INFO_URL = 'https://ipinfo.io/json';
 export const DONATE_URL = 'https://secure.actblue.com/donate/5calls-donate';
 
+export const SHARE_BUCKET_URL = 'http://5callsorg-shareimages.s3-website-us-west-1.amazonaws.com/';
+
 const callbackURI = () => {
   if (window.location.host.includes('localhost')) {
     return 'http://localhost:3000/auth0callback';
