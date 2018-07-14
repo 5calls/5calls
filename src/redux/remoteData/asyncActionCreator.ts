@@ -13,7 +13,7 @@ import { LoginService } from '@5calls/react-components';
 import { Auth0Config } from '../../common/constants';
 import { UserContactEvent } from '../userStats';
 import { setUploadedActionCreator } from '../userStats/actionCreator';
-import { clearProfileActionCreator } from '../userState';
+import { clearProfileActionCreator, setAuthTokenActionCreator, setProfileActionCreator } from '../userState';
 import { setInvalidAddress } from '../location/actionCreator';
 
 /**
@@ -238,12 +238,16 @@ export const startup = () => {
 
     // check expired login and handle or logout
     const auth = new LoginService(Auth0Config);
-    auth.checkAndRenewSession(state.userState.profile).then((success) => {
-      // ok
-    }).catch((error) => {
-      // clear the session
-      dispatch(clearProfileActionCreator());
-    });
+    if (state.userState.profile && state.userState.idToken) {
+      auth.checkAndRenewSession(state.userState.profile, state.userState.idToken).then((authResponse) => {
+        // Set the updated profile ourselves - auth is a component that doesn't know about redux
+        dispatch(setAuthTokenActionCreator(authResponse.authToken));
+        dispatch(setProfileActionCreator(authResponse.userProfile));
+      }).catch((error) => {
+        // clear the session
+        dispatch(clearProfileActionCreator());
+      });  
+    }
 
     // if a location is passed as a query, override or set the location address manually
     // this will remove hashes, so... don't use them? Or fix this.

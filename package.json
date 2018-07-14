@@ -4,8 +4,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@5calls/react-components": "^0.0.9",
-    "auth0-js": "^9.1.0",
+    "@5calls/react-components": "^0.0.10",
     "axios": "^0.16.2",
     "core-js": "^2.5.7",
     "i18next": "^8.4.3",
@@ -34,7 +33,6 @@
     "string.prototype.includes": "^1.0.0"
   },
   "devDependencies": {
-    "@types/auth0-js": "^8.11.2",
     "@types/axios": "^0.14.0",
     "@types/enzyme": "^3.1.5",
     "@types/enzyme-adapter-react-16": "^1.0.1",

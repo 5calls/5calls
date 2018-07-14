@@ -30,6 +30,7 @@ export const Auth0Config = {
   audience: 'https://5callsos.auth0.com/userinfo',
   callbackUri: callbackURI(),
   poweredURL: 'https://5calls.org',
+  popupAuth: false,
 };
 
 export const zipCodeRegex: RegExp = /^\d{5}(-\d{4})?$/;
