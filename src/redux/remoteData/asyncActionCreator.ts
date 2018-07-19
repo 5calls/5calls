@@ -187,7 +187,7 @@ export const fetchBrowserGeolocation = () => {
         .then(location => {
           if (location.latitude && location.longitude) {
             dispatch(setLocationFetchType(LocationFetchType.BROWSER_GEOLOCATION));
-            const loc = `${location.latitude} ${location.longitude}`;
+            const loc = `${location.latitude},${location.longitude}`;
             dispatch(fetchAllIssues(loc));
             clearTimeout(setTimeoutHandle);
           } else {
