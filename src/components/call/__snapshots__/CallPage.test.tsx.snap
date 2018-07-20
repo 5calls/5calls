@@ -65,9 +65,10 @@ exports[`snapshot should render correctly with an issue and group 1`] = `
     Object {
       "customCalls": false,
       "description": "",
-      "id": "craig",
+      "groupID": "craig",
       "name": "",
       "photoURL": "",
+      "subscribed": false,
       "subtitle": "",
       "totalCalls": 0,
     }

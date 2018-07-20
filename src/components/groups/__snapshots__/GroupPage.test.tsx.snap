@@ -6,9 +6,10 @@ exports[`Test Group Page error 1`] = `
     Object {
       "customCalls": false,
       "description": "",
-      "id": "craig",
+      "groupID": "craig",
       "name": "",
       "photoURL": "",
+      "subscribed": false,
       "subtitle": "",
       "totalCalls": 0,
     }
@@ -41,9 +42,10 @@ exports[`Test Group Page found 1`] = `
     Object {
       "customCalls": false,
       "description": "",
-      "id": "craig",
+      "groupID": "craig",
       "name": "",
       "photoURL": "",
+      "subscribed": false,
       "subtitle": "",
       "totalCalls": 0,
     }
@@ -78,9 +80,10 @@ exports[`Test Group Page loading 1`] = `
     Object {
       "customCalls": false,
       "description": "",
-      "id": "craig",
+      "groupID": "craig",
       "name": "",
       "photoURL": "",
+      "subscribed": false,
       "subtitle": "",
       "totalCalls": 0,
     }
@@ -107,9 +110,10 @@ exports[`Test Group Page not found 1`] = `
     Object {
       "customCalls": false,
       "description": "",
-      "id": "craig",
+      "groupID": "craig",
       "name": "",
       "photoURL": "",
+      "subscribed": false,
       "subtitle": "",
       "totalCalls": 0,
     }
