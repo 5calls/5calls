@@ -132,3 +132,16 @@ export const getNextContact = (issueId: string): Promise<VoterContact[]> => {
     .then(response => Promise.resolve(response.data))
     .catch(e => Promise.reject(e));
 };
+
+export const postPhoneRemind = (phone: string): Promise<Boolean> => {
+  const postData = querystring.stringify({
+    phone: phone,
+    ref: '',
+  });
+  return axios.post(
+    Constants.REMINDER_API_URL,
+    postData,
+  )
+    .then(response => Promise.resolve(true))
+    .catch(e => Promise.reject(e));
+};

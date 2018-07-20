@@ -4,7 +4,6 @@ import onClickOutside from 'react-onclickoutside';
 
 import { CustomLogin } from '@5calls/react-components';
 import { store } from '../../redux/store';
-// import { DonationContainer } from '../donation/';
 import { UserState, UserProfile } from '../../redux/userState/reducer';
 import { clearProfileActionCreator } from '../../redux/userState/action';
 import { Auth0Config } from '../../common/constants';

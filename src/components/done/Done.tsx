@@ -2,6 +2,8 @@ import * as React from 'react';
 // import { Link } from 'react-router-dom';
 import * as ReactGA from 'react-ga';
 import PhoneInput from 'react-phone-number-input';
+import { isValidNumber } from 'libphonenumber-js';
+
 import 'react-phone-number-input/rrui.css';
 import 'react-phone-number-input/style.css';
 
@@ -10,6 +12,7 @@ import { TranslationFunction } from 'i18next';
 import { translate } from 'react-i18next';
 import { Issue } from '../../common/model';
 import { CallCount } from '../shared';
+import { postPhoneRemind } from '../../services/apiServices';
 
 interface Props {
   readonly currentIssue: Issue;
@@ -19,6 +22,7 @@ interface Props {
 
 interface State {
   reminderPhone: string;
+  reminderError?: string;
   reminderSet: boolean;
 }
 
@@ -34,6 +38,7 @@ export class Done extends React.Component<Props, State> {
 
     this.state = {
       reminderPhone: '',
+      reminderError: undefined,
       reminderSet: false,
     };
   }
@@ -61,8 +66,15 @@ export class Done extends React.Component<Props, State> {
 
   setReminder(e: React.MouseEvent<HTMLButtonElement>) {
     e.preventDefault();
+    
+    if (isValidNumber(this.state.reminderPhone, 'US')) {
+      // ignore errors from the server
+      postPhoneRemind(this.state.reminderPhone);
+      this.setState({reminderSet: true});
 
-    this.setState({reminderSet: true});
+    } else {
+      this.setState({reminderError: 'Please enter a valid US phone number'});
+    }
   }
 
   donateClick(amount: number) {
@@ -128,15 +140,16 @@ export class Done extends React.Component<Props, State> {
               <h3>
                 <span>⏰ Remind me:</span>
               </h3>
-              <p>Enter your phone number to get a reminder text to make more calls.</p>
+              <p>Enter your phone number to get a reminder to make your next call.</p>
               <blockquote>
                 {this.state.reminderSet ?
                 <h3><strong>Thanks, we'll remind you!</strong></h3>
                 :
                 <span>
                 <PhoneInput
-                  placeholder="(415) 555 1212"
+                  placeholder="415 555 1212"
                   countries={['US']}
+                  error={this.state.reminderError}
                   indicateInvalid={true}
                   onChange={phone => this.setState({ reminderPhone: phone })}
                 />

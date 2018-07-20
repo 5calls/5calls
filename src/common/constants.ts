@@ -10,6 +10,7 @@ export const STATS_API_URL = `${API_URL}/users/stats`;
 export const DONATIONS_API_URL = `${API_URL}/donations`;
 export const GROUP_API_URL = `${API_URL}/groups`;
 export const CONTACTS_API_URL = `${API_URL}/contacts`;
+export const REMINDER_API_URL = `${API_URL}/remind`;
 export const IP_INFO_URL = 'https://ipinfo.io/json';
 export const DONATE_URL = 'https://secure.actblue.com/donate/5calls-donate';
 

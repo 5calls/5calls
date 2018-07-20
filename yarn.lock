@@ -3907,6 +3907,14 @@ libphonenumber-js@^1.2.20:
     semver-compare "^1.0.0"
     xml2js "^0.4.17"
 
+libphonenumber-js@^1.2.21:
+  version "1.2.21"
+  resolved "https://registry.yarnpkg.com/libphonenumber-js/-/libphonenumber-js-1.2.21.tgz#17cf0d5afa1f026b8f0901b8104c8088a606bd82"
+  dependencies:
+    minimist "^1.2.0"
+    semver-compare "^1.0.0"
+    xml2js "^0.4.17"
+
 load-json-file@^1.0.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/load-json-file/-/load-json-file-1.1.0.tgz#956905708d58b4bab4c2261b04f59f31c99374c0"

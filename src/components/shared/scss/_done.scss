@@ -11,6 +11,7 @@
       button {
         font-size: 32px;
         font-weight: bold;
+        text-transform: inherit;
 
         &.donate-best {
           background-color: $red;
