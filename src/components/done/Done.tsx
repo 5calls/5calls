@@ -98,7 +98,7 @@ export class Done extends React.Component<Props, State> {
       this.facebookTitle = this.props.t('promote.shareThisIssue');
     }
 
-    const shareURL = `${Constants.SHARE_BUCKET_URL}${this.props.currentIssue.id}`;
+    const shareURL = `${Constants.SHARE_BUCKET_URL}${this.props.currentIssue.id}.png`;
 
     return (
       <section className="call">
