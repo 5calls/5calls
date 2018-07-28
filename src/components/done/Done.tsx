@@ -1,5 +1,4 @@
 import * as React from 'react';
-// import { Link } from 'react-router-dom';
 import * as ReactGA from 'react-ga';
 import PhoneInput from 'react-phone-number-input';
 import { isValidNumber } from 'libphonenumber-js';
