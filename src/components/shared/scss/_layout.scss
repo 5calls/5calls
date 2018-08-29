@@ -34,6 +34,28 @@
   @include bp(medium) {
     margin: 0 24px 24px;
   }
+
+  section.loading {
+    margin: 20px 20px;
+    padding: 14px 25px;
+    background-color: $grey;
+    border-radius: 15px;
+
+    h2 {
+      margin-bottom: 4px;
+    }
+
+    p {
+      margin: 0;
+    }
+  }
+
+  h1 {
+    span {
+      margin-left: 10px;
+      font-size: 14px;
+    }
+  }
 }
 
 .logo__header {
