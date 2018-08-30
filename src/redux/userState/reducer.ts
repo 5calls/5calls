@@ -1,6 +1,7 @@
 import { Reducer } from 'redux';
 
 import { UserStateAction, UserStateActionType } from './index';
+import { UserCallDetails } from '../remoteData/asyncActionCreator';
 
 export class UserAuth {
   accessToken: string;
@@ -19,6 +20,7 @@ export interface UserProfile {
   sub: string; // sub is the user id, either a unique userid or twitter|<twitterid>, etc
   exp: number;
   picture: string; // a url for the users' photo
+  callDetails?: UserCallDetails;
 }
 
 const initialState: UserState = {

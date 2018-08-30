@@ -1,0 +1,84 @@
+section.profile {
+  color: #000; // temp override until the whole site is this way
+  margin-top: 20px;
+
+  &.preview {
+    opacity: 0.4;
+  }
+
+  .profile-header {
+    display: inline-block;
+    width: 100%;
+
+    img {
+      float: left;
+      margin: 0 20px 0 0;
+      width: 120px;
+      border-radius: 60px;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 48px;
+      font-family: $font-sans-normal;
+    }
+
+    h2 {
+      margin: 3px 0 5px 0;
+      font-size: 36px;
+      font-weight: normal;
+    }
+
+    p {
+      font-size: 18px;
+    }
+  }
+
+  .profile-awards {
+    display: inline-block;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+
+    li {
+      float: left;
+      margin-right: 20px;
+      font-size: 18px;
+    }
+  }
+
+  .profile-history {
+    clear: left;
+    margin-top: 30px;
+
+    h4 {
+      font-family: $font-sans-normal;
+      font-size: 18px;
+      margin: 0 0 8px 60px;
+    }
+
+    hr {
+      margin: 0 0 25px 0;
+      border: 1px solid $grey;
+    }
+
+    &-item {
+      clear: left;
+      display: inline-block;
+      width: 100%;
+      margin-bottom: 20px;
+
+      img {
+        float: left;
+        width: 50px;
+        border-radius: 25px;
+        margin-right: 10px;
+      }
+
+      p {
+        overflow: hidden;
+        margin: 0;
+      }
+    }
+  }
+}

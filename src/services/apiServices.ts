@@ -4,6 +4,7 @@ import * as querystring from 'querystring';
 import { ApiData, CountData, DonationGoal, Group, GroupIssues, VoterContact } from './../common/model';
 import * as Constants from '../common/constants';
 import { UserContactEvent } from '../redux/userStats';
+import { UserCallDetails } from '../redux/remoteData/asyncActionCreator';
 
 export const getAllIssues = (address: string): Promise<ApiData> => {
   return axios.get(`${Constants.ISSUES_API_URL}${encodeURIComponent(address)}`)
@@ -131,6 +132,25 @@ export const getNextContact = (issueId: string): Promise<VoterContact[]> => {
   return axios.get(contactsUrl)
     .then(response => Promise.resolve(response.data))
     .catch(e => Promise.reject(e));
+};
+
+export const getUserCallDetails = (idToken: string) => {
+  let today = new Date();
+  // this is fine for now, we can add moment later
+  today.setDate(today.getDate() - 60);
+  const dateString = today.getFullYear() + '-' +
+    ('0' + (today.getMonth() + 1)).slice(-2) + '-' +
+    ('0' + today.getDate()).slice(-2);
+
+  return axios.get(
+    `${Constants.PROFILE_API_URL}?timestamp=${dateString}`,
+    {
+      headers: {'Authorization': 'Bearer ' + idToken}
+    })
+  .then(response => {
+    let profile = response.data as UserCallDetails;
+    return Promise.resolve(profile);
+  }).catch(e => Promise.reject(e));
 };
 
 export const postPhoneRemind = (phone: string): Promise<Boolean> => {

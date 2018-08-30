@@ -1,7 +1,8 @@
 import { Dispatch } from 'redux';
 import { ApiData, GroupIssues, IpInfoData, LocationFetchType,
   CountData } from './../../common/model';
-import { getAllIssues, getGroupIssues, getCountData, postBackfillOutcomes } from '../../services/apiServices';
+import { getAllIssues, getGroupIssues, getCountData,
+  postBackfillOutcomes, getUserCallDetails } from '../../services/apiServices';
 import { setCachedCity, setLocation, setLocationFetchType,
   setSplitDistrict, setUiState } from '../location/index';
 import { getLocationByIP, getBrowserGeolocation, GEOLOCATION_TIMEOUT } from '../../services/geolocationServices';
@@ -9,12 +10,13 @@ import { issuesActionCreator, groupIssuesActionCreator, callCountActionCreator }
 import { clearContactIndexes } from '../callState/';
 import { ApplicationState } from '../root';
 import { LocationUiState } from '../../common/model';
-import { LoginService } from '@5calls/react-components';
+import { LoginService, UserProfile } from '@5calls/react-components';
 import { Auth0Config } from '../../common/constants';
 import { UserContactEvent } from '../userStats';
 import { setUploadedActionCreator } from '../userStats/actionCreator';
 import { clearProfileActionCreator, setAuthTokenActionCreator, setProfileActionCreator } from '../userState';
 import { setInvalidAddress } from '../location/actionCreator';
+import { store } from '../store';
 
 /**
  * Timer for calling fetchLocationByIP() if
@@ -225,6 +227,46 @@ export const uploadStatsIfNeeded = () => {
       }
     }
   };
+};
+
+export interface UserCallDetails {
+  stats: UserStats;
+  weeklyStreak: number;
+  firstCallTime: number;
+  calls: DailyCallReport[];
+}
+
+export interface DailyCallReport {
+  date: string;
+  issues: IssueSummary[];
+}
+
+export interface IssueSummary {
+  count: number;
+  issue_name: string;
+}
+
+export interface UserStats {
+  voicemail: number;
+  unavailable: number;
+  contact: number;
+}
+
+export const getProfileInfo = async (): Promise<UserProfile> => {
+  const state = store.getState();
+
+  if (state.userState.profile && state.userState.idToken) {
+    const callDetails = await getUserCallDetails(state.userState.idToken);
+    // attach details to token profile
+    let filledProfile = state.userState.profile;
+    filledProfile.callDetails = callDetails;
+
+    return filledProfile;
+  } else {
+    // not logged in
+  }
+
+  return Promise.reject('no profile sorry');
 };
 
 export const startup = () => {
