@@ -118,12 +118,6 @@ class CallPage extends React.Component<Props, State> {
         this.setState({...this.state, hasBeenCached: false});
     }
 
-    if (!this.props.issues) {
-      queueUntilRehydration(() => {
-        this.props.onGetIssuesIfNeeded();
-      });
-    }
-
     if (!this.state.hasBeenCached && newProps.currentGroup) {
       // cache group and assigned it to currentGroup
       this.setState({...this.state, hasBeenCached: true});
