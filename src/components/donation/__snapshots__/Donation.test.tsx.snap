@@ -48,10 +48,10 @@ exports[`should render Donation component properly 1`] = `
           href="https://secure.actblue.com/donate/5calls-donate?amount=25"
           target="_blank"
         >
-          $10
+          Donate
         </a>
         <p>
-          Donate to Support 5 Calls
+          Be a 5 Calls Supporter
         </p>
       </div>
     </div>
