@@ -13,6 +13,11 @@ export class UserAuth {
 export interface UserState {
   idToken?: string;
   profile?: UserProfile;
+  userExtras?: UserExtras;
+}
+
+export interface UserExtras {
+  needsEmail: boolean;
 }
 
 export interface UserProfile {
@@ -26,6 +31,7 @@ export interface UserProfile {
 const initialState: UserState = {
   idToken: undefined,
   profile: undefined,
+  userExtras: undefined,
 };
 
 export const userStateReducer: Reducer<UserState> = (
@@ -41,6 +47,12 @@ export const userStateReducer: Reducer<UserState> = (
       const profile = action.payload as UserProfile | undefined;
 
       const newState: UserState = { ...state, profile: profile };
+      return newState;
+    }
+    case UserStateActionType.SET_NEEDS_EMAIL: {
+      const needsEmail = action.payload as boolean;
+
+      const newState: UserState = { ...state, userExtras: { needsEmail } };
       return newState;
     }
     case UserStateActionType.CLEAR_USER_PROFILE: {

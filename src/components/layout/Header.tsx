@@ -61,6 +61,7 @@ class HeaderImpl extends React.Component<Props, State> {
           <CustomLogin
             auth0Config={Auth0Config}
             userProfile={profile}
+            needsEmail={true}
             logoutHandler={this.logout}
           />
         </div>
