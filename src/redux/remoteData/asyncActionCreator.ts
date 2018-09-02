@@ -1,10 +1,25 @@
 import { Dispatch } from 'redux';
-import { ApiData, GroupIssues, IpInfoData, LocationFetchType,
-  CountData } from './../../common/model';
-import { getAllIssues, getGroupIssues, getCountData,
-  postBackfillOutcomes, getUserCallDetails } from '../../services/apiServices';
-import { setCachedCity, setLocation, setLocationFetchType,
-  setSplitDistrict, setUiState } from '../location/index';
+import {
+  ApiData,
+  GroupIssues,
+  IpInfoData,
+  LocationFetchType,
+  CountData
+} from './../../common/model';
+import {
+  getAllIssues,
+  getGroupIssues,
+  getCountData,
+  postBackfillOutcomes,
+  getUserCallDetails
+} from '../../services/apiServices';
+import {
+  setCachedCity,
+  setLocation,
+  setLocationFetchType,
+  setSplitDistrict,
+  setUiState
+} from '../location/index';
 import { getLocationByIP, getBrowserGeolocation, GEOLOCATION_TIMEOUT } from '../../services/geolocationServices';
 import { issuesActionCreator, groupIssuesActionCreator, callCountActionCreator } from './index';
 import { clearContactIndexes } from '../callState/';
