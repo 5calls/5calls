@@ -24,6 +24,35 @@
   border-radius: 15px;
   box-shadow: 0 0 12px #888888;
 
+  &.email {
+    width: 500px;
+
+    h2 {
+      margin: 10px 0;
+    }
+
+    p {
+      margin: 0;
+    }
+
+    input {
+      width: 100%;
+      margin: 15px 0;
+    }
+
+    button {
+      width: 100%;
+      margin: 0;
+      font-size: 18px;
+    }
+
+    @include bp(small) {
+      width: 96%;
+      margin: 0 2%;
+      height: inherit;
+    }  
+  }
+
   @include bp(small) {
     width: 96%;
     margin: 0 2%;

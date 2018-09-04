@@ -26,6 +26,7 @@ export interface UserProfile {
   exp: number;
   picture: string; // a url for the users' photo
   callDetails?: UserCallDetails;
+  email?: string;
 }
 
 const initialState: UserState = {

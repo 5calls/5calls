@@ -32,6 +32,7 @@ import { setUploadedActionCreator } from '../userStats/actionCreator';
 import { clearProfileActionCreator, setAuthTokenActionCreator, setProfileActionCreator } from '../userState';
 import { setInvalidAddress } from '../location/actionCreator';
 import { store } from '../store';
+import { setNeedsEmailActionCreator } from '../userState/action';
 
 /**
  * Timer for calling fetchLocationByIP() if
@@ -296,6 +297,12 @@ export const startup = () => {
     // check expired login and handle or logout
     const auth = new LoginService(Auth0Config);
     if (state.userState.profile && state.userState.idToken) {
+      // during startup we should ensure users have an email on file
+      // later, in context, we should ask users to subscribe, etc
+      if (!state.userState.profile.email) {
+        dispatch(setNeedsEmailActionCreator(true));
+      }
+
       auth.checkAndRenewSession(state.userState.profile, state.userState.idToken).then((authResponse) => {
         // Set the updated profile ourselves - auth is a component that doesn't know about redux
         dispatch(setAuthTokenActionCreator(authResponse.authToken));
