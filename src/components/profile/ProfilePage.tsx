@@ -16,10 +16,10 @@ interface State {
 }
 
 // tslint:disable-next-line:max-line-length
-const fakePhotoUrl = 'https://platform-lookaside.fbsbx.com/platform/profilepic/?asid=10100282826789781&width=999999&ext=1537988788&hash=AeSrdh8ArReZITOQ';
+const fakePhotoUrl = '/img/example-activist.jpg';
 
 const fakeUserProfile = {
-  name: 'Activist',
+  name: 'Example Activist',
   sub: '',
   exp: 0,
   picture: fakePhotoUrl,
