@@ -2,9 +2,9 @@
 # yarn lockfile v1
 
 
-"@5calls/react-components@0.0.12":
-  version "0.0.12"
-  resolved "https://registry.yarnpkg.com/@5calls/react-components/-/react-components-0.0.12.tgz#64cfb267a2457ed4bf6b627b64a9cbab547c38b8"
+"@5calls/react-components@0.0.13":
+  version "0.0.13"
+  resolved "https://registry.yarnpkg.com/@5calls/react-components/-/react-components-0.0.13.tgz#a8c77fe709c4cb488193368a27a0c6e8cf0dfc11"
   dependencies:
     auth0-js "^9.6.1"
     email-validator "^2.0.4"
