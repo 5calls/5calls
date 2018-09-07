@@ -165,3 +165,18 @@ export const postPhoneRemind = (phone: string): Promise<Boolean> => {
     .then(response => Promise.resolve(true))
     .catch(e => Promise.reject(e));
 };
+
+export const postEmail = (email: string, idToken: string): Promise<Boolean> => {
+  const postData = querystring.stringify({
+    email: email,
+  });
+  return axios.post(
+    Constants.PROFILE_API_URL,
+    postData,
+    {
+      headers: {'Authorization': 'Bearer ' + idToken}
+    },
+  )
+    .then(response => Promise.resolve(true))
+    .catch(e => Promise.reject(e));
+};

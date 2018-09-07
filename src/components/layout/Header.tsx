@@ -2,12 +2,17 @@ import * as React from 'react';
 import { Link } from 'react-router-dom';
 import onClickOutside from 'react-onclickoutside';
 
-import { CustomLogin } from '@5calls/react-components';
+import { CustomLogin, LoginService } from '@5calls/react-components';
 import { store } from '../../redux/store';
 import { UserState, UserProfile } from '../../redux/userState/reducer';
-import { clearProfileActionCreator } from '../../redux/userState/action';
+import {
+  clearProfileActionCreator,
+  setProfileActionCreator,
+  setAuthTokenActionCreator
+} from '../../redux/userState/action';
 import { Auth0Config } from '../../common/constants';
 import { DonationContainer } from '../donation';
+import { postEmail } from '../../services/apiServices';
 
 interface Props {
   readonly postcards?: boolean;
@@ -41,6 +46,32 @@ class HeaderImpl extends React.Component<Props, State> {
     store.dispatch(clearProfileActionCreator());
   }
 
+  refresh = (email: string) => {
+    let idToken = '';
+    if (this.props.currentUser && this.props.currentUser.idToken) {
+      idToken = this.props.currentUser.idToken;
+    }
+
+    // send email, then refresh
+    postEmail(email, idToken).then(() => {
+      let login = new LoginService(Auth0Config);
+
+      if (this.props.currentUser && this.props.currentUser.profile && this.props.currentUser.idToken) {
+        login.checkAndRenewSession(this.props.currentUser.profile, this.props.currentUser.idToken, true)
+        .then((authResponse) => {
+          // Set the updated profile ourselves - auth is a component that doesn't know about redux
+          store.dispatch(setAuthTokenActionCreator(authResponse.authToken));
+          store.dispatch(setProfileActionCreator(authResponse.userProfile));
+        }).catch((error) => {
+          // clear the session
+          store.dispatch(clearProfileActionCreator());
+        });
+      }  
+    }).catch(error => {
+      console.error("got an error updating email");
+    });
+  }
+
   render() {
     let profile: UserProfile | undefined;
     if (this.props.currentUser !== undefined) {
@@ -61,8 +92,8 @@ class HeaderImpl extends React.Component<Props, State> {
           <CustomLogin
             auth0Config={Auth0Config}
             userProfile={profile}
-            needsEmail={true}
             logoutHandler={this.logout}
+            refreshHandler={this.refresh}
           />
         </div>
         {!this.props.hideDonation && <DonationContainer />}
