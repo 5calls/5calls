@@ -166,9 +166,12 @@ export const postPhoneRemind = (phone: string): Promise<Boolean> => {
     .catch(e => Promise.reject(e));
 };
 
-export const postEmail = (email: string, idToken: string): Promise<Boolean> => {
+export const postEmail = (email: string, sub: boolean, idToken: string): Promise<Boolean> => {
+  const subscribe = sub ? 'true' : '';
+
   const postData = querystring.stringify({
     email: email,
+    subscribe: subscribe,
   });
   return axios.post(
     Constants.PROFILE_API_URL,

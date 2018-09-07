@@ -46,14 +46,14 @@ class HeaderImpl extends React.Component<Props, State> {
     store.dispatch(clearProfileActionCreator());
   }
 
-  refresh = (email: string) => {
+  refresh = (email: string, subscribe: boolean) => {
     let idToken = '';
     if (this.props.currentUser && this.props.currentUser.idToken) {
       idToken = this.props.currentUser.idToken;
     }
 
     // send email, then refresh
-    postEmail(email, idToken).then(() => {
+    postEmail(email, subscribe, idToken).then(() => {
       let login = new LoginService(Auth0Config);
 
       if (this.props.currentUser && this.props.currentUser.profile && this.props.currentUser.idToken) {
