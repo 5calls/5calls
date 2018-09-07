@@ -68,7 +68,7 @@ class HeaderImpl extends React.Component<Props, State> {
         });
       }  
     }).catch(error => {
-      console.error("got an error updating email");
+      // console.error("got an error updating email");
     });
   }
 
