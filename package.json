@@ -108,7 +108,8 @@
     "test:nolint": "node scripts/test.js --env=jsdom",
     "test:coverage": "node scripts/test.js --env=jsdom --coverage",
     "tslint": "tslint 'src/**/*.ts' 'src/**/*.tsx'",
-    "postinstall": "npm run build-css"
+    "postinstall": "npm run build-css",
+    "web-tests:all": "testcafe chrome ./web-tests/*.ts"
   },
   "jest": {
     "collectCoverageFrom": [
