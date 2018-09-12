@@ -7,7 +7,7 @@ import {
   waitForReact,
   ReactSelector,
 } from 'testcafe-react-selectors';
-import * as request from 'request';
+import axios from 'axios';
 
 const getWindowLocation = ClientFunction(() => window.location.href);
 
@@ -29,11 +29,11 @@ test('All images on front page have loaded', async t => {
     let url = await images.nth(i).getAttribute('src');
 
     if (!url.startsWith('data')) {
-      requestPromises.push(new Promise(resolve => {
+      requestPromises.push(new Promise((resolve, reject) => {
         // tslint:disable-next-line:no-any
-        return request(location + url, function(err: any, resp: request.Response) {
-          resolve(resp ? resp.statusCode : 0);
-        });
+        return axios.get(location + url)
+          .then(resp => resolve(resp ? resp.status : 0))
+          .catch(e => reject(e));
       }));
     }
 
