@@ -28,7 +28,8 @@
     "config/testSetup.ts",
     "e2e-tests",
     "**/*.test.ts",
-    "**/*.test.tsx"
+    "**/*.test.tsx",
+    "web-tests"
   ],
   "types": [
     "typePatches"

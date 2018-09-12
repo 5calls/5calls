@@ -33,7 +33,8 @@
     "redux-logger": "^3.0.6",
     "redux-persist": "^4.8.2",
     "redux-thunk": "^2.2.0",
-    "string.prototype.includes": "^1.0.0"
+    "string.prototype.includes": "^1.0.0",
+    "testcafe-browser-provider-browserstack": "^1.5.0"
   },
   "devDependencies": {
     "@types/axios": "^0.14.0",
@@ -109,7 +110,8 @@
     "test:coverage": "node scripts/test.js --env=jsdom --coverage",
     "tslint": "tslint 'src/**/*.ts' 'src/**/*.tsx'",
     "postinstall": "npm run build-css",
-    "web-tests:all": "testcafe chrome ./web-tests/*.ts"
+    "web-tests:all": "testcafe chrome ./web-tests/*.ts",
+    "web-tests:browserstack": "testcafe 'browserstack:Chrome@68.0:Windows 10' ./web-tests/*.ts"
   },
   "jest": {
     "collectCoverageFrom": [
