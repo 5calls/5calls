@@ -88,8 +88,9 @@ export const userStatsReducer: Reducer<UserStatsState> = (
           break;
         }
         default: {
-          // this represents an invalid result string
-          // do nothing and return an unchanged state below
+          // anything that isn't the normal type can be added without changing the state
+          addEvent = true;
+          break;
         }
       }
 

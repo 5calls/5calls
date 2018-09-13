@@ -6,7 +6,7 @@ import { Issue, Contact } from '../../common/model';
 import { CallHeaderTranslatable, ContactDetails, Outcomes,
   ScriptTranslatable, NoContactSplitDistrict, IssueLink } from './index';
 import { CallState } from '../../redux/callState';
-import { locationStateContext } from '../../contexts';
+import { locationStateContext, userStateContext } from '../../contexts';
 
 // This defines the props that we must pass into this component.
 export interface Props {
@@ -136,14 +136,18 @@ export class Call extends React.Component<Props, State> {
             contactIndex={this.state.currentContactIndex}
             locationState={locationState}
           />
-          { this.missingContacts(this.props.issue) || (
-           this.props.issue &&
-           (this.props.issue.contacts && this.props.issue.contacts.length === 0)) ? <span/> :
-          <Outcomes
-            currentIssue={this.state.issue}
-            numberContactsLeft={this.state.numberContactsLeft}
-            currentContactId={(this.state.currentContact ? this.state.currentContact.id : '')}
-          />}
+          { this.missingContacts(this.props.issue) ? <span/> :
+          <userStateContext.Consumer>
+            {userState =>
+              <Outcomes
+                currentIssue={this.state.issue}
+                userState={userState}
+                numberContactsLeft={this.state.numberContactsLeft}
+                currentContactId={(this.state.currentContact ? this.state.currentContact.id : '')}
+              />
+            }
+          </userStateContext.Consumer>
+}
           {/* TODO: Fix people/person text for 1 contact left. Move logic to a function */}
           { this.missingContacts(this.props.issue) ? <span/> :
           this.state.numberContactsLeft > 0 ?

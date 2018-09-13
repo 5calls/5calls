@@ -74,7 +74,7 @@ export function submitOutcome(data: OutcomeData) {
         .catch(e => console.error('Problem posting outcome data', e));
     }
 
-    if (data.numberContactsLeft === 0) {
+    if (data.numberContactsLeft <= 0) {
       return dispatch(completeIssueActionCreator());
     } else {
       return dispatch(moveToNextActionCreator());

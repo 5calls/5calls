@@ -27,7 +27,14 @@ export class Issue {
     this.linkTitle = '';
     this.slug = '';
   }
+}
 
+export function slugOrID(issue: Issue): string {
+  if (issue.slug !== '') {
+    return issue.slug;
+  }
+
+  return issue.id;
 }
 
 export interface Outcome {
