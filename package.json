@@ -111,7 +111,7 @@
     "tslint": "tslint 'src/**/*.ts' 'src/**/*.tsx'",
     "postinstall": "npm run build-css",
     "web-tests:all": "testcafe chrome ./web-tests/*.ts",
-    "web-tests:browserstack": "testcafe 'browserstack:Chrome@68.0:Windows 10' ./web-tests/*.ts"
+    "web-tests:browserstack": "node runner.js"
   },
   "jest": {
     "collectCoverageFrom": [
