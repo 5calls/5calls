@@ -8,6 +8,7 @@ import {
   ReactSelector,
 } from 'testcafe-react-selectors';
 import axios from 'axios';
+import { isLinkValid } from './utils';
 
 const getWindowLocation = ClientFunction(() => window.location.href);
 
@@ -30,7 +31,6 @@ test('All images on front page have loaded', async t => {
 
     if (!url.startsWith('data')) {
       requestPromises.push(new Promise((resolve, reject) => {
-        // tslint:disable-next-line:no-any
         return axios.get(location + url)
           .then(resp => resolve(resp ? resp.status : 0))
           .catch(e => reject(e));
@@ -97,18 +97,18 @@ test('Donation bar is displayed and links work', async t => {
     },
   ];
 
-  // tslint:disable-next-line:no-debugger
-  debugger;
   await t.expect(donateText.innerText).eql('Get Involved:');
 
   for (let i = 0; i < count; i++) {
     const link = donateLinks.nth(i);
     const expected = donateLinkExpected[i];
     const linkElement = await link.find('a');
+    const linkUrl = await linkElement.getAttribute('href');
     const linkLabel = await link.find('p');
 
-    await t.expect(linkElement.getAttribute('href')).eql(expected.url);
+    await t.expect(linkUrl).eql(expected.url);
     await t.expect(linkElement.innerText).eql(expected.linkText);
     await t.expect(linkLabel.innerText).eql(expected.labelText);
+    await t.expect(isLinkValid(linkUrl)).ok();
   }
 });
