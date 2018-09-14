@@ -69,3 +69,46 @@ test('The login link is displayed when no users are logged in', async t => {
   await t.expect(img.getAttribute('alt')).eql(expectedAlt);
   await t.expect(link.innerText).eql(expectedText);
 });
+
+// tslint:disable-next-line:no-shadowed-variable
+test('Donation bar is displayed and links work', async t => {
+  const DonationBar = await ReactSelector('Donation');
+  await t.expect(DonationBar).ok();
+
+  const donateText = await Selector('.logo__header__donatetext');
+  const donateLinks = await Selector('.logo__header__donatebutton');
+  const count = await donateLinks.count;
+
+  const donateLinkExpected = [
+    {
+      url: 'https://airtable.com/shrSFvr3AlMKRRssx',
+      linkText: 'Contact Us',
+      labelText: 'Get Your Own 5 Calls Page',
+    },
+    {
+      url: 'https://github.com/5calls/5calls/wiki/Getting-Involved-with-5-Calls-Development',
+      linkText: 'Projects',
+      labelText: 'Contribute Design or Code',
+    },
+    {
+      url: 'https://secure.actblue.com/donate/5calls-donate?amount=25',
+      linkText: 'Donate',
+      labelText: 'Be a 5 Calls Supporter',
+    },
+  ];
+
+  // tslint:disable-next-line:no-debugger
+  debugger;
+  await t.expect(donateText.innerText).eql('Get Involved:');
+
+  for (let i = 0; i < count; i++) {
+    const link = donateLinks.nth(i);
+    const expected = donateLinkExpected[i];
+    const linkElement = await link.find('a');
+    const linkLabel = await link.find('p');
+
+    await t.expect(linkElement.getAttribute('href')).eql(expected.url);
+    await t.expect(linkElement.innerText).eql(expected.linkText);
+    await t.expect(linkLabel.innerText).eql(expected.labelText);
+  }
+});
