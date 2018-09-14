@@ -12,7 +12,7 @@ import { isLinkValid } from './utils';
 
 const getWindowLocation = ClientFunction(() => window.location.href);
 
-fixture`Home page`
+fixture`Header`
   .page`http://localhost:3000`
   .beforeEach(async () => {
     await waitForReact(5000);
