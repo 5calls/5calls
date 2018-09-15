@@ -8,7 +8,6 @@ import {
   ReactSelector,
 } from 'testcafe-react-selectors';
 import axios from 'axios';
-import { isLinkValid } from './utils';
 
 const getWindowLocation = ClientFunction(() => window.location.href);
 
@@ -71,7 +70,7 @@ test('The login link is displayed when no users are logged in', async t => {
 });
 
 // tslint:disable-next-line:no-shadowed-variable
-test('Donation bar is displayed and links work', async t => {
+test('Donation bar is displayed', async t => {
   const DonationBar = await ReactSelector('Donation');
   await t.expect(DonationBar).ok();
 
@@ -109,6 +108,5 @@ test('Donation bar is displayed and links work', async t => {
     await t.expect(linkUrl).eql(expected.url);
     await t.expect(linkElement.innerText).eql(expected.linkText);
     await t.expect(linkLabel.innerText).eql(expected.labelText);
-    await t.expect(isLinkValid(linkUrl)).ok();
   }
 });

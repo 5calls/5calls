@@ -1,4 +1,4 @@
-import { 
+import {
   ClientFunction,
   t,
   Selector,
@@ -19,7 +19,7 @@ fixture`Sidebar`
 // tslint:disable-next-line:no-shadowed-variable
 test('Sidebar Header exists and user may set location', async t => {
   const SidebarHeader = await ReactSelector('SidebarHeader');
-  await t.expect(SidebarHeader).ok();
+  await t.expect(SidebarHeader).ok('Sidebar header is displayed');
 
   const Location = await ReactSelector('Location');
   await t.expect(Location).ok();
@@ -46,5 +46,29 @@ test('Sidebar Header exists and user may set location', async t => {
 
     locationSetMessage = await Selector('#locationMessage').withText('Your location: ');
     await t.expect(locationSetMessage.innerText).eql('Your location: Littleton');
+  }
+});
+
+// tslint:disable-next-line:no-shadowed-variable
+test('Sidebar body contains a list of 10 issues and the footer', async t => {
+  const Sidebar = await ReactSelector('Sidebar');
+  await t.expect(Sidebar).ok('Sidebar is displayed on the page');
+
+  const IssueItems = await Sidebar.findReact('li');
+  const count = await IssueItems.count;
+  // There will be 11 items, the 10 issues and the footer
+  await t.expect(count).eql(11, 'There are 10 issues in the sidebar');
+
+  for (let i = 0; i < count; i++) {
+    const Issue = IssueItems.nth(i);
+    const Link = await Issue.findReact('a');
+    const url = await Link.getAttribute('href');
+
+    // ensure footer is correct
+    if (i === 10) {
+      await t.expect(url).eql('/more');
+      const footerText = await Link.findReact('span');
+      await t.expect(footerText.innerText).eql('View all active issues');
+    }
   }
 });
