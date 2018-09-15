@@ -11,6 +11,7 @@ import { getAll } from './services/localStorage';
 import { transform, LegacyUserStatsState } from './services/legacyStats';
 import { setUserStatsActionCreator } from './redux/userStats';
 import * as ReactGA from 'react-ga';
+import * as Raven from 'raven-js';
 
 import NotFoundPage from './components/NotFoundPage';
 import { HomePage } from './components/home';
@@ -28,6 +29,7 @@ import './components/bundle.css';
 import { Auth0CallbackContainer } from './components/shared';
 import ProfilePageContainer from './components/profile/ProfilePageContainer';
 import AppProvider from './components/AppProvider';
+import MidtermsPage from './components/MidtermsPage';
 
 ReactGA.initialize('UA-90915119-1');
 const trackPageView = location => {
@@ -36,6 +38,9 @@ const trackPageView = location => {
   });
   ReactGA.pageview(location.pathname);
 };
+
+Raven.config('https://7f6e814bc848495aafd63747694a0a30@sentry.io/131886', {
+}).install();
 
 const history = createHistory();
 trackPageView(history.location);
@@ -67,6 +72,7 @@ ReactDOM.render(
             <Route path="/profile" exact={true} component={ProfilePageContainer} />
             <Route path="/impact" exact={true} component={MyImpactPage} />
             <Route path="/more" exact={true} component={MoreIssuesPage} />
+            <Route path="/midterms" exact={true} component={MidtermsPage} />
             <Route path="/team/:groupid" exact={true} component={GroupPage} />
             <Route path="/team/:groupid/:issueid" exact={true} component={CallPage} />
             <Route path="/faq" exact={true} component={FaqPage} />

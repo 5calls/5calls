@@ -228,3 +228,14 @@ export interface OutcomeButton {
   emoji: string;
   key: string;
 }
+
+export interface MidtermStats {
+  week1: number;
+  week2: number;
+  week3: number;
+  week4: number;
+  week5: number;
+  week6: number;
+  week7: number;
+  week8: number;
+}
