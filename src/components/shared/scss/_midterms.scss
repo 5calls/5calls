@@ -1,3 +1,20 @@
+.midterms {
+  .subscribe {
+    margin: 20px 0;
+    text-align: center;
+
+    label {
+      font-size: 22px;
+    }
+
+    input[type=text] {
+      margin: 0 10px;
+      width: 200px;
+      text-align: center;
+    }
+  }
+}
+
 .midterms-list {
   width: 80%;
   margin: 0 auto;

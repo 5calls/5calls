@@ -1,5 +1,6 @@
 import * as React from 'react';
 
+import * as moment from 'moment';
 import * as Raven from 'raven-js';
 
 import { Layout } from './layout';
@@ -28,6 +29,13 @@ class MidtermsPage extends React.Component<Props, State> {
 
   componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
     Raven.captureException(error, { extra: errorInfo });
+  }
+
+  weekCountdown(date: string): string {
+    const now = moment();
+    const days = moment(date, 'YYYYMMDD').diff(now, 'days');
+
+    return 'in ' + days + ' days';
   }
 
   week1actions() {
@@ -65,36 +73,47 @@ class MidtermsPage extends React.Component<Props, State> {
   render() {
     return (
       <Layout>
-        <main role="main" id="content" className="layout__main">
+        <main role="main" id="content" className="layout__main midterms">
           <h1>5 Calls Midterm Challenge</h1>
           {/*tslint:disable-next-line:max-line-length*/}
-          <p>Hello and welcome to the 5 Calls 2018 Midterm Challenge - Week 1! We are very excited to announced that xxx people have already signed up.</p>
-          <p>This week’s challenge is... COMMIT TO VOTE</p>
+          <p>Hello and welcome to the 5 Calls Midterm Challenge!</p>
           {/*tslint:disable-next-line:max-line-length*/}
-          <p>Yes, we know you are already definitely going to vote*. But your challenge for this week is to get warmed up on advocacy and start getting your friends mobilized to vote by putting yourself out there a little bit. How? Here’s your step-by-step guide:</p>
+          <p>Our priority is to <strong>help <em>you</em> get out the vote</strong> by talking with other voters. Why are we focused on that? Studies have shown that peer to peer (and particularly friend to friend) discussions are the <strong>number one most effective tactic to get people to vote</strong>.</p>
+          {/*tslint:disable-next-line:max-line-length*/}
+          <p>How it works: Each week, we will <strong>send you a new challenge</strong>, along with the guidance and resources you need to complete it. Each challenge has been carefully chosen to <strong>maximize your impact on the 2018 midterm election</strong> — both in your local races as well as key swing races nationally. Each challenge is also designed to be <strong>doable in less than an hour</strong>. Just like we made calling Congress easy, we’re doing the same for this.</p>
+          <div className="subscribe">
+            {/*tslint:disable-next-line:max-line-length*/}
+            <form action="//5calls.us16.list-manage.com/subscribe/post?u=82a164d5fe7f51f4a4efb1f83&amp;id=624ef52208" method="post" target="popupwindow">
+              <label htmlFor="email"><strong>Get email alerts once every week</strong></label>
+              <span className="emailform">
+                <input type="text" placeholder="youremail@example.com" name="email" id="email" />
+                <input type="submit" value="Subscribe" />
+              </span>
+            </form>
+          </div>
           <ul className="midterms-list">
             <li className="item">
               <span className={`item__status ${isIssueComplete('midterm-challenge-week1') ? 'is-complete' : ''}`}>
                 <span className="visually-hidden" />
               </span>
               <span className="item__title">
-                <Link to="/issue/midterm-challenge-week1">Week 1: Commit to Vote</Link>
+                <Link to="/issue/midterm-challenge-week-1">Week 1: Commit to Vote</Link>
                 {this.week1actions()}
               </span>
               <span className="item__subtitle">
-                Details about why week 1 is important
+                Practice accountability for you AND others
               </span>
             </li>
-            <li className="item">
+            <li className="item preview">
               <span className={`item__status ${isIssueComplete('midterm-challenge-week2') ? 'is-complete' : ''}`}>
                 <span className="visually-hidden" />
               </span>
               <span className="item__title">
-                <Link to="/issue/midterm-challenge-week1">Week 2: The Focus of Week 2</Link>
+                Week 2
                 {this.week2actions()}
               </span>
               <span className="item__subtitle">
-                Details about why week 2 is important
+                Week 2 starts {this.weekCountdown('20180924')}
               </span>
             </li>
             <li className="item preview">
@@ -102,11 +121,11 @@ class MidtermsPage extends React.Component<Props, State> {
                 <span className="visually-hidden" />
               </span>
               <span className="item__title">
-                Week 3: Something else
+                Week 3
                 {this.week3actions()}
               </span>
               <span className="item__subtitle">
-                Details about why week 3 is important
+                Week 3 starts {this.weekCountdown('20181001')}
               </span>
             </li>
             <li className="item preview">
@@ -118,7 +137,7 @@ class MidtermsPage extends React.Component<Props, State> {
                 {this.week4actions()}
               </span>
               <span className="item__subtitle">
-                Details about why week 3 is important
+                Week 4 starts {this.weekCountdown('20181008')}
               </span>
             </li>
             <li className="item preview">
@@ -129,7 +148,7 @@ class MidtermsPage extends React.Component<Props, State> {
                 Week 5
               </span>
               <span className="item__subtitle">
-                Details about why week 3 is important
+                Week 5 starts {this.weekCountdown('20181015')}
               </span>
             </li>
             <li className="item preview">
@@ -140,7 +159,7 @@ class MidtermsPage extends React.Component<Props, State> {
                 Week 6
               </span>
               <span className="item__subtitle">
-                Details about why week 3 is important
+                Week 6 starts {this.weekCountdown('20181022')}
               </span>
             </li>
             <li className="item preview">
@@ -151,7 +170,7 @@ class MidtermsPage extends React.Component<Props, State> {
                 Week 7
               </span>
               <span className="item__subtitle">
-                Details about why week 3 is important
+                Week 7 starts {this.weekCountdown('20181029')}
               </span>
             </li>
             <li className="item last preview">
@@ -162,7 +181,7 @@ class MidtermsPage extends React.Component<Props, State> {
                 Week 8
               </span>
               <span className="item__subtitle">
-                Details about why week 3 is important
+                Week 8 starts {this.weekCountdown('20181105')}
               </span>
             </li>
           </ul>
