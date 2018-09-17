@@ -7,6 +7,7 @@ import { CallHeaderTranslatable, ContactDetails, Outcomes,
   ScriptTranslatable, NoContactSplitDistrict, IssueLink } from './index';
 import { CallState } from '../../redux/callState';
 import { locationStateContext, userStateContext } from '../../contexts';
+import { eventContext } from '../../contexts/EventContext';
 
 // This defines the props that we must pass into this component.
 export interface Props {
@@ -139,12 +140,17 @@ export class Call extends React.Component<Props, State> {
           { this.missingContacts(this.props.issue) ? <span/> :
           <userStateContext.Consumer>
             {userState =>
-              <Outcomes
-                currentIssue={this.state.issue}
-                userState={userState}
-                numberContactsLeft={this.state.numberContactsLeft}
-                currentContactId={(this.state.currentContact ? this.state.currentContact.id : '')}
-              />
+              <eventContext.Consumer>
+                {eventManager =>
+                  <Outcomes
+                    currentIssue={this.state.issue}
+                    userState={userState}
+                    eventEmitter={eventManager.ee}
+                    numberContactsLeft={this.state.numberContactsLeft}
+                    currentContactId={(this.state.currentContact ? this.state.currentContact.id : '')}
+                  />                
+                }
+              </eventContext.Consumer>
             }
           </userStateContext.Consumer>
 }

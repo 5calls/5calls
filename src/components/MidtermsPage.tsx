@@ -74,7 +74,7 @@ class MidtermsPage extends React.Component<Props, State> {
     return (
       <Layout>
         <main role="main" id="content" className="layout__main midterms">
-          <h1>5 Calls Midterm Challenge</h1>
+          <h1>5 Calls 2018 Midterm Challenge</h1>
           {/*tslint:disable-next-line:max-line-length*/}
           <p>Hello and welcome to the 5 Calls Midterm Challenge!</p>
           {/*tslint:disable-next-line:max-line-length*/}

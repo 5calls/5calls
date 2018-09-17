@@ -2,6 +2,9 @@ import * as React from 'react';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { TranslationFunction } from 'i18next';
 import { translate } from 'react-i18next';
+
+import EventEmitter = require('wolfy87-eventemitter');
+
 import {
   submitOutcome,
 } from '../../redux/callState';
@@ -12,6 +15,7 @@ import { UserState } from '../../redux/userState';
 interface Props {
   readonly currentIssue: Issue;
   readonly userState: UserState;
+  readonly eventEmitter: EventEmitter;
   readonly currentContactId: string;
   readonly numberContactsLeft: number;
   readonly t: TranslationFunction;
@@ -56,6 +60,13 @@ class Outcomes extends React.Component<Props & RouteComponentProps<any>, State> 
     return true;
   }
 
+  showLogin(e: React.MouseEvent<HTMLAnchorElement>) {
+    e.preventDefault();
+
+    this.props.eventEmitter.emitEvent('showLogin');
+    window.scroll(1, 1);
+  }
+
   render() {
     if (this.props.currentIssue) {
       if (this.props.currentIssue.contactType === 'ACTION') {
@@ -74,7 +85,7 @@ class Outcomes extends React.Component<Props & RouteComponentProps<any>, State> 
           return (
             <span>
               <section className="loading">
-                <h2>Log in to participate in the challenge 📊</h2>
+                <h2><a href="#" onClick={(e) => this.showLogin(e)}>Log in</a> to participate in the challenge 📊</h2>
                 <p>Your current call total will be saved to your 5 Calls profile</p>
               </section>
               <div className="call__outcomes preview">

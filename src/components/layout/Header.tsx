@@ -13,6 +13,7 @@ import {
 import { Auth0Config } from '../../common/constants';
 import { DonationContainer } from '../donation';
 import { postEmail } from '../../services/apiServices';
+import { eventContext } from '../../contexts/EventContext';
 
 interface Props {
   readonly postcards?: boolean;
@@ -89,12 +90,17 @@ class HeaderImpl extends React.Component<Props, State> {
             <li><Link className={props.postcards ? '' : 'active'} to="/">Calls</Link></li>
             <li><Link className={props.postcards ? 'active' : ''} to="/postcards">Postcards</Link></li>
           </ul> */}
-          <CustomLogin
-            auth0Config={Auth0Config}
-            userProfile={profile}
-            logoutHandler={this.logout}
-            refreshHandler={this.refresh}
-          />
+          <eventContext.Consumer>
+            {eventManager => 
+              <CustomLogin
+                auth0Config={Auth0Config}
+                userProfile={profile}
+                eventEmitter={eventManager.ee}
+                logoutHandler={this.logout}
+                refreshHandler={this.refresh}
+              />
+            }
+          </eventContext.Consumer>
         </div>
         {!this.props.hideDonation && <DonationContainer />}
       </header>
