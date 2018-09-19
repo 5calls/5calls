@@ -18,8 +18,8 @@ fixture`Sidebar`
 
 // tslint:disable-next-line:no-shadowed-variable
 test('Sidebar Header exists and user may set location', async t => {
-  const SidebarHeader = await ReactSelector('SidebarHeader');
-  await t.expect(SidebarHeader.exists).ok();
+  const sidebarComponent = await Selector('.issues__header');
+  await t.expect(sidebarComponent.exists).ok();
 
   const Location = await ReactSelector('Location');
   await t.expect(Location).ok('Location component is not displayed');
