@@ -19,7 +19,6 @@ fixture`IssuePage`
 // tslint:disable-next-line:no-shadowed-variable
 test('Link on sidebar navigates to issue page', async t => {
   const Sidebar = await ReactSelector('Sidebar');
-  await t.expect(Sidebar).ok('Sidebar is displayed on the page');
 
   const IssueItems = await Sidebar.findReact('li');
   const firstIssue = IssueItems.nth(0);
@@ -49,7 +48,6 @@ test('Link on sidebar navigates to issue page', async t => {
 // tslint:disable-next-line:no-shadowed-variable
 test('Contacts are visible in an issue', async t => {
   const Sidebar = await ReactSelector('Sidebar');
-  await t.expect(Sidebar).ok('Sidebar is displayed on the page');
 
   // get the second issue and navigate to it
   // necessary since this was written during the midterm challenge
@@ -89,7 +87,6 @@ test('Contacts are visible in an issue', async t => {
 // tslint:disable-next-line:no-shadowed-variable
 test('Call Script is visible with their issue', async t => {
   const Sidebar = await ReactSelector('Sidebar');
-  await t.expect(Sidebar).ok('Sidebar is displayed on the page');
 
   // get a further child issue and navigate to it
   // necessary since this was written during the midterm challenge
@@ -111,4 +108,50 @@ test('Call Script is visible with their issue', async t => {
 
   const scriptBody = script.child('.call__script__body');
   await t.expect(scriptBody.exists).ok('The call script body is missing');
+});
+
+// tslint:disable-next-line:no-shadowed-variable
+test('Results buttons are visible with their issue', async t => {
+  const Sidebar = await ReactSelector('Sidebar');
+
+  // get a further child issue and navigate to it
+  // necessary since this was written during the midterm challenge
+  const IssueItems = await Sidebar.findReact('li');
+  const firstIssue = IssueItems.nth(2);
+  const link = await firstIssue.findReact('a').getAttribute('href');
+  await t
+    .click(firstIssue)
+    .navigateTo(link);
+  await waitForReact(5000);
+
+  await t.expect(getWindowLocation()).eql('http://localhost:3000' + link);
+
+  /*
+  const Outcomes = await ReactSelector('Outcomes');
+  const outcomesComponent = await Outcomes.getReact();
+  await t.expect(outcomesComponent.exists).ok('Outcomes component is missing from the page');
+  const callsLeft = parseInt(outcomesComponent.props.numberOfContactsLeft, 10);
+  await t.expect(isNaN(callsLeft)).notOk();
+  */
+  const buttonLabels = [
+    'UNAVAILABLE',
+    'LEFT VOICEMAIL',
+    'MADE CONTACT',
+    'SKIP',
+  ];
+
+  const callOutcomes = await Selector('.call__outcomes');
+  await t.expect(callOutcomes.exists).ok('Call outcomes is missing');
+  const callHeader = await callOutcomes.child('.call__outcomes__header');
+  await t.expect(callHeader.innerText)
+    .eql('Enter your call result to get the next call:');
+  const callButtons = await callOutcomes.child('.call__outcomes__items');
+  const buttons = await callOutcomes.find('button');
+  const count = await buttons.count;
+  await t.expect(count).eql(4);
+
+  for (let i = 0; i < count; i++) {
+    const button = await buttons.nth(i);
+    await t.expect(button.innerText).eql(buttonLabels[i]);
+  }
 });
