@@ -13,7 +13,7 @@ const getWindowLocation = ClientFunction(() => window.location.href);
 fixture`IssuePage`
   .page`http://localhost:3000`
   .beforeEach(async () => {
-    await waitForReact(5000);
+    await waitForReact(7000);
   });
 
 // tslint:disable-next-line:no-shadowed-variable
@@ -21,8 +21,9 @@ test('Link on sidebar navigates to issue page', async t => {
   const Sidebar = await ReactSelector('Sidebar');
 
   const IssueItems = await Sidebar.findReact('li');
-  const firstIssue = IssueItems.nth(0);
-  const link = await firstIssue.findReact('a').getAttribute('href');
+  const firstIssue = IssueItems.nth(1);
+  const linkComponent = await firstIssue.findReact('a');
+  const link = await linkComponent.getAttribute('href');
   await t
     .click(firstIssue)
     .navigateTo(link);
@@ -43,23 +44,7 @@ test('Link on sidebar navigates to issue page', async t => {
   // ensure the call body exists and is below the header
   const callBody = await headerText.nextSibling('.call__reason');
   await t.expect(callBody.exists).ok('The call body text is missing from the page');
-});
-
-// tslint:disable-next-line:no-shadowed-variable
-test('Contacts are visible in an issue', async t => {
-  const Sidebar = await ReactSelector('Sidebar');
-
-  // get the second issue and navigate to it
-  // necessary since this was written during the midterm challenge
-  const IssueItems = await Sidebar.findReact('li');
-  const firstIssue = IssueItems.nth(1);
-  const link = await firstIssue.findReact('a').getAttribute('href');
-  await t
-    .click(firstIssue)
-    .navigateTo(link);
-
-  await t.expect(getWindowLocation()).eql('http://localhost:3000' + link);
-
+  
   // ensure the contact element exists
   const contact = await Selector('.call__contact');
   await t.expect(contact.exists).ok('The ContactDetails element is missing');
@@ -82,23 +67,8 @@ test('Contacts are visible in an issue', async t => {
 
   const contactOffice = await Selector('.call__contact__show-field-offices');
   await t.expect(contactOffice.exists).ok('The ContactOffice component is missint');
-});
 
-// tslint:disable-next-line:no-shadowed-variable
-test('Call Script is visible with their issue', async t => {
-  const Sidebar = await ReactSelector('Sidebar');
-
-  // get a further child issue and navigate to it
-  // necessary since this was written during the midterm challenge
-  const IssueItems = await Sidebar.findReact('li');
-  const firstIssue = IssueItems.nth(2);
-  const link = await firstIssue.findReact('a').getAttribute('href');
-  await t
-    .click(firstIssue)
-    .navigateTo(link);
-
-  await t.expect(getWindowLocation()).eql('http://localhost:3000' + link);
-
+  // check for the call script
   const script = await Selector('.call__script');
   await t.expect(script.exists).ok('The call script is missing from the page');
 
@@ -108,31 +78,8 @@ test('Call Script is visible with their issue', async t => {
 
   const scriptBody = script.child('.call__script__body');
   await t.expect(scriptBody.exists).ok('The call script body is missing');
-});
 
-// tslint:disable-next-line:no-shadowed-variable
-test('Results buttons are visible with their issue', async t => {
-  const Sidebar = await ReactSelector('Sidebar');
-
-  // get a further child issue and navigate to it
-  // necessary since this was written during the midterm challenge
-  const IssueItems = await Sidebar.findReact('li');
-  const firstIssue = IssueItems.nth(2);
-  const link = await firstIssue.findReact('a').getAttribute('href');
-  await t
-    .click(firstIssue)
-    .navigateTo(link);
-  await waitForReact(5000);
-
-  await t.expect(getWindowLocation()).eql('http://localhost:3000' + link);
-
-  /*
-  const Outcomes = await ReactSelector('Outcomes');
-  const outcomesComponent = await Outcomes.getReact();
-  await t.expect(outcomesComponent.exists).ok('Outcomes component is missing from the page');
-  const callsLeft = parseInt(outcomesComponent.props.numberOfContactsLeft, 10);
-  await t.expect(isNaN(callsLeft)).notOk();
-  */
+  // check for call outcomes
   const buttonLabels = [
     'UNAVAILABLE',
     'LEFT VOICEMAIL',
