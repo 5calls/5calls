@@ -85,3 +85,30 @@ test('Contacts are visible in an issue', async t => {
   const contactOffice = await Selector('.call__contact__show-field-offices');
   await t.expect(contactOffice.exists).ok('The ContactOffice component is missint');
 });
+
+// tslint:disable-next-line:no-shadowed-variable
+test('Call Script is visible with their issue', async t => {
+  const Sidebar = await ReactSelector('Sidebar');
+  await t.expect(Sidebar).ok('Sidebar is displayed on the page');
+
+  // get a further child issue and navigate to it
+  // necessary since this was written during the midterm challenge
+  const IssueItems = await Sidebar.findReact('li');
+  const firstIssue = IssueItems.nth(2);
+  const link = await firstIssue.findReact('a').getAttribute('href');
+  await t
+    .click(firstIssue)
+    .navigateTo(link);
+
+  await t.expect(getWindowLocation()).eql('http://localhost:3000' + link);
+
+  const script = await Selector('.call__script');
+  await t.expect(script.exists).ok('The call script is missing from the page');
+
+  const scriptHeader = script.child('.call__script__header');
+  await t.expect(scriptHeader.exists).ok('The call script header is missing');
+  await t.expect(scriptHeader.innerText).eql('Your script:');
+
+  const scriptBody = script.child('.call__script__body');
+  await t.expect(scriptBody.exists).ok('The call script body is missing');
+});
