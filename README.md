@@ -62,6 +62,43 @@ For the best development experience, you should install both the React and Redux
 ### Unit testing
 Unit testing in this repository is done using [Jest](https://facebook.github.io/jest/) with [Enzyme](https://github.com/airbnb/enzyme) in addition to the [redux-mock-store](https://github.com/arnaudbenard/redux-mock-store) library to support Redux-related tests.
 
+<a id="End-to-end_Integration_Tests"></a>
+### End-to-end Integration Tests
+E2E testing for this project is done using [TestCafe](https://testcafe.devexpress.com/) with [testcafe-react-selectors](https://github.com/DevExpress/testcafe-react-selectors). This provides a web scraping test bed that provides an assertion library to ensure that the expected elements appear on each page under test. 
+
+#### Running the tests
+Before running the tests, the development server must be running using the command
+`yarn start`
+Once the test server is running, you may either run all the tests on your local browser using one of the following commands
+```
+testcafe <browsername> web-tests/*.ts
+yarn web-tests:all
+```
+Or if you have access to browserstack, you may run on multiple browsers using the command
+
+`yarn web-tests:browserstack`
+
+#### Running on browserstack
+To run on browserstack, ensure that you have environment variables set for BOWSERSTACK_ACCESS_KEY and BROWSERSTACK_USERNAME to the values of your browserstack account
+You may view test results on the [dashboard](https://automate.browserstack.com/builds)
+
+#### Debugging and running individual tests
+You may run specific tests by running testcafe with the -t or -T option
+-t <full test name>
+-T <partial test name, must meet grep search criteria. Ex. Tests that start with donate may be found with "Donate.*">
+
+Tests may be run in debug mode with the --inspect-brk option. 
+```
+testcafe --inspect-brk chrome web-tests/test.ts 
+```
+Breakpoints may be put in the test with the following syntax
+```
+// tslint:disable-next-line:no-debugger
+debugger;
+```
+Then in chrome, navigate to `chrome://inspect`
+On this page, under Remote Target there will be an inspect link, click to start the debugger.
+
 ## Architecture, Data Flow and Strong Typing
 A selection of files in this repository include code comments describing the architecture, data flow and strong typing conventions used in developing the React-Redux-TypeScript version of the 5 Calls application. These include files that illustrate the following (see the individual files for more details):
 
