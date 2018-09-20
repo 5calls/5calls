@@ -2,13 +2,14 @@
 # yarn lockfile v1
 
 
-"@5calls/react-components@0.0.13":
-  version "0.0.13"
-  resolved "https://registry.yarnpkg.com/@5calls/react-components/-/react-components-0.0.13.tgz#a8c77fe709c4cb488193368a27a0c6e8cf0dfc11"
+"@5calls/react-components@0.0.14":
+  version "0.0.14"
+  resolved "https://registry.yarnpkg.com/@5calls/react-components/-/react-components-0.0.14.tgz#c8a08972a05066e0d3f71b197e447b3b2c53cb9f"
   dependencies:
     auth0-js "^9.6.1"
     email-validator "^2.0.4"
     jwt-decode "^2.2.0"
+    wolfy87-eventemitter "^5.2.5"
 
 "@babel/code-frame@^7.0.0-beta.35":
   version "7.0.0"

@@ -2,9 +2,7 @@ import * as React from 'react';
 import { Store } from 'react-redux';
 import { CallState } from '../redux/callState';
 import { RemoteDataState } from '../redux/remoteData';
-import {
-  GroupState,
-} from '../redux/group';
+import { GroupState } from '../redux/group';
 import { LocationState } from '../redux/location';
 import { UserState } from '../redux/userState';
 import { UserStatsState } from '../redux/userStats';

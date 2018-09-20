@@ -70,6 +70,38 @@ class MidtermsPage extends React.Component<Props, State> {
     return <></>;
   }
 
+  week5actions() {
+    if (this.state.midtermStats && this.state.midtermStats.week5 > 0) {
+      return <span> ⋆ {this.state.midtermStats.week5} actions taken</span>;
+    }
+
+    return <></>;
+  }
+
+  week6actions() {
+    if (this.state.midtermStats && this.state.midtermStats.week6 > 0) {
+      return <span> ⋆ {this.state.midtermStats.week6} actions taken</span>;
+    }
+
+    return <></>;
+  }
+
+  week7actions() {
+    if (this.state.midtermStats && this.state.midtermStats.week7 > 0) {
+      return <span> ⋆ {this.state.midtermStats.week7} actions taken</span>;
+    }
+
+    return <></>;
+  }
+
+  week8actions() {
+    if (this.state.midtermStats && this.state.midtermStats.week8 > 0) {
+      return <span> ⋆ {this.state.midtermStats.week8} actions taken</span>;
+    }
+
+    return <></>;
+  }
+
   render() {
     return (
       <Layout>
@@ -146,6 +178,7 @@ class MidtermsPage extends React.Component<Props, State> {
               </span>
               <span className="item__title">
                 Week 5
+                {this.week5actions()}
               </span>
               <span className="item__subtitle">
                 Week 5 starts {this.weekCountdown('20181015')}
@@ -157,6 +190,7 @@ class MidtermsPage extends React.Component<Props, State> {
               </span>
               <span className="item__title">
                 Week 6
+                {this.week6actions()}
               </span>
               <span className="item__subtitle">
                 Week 6 starts {this.weekCountdown('20181022')}
@@ -168,6 +202,7 @@ class MidtermsPage extends React.Component<Props, State> {
               </span>
               <span className="item__title">
                 Week 7
+                {this.week7actions()}
               </span>
               <span className="item__subtitle">
                 Week 7 starts {this.weekCountdown('20181029')}
@@ -179,6 +214,7 @@ class MidtermsPage extends React.Component<Props, State> {
               </span>
               <span className="item__title">
                 Week 8
+                {this.week8actions()}
               </span>
               <span className="item__subtitle">
                 Week 8 starts {this.weekCountdown('20181105')}
