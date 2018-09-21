@@ -3,8 +3,13 @@ import {
   t,
   Selector,
 } from 'testcafe';
+const users = require( './accounts.json');
 
 const getWindowLocation = ClientFunction(() => window.location.href);
+
+const sleep = ms => {
+  return new Promise(resolve => setTimeout(resolve, ms));
+};
 
 // tslint:disable-next-line:no-unused-expression
 fixture`Login`
@@ -43,10 +48,11 @@ test('User may login with twitter', async t => {
   const username = await Selector('#username_or_email');
   const password = await Selector('#password');
   const submit = await Selector('#allow');
-  await t.typeText(username, 'fivecalls_test@mail.com');
-  await t.typeText(password, 'VoiceH3@rd');
+  await t.typeText(username, users.twitterLogin.user);
+  await t.typeText(password, users.twitterLogin.pass);
   await t.click(submit);
 
+  await sleep(5000);
   windowLocation = await getWindowLocation();
   await t.expect(windowLocation).contains('http://localhost:3000');
   userText = await loginComponent.find('p').innerText;
@@ -54,7 +60,7 @@ test('User may login with twitter', async t => {
 });
 
 // tslint:disable-next-line:no-shadowed-variable
-test('User may login with facebook', async t => {
+test.skip('User may login with facebook', async t => {
   const loginComponent = await Selector('.userHeader');
   await t.expect(loginComponent.exists).ok('The login component is missing');
 
@@ -81,21 +87,20 @@ test('User may login with facebook', async t => {
   await t.expect(facebookLogin.exists).ok('The facebook login button is missing from modal');
   await t.click(facebookLogin);
 
+  await sleep(5000);
   let windowLocation = await getWindowLocation();
   const isFacebookLogin = windowLocation.includes('facebook.com/login.php');
   await t.expect(isFacebookLogin).ok('Did not redirect to facebook login');
 
-  /*
   const username = await Selector('#email');
   const password = await Selector('#pass');
   const submit = await Selector('#loginbutton');
-  await t.typeText(username, '');
-  await t.typeText(password, '');
+  await t.typeText(username, users.facebookLogin.user);
+  await t.typeText(password, users.facebookLogin.pass);
   await t.click(submit);
 
   windowLocation = await getWindowLocation();
   await t.expect(windowLocation).contains('http://localhost:3000');
   userText = await loginComponent.find('p').innerText;
   await t.expect(userText).eql('Noah Abe');
-   */
 });
