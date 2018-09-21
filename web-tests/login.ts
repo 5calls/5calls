@@ -7,7 +7,7 @@ import {
 const getWindowLocation = ClientFunction(() => window.location.href);
 
 // tslint:disable-next-line:no-unused-expression
-fixture`Complete Call`
+fixture`Login`
   .page`http://localhost:3000`;
 
 // tslint:disable-next-line:no-shadowed-variable
@@ -85,15 +85,17 @@ test('User may login with facebook', async t => {
   const isFacebookLogin = windowLocation.includes('facebook.com/login.php');
   await t.expect(isFacebookLogin).ok('Did not redirect to facebook login');
 
+  /*
   const username = await Selector('#email');
   const password = await Selector('#pass');
   const submit = await Selector('#loginbutton');
-  await t.typeText(username, 'fivecalls_test@aol.com');
-  await t.typeText(password, 'VoiceH3@rd');
+  await t.typeText(username, '');
+  await t.typeText(password, '');
   await t.click(submit);
 
   windowLocation = await getWindowLocation();
   await t.expect(windowLocation).contains('http://localhost:3000');
   userText = await loginComponent.find('p').innerText;
   await t.expect(userText).eql('Noah Abe');
+   */
 });
