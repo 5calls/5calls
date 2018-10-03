@@ -3,35 +3,12 @@
 exports[`snapshot should render correctly with an issue and NO group 1`] = `
 <withRouter(CallPageView)
   callState={Object {}}
-  groupState={Object {}}
   history={Object {}}
   location={Object {}}
   match={
     Object {
       "isExact": true,
       "params": Object {
-        "groupid": "",
-        "issueid": "100",
-      },
-      "path": "",
-      "url": "",
-    }
-  }
-  remoteState={Object {}}
-/>
-`;
-
-exports[`snapshot should render correctly with an issue and group 1`] = `
-<withRouter(CallPageView)
-  callState={Object {}}
-  groupState={Object {}}
-  history={Object {}}
-  location={Object {}}
-  match={
-    Object {
-      "isExact": true,
-      "params": Object {
-        "groupid": "craig",
         "issueid": "100",
       },
       "path": "",
