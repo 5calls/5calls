@@ -1,10 +1,12 @@
+import storage from 'redux-persist/lib/storage';
+
 import { ApplicationState } from './root';
-import { combineReducers } from 'redux';
 import { LocationState, locationStateReducer } from './location';
 import { CallState, callStateReducer } from './callState';
 import { RemoteDataState, remoteDataReducer } from './remoteData';
 import { UserStatsState, userStatsReducer } from './userStats';
 import { UserState, userStateReducer } from './userState';
+import { persistCombineReducers } from 'redux-persist';
 
 export enum OutcomeType {
   UNAVAILABLE = 'unavailable',
@@ -50,7 +52,16 @@ export const ApplicationStateKey: ApplicationStateKeyTypes = {
   userState: 'userState',
 };
 
-const rootReducer = combineReducers({
+const config = {
+  key: 'fivecalls',
+  storage,
+  whitelist: [
+    ApplicationStateKey.locationState,
+    ApplicationStateKey.userStatsState,
+  ],
+};
+
+const rootReducer = persistCombineReducers(config, {
   remoteDataState: remoteDataReducer,
   callState: callStateReducer,
   locationState: locationStateReducer,

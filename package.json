@@ -32,7 +32,7 @@
     "react-router-redux": "^5.0.0-alpha.6",
     "redux": "^3.7.2",
     "redux-logger": "^3.0.6",
-    "redux-persist": "^4.8.2",
+    "redux-persist": "^5.0.0",
     "redux-thunk": "^2.2.0",
     "string.prototype.includes": "^1.0.0",
     "wolfy87-eventemitter": "^5.2.5"
