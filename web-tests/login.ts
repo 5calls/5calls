@@ -16,7 +16,7 @@ fixture`Login`
   .page`http://localhost:3000`;
 
 // tslint:disable-next-line:no-shadowed-variable
-test('User may login with twitter', async t => {
+test.skip('User may login with twitter', async t => {
   const loginComponent = await Selector('.userHeader');
   await t.expect(loginComponent.exists).ok('The user component is missing');
   let userText = await loginComponent.find('p').innerText;

@@ -1,0 +1,10 @@
+{
+  "twitterLogin": {
+    "user": "",
+    "pass": ""
+  },
+  "facebookLogin": {
+    "user": "",
+    "pass": ""
+  }
+}
