@@ -4,7 +4,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@5calls/react-components": "0.0.13",
+    "@5calls/react-components": "0.0.14",
     "axios": "^0.18.0",
     "core-js": "^2.5.7",
     "i18next": "^8.4.3",
@@ -16,6 +16,7 @@
     "moment": "^2.22.2",
     "npm-run-all": "^4.1.3",
     "querystring": "^0.2.0",
+    "raven-js": "^3.27.0",
     "react": "^16.4.1",
     "react-dom": "^16.2.0",
     "react-ga": "^2.2.0",
@@ -33,7 +34,8 @@
     "redux-logger": "^3.0.6",
     "redux-persist": "^4.8.2",
     "redux-thunk": "^2.2.0",
-    "string.prototype.includes": "^1.0.0"
+    "string.prototype.includes": "^1.0.0",
+    "wolfy87-eventemitter": "^5.2.5"
   },
   "devDependencies": {
     "@types/axios": "^0.14.0",
@@ -42,7 +44,9 @@
     "@types/i18next": "^8.4.1",
     "@types/jest": "^19.2.3",
     "@types/jwt-decode": "^2.2.1",
+    "@types/lodash": "^4.14.116",
     "@types/node": "^7.0.22",
+    "@types/raven-js": "^3.10.0",
     "@types/react": "^16.2.0",
     "@types/react-dom": "^16.0.5",
     "@types/react-ga": "^2.1.1",

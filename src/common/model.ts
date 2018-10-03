@@ -27,7 +27,14 @@ export class Issue {
     this.linkTitle = '';
     this.slug = '';
   }
+}
 
+export function slugOrID(issue: Issue): string {
+  if (issue.slug !== '') {
+    return issue.slug;
+  }
+
+  return issue.id;
 }
 
 export interface Outcome {
@@ -220,4 +227,15 @@ export interface OutcomeButton {
   title: string;
   emoji: string;
   key: string;
+}
+
+export interface MidtermStats {
+  week1: number;
+  week2: number;
+  week3: number;
+  week4: number;
+  week5: number;
+  week6: number;
+  week7: number;
+  week8: number;
 }

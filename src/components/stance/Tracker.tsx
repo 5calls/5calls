@@ -180,14 +180,10 @@ definitelyYes.forEach((senator) => {
 });
 
 const definitelyUnknown = [
-  'AL-DougJones',
-  'IN-JoeDonnelly',
   'ND-HeidiHeitkamp',
   'WV-JoeManchin',
   'AK-LisaMurkowski',
-  'AZ-JeffFlake',
   'ME-SusanCollins',
-  'MO-ClaireMcCaskill',
 ];
 definitelyUnknown.forEach((senator) => {
   // add to hard list

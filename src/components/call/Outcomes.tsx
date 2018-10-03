@@ -2,13 +2,21 @@ import * as React from 'react';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { TranslationFunction } from 'i18next';
 import { translate } from 'react-i18next';
+
+import EventEmitter = require('wolfy87-eventemitter');
+
 import {
   submitOutcome,
 } from '../../redux/callState';
 import { store } from '../../redux/store';
-import { Issue } from '../../common/model';
+import { Issue, slugOrID } from '../../common/model';
+import { UserState } from '../../redux/userState';
 
-interface Props { readonly currentIssue: Issue; readonly currentContactId: string;
+interface Props {
+  readonly currentIssue: Issue;
+  readonly userState: UserState;
+  readonly eventEmitter: EventEmitter;
+  readonly currentContactId: string;
   readonly numberContactsLeft: number;
   readonly t: TranslationFunction;
 }
@@ -18,10 +26,6 @@ interface State { }
 class Outcomes extends React.Component<Props & RouteComponentProps<any>, State>  {
 
   dispatchOutcome(e: React.MouseEvent<HTMLButtonElement>, outcome: string) {
-    /* e.target.blur() called in Choo version
-      for details on use of currentTarget see:
-      https://github.com/DefinitelyTyped/DefinitelyTyped/pull/12239
-    */
     e.currentTarget.blur();
 
     // tslint:disable-next-line:no-any
@@ -37,12 +41,12 @@ class Outcomes extends React.Component<Props & RouteComponentProps<any>, State> 
     );
 
     // navigate to /done when finished
-    if (this.props.numberContactsLeft === 0 && this.props.history) {
+    if (this.props.numberContactsLeft <= 0 && this.props.history) {
       // it feels like this history push should be further up (maybe in onsubmitoutcome?)
       if (this.props.match.params.groupid) {
         this.props.history.push(`/team/${this.props.match.params.groupid}`);
       } else {
-        this.props.history.push(`/done/${this.props.currentIssue.id}`);
+        this.props.history.push(`/done/${slugOrID(this.props.currentIssue)}`);
       }
 
       window.scroll(1, 1);
@@ -56,18 +60,44 @@ class Outcomes extends React.Component<Props & RouteComponentProps<any>, State> 
     return true;
   }
 
+  showLogin(e: React.MouseEvent<HTMLAnchorElement>) {
+    e.preventDefault();
+
+    this.props.eventEmitter.emitEvent('showLogin');
+    window.scroll(1, 1);
+  }
+
   render() {
     if (this.props.currentIssue) {
       if (this.props.currentIssue.contactType === 'ACTION') {
-        return (
-          <div className="call__outcomes">
-            <div className="call__outcomes__items">
-              <button onClick={(e) => this.dispatchOutcome(e, 'completed')}>
-                I Did It!
-              </button>
+
+        if (this.props.userState.profile) {
+          return (
+            <div className="call__outcomes">
+              <div className="call__outcomes__items">
+                <button onClick={(e) => this.dispatchOutcome(e, 'completed')}>
+                  I Did It!
+                </button>
+              </div>
             </div>
-          </div>
-        );
+          );
+        } else {
+          return (
+            <span>
+              <section className="loading">
+                <h2><a href="#" onClick={(e) => this.showLogin(e)}>Log in</a> to participate in the challenge 📊</h2>
+                <p>Your current call total will be saved to your 5 Calls profile</p>
+              </section>
+              <div className="call__outcomes preview">
+                <div className="call__outcomes__items">
+                  <button>
+                    I Did It!
+                  </button>
+                </div>
+              </div>
+            </span>
+          );
+        }
       } else {
         return (
           <div className="call__outcomes">

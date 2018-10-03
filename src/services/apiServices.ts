@@ -1,7 +1,7 @@
 import { OutcomeData } from './../redux/callState/asyncActionCreator';
 import axios from 'axios';
 import * as querystring from 'querystring';
-import { ApiData, CountData, DonationGoal, Group, GroupIssues, VoterContact } from './../common/model';
+import { ApiData, CountData, DonationGoal, Group, GroupIssues, VoterContact, MidtermStats } from './../common/model';
 import * as Constants from '../common/constants';
 import { UserContactEvent } from '../redux/userStats';
 import { UserCallDetails } from '../redux/remoteData/asyncActionCreator';
@@ -116,6 +116,13 @@ export const postOutcomeData = (data: OutcomeData) => {
 export const getDonations = (): Promise<DonationGoal> => {
   const donationUrl = `${Constants.DONATIONS_API_URL}`;
   return axios.get(`${donationUrl}`)
+    .then(response => Promise.resolve(response.data))
+    .catch(e => Promise.reject(e));
+};
+
+export const getMidterms = (): Promise<MidtermStats> => {
+  const midtermsURL = `${Constants.MIDTERMS_API_URL}`;
+  return axios.get(`${midtermsURL}`)
     .then(response => Promise.resolve(response.data))
     .catch(e => Promise.reject(e));
 };

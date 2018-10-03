@@ -79,15 +79,15 @@ export const HomeExtras: React.StatelessComponent = () => {
       <ul>
         <li>
           {/*tslint:disable-next-line:max-line-length*/}
-          <a href="https://www.youtube.com/watch?v=rsazVtf1HP4" target="_blank"><img src="/img/video-mmoore.png" alt="Michael Moore talking about 5 Calls on MSNBC" /></a>
+          <a href="https://www.youtube.com/watch?v=rsazVtf1HP4" target="_blank"><img src="/img/video-mmoore.jpg" alt="Michael Moore talking about 5 Calls on MSNBC" /></a>
         </li>
         <li>
           {/*tslint:disable-next-line:max-line-length*/}
-          <a href="https://www.youtube.com/watch?v=N62ViRRn61I" target="_blank"><img src="/img/video-app.png" alt="How to use the 5 Calls iPhone App" /></a>
+          <a href="https://www.youtube.com/watch?v=N62ViRRn61I" target="_blank"><img src="/img/video-app.jpg" alt="How to use the 5 Calls iPhone App" /></a>
         </li>
         <li>
           {/*tslint:disable-next-line:max-line-length*/}
-          <a href="https://www.youtube.com/watch?v=wwoJqYXvh9s" target="_blank"><img src="/img/video-shower.png" alt="When do you make your 5 Calls?" /></a>
+          <a href="https://www.youtube.com/watch?v=wwoJqYXvh9s" target="_blank"><img src="/img/video-shower.jpg" alt="When do you make your 5 Calls?" /></a>
         </li>
       </ul>
       </div>

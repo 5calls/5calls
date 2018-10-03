@@ -2,13 +2,14 @@
 # yarn lockfile v1
 
 
-"@5calls/react-components@0.0.13":
-  version "0.0.13"
-  resolved "https://registry.yarnpkg.com/@5calls/react-components/-/react-components-0.0.13.tgz#a8c77fe709c4cb488193368a27a0c6e8cf0dfc11"
+"@5calls/react-components@0.0.14":
+  version "0.0.14"
+  resolved "https://registry.yarnpkg.com/@5calls/react-components/-/react-components-0.0.14.tgz#c8a08972a05066e0d3f71b197e447b3b2c53cb9f"
   dependencies:
     auth0-js "^9.6.1"
     email-validator "^2.0.4"
     jwt-decode "^2.2.0"
+    wolfy87-eventemitter "^5.2.5"
 
 "@babel/code-frame@^7.0.0-beta.35":
   version "7.0.0"
@@ -74,7 +75,7 @@
   version "2.2.1"
   resolved "https://registry.yarnpkg.com/@types/jwt-decode/-/jwt-decode-2.2.1.tgz#afdf5c527fcfccbd4009b5fd02d1e18241f2d2f2"
 
-"@types/lodash@^4.14.72":
+"@types/lodash@^4.14.116":
   version "4.14.116"
   resolved "https://registry.yarnpkg.com/@types/lodash/-/lodash-4.14.116.tgz#5ccf215653e3e8c786a58390751033a9adca0eb9"
 
@@ -91,6 +92,12 @@
   resolved "https://registry.yarnpkg.com/@types/prop-types/-/prop-types-15.5.5.tgz#17038dd322c2325f5da650a94d5f9974943625e3"
   dependencies:
     "@types/react" "*"
+
+"@types/raven-js@^3.10.0":
+  version "3.10.0"
+  resolved "https://registry.yarnpkg.com/@types/raven-js/-/raven-js-3.10.0.tgz#d0832162ebea7671eafff08a324b56adde5bf9c3"
+  dependencies:
+    raven-js "*"
 
 "@types/react-dom@^16.0.5":
   version "16.0.7"
@@ -6581,6 +6588,10 @@ range-parser@^1.0.3, range-parser@~1.2.0:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/range-parser/-/range-parser-1.2.0.tgz#f49be6b487894ddc40dcc94a322f611092e00d5e"
 
+raven-js@*, raven-js@^3.27.0:
+  version "3.27.0"
+  resolved "https://registry.yarnpkg.com/raven-js/-/raven-js-3.27.0.tgz#9f47c03e17933ce756e189f3669d49c441c1ba6e"
+
 raw-body@2.3.2:
   version "2.3.2"
   resolved "https://registry.yarnpkg.com/raw-body/-/raw-body-2.3.2.tgz#bcd60c77d3eb93cde0050295c3f379389bc88f89"
@@ -8972,6 +8983,10 @@ window-size@0.1.0:
 window-size@^0.2.0:
   version "0.2.0"
   resolved "https://registry.yarnpkg.com/window-size/-/window-size-0.2.0.tgz#b4315bb4214a3d7058ebeee892e13fa24d98b075"
+
+wolfy87-eventemitter@^5.2.5:
+  version "5.2.5"
+  resolved "https://registry.yarnpkg.com/wolfy87-eventemitter/-/wolfy87-eventemitter-5.2.5.tgz#e7af2adbb84e481c65edeb2a2e01032c8ff1b88f"
 
 wordwrap@0.0.2:
   version "0.0.2"

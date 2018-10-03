@@ -10,6 +10,7 @@ export const COUNTS_API_URL = `${API_URL}/counts`;
 export const STATS_API_URL = `${API_URL}/users/stats`;
 export const PROFILE_API_URL = `${API_URL}/users/profile`;
 export const DONATIONS_API_URL = `${API_URL}/donations`;
+export const MIDTERMS_API_URL = `https://api.5calls.org/v1/midterms`;
 export const GROUP_API_URL = `${API_URL}/groups`;
 export const CONTACTS_API_URL = `${API_URL}/contacts`;
 export const REMINDER_API_URL = `${API_URL}/remind`;

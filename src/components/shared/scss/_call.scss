@@ -130,6 +130,18 @@
     margin: auto auto 24px auto;
     padding: 0;
 
+    &.preview {
+      opacity: 0.4;
+
+      button {
+        &:hover {
+          color: $blue;
+          background-color: $blue-light;
+          cursor: inherit;
+        }  
+      }
+    }
+
     &__items {
       display: flex;
       flex-wrap: wrap;

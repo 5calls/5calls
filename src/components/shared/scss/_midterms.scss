@@ -1,0 +1,97 @@
+.midterms-join {
+  text-align: center;
+
+  img {
+    width: 400px;
+    margin: 0 auto;  
+  }
+}
+
+.midterms {
+  .subscribe {
+    margin: 20px 0;
+    text-align: center;
+
+    label {
+      font-size: 22px;
+    }
+
+    input[type=text] {
+      margin: 0 10px;
+      width: 200px;
+      text-align: center;
+    }
+  }
+}
+
+.midterms-list {
+  width: 80%;
+  margin: 0 auto;
+  padding: 0;
+  list-style: none;
+  background-color: $gray-xlight;
+  border-right: 1px solid $gray-lesslight;
+  border-left: 1px solid $gray-lesslight;
+
+  .item {
+    display: block;
+    position: relative;
+    border-top: 1px solid $gray-lesslight;
+    padding: 3px 12px 3px 48px;
+    margin: 0;
+    color: $blue;
+
+    &.last {
+      border-bottom: 1px solid $gray-lesslight;
+    }
+
+    &.preview {
+      opacity: 0.4;
+    }
+
+    &__status {
+      position: absolute;;
+      top: 10px;
+      left: 10px;
+      border-radius: 50%;
+      border: 3px solid $gray-lesslight;
+      width: 36px;
+      height: 36px;
+      font-size: 21px;
+      line-height: 36px;
+      text-align: center;
+      vertical-align: middle;
+      margin: 0;
+      padding: 0;
+      color: $white;
+
+      &.is-complete {
+        color: transparent;
+        border: 3px solid $green;
+        background-color: $green;
+        background-image: url(/img/5calls-icon-checkmark.png);
+        background-size: 26px auto;
+        background-repeat: no-repeat;
+        background-position: center;
+      }
+    }
+
+    &__title {
+      display: block;
+      font-size: $font-large;
+      font-weight: bold;
+      margin: 4px 0 0 10px;
+
+      span {
+        font-size: $font-normal;
+        font-weight: normal;
+      }
+    }
+
+    &__subtitle {
+      display: block;
+      // font-size: $font-large;
+      margin: 0 0 4px 10px;
+    }
+  }
+}

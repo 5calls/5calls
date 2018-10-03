@@ -3,6 +3,7 @@ import { Issue } from './../../common/model';
 import { RemoteDataState } from '../../redux/remoteData';
 
 import { find } from 'lodash';
+import { store } from '../../redux/store';
 
 /**
  * Formats the location for the back end as
@@ -83,4 +84,14 @@ export const getIssue = (remoteDataState: RemoteDataState, issueId: string): Iss
   }
 
   return undefined;
+};
+
+export const isIssueComplete = (issueID: string): boolean => {
+  let state = store.getState();
+
+  if (state.callState && state.callState.completedIssueIds) {
+    return find(state.callState.completedIssueIds, (issueId: string) => issueID === issueId) !== undefined;
+  }
+
+  return false;
 };
