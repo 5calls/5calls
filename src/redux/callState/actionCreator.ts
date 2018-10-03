@@ -1,7 +1,6 @@
 import { CurrentIssueAction,
   CompleteIssueAction, NextContact,
-  CallStateActionType, ClearContactIndexesAction, JoinGroupAction } from './index';
-import { Group } from '../../common/model';
+  CallStateActionType, ClearContactIndexesAction } from './index';
 
 /* REDUX DATA FLOW 3: At this point in the data flow, the IssueListItem View Component was clicked, the method was
     passed up through the Redux Container which called this actionCreator.
@@ -17,13 +16,6 @@ export const selectIssueActionCreator = (issueId: string): CurrentIssueAction =>
   return {
     type: CallStateActionType.CURRENT_ISSUE_SELECTED,
     payload: issueId
-  };
-};
-
-export const joinGroupActionCreator = (group: Group): JoinGroupAction => {
-  return {
-    type: CallStateActionType.JOIN_GROUP,
-    payload: group
   };
 };
 

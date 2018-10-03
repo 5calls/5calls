@@ -1,7 +1,0 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
-
-exports[`Test Group Page loading 1`] = `
-<ContextConsumer>
-  <Component />
-</ContextConsumer>
-`;

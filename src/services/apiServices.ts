@@ -1,23 +1,13 @@
 import { OutcomeData } from './../redux/callState/asyncActionCreator';
 import axios from 'axios';
 import * as querystring from 'querystring';
-import { ApiData, CountData, DonationGoal, Group, GroupIssues, VoterContact, MidtermStats } from './../common/model';
+import { ApiData, CountData, MidtermStats } from './../common/model';
 import * as Constants from '../common/constants';
 import { UserContactEvent } from '../redux/userStats';
 import { UserCallDetails } from '../redux/remoteData/asyncActionCreator';
 
 export const getAllIssues = (address: string): Promise<ApiData> => {
   return axios.get(`${Constants.ISSUES_API_URL}${encodeURIComponent(address)}`)
-    .then(response => Promise.resolve(response.data))
-    .catch(e => Promise.reject(e));
-};
-
-export const getGroupIssues = (groupid: string, address: string): Promise<GroupIssues> => {
-  return axios.get(
-    `${Constants.GROUP_API_URL}/${groupid}/issues?address=${encodeURIComponent(address)}`,
-    {
-      headers: {'Cache-Control': 'max-age=0'}
-    })
     .then(response => Promise.resolve(response.data))
     .catch(e => Promise.reject(e));
 };
@@ -97,7 +87,6 @@ export const postOutcomeData = (data: OutcomeData) => {
     result: data.outcome,
     contactid: data.contactId,
     issueid: data.issueId,
-    groupid: data.groupId,
     via: data.via,
     userid: data.userId
   });
@@ -113,32 +102,9 @@ export const postOutcomeData = (data: OutcomeData) => {
     }).catch(e => Promise.reject(e));
 };
 
-export const getDonations = (): Promise<DonationGoal> => {
-  const donationUrl = `${Constants.DONATIONS_API_URL}`;
-  return axios.get(`${donationUrl}`)
-    .then(response => Promise.resolve(response.data))
-    .catch(e => Promise.reject(e));
-};
-
 export const getMidterms = (): Promise<MidtermStats> => {
   const midtermsURL = `${Constants.MIDTERMS_API_URL}`;
   return axios.get(`${midtermsURL}`)
-    .then(response => Promise.resolve(response.data))
-    .catch(e => Promise.reject(e));
-};
-
-export const getGroup = (groupId: string): Promise<Group> => {
-  const groupUrl = `${Constants.GROUP_API_URL}/${groupId}`;
-  // tslint:disable-next-line:no-console
-  console.log('in getGroup');
-  return axios.get(groupUrl)
-    .then(response => Promise.resolve(response.data))
-    .catch(e => Promise.reject(e));
-};
-
-export const getNextContact = (issueId: string): Promise<VoterContact[]> => {
-  const contactsUrl = `${Constants.CONTACTS_API_URL}?issueID=${issueId}`;
-  return axios.get(contactsUrl)
     .then(response => Promise.resolve(response.data))
     .catch(e => Promise.reject(e));
 };

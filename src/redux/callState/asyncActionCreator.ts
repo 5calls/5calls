@@ -13,7 +13,6 @@ export interface OutcomeData {
   numberContactsLeft: number;
   location?: string; // added in submitOutcome()
   contactId: string;
-  groupId?: string;
   via?: string; // added in submitOutcome()
   userId?: string; // added in submitOutcome()
 }
@@ -52,11 +51,6 @@ export function submitOutcome(data: OutcomeData) {
       // A value of test indicates that it did not come from the production environment
       const viaParameter = window.location.host === '5calls.org' ? 'web' : 'test';
       data.via = viaParameter;
-
-      // we've gone back and forth on how this data is set, but don't overwrite it
-      if (data.groupId === undefined) {
-        data.groupId = state.callState.group ? state.callState.group.groupID : '';
-      }
 
       // if we have a userid, the call is counted server side
       const userContactData = {

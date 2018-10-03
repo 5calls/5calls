@@ -11,7 +11,7 @@ import { newLocationLookup, clearAddress } from '../redux/location';
 import { CallState } from '../redux/callState/reducer';
 import { selectIssueActionCreator } from '../redux/callState';
 import { ApplicationState } from '../redux/root';
-import { Issue, CacheableGroup } from '../common/model';
+import { Issue } from '../common/model';
 
 import { SidebarHeader, Sidebar, Footer, Header } from './layout';
 
@@ -62,7 +62,6 @@ const NotFoundPage: React.StatelessComponent<AllProps> = (props: AllProps) => {
 interface OwnProps {
   readonly issueId?: string;
   readonly issues?: Issue[];
-  readonly currentGroup?: CacheableGroup;
 }
 
 interface Props {

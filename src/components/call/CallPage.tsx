@@ -13,8 +13,7 @@ import { getIssue } from '../shared/utils';
 import i18n from '../../services/i18n';
 import { CallTranslatable, FetchCall } from './index';
 import { Layout } from '../layout';
-import { Issue, Group } from '../../common/model';
-import { GroupDisclaimer } from '../groups/GroupPage';
+import { Issue } from '../../common/model';
 
 import {
   CallState,
@@ -26,13 +25,10 @@ import {
   RemoteDataState,
 } from '../../redux/remoteData';
 import { store } from '../../redux/store';
-import { cacheGroup } from '../../redux/cache';
-import { GroupState } from '../../redux/group';
 
 import {
   remoteStateContext,
   callStateContext,
-  groupStateContext,
 } from '../../contexts';
 
 interface RouteProps {
@@ -44,13 +40,11 @@ interface RouteProps {
 type Props = RouteComponentProps<RouteProps> & {
   remoteState: RemoteDataState;
   callState: CallState;
-  groupState: GroupState;
 };
 
 export interface State {
   currentIssue?: Issue;
   currentIssueId: string;
-  currentGroup: Group | undefined;
   hasBeenCached: boolean;
 }
 
@@ -63,12 +57,10 @@ class CallPageView extends React.Component<Props, State> {
 
   setStateFromProps(props: Props) {
     let currentIssue = this.getCurrentIssue(props.remoteState);
-    let currentGroup = this.getCurrentGroup(props.groupState);
 
     return {
       currentIssue: currentIssue,
       currentIssueId: currentIssue ? currentIssue.id : '',
-      currentGroup: currentGroup,
       hasBeenCached: false,
     };
   }
@@ -78,14 +70,12 @@ class CallPageView extends React.Component<Props, State> {
     if (!this.state.currentIssueId && this.state.currentIssue) {
       selectIssueActionCreator(this.state.currentIssue.id);
     }
-    this.determineCachedState(this.props.groupState);
   }
 
   componentDidUpdate(prevProps: Props) {
     if (this.props.remoteState.issues) {
       if (!isEqual(this.props, prevProps)) {
         const currentIssue = this.getCurrentIssue(this.props.remoteState);
-        this.determineCachedState(this.props.groupState);
         this.setState({
           ...this.state,
           currentIssue: currentIssue,
@@ -114,37 +104,7 @@ class CallPageView extends React.Component<Props, State> {
     return currentIssue;
   }
 
-  getCurrentGroup = (groupState: GroupState) => {
-    return groupState.currentGroup ? groupState.currentGroup : undefined;
-  }
-
-  determineCachedState = (groupState: GroupState) => {
-    let hasBeenCached = false;
-
-    if (this.state.currentGroup && groupState.currentGroup) {
-      hasBeenCached = this.state.currentGroup.groupID === groupState.currentGroup.groupID;
-    }
-    this.setState({ hasBeenCached: hasBeenCached });
-
-    if (!hasBeenCached) {
-      queueUntilRehydration(() => {
-        if (groupState.currentGroup) {
-          let group = groupState.currentGroup as Group;
-          // tslint:disable-next-line:no-any
-          store.dispatch<any>(cacheGroup(group.groupID));
-        }
-      });
-    }
-  }
-
   getView = () => {
-  //
-    // get the current group and groupImage
-    let groupImage = '/img/5calls-stars.png';
-    if (this.state.currentGroup && this.state.currentGroup.photoURL) {
-      groupImage = this.state.currentGroup.photoURL;
-    }
-
     if (!this.props.remoteState.issues) {
       queueUntilRehydration(() => {
         getIssuesIfNeeded();
@@ -152,19 +112,10 @@ class CallPageView extends React.Component<Props, State> {
     }
 
     let extraComponent;
-    let showGroup = false;
-    if (this.state.currentGroup) {
-      extraComponent = <GroupDisclaimer/>;
-      showGroup = true;
-    }
 
     let pageTitle = '5 Calls: Make your voice heard';
     if (this.state.currentIssue) {
-      if (this.state.currentGroup) {
-        pageTitle = `${this.state.currentIssue.name} - ${this.state.currentGroup.name}: 5 Calls`;
-      } else {
-        pageTitle = `${this.state.currentIssue.name}: 5 Calls`;
-      }
+      pageTitle = `${this.state.currentIssue.name}: 5 Calls`;
     }
 
     let canonicalURL: string | undefined = undefined;
@@ -174,11 +125,7 @@ class CallPageView extends React.Component<Props, State> {
         slug = this.state.currentIssue.id;
       }
 
-      if (this.props.groupState.currentGroup) {
-        canonicalURL = Constants.APP_URL + '/team/' + this.props.groupState.currentGroup.groupID + '/' + slug;
-      } else {
-        canonicalURL = Constants.APP_URL + '/issues/' + slug;
-      }
+      canonicalURL = Constants.APP_URL + '/issues/' + slug;
     }
 
     if (this.state.currentIssue &&
@@ -187,65 +134,34 @@ class CallPageView extends React.Component<Props, State> {
         return (
         <Layout
           extraComponent={extraComponent}
-          groupPage={showGroup}
         >
           <Helmet>
             <title>{pageTitle}</title>
             {canonicalURL && <link rel="canonical" href={canonicalURL} />}
           </Helmet>
-          { this.state.currentGroup ?
-          <div className="page__group">
-            <div className="page__header">
-              <div className="page__header__image"><img alt={this.state.currentGroup.name} src={groupImage}/></div>
-              <h1 className="page__title">{this.state.currentGroup.name}</h1>
-              <h2 className="page__subtitle">{this.state.currentGroup.subtitle}&nbsp;</h2>
-            </div>
-            <FetchCall
-              issue={this.state.currentIssue}
-              currentGroup={this.state.currentGroup}
-            />
-          </div>
-          :
           <FetchCall
             issue={this.state.currentIssue}
-            currentGroup={this.state.currentGroup}
           />
-          }
         </Layout>
       );
     } else if (this.state.currentIssue) {
       return (
         <Layout
           extraComponent={extraComponent}
-          groupPage={showGroup}
         >
           <Helmet>
             <title>{pageTitle}</title>
             {canonicalURL && <link rel="canonical" href={canonicalURL} />}
           </Helmet>
-          { this.state.currentGroup ?
-          <div className="page__group">
-            <div className="page__header">
-              <div className="page__header__image"><img alt={this.state.currentGroup.name} src={groupImage}/></div>
-              <h1 className="page__title">{this.state.currentGroup.name}</h1>
-              <h2 className="page__subtitle">{this.state.currentGroup.subtitle}&nbsp;</h2>
-            </div>
-            <CallTranslatable
-              issue={this.state.currentIssue}
-              callState={this.props.callState}
-            />
-          </div>
-          :
           <CallTranslatable
             issue={this.state.currentIssue}
             callState={this.props.callState}
           />
-          }
         </Layout>
       );
     } else {
       return (
-        <Layout groupPage={showGroup}>
+        <Layout>
           <h1 className="call__title">{i18n.t('noCalls.title')}</h1>
           <p>{i18n.t('noCalls.reason')}</p>
           <p>{i18n.t('noCalls.nextStep')}</p>
@@ -272,16 +188,11 @@ export default class CallPage extends React.Component {
       { remoteState =>
         <callStateContext.Consumer>
         { callState =>
-          <groupStateContext.Consumer>
-          { groupState =>
-            <CallPageWithRouter
-              remoteState={remoteState}
-              callState={callState}
-              groupState={groupState}
-            />
-          }
-          </groupStateContext.Consumer>
-          }
+          <CallPageWithRouter
+            remoteState={remoteState}
+            callState={callState}
+          />
+        }
         </callStateContext.Consumer>
       }
       </remoteStateContext.Consumer>

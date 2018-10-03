@@ -1,5 +1,3 @@
-import { GroupState } from '../redux/group/reducer';
-
 export class Issue {
   id: string;
   name: string;
@@ -84,68 +82,6 @@ export interface UserStat {
   contactedCount: number;
   voiceMailCount: number;
   unavailableCount: number;
-}
-
-export class Group {
-  // id: number;
-  groupID: string;
-  name: string;
-  subtitle: string;
-  description: string;
-  totalCalls: number;
-  photoURL: string;
-  customCalls: boolean;
-  subscribed: boolean;
-
-  constructor(groupId: string) {
-    this.groupID = groupId;
-    this.name = '';
-    this.subtitle = '';
-    this.description = '';
-    this.totalCalls = 0;
-    this.photoURL = '';
-    this.customCalls = false;
-    this.subscribed = false;
-  }
-
-  static from(groupState: GroupState) {
-    if (groupState.currentGroup) {
-      return groupState.currentGroup;
-    }
-
-    return getDefaultGroup('');
-  }
-}
-
-/**
- *
- * @param {string} groupId - the group id
- * @returns {Group} - a group object with the id set as the
- *  argument and other properties set to an empty string
- *  or 0 (totalCalls).
- */
-export const getDefaultGroup = (groupId: string): Group => {
-  return {
-    groupID: groupId,
-    name: '',
-    subtitle: '',
-    description: '',
-    totalCalls: 0,
-    photoURL: '',
-    customCalls: false,
-    subscribed: false,
-  };
-};
-
-/**
- * Group data to be cached, which includes a
- * timestamp to determine if the cache needs
- * to be refreshed.
- *
- */
-export interface CacheableGroup {
-  group: Group;
-  timestamp: number;
 }
 
 /**

@@ -24,7 +24,6 @@ import { DonePage } from './components/done';
 import { MoreIssuesPage } from './components/issues';
 import { CallPage } from './components/call';
 import { MyImpactPage } from './components/myimpact';
-import { GroupPage } from './components/groups';
 import './components/bundle.css';
 import { Auth0CallbackContainer } from './components/shared';
 import ProfilePageContainer from './components/profile/ProfilePageContainer';
@@ -73,8 +72,6 @@ ReactDOM.render(
             <Route path="/impact" exact={true} component={MyImpactPage} />
             <Route path="/more" exact={true} component={MoreIssuesPage} />
             <Route path="/midterms" exact={true} component={MidtermsPage} />
-            <Route path="/team/:groupid" exact={true} component={GroupPage} />
-            <Route path="/team/:groupid/:issueid" exact={true} component={CallPage} />
             <Route path="/faq" exact={true} component={FaqPage} />
             <Route path="/privacy" exact={true} component={PrivacyPage} />
             <Route path="/about" exact={true} component={AboutPage} />

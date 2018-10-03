@@ -1,14 +1,12 @@
 import { Dispatch } from 'redux';
 import {
   ApiData,
-  GroupIssues,
   IpInfoData,
   LocationFetchType,
   CountData
 } from './../../common/model';
 import {
   getAllIssues,
-  getGroupIssues,
   getCountData,
   postBackfillOutcomes,
   getUserCallDetails
@@ -21,7 +19,7 @@ import {
   setUiState
 } from '../location/index';
 import { getLocationByIP, getBrowserGeolocation, GEOLOCATION_TIMEOUT } from '../../services/geolocationServices';
-import { issuesActionCreator, groupIssuesActionCreator, callCountActionCreator } from './index';
+import { issuesActionCreator, callCountActionCreator } from './index';
 import { clearContactIndexes } from '../callState/';
 import { ApplicationState } from '../root';
 import { LocationUiState } from '../../common/model';
@@ -61,24 +59,6 @@ export const getIssuesIfNeeded = () => {
   };
 };
 
-export const getGroupIssuesIfNeeded = (groupid: string) => {
-  return (dispatch: Dispatch<ApplicationState>,
-          getState: () => ApplicationState) => {
-    const state: ApplicationState = getState();
-    // Only make the api call if it hasn't already been made
-    // This method is primarily for when a user has navigated
-    // directly to a route with an issue id
-    if (!state.remoteDataState.groupIssues || state.remoteDataState.groupIssues.length === 0 ||
-        state.remoteDataState.currentGroupId !== groupid) {
-      const loc = state.locationState.address;
-      if (loc) {
-        // tslint:disable-next-line:no-any
-        dispatch<any>(fetchGroupIssues(groupid, loc));
-      }
-    }
-  };
-};
-
 export const fetchAllIssues = (address: string = '') => {
   return (dispatch: Dispatch<ApplicationState>,
           getState: () => ApplicationState) => {
@@ -104,34 +84,6 @@ export const fetchAllIssues = (address: string = '') => {
         // tslint:disable-next-line:no-console
         console.error(`getIssue error: ${error.message}`, error);
         // can't return promises from this dispatch bullshit
-      });
-  };
-};
-
-export const fetchGroupIssues = (groupid: string, address: string = '') => {
-  return (dispatch: Dispatch<ApplicationState>,
-          getState: () => ApplicationState) => {
-    return getGroupIssues(groupid, address)
-      .then((response: GroupIssues) => {
-        if (response.invalidAddress) {
-          dispatch(setUiState(LocationUiState.LOCATION_ERROR));
-          dispatch(setInvalidAddress(response.invalidAddress));
-        } else {
-          const normalizedAddress = response.normalizedLocation as string;
-          dispatch(setCachedCity(normalizedAddress));
-          dispatch(setLocation(address));
-          if (!address) {
-            dispatch(setUiState(LocationUiState.LOCATION_ERROR));
-          }
-          dispatch(setSplitDistrict(response.splitDistrict));
-          dispatch(setInvalidAddress(false));
-          dispatch(setLocationFetchType(LocationFetchType.CACHED_ADDRESS));
-          dispatch(groupIssuesActionCreator(response.issues));
-        }
-      }).catch((error) => {
-        // dispatch(apiErrorMessageActionCreator(error.message));
-        // tslint:disable-next-line:no-console
-        console.error(`getIssue error: ${error.message}`, error);
       });
   };
 };

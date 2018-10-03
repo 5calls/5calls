@@ -3,19 +3,17 @@ import * as React from 'react';
 import i18n from '../../services/i18n';
 import * as ReactMarkdown from 'react-markdown';
 
-import { Issue, VoterContact, Group } from '../../common/model';
+import { Issue, VoterContact } from '../../common/model';
 import { CallHeaderTranslatable, SupportOutcomes, ACAOutcomes } from './index';
 import {
   submitOutcome,
 } from '../../redux/callState';
-import { getNextContact } from '../../services/apiServices';
 import { queueUntilRehydration } from '../../redux/rehydrationUtil';
 import { locationStateContext } from '../../contexts';
 
 // This defines the props that we must pass into this component.
 export interface Props {
   issue: Issue;
-  currentGroup?: Group;
 }
 
 export interface State {
@@ -44,16 +42,16 @@ export default class FetchCall extends React.Component<Props, State> {
   }
 
   fillContact() {
-    getNextContact(this.props.issue.id).then((contacts: VoterContact[]) => {
-      let contact: VoterContact | undefined = undefined;
-      if (contacts.length === 1) {
-        contact = contacts[0];
-      }
-      this.setState({
-        currentContact: contact,
-        checkedForContact: true
-      });
-    });
+    // getNextContact(this.props.issue.id).then((contacts: VoterContact[]) => {
+    //   let contact: VoterContact | undefined = undefined;
+    //   if (contacts.length === 1) {
+    //     contact = contacts[0];
+    //   }
+    //   this.setState({
+    //     currentContact: contact,
+    //     checkedForContact: true
+    //   });
+    // });
   }
 
   componentWillReceiveProps(newProps: Props) {

@@ -1,7 +1,7 @@
-export { IssuesAction, GroupIssuesAction, RemoteDataAction, RemoteDataActionType,
+export { IssuesAction, RemoteDataAction, RemoteDataActionType,
   CallCountAction, ApiErrorAction, DonationsAction } from './action';
-export { issuesActionCreator, groupIssuesActionCreator, callCountActionCreator,
+export { issuesActionCreator, callCountActionCreator,
   apiErrorMessageActionCreator, donationsActionCreator } from './actionCreator';
 export { RemoteDataState, remoteDataReducer } from './reducer';
-export { startup, fetchAllIssues, getIssuesIfNeeded, getGroupIssuesIfNeeded,
+export { startup, fetchAllIssues, getIssuesIfNeeded,
    fetchCallCount, fetchLocationByIP, fetchBrowserGeolocation } from './asyncActionCreator';

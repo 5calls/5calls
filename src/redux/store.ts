@@ -44,7 +44,6 @@ export default (initialState) => {
     ApplicationStateKey.userStatsState,
     ApplicationStateKey.userState,
     ApplicationStateKey.callState,
-    ApplicationStateKey.appCache
   ];
   persistor = persistStore(
     store,

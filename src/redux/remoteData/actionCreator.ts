@@ -1,19 +1,12 @@
 import { DonationsAction } from './action';
 import { Donations } from './../../common/model';
 import { NewLocationLookupAction, LocationActionType } from './../location/index';
-import { CallCountAction, ApiErrorAction, IssuesAction, GroupIssuesAction, RemoteDataActionType } from './index';
+import { CallCountAction, ApiErrorAction, IssuesAction, RemoteDataActionType } from './index';
 import { Issue } from '../../common/model';
 
 export const issuesActionCreator = (issues: Issue[]): IssuesAction => {
   return {
     type: RemoteDataActionType.GET_ISSUES,
-    payload: issues
-  };
-};
-
-export const groupIssuesActionCreator = (issues: Issue[]): GroupIssuesAction => {
-  return {
-    type: RemoteDataActionType.GET_GROUP_ISSUES,
     payload: issues
   };
 };

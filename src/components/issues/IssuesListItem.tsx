@@ -1,13 +1,12 @@
 import * as React from 'react';
 import { Link } from 'react-router-dom';
-import { Issue, Group } from '../../common/model';
+import { Issue, slugOrID } from '../../common/model';
 import { selectIssueActionCreator } from '../../redux/callState';
 
 interface Props {
   readonly issue: Issue;
   readonly isIssueComplete: boolean;
   readonly isIssueActive: boolean;
-  readonly currentGroup?: Group;
 }
 
 interface State { }
@@ -16,12 +15,8 @@ export class IssuesListItem extends React.Component<Props, State> {
   render() {
     const isCompleted = this.props.isIssueComplete ? 'is-complete' : '';
     const isActive = this.props.isIssueActive ? 'is-active' : '';
+    const issueLink = `/issue/${slugOrID(this.props.issue)}`;
 
-    const issueID = this.props.issue.slug ? this.props.issue.slug : this.props.issue.id;
-
-    // need to provide alternative links for on group page
-    const issueLink = this.props.currentGroup ?
-      `/team/${this.props.currentGroup.groupID}/${issueID}` : `/issue/${issueID}`;
     return (
       <li>
         <Link

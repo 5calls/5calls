@@ -1,6 +1,5 @@
 import { Reducer } from 'redux';
 import { CallStateAction, CallStateActionType } from './index';
-import { Group } from '../../common/model';
 
 /*
   REDUX DATA FLOW 4: When the selectIssueActionCreator has been dispatched, it returns the
@@ -24,7 +23,6 @@ export interface CallState {
   // key is the issueId, value is the index of the last contact visited
   contactIndexes: {[key: string]: number};
   completedIssueIds: string[];
-  group: Group | undefined;
 }
 
 /*
@@ -91,9 +89,6 @@ export const callStateReducer: Reducer<CallState> = (
       return { ...state, contactIndexes: newIndexes };
     case CallStateActionType.CLEAR_CONTACT_INDEXES:
       return { ...state, contactIndexes: {}};
-    case CallStateActionType.JOIN_GROUP:
-      const groupPayload = action.payload as Group;
-      return { ...state, group: groupPayload };
     default:
       return state;
   }
