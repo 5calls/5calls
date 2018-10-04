@@ -246,54 +246,37 @@ export const getProfileInfo = async (): Promise<UserProfile> => {
 };
 
 export const startup = () => {
-  return (dispatch: Dispatch<ApplicationState>,
-          getState: () => ApplicationState) => {
-    const state = getState();
+  const state = store.getState();
 
-    dispatch(setUiState(LocationUiState.FETCHING_LOCATION));
-    // clear contact indexes loaded from local storage
-    dispatch(clearContactIndexes());
+  store.dispatch(setUiState(LocationUiState.FETCHING_LOCATION));
+  // clear contact indexes loaded from local storage
+  store.dispatch(clearContactIndexes());
 
-    // check expired login and handle or logout
-    const auth = new LoginService(Auth0Config);
-    if (state.userState.profile && state.userState.idToken) {
-      auth.checkAndRenewSession(state.userState.profile, state.userState.idToken).then((authResponse) => {
-        // Set the updated profile ourselves - auth is a component that doesn't know about redux
-        dispatch(setAuthTokenActionCreator(authResponse.authToken));
-        dispatch(setProfileActionCreator(authResponse.userProfile));
-      }).catch((error) => {
-        // clear the session
-        dispatch(clearProfileActionCreator());
-      });
-    }
+  // check expired login and handle or logout
+  const auth = new LoginService(Auth0Config);
+  if (state.userState.profile && state.userState.idToken) {
+    auth.checkAndRenewSession(state.userState.profile, state.userState.idToken).then((authResponse) => {
+      // Set the updated profile ourselves - auth is a component that doesn't know about redux
+      store.dispatch(setAuthTokenActionCreator(authResponse.authToken));
+      store.dispatch(setProfileActionCreator(authResponse.userProfile));
+    }).catch((error) => {
+      // clear the session
+      store.dispatch(clearProfileActionCreator());
+    });
+  }
 
-    // if a location is passed as a query, override or set the location address manually
-    // this will remove hashes, so... don't use them? Or fix this.
-    let addressQuery = 'forceAddress';
-    let query = window.location.search.substring(1);
-    let vars = query.split('&');
-    for (let i = 0; i < vars.length; i++) {
-        let pair = vars[i].split('=');
-        if (decodeURIComponent(pair[0]) === addressQuery) {
-          dispatch(setLocation(pair[1]));
-          dispatch(setCachedCity(''));
-        }
-    }
-    window.history.replaceState(null, '', window.location.pathname);
+  const loc = state.locationState.address;
 
-    const loc = state.locationState.address;
-
-    if (loc) {
-      // tslint:disable-next-line:no-any
-      dispatch<any>(fetchAllIssues(loc))
-      .then(() => {
-        setLocationFetchType(LocationFetchType.CACHED_ADDRESS);
-      });
-    } else {
-      // tslint:disable-next-line:no-any
-      dispatch<any>(fetchBrowserGeolocation());
-    }
+  if (loc) {
     // tslint:disable-next-line:no-any
-    dispatch<any>(fetchCallCount());
-  };
+    store.dispatch<any>(fetchAllIssues(loc))
+    .then(() => {
+      setLocationFetchType(LocationFetchType.CACHED_ADDRESS);
+    });
+  } else {
+    // tslint:disable-next-line:no-any
+    store.dispatch<any>(fetchBrowserGeolocation());
+  }
+  // tslint:disable-next-line:no-any
+  store.dispatch<any>(fetchCallCount());
 };

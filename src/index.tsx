@@ -27,6 +27,7 @@ import { Auth0CallbackContainer } from './components/shared';
 import ProfilePageContainer from './components/profile/ProfilePageContainer';
 import AppProvider from './components/AppProvider';
 import MidtermsPage from './components/MidtermsPage';
+import { startup } from './redux/remoteData';
 
 ReactGA.initialize('UA-90915119-1');
 const trackPageView = location => {
@@ -49,7 +50,7 @@ ReactDOM.render(
   <I18nextProvider i18n={i18n}>
     <Provider store={store}>
       <AppProvider store={store}>
-        <PersistGate persistor={persistor}>
+        <PersistGate persistor={persistor} onBeforeLift={() => startup()}>
             <Router history={history}>
               <Switch>
                 <Route path="/" exact={true} component={HomePage} />
