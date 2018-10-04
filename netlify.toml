@@ -3,7 +3,7 @@ ID = "5calls"
 
 [[redirects]]
   from = "/issues/*"
-  to = "http://138.68.25.82/issues/:splat"
+  to = "https://api.5calls.org/v1/issues/:splat"
 
 [[redirects]]
   from = "/report"
