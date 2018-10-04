@@ -7,7 +7,6 @@ import Pluralize from 'react-pluralize';
 import { CallCount } from '../shared';
 import { UserStatsState } from '../../redux/userStats';
 import { RemoteUserStats, getUserStats } from '../../services/apiServices';
-import { queueUntilRehydration } from '../../redux/rehydrationUtil';
 import { UserState } from '../../redux/userState';
 import { remoteStateContext } from '../../contexts';
 
@@ -34,18 +33,16 @@ export class MyImpact extends React.Component<Props, State> {
   }
 
   componentDidMount() {
-    queueUntilRehydration(() => {
-      if (this.props.currentUser && this.props.currentUser.idToken && !this.state.fetchedStats) {
-        this.setState({fetchedStats: true});
+    if (this.props.currentUser && this.props.currentUser.idToken && !this.state.fetchedStats) {
+      this.setState({fetchedStats: true});
 
-        getUserStats(this.props.currentUser.idToken).then((userStats) => {
-          this.setState({remoteUserStats: userStats});
-        }).catch((error) => {
-          // tslint:disable-next-line:no-console
-          console.error('error getting user stats', error);
-        });
-      }
-    });
+      getUserStats(this.props.currentUser.idToken).then((userStats) => {
+        this.setState({remoteUserStats: userStats});
+      }).catch((error) => {
+        // tslint:disable-next-line:no-console
+        console.error('error getting user stats', error);
+      });
+    }
   }
 
   render() {

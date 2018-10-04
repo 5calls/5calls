@@ -1,4 +1,5 @@
 import storage from 'redux-persist/lib/storage';
+import getStoredState from 'redux-persist/lib/integration/getStoredStateMigrateV4';
 
 import { ApplicationState } from './root';
 import { LocationState, locationStateReducer } from './location';
@@ -52,13 +53,26 @@ export const ApplicationStateKey: ApplicationStateKeyTypes = {
   userState: 'userState',
 };
 
+const v4config = {
+  whitelist: [
+    ApplicationStateKey.locationState,
+    ApplicationStateKey.userStatsState,
+    ApplicationStateKey.userState,
+    ApplicationStateKey.callState,
+  ],
+};
+
 const config = {
   key: 'fivecalls',
+  debug: true,
   storage,
   whitelist: [
     ApplicationStateKey.locationState,
     ApplicationStateKey.userStatsState,
+    ApplicationStateKey.userState,
+    ApplicationStateKey.callState,
   ],
+  getStoredState: getStoredState(v4config),
 };
 
 const rootReducer = persistCombineReducers(config, {

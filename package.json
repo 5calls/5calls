@@ -57,6 +57,7 @@
     "@types/react-router-redux": "^5.0.1",
     "@types/redux-logger": "^3.0.0",
     "@types/redux-mock-store": "0.0.9",
+    "@types/redux-persist": "^4.3.1",
     "app-root-path": "^2.0.1",
     "autoprefixer": "7.1.0",
     "babel-core": "^6.26.3",

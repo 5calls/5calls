@@ -19,7 +19,6 @@ import {
   CallState,
   selectIssueActionCreator,
 } from '../../redux/callState';
-import { queueUntilRehydration } from '../../redux/rehydrationUtil';
 import {
   getIssuesIfNeeded,
   RemoteDataState,
@@ -106,9 +105,7 @@ class CallPageView extends React.Component<Props, State> {
 
   getView = () => {
     if (!this.props.remoteState.issues) {
-      queueUntilRehydration(() => {
-        getIssuesIfNeeded();
-      });
+      getIssuesIfNeeded();
     }
 
     let extraComponent;

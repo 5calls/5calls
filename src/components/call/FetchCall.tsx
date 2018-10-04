@@ -8,7 +8,6 @@ import { CallHeaderTranslatable, SupportOutcomes, ACAOutcomes } from './index';
 import {
   submitOutcome,
 } from '../../redux/callState';
-import { queueUntilRehydration } from '../../redux/rehydrationUtil';
 import { locationStateContext } from '../../contexts';
 
 // This defines the props that we must pass into this component.
@@ -36,9 +35,7 @@ export default class FetchCall extends React.Component<Props, State> {
   }
 
   componentDidMount() {
-    queueUntilRehydration(() => {
-      this.fillContact();
-    });
+    this.fillContact();
   }
 
   fillContact() {

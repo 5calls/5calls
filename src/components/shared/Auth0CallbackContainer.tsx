@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { queueUntilRehydration } from '../../redux/rehydrationUtil';
 import { Auth0Callback, AuthResponse } from '@5calls/react-components';
 import { store } from '../../redux/store';
 import { setAuthTokenActionCreator, setProfileActionCreator } from '../../redux/userState';
@@ -19,10 +18,8 @@ export class Auth0CallbackContainer extends React.Component<Props, State> {
     store.dispatch(setProfileActionCreator(authResponse.userProfile));
 
     // check for unuploaded stats
-    queueUntilRehydration(() => {
-      // tslint:disable-next-line:no-any
-      store.dispatch<any>(uploadStatsIfNeeded());
-    });
+    // tslint:disable-next-line:no-any
+    store.dispatch<any>(uploadStatsIfNeeded());
 
     return Promise.resolve(authResponse);
   }

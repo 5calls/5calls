@@ -4,7 +4,6 @@ import * as moment from 'moment';
 import { Layout } from '../layout';
 import { UserState, UserProfile } from '../../redux/userState';
 import { getProfileInfo, UserCallDetails } from '../../redux/remoteData/asyncActionCreator';
-import { queueUntilRehydration } from '../../redux/rehydrationUtil';
 
 interface Props {
   readonly currentUser?: UserState;
@@ -70,13 +69,11 @@ class ProfilePage extends React.Component<Props, State> {
   }
 
   componentDidMount() {
-    queueUntilRehydration(() => {
-      getProfileInfo().then(profile => {
-        this.setState({ profile: profile, loadedProfile: true });
-      }).catch(error => {
-        // console.log('error getting profile', error);
-      });  
-    });
+    getProfileInfo().then(profile => {
+      this.setState({ profile: profile, loadedProfile: true });
+    }).catch(error => {
+      // console.log('error getting profile', error);
+    });  
   }
 
   totalCalls(callDetails: UserCallDetails): number {

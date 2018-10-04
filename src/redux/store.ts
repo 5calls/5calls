@@ -1,19 +1,12 @@
 import { applyMiddleware, createStore, Store, compose, Middleware } from 'redux';
 import { persistStore, Persistor } from 'redux-persist';
 import rootReducer, { ApplicationState } from './root';
-// import { createLogger, ReduxLoggerOptions } from 'redux-logger';
 import thunk from 'redux-thunk';
 
-// declare var process: { env: { NODE_ENV: string } };
-// const env = process.env.NODE_ENV;
 const middlewares: Middleware[] = [thunk];
 
 export let persistor = {} as Persistor;
 export let store = {} as Store<ApplicationState>;
-
-// NOTE: uncomment these to show the redux log statements
-// const options: ReduxLoggerOptions = {};
-// middlewares.push(createLogger(options));
 
 export default (initialState) => {
   store = createStore(
@@ -26,13 +19,7 @@ export default (initialState) => {
       typeof window === 'object' && typeof window['devToolsExtension'] !== 'undefined' ? window['devToolsExtension']() : (f) => f
     ));
 
-  persistor = persistStore(
-    store,
-    undefined,
-    () => {
-      store.getState();
-    }
-  );
+  persistor = persistStore(store);
 
   return store;
 };
