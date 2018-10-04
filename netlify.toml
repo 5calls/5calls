@@ -1,7 +1,12 @@
 [Settings]
-ID = "eloquent-swirles-2ba06d"
+ID = "5calls"
+
+[[redirects]]
+  from = "/issues/*"
+  to = "http://138.68.25.82/issues/:splat"
 
 [[redirects]]
   from = "/*"
   to = "/index.html"
   status = 200
+
