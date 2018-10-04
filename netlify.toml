@@ -6,6 +6,18 @@ ID = "5calls"
   to = "http://138.68.25.82/issues/:splat"
 
 [[redirects]]
+  from = "/report"
+  to = "http://138.68.25.82/report"
+
+[[redirects]]
+  from = "/photo/*"
+  to = "http://138.68.25.82/photo/:splat"
+
+[[redirects]]
+  from = "/admin/refresh"
+  to = "http://138.68.25.82/admin/refresh"
+
+[[redirects]]
   from = "/*"
   to = "/index.html"
   status = 200
