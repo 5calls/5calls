@@ -3,19 +3,19 @@ ID = "5calls"
 
 [[redirects]]
   from = "/issues/*"
-  to = "https://api.5calls.org/v1/issues/:splat"
+  to = "https://api.5calls.org/v1/callserve/issues/:splat"
 
 [[redirects]]
   from = "/report"
-  to = "http://138.68.25.82/report"
+  to = "https://api.5calls.org/v1/report"
 
 [[redirects]]
   from = "/photo/*"
-  to = "http://138.68.25.82/photo/:splat"
+  to = "https://api.5calls.org/v1/callserve/photo/:splat"
 
 [[redirects]]
   from = "/admin/refresh"
-  to = "http://138.68.25.82/admin/refresh"
+  to = "https://api.5calls.org/v1/callserve/admin/refresh"
 
 [[redirects]]
   from = "/*"
