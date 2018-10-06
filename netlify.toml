@@ -4,10 +4,14 @@ ID = "5calls"
 [[redirects]]
   from = "/issues/"
   to = "https://api.5calls.org/v1/callserve/issues"
+  [redirects.headers]
+    Access-Control-Allow-Origin = "*"
 
 [[redirects]]
   from = "/issues"
   to = "https://api.5calls.org/v1/callserve/issues"
+  [redirects.headers]
+    Access-Control-Allow-Origin = "*"
 
 [[redirects]]
   from = "/report"
