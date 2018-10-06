@@ -5,33 +5,40 @@ ID = "5calls"
   from = "/issues/"
   query = {address = ":address", all = ":all"}
   to = "https://api.5calls.org/v1/callserve/issues?all=:all&address=:address"
+  status = 200
 
 [[redirects]]
   from = "/issues/"
   query = {address = ":address"}
   to = "https://api.5calls.org/v1/callserve/issues?address=:address"
+  status = 200
 
 [[redirects]]
   from = "/issues"
   query = {address = ":address", all = ":all"}
   to = "https://api.5calls.org/v1/callserve/issues?all=:all&address=:address"
+  status = 200
 
 [[redirects]]
   from = "/issues"
   query = {address = ":address"}
   to = "https://api.5calls.org/v1/callserve/issues?address=:address"
+  status = 200
 
 [[redirects]]
   from = "/report"
   to = "https://api.5calls.org/v1/report"
+  status = 200
 
 [[redirects]]
   from = "/photo/*"
   to = "https://api.5calls.org/v1/callserve/photo/:splat"
+  status = 200
 
 [[redirects]]
   from = "/admin/refresh"
   to = "https://api.5calls.org/v1/callserve/admin/refresh"
+  status = 200
 
 [[redirects]]
   from = "/*"
