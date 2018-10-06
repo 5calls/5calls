@@ -2,8 +2,12 @@
 ID = "5calls"
 
 [[redirects]]
-  from = "/issues/*"
-  to = "https://api.5calls.org/v1/callserve/issues/:splat"
+  from = "/issues/"
+  to = "https://api.5calls.org/v1/callserve/issues"
+
+[[redirects]]
+  from = "/issues"
+  to = "https://api.5calls.org/v1/callserve/issues"
 
 [[redirects]]
   from = "/report"
