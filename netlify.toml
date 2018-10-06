@@ -32,12 +32,12 @@ ID = "5calls"
 
 [[redirects]]
   from = "/photo/*"
-  to = "https://api.5calls.org/v1/callserve/photo/:splat"
+  to = "http://167.99.163.163:8080/photo/:splat"
   status = 200
 
 [[redirects]]
   from = "/admin/refresh"
-  to = "https://api.5calls.org/v1/callserve/admin/refresh"
+  to = "http://167.99.163.163:8080/admin/refresh"
   status = 200
 
 [[redirects]]
