@@ -3,15 +3,23 @@ ID = "5calls"
 
 [[redirects]]
   from = "/issues/"
-  to = "https://api.5calls.org/v1/callserve/issues"
-  [redirects.headers]
-    Access-Control-Allow-Origin = "*"
+  query = {address = ":address", all = ":all"}
+  to = "https://api.5calls.org/v1/callserve/issues?all=:all&address=:address"
+
+[[redirects]]
+  from = "/issues/"
+  query = {address = ":address"}
+  to = "https://api.5calls.org/v1/callserve/issues?address=:address"
 
 [[redirects]]
   from = "/issues"
-  to = "https://api.5calls.org/v1/callserve/issues"
-  [redirects.headers]
-    Access-Control-Allow-Origin = "*"
+  query = {address = ":address", all = ":all"}
+  to = "https://api.5calls.org/v1/callserve/issues?all=:all&address=:address"
+
+[[redirects]]
+  from = "/issues"
+  query = {address = ":address"}
+  to = "https://api.5calls.org/v1/callserve/issues?address=:address"
 
 [[redirects]]
   from = "/report"
