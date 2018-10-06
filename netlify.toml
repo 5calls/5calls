@@ -4,25 +4,25 @@ ID = "5calls"
 [[redirects]]
   from = "/issues/"
   query = {address = ":address", all = ":all"}
-  to = "https://api.5calls.org/v1/callserve/issues?all=:all&address=:address"
+  to = "http://167.99.163.163:8080/issues?all=:all&address=:address"
   status = 200
 
 [[redirects]]
   from = "/issues/"
   query = {address = ":address"}
-  to = "https://api.5calls.org/v1/callserve/issues?address=:address"
+  to = "http://167.99.163.163:8080/issues?address=:address"
   status = 200
 
 [[redirects]]
   from = "/issues"
   query = {address = ":address", all = ":all"}
-  to = "https://api.5calls.org/v1/callserve/issues?all=:all&address=:address"
+  to = "http://167.99.163.163:8080/issues?all=:all&address=:address"
   status = 200
 
 [[redirects]]
   from = "/issues"
   query = {address = ":address"}
-  to = "https://api.5calls.org/v1/callserve/issues?address=:address"
+  to = "http://167.99.163.163:8080/issues?address=:address"
   status = 200
 
 [[redirects]]
