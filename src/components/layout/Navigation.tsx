@@ -19,6 +19,7 @@ const Navigation: React.StatelessComponent = () => {
           </Link>
         </li>
         <li>
+          {/*tslint:disable-next-line:max-line-length*/}
           <a href="https://github.com/5calls/5calls" target="_blank" rel="noopener"><i aria-hidden="true" className="fa fa-github" />
             <span>{i18n.t('footer.openSource')}</span>
           </a>

@@ -20,7 +20,8 @@ exports[`should render Donation component properly 1`] = `
       >
         <a
           href="https://airtable.com/shrSFvr3AlMKRRssx"
-          target="_blank" rel="noopener"
+          rel="noopener"
+          target="_blank"
         >
           Contact Us
         </a>
@@ -33,7 +34,8 @@ exports[`should render Donation component properly 1`] = `
       >
         <a
           href="https://github.com/5calls/5calls/wiki/Getting-Involved-with-5-Calls-Development"
-          target="_blank" rel="noopener"
+          rel="noopener"
+          target="_blank"
         >
           Projects
         </a>
@@ -46,7 +48,8 @@ exports[`should render Donation component properly 1`] = `
       >
         <a
           href="https://secure.actblue.com/donate/5calls-donate?amount=25"
-          target="_blank" rel="noopener"
+          rel="noopener"
+          target="_blank"
         >
           Donate
         </a>
