@@ -29,15 +29,15 @@ export const Postcards: React.StatelessComponent<Props> = (props: Props) => (
     <ul>
       <li>Polls will be open from 7am - 7pm.</li>
       {/*tslint:disable-next-line:max-line-length*/}
-      <li>Polling locations can be found at <a href="http://www.alabamavotes.gov" target="_blank">www.alabamavotes.gov</a></li>
+      <li>Polling locations can be found at <a href="http://www.alabamavotes.gov" target="_blank" rel="noopener">www.alabamavotes.gov</a></li>
       {/*tslint:disable-next-line:max-line-length*/}
-      <li>Since 2014, voters in Alabama have been required to bring ID to the polls. They can find information on acceptable ID or how to get a free ID at <a href="http://www.alabamavotes.gov" target="_blank">www.alabamavotes.gov</a></li>
+      <li>Since 2014, voters in Alabama have been required to bring ID to the polls. They can find information on acceptable ID or how to get a free ID at <a href="http://www.alabamavotes.gov" target="_blank" rel="noopener">www.alabamavotes.gov</a></li>
       {/*tslint:disable-next-line:max-line-length*/}
       <li>Keep messaging positive and encouraging. The best way to connect with other voters is to be sincere and authentic.</li>
     </ul>
     <h3>Postcard message examples:</h3>
     <blockquote>
-      <p>Dear Voter,</p> 
+      <p>Dear Voter,</p>
       {/*tslint:disable-next-line:max-line-length*/}
       <p>Participating in elections is a critical way to make your voice heard in our democracy! Every vote counts! Don’t miss your chance to vote in the special election on Dec. 12. Polls are open from 7am - 7pm, more info can be found at www.alabamavotes.gov</p>
       <p>Thank you for being a voter!</p>

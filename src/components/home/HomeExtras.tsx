@@ -48,25 +48,25 @@ export const HomeExtras: React.StatelessComponent = () => {
       <ul>
         <li>
           {/*tslint:disable-next-line:max-line-length*/}
-          <a href="https://techcrunch.com/2017/01/25/5-calls-debuts-what-may-be-the-easiest-way-to-call-your-reps-yet/" target="_blank">
+          <a href="https://techcrunch.com/2017/01/25/5-calls-debuts-what-may-be-the-easiest-way-to-call-your-reps-yet/" target="_blank" rel="noopener">
             <img src="/img/logo-techcrunch.png" alt="TechCrunch" />
           </a>
         </li>
         <li>
           {/*tslint:disable-next-line:max-line-length*/}
-          <a href="http://www.vogue.com/article/five-calls-best-political-activist-hack" target="_blank">
+          <a href="http://www.vogue.com/article/five-calls-best-political-activist-hack" target="_blank" rel="noopener">
             <img src="/img/logo-vogue.png" alt="Vogue" />
           </a>
         </li>
         <li>
           {/*tslint:disable-next-line:max-line-length*/}
-          <a href="http://www.huffingtonpost.com/entry/5-calls-congress-phone_us_588ada64e4b0230ce61b26d7" target="_blank">
+          <a href="http://www.huffingtonpost.com/entry/5-calls-congress-phone_us_588ada64e4b0230ce61b26d7" target="_blank" rel="noopener">
             <img src="/img/logo-huffpost.png" alt="HuffPost" />
           </a>
         </li>
         <li>
           {/*tslint:disable-next-line:max-line-length*/}
-          <a href="https://www.bloomberg.com/news/articles/2017-02-09/silicon-valley-fights-trump-in-its-free-time" target="_blank">
+          <a href="https://www.bloomberg.com/news/articles/2017-02-09/silicon-valley-fights-trump-in-its-free-time" target="_blank" rel="noopener">
             <img src="/img/logo-businessweek.png" alt="Bloomberg Businessweek" />
           </a>
         </li>
@@ -79,15 +79,15 @@ export const HomeExtras: React.StatelessComponent = () => {
       <ul>
         <li>
           {/*tslint:disable-next-line:max-line-length*/}
-          <a href="https://www.youtube.com/watch?v=rsazVtf1HP4" target="_blank"><img src="/img/video-mmoore.jpg" alt="Michael Moore talking about 5 Calls on MSNBC" /></a>
+          <a href="https://www.youtube.com/watch?v=rsazVtf1HP4" target="_blank" rel="noopener"><img src="/img/video-mmoore.jpg" alt="Michael Moore talking about 5 Calls on MSNBC" /></a>
         </li>
         <li>
           {/*tslint:disable-next-line:max-line-length*/}
-          <a href="https://www.youtube.com/watch?v=N62ViRRn61I" target="_blank"><img src="/img/video-app.jpg" alt="How to use the 5 Calls iPhone App" /></a>
+          <a href="https://www.youtube.com/watch?v=N62ViRRn61I" target="_blank" rel="noopener"><img src="/img/video-app.jpg" alt="How to use the 5 Calls iPhone App" /></a>
         </li>
         <li>
           {/*tslint:disable-next-line:max-line-length*/}
-          <a href="https://www.youtube.com/watch?v=wwoJqYXvh9s" target="_blank"><img src="/img/video-shower.jpg" alt="When do you make your 5 Calls?" /></a>
+          <a href="https://www.youtube.com/watch?v=wwoJqYXvh9s" target="_blank" rel="noopener"><img src="/img/video-shower.jpg" alt="When do you make your 5 Calls?" /></a>
         </li>
       </ul>
       </div>
