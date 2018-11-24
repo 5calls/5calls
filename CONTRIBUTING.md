@@ -34,7 +34,13 @@ that you're going to be working on it and start coding!
 Once a feature has been reviewed and approved for implementation, please follow
 the following guidelines for submitting your Pull Request (PR):
 
-1. Be sure your PR branch is rebased if it becomes out-of-date with the 5 Calls
+1. Each time you commit, an `tslint --fix` command will automatically be run and
+   attempt to fix any lint errors found in the code. If errors remain that cannot
+   be automatically corrected, the commit will fail with a message indicating
+   where the remaining lint errors are. You'll have to fix them before the commit will happen.
+   Alternatively, if you'd like to bypass this checking for some reason, you can run
+   `git commit -m [commit message] --no-verify`.
+2. Be sure your PR branch is rebased if it becomes out-of-date with the 5 Calls
    repo's master branch.
 3. A unit or end-to-end test (or tests) should be included with the Pull Request
    covering the changes you've made. If tests are not possible, an explanation
