@@ -34,7 +34,7 @@ that you're going to be working on it and start coding!
 Once a feature has been reviewed and approved for implementation, please follow
 the following guidelines for submitting your Pull Request (PR):
 
-1. Each time you commit, an `tslint --fix` command will automatically be run and
+1. Each time you commit, a `tslint --fix` command will automatically be run and
    attempt to fix any lint errors found in the code. If errors remain that cannot
    be automatically corrected, the commit will fail with a message indicating
    where the remaining lint errors are. You'll have to fix them before the commit will happen.
