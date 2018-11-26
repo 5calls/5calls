@@ -1,7 +1,6 @@
 import * as React from 'react';
 import i18n from '../../services/i18n';
 import { isEqual } from 'lodash';
-import { translate } from 'react-i18next';
 
 import { Issue, Contact } from '../../common/model';
 import {
@@ -15,12 +14,12 @@ import {
 import { CallState } from '../../redux/callState';
 import { locationStateContext, userStateContext } from '../../contexts';
 import { eventContext } from '../../contexts/EventContext';
+import { Mixpanel } from '../../services/mixpanel';
 
 // This defines the props that we must pass into this component.
 export interface Props {
   issue: Issue;
   callState: CallState;
-  mixpanel: Mixpanel;
 }
 
 export interface State {
@@ -30,7 +29,7 @@ export interface State {
   numberContactsLeft: number;
 }
 
-export class Call extends React.Component<Props, State> {
+export default class Call extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
     // set initial state
@@ -69,6 +68,10 @@ export class Call extends React.Component<Props, State> {
       numberContactsLeft: numberContactsLeft,
       issue: props.issue
     };
+  }
+
+  componentDidMount() {
+    Mixpanel.track('Topic', { IssueID: this.props.issue.id });
   }
 
   componentDidUpdate(prevProps: Props) {
@@ -190,5 +193,3 @@ export class Call extends React.Component<Props, State> {
     );
   }
 }
-
-export const CallTranslatable = translate()(Call);

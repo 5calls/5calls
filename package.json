@@ -24,10 +24,10 @@
     "react-helmet": "^5.2.0",
     "react-i18next": "^7.0.0",
     "react-markdown": "^2.5.0",
-    "react-mixpanel": "^1.0.1",
     "react-onclickoutside": "^6.7.1",
     "react-phone-number-input": "^1.1.13",
     "react-pluralize": "^1.4.1",
+    "react-pure-lifecycle": "^3.0.0",
     "react-redux": "^5.0.5",
     "react-router": "^4.1.1",
     "react-router-dom": "^4.1.1",
@@ -47,7 +47,6 @@
     "@types/jest": "^19.2.3",
     "@types/jwt-decode": "^2.2.1",
     "@types/lodash": "^4.14.116",
-    "@types/mixpanel": "^2.14.0",
     "@types/node": "^7.0.22",
     "@types/raven-js": "^3.10.0",
     "@types/react": "^16.2.0",
@@ -163,9 +162,6 @@
       "^.+\\.(ts|tsx)$": "ts-jest",
       "^.+\\.css$": "<rootDir>/config/jest/cssTransform.js",
       "^(?!.*\\.(css|json)$)": "<rootDir>/config/jest/fileTransform.js"
-    },
-    "moduleNameMapper": {
-      "mixpanel-browser/src/loader-module": "<rootDir>/src/tests/mixpanel-mock.js"
     },
     "transformIgnorePatterns": [
       "[/\\\\]node_modules[/\\\\].+\\.(js|jsx|ts|tssx)$"

@@ -16,6 +16,7 @@ import { postEmail } from '../../services/apiServices';
 import { eventContext } from '../../contexts/EventContext';
 import HeadMeta from '../shared/HeadMeta';
 import { Issue } from '../../common/model';
+import { Mixpanel } from '../../services/mixpanel';
 
 interface Props {
   readonly postcards?: boolean;
@@ -23,7 +24,6 @@ interface Props {
   readonly currentIssue?: Issue;
   readonly issues: Issue[];
   readonly hideDonation: boolean;
-  readonly mixpanel: Mixpanel;
 }
 
 interface State {
@@ -42,7 +42,7 @@ class HeaderImpl extends React.Component<Props, State> {
 
   componentDidMount() {
     if (this.props.currentUser && this.props.currentUser.profile) {
-      mixpanel.identify(this.props.currentUser.profile.sub);
+      Mixpanel.identify(this.props.currentUser.profile.sub);
     }
   }
 

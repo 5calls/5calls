@@ -2,11 +2,9 @@ import * as React from 'react';
 import { isEqual } from 'lodash';
 import { withRouter, RouteComponentProps } from 'react-router';
 
-import { MixpanelConsumer } from 'react-mixpanel';
-
 import { getIssue } from '../shared/utils';
 import i18n from '../../services/i18n';
-import { CallTranslatable } from './index';
+import { Call } from './index';
 import { Layout } from '../layout';
 import { Issue } from '../../common/model';
 
@@ -97,15 +95,10 @@ class CallPageView extends React.Component<Props, State> {
     if (this.state.currentIssue) {
       return (
         <Layout>
-          <MixpanelConsumer>
-            {mixpanel => (
-              <CallTranslatable
-                issue={this.state.currentIssue as Issue}
-                callState={this.props.callState}
-                mixpanel={mixpanel}
-              />
-            )}
-          </MixpanelConsumer>
+          <Call
+            issue={this.state.currentIssue as Issue}
+            callState={this.props.callState}
+          />
         </Layout>
       );
     } else {

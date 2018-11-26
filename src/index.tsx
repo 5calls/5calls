@@ -10,7 +10,6 @@ import { PersistGate } from 'redux-persist/integration/react';
 import i18n from './services/i18n';
 import * as ReactGA from 'react-ga';
 import * as Raven from 'raven-js';
-import mixpanel from 'mixpanel-browser/src/loader-module';
 
 import NotFoundPage from './components/NotFoundPage';
 import { HomePage } from './components/home';
@@ -28,15 +27,12 @@ import AppProvider from './components/AppProvider';
 import { startup } from './redux/remoteData';
 import './components/bundle.css';
 
-mixpanel.init('776fce75f7e3ddfbb13b615dcb94ff95');
-
 ReactGA.initialize('UA-90915119-1');
 const trackPageView = location => {
   ReactGA.set({
     page: location.pathname
   });
   ReactGA.pageview(location.pathname);
-  mixpanel.track(location.pathname);
 };
 
 Raven.config(

@@ -1,7 +1,5 @@
 import * as React from 'react';
 
-import { MixpanelConsumer } from 'react-mixpanel';
-
 import { Issue } from '../../common/model';
 import { SidebarHeader, Sidebar, Footer, Header } from './index';
 
@@ -42,19 +40,14 @@ const Layout: React.StatelessComponent<Props> = (props: Props) => (
             <>
               <userStateContext.Consumer>
                 {userState => (
-                  <MixpanelConsumer>
-                    {mixpanel => (
-                      <Header
-                        postcards={props.postcards}
-                        currentUser={userState}
-                        currentIssue={currentIssue(
-                          remoteState.issues,
-                          callState.currentIssueId
-                        )}
-                        mixpanel={mixpanel}
-                      />
+                  <Header
+                    postcards={props.postcards}
+                    currentUser={userState}
+                    currentIssue={currentIssue(
+                      remoteState.issues,
+                      callState.currentIssueId
                     )}
-                  </MixpanelConsumer>
+                  />
                 )}
               </userStateContext.Consumer>
               <div className="layout">

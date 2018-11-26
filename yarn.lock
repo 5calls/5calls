@@ -114,11 +114,6 @@
   resolved "https://registry.yarnpkg.com/@types/lodash/-/lodash-4.14.116.tgz#5ccf215653e3e8c786a58390751033a9adca0eb9"
   integrity sha512-lRnAtKnxMXcYYXqOiotTmJd74uawNWuPnsnPrrO7HiFuE3npE2iQhfABatbYDyxTNqZNuXzcKGhw37R7RjBFLg==
 
-"@types/mixpanel@^2.14.0":
-  version "2.14.0"
-  resolved "https://registry.yarnpkg.com/@types/mixpanel/-/mixpanel-2.14.0.tgz#ecca57f7f9fa18eb4e8096bd92a6afffd1511acc"
-  integrity sha512-UMFS1lqhXAaPiy3CPD0Tl/+7YGI69IPJ6dvwXgvbA5LO5Dh6vetyVn7crVsiC39dtt/LtbS/NEigKeK7epeCLg==
-
 "@types/node@*":
   version "10.10.1"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-10.10.1.tgz#d5c96ca246a418404914d180b7fdd625ad18eca6"
@@ -8193,11 +8188,6 @@ react-markdown@^2.5.0:
     commonmark-react-renderer "^4.3.4"
     prop-types "^15.5.1"
 
-react-mixpanel@^1.0.1:
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/react-mixpanel/-/react-mixpanel-1.0.1.tgz#1bf8aa09b7bbb09458472ea1aff618ce327afe36"
-  integrity sha512-p+k7dYoJv84mRVZLLYpLkrh+2S0h2k7J91nxsolh/5HH+4pWQYtcs3DaB9XHLHPcTLlbJCNehr8I0UivADhb4w==
-
 react-modal@^3.0.0:
   version "3.5.1"
   resolved "https://registry.yarnpkg.com/react-modal/-/react-modal-3.5.1.tgz#33d38527def90ea324848f7d63e53acc4468a451"
@@ -8231,6 +8221,11 @@ react-pluralize@^1.4.1:
   integrity sha512-PS5PkJYkgtLehlEUMXL6kDo+Gl8v2C7Xbnotft/HoDNiBKGCYk7rC3xsxNZfyYyrYCvoY181i8WzFWf57riu5A==
   dependencies:
     react "^15.5.4"
+
+react-pure-lifecycle@^3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/react-pure-lifecycle/-/react-pure-lifecycle-3.0.0.tgz#8077c7294904c7f85124a976c09ddec96bc119aa"
+  integrity sha512-jERjJ/SxA2ErtYOlwSV3AzdEU3zAs4g0UTL3zJp7X29fV71gKJEKVV36WkMc0Jeh7xIT5Z1Incam+auon5SElA==
 
 react-redux@^5.0.5:
   version "5.0.7"
