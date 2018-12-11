@@ -73,7 +73,11 @@ describe('when the script text is shown', () => {
         t={t}
       />
     );
-    expect(wrapper.contains(<ReactMarkdown source="script_text" />)).toBe(true);
+    expect(
+      wrapper.contains(
+        <ReactMarkdown source="script_text" linkTarget="_blank" />
+      )
+    ).toBe(true);
   });
 });
 
