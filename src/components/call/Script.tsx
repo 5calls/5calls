@@ -75,7 +75,7 @@ export const Script: React.StatelessComponent<Props> = ({
       <div className="call__script">
         <h3 className="call__script__header">{t('script.yourScript')}</h3>
         <div className="call__script__body">
-          <ReactMarkdown source={formattedScript} />
+          <ReactMarkdown source={formattedScript} linkTarget="_blank" />
         </div>
       </div>
     );

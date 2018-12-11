@@ -19,7 +19,7 @@ export const CallHeader: React.StatelessComponent<Props> = ({
       <header className="call__header">
         <h1 className="call__title">{currentIssue.name}</h1>
         <div className="call__reason">
-          <ReactMarkdown source={currentIssue.reason} />
+          <ReactMarkdown source={currentIssue.reason} linkTarget="_blank" />
         </div>
       </header>
     );

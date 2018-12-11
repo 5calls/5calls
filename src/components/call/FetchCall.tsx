@@ -100,6 +100,7 @@ export default class FetchCall extends React.Component<Props, State> {
                 this.props.issue.script,
                 this.state.currentContact
               )}
+              linkTarget="_blank"
             />
           </div>
           {this.props.issue.id === '51' ? (

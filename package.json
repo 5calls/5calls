@@ -23,7 +23,7 @@
     "react-ga": "^2.2.0",
     "react-helmet": "^5.2.0",
     "react-i18next": "^7.0.0",
-    "react-markdown": "^2.5.0",
+    "react-markdown": "^4.0.0",
     "react-onclickoutside": "^6.7.1",
     "react-phone-number-input": "^1.1.13",
     "react-pluralize": "^1.4.1",
