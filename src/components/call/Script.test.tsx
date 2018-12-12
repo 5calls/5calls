@@ -11,6 +11,7 @@ import {
   LocationFetchType
 } from '../../common/model';
 import { LocationState } from '../../redux/location';
+import { linkRefRenderer } from '../shared/markdown-utils';
 
 test('Script component should be rendered if passed a valid object', () => {
   const issue: Issue = Object.assign({}, new Issue(), {
@@ -75,7 +76,11 @@ describe('when the script text is shown', () => {
     );
     expect(
       wrapper.contains(
-        <ReactMarkdown source="script_text" linkTarget="_blank" />
+        <ReactMarkdown
+          source="script_text"
+          linkTarget="_blank"
+          renderers={{ linkReference: linkRefRenderer }}
+        />
       )
     ).toBe(true);
   });

@@ -4,6 +4,7 @@ import { TranslationFunction } from 'i18next';
 import { translate } from 'react-i18next';
 import { Contact, Issue } from '../../common/model';
 import { LocationState } from '../../redux/location/reducer';
+import { linkRefRenderer } from '../shared/markdown-utils';
 
 interface Props {
   readonly issue: Issue;
@@ -75,7 +76,13 @@ export const Script: React.StatelessComponent<Props> = ({
       <div className="call__script">
         <h3 className="call__script__header">{t('script.yourScript')}</h3>
         <div className="call__script__body">
-          <ReactMarkdown source={formattedScript} linkTarget="_blank" />
+          <ReactMarkdown
+            source={formattedScript}
+            linkTarget="_blank"
+            renderers={{
+              linkReference: linkRefRenderer
+            }}
+          />
         </div>
       </div>
     );
