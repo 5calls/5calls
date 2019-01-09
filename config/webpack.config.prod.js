@@ -12,7 +12,6 @@ const ModuleScopePlugin = require('react-dev-utils/ModuleScopePlugin');
 const paths = require('./paths');
 const getClientEnvironment = require('./env');
 const childProcess = require('child_process');
-const { BugsnagSourceMapUploaderPlugin } = require('webpack-bugsnag-plugins');
 
 // Webpack uses `publicPath` to determine where the app is being served from.
 // It requires a trailing slash, or the file assets will get an incorrect path.
@@ -305,12 +304,6 @@ module.exports = {
       // Work around Windows path issue in SWPrecacheWebpackPlugin:
       // https://github.com/facebookincubator/create-react-app/issues/2235
       stripPrefix: paths.appBuild.replace(/\\/g, '/') + '/'
-    }),
-    // upload new source maps to bugsnag because they have trouble detecting them automatically
-    // uses an environment variable set in the netlify deploy process
-    new BugsnagSourceMapUploaderPlugin({
-      apiKey: process.env.BUGSNAG_API_KEY,
-      overwrite: true
     }),
     // Moment.js is an extremely popular library that bundles large locale files
     // by default due to how Webpack interprets its code. This is a practical
