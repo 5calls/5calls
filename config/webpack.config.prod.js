@@ -4,7 +4,8 @@ const autoprefixer = require('autoprefixer');
 const path = require('path');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const ManifestPlugin = require('webpack-manifest-plugin');
 const InterpolateHtmlPlugin = require('react-dev-utils/InterpolateHtmlPlugin');
 const SWPrecacheWebpackPlugin = require('sw-precache-webpack-plugin');
@@ -53,11 +54,12 @@ const extractTextPluginOptions = shouldUseRelativeAssetPaths
 // It compiles slowly and is focused on producing a fast and minimal bundle.
 // The development configuration is different and lives in a separate file.
 module.exports = {
+  mode: 'production',
   // Don't attempt to continue if there are any errors.
   bail: true,
   // We generate sourcemaps in production. This is slow but gives good results.
   // You can exclude the *.map files from the build during deployment.
-  devtool: 'source-map',
+  devtool: 'inline-source-map',
   // In production, we only want to load the polyfills and the app code.
   entry: [require.resolve('./polyfills'), paths.appIndexJs],
   output: {
@@ -68,7 +70,6 @@ module.exports = {
     // We don't currently advertise code splitting but Webpack supports it.
     filename: 'static/js/[name].[chunkhash:8].js',
     chunkFilename: 'static/js/[name].[chunkhash:8].chunk.js',
-    sourceMapFilename: 'static/js/[name].[chunkhash:8].js.map',
     // We inferred the "public path" (such as / or /my-project) from homepage.
     publicPath: publicPath,
     // Point sourcemap entries to original disk location
@@ -101,6 +102,13 @@ module.exports = {
       // please link the files into your node_modules/ and let module-resolution kick in.
       // Make sure your source files are compiled, as they will not be processed in any way.
       new ModuleScopePlugin(paths.appSrc)
+    ]
+  },
+  optimization: {
+    minimizer: [
+      new UglifyJsPlugin({
+        sourceMap: true
+      })
     ]
   },
   module: {
@@ -179,43 +187,37 @@ module.exports = {
       // in the main CSS file.
       {
         test: /\.css$/,
-        loader: ExtractTextPlugin.extract(
-          Object.assign(
-            {
-              fallback: require.resolve('style-loader'),
-              use: [
-                {
-                  loader: require.resolve('css-loader'),
-                  options: {
-                    importLoaders: 1,
-                    minimize: true,
-                    sourceMap: false
-                  }
-                },
-                {
-                  loader: require.resolve('postcss-loader'),
-                  options: {
-                    ident: 'postcss', // https://webpack.js.org/guides/migrating/#complex-options
-                    plugins: () => [
-                      require('postcss-flexbugs-fixes'),
-                      autoprefixer({
-                        browsers: [
-                          '>1%',
-                          'last 4 versions',
-                          'Firefox ESR',
-                          'not ie < 9' // React doesn't support IE8 anyway
-                        ],
-                        flexbox: 'no-2009'
-                      })
-                    ]
-                  }
-                }
+        use: [
+          {
+            loader: MiniCssExtractPlugin.loader
+          },
+          {
+            loader: require.resolve('css-loader'),
+            options: {
+              importLoaders: 1,
+              minimize: true,
+              sourceMap: false
+            }
+          },
+          {
+            loader: require.resolve('postcss-loader'),
+            options: {
+              ident: 'postcss', // https://webpack.js.org/guides/migrating/#complex-options
+              plugins: () => [
+                require('postcss-flexbugs-fixes'),
+                autoprefixer({
+                  browsers: [
+                    '>1%',
+                    'last 4 versions',
+                    'Firefox ESR',
+                    'not ie < 9' // React doesn't support IE8 anyway
+                  ],
+                  flexbox: 'no-2009'
+                })
               ]
-            },
-            extractTextPluginOptions
-          )
-        )
-        // Note: this won't work without `new ExtractTextPlugin()` in `plugins`.
+            }
+          }
+        ]
       }
       // ** STOP ** Are you adding a new loader?
       // Remember to add the new extension(s) to the "file" loader exclusion list.
@@ -254,23 +256,19 @@ module.exports = {
     // Otherwise React will be compiled in the very slow development mode.
     new webpack.DefinePlugin(env.stringified),
     // Minify the code.
-    new webpack.optimize.UglifyJsPlugin({
-      compress: {
-        warnings: false,
-        // This feature has been reported as buggy a few times, such as:
-        // https://github.com/mishoo/UglifyJS2/issues/1964
-        // We'll wait with enabling it by default until it is more solid.
-        reduce_vars: false
-      },
-      output: {
-        comments: false
-      },
-      sourceMap: true
-    }),
-    // Note: this won't work without ExtractTextPlugin.extract(..) in `loaders`.
-    new ExtractTextPlugin({
-      filename: cssFilename
-    }),
+    // new webpack.optimize.UglifyJsPlugin({
+    //   compress: {
+    //     warnings: false,
+    //     // This feature has been reported as buggy a few times, such as:
+    //     // https://github.com/mishoo/UglifyJS2/issues/1964
+    //     // We'll wait with enabling it by default until it is more solid.
+    //     reduce_vars: false
+    //   },
+    //   output: {
+    //     comments: false
+    //   },
+    //   sourceMap: true
+    // }),
     // Generate a manifest file which contains a mapping of all asset filenames
     // to their corresponding output file so that tools can pick it up without
     // having to parse `index.html`.
