@@ -4,6 +4,7 @@ import { RemoteDataState } from '../../redux/remoteData';
 
 import { find } from 'lodash';
 import { store } from '../../redux/store';
+import { UserState } from '@5calls/react-components/lib/shared/model';
 
 /**
  * Formats the location for the back end as
@@ -121,4 +122,39 @@ export const removeURLParameter = (url: string, parameter: string): string => {
     return urlparts[0] + (pars.length > 0 ? '?' + pars.join('&') : '');
   }
   return url;
+};
+
+interface IntercomProfile {
+  user_id: string;
+  name: string;
+  email?: string;
+}
+
+export const intercomUserFromUserState = (
+  userState: UserState
+): IntercomProfile | undefined => {
+  if (userState.profile) {
+    let user: IntercomProfile = {
+      user_id: userState.profile.sub,
+      name: userState.profile.name,
+      email: undefined
+    };
+
+    if (userState.profile['https://5calls.org/email']) {
+      user.email = userState.profile['https://5calls.org/email'];
+    }
+
+    return user;
+  }
+
+  return undefined;
+};
+
+export const intercomID = (): string => {
+  if (process.env.NODE_ENV === 'production') {
+    return 'mymkg1h9';
+  }
+
+  // test intercom id
+  return 'ltn1j0pa';
 };

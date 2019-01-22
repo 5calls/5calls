@@ -26,6 +26,12 @@ import AppProvider from './components/AppProvider';
 import { startup } from './redux/remoteData';
 import './components/bundle.css';
 import bugsnagClient from './services/bugsnag';
+import Intercom, { IntercomAPI } from 'react-intercom';
+import { userStateContext } from './contexts';
+import {
+  intercomUserFromUserState,
+  intercomID
+} from './components/shared/utils';
 
 ReactGA.initialize('UA-90915119-1');
 const trackPageView = location => {
@@ -34,6 +40,7 @@ const trackPageView = location => {
     dimension4: 'split-test'
   });
   ReactGA.pageview(location.pathname);
+  IntercomAPI('update');
 };
 
 const ErrorBoundary = bugsnagClient.getPlugin('react');
@@ -50,6 +57,14 @@ ReactDOM.render(
       <Provider store={store}>
         <AppProvider store={store}>
           <PersistGate persistor={persistor} onBeforeLift={() => startup()}>
+            <userStateContext.Consumer>
+              {userState => (
+                <Intercom
+                  appID={intercomID()}
+                  {...intercomUserFromUserState(userState)}
+                />
+              )}
+            </userStateContext.Consumer>
             <Router history={history}>
               <Switch>
                 <Route path="/" exact={true} component={HomePage} />

@@ -7962,6 +7962,13 @@ prompts@^0.1.9:
     kleur "^2.0.1"
     sisteransi "^0.1.1"
 
+prop-types@15.5.8:
+  version "15.5.8"
+  resolved "https://registry.yarnpkg.com/prop-types/-/prop-types-15.5.8.tgz#6b7b2e141083be38c8595aa51fc55775c7199394"
+  integrity sha1-a3suFBCDvjjIWVqlH8VXdccZk5Q=
+  dependencies:
+    fbjs "^0.8.9"
+
 prop-types@^15.5.10, prop-types@^15.5.4, prop-types@^15.5.6, prop-types@^15.6.0, prop-types@^15.6.1, prop-types@^15.6.2:
   version "15.6.2"
   resolved "https://registry.yarnpkg.com/prop-types/-/prop-types-15.6.2.tgz#05d5ca77b4453e985d60fc7ff8c859094a497102"
@@ -8280,6 +8287,12 @@ react-i18next@^7.0.0:
     hoist-non-react-statics "^2.3.1"
     html-parse-stringify2 "2.0.1"
     prop-types "^15.6.0"
+
+react-intercom@5calls/react-intercom:
+  version "1.0.16"
+  resolved "https://codeload.github.com/5calls/react-intercom/tar.gz/94ecdfe5fe77ba3e06b9b4659a7f37fa6375a6fd"
+  dependencies:
+    prop-types "15.5.8"
 
 react-is@^16.4.2, react-is@^16.5.2:
   version "16.5.2"
