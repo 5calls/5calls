@@ -25,15 +25,6 @@ export const ContactProgress: React.StatelessComponent<Props> = ({
   currentContact,
   selectContact
 }: Props) => {
-  // this component can handle the click to avoid complexity upstream
-  const selectIndirect = (
-    e: React.MouseEvent<HTMLAnchorElement>,
-    index: number
-  ) => {
-    e.preventDefault();
-    selectContact(index);
-  };
-
   const contactCalled = (contact: Contact): Boolean => {
     if (userStatsState.all) {
       let completed = userStatsState.all.filter(result => {
@@ -73,20 +64,14 @@ export const ContactProgress: React.StatelessComponent<Props> = ({
       <li key={index} className={active ? 'active' : ''}>
         {areaContact ? (
           <>
-            <a href="#" onClick={e => selectIndirect(e, index)}>
-              <img
-                alt={areaContact.name}
-                src={repPhoto(areaContact)}
-                onError={e => {
-                  e.currentTarget.src = '/img/no-rep.png';
-                }}
-              />
-            </a>
-            <h4>
-              <a href="#" onClick={e => selectIndirect(e, index)}>
-                {areaContact.contactDisplay()}
-              </a>
-            </h4>
+            <img
+              alt={areaContact.name}
+              src={repPhoto(areaContact)}
+              onError={e => {
+                e.currentTarget.src = '/img/no-rep.png';
+              }}
+            />
+            <h4>{areaContact.contactDisplay()}</h4>
           </>
         ) : (
           <>

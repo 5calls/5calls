@@ -104,7 +104,7 @@ class Outcomes extends React.Component<
         return (
           <div className="call__outcomes">
             <h3 className="call__outcomes__header">
-              Help track representative availability by selecting your result:
+              Select your call result to show the next representative:
             </h3>{' '}
             <div className="call__outcomes__items">
               {this.props.currentIssue.outcomeModels.map((outcome, index) => (
