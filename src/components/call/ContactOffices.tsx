@@ -15,6 +15,7 @@ export interface State {
 export class ContactOffices extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
+
     this.state = { showFieldOfficeNumbers: false };
   }
 
@@ -32,8 +33,8 @@ export class ContactOffices extends React.Component<Props, State> {
 
   render() {
     if (
-      this.props.currentContact.fieldOffices == null ||
-      this.props.currentContact.fieldOffices.length === 0
+      this.props.currentContact.field_offices == null ||
+      this.props.currentContact.field_offices.length === 0
     ) {
       return <span />;
     }
@@ -45,8 +46,8 @@ export class ContactOffices extends React.Component<Props, State> {
             Local office numbers:
           </h3>
           <ul className="call__contact__field-office-list">
-            {this.props.currentContact.fieldOffices ? (
-              this.props.currentContact.fieldOffices.map(office => (
+            {this.props.currentContact.field_offices ? (
+              this.props.currentContact.field_offices.map(office => (
                 <li key={office.phone}>
                   {makePhoneLink(office.phone)}
                   {cityFormat(office, this.props.currentContact)}

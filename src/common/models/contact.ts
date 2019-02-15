@@ -9,7 +9,8 @@ export class Contact {
   state: string;
   reason: string;
   area?: string;
-  fieldOffices?: FieldOffice[];
+  // tslint:disable-next-line:variable-name
+  field_offices?: FieldOffice[];
 
   public contactDisplay(): string {
     if (this.partyStateAbbr() !== '') {
@@ -38,5 +39,5 @@ export const mockContact = Object.assign(new Contact(), {
   state: 'CA',
   reason: 'This is your mock representative',
   area: undefined,
-  fieldOffices: []
+  field_offices: []
 });
