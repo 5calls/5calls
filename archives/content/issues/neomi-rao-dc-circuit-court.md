@@ -1,0 +1,8 @@
+---
+title: Oppose Human Rights Opponent Neomi Rao for DC Circuit Judge
+date: 2017-03-23
+publishdate: 2017-03-24
+---
+Neomi Rao, a conservative lawyer and anti-regulation advocate, has been nominated to fill Brett Kavanaugh’s vacated DC Circuit Court seat. The DC Circuit is regarded as the second most important court behind the Supreme Court because it directly reviews decisions and rules of federal agencies based in the nation’s capital. Currently, Rao is heading the Office of Information and Regulatory Affairs (OIRA), where she has been described as an ally to the administration in stripping away federal government protections and regulations. On the Circuit Court, it is likely she would continue to focus on deregulation, at the expense of consumer rights and other protections.
+
+More broadly, she has odd and troubling beliefs around human rights. She has repeatedly taken a strong position defending [“dwarf-tossing,”](https://www.motherjones.com/politics/2018/11/neomi-rao-dwarf-tossing-kavanaugh-replacement/) where people with dwarfism wearing velcro are thrown against a wall, arguing that opposition to this practice represents a misguided focus on human dignity that conflicts with the Constitution, personal freedom and American exceptionalism. She also has repeatedly criticized advancements in racial and LGBT rights, including the decriminalization of gay sex and the striking down of the Defense of Marriage Act. Her fundamental beliefs - that unfettered individual freedom (including the ability to abuse and discriminate against others) is more important than protecting the rights of others - are dangerously extreme for one of our most influential Courts.
