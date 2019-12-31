@@ -1,45 +1,43 @@
 .sidebar-nonissue {
-    box-shadow: 0px 2px 12px 0px rgba(0, 0, 0, 0.18);
-  
-    @include max-width-bp(medium) {
-      box-shadow: none;
+  box-shadow: 0px 2px 12px 0px rgba(0, 0, 0, 0.18);
+
+  @include max-width-bp(medium) {
+    box-shadow: none;
+  }
+
+  .nonissue {
+    font-size: 18px;
+    text-align: center;
+    margin: 0;
+    a {
+      display: block;
+      background-color: $gray-light;
+      padding: 24px 0;
     }
-    
-    .nonissue {
-        font-size: 18px;
-        text-align: center;
-        margin: 0;
-        a {
-            display: block;
-            background-color: $gray-light;
-            padding: 24px 0;
-        }
-      }
+  }
 }
 
 .archive__list {
-    h2 {
-        margin-top: 12px;
-    }
+  h2 {
+    margin-top: 12px;
+  }
 
-    article {
-        blockquote {
-            margin: 20px 0;
-            padding: 18px 18px 2px 18px;
-            background-color: $gray-light;
-            border-radius: 10px;
-        }
+  article {
+    blockquote {
+      margin: 20px 0;
+      padding: 18px 18px 2px 18px;
+      background-color: $gray-light;
+      border-radius: 10px;
     }
+  }
 
-
-    ul {
-        list-style: none;
-        li {
-            font-size: 20px;
-        }
+  ul {
+    list-style: none;
+    li {
+      font-size: 20px;
     }
+  }
 }
 
 .archive__single {
-    
 }

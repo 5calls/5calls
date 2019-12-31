@@ -223,8 +223,8 @@ module.exports = {
     new MiniCssExtractPlugin({
       // Options similar to the same options in webpackOptions.output
       // both options are optional
-      filename: 'static/css/[name].[hash:8].css',
-      chunkFilename: 'static/css/[id].[hash:8].css'
+      filename: 'static/css/[name].css',
+      chunkFilename: 'static/css/[id].css'
     })
   ],
   // Some libraries import Node modules but don't use them in the browser.
