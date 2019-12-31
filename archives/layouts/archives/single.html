@@ -4,6 +4,10 @@
     <section class="call">
         <header class="call__header">
             <h1 class="call__title">{{ .Title }}</h1>
+            <blockquote class="call__archived">
+              <h3>🏛 This topic is archived</h3>
+              <p>You’re viewing a topic that isn’t worth calling on anymore. It either passed, failled or is otherwise stuck and unlikely to move forward. If this information changes, we’ll open this topic to calls again.</p>
+            </blockquote>
             <div class="call__reason">
                 {{ .Content }}
             </div>
