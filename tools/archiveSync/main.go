@@ -8,7 +8,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/fabioberger/airtable-go"
+	"github.com/jinzhu/gorm"
+	_ "github.com/jinzhu/gorm/dialects/mysql"
 )
 
 const (
@@ -17,31 +18,20 @@ const (
 )
 
 func main() {
-	base := os.Getenv("AIRTABLE_BASE")
-	key := os.Getenv("AIRTABLE_KEY")
-	if base == "" || key == "" {
-		log.Fatal("could not get airtable env")
+	rdsURL := os.Getenv("FIVECALLS_RDS_URL")
+	readPassword := os.Getenv("FIVECALLS_RDS_READ_PASS")
+	if rdsURL == "" || readPassword == "" {
+		log.Fatal("could not get rds env")
 	}
 
-	// • download filtered dead issues
-	c, err := airtable.New(key, base)
+	db, err := gorm.Open("mysql", fmt.Sprintf("readissues:%s@tcp(%s)/results?charset=utf8&parseTime=True&loc=Local", readPassword, rdsURL))
 	if err != nil {
-		log.Fatalf("couldn't make airtable client: %s", err)
+		log.Fatalf("couldn't connect to db: %s", err)
 	}
+	defer db.Close()
 
-	var issues []*ATIssue
-	err = c.ListRecords(issuesTable, &issues, airtable.ListParameters{
-		FilterByFormula: `Dead`,
-		Sort: []airtable.SortParameter{
-			airtable.SortParameter{
-				Field:          "Sort",
-				ShouldSortDesc: false,
-			},
-		},
-	})
-	if err != nil {
-		log.Fatalf("couldn't fetch airtable issues")
-	}
+	gormIssues := []Issue{}
+	db.Raw("SELECT * FROM newissues WHERE groupID = 99 and deleted_at and created_at >= '2019-01-01 00:00:00'").Scan(&gormIssues)
 
 	// • delete old content folder contents
 	info, err := ioutil.ReadDir(issuesDirectory)
@@ -58,7 +48,7 @@ func main() {
 	// log.Printf("got %d issues", len(issues))
 
 	// • generate new content files
-	for _, issue := range issues {
+	for _, issue := range gormIssues {
 		// log.Printf("issue is %+v", issue)
 		if issue.slugWithNoSpaces() != "" {
 			ioutil.WriteFile(fmt.Sprintf("%s/%s.md", issuesDirectory, issue.slugWithNoSpaces()), []byte(issue.toHugo()), 0644)
@@ -66,56 +56,51 @@ func main() {
 	}
 }
 
-// ATIssueInfo is the model in airtable
-type ATIssueInfo struct {
-	Name         string   `json:"Name"`
-	Action       string   `json:"Action requested"`
-	Script       string   `json:"Script"`
-	Link         string   `json:"Link"`
-	LinkTitle    string   `json:"Link Title"`
-	ContactLinks []string `json:"Contact"`
-	TypeLinks    []string `json:"Type"`
-	Inactive     bool     `json:"Inactive"`
-	Stance       bool     `json:"Stance Results"`
-	URLSlug      string   `json:"URL Slug"`
-	IDidIt       bool     `json:"I did it"`
-	Sort         int      `json:"Sort"`
-}
-
-// ATIssue is the base airtable model
-type ATIssue struct {
-	ID          string `json:"id"`
-	ATIssueInfo `json:"fields"`
-	CreatedAt   string `json:"createdTime"`
-}
-
-func (i ATIssue) slugWithNoSpaces() string {
-	return strings.Join(strings.Fields(i.ATIssueInfo.URLSlug), "")
-}
-
-func (i ATIssue) frontmatterDate() string {
-	layout := "2006-01-02T15:04:05.000Z"
-	t, err := time.Parse(layout, i.CreatedAt)
-	if err != nil {
-		fmt.Println(err)
-		return "2018-01-01"
-	}
-
-	return t.Format("2006-01-02")
-}
-
-func (i ATIssue) toHugo() string {
+func (i Issue) toHugo() string {
 	date := i.frontmatterDate()
 
 	issueMarkdown := fmt.Sprintf(`---
-title: "%s"
+title: %s
 date: %s
 publishdate: %s
 categories: [116th]
 aliases:
  - /issues/%s/
 ---
-%s`, i.ATIssueInfo.Name, date, date, i.slugWithNoSpaces(), i.ATIssueInfo.Action)
+%s`, strings.Replace(i.Name, ":", `\:`, 0), date, date, i.slugWithNoSpaces(), i.Description)
 
 	return issueMarkdown
+}
+
+type Model struct {
+	ID        uint       `json:"id" gorm:"primary_key"`
+	CreatedAt time.Time  `json:"createdAt"`
+	UpdatedAt time.Time  `json:"-"`
+	DeletedAt *time.Time `json:"-"`
+}
+
+type Issue struct {
+	Model
+	GroupID      uint     `json:"-" gorm:"column:groupID"`
+	Name         string   `json:"name"`
+	Description  string   `json:"reason"`
+	Script       string   `json:"script"`
+	ContactType  string   `json:"contactType" gorm:"column:contactType"`
+	ContactAreas []string `json:"contactAreas" gorm:"-"`
+	Slug         string   `json:"slug"`
+	Active       bool     `json:"active"`
+	Meta         string   `json:"-"`
+	Sort         int      `json:"-"`
+}
+
+func (Issue) TableName() string {
+	return "newissues"
+}
+
+func (i Issue) slugWithNoSpaces() string {
+	return strings.Join(strings.Fields(i.Slug), "")
+}
+
+func (i Issue) frontmatterDate() string {
+	return i.Model.UpdatedAt.Format("2006-01-02")
 }
