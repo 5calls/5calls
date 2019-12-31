@@ -6,13 +6,14 @@ import (
 	"log"
 	"os"
 	"strings"
+	"time"
 
 	"github.com/fabioberger/airtable-go"
 )
 
 const (
 	issuesTable     = "Issues list"
-	issuesDirectory = "../../archives/content/issues"
+	issuesDirectory = "../../archives/content/archives"
 )
 
 func main() {
@@ -92,14 +93,29 @@ func (i ATIssue) slugWithNoSpaces() string {
 	return strings.Join(strings.Fields(i.ATIssueInfo.URLSlug), "")
 }
 
+func (i ATIssue) frontmatterDate() string {
+	layout := "2006-01-02T15:04:05.000Z"
+	t, err := time.Parse(layout, i.CreatedAt)
+	if err != nil {
+		fmt.Println(err)
+		return "2018-01-01"
+	}
+
+	return t.Format("2006-01-02")
+}
+
 func (i ATIssue) toHugo() string {
+	date := i.frontmatterDate()
+
 	issueMarkdown := fmt.Sprintf(`---
 title: "%s"
 date: %s
-publishdate: 2017-03-24
+publishdate: %s
 categories: [116th]
+aliases:
+ - /issues/%s/
 ---
-%s`, i.ATIssueInfo.Name, "2017-03-24", i.ATIssueInfo.Action)
+%s`, i.ATIssueInfo.Name, date, date, i.slugWithNoSpaces(), i.ATIssueInfo.Action)
 
 	return issueMarkdown
 }
