@@ -1,6 +1,7 @@
 [Settings]
 ID = "5calls"
 
+[context.deploy-preview.environment]
 HUGO_VERSION = "0.62.0"
 
 [build]
