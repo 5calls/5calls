@@ -3,6 +3,7 @@ title: Protect Mueller and the Russia Investigation
 date: 2019-03-22
 publishdate: 2019-03-22
 categories: [116th]
+issue_id: 412
 aliases:
  - /issues/protect-mueller-russia-investigation/
 ---

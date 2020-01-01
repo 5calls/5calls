@@ -3,6 +3,7 @@ title: Demand the Treasury Department Release Trump's Tax Returns
 date: 2019-05-05
 publishdate: 2019-05-05
 categories: [116th]
+issue_id: 561
 aliases:
  - /issues/treasury-trump-tax-returns/
 ---

@@ -3,6 +3,7 @@ title: Demand the Closure and Investigation of Child Migrant Prisons
 date: 2019-03-27
 publishdate: 2019-03-27
 categories: [116th]
+issue_id: 434
 aliases:
  - /issues/migrant-child-detention-homestead-florida/
 ---

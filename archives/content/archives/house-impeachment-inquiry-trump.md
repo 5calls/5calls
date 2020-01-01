@@ -3,6 +3,7 @@ title: Demand the House Impeach Donald Trump
 date: 2019-10-07
 publishdate: 2019-10-07
 categories: [116th]
+issue_id: 633
 aliases:
  - /issues/house-impeachment-inquiry-trump/
 ---

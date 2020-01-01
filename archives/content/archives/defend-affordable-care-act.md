@@ -3,6 +3,7 @@ title: Urge Congress to Defend the Affordable Care Act
 date: 2019-03-27
 publishdate: 2019-03-27
 categories: [116th]
+issue_id: 410
 aliases:
  - /issues/defend-affordable-care-act/
 ---

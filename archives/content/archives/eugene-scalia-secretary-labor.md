@@ -3,6 +3,7 @@ title: Reject Secretary of Labor Nominee Eugene Scalia - Vote Tuesday
 date: 2019-09-26
 publishdate: 2019-09-26
 categories: [116th]
+issue_id: 634
 aliases:
  - /issues/eugene-scalia-secretary-labor/
 ---

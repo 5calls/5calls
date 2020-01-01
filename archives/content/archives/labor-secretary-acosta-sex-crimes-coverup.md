@@ -3,6 +3,7 @@ title: Demand Labor Secretary Acosta Resign for the Coverup of Jeffrey Epstein's
 date: 2019-07-14
 publishdate: 2019-07-14
 categories: [116th]
+issue_id: 604
 aliases:
  - /issues/labor-secretary-acosta-sex-crimes-coverup/
 ---

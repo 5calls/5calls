@@ -3,6 +3,7 @@ title: Demand Congress Reverse Changes to the Endangered Species Act
 date: 2019-12-09
 publishdate: 2019-12-09
 categories: [116th]
+issue_id: 622
 aliases:
  - /issues/endangered-species-act-cra/
 ---

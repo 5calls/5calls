@@ -3,6 +3,7 @@ title: Ensure the Public Release of the Mueller Report
 date: 2019-03-27
 publishdate: 2019-03-27
 categories: [116th]
+issue_id: 433
 aliases:
  - /issues/mueller-report-transparency-act/
 ---

@@ -3,6 +3,7 @@ title: Oppose Anti-LGBT Howard Nielson Jr. for Federal Judgeship - Confirmed
 date: 2019-05-23
 publishdate: 2019-05-23
 categories: [116th]
+issue_id: 579
 aliases:
  - /issues/howard-nielson-district-judge-utah/
 ---

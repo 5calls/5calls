@@ -3,6 +3,7 @@ title: Restore the SALT Deduction
 date: 2019-10-27
 publishdate: 2019-10-27
 categories: [116th]
+issue_id: 644
 aliases:
  - /issues/salt-deduction-cra/
 ---

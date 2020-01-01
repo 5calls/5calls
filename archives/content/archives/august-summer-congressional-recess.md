@@ -3,6 +3,7 @@ title: Request an August Recess Town Hall to Demand Your Reps Pursue Impeachment
 date: 2019-09-16
 publishdate: 2019-09-16
 categories: [116th]
+issue_id: 611
 aliases:
  - /issues/august-summer-congressional-recess/
 ---

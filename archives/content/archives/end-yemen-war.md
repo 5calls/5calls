@@ -3,6 +3,7 @@ title: End the US Involvement in Yemen War - VETOED
 date: 2019-05-05
 publishdate: 2019-05-05
 categories: [116th]
+issue_id: 549
 aliases:
  - /issues/end-yemen-war/
 ---

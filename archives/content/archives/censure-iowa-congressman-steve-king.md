@@ -3,6 +3,7 @@ title: Demand Censure of Rep. Steve King
 date: 2019-02-25
 publishdate: 2019-02-25
 categories: [116th]
+issue_id: 413
 aliases:
  - /issues/censure-iowa-congressman-steve-king/
 ---

@@ -3,6 +3,7 @@ title: Urge Congress Hold Border Patrol Agents Accountable
 date: 2019-08-15
 publishdate: 2019-08-15
 categories: [116th]
+issue_id: 603
 aliases:
  - /issues/border-patrol-agents-racist-facebook/
 ---

@@ -3,6 +3,7 @@ title: Block Coal Lobbyist Andrew Wheeler for EPA Administrator - Confirmed
 date: 2019-03-01
 publishdate: 2019-03-01
 categories: [116th]
+issue_id: 417
 aliases:
  - /issues/andrew-wheeler-epa/
 ---

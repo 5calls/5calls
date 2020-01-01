@@ -3,6 +3,7 @@ title: Demand the Resignation of Congressman Steve King
 date: 2019-09-04
 publishdate: 2019-09-04
 categories: [116th]
+issue_id: 620
 aliases:
  - /issues/steve-king-iowa-resign/
 ---

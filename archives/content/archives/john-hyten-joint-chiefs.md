@@ -3,6 +3,7 @@ title: Block John Hyten for Vice Chairman of Joint Chiefs of Staff
 date: 2019-11-25
 publishdate: 2019-11-25
 categories: [116th]
+issue_id: 621
 aliases:
  - /issues/john-hyten-joint-chiefs/
 ---

@@ -3,6 +3,7 @@ title: Overturn Trump's National Emergency Declaration - Veto Override Vote Tues
 date: 2019-03-29
 publishdate: 2019-03-29
 categories: [116th]
+issue_id: 461
 aliases:
  - /issues/trump-national-emergency/
 ---

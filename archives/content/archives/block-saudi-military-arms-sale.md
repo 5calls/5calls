@@ -3,6 +3,7 @@ title: Block Trump's Military Arms Sale to Saudi Arabia - Veto Override Vote Mon
 date: 2019-08-15
 publishdate: 2019-08-15
 categories: [116th]
+issue_id: 608
 aliases:
  - /issues/block-saudi-military-arms-sale/
 ---

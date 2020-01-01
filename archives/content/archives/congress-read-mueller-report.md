@@ -3,6 +3,7 @@ title: Demand your Members of Congress Read the Entire Mueller Report
 date: 2019-08-15
 publishdate: 2019-08-15
 categories: [116th]
+issue_id: 591
 aliases:
  - /issues/congress-read-mueller-report/
 ---

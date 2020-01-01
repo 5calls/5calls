@@ -3,6 +3,7 @@ title: Request a July Recess Town Hall
 date: 2019-07-07
 publishdate: 2019-07-07
 categories: [116th]
+issue_id: 602
 aliases:
  - /issues/july-recess-town-hall/
 ---

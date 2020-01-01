@@ -3,6 +3,7 @@ title: Oppose Barry Myers for NOAA Administrator
 date: 2019-11-25
 publishdate: 2019-11-25
 categories: [116th]
+issue_id: 576
 aliases:
  - /issues/barry-myers-noaa-administrator/
 ---

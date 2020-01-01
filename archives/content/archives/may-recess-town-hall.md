@@ -3,6 +3,7 @@ title: Request a May Recess Town Hall
 date: 2019-06-02
 publishdate: 2019-06-02
 categories: [116th]
+issue_id: 584
 aliases:
  - /issues/may-recess-town-hall/
 ---

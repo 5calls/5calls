@@ -3,6 +3,7 @@ title: Prevent War with Iran
 date: 2019-08-15
 publishdate: 2019-08-15
 categories: [116th]
+issue_id: 578
 aliases:
  - /issues/iran-war-trump-bolton/
 ---

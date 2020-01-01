@@ -3,6 +3,7 @@ title: Hold AG Barr and Secretary Ross in Contempt of Congress - Held in Contemp
 date: 2019-07-21
 publishdate: 2019-07-21
 categories: [116th]
+issue_id: 593
 aliases:
  - /issues/subpoena-mueller-report-evidence/
 ---

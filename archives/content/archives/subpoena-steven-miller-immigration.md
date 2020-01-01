@@ -3,6 +3,7 @@ title: Subpoena Steven Miller to Testify Before Congress
 date: 2019-08-15
 publishdate: 2019-08-15
 categories: [116th]
+issue_id: 575
 aliases:
  - /issues/subpoena-steven-miller-immigration/
 ---

@@ -3,6 +3,7 @@ title: Demand a Federal Ban on Assault Weapons
 date: 2019-09-16
 publishdate: 2019-09-16
 categories: [116th]
+issue_id: 483
 aliases:
  - /issues/assault-weapon-ban/
 ---

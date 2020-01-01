@@ -3,6 +3,7 @@ title: Ensure Adherence to Obama-Era Clean Air Standards
 date: 2019-10-21
 publishdate: 2019-10-21
 categories: [116th]
+issue_id: 640
 aliases:
  - /issues/affordable-clean-energy-clean-power-plan/
 ---

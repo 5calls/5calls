@@ -3,6 +3,7 @@ title: Protect Furloughed Federal Workers from Eviction and Foreclosure
 date: 2019-02-25
 publishdate: 2019-02-25
 categories: [116th]
+issue_id: 416
 aliases:
  - /issues/federal-employee-civil-relief-act/
 ---
