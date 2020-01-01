@@ -6,7 +6,7 @@ ID = "5calls"
   PUBLIC_URL = "/"
 
 [build]
-command = "yarn build && cd archives && hugo version"
+command = "yarn build && cd archives && hugo"
 
 [[redirects]]
   from = "/issues/"
