@@ -4,7 +4,7 @@ ID = "5calls"
 HUGO_VERSION = "0.62.0"
 
 [build]
-command = "yarn build && cd archives && hugo"
+command = "yarn build && cd archives && hugo version"
 
 [[redirects]]
   from = "/issues/"
