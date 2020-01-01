@@ -65,7 +65,7 @@ test('Footer displays right links', async t => {
   await t.expect(impactLink.getAttribute('href')).eql('/impact');
   await t.expect(impactLink.innerText).eql('Your Impact');
 
-  const support = rightLinks.nth(1);
+  const support = rightLinks.nth(2);
   const supportLink = support.find('a');
   await t
     .expect(supportLink.getAttribute('href'))
