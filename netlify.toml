@@ -1,6 +1,9 @@
 [Settings]
 ID = "5calls"
 
+[build]
+  command = "yarn build && cd archive && hugo"
+
 [[redirects]]
   from = "/issues/"
   query = {address = ":address", all = ":all"}
@@ -41,8 +44,8 @@ ID = "5calls"
   status = 200
 
 [[redirects]]
-  from = "/admin/refresh"
-  to = "http://167.99.163.163:8080/admin/refresh"
+  from = "/archives/*"
+  to = "/archives/:splat"
   status = 200
 
 [[redirects]]

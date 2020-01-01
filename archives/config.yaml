@@ -1,6 +1,6 @@
 title: "5 Calls"
 baseURL: "https://5calls.org/"
 languageCode: "en-us"
-publishDir: "public"
+publishDir: "../build" # "public"
 disableKinds: ["RSS","sitemap","home","taxonomy","taxonomyTerm"]
 staticDir: "fakestatic" # disable when testing locally to get the static images for the site to look good
