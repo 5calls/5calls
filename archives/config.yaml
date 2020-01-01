@@ -1,5 +1,5 @@
 title: "5 Calls"
-baseURL: "https://5calls.org/"
+baseURL: ""
 languageCode: "en-us"
 publishDir: "../build" # "public"
 disableKinds: ["RSS","sitemap","home","taxonomy","taxonomyTerm"]
