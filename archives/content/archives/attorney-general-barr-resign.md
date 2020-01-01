@@ -3,6 +3,7 @@ title: Demand Attorney General Barr Resign
 date: 2019-06-02
 publishdate: 2019-06-02
 categories: [116th]
+issue_id: 571
 aliases:
  - /issues/attorney-general-barr-resign/
 ---

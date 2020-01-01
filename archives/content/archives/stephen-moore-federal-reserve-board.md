@@ -3,6 +3,7 @@ title: Oppose Stephen Moore for Federal Reserve Board - Withdrawn
 date: 2019-05-05
 publishdate: 2019-05-05
 categories: [116th]
+issue_id: 546
 aliases:
  - /issues/stephen-moore-federal-reserve-board/
 ---

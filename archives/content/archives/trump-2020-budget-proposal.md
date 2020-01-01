@@ -3,6 +3,7 @@ title: Oppose the Trump Administration's 2020 Budget Proposal
 date: 2019-06-02
 publishdate: 2019-06-02
 categories: [116th]
+issue_id: 531
 aliases:
  - /issues/trump-2020-budget-proposal/
 ---

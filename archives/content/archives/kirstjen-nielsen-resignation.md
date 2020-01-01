@@ -3,6 +3,7 @@ title: Demand Homeland Security Secretary Kirstjen Nielsen's Resignation
 date: 2019-04-08
 publishdate: 2019-04-08
 categories: [116th]
+issue_id: 504
 aliases:
  - /issues/kirstjen-nielsen-resignation/
 ---

@@ -3,6 +3,7 @@ title: Reject Transfer of FEMA Money for Immigrant Detention
 date: 2019-11-25
 publishdate: 2019-11-25
 categories: [116th]
+issue_id: 626
 aliases:
  - /issues/fema-disaster-relief-ice-detention/
 ---

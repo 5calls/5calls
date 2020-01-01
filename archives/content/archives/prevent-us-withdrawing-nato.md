@@ -3,6 +3,7 @@ title: Prevent Trump From Unilaterally Withdrawing from NATO
 date: 2019-06-02
 publishdate: 2019-06-02
 categories: [116th]
+issue_id: 482
 aliases:
  - /issues/prevent-us-withdrawing-nato/
 ---

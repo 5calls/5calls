@@ -3,6 +3,7 @@ title: Oppose Climate Denier Kelly Knight Craft for UN Ambassador - Final Vote t
 date: 2019-09-09
 publishdate: 2019-09-09
 categories: [116th]
+issue_id: 627
 aliases:
  - /issues/knight-craft-un-ambassador/
 ---

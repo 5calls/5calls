@@ -3,6 +3,7 @@ title: Demand Congress Impose Sanctions on Turkey - Passed House
 date: 2019-12-09
 publishdate: 2019-12-09
 categories: [116th]
+issue_id: 639
 aliases:
  - /issues/syria-military-withdrawal-turkey-kurds/
 ---

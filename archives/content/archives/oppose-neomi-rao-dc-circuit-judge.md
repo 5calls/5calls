@@ -3,6 +3,7 @@ title: Oppose Anti-Regulation Attorney Neomi Rao for DC Circuit Judge - Confirme
 date: 2019-03-13
 publishdate: 2019-03-13
 categories: [116th]
+issue_id: 446
 aliases:
  - /issues/oppose-neomi-rao-dc-circuit-judge/
 ---

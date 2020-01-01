@@ -3,6 +3,7 @@ title: Support the Sovereignty of the Mashpee Wamapnoag Tribe - Passed House
 date: 2019-08-15
 publishdate: 2019-08-15
 categories: [116th]
+issue_id: 574
 aliases:
  - /issues/sovereignty-mashpee-wamapnoag-tribe/
 ---

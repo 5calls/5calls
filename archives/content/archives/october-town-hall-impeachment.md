@@ -3,6 +3,7 @@ title: Request an October Recess Town Hall to Discuss Trump's Impeachment
 date: 2019-10-13
 publishdate: 2019-10-13
 categories: [116th]
+issue_id: 635
 aliases:
  - /issues/october-town-hall-impeachment/
 ---

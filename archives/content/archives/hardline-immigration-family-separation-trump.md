@@ -3,6 +3,7 @@ title: Oppose New Family Separation and Hardline Immigration Policies
 date: 2019-08-12
 publishdate: 2019-08-12
 categories: [116th]
+issue_id: 562
 aliases:
  - /issues/hardline-immigration-family-separation-trump/
 ---

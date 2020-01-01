@@ -3,6 +3,7 @@ title: Demand the Investigation and Impeachment of Brett Kavanaugh
 date: 2019-09-22
 publishdate: 2019-09-22
 categories: [116th]
+issue_id: 631
 aliases:
  - /issues/brett-kavanaugh-investigation-impeachment/
 ---

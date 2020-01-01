@@ -3,6 +3,7 @@ title: Hold Mnuchin and Rettig in Contempt for Failing to Release Trump's Tax Re
 date: 2019-08-15
 publishdate: 2019-08-15
 categories: [116th]
+issue_id: 581
 aliases:
  - /issues/trump-taxes-mnuchin-rettig-contempt/
 ---

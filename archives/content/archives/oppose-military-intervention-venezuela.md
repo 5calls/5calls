@@ -3,6 +3,7 @@ title: Oppose Military Intervention in Venezuela
 date: 2019-05-19
 publishdate: 2019-05-19
 categories: [116th]
+issue_id: 432
 aliases:
  - /issues/oppose-military-intervention-venezuela/
 ---

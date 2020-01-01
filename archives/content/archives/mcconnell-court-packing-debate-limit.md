@@ -3,6 +3,7 @@ title: Stop McConnell and the GOP from Packing the Courts - PASSED
 date: 2019-04-07
 publishdate: 2019-04-07
 categories: [116th]
+issue_id: 548
 aliases:
  - /issues/mcconnell-court-packing-debate-limit/
 ---

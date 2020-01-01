@@ -3,6 +3,7 @@ title: Prevent the Sale of Junk Health Insurance Policies - Senate Vote FAILED
 date: 2019-11-03
 publishdate: 2019-11-03
 categories: [116th]
+issue_id: 642
 aliases:
  - /issues/junk-insurance-cra/
 ---

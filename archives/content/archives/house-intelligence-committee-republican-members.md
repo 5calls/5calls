@@ -3,6 +3,7 @@ title: Demand the House GOP Name Intel Committee Members
 date: 2019-01-30
 publishdate: 2019-01-30
 categories: [116th]
+issue_id: 427
 aliases:
  - /issues/house-intelligence-committee-republican-members/
 ---

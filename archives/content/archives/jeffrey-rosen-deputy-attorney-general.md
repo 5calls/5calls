@@ -3,6 +3,7 @@ title: Oppose Jeffrey Rosen for Deputy Attorney General - Confirmed
 date: 2019-05-19
 publishdate: 2019-05-19
 categories: [116th]
+issue_id: 572
 aliases:
  - /issues/jeffrey-rosen-deputy-attorney-general/
 ---

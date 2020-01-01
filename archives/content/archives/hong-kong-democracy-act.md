@@ -3,6 +3,7 @@ title: Support Democracy and Freedom in Hong Kong - Passed House
 date: 2019-11-20
 publishdate: 2019-11-20
 categories: [116th]
+issue_id: 638
 aliases:
  - /issues/hong-kong-democracy-act/
 ---

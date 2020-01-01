@@ -3,6 +3,7 @@ title: Block David Bernhardt for Secretary of the Department of Interior - Confi
 date: 2019-04-12
 publishdate: 2019-04-12
 categories: [116th]
+issue_id: 552
 aliases:
  - /issues/david-bernhardt-interior-secretary/
 ---

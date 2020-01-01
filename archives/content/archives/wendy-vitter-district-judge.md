@@ -3,6 +3,7 @@ title: Block Anti-Choice Extremist Wendy Vitter from a Lifetime Judgeship - Conf
 date: 2019-05-19
 publishdate: 2019-05-19
 categories: [116th]
+issue_id: 577
 aliases:
  - /issues/wendy-vitter-district-judge/
 ---

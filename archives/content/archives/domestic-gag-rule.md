@@ -3,6 +3,7 @@ title: Protect Women's Healthcare Clinics from Trump's "Domestic Gag Rule"
 date: 2019-08-15
 publishdate: 2019-08-15
 categories: [116th]
+issue_id: 485
 aliases:
  - /issues/domestic-gag-rule/
 ---

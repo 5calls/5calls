@@ -3,6 +3,7 @@ title: Oppose Steven Menashi for a Lifetime Federal Judgeship - Confirmed
 date: 2019-11-17
 publishdate: 2019-11-17
 categories: [116th]
+issue_id: 647
 aliases:
  - /issues/steven-menashi-second-circuit-court/
 ---

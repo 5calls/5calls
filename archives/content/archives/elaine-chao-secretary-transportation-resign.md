@@ -3,6 +3,7 @@ title: Demand Elaine Chao Resign for Corruption
 date: 2019-08-15
 publishdate: 2019-08-15
 categories: [116th]
+issue_id: 595
 aliases:
  - /issues/elaine-chao-secretary-transportation-resign/
 ---

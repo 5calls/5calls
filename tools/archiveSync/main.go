@@ -64,10 +64,11 @@ title: %s
 date: %s
 publishdate: %s
 categories: [116th]
+issue_id: %d
 aliases:
  - /issues/%s/
 ---
-%s`, strings.Replace(i.Name, ":", `\:`, 0), date, date, i.slugWithNoSpaces(), i.Description)
+%s`, strings.Replace(i.Name, ":", `\:`, 0), date, date, i.ID, i.slugWithNoSpaces(), i.Description)
 
 	return issueMarkdown
 }

@@ -3,6 +3,7 @@ title: Investigate Approval of White House Security Clearances Against Expert Ad
 date: 2019-08-15
 publishdate: 2019-08-15
 categories: [116th]
+issue_id: 425
 aliases:
  - /issues/security-clearance-jared-kushner/
 ---

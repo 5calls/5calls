@@ -3,6 +3,7 @@ title: Demand the House Subpoena Robert Mueller to Publicly Testify - Subpoenaed
 date: 2019-06-27
 publishdate: 2019-06-27
 categories: [116th]
+issue_id: 600
 aliases:
  - /issues/subpoena-robert-mueller/
 ---
