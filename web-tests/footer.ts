@@ -4,7 +4,7 @@ import { waitForReact, ReactSelector } from 'testcafe-react-selectors';
 const getWindowLocation = ClientFunction(() => window.location.href);
 
 fixture`Footer`.page`http://localhost:3000`.beforeEach(async () => {
-  await waitForReact(15000);
+  waitForReact(15000);
 });
 
 // tslint:disable-next-line:no-shadowed-variable
