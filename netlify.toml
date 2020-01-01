@@ -2,7 +2,7 @@
 ID = "5calls"
 
 [build]
-  command = "yarn build && cd archive && hugo"
+  command = "yarn build && cd archives && hugo"
 
 [[redirects]]
   from = "/issues/"
