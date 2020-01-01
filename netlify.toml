@@ -1,6 +1,9 @@
 [Settings]
 ID = "5calls"
 
+[context.production.environment]
+  HUGO_VERSION = "0.62.0"
+
 [context.deploy-preview.environment]
   HUGO_VERSION = "0.62.0"
   PUBLIC_URL = "/"
