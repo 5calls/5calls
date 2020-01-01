@@ -2,7 +2,8 @@
 ID = "5calls"
 
 [context.deploy-preview.environment]
-HUGO_VERSION = "0.62.0"
+  HUGO_VERSION = "0.62.0"
+  PUBLIC_URL = "/"
 
 [build]
 command = "yarn build && cd archives && hugo version"
@@ -55,6 +56,3 @@ command = "yarn build && cd archives && hugo version"
   from = "/*"
   to = "/index.html"
   status = 200
-
-[context.deploy-preview.environment]
-  PUBLIC_URL = "/"
