@@ -1,0 +1,10 @@
+name: Update Archive
+on: [pull_request_review_comment]
+jobs:
+  build:
+    name: Check for updates
+    runs-on: ubuntu-latest
+    steps:
+
+    - name: Checkout
+      uses: actions/checkout@v2
