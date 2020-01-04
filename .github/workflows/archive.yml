@@ -1,6 +1,8 @@
 name: Update Archive
 
-on: [push]
+on:
+  schedule:
+    - cron: '2 8 * * *' # midnight pacific
 
 jobs:
   build:
@@ -8,15 +10,14 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Setup Go for use with actions
-      uses: actions/setup-go@v1.0.0
+    - uses: actions/setup-go@v1.0.0 # setup running go
       with:
         version: 1.13
-    - uses: actions/checkout@v1
-    - uses: geertvdc/setup-hub@master
-    - uses: fregante/setup-git-token@v1
+    - uses: geertvdc/setup-hub@master # setup running hub cli
+    - uses: fregante/setup-git-token@v1 # auth git with github token
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
+    - uses: actions/checkout@v1 
     - run: cd tools/archiveSync && go get . && go run main.go
       env:
         FIVECALLS_RDS_URL: ${{ secrets.FIVECALLS_RDS_URL }}
@@ -25,11 +26,11 @@ jobs:
       run: |
         git config --local user.email "action@github.com"
         git config --local user.name "GitHub Action"
-    - run: git diff archives/content/
-    - run: branch_name=$(date +'%m-%d-%Y') && git checkout -b archive-${branch_name}
-    - run: git add archives/content/
+    - run: git diff archives/content/ # for our use right now, but this should exit if we there's no diff here
+    - run: branch_name=$(date +'%m-%d-%Y') && git checkout -b archive-${branch_name} # set new branch name to day
+    - run: git add archives/content/ # add only content from this directory
     - run: git commit -m "updated archive content"
-    - run: hub pull-request -p -l archive -m "Archive topics update"
+    - run: hub pull-request -p -l archive -m "Archive topics update" # make a new pull request with the results
       env:
         GITHUB_USER: ${{ secrets.GITHUB_USER }}
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
