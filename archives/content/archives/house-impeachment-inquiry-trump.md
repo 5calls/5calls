@@ -1,12 +1,16 @@
 ---
-title: Demand the House Impeach Donald Trump
-date: 2019-10-07
-publishdate: 2019-10-07
+title: Support the Impeachment Inquiry of Donald Trump - PASSED
+date: 2020-01-20
+publishdate: 2020-01-20
 categories: [116th]
-issue_id: 633
+issue_id: 645
 aliases:
  - /issues/house-impeachment-inquiry-trump/
 ---
+>**UPDATE (10/31/19):** In a 231 to 196 vote, the House has passed a resolution to formalize the next steps of Trump's impeachment.
+
+>**UPDATE (10/28/19):** On Thursday, October 31st, the House will [vote on a resolution to formalize](https://www.washingtonpost.com/politics/trump-impeachment-inquiry-live-updates/2019/10/28/4d316e64-f96a-11e9-8190-6be4deb56e01_story.html) the next phase of Trump's impeachment inquiry. After unprecedented obstruction by Trump and his allies, [House Speaker Nancy Pelosi announced](https://www.npr.org/2019/10/28/774170607/house-will-vote-to-formalize-impeachment-inquiry) "We are taking this step to eliminate any doubt as to whether the Trump Administration may withhold documents, prevent witness testimony, disregard duly authorized subpoenas, or continue obstructing the House of Representatives." Demand your representatives vote in favor of the resolution to formalize Trump's impeachment inquiry.
+
 >**UPDATE (09/24/12):** House Speaker Nancy Pelosi has announced that [six House committees will initiate a formal impeachment inquiry against Donald Trump](https://www.cnn.com/politics/live-news/trump-ukraine-09-24-2019/index.html). The decision to pursue impeachment comes in the wake of a bombshell [whistleblower report](https://www.nytimes.com/2019/09/19/opinion/trump-whistleblower.html) alleging that Trump pressured the Ukrainian government to discredit Democratic presidential candidate Joe Biden [in exchange for military aid](https://www.wsj.com/articles/trump-defends-conversation-with-ukraine-leader-11568993176). The Trump administration has repeatedly [refused to release the full whistleblower complaint to Congress](https://www.nbcnews.com/politics/donald-trump/trump-acknowledges-withholding-funds-ukraine-n1058126), offering only to release a single transcript of a call between Trump and Ukrainian president Volodymyr Zelensky. The official impeachment inquiry begun today is a necessary step toward revealing the full scope of Trump's abuses of power. 
 
 Since (now-former) Special Counsel Robert Mueller released his team’s final [report](https://www.justice.gov/storage/report.pdf) in late April, the Trump administration has aggressively moved to [mislead the American people](https://www.nytimes.com/2019/05/31/us/politics/barr-mueller-team.html?smid=tw-nytimes&smtyp=cur) about the report’s central findings: the Russian government interfered in the 2016 US elections, and Mueller’s team could not clear Donald Trump of crimes related to this effort. In a surprise press conference on May 29, Mueller reiterated that the Department of Justice prevents criminal prosecution of a sitting President and stated, “If we had had confidence that the president clearly did not commit a crime, we would have said so.” Mueller made it clear that it now falls to Congress to review the report and its findings and act accordingly. 
