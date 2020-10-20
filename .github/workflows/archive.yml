@@ -15,7 +15,7 @@ jobs:
         version: 1.13
     - uses: geertvdc/setup-hub@master # setup running hub cli
     - uses: actions/checkout@v2
-    - uses: fregante/setup-git-user@v1 # auth git with github token
+    - uses: fregante/setup-git-user@v1 # configure git user to enable committing
     - run: cd tools/archiveSync && go get . && go run main.go
       env:
         FIVECALLS_RDS_URL: ${{ secrets.FIVECALLS_RDS_URL }}
