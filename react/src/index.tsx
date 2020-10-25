@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
 import App from './App';
+import Reps from './Reps';
 import reportWebVitals from './reportWebVitals';
 
 ReactDOM.render(
@@ -10,6 +10,22 @@ ReactDOM.render(
   </React.StrictMode>,
   document.getElementById('location')
 );
+
+try {
+  ReactDOM.render(
+    <React.StrictMode>
+      <Reps />
+    </React.StrictMode>,
+    document.getElementById('reps')
+  );  
+}
+catch (error) {
+  if (`${error}`.includes("Minified React error #200")) {
+    // nbd, we're on a page where no reps element is
+  } else {
+    console.error("error loading reps component:",error);
+  }
+}
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))
