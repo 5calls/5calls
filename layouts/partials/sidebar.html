@@ -1,24 +1,7 @@
 
 <div class="i-bar">
-    <div class="i-bar-location">
-      <div class="is-visible">
-        <span>Showing representatives for</span>
-        <strong>Oakland, CA</strong>
-        <button class="button-link" onclick="toggleState(1)">Change location</button>
-      </div>
-  
-      <div>
-        <span class="i-bar-loading"><i class="fa fa-map-marker"></i> <b>Getting your location automatically&hellip;</b></span>
-        <button class="button-link" onclick="toggleState(2)"> Or enter an address manually</button>
-      </div>
-  
-      <div>
-        <span>Enter an address or ZIP code</span>
-        <form>
-          <input type="text" placeholder="20500" />
-          <button class="button button-small button-red" onclick="toggleState(0)">Go</button>
-        </form>
-      </div>
+    <div class="i-bar-location" id="location">
+      <!-- react location app here  -->
     </div>
 
     <div class="i-bar-list">

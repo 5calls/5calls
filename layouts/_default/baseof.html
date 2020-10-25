@@ -10,7 +10,11 @@
   {{ $style := resources.Get "sass/main.scss" | resources.ToCSS | resources.Minify | resources.Fingerprint }}
   <link rel="stylesheet" href="{{ $style.Permalink }}">
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700;900&display=swap" rel="stylesheet">
-  <meta name="robots" content="noindex">
+
+  {{ $js := resources.Match "js/*" }}
+  {{ range $js }}
+  <script type="text/javascript" src="{{ .RelPermalink }}" defer></script>
+  {{ end }}
 </head>
 <body class="{{ block `bodyclass` . }}{{ end }}">
   <div class="site">

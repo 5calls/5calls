@@ -3,3 +3,8 @@
 # published
 public/
 resources/
+
+# generated
+assets/js/*
+react/build/
+react/node_modules/
