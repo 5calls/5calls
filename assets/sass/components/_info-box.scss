@@ -1,0 +1,32 @@
+.info-box {
+  background: var(--c-info-box);
+  border-radius: var(--radius);
+  padding: 3rem 1.5rem 0.75rem 1.5rem;
+  position: relative;
+  margin-top: 2rem;
+  font-size: 1rem;
+  text-align: center;
+  &::before {
+    content: "\f05a";
+    font-family: "Font Awesome 5 Free";
+    font-weight: 900;
+    font-size: 1.5rem;
+    color: rgba(#000, 0.3);
+    position: absolute;
+    top: 0.75rem;
+    left: 50%;
+    width: 1.5rem;
+    text-align: center;
+    margin-left: -0.75rem;
+  }
+
+  @media screen and (min-width: 26rem) {
+    text-align: left;
+    padding: 0.75rem 1.5rem 0.75rem 4rem;
+    &::before {
+      left: 1.5rem;
+      margin-left: -0.75rem;
+      width: auto;
+    }
+  }
+}

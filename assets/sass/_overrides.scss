@@ -1,0 +1,205 @@
+// =========
+// Page-specific overrides
+// =========
+
+
+// Homepage
+
+.home {
+  h1 {
+    margin-bottom: var(--paragraph-break);
+    span {
+      display: block;
+    }
+  }
+
+  @media screen and (min-width: 40rem) {
+    .i-bar {
+      grid-column: 1 / span 6;
+    }
+
+    .card-home-wrapper {
+      grid-column: 7 / -1;
+    }
+  }
+
+  @media screen and (min-width: 76rem) {
+    .i-bar {
+      grid-column-end: 5;
+    }
+
+    .card-home-wrapper {
+      grid-column-start: 5;
+    }
+  }
+}
+
+.subscribe-body {
+  input[type="text"] {
+    margin-bottom: 1rem;
+  }
+
+  input[type="submit"] {
+    width: 100%;
+  }
+
+  @media screen and (min-width: 76rem) {
+    display: flex;
+    input[type="text"] {
+      margin: 0 0.5rem 0 0;
+    }
+
+    input[type="submit"] {
+      width: auto;
+    }
+  }
+}
+
+// About page
+
+.founders-photo {
+  grid-column: 1 / span 4;
+
+  img {
+    filter: brightness(40) grayscale(1);
+    display: block;
+    margin: 0 auto;
+
+    @media screen and (min-width: 40rem) {
+      margin: 0;
+    }
+  }
+}
+
+.founders-body {
+  grid-column: 5 / span 8;
+}
+
+@media screen and (min-width: 60rem) {
+  .founders-photo {
+    grid-column: 3 / span 3;
+  }
+
+  .founders-body {
+    grid-column: 6 / span 5;
+  }
+}
+
+.founders-social {
+  font-size: 1rem;
+
+  a {
+    text-decoration: none;
+    margin-right: 1rem;
+    display: block;
+
+    @media screen and (min-width: 30rem) {
+      display: inline-block;
+    }
+  }
+}
+
+
+
+.full-list-link {
+  text-align: center;
+  width: 100%;
+  display: block;
+  margin-top: calc(var(--g-gap) * -1 + 1rem);
+  a {
+    background: rgba(var(--c-blue-rgb), 0.1);
+    color: var(--c-dark);
+    font-size: 0.875rem;
+    display: inline-block;
+    margin: 0 auto;
+    text-decoration: none;
+    border-radius: var(--radius);
+    text-align: center;
+    margin-top: 1.5rem;
+    padding: 0.25rem 0.5rem;
+  }
+}
+
+.about-team {
+  margin-top: 5rem;
+}
+
+// Why Calling Works
+
+.other-comms-footnote {
+  margin-top: 2rem;
+}
+
+// Getting Started
+
+.calling-tips {
+  .card {
+    grid-column: 1 / span 6;
+    &:nth-child(even) {
+      grid-column-start: 7;
+    }
+    @media screen and (min-width: 60rem) {
+      grid-column: 2 / span 5;
+    }
+    @media screen and (min-width: 75rem) {
+      grid-column: 3 / span 4;
+    }
+  }
+  p:first-child {
+    margin-bottom: 0.5rem;
+  }
+}
+
+.g-faq .card {
+  @media screen and (min-width: 40rem) {
+    grid-column: 2 / span 10;
+  }
+
+  @media screen and (min-width: 54rem) {
+    grid-column: 3 / span 8;
+  }
+
+  @media screen and (min-width: 66rem) {
+    grid-column-start: auto;
+    grid-column-end: span 4;
+  }
+}
+
+// Troubleshooting
+
+.troubleshooting {
+  h2 {
+    margin-top: calc(var(--leading) * 2rem);
+  }
+  .g-3up {
+    margin: 0 auto 6rem;
+
+    + div .info-box {
+      margin-top: - 3rem;
+    }
+
+    div {
+      margin-bottom: calc(var(--leading) * 1.5rem);
+    }
+
+    p {
+      margin-bottom: 0;
+    }
+  }
+  img {
+    width: 75%;
+    border-radius: var(--radius);
+    margin: 0 auto 1rem;
+    display: block;
+  }
+
+  @media screen and (min-width: 40rem) {
+    .g-3up {
+      margin-top: 3rem;
+
+      div {
+        margin-bottom: 0;
+      }
+    }
+  }
+}

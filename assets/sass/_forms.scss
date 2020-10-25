@@ -1,0 +1,62 @@
+// Default form styles
+
+form {
+  margin: 0;
+}
+
+::placeholder {
+  color: var(--c-dark);
+}
+
+input {
+  margin: 0;
+  font-size: 1rem;
+  font-family: inherit;
+  line-height: normal;
+}
+
+input::-ms-clear {
+  display: none;
+}
+
+input[type="submit"] {
+  cursor: pointer;
+  -webkit-appearance: button;
+}
+
+input {
+  display: block;
+  width: 100%;
+  vertical-align: middle;
+  &:focus {
+    outline: 0;
+    border-color: var(--c-blue);
+  }
+}
+
+input {
+  padding: 0.5rem 1rem;
+  border-radius: var(--radius);
+  color: var(--c-base);
+}
+
+label, legend {
+  color: var(--c-base);
+}
+
+input[type="text"],
+input[type="email"] {
+  height: var(--leading);
+  border: 2px solid var(--c-blue);
+}
+
+input[type="submit"] {
+  display: inline-block;
+  width: auto;
+  border: 0;
+}
+
+input::-moz-focus-inner {
+  padding: 0;
+  border: 0;
+}

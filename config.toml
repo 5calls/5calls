@@ -1,0 +1,5 @@
+baseURL = "https://5calls.org/"
+languageCode = "en-us"
+title = "5 Calls"
+disableKinds = ["taxonomy"]
+ignoreErrors = ["error-disable-taxonomy"]

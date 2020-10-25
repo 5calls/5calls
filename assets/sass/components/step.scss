@@ -1,0 +1,49 @@
+.step {
+  margin-bottom: 4rem;
+}
+
+.step-content {
+  max-width: 30rem;
+  margin: 0 auto;
+  h2 {
+    margin: 1rem 0;
+    font-weight: 700;
+    text-align: center;
+  }
+}
+
+.step i {
+  font-size: 4em;
+  color: var(--c-blue);
+  margin: 0 auto;
+  display: block;
+}
+
+@media screen and (min-width: 40rem) {
+  .step-content {
+    grid-column: 4 / span 8;
+    margin: 0;
+    max-width: unset;
+
+    h2 {
+      text-align: left;
+      margin: 0 0 var(--paragraph-break);
+    }
+  }
+
+  .step i {
+    font-size: 3em;
+    grid-column: 2 / span 2;
+  }
+}
+
+@media screen and (min-width: 66rem) {
+  .step-content {
+    grid-column: 5 / span 6;
+  }
+
+  .step i {
+    font-size: 4em;
+    grid-column: 3 / span 2;
+  }
+}

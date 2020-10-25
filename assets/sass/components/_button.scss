@@ -1,0 +1,70 @@
+.button {
+  display: inline-block;
+  margin: 0;
+  padding: 1rem 1.5rem;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+  border-radius: var(--radius);
+  background: var(--c-dark);
+  color: #fff;
+  font-weight: 700;
+  transition: transform 0.1s ease-in;
+
+
+  &.button-small {
+    font-size: 1rem;
+    padding: 0.5rem 0.75rem;
+  }
+
+  &:hover,
+  &:focus,
+  &:active,
+  &:visited {
+    color: #fff;
+  }
+
+  &:hover,
+  &:focus {
+    background: var(--c-dark-hover);
+    text-decoration: none;
+  }
+
+  &:focus {
+    box-shadow: 2px solid var(--c-blue);
+  }
+
+  &:active {
+    transform: scale(0.98);
+  }
+
+  &.button-red {
+    --c-dark: var(--c-red);
+    --c-dark: var(--c-red-darker);
+    --c-dark-hover: var(--c-red-dark-hover);
+  }
+
+  &.icon-l,
+  &.icon-r {
+    i {
+      font-size: 1rem;
+    }
+  }
+
+  &.icon-l i {
+    margin-right: 0.5rem;
+  }
+
+  &.icon-r i {
+    margin-left: 0.5rem;
+  }
+}
+
+.button-link {
+  border: 0;
+  background: transparent;
+  padding: 0;
+  margin: 0;
+  color: var(--c-blue);
+  text-decoration: underline;
+}

@@ -1,0 +1,66 @@
+- title: "Editorial and Social"
+  volunteers:
+    - name: Charm Bitanga
+      socialUsername: charmbtrippin
+      socialLink: https://twitter.com/charmbtrippin
+
+    - name: Sara
+      social-service: instagram
+      socialUsername: sara.n.g
+      socialLink: https://www.instagram.com/sara.n.g/
+
+    - name: Rachel Perkins
+      socialUsername: djpiebob
+      socialLink: https://twitter.com/djpiebob
+
+    - name: Rati Gupta
+      socialUsername: theRati
+      socialLink: https://twitter.com/theRati
+
+    - name: Eleanor Wertman
+      social-service: medium
+      socialUsername: eleanor.wertman
+      socialLink: https://medium.com/eleanor.wertman
+
+- title: "Web Design and Engineering"
+  volunteers:
+    - name: Mike Monteiro
+      socialUsername: monteiro
+      socialLink: https://twitter.com/monteiro
+
+    - name: Stewart Scott-Curran
+      socialUsername: stewartsc
+      socialLink: https://twitter.com/stewartsc
+
+    - name: Craig Doremus
+      socialUsername: cdoremus
+      socialLink: https://twitter.com/cdoremus
+
+    - name: Rob Brackett
+      socialUsername: mr0grog
+      socialLink: https://twitter.com/mr0grog
+  fullListUrl: https://github.com/5calls/5calls/graphs/contributors
+
+- title: "iOS Team"
+  volunteers:
+    - name: Ben Scheirman
+      socialUsername: subdigital
+      socialLink: https://twitter.com/subdigital
+
+    - name: Patrick McCarron
+      socialUsername: mccarron
+      socialLink: https://twitter.com/mccarron
+  fullListUrl: https://github.com/5calls/ios/graphs/contributors
+
+- title: "Android Team"
+  volunteers:
+    - name: Katie Dektar
+      social-service: github
+      socialUsername: dektar
+      socialLink: https://github.com/dektar
+
+    - name: Greg Lee
+      social-service: github
+      socialUsername: gregliest
+      socialLink: https://github.com/gregliest
+  fullListUrl: https://github.com/5calls/android/graphs/contributors

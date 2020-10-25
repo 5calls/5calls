@@ -1,0 +1,107 @@
+a {
+  color: var(--c-dark);
+  &:hover,
+  &:active,
+  &:focus,
+  &:visited {
+    color: var(--c-dark);
+  }
+}
+
+
+h1, h2, h3,
+.h1, .h2, .h3 {
+  line-height: 1.2;
+  color: var(--c-emphasis);
+  text-align: center;
+}
+
+h1, .h1,
+h2, .h2 {
+  letter-spacing: -0.02em;
+}
+
+h1, .h1 {
+  font-size: calc(33rem / var(--base-font-size));
+  font-weight: 900;
+  margin-bottom: calc(var(--leading) * 1rem);
+}
+
+h2, .h2 {
+  font-size: calc(22rem / var(--base-font-size));
+  font-weight: 700;
+  margin: calc(var(--leading) * 3rem) auto calc(var(--leading) * 1.5rem);
+  max-width: 53rem;
+}
+
+h3, .h3 {
+  font-size: 100%;
+  font-weight: 400;
+  letter-spacing: -0.03em;
+}
+
+h4, .h4 {
+  font-weight: 700;
+  font-size: 100%;
+  margin-bottom: 0.5rem;
+}
+
+.subhead {
+  display: block;
+  font-size: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05rem;
+  opacity: 0.8;
+  margin-bottom: 0.5rem;
+  line-height: 1;
+}
+
+@media screen and (min-width: 40rem) {
+  h1, .h1 {
+    font-size: calc(64rem / var(--base-font-size));
+    margin-bottom: calc(var(--leading) * 1.5rem);
+  }
+
+  h2, .h2 {
+    font-size: calc(50rem / var(--base-font-size));
+  }
+
+  h3, .h3 {
+    font-size: calc(33rem / var(--base-font-size));
+  }
+
+  .content, h4, h5, h6 {
+    font-size: calc(22rem / var(--base-font-size));
+  }
+}
+
+p {
+  margin-bottom: var(--paragraph-break);
+}
+
+li {
+  margin-bottom: calc(var(--leading) * 1.5rem);
+}
+
+.small {
+  font-size: 1rem;
+  opacity: 0.8;
+}
+
+b, strong {
+  font-weight: 700;
+}
+
+ul li {
+  list-style: disc outside;
+  margin-left: 1.5rem;
+
+  @media screen and (min-width: 40rem) {
+    margin-left: 0;
+  }
+}
+
+
+i, em {
+  font-style: italic;
+}

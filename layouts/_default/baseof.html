@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>{{ if or (.IsPage) (.IsSection) }}{{ .Title }} ⭑ {{ .Site.Title }}{{ else }}{{ .Site.Title }}{{ end }}</title>
+  <meta name="description" content="{{ if .IsPage }}{{ .Description }}{{ else }}{{ .Site.Params.description }}{{ end }}" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  {{ hugo.Generator }}
+  
+  {{ $style := resources.Get "sass/main.scss" | resources.ToCSS | resources.Minify | resources.Fingerprint }}
+  <link rel="stylesheet" href="{{ $style.Permalink }}">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700;900&display=swap" rel="stylesheet">
+  <meta name="robots" content="noindex">
+</head>
+<body class="{{ block `bodyclass` . }}{{ end }}">
+  <div class="site">
+    {{ partial "header.html" . }}
+    {{ block "main" . }}{{ end }}
+    {{ partial "footer.html" . }}
+  </div>
+  <script src="https://kit.fontawesome.com/e8889460d3.js" crossorigin="anonymous"></script>
+  <script>
+    window.FontAwesomeConfig = {
+      searchPseudoElements: true
+    }
+  </script>
+</body>
+</html>

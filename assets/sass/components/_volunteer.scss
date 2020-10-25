@@ -1,0 +1,32 @@
+.volunteer-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.volunteer {
+  font-size: 1rem;
+  text-align: center;
+  width: 50%;
+  padding: 0 calc(var(--g-gap) / 2) var(--g-gap);
+
+  img {
+    max-width: 75%;
+    margin: 0 auto 0.5rem;
+  }
+
+  a {
+    text-decoration: none;
+  }
+
+  p {
+    margin: 0;
+  }
+}
+
+@media screen and (min-width: 60rem) {
+  .volunteer {
+    padding: 0 calc(var(--g-gap) / 2) var(--g-gap);
+    width: 25%;
+  }
+}

@@ -1,0 +1,64 @@
+.header {
+  padding: 1.5rem 0 1rem;
+  border-top: 0.5rem solid var(--c-blue);
+  margin-bottom: 2rem;
+
+  @media screen and (min-width: 40rem) {
+    margin-bottom: 3rem;
+  }
+
+  img {
+    height: 2rem;
+  }
+
+  .content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 1rem;
+  }
+
+  .button {
+    margin-right: 0.75rem;
+
+    i {
+      display: none;
+    }
+  }
+
+  .stars {
+    display: none;
+  }
+
+  @media screen and (min-width: 28rem) {
+    .button {
+      margin-right: 1.5rem;
+
+      i {
+        display: inline-block;
+      }
+    }
+
+    .stars {
+      margin-right: 0.5rem;
+      display: inline-block;
+    }
+  }
+}
+
+.header-actions,
+.header-actions-user {
+  display: flex;
+  align-items: center;
+}
+
+.header-actions-user {
+  color: var(--c-blue);
+  cursor: pointer;
+  &:hover,
+  &:active,
+  &:focus,
+  &:visited {
+    color: var(--c-blue);
+  }
+}

@@ -1,0 +1,55 @@
+{{ define "bodyclass" }}home{{ end }}
+{{ define "main" }}
+<div class="content">
+    <h1>Make your voice heard.</h1>
+    <div class="g">
+        <div class="measure a-ctr">
+            <p>5 Calls is the easiest and most effective way for U.S. constituents to make a political impact.</p>
+        </div>            
+
+        {{ partial "sidebar.html" . }}
+
+        <div class="card-home-wrapper">
+            <div class="card card-home">
+            <i class="fa fa-fw fa-phone-alt"></i>
+            <div class="card-home-body">
+                <h2 class="h3">Calling your congressperson is the most effective way to sway them.</h2>
+                <p><a href="/why-calling-works/">Learn more about why calling works.</a></p>
+            </div>
+            </div>
+        
+            <div class="card card-home">
+            <i class="fa fa-fw fa-hand-holding-heart"></i>
+            <div class="card-home-body">
+                <h2 class="h3">We've made 2,690,317 calls so far. Join&nbsp;us.</h2>
+                <p>Pick an issue from the list, or <a href="/getting-started/">read our guide to getting started.</a></p>
+            </div>
+            </div>
+        
+            <div class="card card-home">
+            <i class="fa fa-fw fa-heart"></i>
+            <div>
+                <h2 class="h3">We're a team of volunteers.</h2>
+                <p>Want to help out? <a href="mailto:hello@make5calls.org?subject=Volunteering">Email us.</a></p>
+            </div>
+            </div>
+        
+            <div class="card card-home">
+            <i class="fa fa-fw fa-envelope-open-text"></i>
+            <div>
+                <h2 class="h3">Get updates on the latest issues.</h2>
+                <p>Subscribe to our newsletter. Once a week, no spam.</p>
+        
+                <form action="//5calls.us16.list-manage.com/subscribe/post?u=82a164d5fe7f51f4a4efb1f83&amp;id=624ef52208" method="post" target="popupwindow" class="subscribe">
+                <label for="email" class="sr-only">Enter your email address</label>
+                <div class="subscribe-body">
+                    <input type="text" placeholder="youremail@example.com" name="email" id="email">
+                    <input type="submit" class="button" value="Subscribe">
+                </div>
+                </form>
+            </div>
+            </div>
+        </div>
+    </div>
+</div>
+{{ end }}

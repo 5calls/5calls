@@ -1,0 +1,8 @@
+<div>
+    <h4>{{ .group }}</h4>
+    <ul>
+        {{ range .links }}
+        <li><i class="fa{{ if .brand }}b{{ end }} fa-fw fa-{{ .icon }}"></i> <a href="{{ .url }}">{{ .title }}</a></li>
+        {{ end }}
+      </ul>  
+</div>

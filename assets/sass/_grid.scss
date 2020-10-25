@@ -1,0 +1,33 @@
+@media screen and (min-width: 40rem) {
+  .g {
+    display: grid;
+    grid-template-columns: repeat(12, minmax(2%, 10%));
+    grid-gap: var(--g-gap);
+
+    &.g-2up > *,
+    &.g-3up > *,
+    &.g-4up > *, {
+      grid-column-end: span 6;
+    }
+
+    &.g-3up > *:nth-child(3) {
+      grid-column-start: 4;
+    }
+  }
+}
+
+@media screen and (min-width: 60rem) {
+  .g {
+    &.g-3up > * {
+      grid-column-end: span 4;
+
+      &:nth-child(3) {
+        grid-column-start: 9;
+      }
+    }
+
+    &.g-4up > * {
+      grid-column-end: span 3;
+    }
+  }
+}

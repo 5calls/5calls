@@ -1,0 +1,121 @@
+// Variables
+
+:root {
+  // Typography
+  --base-font-size: 16;
+  --leading: 1.4;
+  --leading-rem: calc(var(--leading) * 1rem);
+  --paragraph-break: calc(var(--leading) * 0.75rem);
+
+  // Theme Colors
+  --c-base: #545555;
+  --c-emphasis: #191b1d;
+  --c-red: rgb(237, 60, 29);
+  --c-red-rgb: 237, 60, 29;
+  --c-red-darker: #c62b10;
+  --c-red-dark-hover: #97210c;
+  --c-blue: rgb(24, 117, 209);
+  --c-blue-rgb: 24, 117, 209;
+  --c-dark: rgb(2, 63, 159);
+  --c-dark-hover: rgb(1, 44, 111);
+  --c-dark-rgb: 2, 63, 159;
+  --c-darker: rgb(1, 30, 77);
+  --c-info-box: #fdf2d4;
+
+  // Issue status colors
+  --c-latest: rgb(253, 133, 64);
+  --c-latest-rgb: 253, 133, 64;
+  --c-urgent: rgb(228, 37, 126);
+  --c-urgent-rgb: 228, 37, 126;
+  --c-momentum: rgb(3, 182, 85);
+  --c-momentum-rgb: 3, 182, 85;
+  --c-unsorted: var(--c-dark);
+  --c-unsorted-rgb: var(--c-dark-rgb);
+
+  // Layout
+  --g-gap: 2rem;
+  --radius: 3px;
+  @media screen and (min-width: 60rem) {
+    --g-gap: 3rem;
+  }
+}
+
+//  Basic layout
+
+html, input, select, button {
+  font-family: 'Roboto', sans-serif;
+  color: var(--c-base);
+}
+
+body {
+  background: white;
+  font-weight: 400;
+  line-height: var(--leading);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.content {
+  width: 90%;
+  max-width: 70rem;
+  margin: 0 auto;
+}
+
+.measure {
+  max-width: 25rem;
+  margin-left: auto;
+  margin-right: auto;
+
+  @media screen and (min-width: 40rem) {
+    max-width: unset;
+    margin-left: inherit;
+    margin-right: inherit;
+    grid-column: 2 / span 10;
+  }
+
+  @media screen and (min-width: 53rem) {
+    grid-column: 3 / span 8;
+  }
+
+  @media screen and (min-width: 66rem) {
+    grid-column: 4 / span 6;
+  }
+}
+
+// Sections with blue backgrounds
+
+.alt {
+  background: var(--c-darker);
+  color: #fff;
+  padding: 1.5rem 0;
+  margin: 2rem 0;
+  @media screen and (min-width: 40rem) {
+    padding: 3rem 0;
+    margin: 3rem 0;
+  }
+  h2 {
+    margin-top: 1rem;
+  }
+
+  h2, .card, .card i,
+  a, a:hover, a:focus, a:active, a:visited {
+    color: #fff;
+  }
+}
+
+// Utilities
+
+.a-left {
+  text-align: left !important;
+  margin-left: 0;
+  margin-right: 0;
+}
+
+.a-ctr {
+  margin: 0 auto;
+  text-align: center !important;
+}
+
+.sr-only {
+  font-size: 1px;
+}
