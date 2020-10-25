@@ -1,0 +1,18 @@
+- source:
+    name: Vox
+    logo: vox.png
+  url: https://www.vox.com/policy-and-politics/2016/11/15/13641920/trump-resist-congress
+  quote: |
+    Tweets, Facebook messages, emails, and even letters can be easily discarded and ignored… but a blast of phone calls can seriously disrupt a congressional office.
+- source:
+    name: The New York Times
+    logo: nytimes.png
+  url: https://www.nytimes.com/2016/11/22/us/politics/heres-why-you-should-call-not-email-your-legislators.html
+  quote: |
+    A phone call from a constituent can, indeed, hold more weight than an email, and far outweighs a Facebook post or a tweet.
+- source:
+    name: The Washington Post
+    logo: post.png
+  url: https://www.washingtonpost.com/powerpost/a-day-of-chaos-at-the-capitol-as-house-republicans-back-down-on-ethics-changes/2017/01/03/50e392ac-d1e6-11e6-9cb0-54ab630851e8_story.html
+  quote: |
+    “I can tell you the [number of] calls we’ve gotten in my district office and here in Washington surprised me.“

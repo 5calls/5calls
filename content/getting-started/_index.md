@@ -1,5 +1,3 @@
 ---
 title: Getting Started
 ---
-
-about
