@@ -20,6 +20,26 @@
         </form>
       </div>
     </div>
+
+    <div class="i-bar-list">
+        <section class="i-bar-list-section">
+          <header class="i-bar-header i-bar-header-latest">
+            <h3><i class="fa fa-fire-alt"></i> Just Updated</h3>
+          </header>
+  
+          {{ range where (where .Site.Pages "Type" "issue") ".Params.active" "eq" true }}
+            <button class="i-bar-item is-latest" onclick="window.location='{{ .Permalink }}'">
+              <div class="i-bar-item-check">
+                  <div class="i-bar-check-initial">
+                    <i class="fa fa-phone-alt"></i>
+                    <span class="sr-only">Needs your calls</span>
+                  </div>
+              </div>
+              <strong>{{ .Title }}</strong>
+            </button>
+          {{ end }}
+        </section>
+    </div>
   
     <a href="https://5calls.org/more" class="i-bar-more">See all 67 issues</a>
 </div>

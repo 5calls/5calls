@@ -2,7 +2,6 @@
 // Page-specific overrides
 // =========
 
-
 // Homepage
 
 .home {
@@ -99,8 +98,6 @@
   }
 }
 
-
-
 .full-list-link {
   text-align: center;
   width: 100%;
@@ -175,7 +172,7 @@
     margin: 0 auto 6rem;
 
     + div .info-box {
-      margin-top: - 3rem;
+      margin-top: -3rem;
     }
 
     div {
@@ -200,6 +197,30 @@
       div {
         margin-bottom: 0;
       }
+    }
+  }
+}
+
+// issue page
+
+.issue {
+  @media screen and (min-width: 40rem) {
+    .i-bar {
+      grid-column: 1 / span 6;
+    }
+
+    .issue-wrapper {
+      grid-column: 7 / -1;
+    }
+  }
+
+  @media screen and (min-width: 76rem) {
+    .i-bar {
+      grid-column-end: 5;
+    }
+
+    .issue-wrapper {
+      grid-column-start: 5;
     }
   }
 }

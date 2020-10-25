@@ -1,0 +1,12 @@
+{{ define "bodyclass" }}issue{{ end }}
+{{ define "main" }}
+<div class="content">
+    <div class="g">
+    {{ partial "sidebar.html" . }}
+    <div class="issue-wrapper">
+        {{ .Content }}
+
+    </div>
+    </div>
+</div>
+{{ end }}
