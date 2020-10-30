@@ -5,7 +5,7 @@
       socialLink: https://twitter.com/charmbtrippin
 
     - name: Sara
-      social-service: instagram
+      socialService: instagram
       socialUsername: sara.n.g
       socialLink: https://www.instagram.com/sara.n.g/
 
@@ -18,7 +18,7 @@
       socialLink: https://twitter.com/theRati
 
     - name: Eleanor Wertman
-      social-service: medium
+      socialService: medium
       socialUsername: eleanor.wertman
       socialLink: https://medium.com/eleanor.wertman
 
@@ -55,12 +55,12 @@
 - title: "Android Team"
   volunteers:
     - name: Katie Dektar
-      social-service: github
+      socialService: github
       socialUsername: dektar
       socialLink: https://github.com/dektar
 
     - name: Greg Lee
-      social-service: github
+      socialService: github
       socialUsername: gregliest
       socialLink: https://github.com/gregliest
   fullListUrl: https://github.com/5calls/android/graphs/contributors

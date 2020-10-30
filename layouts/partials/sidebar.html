@@ -24,5 +24,5 @@
         </section>
     </div>
   
-    <a href="https://5calls.org/more" class="i-bar-more">See all 67 issues</a>
+    <a href="/more" class="i-bar-more">See all {{ len (where (where .Site.Pages "Type" "issue") ".Params.active" "eq" true) }} issues</a>
 </div>

@@ -1,5 +1,8 @@
 {{ define "main" }}
 <div class="content">
+  <h1>We’re the team making advocacy&nbsp;accessible.</h1>
+</div>
+<div class="content">
     <div class="g">
         <div class="measure">
         <p>5 Calls makes it easy for you to reach your members of Congress and make your voice heard.</p>
@@ -20,7 +23,7 @@
 </div>
 
 <div class="founders-body">
-<p>4–5 sentence biography goes here. 4–5 sentence biography goes here. 4–5 sentence biography goes here. 4–5 sentence biography goes here. 4–5 sentence biography goes here. 4–5 sentence biography goes here.</p>
+<p>After working in the field during the 2016 Presidential election Nick, a software engineer, and Rebecca, a former molecular biologist, reached out to friends working in Capitol Hill to find out how best to voice support or opposition to the actions of their representatives.</p>
 
 <p class="founders-social"><a href="https://twitter.com/nickoneill"><i class="fa fa-twitter"></i> @nickoneill</a> <a href="https://twitter.com/syntheticmethod"><i class="fa fa-twitter"></i> @syntheticmethod</a></p>
 </div>
@@ -43,10 +46,10 @@
 
 <img src="{{ default `/images/avatar.svg` .avatar }}" alt="" />
 
-<strong>{{ .name }}</strong>
+<p><strong>{{ .name }}</strong></p>
 
-<a href="{{ .socialLink }}"><i class="fa fa-{{ .socialService }}"></i>
-@{{ .socialUsername }}</a>
+<p><a href="{{ .socialLink }}"><i class="fa fa-{{ default `twitter` .socialService }}"></i>
+@{{ .socialUsername }}</a></p>
 
 </div>
 {{ end }}
