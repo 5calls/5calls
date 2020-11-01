@@ -1,28 +1,27 @@
-
 <div class="i-bar">
-    <div class="i-bar-location" id="location">
-      <!-- react location app here  -->
-    </div>
+  <div class="i-bar-location" id="location">
+    <!-- react location app here  -->
+  </div>
 
-    <div class="i-bar-list">
-        <section class="i-bar-list-section">
-          <header class="i-bar-header i-bar-header-latest">
-            <h3><i class="fa fa-fire-alt"></i> Just Updated</h3>
-          </header>
-  
-          {{ range where (where .Site.Pages "Type" "issue") ".Params.active" "eq" true }}
-            <button class="i-bar-item is-latest" onclick="window.location='{{ .Permalink }}'">
-              <div class="i-bar-item-check">
-                  <div class="i-bar-check-initial">
-                    <i class="fa fa-phone-alt"></i>
-                    <span class="sr-only">Needs your calls</span>
-                  </div>
-              </div>
-              <strong>{{ .Title }}</strong>
-            </button>
-          {{ end }}
-        </section>
-    </div>
-  
-    <a href="/more" class="i-bar-more">See all {{ len (where (where .Site.Pages "Type" "issue") ".Params.active" "eq" true) }} issues</a>
+  <div class="i-bar-list">
+    <section class="i-bar-list-section">
+      <header class="i-bar-header i-bar-header-latest">
+        <h3><i class="fa fa-fire-alt"></i> Just Updated</h3>
+      </header>
+
+      {{ range where (where .Site.Pages "Type" "issue") ".Params.active" "eq" true }}
+      <button class="i-bar-item is-latest" onclick="window.location='{{ .Permalink }}'">
+        <div class="i-bar-item-check">
+          <div class="i-bar-check-initial">
+            <i class="fa fa-phone-alt"></i>
+            <span class="sr-only">Needs your calls</span>
+          </div>
+        </div>
+        <strong>{{ .Title }}</strong>
+      </button>
+      {{ end }}
+    </section>
+  </div>
+
+  <a href="/more" class="i-bar-more">See all {{ len (where .Site.Pages "Type" "issue") }} issues</a>
 </div>

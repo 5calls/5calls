@@ -1,0 +1,6 @@
+{
+    "search.exclude": {
+        "**/public": true
+    },
+    "prettier.printWidth": 120
+}

@@ -19,6 +19,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
+    "build-content": "yarn run ts-node -O '{\"module\": \"commonjs\"}' scripts/build-content.ts",
     "deployjs": "yarn build && yarn move",
     "move": "node ./scripts/move-built.js",
     "test": "react-scripts test",
@@ -41,5 +42,10 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "@types/node-fetch": "^2.5.7",
+    "node-fetch": "^2.6.1",
+    "ts-node": "^9.0.0"
   }
 }
