@@ -1,7 +1,6 @@
 import React from 'react';
-import './App.css';
 
-function App() {
+function Location() {
   return (
     <>
       <div className="is-visible">
@@ -26,4 +25,4 @@ function App() {
   );
 }
 
-export default App;
+export default Location;
