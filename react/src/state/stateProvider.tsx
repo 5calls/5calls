@@ -21,7 +21,8 @@ export default class StateProvider extends React.Component<Props, State> {
   componentDidMount() {
     try {
       const data = JSON.parse(localStorage.getItem("persist:fivecalls") ?? "") as StoredData;
-      this.setState({ locationState: JSON.parse(data.locationState ?? "") as LocationState });
+      const locationState = JSON.parse(data.locationState ?? "") as LocationState;
+      this.setState({ locationState });
     } catch (error) {
       console.log("could not parse localstorage:", error);
     }

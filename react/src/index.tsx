@@ -1,10 +1,10 @@
 import React from "react";
 import ReactDOM from "react-dom";
 
-import Location from "./Location";
-import Reps from "./Reps";
-import reportWebVitals from "./reportWebVitals";
-import StateProvider from "./stateProvider";
+import reportWebVitals from "./utils/reportWebVitals";
+import Location from "./components/Location";
+import Reps from "./components/Reps";
+import StateProvider from "./state/stateProvider";
 
 try {
   ReactDOM.render(

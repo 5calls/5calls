@@ -1,7 +1,7 @@
 import React from "react";
 
-import { LocationState, WithLocationProps } from "./locationState";
-import { withLocation } from "./stateProvider";
+import { LocationState, WithLocationProps } from "../state/locationState";
+import { withLocation } from "../state/stateProvider";
 
 enum ComponentState {
   NoLocation,
