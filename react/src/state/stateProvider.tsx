@@ -1,4 +1,5 @@
 import React from "react";
+import { GeolocationPosition } from "../common/models/geolocation";
 
 import { LocationState, LocationContext, WithLocationProps } from "./locationState";
 
@@ -28,11 +29,16 @@ export default class StateProvider extends React.Component<Props, State> {
     }
   }
 
+  setLocation(loc: GeolocationPosition) {
+    // set the location
+  }
+
   render(): JSX.Element {
     return (
       <LocationContext.Provider
         value={{
           locationState: this.state.locationState,
+          setLocation: (loc: GeolocationPosition) => this.setLocation(loc),
         }}
       >
         {this.props.children}
@@ -45,6 +51,8 @@ export const withLocation = <P extends object>(
   Component: React.ComponentType<P>
 ): React.FC<Omit<P, keyof WithLocationProps>> => (props) => (
   <LocationContext.Consumer>
-    {({ locationState }) => <Component {...(props as P)} locationState={locationState} />}
+    {({ locationState, setLocation }) => (
+      <Component {...(props as P)} locationState={locationState} setLocation={setLocation} />
+    )}
   </LocationContext.Consumer>
 );

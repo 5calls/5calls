@@ -2,64 +2,93 @@ import React from "react";
 
 import { LocationState, WithLocationProps } from "../state/locationState";
 import { withLocation } from "../state/stateProvider";
+import { getBrowserGeolocation } from "../utils/geolocation";
 
-enum ComponentState {
+enum ComponentLocationState {
   NoLocation,
-  Location,
-  Getting,
+  HasLocation,
+  GettingAutomatically,
+  EnterManually,
 }
 
 interface Props {}
+interface State {
+  componentLocationState: ComponentLocationState;
+}
 
-class Location extends React.Component<Props & WithLocationProps> {
-  // const locationState = ComponentState.NoLocation;
+class Location extends React.Component<Props & WithLocationProps, State> {
+  state = { componentLocationState: ComponentLocationState.NoLocation };
 
-  classForComponent = (component: string, locationState: LocationState | undefined): string => {
-    switch (component) {
-      case "noLocation": {
-        if (!locationState) {
-          return "is-visible";
-        }
-        break;
-      }
-      case "hasLocation": {
-        if (locationState?.address) {
-          return "is-visible";
-        }
-        break;
-      }
+  componentDidMount() {
+    // update the local component state based on our global state
+    if (this.props.locationState && this.props.locationState.address) {
+      this.setState({ componentLocationState: ComponentLocationState.HasLocation });
     }
+  }
 
-    return "";
+  // the states this component can transition between:
+
+  setAutomaticallyOrFail = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    this.setState({ componentLocationState: ComponentLocationState.GettingAutomatically });
+
+    getBrowserGeolocation()
+      .then((loc) => {
+        // TODO: give stateprovider this loc
+        this.props.setLocation(loc);
+        this.setState({ componentLocationState: ComponentLocationState.HasLocation });
+      })
+      .catch((err) => {
+        // nbd, go to manual entry
+        this.setState({ componentLocationState: ComponentLocationState.EnterManually });
+      });
   };
 
   render() {
     console.log("location, state is now", this.props.locationState);
 
-    return (
-      <>
-        <div className={this.classForComponent("hasLocation", this.props.locationState)}>
-          <span>Showing representatives for</span>
-          <strong>{this.props.locationState?.cachedCity || this.props.locationState?.address}</strong>
-          <button className="button-link">Change location</button>
-        </div>
-
-        <div className={this.classForComponent("locationInput", this.props.locationState)}>
-          <span className="i-bar-loading">
-            <i className="fa fa-map-marker"></i> <b>Getting your location automatically&hellip;</b>
-          </span>
-          <button className="button-link"> Or enter an address manually</button>
-        </div>
-
-        <div className={this.classForComponent("noLocation", this.props.locationState)}>
-          <span>Enter an address or ZIP code</span>
-          <form>
-            <input type="text" placeholder="20500" />
-            <button className="button button-small button-red">Go</button>
-          </form>
-        </div>
-      </>
-    );
+    switch (this.state.componentLocationState) {
+      case ComponentLocationState.NoLocation: {
+        return (
+          <div className="is-visible">
+            <span>Find your representatives</span>
+            <form onSubmit={this.setAutomaticallyOrFail}>
+              <button className="button button-small button-red">Set your location</button>
+            </form>
+          </div>
+        );
+      }
+      case ComponentLocationState.GettingAutomatically: {
+        return (
+          <div className="is-visible">
+            <span className="i-bar-loading">
+              <i className="fa fa-map-marker"></i> <b>Getting your location automatically&hellip;</b>
+            </span>
+            <button className="button-link"> Or enter an address manually</button>
+          </div>
+        );
+      }
+      case ComponentLocationState.HasLocation: {
+        return (
+          <div className="is-visible">
+            <span>Showing representatives for</span>
+            <strong>{this.props.locationState?.cachedCity || this.props.locationState?.address}</strong>
+            <button className="button-link">Change location</button>
+          </div>
+        );
+      }
+      case ComponentLocationState.EnterManually: {
+        return (
+          <div className="is-visible">
+            <span>Enter an address or ZIP code</span>
+            <form>
+              <input type="text" placeholder="20500" />
+              <button className="button button-small button-red">Go</button>
+            </form>
+          </div>
+        );
+      }
+    }
   }
 }
 

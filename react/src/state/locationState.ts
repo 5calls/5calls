@@ -1,11 +1,14 @@
 import { createContext } from "react";
+import { GeolocationPosition } from "../common/models/geolocation";
 
 export const LocationContext = createContext<WithLocationProps>({
   locationState: undefined,
+  setLocation: () => {},
 });
 
 export type WithLocationProps = {
   locationState?: LocationState;
+  setLocation(loc: GeolocationPosition): void;
 };
 
 export interface LocationState {
