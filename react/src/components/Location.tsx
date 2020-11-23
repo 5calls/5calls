@@ -38,11 +38,11 @@ class Location extends React.Component<Props & WithLocationProps, State> {
     }
   }
 
-  componentDidUpdate(prevProps: Props & WithLocationProps) {
-    if (prevProps.locationState == undefined && this.props.locationState && this.props.locationState?.address) {
-      this.setState({ componentLocationState: ComponentLocationState.HasLocation });
-    }
-  }
+  // componentDidUpdate(prevProps: Props & WithLocationProps) {
+  //   if (prevProps.locationState == undefined && this.props.locationState && this.props.locationState?.address) {
+  //     this.setState({ componentLocationState: ComponentLocationState.HasLocation });
+  //   }
+  // }
 
   updateManualAddress = (e: React.ChangeEvent<HTMLInputElement>) => {
     this.setState({ manualAddress: e.target.value });
@@ -96,8 +96,6 @@ class Location extends React.Component<Props & WithLocationProps, State> {
   };
 
   render() {
-    console.log("location, state is now", this.props.locationState);
-
     switch (this.state.componentLocationState) {
       case ComponentLocationState.NoLocation: {
         return (
