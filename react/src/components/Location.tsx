@@ -1,9 +1,10 @@
 import React from "react";
 
-import { LocationState, WithLocationProps } from "../state/locationState";
+import { LocationFetchType, LocationState, WithLocationProps } from "../state/locationState";
 import { withLocation } from "../state/stateProvider";
 import { getBrowserGeolocation } from "../utils/geolocation";
 import { getContacts } from "../utils/api";
+import Storage from "../utils/storage";
 
 enum ComponentLocationState {
   NoLocation,
@@ -37,6 +38,12 @@ class Location extends React.Component<Props & WithLocationProps, State> {
     }
   }
 
+  componentDidUpdate(prevProps: Props & WithLocationProps) {
+    if (prevProps.locationState == undefined && this.props.locationState && this.props.locationState?.address) {
+      this.setState({ componentLocationState: ComponentLocationState.HasLocation });
+    }
+  }
+
   updateManualAddress = (e: React.ChangeEvent<HTMLInputElement>) => {
     this.setState({ manualAddress: e.target.value });
   };
@@ -60,10 +67,12 @@ class Location extends React.Component<Props & WithLocationProps, State> {
     if (this.state.manualAddress) {
       getContacts(this.state.manualAddress)
         .then((contactList) => {
-          console.log("contacts are", contactList);
+          // console.log("contacts are", contactList);
+          this.props.setLocationAddress(this.state.manualAddress ?? "", contactList.location);
           this.setState({ componentLocationState: ComponentLocationState.HasLocation });
         })
         .catch((error) => {
+          console.log("error:", error);
           // we don't specify different types of location errors, but might in the future
           this.setState({ locationError: "location error" });
         });
