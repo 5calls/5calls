@@ -3,9 +3,11 @@ import React from "react";
 import { LocationState, WithLocationProps } from "../state/locationState";
 import { withLocation } from "../state/stateProvider";
 import { getBrowserGeolocation } from "../utils/geolocation";
+import { getContacts } from "../utils/api";
 
 enum ComponentLocationState {
   NoLocation,
+  BadLocation,
   HasLocation,
   GettingAutomatically,
   EnterManually,
@@ -14,10 +16,19 @@ enum ComponentLocationState {
 interface Props {}
 interface State {
   componentLocationState: ComponentLocationState;
+  manualAddress: string | undefined;
+  locationError: string | undefined;
 }
 
 class Location extends React.Component<Props & WithLocationProps, State> {
-  state = { componentLocationState: ComponentLocationState.NoLocation };
+  _defaultManualAddress: string | undefined = undefined;
+  _defaultLocationError: string | undefined = undefined;
+
+  state = {
+    componentLocationState: ComponentLocationState.NoLocation,
+    manualAddress: this._defaultManualAddress,
+    locationError: this._defaultLocationError,
+  };
 
   componentDidMount() {
     // update the local component state based on our global state
@@ -26,9 +37,40 @@ class Location extends React.Component<Props & WithLocationProps, State> {
     }
   }
 
-  // the states this component can transition between:
+  updateManualAddress = (e: React.ChangeEvent<HTMLInputElement>) => {
+    this.setState({ manualAddress: e.target.value });
+  };
 
-  setAutomaticallyOrFail = (e: React.FormEvent<HTMLFormElement>) => {
+  changeLocation = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    this.setState({ componentLocationState: ComponentLocationState.EnterManually });
+  };
+
+  setLocationManually = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    this.setState({ locationError: undefined });
+
+    if (!this.state.manualAddress || this.state.manualAddress == "") {
+      // TODO: re-try automatic location
+      return;
+    }
+
+    // fetch reps from the api and see if this is valid before saving
+    if (this.state.manualAddress) {
+      getContacts(this.state.manualAddress)
+        .then((contactList) => {
+          console.log("contacts are", contactList);
+          this.setState({ componentLocationState: ComponentLocationState.HasLocation });
+        })
+        .catch((error) => {
+          // we don't specify different types of location errors, but might in the future
+          this.setState({ locationError: "location error" });
+        });
+    }
+  };
+
+  setLocationAutomatically = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     this.setState({ componentLocationState: ComponentLocationState.GettingAutomatically });
 
@@ -52,7 +94,7 @@ class Location extends React.Component<Props & WithLocationProps, State> {
         return (
           <div className="is-visible">
             <span>Find your representatives</span>
-            <form onSubmit={this.setAutomaticallyOrFail}>
+            <form onSubmit={this.setLocationAutomatically}>
               <button className="button button-small button-red">Set your location</button>
             </form>
           </div>
@@ -64,7 +106,9 @@ class Location extends React.Component<Props & WithLocationProps, State> {
             <span className="i-bar-loading">
               <i className="fa fa-map-marker"></i> <b>Getting your location automatically&hellip;</b>
             </span>
-            <button className="button-link"> Or enter an address manually</button>
+            <form onSubmit={this.changeLocation}>
+              <button className="button-link"> Or enter an address manually</button>
+            </form>
           </div>
         );
       }
@@ -73,7 +117,9 @@ class Location extends React.Component<Props & WithLocationProps, State> {
           <div className="is-visible">
             <span>Showing representatives for</span>
             <strong>{this.props.locationState?.cachedCity || this.props.locationState?.address}</strong>
-            <button className="button-link">Change location</button>
+            <form onSubmit={this.changeLocation}>
+              <button className="button-link">Change location</button>
+            </form>
           </div>
         );
       }
@@ -81,10 +127,25 @@ class Location extends React.Component<Props & WithLocationProps, State> {
         return (
           <div className="is-visible">
             <span>Enter an address or ZIP code</span>
-            <form>
-              <input type="text" placeholder="20500" />
+            <form onSubmit={this.setLocationManually}>
+              <input
+                name="address"
+                type="text"
+                placeholder="20500 or 1600 Pennsylvania Ave, Washington, DC"
+                onChange={this.updateManualAddress}
+              />
               <button className="button button-small button-red">Go</button>
             </form>
+            {this.state.locationError && (
+              <span className="location-error">Couldn't find that location, please try again</span>
+            )}
+          </div>
+        );
+      }
+      case ComponentLocationState.BadLocation: {
+        return (
+          <div className="is-visible">
+            <span>no reps for that location</span>
           </div>
         );
       }
