@@ -11,7 +11,6 @@
   font-weight: 700;
   transition: transform 0.1s ease-in;
 
-
   &.button-small {
     font-size: 1rem;
     padding: 0.5rem 0.75rem;
@@ -67,4 +66,7 @@
   margin: 0;
   color: var(--c-blue);
   text-decoration: underline;
+  &:hover {
+    cursor: pointer;
+  }
 }

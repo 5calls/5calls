@@ -5,14 +5,14 @@
 
   <div class="i-bar-list">
     <section class="i-bar-list-section">
-      <header class="i-bar-header i-bar-header-latest">
-        <h3><i class="fa fa-fire-alt"></i> Just Updated</h3>
+      <header class="i-bar-header i-bar-header-unsorted">
+        <h3><i class="fa fa-newspaper"></i> In the News</h3>
       </header>
 
       {{ range where (where .Site.Pages "Type" "issue") ".Params.active" "eq" true }}
-      <button class="i-bar-item is-latest" onclick="window.location='{{ .Permalink }}'">
+      <button class="i-bar-item is-unsorted" onclick="window.location='{{ .Permalink }}'">
         <div class="i-bar-item-check">
-          <div class="i-bar-check-initial">
+          <div class="i-bar-check-completed">
             <i class="fa fa-phone-alt"></i>
             <span class="sr-only">Needs your calls</span>
           </div>

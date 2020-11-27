@@ -1,32 +1,51 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="utf-8">
-  <title>{{ if or (.IsPage) (.IsSection) }}{{ .Title }} ⭑ {{ .Site.Title }}{{ else }}{{ .Site.Title }}{{ end }}</title>
-  <meta name="description" content="{{ if .IsPage }}{{ .Description }}{{ else }}{{ .Site.Params.description }}{{ end }}" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  {{ hugo.Generator }}
-  
-  {{ $style := resources.Get "sass/main.scss" | resources.ToCSS | resources.Minify | resources.Fingerprint }}
-  <link rel="stylesheet" href="{{ $style.Permalink }}">
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700;900&display=swap" rel="stylesheet">
+  <head>
+    <meta charset="utf-8" />
+    <title>
+      {{ if or (.IsPage) (.IsSection) }}{{ .Title }} ⭑ {{ .Site.Title }}{{ else }}{{ .Site.Title }}{{ end }}
+    </title>
+    <meta
+      name="description"
+      content="{{ if .IsPage }}{{ .Description }}{{ else }}{{ .Site.Params.description }}{{ end }}"
+    />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- prettier-ignore -->
+    {{ hugo.Generator }} {{ $style := resources.Get "sass/main.scss" | resources.ToCSS | resources.Minify | resources.Fingerprint }}
+    <link rel="stylesheet" href="{{ $style.Permalink }}" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700;900&display=swap"
+      rel="stylesheet"
+    />
 
-  {{ $js := resources.Match "js/*" }}
-  {{ range $js }}
-  <script type="text/javascript" src="{{ .RelPermalink }}" defer></script>
-  {{ end }}
-</head>
-<body class="{{ block `bodyclass` . }}{{ end }}">
-  <div class="site">
-    {{ partial "header.html" . }}
-    {{ block "main" . }}{{ end }}
-    {{ partial "footer.html" . }}
-  </div>
-  <script src="https://kit.fontawesome.com/e8889460d3.js" crossorigin="anonymous"></script>
-  <script>
-    window.FontAwesomeConfig = {
-      searchPseudoElements: true
-    }
-  </script>
-</body>
+    {{ $js := resources.Match "js/*" }} {{ range $js }}
+    <script type="text/javascript" src="{{ .RelPermalink }}" defer></script>
+    {{ end }}
+  </head>
+  <body class="{{ block `bodyclass` . }}{{ end }}">
+    <div class="site">{{ partial "header.html" . }} {{ block "main" . }}{{ end }} {{ partial "footer.html" . }}</div>
+    <script src="https://kit.fontawesome.com/e8889460d3.js" crossorigin="anonymous"></script>
+    <script>
+      window.FontAwesomeConfig = {
+        searchPseudoElements: true,
+      };
+    </script>
+    <!-- The core Firebase JS SDK is always required and must be listed first -->
+    <script src="https://www.gstatic.com/firebasejs/8.0.1/firebase-app.js"></script>
+
+    <script>
+      // Your web app's Firebase configuration
+      var firebaseConfig = {
+        apiKey: "AIzaSyCqbgwuM82Z4a3oBzzmPgi-208UrOwIgAA",
+        authDomain: "southern-zephyr-209101.firebaseapp.com",
+        databaseURL: "https://southern-zephyr-209101.firebaseio.com",
+        projectId: "southern-zephyr-209101",
+        storageBucket: "southern-zephyr-209101.appspot.com",
+        messagingSenderId: "919201105905",
+        appId: "1:919201105905:web:cb16c071be2bb896dfa650",
+      };
+      // Initialize Firebase
+      firebase.initializeApp(firebaseConfig);
+    </script>
+  </body>
 </html>

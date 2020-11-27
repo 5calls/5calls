@@ -1,10 +1,9 @@
 import React from "react";
 
-import { LocationFetchType, LocationState, WithLocationProps } from "../state/locationState";
+import { WithLocationProps } from "../state/locationState";
 import { withLocation } from "../state/stateProvider";
 import { getBrowserGeolocation } from "../utils/geolocation";
 import { getContacts } from "../utils/api";
-import Storage from "../utils/storage";
 
 enum ComponentLocationState {
   NoLocation,
@@ -37,12 +36,6 @@ class Location extends React.Component<Props & WithLocationProps, State> {
       this.setState({ componentLocationState: ComponentLocationState.HasLocation });
     }
   }
-
-  // componentDidUpdate(prevProps: Props & WithLocationProps) {
-  //   if (prevProps.locationState == undefined && this.props.locationState && this.props.locationState?.address) {
-  //     this.setState({ componentLocationState: ComponentLocationState.HasLocation });
-  //   }
-  // }
 
   updateManualAddress = (e: React.ChangeEvent<HTMLInputElement>) => {
     this.setState({ manualAddress: e.target.value });

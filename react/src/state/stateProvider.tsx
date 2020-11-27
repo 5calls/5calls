@@ -3,7 +3,6 @@ import { GeolocationPosition } from "../common/models/geolocation";
 
 import { LocationState, LocationContext, WithLocationProps, LocationFetchType } from "./locationState";
 import Storage from "../utils/storage";
-import { threadId } from "worker_threads";
 
 interface Props {}
 interface State {

@@ -1,7 +1,7 @@
-import { createContext } from "react";
+import React from "react";
 import { GeolocationPosition } from "../common/models/geolocation";
 
-export const LocationContext = createContext<WithLocationProps>({
+export const LocationContext = React.createContext<WithLocationProps>({
   locationState: undefined,
   setLocation: () => {},
   setLocationAddress: () => {},

@@ -1,0 +1,14 @@
+// issue page
+
+.issue {
+  .issue-wrapper {
+    h2 {
+      text-align: left;
+      margin: 0 0 10px 0;
+    }
+    p {
+      font-size: calc(20rem / var(--base-font-size));
+      line-height: 1.7rem;
+    }
+  }
+}
