@@ -1,0 +1,7 @@
+{
+    "name": "5calls-static",
+    "version": "0.1.0",
+    "private": true,
+    "note": "fake package so yarn gets installed in netlify"
+}
+  

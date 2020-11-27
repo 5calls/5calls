@@ -1,14 +1,14 @@
 # Settings in the [build] context are global and are applied to all contexts
 # unless otherwise overridden by more specific contexts.
 [build]
-base = "react/"
-command = "yarn deploy-js; yarn build-content && cd ..; hugo -d react/netlifypublish -b https://test.5calls.org"
-publish = "netlifypublish/"
+# netlify won't install yarn unless base is a react project :/ which means we also need a publish directory inside base
+# so we force this with hugo. Maybe 
+command = "yarn deploy-js; yarn build-content && cd ..; hugo -b https://test.5calls.org"
 [build.environment]
+# set hugo version for consistency
 HUGO_VERSION = '0.74.3'
+# need yarn installed manually, even though it doesn't work
 NETLIFY_USE_YARN = 'true'
+# don't care about ruby, but the default installs a new version for each build
 RUBY_VERSION = '2.6.2'
 YARN_VERSION = '1.22.5'
-# need yarn installed manually
-# set hugo version for consistency
-# don't care about ruby, but the default installs a new version for each build
