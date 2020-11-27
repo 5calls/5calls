@@ -3,7 +3,7 @@
 [build]
 # netlify won't install yarn unless base is a react project :/ which means we also need a publish directory inside base
 # so we force this with hugo. Maybe 
-command = "cd react; yarn deploy-js; yarn build-content && hugo -b https://test.5calls.org"
+command = "cd react; yarn; yarn deploy-js; yarn build-content && hugo -b https://test.5calls.org"
 [build.environment]
 # set hugo version for consistency
 HUGO_VERSION = '0.74.3'
