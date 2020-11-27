@@ -1,7 +1,8 @@
 # Settings in the [build] context are global and are applied to all contexts
 # unless otherwise overridden by more specific contexts.
 [build]
-command = "cd react; yarn deploy-js; yarn build-content && hugo"
+base = "react/"
+command = "yarn deploy-js; yarn build-content && cd ..; hugo"
 [build.environment]
 HUGO_VERSION = '0.74.3'
 NETLIFY_USE_YARN = 'true'
