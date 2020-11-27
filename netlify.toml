@@ -4,7 +4,6 @@
 command = "cd react; yarn deploy-js; yarn build-content && hugo"
 [build.environment]
 HUGO_VERSION = '0.74.3'
-NETLIFY_USE_YARN = 'true'
 RUBY_VERSION = '2.6.2'
 # need yarn installed manually
 # set hugo version for consistency
