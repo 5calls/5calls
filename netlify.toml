@@ -2,8 +2,8 @@
 # unless otherwise overridden by more specific contexts.
 [build]
 base = "react/"
-command = "yarn deploy-js; yarn build-content && cd ..; hugo"
-publish = "../public/"
+command = "yarn deploy-js; yarn build-content && cd ..; hugo -d react/netlifypublish"
+publish = "netlifypublish/"
 [build.environment]
 HUGO_VERSION = '0.74.3'
 NETLIFY_USE_YARN = 'true'
