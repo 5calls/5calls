@@ -3,6 +3,7 @@
 [build]
 base = "react/"
 command = "yarn deploy-js; yarn build-content && cd ..; hugo"
+publish = "public/"
 [build.environment]
 HUGO_VERSION = '0.74.3'
 NETLIFY_USE_YARN = 'true'
