@@ -16,7 +16,7 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "build-content": "yarn run ts-node -O '{\"module\": \"commonjs\"}' scripts/build-content.ts",
-    "deployjs": "yarn build && yarn move",
+    "deploy-js": "yarn build && yarn move",
     "move": "node ./scripts/move-built.js",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
