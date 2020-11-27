@@ -2,9 +2,10 @@
 # unless otherwise overridden by more specific contexts.
 [build]
 command = "cd react; yarn deploy-js; yarn build-content && hugo"
-environment = {HUGO_VERSION = '0.74.3', RUBY_VERSION = '2.6.2'}
 # need yarn installed manually
 # set hugo version for consistency
 # don't care about ruby, but the default installs a new version for each build
 [build.environment]
+HUGO_VERSION = '0.74.3'
 NETLIFY_USE_YARN = true
+RUBY_VERSION = '2.6.2'
