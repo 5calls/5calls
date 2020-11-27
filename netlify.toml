@@ -2,4 +2,4 @@
 # unless otherwise overridden by more specific contexts.
 [build]
 command = "cd react; yarn deploy-js; yarn build-content && hugo"
-environment = {NETLIFY_USE_YARN = true, HUGO_VERSION = '0.74.3'}
+environment = {NETLIFY_USE_YARN = 'true', HUGO_VERSION = '0.74.3'}
