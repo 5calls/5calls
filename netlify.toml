@@ -2,7 +2,7 @@
 # unless otherwise overridden by more specific contexts.
 [build]
 base = "react/"
-command = "yarn deploy-js; yarn build-content && cd ..; hugo -d react/netlifypublish"
+command = "yarn deploy-js; yarn build-content && cd ..; hugo -d react/netlifypublish -b https://test.5calls.org"
 publish = "netlifypublish/"
 [build.environment]
 HUGO_VERSION = '0.74.3'
