@@ -33,11 +33,6 @@ class Reps extends React.Component<Props & WithLocationProps, State> {
       // if we don't have contacts, fetch the contacts
       this.updateContacts();
     }
-
-    // document.addEventListener("updateReps", () => {
-    //   console.log("update reps");
-    //   this.updateContacts();
-    // });
   }
 
   componentDidUpdate(prevProps: Props & WithLocationProps) {

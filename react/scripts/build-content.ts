@@ -1,5 +1,6 @@
 import fetch from "node-fetch";
 import fs from "fs";
+import fsExtra from "fs-extra";
 
 // yarn run ts-node -O '{"module": "commonjs"}' scripts/build-content.ts
 
@@ -14,22 +15,26 @@ interface Issue {
 }
 
 const buildContent = async () => {
+  const contentDirectory = `${__dirname}/../../content/issue/`;
+  fsExtra.emptyDirSync(contentDirectory);
+
   fetch(`https://api.5calls.org/v1/issues`)
     .then((res) => res.json())
     .then((data) => {
       const issues = data as Issue[];
       // console.log("resoponse is", issues);
       issues.forEach((issue) => {
-        fs.writeFileSync(`${__dirname}/../../content/issue/${issue.slug}.md`, postContentFromIssue(issue));
+        fs.writeFileSync(`${contentDirectory}${issue.slug}.md`, postContentFromIssue(issue));
       });
     });
 };
 
 const postContentFromIssue = (issue: Issue): string => {
   return `---
-title: "${escapeForYAML(issue.name)}"
+title: "${escapeQuotes(issue.name)}"
 date: ${issue.createdAt}
-script: "${escapeForYAML(issue.script)}"
+script: |
+${multilineScript(issue.script)}
 ${contactAreaYAML(issue)}
 active: ${issue.active ? "true" : "false"}
 ---
@@ -37,8 +42,13 @@ ${issue.reason}
 `;
 };
 
-const escapeForYAML = (text: string): string => {
+const escapeQuotes = (text: string): string => {
   return text.replace(/"/g, '\\"');
+};
+
+const multilineScript = (text: string): string => {
+  // multiline strings
+  return text.replace(/^/gm, "  ");
 };
 
 const contactAreaYAML = (issue: Issue): string => {
