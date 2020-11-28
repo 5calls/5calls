@@ -4,6 +4,7 @@ import ReactDOM from "react-dom";
 import reportWebVitals from "./utils/reportWebVitals";
 import Location from "./components/Location";
 import Reps from "./components/Reps";
+import Script from "./components/Script";
 import StateProvider from "./state/stateProvider";
 
 try {
@@ -31,7 +32,7 @@ try {
     <StateProvider>
       <Reps />
     </StateProvider>,
-    document.getElementById("reps")
+    document.getElementById("react-reps")
   );
 } catch (error) {
   if (`${error}`.includes("Minified React error #200")) {
@@ -40,6 +41,23 @@ try {
     // dev version of above
   } else {
     console.error("error loading reps component:", error);
+  }
+}
+
+try {
+  ReactDOM.render(
+    <StateProvider>
+      <Script />
+    </StateProvider>,
+    document.getElementById("react-script")
+  );
+} catch (error) {
+  if (`${error}`.includes("Minified React error #200")) {
+    // nbd, we're on a page where no reps element is
+  } else if (`${error}`.includes("Target container is not a DOM element.")) {
+    // dev version of above
+  } else {
+    console.error("error loading script component:", error);
   }
 }
 

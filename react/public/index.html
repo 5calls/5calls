@@ -56,7 +56,7 @@
             </div>
             <div class="reps">
               <h3>Contacts for this topic:</h3>
-              <div class="rep-list" id="reps" data-rep-areas="USSenate,USHouse"></div>
+              <div class="rep-list" id="react-reps" data-rep-areas="US Senate,US House"></div>
               <p class="help">
                 <a
                   href="https://intercom.help/5calls/using-the-5-calls-website-and-apps/why-do-i-only-see-some-of-my-representatives"
@@ -65,22 +65,24 @@
                 >
               </p>
             </div>
-            <div class="issue-script">
-              <p>Hi, my name is <strong>[NAME]</strong> and I'm a constituent from Los Angeles.</p>
-              <p>I'm calling to urge <strong>[PICK 2-3 ITEMS TO HIGHLIGHT]:</strong></p>
-              <ul>
-                <li>An extension of the $600 per week unemployment compensation program;</li>
-                <li>
-                  Suspension of all consumer and small business credit payments (including mortgages, student loans, and
-                  personal loans);
-                </li>
-                <li>Suspension of negative consumer credit reporting;</li>
-                <li>Suspension of rent and utility payments;</li>
-              </ul>
+            <div
+              class="issue-script"
+              id="react-script"
+              data-script-markdown="Hi, my name is **[NAME]** and I’m a constituent from **[CITY, ZIP]**.
+
+I am outraged the Senate has confirmed Amy Coney Barrett to the Supreme Court during an election. The people's voice has been stolen by our elected officials.
+            
+Thank you for your time and attention.
+            
+[IF LEAVING A VOICEMAIL: please leave your full street address to ensure your call is tallied]"
+            >
+              <p>Hi, my name is <strong>[NAME]</strong> and I’m a constituent from <strong>[CITY, ZIP]</strong>.</p>
               <p>
-                <strong>IF LEAVING A VOICEMAIL:</strong> Please leave your full street address to ensure your call is
-                tallied.
+                I am outraged the Senate has confirmed Amy Coney Barrett to the Supreme Court during an election. The
+                people’s voice has been stolen by our elected officials.
               </p>
+              <p>Thank you for your time and attention.</p>
+              <p>[IF LEAVING A VOICEMAIL: please leave your full street address to ensure your call is tallied]</p>
             </div>
           </div>
         </div>

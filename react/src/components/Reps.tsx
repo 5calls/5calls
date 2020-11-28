@@ -24,6 +24,7 @@ class Reps extends React.Component<Props & WithLocationProps, State> {
 
   componentDidMount() {
     const thisComponent = ReactDOM.findDOMNode(this);
+    console.log("reps component", thisComponent);
     if (thisComponent && thisComponent.parentElement) {
       const areas = (thisComponent.parentElement.dataset.repAreas ?? "").split(",");
       this.setState({ areas });
