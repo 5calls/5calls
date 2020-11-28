@@ -63,6 +63,7 @@ class Location extends React.Component<Props & WithLocationProps, State> {
           // console.log("contacts are", contactList);
           this.props.setLocationAddress(this.state.manualAddress ?? "", contactList.location);
           this.setState({ componentLocationState: ComponentLocationState.HasLocation });
+          document.dispatchEvent(new Event("updateReps"));
         })
         .catch((error) => {
           console.log("error:", error);

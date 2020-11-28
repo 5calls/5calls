@@ -18,11 +18,20 @@ export default class StateProvider extends React.Component<Props, State> {
 
   componentDidMount() {
     try {
-      const appState = Storage.getStorageAsObject();
-      this.setState({ locationState: appState.locationState, savedStateRestored: true });
+      this.loadFromStorage();
     } catch (error) {
       console.log("could not parse localstorage:", error);
     }
+
+    // if these events are fired, we should reload from storage
+    document.addEventListener("updateReps", () => {
+      this.loadFromStorage();
+    });
+  }
+
+  loadFromStorage() {
+    const appState = Storage.getStorageAsObject();
+    this.setState({ locationState: appState.locationState, savedStateRestored: true });
   }
 
   setLocation(loc: GeolocationPosition) {

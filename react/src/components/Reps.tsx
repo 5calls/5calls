@@ -1,11 +1,12 @@
+import { timeStamp } from "console";
 import React from "react";
 import ReactDOM from "react-dom";
-import { contact } from "../common/constants";
 import { Contact } from "../common/models/contact";
 import { ContactList } from "../common/models/contactList";
 import { WithLocationProps } from "../state/locationState";
 import { withLocation } from "../state/stateProvider";
 import { getContacts } from "../utils/api";
+import contactUtils from "../utils/contactUtils";
 
 interface Props {}
 interface State {
@@ -28,8 +29,25 @@ class Reps extends React.Component<Props & WithLocationProps, State> {
       this.setState({ areas });
     }
 
-    if (!this.state.contactList && this.props.locationState?.address) {
-      // if we don't have contacts but have an address, fetch the contacts
+    if (!this.state.contactList) {
+      // if we don't have contacts, fetch the contacts
+      this.updateContacts();
+    }
+
+    // document.addEventListener("updateReps", () => {
+    //   console.log("update reps");
+    //   this.updateContacts();
+    // });
+  }
+
+  componentDidUpdate(prevProps: Props & WithLocationProps) {
+    if (prevProps.locationState?.address != this.props.locationState?.address) {
+      this.updateContacts();
+    }
+  }
+
+  updateContacts() {
+    if (this.props.locationState) {
       getContacts(this.props.locationState.address)
         .then((contactList) => {
           this.setState({ contactList });
@@ -41,11 +59,12 @@ class Reps extends React.Component<Props & WithLocationProps, State> {
   }
 
   contactComponent(contact: Contact): JSX.Element {
-    console.log("contact component for ", contact.name);
     return (
       <li key={contact.id}>
         <img alt={contact.name} src={contact.photoURL} />
-        <h4>{contact.name} (D-CA)</h4>
+        <h4>
+          {contact.name} ({contactUtils.partyAndState(contact)})
+        </h4>
         <p>{contact.reason}</p>
       </li>
     );

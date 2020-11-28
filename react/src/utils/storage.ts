@@ -1,4 +1,5 @@
 import { LocationState } from "../state/locationState";
+import { ApplicationState } from "../state/appState";
 
 const LocalStorageKey = "persist:fivecalls";
 
@@ -19,10 +20,6 @@ const getStorageAsObject = (): ApplicationState => {
 };
 
 // const saveStorage = (appState: ApplicationState) => {};
-
-interface ApplicationState {
-  locationState?: LocationState;
-}
 
 // maybe this is a quirk of our former redux-persist usage,
 // each key is not an object, but another json string to parse
