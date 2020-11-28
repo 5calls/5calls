@@ -1,12 +1,12 @@
-import { timeStamp } from "console";
 import React from "react";
 import ReactDOM from "react-dom";
+
 import { Contact } from "../common/models/contact";
 import { ContactList } from "../common/models/contactList";
 import { WithLocationProps } from "../state/locationState";
 import { withLocation } from "../state/stateProvider";
 import { getContacts } from "../utils/api";
-import contactUtils from "../utils/contactUtils";
+import ContactUtils from "../utils/contactUtils";
 
 interface Props {}
 interface State {
@@ -41,7 +41,7 @@ class Reps extends React.Component<Props & WithLocationProps, State> {
   }
 
   componentDidUpdate(prevProps: Props & WithLocationProps) {
-    if (prevProps.locationState?.address != this.props.locationState?.address) {
+    if (prevProps.locationState?.address !== this.props.locationState?.address) {
       this.updateContacts();
     }
   }
@@ -63,7 +63,7 @@ class Reps extends React.Component<Props & WithLocationProps, State> {
       <li key={contact.id}>
         <img alt={contact.name} src={contact.photoURL} />
         <h4>
-          {contact.name} ({contactUtils.partyAndState(contact)})
+          {contact.name} ({ContactUtils.partyAndState(contact)})
         </h4>
         <p>{contact.reason}</p>
       </li>

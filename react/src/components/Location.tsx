@@ -51,7 +51,7 @@ class Location extends React.Component<Props & WithLocationProps, State> {
     e.preventDefault();
     this.setState({ locationError: undefined });
 
-    if (!this.state.manualAddress || this.state.manualAddress == "") {
+    if (!this.state.manualAddress || this.state.manualAddress === "") {
       // TODO: re-try automatic location
       return;
     }

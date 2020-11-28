@@ -8,7 +8,7 @@ import { OutcomeData, UserContactEvent } from "../common/models/contactEvent";
 import { UserCallDetails } from "../common/models/userStats";
 
 const prepareHeaders = (): Headers => {
-  const state = undefined; //store.getState();
+  // const state = undefined; //store.getState();
 
   let headers: Headers = { "Content-Type": "application/json; charset=utf-8" };
   //   if (state && state.userState.idToken) {

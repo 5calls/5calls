@@ -28,4 +28,9 @@ interface StoredData {
   locationState?: string;
 }
 
-export default { saveLocation, getStorageAsObject };
+interface Storage {
+  saveLocation(location: LocationState): void;
+  getStorageAsObject(): ApplicationState;
+}
+
+export default { saveLocation, getStorageAsObject } as Storage;

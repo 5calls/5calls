@@ -9,4 +9,8 @@ const partyAndState = (contact: Contact): string => {
   return "";
 };
 
-export default { partyAndState };
+interface ContactUtils {
+  partyAndState(contact: Contact): void;
+}
+
+export default { partyAndState } as ContactUtils;
