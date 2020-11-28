@@ -1,7 +1,7 @@
 import React from "react";
 import { GeolocationPosition } from "../common/models/geolocation";
 
-import { LocationState, LocationContext, WithLocationProps, LocationFetchType } from "./locationState";
+import { LocationState, LocationContext, WithLocationProps } from "./locationState";
 import Storage from "../utils/storage";
 
 interface Props {}

@@ -9,6 +9,7 @@
 
   // Theme Colors
   --c-base: #545555;
+  --c-xlight-base: #f5f5f5;
   --c-emphasis: #191b1d;
   --c-red: rgb(237, 60, 29);
   --c-red-rgb: 237, 60, 29;
@@ -42,8 +43,11 @@
 
 //  Basic layout
 
-html, input, select, button {
-  font-family: 'Roboto', sans-serif;
+html,
+input,
+select,
+button {
+  font-family: "Roboto", sans-serif;
   color: var(--c-base);
 }
 
@@ -97,8 +101,14 @@ body {
     margin-top: 1rem;
   }
 
-  h2, .card, .card i,
-  a, a:hover, a:focus, a:active, a:visited {
+  h2,
+  .card,
+  .card i,
+  a,
+  a:hover,
+  a:focus,
+  a:active,
+  a:visited {
     color: #fff;
   }
 }

@@ -1,14 +1,113 @@
 // issue page
 
 .issue {
-  .issue-wrapper {
+  ul {
+    padding-left: 40px;
+  }
+
+  li {
+    margin-bottom: calc(var(--leading) * 0.5rem);
+  }
+
+  .issue-content {
     h2 {
       text-align: left;
       margin: 0 0 10px 0;
     }
-    p {
+
+    p,
+    li,
+    blockquote {
       font-size: calc(20rem / var(--base-font-size));
-      line-height: 1.7rem;
+    }
+
+    p {
+      line-height: 1.8rem;
+    }
+
+    blockquote {
+      margin-left: 0;
+      border-left: 0.3rem solid #1875d1;
+      padding-left: 1.2rem;
+    }
+  }
+
+  .reps {
+    margin: 30px 0;
+
+    h3 {
+      text-align: left;
+      font-size: 1.2rem;
+      font-weight: bold;
+      margin-bottom: 4px;
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+
+      li {
+        margin-bottom: 2px;
+        padding: 4px;
+        height: 50px;
+        background-color: var(--c-xlight-base);
+        border-left: 3px solid var(--c-xlight-base);
+        overflow: hidden;
+
+        &.active {
+          border-left-color: var(--c-blue);
+        }
+
+        img {
+          margin: 3px 6px 0 3px;
+          width: 36px;
+          height: 36px;
+          border-radius: 18px;
+          float: left;
+          object-fit: cover;
+        }
+
+        a {
+          color: var(--c-blue);
+          // text-decoration: underline;
+        }
+
+        h4 {
+          margin: 0 0 0 0;
+          font-size: 17px;
+          font-weight: bold;
+        }
+
+        p {
+          font-size: 15px;
+          a {
+            text-decoration: underline;
+          }
+        }
+      }
+    }
+
+    .help {
+      margin: 4px 0 0 6px;
+      font-size: 14px;
+      font-style: italic;
+    }
+  }
+
+  .issue-script {
+    background-color: #f5f5f5;
+    padding: 20px;
+
+    p,
+    li,
+    blockquote {
+      font-size: calc(20rem / var(--base-font-size));
+    }
+
+    p {
+      line-height: 1.4em;
+      margin: 0 0 16px 0;
     }
   }
 }

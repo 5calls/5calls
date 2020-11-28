@@ -11,7 +11,7 @@
     />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <!-- prettier-ignore -->
-    {{ hugo.Generator }} {{ $style := resources.Get "sass/main.scss" | resources.ToCSS | resources.Minify | resources.Fingerprint }}
+    {{ hugo.Generator }} {{ $style := resources.Get "sass/main.scss" | resources.ToCSS | resources.Minify }}
     <link rel="stylesheet" href="{{ $style.Permalink }}" />
     <link
       href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700;900&display=swap"

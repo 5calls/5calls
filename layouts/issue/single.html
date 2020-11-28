@@ -3,9 +3,69 @@
   <div class="g">
     {{ partial "sidebar.html" . }}
     <div class="issue-wrapper">
-      <h2>{{ .Title }}</h2>
-      {{ .Content }}
-      <div class="reps" id="reps"></div>
+      <div class="issue-content">
+        <h2>{{ .Title }}</h2>
+        {{ .Content }}
+      </div>
+      <div class="reps">
+        <h3>Contacts for this topic:</h3>
+        <div class="rep-list">
+          <ul>
+            <li class="active">
+              <img alt="Kamala Harris" src="https://repimages.5calls.org/us-senate/512x512/kamala-harris.jpg" />
+              <h4>Kamala Harris (D-CA)</h4>
+              <p>This is one of your two Senators.</p>
+            </li>
+            <li>
+              <img alt="Dianne Feinstein" src="https://repimages.5calls.org/us-senate/512x512/dianne-feinstein.jpg" />
+              <h4>Dianne Feinstein (D-CA)</h4>
+              <p>This is one of your two Senators.</p>
+            </li>
+            <li>
+              <img alt="Jimmy Gomez" src="https://repimages.5calls.org/us-house/512x512/jimmy-gomez.jpg" />
+              <h4>Jimmy Gomez (D-CA)</h4>
+              <p>This is your representative in the House.</p>
+            </li>
+          </ul>
+        </div>
+        <p class="help">
+          <a
+            href="https://intercom.help/5calls/using-the-5-calls-website-and-apps/why-do-i-only-see-some-of-my-representatives"
+            target="_blank"
+            >Where are the rest of my representatives?</a
+          >
+        </p>
+      </div>
+      <div class="issue-script">
+        <p>Hi, my name is <strong>[NAME]</strong> and I'm a constituent from Los Angeles.</p>
+        <p>
+          I'm calling to urge Senator Kamala Harris to focus all of their attention on immediately passing additional
+          measures to alleviate the coronavirus' economic pressure on Americans. I am particularly interested in
+          measures like... <strong>[PICK 2-3 ITEMS TO HIGHLIGHT]:</strong>
+        </p>
+        <ul>
+          <li>An extension of the $600 per week unemployment compensation program;</li>
+          <li>
+            Suspension of all consumer and small business credit payments (including mortgages, student loans, and
+            personal loans);
+          </li>
+          <li>Suspension of negative consumer credit reporting;</li>
+          <li>Suspension of rent and utility payments;</li>
+          <li>Additional monthly stimulus payments;</li>
+          <li>
+            Expansion of paid sick days, family and medical leave, nutrition and food assistance programs, and housing
+            assistance;
+          </li>
+          <li>Payments and other assistance to state, local, tribal, and territorial governments;</li>
+          <li>Funding for education and schools that does not require schools to reopen;</li>
+          <li>Funding for COVID-19 testing and contact tracing; and</li>
+          <li>Elimination of cost-sharing for COVID-19 treatments.</li>
+        </ul>
+        <p>Protecting families economically will also help them stay home and reduce the spread of coronavirus.</p>
+        <p>
+          <strong>IF LEAVING A VOICEMAIL:</strong> Please leave your full street address to ensure your call is tallied.
+        </p>
+      </div>
     </div>
   </div>
 </div>

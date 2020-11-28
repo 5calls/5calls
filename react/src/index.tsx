@@ -27,11 +27,10 @@ try {
 
 try {
   ReactDOM.render(
-    <React.StrictMode>
-      {/* <StateProvider> */}
+    // we disabled strict mode here because we use findDOMNode in a very safe way (hopefully)
+    <StateProvider>
       <Reps />
-      {/* </StateProvider> */}
-    </React.StrictMode>,
+    </StateProvider>,
     document.getElementById("reps")
   );
 } catch (error) {
