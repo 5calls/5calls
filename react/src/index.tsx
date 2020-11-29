@@ -5,6 +5,7 @@ import reportWebVitals from "./utils/reportWebVitals";
 import Location from "./components/Location";
 import Reps from "./components/Reps";
 import Script from "./components/Script";
+import Outcomes from "./components/Outcomes";
 import StateProvider from "./state/stateProvider";
 
 try {
@@ -58,6 +59,18 @@ try {
     // dev version of above
   } else {
     console.error("error loading script component:", error);
+  }
+}
+
+try {
+  ReactDOM.render(<Outcomes />, document.getElementById("react-outcomes"));
+} catch (error) {
+  if (`${error}`.includes("Minified React error #200")) {
+    // nbd, we're on a page where no reps element is
+  } else if (`${error}`.includes("Target container is not a DOM element.")) {
+    // dev version of above
+  } else {
+    console.error("error loading outcomes component:", error);
   }
 }
 

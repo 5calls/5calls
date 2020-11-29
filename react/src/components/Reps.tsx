@@ -2,7 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom";
 
 import { Contact } from "../common/models/contact";
-import { ContactArea, ContactList } from "../common/models/contactList";
+import { ContactList } from "../common/models/contactList";
 import { WithLocationProps } from "../state/locationState";
 import { withLocation } from "../state/stateProvider";
 import { getContacts } from "../utils/api";
@@ -12,6 +12,7 @@ interface Props {}
 interface State {
   areas: string[];
   contactList: ContactList | undefined;
+  activeContactIndex: number;
 }
 
 class Reps extends React.Component<Props & WithLocationProps, State> {
@@ -20,6 +21,7 @@ class Reps extends React.Component<Props & WithLocationProps, State> {
   state = {
     areas: this._defaultAreas,
     contactList: this._defaultContactList,
+    activeContactIndex: 0,
   };
 
   componentDidMount() {
@@ -33,6 +35,16 @@ class Reps extends React.Component<Props & WithLocationProps, State> {
       // if we don't have contacts, fetch the contacts
       this.updateContacts();
     }
+
+    document.addEventListener("nextContact", () => {
+      const contacts = this.contactsForArea(this.state.areas);
+      if (this.state.activeContactIndex < contacts.length - 1) {
+        let activeContactIndex = this.state.activeContactIndex + 1;
+        this.setState({ activeContactIndex });
+      } else {
+        // TODO: done page
+      }
+    });
   }
 
   componentDidUpdate(prevProps: Props & WithLocationProps) {
@@ -53,9 +65,26 @@ class Reps extends React.Component<Props & WithLocationProps, State> {
     }
   }
 
-  contactComponent(contact: Contact): JSX.Element {
+  contactsForArea(areas: string[]): Contact[] {
+    let contacts: Contact[] = [];
+
+    if (this.state.contactList) {
+      contacts = ContactUtils.allContacts(this.state.contactList).filter((contact) => {
+        for (const area of this.state.areas) {
+          if (area === contact.area) {
+            return true;
+          }
+        }
+        return false;
+      });
+    }
+
+    return contacts;
+  }
+
+  contactComponent(contact: Contact, index: number, activeIndex: number): JSX.Element {
     return (
-      <li key={contact.id}>
+      <li className={index == activeIndex ? "active" : ""} key={contact.id}>
         <img alt={contact.name} src={contact.photoURL} />
         <h4>
           {contact.name} ({ContactUtils.partyAndState(contact)})
@@ -78,13 +107,19 @@ class Reps extends React.Component<Props & WithLocationProps, State> {
       );
     }
 
+    const contacts = this.contactsForArea(this.state.areas);
+    let activeContact: Contact | undefined;
+    if (contacts.length > 0) {
+      activeContact = contacts[this.state.activeContactIndex];
+    }
+
     return (
-      <ul>
-        {this.state.areas.includes(ContactArea.USSenate) &&
-          this.state.contactList?.senateReps().map((contact) => this.contactComponent(contact))}
-        {this.state.areas.includes(ContactArea.USHouse) &&
-          this.state.contactList?.houseRep().map((contact) => this.contactComponent(contact))}
-      </ul>
+      <>
+        <ul>
+          {contacts.map((contact, index) => this.contactComponent(contact, index, this.state.activeContactIndex))}
+        </ul>
+        {activeContact && <div>active contact is {activeContact.name}</div>}
+      </>
     );
   }
 }

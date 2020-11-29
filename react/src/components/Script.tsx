@@ -66,7 +66,6 @@ class Script extends React.Component<Props & WithLocationProps, State> {
     if (thisComponent && thisComponent.parentElement) {
       scriptMarkdown = thisComponent.parentElement.dataset.scriptMarkdown ?? "";
 
-      // replace location in script
       if (this.props.locationState) {
         scriptMarkdown = this.scriptFormat(scriptMarkdown, this.props.locationState);
       }
@@ -78,6 +77,7 @@ class Script extends React.Component<Props & WithLocationProps, State> {
   render() {
     return (
       <span>
+        {/* react-markdown is 20kb, we could probably find a lighter one */}
         <ReactMarkdown>{this.state.scriptMarkdown}</ReactMarkdown>
       </span>
     );
