@@ -36,7 +36,8 @@ class Reps extends React.Component<Props & WithLocationProps, State> {
       this.updateContacts();
     }
 
-    document.addEventListener("nextContact", () => {
+    document.addEventListener("nextContact", (e) => {
+      console.log("got event with ", (e as CustomEvent).detail);
       const contacts = this.contactsForArea(this.state.areas);
       if (this.state.activeContactIndex < contacts.length - 1) {
         let activeContactIndex = this.state.activeContactIndex + 1;
