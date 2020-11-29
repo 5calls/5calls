@@ -1,5 +1,10 @@
 import { Contact } from "./contact";
 
+export enum ContactArea {
+  USSenate = "US Senate",
+  USHouse = "US House",
+}
+
 export class ContactList {
   public location: string;
   public representatives: Contact[];
@@ -10,13 +15,13 @@ export class ContactList {
   }
 
   public senateReps(): Contact[] {
-    return this.representatives.filter((contact) => contact.area === "US Senate");
+    return this.representatives.filter((contact) => contact.area === ContactArea.USSenate);
   }
 
   // there may be multiple house reps returned here, only return one for now
   public houseRep(): Contact[] {
     const contacts: Contact[] = [];
-    const houseRep = this.representatives.find((contact) => contact.area === "US House");
+    const houseRep = this.representatives.find((contact) => contact.area === ContactArea.USHouse);
     if (houseRep) {
       contacts.push(houseRep);
     }

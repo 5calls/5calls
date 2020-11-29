@@ -2,7 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom";
 
 import { Contact } from "../common/models/contact";
-import { ContactList } from "../common/models/contactList";
+import { ContactArea, ContactList } from "../common/models/contactList";
 import { WithLocationProps } from "../state/locationState";
 import { withLocation } from "../state/stateProvider";
 import { getContacts } from "../utils/api";
@@ -24,7 +24,6 @@ class Reps extends React.Component<Props & WithLocationProps, State> {
 
   componentDidMount() {
     const thisComponent = ReactDOM.findDOMNode(this);
-    console.log("reps component", thisComponent);
     if (thisComponent && thisComponent.parentElement) {
       const areas = (thisComponent.parentElement.dataset.repAreas ?? "").split(",");
       this.setState({ areas });
@@ -81,9 +80,9 @@ class Reps extends React.Component<Props & WithLocationProps, State> {
 
     return (
       <ul>
-        {this.state.areas.includes("USSenate") &&
+        {this.state.areas.includes(ContactArea.USSenate) &&
           this.state.contactList?.senateReps().map((contact) => this.contactComponent(contact))}
-        {this.state.areas.includes("USHouse") &&
+        {this.state.areas.includes(ContactArea.USHouse) &&
           this.state.contactList?.houseRep().map((contact) => this.contactComponent(contact))}
       </ul>
     );
