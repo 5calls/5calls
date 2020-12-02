@@ -7,6 +7,7 @@ import { WithLocationProps } from "../state/locationState";
 import { withLocation } from "../state/stateProvider";
 import { getContacts } from "../utils/api";
 import ContactUtils from "../utils/contactUtils";
+import ActiveContact from "./ActiveContact";
 
 interface Props {}
 interface State {
@@ -119,7 +120,7 @@ class Reps extends React.Component<Props & WithLocationProps, State> {
         <ul>
           {contacts.map((contact, index) => this.contactComponent(contact, index, this.state.activeContactIndex))}
         </ul>
-        {activeContact && <div>active contact is {activeContact.name}</div>}
+        {activeContact && <ActiveContact contact={activeContact} />}
       </>
     );
   }

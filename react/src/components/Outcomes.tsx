@@ -28,7 +28,7 @@ class Outcomes extends React.Component<Props, State> {
   render() {
     return (
       <>
-        <p>outcomes</p>
+        <h3>Select your call result to show the next representative:</h3>
         {this.state.outcomes.map((outcome) => {
           return <button onClick={() => this.next(outcome)}>{outcome}</button>;
         })}
