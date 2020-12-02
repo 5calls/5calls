@@ -27,12 +27,14 @@ class Outcomes extends React.Component<Props, State> {
 
   render() {
     return (
-      <>
+      <div className="outcomes">
         <h3>Select your call result to show the next representative:</h3>
-        {this.state.outcomes.map((outcome) => {
-          return <button onClick={() => this.next(outcome)}>{outcome}</button>;
-        })}
-      </>
+        <div className="outcomes-items">
+          {this.state.outcomes.map((outcome) => {
+            return <button onClick={() => this.next(outcome)}>{outcome}</button>;
+          })}
+        </div>
+      </div>
     );
   }
 }

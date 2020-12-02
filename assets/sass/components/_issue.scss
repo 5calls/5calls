@@ -207,4 +207,87 @@
       margin: 0 0 16px 0;
     }
   }
+
+  .outcomes {
+    margin: 30px auto 24px auto;
+    padding: 0;
+
+    h3 {
+      font-weight: bold;
+      font-size: 1.4rem;
+      text-align: left;
+      margin-bottom: 10px;
+    }
+
+    &.preview {
+      opacity: 0.4;
+
+      button {
+        &:hover {
+          color: --c-blue;
+          background-color: --c-blue;
+          cursor: inherit;
+        }
+      }
+    }
+
+    &-items {
+      display: flex;
+      flex-wrap: wrap;
+
+      button {
+        text-transform: uppercase;
+        font-weight: 600;
+        cursor: pointer;
+
+        flex-grow: 1;
+        font-size: 1.3rem;
+        flex-basis: 180px;
+        margin: 2px;
+        text-align: center;
+        padding-top: 1rem;
+        padding-bottom: 1rem;
+
+        -webkit-font-smoothing: antialiased;
+        color: #fff;
+        background-color: var(--c-blue);
+        // I don't know how to use --c-blue in darken, fade-out, etc
+        border: 1px solid darken(rgb(24, 117, 209), 10%);
+
+        &:hover,
+        &:focus {
+          background-color: darken(rgb(24, 117, 209), 5%);
+        }
+        &:hover {
+          box-shadow: 0 1px 10px fade-out(rgb(24, 117, 209), 0.15);
+        }
+        &:focus {
+          outline: none;
+          box-shadow: 0 0 0 0.2rem fade-out(rgb(24, 117, 209), 0.4);
+        }
+
+        @include bp(small) {
+          font-size: 1.2rem;
+        }
+
+        @include bp(medium) {
+          flex-basis: 150px;
+        }
+
+        @include bp(large) {
+          border-radius: 0;
+          border-left-width: 0;
+          &:first-of-type {
+            border-top-left-radius: 6px;
+            border-bottom-left-radius: 6px;
+            border-left-width: 1px;
+          }
+          &:last-of-type {
+            border-top-right-radius: 6px;
+            border-bottom-right-radius: 6px;
+          }
+        }
+      }
+    }
+  }
 }
