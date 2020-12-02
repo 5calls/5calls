@@ -18,7 +18,8 @@ export class LocalNumbers extends React.Component<Props, State> {
     this.state = { showFieldOfficeNumbers: false };
   }
 
-  showField = () => {
+  showField = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
     this.setState({ showFieldOfficeNumbers: true });
   };
 
@@ -56,9 +57,7 @@ export class LocalNumbers extends React.Component<Props, State> {
     } else {
       return (
         <div className="contact-local-numbers">
-          <p>
-            <a onClick={this.showField}>Or call a local office</a>
-          </p>
+          <button onClick={this.showField}>Or call a local office</button>
         </div>
       );
     }

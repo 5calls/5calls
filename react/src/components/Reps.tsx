@@ -99,7 +99,7 @@ class Reps extends React.Component<Props & WithLocationProps, State> {
 
   contactComponent(contact: Contact, index: number, activeIndex: number): JSX.Element {
     return (
-      <li className={index == activeIndex ? "active" : ""} key={contact.id}>
+      <li className={index === activeIndex ? "active" : ""} key={contact.id}>
         <img alt={contact.name} src={contact.photoURL} />
         <h4>
           {contact.name} ({ContactUtils.partyAndState(contact)})

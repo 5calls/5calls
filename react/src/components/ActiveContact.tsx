@@ -14,7 +14,7 @@ class ActiveContact extends React.Component<Props, State> {
     return (
       <div className="contact">
         <div className="contact-image">
-          <img alt={`Photo of ${this.props.contact.name}`} src={this.props.contact.photoURL} />
+          <img alt={this.props.contact.name} src={this.props.contact.photoURL} />
         </div>
         <div>
           <h3 className="contact-name">

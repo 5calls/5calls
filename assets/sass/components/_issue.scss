@@ -186,8 +186,11 @@
         }
       }
 
-      a {
+      button {
+        background-color: transparent;
+        text-decoration: underline;
         cursor: pointer;
+        color: var(--c-dark);
       }
     }
   }
