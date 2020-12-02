@@ -38,11 +38,14 @@ class Reps extends React.Component<Props & WithLocationProps, State> {
     }
 
     document.addEventListener("nextContact", (e) => {
+      // TODO: send result to server
       console.log("got event with ", (e as CustomEvent).detail);
-      const contacts = this.contactsForArea(this.state.areas);
+
+      const contacts = this.contactsForArea(this.state.areas, this.state.contactList ?? ({} as ContactList));
       if (this.state.activeContactIndex < contacts.length - 1) {
         let activeContactIndex = this.state.activeContactIndex + 1;
         this.setState({ activeContactIndex });
+        this.reportUpdatedActiveContact(contacts[activeContactIndex]);
       } else {
         // TODO: done page
       }
@@ -55,11 +58,23 @@ class Reps extends React.Component<Props & WithLocationProps, State> {
     }
   }
 
+  reportUpdatedActiveContact(contact: Contact) {
+    // yuck, I don't have a good way to sync state across different-root components yet
+    // so script component just listens to this
+    const activeContactEvent = new CustomEvent("activeContact", { detail: contact });
+    document.dispatchEvent(activeContactEvent);
+  }
+
   updateContacts() {
     if (this.props.locationState) {
       getContacts(this.props.locationState.address)
         .then((contactList) => {
-          this.setState({ contactList });
+          this.setState({ activeContactIndex: 0, contactList });
+          const contacts = this.contactsForArea(this.state.areas, contactList);
+          if (contacts.length > 0) {
+            // start our script component with an active contact
+            this.reportUpdatedActiveContact(contacts[0]);
+          }
         })
         .catch((error) => {
           console.log("error getting reps:", error);
@@ -67,19 +82,17 @@ class Reps extends React.Component<Props & WithLocationProps, State> {
     }
   }
 
-  contactsForArea(areas: string[]): Contact[] {
+  contactsForArea(areas: string[], contactList: ContactList): Contact[] {
     let contacts: Contact[] = [];
 
-    if (this.state.contactList) {
-      contacts = ContactUtils.allContacts(this.state.contactList).filter((contact) => {
-        for (const area of this.state.areas) {
-          if (area === contact.area) {
-            return true;
-          }
+    contacts = ContactUtils.allContacts(contactList).filter((contact) => {
+      for (const area of this.state.areas) {
+        if (area === contact.area) {
+          return true;
         }
-        return false;
-      });
-    }
+      }
+      return false;
+    });
 
     return contacts;
   }
@@ -97,7 +110,7 @@ class Reps extends React.Component<Props & WithLocationProps, State> {
   }
 
   render() {
-    if (!this.state.contactList && !this.props.locationState?.address) {
+    if (!this.state.contactList || !this.props.locationState?.address) {
       return (
         <ul>
           <li>
@@ -109,7 +122,7 @@ class Reps extends React.Component<Props & WithLocationProps, State> {
       );
     }
 
-    const contacts = this.contactsForArea(this.state.areas);
+    const contacts = this.contactsForArea(this.state.areas, this.state.contactList);
     let activeContact: Contact | undefined;
     if (contacts.length > 0) {
       activeContact = contacts[this.state.activeContactIndex];

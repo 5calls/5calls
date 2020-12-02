@@ -8,6 +8,16 @@ import Script from "./components/Script";
 import Outcomes from "./components/Outcomes";
 import StateProvider from "./state/stateProvider";
 
+const handleRootRenderError = (error: any, component: string) => {
+  if (`${error}`.includes("Minified React error #200")) {
+    // nbd, we're on a page where no reps element is
+  } else if (`${error}`.includes("Target container is not a DOM element.")) {
+    // dev version of above
+  } else {
+    console.error(`error loading ${component} component: ${error}`);
+  }
+};
+
 try {
   ReactDOM.render(
     <React.StrictMode>
@@ -18,13 +28,7 @@ try {
     document.getElementById("location")
   );
 } catch (error) {
-  if (`${error}`.includes("Minified React error #200")) {
-    // nbd, we're on a page where no sidebar element
-  } else if (`${error}`.includes("Target container is not a DOM element.")) {
-    // dev version of above
-  } else {
-    console.error("error loading location component:", error);
-  }
+  handleRootRenderError(error, "location");
 }
 
 try {
@@ -36,13 +40,7 @@ try {
     document.getElementById("react-reps")
   );
 } catch (error) {
-  if (`${error}`.includes("Minified React error #200")) {
-    // nbd, we're on a page where no reps element is
-  } else if (`${error}`.includes("Target container is not a DOM element.")) {
-    // dev version of above
-  } else {
-    console.error("error loading reps component:", error);
-  }
+  handleRootRenderError(error, "reps");
 }
 
 try {
@@ -53,25 +51,13 @@ try {
     document.getElementById("react-script")
   );
 } catch (error) {
-  if (`${error}`.includes("Minified React error #200")) {
-    // nbd, we're on a page where no reps element is
-  } else if (`${error}`.includes("Target container is not a DOM element.")) {
-    // dev version of above
-  } else {
-    console.error("error loading script component:", error);
-  }
+  handleRootRenderError(error, "script");
 }
 
 try {
   ReactDOM.render(<Outcomes />, document.getElementById("react-outcomes"));
 } catch (error) {
-  if (`${error}`.includes("Minified React error #200")) {
-    // nbd, we're on a page where no reps element is
-  } else if (`${error}`.includes("Target container is not a DOM element.")) {
-    // dev version of above
-  } else {
-    console.error("error loading outcomes component:", error);
-  }
+  handleRootRenderError(error, "outcomes");
 }
 
 // If you want to start measuring performance in your app, pass a function

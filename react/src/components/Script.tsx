@@ -9,6 +9,7 @@ import { withLocation } from "../state/stateProvider";
 interface Props {}
 interface State {
   scriptMarkdown: string;
+  currentContact?: Contact;
 }
 
 // Replacement regexes, ideally standardize copy to avoid complex regexs
@@ -16,7 +17,7 @@ const titleReg = /\[REP\/SEN NAME\]|\[SENATOR\/REP NAME\]/gi;
 const locationReg = /\[CITY,\s?ZIP\]|\[CITY,\s?STATE\]/gi;
 
 class Script extends React.Component<Props & WithLocationProps, State> {
-  state = { scriptMarkdown: "" };
+  state: State = { scriptMarkdown: "" };
 
   getContactNameWithTitle = (contact: Contact) => {
     let title = "";
@@ -48,14 +49,16 @@ class Script extends React.Component<Props & WithLocationProps, State> {
     return title + contact.name;
   };
 
-  scriptFormat = (script: string, locationState: LocationState) => {
+  scriptFormat = (script: string, locationState: LocationState, contact: Contact | undefined) => {
     const location = locationState.cachedCity;
     if (location) {
       script = script.replace(locationReg, location);
     }
 
-    // const title = this.getContactNameWithTitle(contact);
-    // script = script.replace(titleReg, title);
+    if (contact) {
+      const title = this.getContactNameWithTitle(contact);
+      script = script.replace(titleReg, title);
+    }
 
     return script;
   };
@@ -66,19 +69,30 @@ class Script extends React.Component<Props & WithLocationProps, State> {
     if (thisComponent && thisComponent.parentElement) {
       scriptMarkdown = thisComponent.parentElement.dataset.scriptMarkdown ?? "";
 
-      if (this.props.locationState) {
-        scriptMarkdown = this.scriptFormat(scriptMarkdown, this.props.locationState);
-      }
-
       this.setState({ scriptMarkdown });
     }
+
+    document.addEventListener("activeContact", (e) => {
+      const contact = (e as CustomEvent).detail as Contact;
+      this.setState({ currentContact: contact });
+    });
   }
 
   render() {
+    let formattedScriptMarkdown = this.state.scriptMarkdown;
+
+    if (this.props.locationState) {
+      formattedScriptMarkdown = this.scriptFormat(
+        formattedScriptMarkdown,
+        this.props.locationState,
+        this.state.currentContact
+      );
+    }
+
     return (
       <span>
         {/* react-markdown is 20kb, we could probably find a lighter one */}
-        <ReactMarkdown>{this.state.scriptMarkdown}</ReactMarkdown>
+        <ReactMarkdown>{formattedScriptMarkdown}</ReactMarkdown>
       </span>
     );
   }

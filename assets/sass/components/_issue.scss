@@ -219,18 +219,6 @@
       margin-bottom: 10px;
     }
 
-    &.preview {
-      opacity: 0.4;
-
-      button {
-        &:hover {
-          color: --c-blue;
-          background-color: --c-blue;
-          cursor: inherit;
-        }
-      }
-    }
-
     &-items {
       display: flex;
       flex-wrap: wrap;
