@@ -22,6 +22,7 @@
       <div class="issue-script" id="react-script" data-script-markdown="{{ .Params.script }}">
         {{ .Params.script | markdownify }}
       </div>
+      <div class="outcomes" id="react-outcomes" data-outcomes="{{ delimit .Params.outcomes `,` }}"></div>
     </div>
   </div>
 </div>

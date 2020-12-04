@@ -11,7 +11,13 @@ interface Issue {
   slug: string;
   createdAt: string;
   contactAreas: string[];
+  outcomeModels: Outcome[];
   active: boolean;
+}
+
+interface Outcome {
+  label: string;
+  status: string;
 }
 
 const buildContent = async () => {
@@ -42,6 +48,7 @@ date: ${issue.createdAt}
 script: |
 ${multilineScript(issue.script)}
 ${contactAreaYAML(issue)}
+${outcomesYAML(issue)}
 active: ${issue.active ? "true" : "false"}
 ---
 ${issue.reason}
@@ -76,6 +83,19 @@ const contactAreaYAML = (issue: Issue): string => {
   }
 
   return contactAreasText;
+};
+
+const outcomesYAML = (issue: Issue): string => {
+  let outcomesText = ``;
+
+  if (issue.outcomeModels.length > 0) {
+    outcomesText = `outcomes:`;
+    for (const outcome of issue.outcomeModels) {
+      outcomesText += `\r  - ${outcome.label}`;
+    }
+  }
+
+  return outcomesText;
 };
 
 buildContent();
