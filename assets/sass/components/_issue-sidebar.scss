@@ -5,6 +5,23 @@
   --i-bar-check-margin: 1rem;
 }
 
+.i-hidden-bar {
+  // shown in smaller screen sizes via overrides.scss
+  display: none;
+  margin-bottom: 20px;
+
+  button {
+    width: 100%;
+    font-size: 1.4rem;
+    font-weight: bold;
+    text-align: left;
+    background-color: var(--c-blue);
+    color: #fff;
+    padding: 4px 8px;
+    text-decoration: underline;
+  }
+}
+
 @keyframes load {
   from {
     transform: scale(1);
@@ -100,7 +117,8 @@
       margin: 0;
     }
 
-    input, button {
+    input,
+    button {
       position: relative;
       &:focus {
         box-shadow: 0 0 0 4px rgb(170, 191, 221);
@@ -166,7 +184,6 @@
     transform: scale(1.05);
   }
 
-
   i {
     color: #fff;
     font-size: 0.75rem;
@@ -211,8 +228,6 @@
   z-index: 2;
 }
 
-
-
 .i-bar-header {
   font-size: 1rem;
   padding: 0.5rem var(--i-bar-padding-h);
@@ -235,7 +250,6 @@
   font-size: 1rem;
 }
 
-
 @mixin i-bar-color($status) {
   .i-bar-header-#{$status} {
     background: rgba(var(--c-#{$status}-rgb), 0.05);
@@ -247,7 +261,8 @@
   .i-bar-item.is-#{$status} {
     --check-color: rgba(var(--c-#{$status}-rgb), 0.8);
 
-    &:hover, &:focus {
+    &:hover,
+    &:focus {
       background: rgba(var(--c-#{$status}-rgb), 0.05);
     }
 

@@ -1,7 +1,5 @@
 <div class="i-bar">
-  <div class="i-bar-location" id="location">
-    <!-- react location app here  -->
-  </div>
+  <div class="i-bar-location" id="react-location"></div>
 
   <div class="i-bar-list">
     <section class="i-bar-list-section">
@@ -24,4 +22,7 @@
   </div>
 
   <a href="/more" class="i-bar-more">See all {{ len (where .Site.Pages "Type" "issue") }} issues</a>
+</div>
+<div class="i-hidden-bar">
+  <button onclick="window.location='/'">&laquo; Back to all issues</button>
 </div>

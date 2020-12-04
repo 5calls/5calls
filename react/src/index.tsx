@@ -25,7 +25,7 @@ try {
         <Location />
       </StateProvider>
     </React.StrictMode>,
-    document.getElementById("location")
+    document.getElementById("react-location")
   );
 } catch (error) {
   handleRootRenderError(error, "location");

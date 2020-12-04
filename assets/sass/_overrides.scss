@@ -203,8 +203,19 @@
 // issue page
 
 .issue {
+  .i-bar {
+    display: none;
+  }
+
+  @media screen and (max-width: 40rem) {
+    .i-hidden-bar {
+      display: block;
+    }
+  }
+
   @media screen and (min-width: 40rem) {
     .i-bar {
+      display: block;
       grid-column: 1 / span 6;
     }
 
@@ -215,6 +226,7 @@
 
   @media screen and (min-width: 76rem) {
     .i-bar {
+      display: block;
       grid-column-end: 5;
     }
 
@@ -227,8 +239,19 @@
 // done page
 
 .done {
+  .i-bar {
+    display: none;
+  }
+
+  @media screen and (max-width: 40rem) {
+    .i-hidden-bar {
+      display: block;
+    }
+  }
+
   @media screen and (min-width: 40rem) {
     .i-bar {
+      display: block;
       grid-column: 1 / span 6;
     }
 
@@ -239,6 +262,7 @@
 
   @media screen and (min-width: 76rem) {
     .i-bar {
+      display: block;
       grid-column-end: 5;
     }
 
