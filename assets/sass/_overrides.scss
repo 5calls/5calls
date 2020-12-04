@@ -60,7 +60,6 @@
   grid-column: 1 / span 4;
 
   img {
-    filter: brightness(40) grayscale(1);
     display: block;
     margin: 0 auto;
 
@@ -220,6 +219,30 @@
     }
 
     .issue-wrapper {
+      grid-column-start: 5;
+    }
+  }
+}
+
+// done page
+
+.done {
+  @media screen and (min-width: 40rem) {
+    .i-bar {
+      grid-column: 1 / span 6;
+    }
+
+    .done-wrapper {
+      grid-column: 7 / -1;
+    }
+  }
+
+  @media screen and (min-width: 76rem) {
+    .i-bar {
+      grid-column-end: 5;
+    }
+
+    .done-wrapper {
       grid-column-start: 5;
     }
   }

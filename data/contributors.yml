@@ -22,7 +22,7 @@
       socialUsername: eleanor.wertman
       socialLink: https://medium.com/eleanor.wertman
 
-- title: "Web Design and Engineering"
+- title: "Web"
   volunteers:
     - name: Mike Monteiro
       socialUsername: monteiro
@@ -41,18 +41,20 @@
       socialLink: https://twitter.com/mr0grog
   fullListUrl: https://github.com/5calls/5calls/graphs/contributors
 
-- title: "iOS Team"
+- title: "iOS"
   volunteers:
     - name: Ben Scheirman
+      avatar: /images/vols/ben.jpg
       socialUsername: subdigital
       socialLink: https://twitter.com/subdigital
 
     - name: Patrick McCarron
+      avatar: /images/vols/patrick.jpg
       socialUsername: mccarron
       socialLink: https://twitter.com/mccarron
   fullListUrl: https://github.com/5calls/ios/graphs/contributors
 
-- title: "Android Team"
+- title: "Android"
   volunteers:
     - name: Katie Dektar
       socialService: github

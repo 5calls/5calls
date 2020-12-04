@@ -3,90 +3,103 @@
   <h1>We’re the team making advocacy&nbsp;accessible.</h1>
 </div>
 <div class="content">
-    <div class="g">
-        <div class="measure">
-        <p>5 Calls makes it easy for you to reach your members of Congress and make your voice heard.</p>
-        <p>We research issues, write scripts that clearly articulate a progressive position, figure out the most influential decision-makers, and collect phone numbers for their offices.</p>
-        <p>All you have to do is call.</p>
-        </div>
+  <div class="g">
+    <div class="measure">
+      <p>5 Calls makes it easy for you to reach your members of Congress and make your voice heard.</p>
+      <p>
+        We research issues, write scripts that clearly articulate a progressive position, figure out the most
+        influential decision-makers, and collect phone numbers for their offices.
+      </p>
+      <p>All you have to do is call.</p>
     </div>
+  </div>
 </div>
 
 <section class="alt">
-<div class="content">
+  <div class="content">
+    <h2>Nick O’Neill and Rebecca Kaufman</h2>
 
-<h2>Nick O’Neill and Rebecca Kaufman</h2>
+    <div class="g founders">
+      <div class="founders-photo">
+        <img src="/images/vols/nick-rebecca.png" alt="Nick O'Neill and Rebecca Kaufman" />
+      </div>
 
-<div class="g founders">
-<div class="founders-photo">
-<img src="/images/avatar.svg" alt="Photo of Nick O'Neill and Rebecca Kaufman." />
-</div>
+      <div class="founders-body">
+        <p>
+          After working in the field during the 2016 Presidential election Nick, a software engineer, and Rebecca, a
+          former molecular biologist, reached out to friends working in Capitol Hill to find out how best to voice
+          support or opposition to the actions of their representatives.
+        </p>
 
-<div class="founders-body">
-<p>After working in the field during the 2016 Presidential election Nick, a software engineer, and Rebecca, a former molecular biologist, reached out to friends working in Capitol Hill to find out how best to voice support or opposition to the actions of their representatives.</p>
-
-<p class="founders-social"><a href="https://twitter.com/nickoneill"><i class="fa fa-twitter"></i> @nickoneill</a> <a href="https://twitter.com/syntheticmethod"><i class="fa fa-twitter"></i> @syntheticmethod</a></p>
-</div>
-</div>
-
-</div> <!-- /.content -->
+        <p class="founders-social">
+          <a href="https://twitter.com/nickoneill"><i class="fa fa-twitter"></i> @nickoneill</a>
+          <a href="https://twitter.com/syntheticmethod"><i class="fa fa-twitter"></i> @syntheticmethod</a>
+        </p>
+      </div>
+    </div>
+  </div>
+  <!-- /.content -->
 </section>
 
 <div class="content">
+  {{ range $.Site.Data.contributors }}
 
-{{ range $.Site.Data.contributors }}
+  <div class="about-team">
+    <h2>{{ .title }}</h2>
 
-<div class="about-team">
+    <div class="volunteer-wrapper">
+      {{ range .volunteers }}
+      <div class="volunteer">
+        <img src="{{ default `/images/avatar.svg` .avatar }}" alt="" />
 
-<h2>{{ .title }}</h2>
+        <p><strong>{{ .name }}</strong></p>
 
-<div class="volunteer-wrapper">
-{{ range .volunteers }}
-<div class="volunteer">
+        <p>
+          <a href="{{ .socialLink }}"
+            ><i class="fa fa-{{ default `twitter` .socialService }}"></i> @{{ .socialUsername }}</a
+          >
+        </p>
+      </div>
+      {{ end }}
 
-<img src="{{ default `/images/avatar.svg` .avatar }}" alt="" />
+      <p class="small full-list-link">
+        {{ if .fullListUrl }}
+        <a href="{{ .fullListUrl }}">See all our contributors</a>
+        {{ else }} Our thanks to all our contributors, including those not mentioned here! {{ end }}
+      </p>
+    </div>
+    <!-- /.volunteer-wrapper -->
+  </div>
+  <!-- /.about-team -->
+  {{ end }}
 
-<p><strong>{{ .name }}</strong></p>
+  <h2>Want to get involved?</h2>
 
-<p><a href="{{ .socialLink }}"><i class="fa fa-{{ default `twitter` .socialService }}"></i>
-@{{ .socialUsername }}</a></p>
+  <div class="g g-3up a-ctr">
+    <div class="card">
+      <i class="fa fa-twitter"></i>
+      <strong>DM us on Twitter</strong>
+      <p>Message <a href="https://twitter.com/make5calls">@make5calls</a></p>
+    </div>
 
-</div>
-{{ end }}
+    <div class="card">
+      <i class="fa fa-envelope-open-text"></i>
+      <strong>Tell us how you'd like to help</strong>
+      <p>Email <a href="mailto:hello@5calls.org?subject=Volunteering">hello@5calls.org</a></p>
+    </div>
 
-<p class="small full-list-link">
-{{ if .fullListUrl }}
-<a href="{{ .fullListUrl }}">See all our contributors</a>
-{{ else }}
-Our thanks to all our contributors, including those not mentioned here!
-{{ end }}
-</p>
-</div> <!-- /.volunteer-wrapper -->
-
-</div> <!-- /.about-team -->
-{{ end }}
-
-<h2>Want to get involved?</h2>
-
-<div class="g g-3up a-ctr">
-<div class="card">
-  <i class="fa fa-twitter"></i>
-  <strong>DM us on Twitter</strong>
-  <p>Message <a href="https://twitter.com/make5calls">@make5calls</a></p>
-</div>
-
-<div class="card">
-  <i class="fa fa-envelope-open-text"></i>
-  <strong>Tell us how you'd like to help</strong>
-  <p>Email <a href="mailto:hello@5calls.org?subject=Volunteering">hello@5calls.org</a></p>
-</div>
-
-<div class="card">
-  <i class="fa fa-github"></i>
-  <strong>Contribute on GitHub</strong>
-  <p>Browse our starter issues for <a href="https://github.com/5calls/5calls/issues?q=is%3Aissue+is%3Aopen+label%3A%22starter+issue%22">Web</a>, <a href="https://github.com/5calls/ios/issues?q=is%3Aissue+is%3Aopen+label%3A%22starter+issue%22">iOS</a>, or&nbsp;<a href="https://github.com/5calls/android/issues?q=is%3Aissue+is%3Aopen+label%3A%22starter+issue%22">Android</a></p>
-</div>
-</div>
-
+    <div class="card">
+      <i class="fa fa-github"></i>
+      <strong>Contribute on GitHub</strong>
+      <p>
+        Browse our starter issues for
+        <a href="https://github.com/5calls/5calls/issues?q=is%3Aissue+is%3Aopen+label%3A%22starter+issue%22">Web</a>,
+        <a href="https://github.com/5calls/ios/issues?q=is%3Aissue+is%3Aopen+label%3A%22starter+issue%22">iOS</a>,
+        or&nbsp;<a href="https://github.com/5calls/android/issues?q=is%3Aissue+is%3Aopen+label%3A%22starter+issue%22"
+          >Android</a
+        >
+      </p>
+    </div>
+  </div>
 </div>
 {{ end }}

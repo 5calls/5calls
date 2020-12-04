@@ -1,0 +1,51 @@
+{{ define "bodyclass" }}done{{ end }} {{ define "main" }}
+<div class="content">
+  <div class="g">
+    {{ partial "sidebar.html" . }}
+    <div class="done-wrapper">
+      <h2>Great work!</h2>
+      <p>
+        Your calls help your representatives decide what issues are most important to their constiuents and can help
+        direct their positions on policy that makes a difference in the lives of all Americans.
+      </p>
+      <div class="done-grid">
+        <div class="done-remind">
+          <h3>📬 Hear from your Rep</h3>
+          <p>Enter your email and we'll try to get your rep's position on this issue:</p>
+          <blockquote class="clearfix">
+            <form>
+              <input type="email" placeholder="email@example.com" autocomplete="email" value="" />
+              <button>Submit</button>
+            </form>
+          </blockquote>
+        </div>
+        <div class="done-share">
+          <h3>📬 Share this call:</h3>
+          <img src="https://shareimages.5calls.org/651.png" class="call__complete__share__img" />
+          <div class="share-links">
+            <p class="share-twitter">
+              <a><i class="fab fa-twitter" aria-hidden="true"></i>Share</a>
+            </p>
+            <p class="share-facebook">
+              <a><i class="fab fa-facebook" aria-hidden="true"></i>Share</a>
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="done-donate">
+        <h3>Donate to 5 Calls</h3>
+        <p>
+          5 Calls is a <strong>grassroots supported non-profit organization</strong>, we rely on donations from members
+          like you to keep our activities fresh and develop new ways to make your voice heard!
+        </p>
+        <div class="donate-grid">
+          <button class="grid-1">$10<span>Supports 200 calls to Congress</span></button>
+          <button class="grid-2">$15<span>Supports outreach to new activists</span></button>
+          <button class="donate-best grid-1">$25<span>Supports issue research and writeups</span></button>
+          <button class="grid-2">$100<span>Keeps the server running for a month</span></button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{{ end }}

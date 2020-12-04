@@ -17,6 +17,8 @@ interface Issue {
 const buildContent = async () => {
   const contentDirectory = `${__dirname}/../../content/issue/`;
   fsExtra.emptyDirSync(contentDirectory);
+  const doneDirectory = `${__dirname}/../../content/done/`;
+  fsExtra.emptyDirSync(doneDirectory);
 
   fetch(`https://api.5calls.org/v1/issues`)
     .then((res) => res.json())
@@ -25,6 +27,10 @@ const buildContent = async () => {
       // console.log("resoponse is", issues);
       issues.forEach((issue) => {
         fs.writeFileSync(`${contentDirectory}${issue.slug}.md`, postContentFromIssue(issue));
+      });
+      // create the done pages too
+      issues.forEach((issue) => {
+        fs.writeFileSync(`${doneDirectory}${issue.slug}.md`, doneContentFromIssue(issue));
       });
     });
 };
@@ -39,6 +45,14 @@ ${contactAreaYAML(issue)}
 active: ${issue.active ? "true" : "false"}
 ---
 ${issue.reason}
+`;
+};
+
+const doneContentFromIssue = (issue: Issue): string => {
+  return `---
+title: "${escapeQuotes(issue.name)}"
+date: ${issue.createdAt}
+---
 `;
 };
 
