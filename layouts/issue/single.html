@@ -9,7 +9,11 @@
       </div>
       <div class="reps">
         <h3>Contacts for this topic:</h3>
-        <div class="rep-list" id="react-reps" data-rep-areas="{{ delimit .Params.contactAreas `,` }}"></div>
+        <div
+          class="rep-list"
+          id="react-reps"
+          data-rep-areas="{{ if isset .Params `contactareas` }}{{ delimit .Params.contactAreas `,` }}{{ end }}"
+        ></div>
         <!-- I want to include this help text but I want it to be under the rep list but not in react since it's not dynamic -->
         <!-- <p class="help">
           <a
@@ -22,7 +26,11 @@
       <div class="issue-script" id="react-script" data-script-markdown="{{ .Params.script }}">
         {{ .Params.script | markdownify }}
       </div>
-      <div class="outcomes" id="react-outcomes" data-outcomes="{{ delimit .Params.outcomes `,` }}"></div>
+      <div
+        class="outcomes"
+        id="react-outcomes"
+        data-outcomes="{{ if isset .Params `outcomes` }}{{ delimit .Params.outcomes `,` }}{{ end }}"
+      ></div>
     </div>
   </div>
 </div>

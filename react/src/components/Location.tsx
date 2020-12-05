@@ -68,7 +68,7 @@ class Location extends React.Component<Props & WithLocationProps, State> {
         .catch((error) => {
           console.log("error:", error);
           // we don't specify different types of location errors, but might in the future
-          this.setState({ locationError: "location error" });
+          this.setState({ locationError: "location error", componentLocationState: ComponentLocationState.NoLocation });
         });
     }
   };
@@ -80,8 +80,24 @@ class Location extends React.Component<Props & WithLocationProps, State> {
     getBrowserGeolocation()
       .then((loc) => {
         // TODO: give stateprovider this loc
-        this.props.setLocation(loc);
-        this.setState({ componentLocationState: ComponentLocationState.HasLocation });
+        const pairedLoc = `${loc.latitude},${loc.longitude}`;
+        getContacts(pairedLoc)
+          .then((contactList) => {
+            this.props.setLocationAddress(pairedLoc, contactList.location);
+            this.setState({ componentLocationState: ComponentLocationState.HasLocation });
+            document.dispatchEvent(new Event("updateReps"));
+          })
+          .catch((error) => {
+            console.log("error getting location after geoloc:", error);
+            // we don't specify different types of location errors, but might in the future
+            this.setState({
+              locationError: "geolocation error",
+              componentLocationState: ComponentLocationState.NoLocation,
+            });
+          });
+
+        // // this.props.setLocation(loc);
+        // this.setState({ componentLocationState: ComponentLocationState.HasLocation });
       })
       .catch((err) => {
         // nbd, go to manual entry

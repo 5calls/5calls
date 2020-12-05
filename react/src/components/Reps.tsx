@@ -48,6 +48,7 @@ class Reps extends React.Component<Props & WithLocationProps, State> {
         this.reportUpdatedActiveContact(contacts[activeContactIndex]);
       } else {
         // TODO: done page
+        window.location.pathname = window.location.pathname + "/done/";
       }
     });
   }
