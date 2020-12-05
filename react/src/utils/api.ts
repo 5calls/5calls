@@ -1,5 +1,8 @@
 import axios from "axios";
 import * as querystring from "querystring";
+import firebase from "firebase/app";
+import "firebase/auth";
+
 import { Contact } from "../common/models/contact";
 import { ContactList } from "../common/models/contactList";
 import * as Constants from "../common/constants";
@@ -7,15 +10,15 @@ import { Issue } from "../common/models/issue";
 import { OutcomeData, UserContactEvent } from "../common/models/contactEvent";
 import { UserCallDetails } from "../common/models/userStats";
 
-const prepareHeaders = (): Headers => {
-  // const state = undefined; //store.getState();
+const prepareHeaders = async (): Promise<Headers> => {
+  const idToken = await firebase.auth().currentUser?.getIdTokenResult();
 
   let headers: Headers = { "Content-Type": "application/json; charset=utf-8" };
-  //   if (state && state.userState.idToken) {
-  //     headers.Authorization = "Bearer " + state.userState.idToken;
-  //   }
+  if (idToken) {
+    headers.Authorization = "Bearer " + idToken.token;
+  }
 
-  return headers;
+  return Promise.resolve(headers);
 };
 
 interface Headers {
@@ -23,8 +26,8 @@ interface Headers {
   "Content-Type": string;
 }
 
-export const getAllIssues = (): Promise<Issue[]> => {
-  const headers = prepareHeaders();
+export const getAllIssues = async (): Promise<Issue[]> => {
+  const headers = await prepareHeaders();
 
   return axios
     .get(Constants.ISSUES_API_URL, {
@@ -36,12 +39,14 @@ export const getAllIssues = (): Promise<Issue[]> => {
 
 export const noLocationError = Error("no location entered");
 
-export const getContacts = (location: string): Promise<ContactList> => {
+export const getContacts = async (location: string): Promise<ContactList> => {
   if (location === "") {
     return Promise.reject(noLocationError);
   }
 
-  const headers = prepareHeaders();
+  console.log("getting contacts");
+
+  const headers = await prepareHeaders();
 
   return axios
     .get<ContactResponse>(

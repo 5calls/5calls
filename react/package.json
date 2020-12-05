@@ -6,6 +6,7 @@
     "@reduxjs/toolkit": "^1.4.0",
     "@types/fs-extra": "^9.0.4",
     "axios": "^0.21.0",
+    "firebase": "^8.1.2",
     "querystring": "^0.2.0",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
