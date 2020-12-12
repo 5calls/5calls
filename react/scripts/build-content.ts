@@ -5,6 +5,7 @@ import fsExtra from "fs-extra";
 // yarn run ts-node -O '{"module": "commonjs"}' scripts/build-content.ts
 
 interface Issue {
+  id: number;
   name: string;
   reason: string;
   script: string;
@@ -59,6 +60,7 @@ const doneContentFromIssue = (issue: Issue): string => {
   return `---
 title: "${escapeQuotes(issue.name)}"
 date: ${issue.createdAt}
+issueId: ${issue.id}
 ---
 `;
 };

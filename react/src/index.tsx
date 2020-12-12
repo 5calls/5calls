@@ -8,7 +8,9 @@ import Location from "./components/Location";
 import Reps from "./components/Reps";
 import Script from "./components/Script";
 import Outcomes from "./components/Outcomes";
+import Share from "./components/Share";
 import StateProvider from "./state/stateProvider";
+import "./utils/staticUtils";
 
 firebase.initializeApp({
   apiKey: "AIzaSyCqbgwuM82Z4a3oBzzmPgi-208UrOwIgAA",
@@ -32,7 +34,8 @@ const handleRootRenderError = (error: any, component: string) => {
 
 let firebaseAuthStartedUp = false;
 firebase.auth().onAuthStateChanged((user) => {
-  console.log("auth state change with user:", user);
+  // console.log("auth state change with user:", user);
+
   if (!user) {
     firebase
       .auth()
@@ -93,6 +96,12 @@ const startComponentRenders = () => {
     ReactDOM.render(<Outcomes />, document.getElementById("react-outcomes"));
   } catch (error) {
     handleRootRenderError(error, "outcomes");
+  }
+
+  try {
+    ReactDOM.render(<Share />, document.getElementById("react-share"));
+  } catch (error) {
+    handleRootRenderError(error, "share");
   }
 };
 

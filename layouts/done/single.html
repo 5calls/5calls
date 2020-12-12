@@ -19,18 +19,13 @@
             </form>
           </blockquote>
         </div>
-        <div class="done-share">
-          <h3>📬 Share this call:</h3>
-          <img src="https://shareimages.5calls.org/651.png" class="call__complete__share__img" />
-          <div class="share-links">
-            <p class="share-twitter">
-              <a><i class="fab fa-twitter" aria-hidden="true"></i>Share</a>
-            </p>
-            <p class="share-facebook">
-              <a><i class="fab fa-facebook" aria-hidden="true"></i>Share</a>
-            </p>
-          </div>
-        </div>
+        <div
+          class="done-share"
+          id="react-share"
+          data-issue-id="{{ .Params.issueId }}"
+          data-issue-title="{{ .Title }}"
+          data-issue-slug="{{ .File.BaseFileName }}"
+        ></div>
       </div>
       <div class="done-donate">
         <h3>Donate to 5 Calls</h3>
@@ -39,10 +34,18 @@
           like you to keep our activities fresh and develop new ways to make your voice heard!
         </p>
         <div class="donate-grid">
-          <button class="grid-1">$10<span>Supports 200 calls to Congress</span></button>
-          <button class="grid-2">$15<span>Supports outreach to new activists</span></button>
-          <button class="donate-best grid-1">$25<span>Supports issue research and writeups</span></button>
-          <button class="grid-2">$100<span>Keeps the server running for a month</span></button>
+          <button onclick="window.fivecalls.openDonate(10)" class="grid-1">
+            $10<span>Supports 200 calls to Congress</span>
+          </button>
+          <button onclick="window.fivecalls.openDonate(15)" class="grid-2">
+            $15<span>Supports outreach to new activists</span>
+          </button>
+          <button onclick="window.fivecalls.openDonate(25)" class="donate-best grid-1">
+            $25<span>Supports issue research and writeups</span>
+          </button>
+          <button onclick="window.fivecalls.openDonate(100)" class="grid-2">
+            $100<span>Keeps the site running for a month</span>
+          </button>
         </div>
       </div>
     </div>
