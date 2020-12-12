@@ -112,12 +112,10 @@ export const getUserStats = (idToken: string) => {
 
 export const postOutcomeData = async (data: OutcomeData) => {
   const postData = querystring.stringify({
-    location: data.location,
     result: data.outcome,
     contactid: data.contactId,
     issueid: data.issueId,
     via: data.via,
-    userid: data.userId,
   });
 
   const headers = await prepareHeaders();
