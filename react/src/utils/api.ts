@@ -44,8 +44,6 @@ export const getContacts = async (location: string): Promise<ContactList> => {
     return Promise.reject(noLocationError);
   }
 
-  console.log("getting contacts");
-
   const headers = await prepareHeaders();
 
   return axios
