@@ -28,7 +28,7 @@ export interface Outcome {
 export interface OutcomeData {
   outcome: UserOutcomeResult;
   issueId: string;
-  numberContactsLeft: number;
+  // numberContactsLeft: number; // removing this... I think we used it for internal communication
   location?: string; // added in submitOutcome()
   contactId: string;
   via?: string; // added in submitOutcome()

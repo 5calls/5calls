@@ -2,16 +2,18 @@ import React from "react";
 import ReactDOM from "react-dom";
 
 import { Contact } from "../common/models/contact";
+import { OutcomeData } from "../common/models/contactEvent";
 import { ContactList } from "../common/models/contactList";
 import { WithLocationProps } from "../state/locationState";
 import { withLocation } from "../state/stateProvider";
-import { getContacts } from "../utils/api";
+import { getContacts, postOutcomeData } from "../utils/api";
 import ContactUtils from "../utils/contactUtils";
 import ActiveContact from "./ActiveContact";
 
 interface Props {}
 interface State {
   areas: string[];
+  issueId: string;
   contactList: ContactList | undefined;
   activeContactIndex: number;
 }
@@ -21,6 +23,7 @@ class Reps extends React.Component<Props & WithLocationProps, State> {
   _defaultContactList: ContactList | undefined = undefined;
   state = {
     areas: this._defaultAreas,
+    issueId: "0000",
     contactList: this._defaultContactList,
     activeContactIndex: 0,
   };
@@ -29,7 +32,8 @@ class Reps extends React.Component<Props & WithLocationProps, State> {
     const thisComponent = ReactDOM.findDOMNode(this);
     if (thisComponent && thisComponent.parentElement) {
       const areas = (thisComponent.parentElement.dataset.repAreas ?? "").split(",");
-      this.setState({ areas });
+      const issueId = thisComponent.parentElement.dataset.issueId ?? "";
+      this.setState({ areas, issueId });
     }
 
     if (!this.state.contactList) {
@@ -38,17 +42,38 @@ class Reps extends React.Component<Props & WithLocationProps, State> {
     }
 
     document.addEventListener("nextContact", (e) => {
-      // TODO: send result to server
-      console.log("got event with ", (e as CustomEvent).detail);
+      const outcome: string = (e as CustomEvent).detail;
 
       const contacts = this.contactsForArea(this.state.areas, this.state.contactList ?? ({} as ContactList));
+
+      if (outcome !== "skip") {
+        const viaParameter = window.location.host === "5calls.org" ? "web" : "test";
+
+        let currentContact: Contact | undefined;
+        if (contacts.length >= this.state.activeContactIndex) {
+          currentContact = contacts[this.state.activeContactIndex];
+        }
+
+        const outcomeData: OutcomeData = {
+          outcome: outcome,
+          issueId: this.state.issueId,
+          contactId: currentContact?.id ?? "no-contact-id",
+          via: viaParameter,
+        };
+        postOutcomeData(outcomeData);
+      }
+
       if (this.state.activeContactIndex < contacts.length - 1) {
         let activeContactIndex = this.state.activeContactIndex + 1;
         this.setState({ activeContactIndex });
         this.reportUpdatedActiveContact(contacts[activeContactIndex]);
       } else {
-        // TODO: done page
-        window.location.pathname = window.location.pathname + "/done/";
+        if (window.location.host === "5calls.org") {
+          window.location.pathname = window.location.pathname + "/done/";
+        } else {
+          // if we're testing, refresh
+          window.location.reload();
+        }
       }
     });
   }

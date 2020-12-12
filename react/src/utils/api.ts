@@ -7,7 +7,7 @@ import { Contact } from "../common/models/contact";
 import { ContactList } from "../common/models/contactList";
 import * as Constants from "../common/constants";
 import { Issue } from "../common/models/issue";
-import { OutcomeData, UserContactEvent } from "../common/models/contactEvent";
+import { OutcomeData } from "../common/models/contactEvent";
 import { UserCallDetails } from "../common/models/userStats";
 
 const prepareHeaders = async (): Promise<Headers> => {
@@ -84,46 +84,6 @@ export const getCountData = (): Promise<CountData> => {
     .catch((e) => Promise.reject(e));
 };
 
-interface BackfillData {
-  stats: BackfillOutcome[];
-}
-
-interface BackfillOutcome {
-  issueID: string;
-  contactID: string;
-  result: string;
-  time: string;
-}
-
-export const postBackfillOutcomes = (data: UserContactEvent[], idToken: string) => {
-  let postData: BackfillData = { stats: [] };
-
-  for (let i = 0; i < data.length; i++) {
-    let timeInSeconds = Math.round(data[i].time / 1000);
-
-    let outcome: BackfillOutcome = {
-      issueID: data[i].issueid,
-      contactID: data[i].contactid,
-      result: data[i].result,
-      time: timeInSeconds.toString(),
-    };
-
-    postData.stats.push(outcome);
-  }
-
-  return axios
-    .post(`${Constants.STATS_API_URL}`, postData, {
-      headers: {
-        Authorization: "Bearer " + idToken,
-        "Content-Type": "application/json; charset=utf-8",
-      },
-    })
-    .then((response) => {
-      return Promise.resolve(null);
-    })
-    .catch((e) => Promise.reject(e));
-};
-
 export interface RemoteUserStats {
   stats: CallStats;
   weeklyStreak: number;
@@ -150,7 +110,7 @@ export const getUserStats = (idToken: string) => {
     .catch((e) => Promise.reject(e));
 };
 
-export const postOutcomeData = (data: OutcomeData) => {
+export const postOutcomeData = async (data: OutcomeData) => {
   const postData = querystring.stringify({
     location: data.location,
     result: data.outcome,
@@ -159,10 +119,13 @@ export const postOutcomeData = (data: OutcomeData) => {
     via: data.via,
     userid: data.userId,
   });
-  // console.log('postOutcomeData() posted data:', postData)
+
+  const headers = await prepareHeaders();
+  headers["Content-Type"] = "application/x-www-form-urlencoded";
+
   return axios
     .post(`${Constants.REPORT_API_URL}`, postData, {
-      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      headers,
     })
     .then((response) => {
       return Promise.resolve(null);
