@@ -19,8 +19,6 @@ const getStorageAsObject = (): ApplicationState => {
   return appState;
 };
 
-// const saveStorage = (appState: ApplicationState) => {};
-
 // maybe this is a quirk of our former redux-persist usage,
 // each key is not an object, but another json string to parse
 // but it's fine because we can abstract around it here

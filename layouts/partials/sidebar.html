@@ -8,7 +8,7 @@
       </header>
 
       {{ range where (where .Site.Pages "Type" "issue") ".Params.active" "eq" true }}
-      <button class="i-bar-item is-unsorted" onclick="window.location='{{ .Permalink }}'">
+      <a class="i-bar-item is-unsorted" href="{{ .Permalink }}">
         <div class="i-bar-item-check">
           <div class="i-bar-check-completed">
             <i class="fa fa-phone-alt"></i>
@@ -16,7 +16,7 @@
           </div>
         </div>
         <strong>{{ .Title }}</strong>
-      </button>
+      </a>
       {{ end }}
     </section>
   </div>

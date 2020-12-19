@@ -25,7 +25,7 @@ export class LocalNumbers extends React.Component<Props, State> {
 
   // this component is reused and the local state is maintained through contact changes,
   // we want the local state to reset when it's updated
-  componentWillReceiveProps(nextProps: Props) {
+  componentDidUpdate(nextProps: Props) {
     if (this.props.contact !== nextProps.contact) {
       this.setState({ showFieldOfficeNumbers: false });
     }

@@ -1,4 +1,5 @@
 import React from "react";
+import $ from "jquery";
 
 import { WithLocationProps } from "../state/locationState";
 import { withLocation } from "../state/stateProvider";
@@ -35,7 +36,18 @@ class Location extends React.Component<Props & WithLocationProps, State> {
     if (this.props.locationState && this.props.locationState.address) {
       this.setState({ componentLocationState: ComponentLocationState.HasLocation });
     }
+
+    this.processIssueCompletion();
   }
+
+  processIssueCompletion = () => {
+    $(".i-bar-list-section .i-bar-item-check>div").each((_, el) => {
+      if ($(el).data("issue-id") == "500") {
+        $(el).attr("class", "i-bar-check-initial");
+        $(el).find("i").first().attr("class", "fa fa-check");
+      }
+    });
+  };
 
   updateManualAddress = (e: React.ChangeEvent<HTMLInputElement>) => {
     this.setState({ manualAddress: e.target.value });
