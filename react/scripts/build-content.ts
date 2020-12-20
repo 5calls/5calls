@@ -46,6 +46,7 @@ const postContentFromIssue = (issue: Issue): string => {
   return `---
 title: "${escapeQuotes(issue.name)}"
 date: ${issue.createdAt}
+issueId: ${issue.id}
 script: |
 ${multilineScript(issue.script)}
 ${contactAreaYAML(issue)}

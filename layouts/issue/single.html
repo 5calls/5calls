@@ -13,6 +13,7 @@
           class="rep-list"
           id="react-reps"
           data-rep-areas="{{ if isset .Params `contactareas` }}{{ delimit .Params.contactAreas `,` }}{{ end }}"
+          data-issue-id="{{ .Params.issueId }}"
         ></div>
         <!-- I want to include this help text but I want it to be under the rep list but not in react since it's not dynamic -->
         <!-- <p class="help">
