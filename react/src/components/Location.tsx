@@ -42,7 +42,7 @@ class Location extends React.Component<Props & WithLocationProps, State> {
 
   processIssueCompletion = () => {
     $(".i-bar-list-section .i-bar-item-check>div").each((_, el) => {
-      if ($(el).data("issue-id") == "500") {
+      if ($(el).data("issue-id") === "500") {
         $(el).attr("class", "i-bar-check-initial");
         $(el).find("i").first().attr("class", "fa fa-check");
       }
