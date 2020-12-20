@@ -19,3 +19,8 @@ YARN_VERSION = '1.22.5'
 from = "/report"
 status = 200
 to = "https://api.5calls.org/v1/report"
+
+[[redirects]]
+from = "/more"
+status = 301
+to = "/all/"

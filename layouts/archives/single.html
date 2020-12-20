@@ -1,0 +1,18 @@
+{{ define "bodyclass" }}issue archive{{ end }} {{ define "main" }}
+<div class="content">
+  <div class="g">
+    {{ partial "sidebar.html" . }}
+    <div class="issue-wrapper">
+      <h4 class="archive">
+        <i class="fas fa-exclamation-circle"></i>This content is archived from the 116th Congress (2019-2020) and is no
+        longer callable, we've provided this copy to remember the topics that you've called on during prevous
+        Congressional sessions. Head <a href="/">back to the front page</a> to see current topics to call on.
+      </h4>
+      <div class="issue-content">
+        <h2>{{ .Title }}</h2>
+        {{ .Content }}
+      </div>
+    </div>
+  </div>
+</div>
+{{ end }}

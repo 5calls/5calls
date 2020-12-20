@@ -9,6 +9,23 @@
     margin-bottom: calc(var(--leading) * 0.5rem);
   }
 
+  h4.archive {
+    background-color: var(--c-latest);
+    padding: 8px 12px;
+    color: #fff;
+    font-size: 1rem;
+    border-radius: 8px;
+    margin-bottom: 0.8rem;
+
+    i {
+      margin-right: 6px;
+    }
+
+    a {
+      color: var(--c-dark);
+    }
+  }
+
   .issue-content {
     h2 {
       text-align: left;
