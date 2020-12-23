@@ -4,12 +4,14 @@ import ReactDOM from "react-dom";
 interface Props {}
 interface State {
   outcomes: string[];
+  showReps: boolean;
 }
 
 class Outcomes extends React.Component<Props, State> {
   _defaultOutcomes: string[] = [];
   state = {
     outcomes: this._defaultOutcomes,
+    showReps: false,
   };
 
   componentDidMount() {
@@ -18,6 +20,10 @@ class Outcomes extends React.Component<Props, State> {
       const outcomes = (thisComponent.parentElement.dataset.outcomes ?? "").split(",");
       this.setState({ outcomes });
     }
+
+    document.addEventListener("loadedReps", (e) => {
+      this.setState({ showReps: true });
+    });
   }
 
   next(outcome: string) {
@@ -26,6 +32,10 @@ class Outcomes extends React.Component<Props, State> {
   }
 
   render() {
+    if (!this.state.showReps) {
+      return <></>;
+    }
+
     return (
       <div className="outcomes">
         <h3>Select your call result to show the next representative:</h3>

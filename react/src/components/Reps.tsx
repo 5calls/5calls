@@ -100,6 +100,9 @@ class Reps extends React.Component<Props & WithLocationProps, State> {
           if (contacts.length > 0) {
             // start our script component with an active contact
             this.reportUpdatedActiveContact(contacts[0]);
+            // report that reps loaded for outcomes to load
+            const loadedRepsEvent = new CustomEvent("loadedReps");
+            document.dispatchEvent(loadedRepsEvent);
           }
         })
         .catch((error) => {

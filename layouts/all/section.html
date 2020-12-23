@@ -1,15 +1,22 @@
 {{ define "bodyclass" }}archive{{ end }} {{ define "main" }}
 <div class="content">
-  <h2>All active topics</h2>
-  <ul>
-    {{ range .Pages }}
-    <li>
-      <span><i class="fa fa-phone-alt" aria-hidden="true"></i></span>
-      <p>
-        <a href="{{ .Permalink }}">{{.Title}}</a>
-      </p>
-    </li>
-    {{ end }}
-  </ul>
+  <div class="g">
+    {{ partial "sidebar.html" . }}
+    <div class="archive-wrapper">
+      <h2>All active topics</h2>
+      <ul>
+        {{ with .Site.GetPage "section" "issue" }}
+        {{ range .Pages }}
+        <li>
+          <span><i class="fa fa-phone-alt" aria-hidden="true"></i></span>
+          <p>
+            <a href="{{ .Permalink }}">{{.Title}}</a>
+          </p>
+        </li>
+        {{ end }}
+        {{ end }}
+      </ul>
+    </div>
+  </div>
 </div>
 {{ end }}
