@@ -33,7 +33,8 @@ class Outcomes extends React.Component<Props, State> {
 
   render() {
     if (!this.state.showReps) {
-      return <></>;
+      // this has to be a real element, not a fragment, because ReactDOM.findDOMNode(this) in didMount will fail for non-rendering elements
+      return <div></div>;
     }
 
     return (
