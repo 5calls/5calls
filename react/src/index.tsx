@@ -2,6 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom";
 import firebase from "firebase/app";
 import "firebase/auth";
+import ReactGA from "react-ga";
 
 import reportWebVitals from "./utils/reportWebVitals";
 import Location from "./components/Location";
@@ -21,6 +22,9 @@ firebase.initializeApp({
   messagingSenderId: "919201105905",
   appId: "1:919201105905:web:cb16c071be2bb896dfa650",
 });
+
+ReactGA.initialize("G-J9HQRTM3YS");
+ReactGA.pageview(window.location.pathname + window.location.search);
 
 const handleRootRenderError = (error: any, component: string) => {
   if (`${error}`.includes("Minified React error #200")) {
