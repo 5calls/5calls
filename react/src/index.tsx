@@ -12,6 +12,7 @@ import Outcomes from "./components/Outcomes";
 import Share from "./components/Share";
 import StateProvider from "./state/stateProvider";
 import "./utils/staticUtils";
+import { Metric } from "web-vitals";
 
 firebase.initializeApp({
   apiKey: "AIzaSyCqbgwuM82Z4a3oBzzmPgi-208UrOwIgAA",
@@ -112,4 +113,8 @@ const startComponentRenders = () => {
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))
 // or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals(console.log);
+reportWebVitals(sendToAnalytics);
+
+function sendToAnalytics({ id, name, value }: Metric) {
+  ReactGA.ga("send", "timing", name, id, Math.round(name === "CLS" ? value * 1000 : value));
+}
