@@ -10,6 +10,8 @@
       content="{{ if .IsPage }}{{ .Description }}{{ else }}{{ .Site.Params.description }}{{ end }}"
     />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- TODO: favicons -->
+    <!-- TODO: share images -->
     <!-- prettier-ignore -->
     {{ hugo.Generator }} {{ $style := resources.Get "sass/main.scss" | resources.ToCSS | resources.Minify }}
     <link rel="stylesheet" href="{{ $style.Permalink }}" />
