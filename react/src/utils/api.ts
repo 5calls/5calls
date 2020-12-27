@@ -6,9 +6,9 @@ import "firebase/auth";
 import { Contact } from "../common/models/contact";
 import { ContactList } from "../common/models/contactList";
 import * as Constants from "../common/constants";
-import { Issue } from "../common/models/issue";
 import { OutcomeData } from "../common/models/contactEvent";
 import { UserCallDetails } from "../common/models/userStats";
+import { CompletionMap } from "../state/completedState";
 
 const prepareHeaders = async (): Promise<Headers> => {
   const idToken = await firebase.auth().currentUser?.getIdTokenResult();
@@ -26,18 +26,12 @@ interface Headers {
   "Content-Type": string;
 }
 
-export const getAllIssues = async (): Promise<Issue[]> => {
-  const headers = await prepareHeaders();
-
-  return axios
-    .get(Constants.ISSUES_API_URL, {
-      headers: headers,
-    })
-    .then((response) => Promise.resolve(response.data))
-    .catch((e) => Promise.reject(e));
-};
-
 export const noLocationError = Error("no location entered");
+
+interface ContactResponse {
+  location: string;
+  representatives: Contact[];
+}
 
 export const getContacts = async (location: string): Promise<ContactList> => {
   if (location === "") {
@@ -47,13 +41,9 @@ export const getContacts = async (location: string): Promise<ContactList> => {
   const headers = await prepareHeaders();
 
   return axios
-    .get<ContactResponse>(
-      `${Constants.REPS_API_URL}?location=${location}`,
-      // `http://localhost:8090/v1/reps?location=${location}`,
-      {
-        headers: headers,
-      }
-    )
+    .get<ContactResponse>(`${Constants.REPS_API_URL}?location=${location}`, {
+      headers: headers,
+    })
     .then((result) => {
       const contactList = new ContactList();
       contactList.location = result.data.location;
@@ -66,11 +56,6 @@ export const getContacts = async (location: string): Promise<ContactList> => {
     });
 };
 
-interface ContactResponse {
-  location: string;
-  representatives: Contact[];
-}
-
 export interface CountData {
   count: number; // total call count
 }
@@ -82,31 +67,31 @@ export const getCountData = (): Promise<CountData> => {
     .catch((e) => Promise.reject(e));
 };
 
-export interface RemoteUserStats {
-  stats: CallStats;
-  weeklyStreak: number;
-}
+// export interface RemoteUserStats {
+//   stats: CallStats;
+//   weeklyStreak: number;
+// }
 
-export interface CallStats {
-  contact: number;
-  voicemail: number;
-  unavailable: number;
-}
+// export interface CallStats {
+//   contact: number;
+//   voicemail: number;
+//   unavailable: number;
+// }
 
-export const getUserStats = (idToken: string) => {
-  return axios
-    .get(`${Constants.STATS_API_URL}`, {
-      headers: {
-        Authorization: "Bearer " + idToken,
-        "Content-Type": "application/json; charset=utf-8",
-      },
-    })
-    .then((response) => {
-      let userData = response.data as RemoteUserStats;
-      return Promise.resolve(userData);
-    })
-    .catch((e) => Promise.reject(e));
-};
+// export const getUserStats = (idToken: string) => {
+//   return axios
+//     .get(`${Constants.STATS_API_URL}`, {
+//       headers: {
+//         Authorization: "Bearer " + idToken,
+//         "Content-Type": "application/json; charset=utf-8",
+//       },
+//     })
+//     .then((response) => {
+//       let userData = response.data as RemoteUserStats;
+//       return Promise.resolve(userData);
+//     })
+//     .catch((e) => Promise.reject(e));
+// };
 
 export const postOutcomeData = async (data: OutcomeData) => {
   const postData = querystring.stringify({
@@ -127,6 +112,26 @@ export const postOutcomeData = async (data: OutcomeData) => {
       return Promise.resolve(null);
     })
     .catch((e) => Promise.reject(e));
+};
+
+interface CompletedIssuesResponse {
+  completed: CompletionMap;
+}
+
+export const getCompletedIssues = async (): Promise<CompletionMap> => {
+  const headers = await prepareHeaders();
+
+  return axios
+    .get<CompletedIssuesResponse>(`${Constants.COMPLETED_API_URL}`, {
+      headers: headers,
+    })
+    .then((result) => {
+      return Promise.resolve(result.data.completed);
+    })
+    .catch((error) => {
+      console.error("couldn't get completed issues", error);
+      return Promise.reject(error);
+    });
 };
 
 export const getUserCallDetails = (idToken: string) => {

@@ -1,12 +1,13 @@
 import React from "react";
-import { GeolocationPosition } from "../common/models/geolocation";
 
 import { LocationState, LocationContext, WithLocationProps } from "./locationState";
 import Storage from "../utils/storage";
+import { CompletedContext, CompletedState, CompletionMap, WithCompletedProps } from "./completedState";
 
 interface Props {}
 interface State {
   locationState?: LocationState;
+  completedState?: CompletedState;
   savedStateRestored: boolean;
 }
 
@@ -20,7 +21,8 @@ export default class StateProvider extends React.Component<Props, State> {
     try {
       this.loadFromStorage();
     } catch (error) {
-      console.log("could not parse localstorage:", error);
+      console.log("could not parse localstorage, removing:", error);
+      localStorage.removeItem("persist:fivecalls");
     }
 
     // if these events are fired, we should reload from storage
@@ -31,11 +33,11 @@ export default class StateProvider extends React.Component<Props, State> {
 
   loadFromStorage() {
     const appState = Storage.getStorageAsObject();
-    this.setState({ locationState: appState.locationState, savedStateRestored: true });
-  }
-
-  setLocation(loc: GeolocationPosition) {
-    // set the location
+    this.setState({
+      locationState: appState.locationState,
+      completedState: appState.completedState,
+      savedStateRestored: true,
+    });
   }
 
   setLocationAddress(address: string, display: string) {
@@ -53,6 +55,20 @@ export default class StateProvider extends React.Component<Props, State> {
     this.setState({ locationState });
   }
 
+  setCompleted(completed: CompletionMap) {
+    Storage.saveCompleted({
+      completed: completed,
+      needsCompletionFetch: false,
+    });
+  }
+
+  setNeedsCompletionFetch(needsRefresh: boolean) {
+    Storage.saveCompleted({
+      completed: this.state.completedState?.completed ?? {},
+      needsCompletionFetch: needsRefresh,
+    });
+  }
+
   render(): JSX.Element {
     // simple version of the redux-persist gate where nothing is rendered until the persisted
     // data is loaded for the first time
@@ -64,11 +80,18 @@ export default class StateProvider extends React.Component<Props, State> {
       <LocationContext.Provider
         value={{
           locationState: this.state.locationState,
-          setLocation: (loc: GeolocationPosition) => this.setLocation(loc),
           setLocationAddress: (address: string, display: string) => this.setLocationAddress(address, display),
         }}
       >
-        {this.props.children}
+        <CompletedContext.Provider
+          value={{
+            completed: this.state.completedState,
+            setCompleted: (completed: CompletionMap) => this.setCompleted(completed),
+            setNeedsCompletionFetch: (needsRefresh: boolean) => this.setNeedsCompletionFetch(needsRefresh),
+          }}
+        >
+          {this.props.children}
+        </CompletedContext.Provider>
       </LocationContext.Provider>
     );
   }
@@ -78,13 +101,23 @@ export const withLocation = <P extends object>(
   Component: React.ComponentType<P>
 ): React.FC<Omit<P, keyof WithLocationProps>> => (props) => (
   <LocationContext.Consumer>
-    {({ locationState, setLocation, setLocationAddress }) => (
-      <Component
-        {...(props as P)}
-        locationState={locationState}
-        setLocation={setLocation}
-        setLocationAddress={setLocationAddress}
-      />
+    {({ locationState, setLocationAddress }) => (
+      <Component {...(props as P)} locationState={locationState} setLocationAddress={setLocationAddress} />
     )}
   </LocationContext.Consumer>
+);
+
+export const withCompleted = <P extends object>(
+  Component: React.ComponentType<P>
+): React.FC<Omit<P, keyof WithCompletedProps>> => (props) => (
+  <CompletedContext.Consumer>
+    {({ completed, setCompleted, setNeedsCompletionFetch }) => (
+      <Component
+        {...(props as P)}
+        completed={completed}
+        setCompleted={setCompleted}
+        setNeedsCompletionFetch={setNeedsCompletionFetch}
+      />
+    )}
+  </CompletedContext.Consumer>
 );

@@ -4,8 +4,9 @@ import ReactDOM from "react-dom";
 import { Contact } from "../common/models/contact";
 import { OutcomeData } from "../common/models/contactEvent";
 import { ContactList } from "../common/models/contactList";
+import { WithCompletedProps } from "../state/completedState";
 import { WithLocationProps } from "../state/locationState";
-import { withLocation } from "../state/stateProvider";
+import { withCompleted, withLocation } from "../state/stateProvider";
 import { getContacts, postOutcomeData } from "../utils/api";
 import ContactUtils from "../utils/contactUtils";
 import ActiveContact from "./ActiveContact";
@@ -18,7 +19,7 @@ interface State {
   activeContactIndex: number;
 }
 
-class Reps extends React.Component<Props & WithLocationProps, State> {
+class Reps extends React.Component<Props & WithLocationProps & WithCompletedProps, State> {
   _defaultAreas: string[] = [];
   _defaultContactList: ContactList | undefined = undefined;
   state = {
@@ -61,6 +62,7 @@ class Reps extends React.Component<Props & WithLocationProps, State> {
           via: viaParameter,
         };
         postOutcomeData(outcomeData);
+        this.props.setNeedsCompletionFetch(true);
       }
 
       if (this.state.activeContactIndex < contacts.length - 1) {
@@ -168,4 +170,4 @@ class Reps extends React.Component<Props & WithLocationProps, State> {
   }
 }
 
-export default withLocation(Reps);
+export default withLocation(withCompleted(Reps));

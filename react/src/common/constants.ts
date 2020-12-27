@@ -5,6 +5,7 @@ export const API_URL = "https://api.5calls.org/v1";
 // export const API_URL = 'http://localhost:8090/v1';
 export const ISSUES_API_URL = `${API_URL}/issues`;
 export const REPS_API_URL = `${API_URL}/reps`;
+export const COMPLETED_API_URL = `${API_URL}/issues/completed`;
 export const REPORT_API_URL = `${API_URL}/report`;
 export const STATS_API_URL = `${API_URL}/users/stats`;
 export const PROFILE_API_URL = `${API_URL}/users/profile`;

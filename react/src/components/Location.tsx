@@ -2,9 +2,10 @@ import React from "react";
 import $ from "jquery";
 
 import { WithLocationProps } from "../state/locationState";
-import { withLocation } from "../state/stateProvider";
+import { withCompleted, withLocation } from "../state/stateProvider";
 import { getBrowserGeolocation } from "../utils/geolocation";
-import { getContacts } from "../utils/api";
+import { getCompletedIssues, getContacts } from "../utils/api";
+import { CompletionMap, WithCompletedProps } from "../state/completedState";
 
 enum ComponentLocationState {
   NoLocation,
@@ -21,7 +22,7 @@ interface State {
   locationError: string | undefined;
 }
 
-class Location extends React.Component<Props & WithLocationProps, State> {
+class Location extends React.Component<Props & WithLocationProps & WithCompletedProps, State> {
   _defaultManualAddress: string | undefined = undefined;
   _defaultLocationError: string | undefined = undefined;
 
@@ -41,8 +42,33 @@ class Location extends React.Component<Props & WithLocationProps, State> {
   }
 
   processIssueCompletion = () => {
+    if (this.props.completed?.needsCompletionFetch) {
+      getCompletedIssues().then((completed) => {
+        this.props.setCompleted(completed);
+        this.updateIssueCompletion(this.completedIDsFromCompletionMap(completed));
+      });
+    } else {
+      if (this.props.completed?.completed) {
+        this.updateIssueCompletion(this.completedIDsFromCompletionMap(this.props.completed?.completed));
+      }
+    }
+  };
+
+  completedIDsFromCompletionMap(completionMap: CompletionMap): string[] {
+    let completedIssueIDs: string[] = [];
+    Object.keys(completionMap).forEach((key) => {
+      completedIssueIDs.push(key);
+    });
+
+    return completedIssueIDs;
+  }
+
+  updateIssueCompletion = (completedIssueIDs: string[]) => {
     $(".i-bar-list-section .i-bar-item-check>div").each((_, el) => {
-      if ($(el).data("issue-id") === "500") {
+      const itemIssueID = $(el).data("issue-id") as string;
+
+      // itemIssueID is VERY insistant that it be a number even with `as string` above
+      if (itemIssueID && completedIssueIDs.indexOf(`${itemIssueID}`) !== -1) {
         $(el).attr("class", "i-bar-check-initial");
         $(el).find("i").first().attr("class", "fa fa-check");
       }
@@ -182,4 +208,4 @@ class Location extends React.Component<Props & WithLocationProps, State> {
   }
 }
 
-export default withLocation(Location);
+export default withLocation(withCompleted(Location));
