@@ -1,9 +1,5 @@
 - title: "Editorial and Social"
   volunteers:
-    - name: Charm Bitanga
-      socialUsername: charmbtrippin
-      socialLink: https://twitter.com/charmbtrippin
-
     - name: Sara
       socialService: instagram
       socialUsername: sara.n.g
@@ -24,14 +20,6 @@
 
 - title: "Web"
   volunteers:
-    - name: Mike Monteiro
-      socialUsername: monteiro
-      socialLink: https://twitter.com/monteiro
-
-    - name: Stewart Scott-Curran
-      socialUsername: stewartsc
-      socialLink: https://twitter.com/stewartsc
-
     - name: Craig Doremus
       socialUsername: cdoremus
       socialLink: https://twitter.com/cdoremus
@@ -39,6 +27,21 @@
     - name: Rob Brackett
       socialUsername: mr0grog
       socialLink: https://twitter.com/mr0grog
+  fullListUrl: https://github.com/5calls/5calls/graphs/contributors
+
+- title: "Brand and Design"
+  volunteers:
+    - name: Charm
+      socialUsername: charmbtrippin
+      socialLink: https://twitter.com/charmbtrippin/
+
+    - name: Mike Monteiro
+      socialUsername: monteiro
+      socialLink: https://twitter.com/monteiro
+
+    - name: Stewart Scott-Curran
+      socialUsername: stewartsc
+      socialLink: https://twitter.com/stewartsc
   fullListUrl: https://github.com/5calls/5calls/graphs/contributors
 
 - title: "iOS"
