@@ -9,21 +9,45 @@
       name="description"
       content="{{ if .IsPage }}{{ .Description }}{{ else }}{{ .Site.Params.description }}{{ end }}"
     />
-    <meta itemProp="name" content="5 Calls: Make Your Voice Heard" />
-    <meta itemProp="description" content="{{ if .IsPage }}{{ .Description }}{{ else }}{{ .Site.Params.description }}{{ end }}" />
-    <meta itemProp="image" content="{{ if .IsPage }}https://api.5calls.org/v1/issue/{{ .Params.issueId }}/share/t{{ else }}https://5calls.org/img/5calls-twitter.png{{ end }}" />
+    <meta itemprop="name" content="5 Calls: Make Your Voice Heard" />
+    <meta
+      itemprop="description"
+      content="{{ if .IsPage }}{{ .Description }}{{ else }}{{ .Site.Params.description }}{{ end }}"
+    />
+    <meta
+      itemprop="image"
+      content="{{ if .IsPage }}https://api.5calls.org/v1/issue/{{ .Params.issueId }}/share/t{{ else }}https://5calls.org/img/5calls-twitter.png{{ end }}"
+    />
     <!-- Twitter Card data -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:site" content="@make5calls" />
-    <meta name="twitter:title" content="{{ if or (.IsPage) (.IsSection) }}{{ .Title }} ⭑ {{ .Site.Title }}{{ else }}{{ .Site.Title }}{{ end }}" />
-    <meta name="twitter:description" content="{{ if .IsPage }}{{ .Description }}{{ else }}{{ .Site.Params.description }}{{ end }}" />
-    <meta name="twitter:image:src" content="{{ if .IsPage }}https://api.5calls.org/v1/issue/{{ .Params.issueId }}/share/t{{ else }}https://5calls.org/img/5calls-twitter.png{{ end }}" />
+    <meta
+      name="twitter:title"
+      content="{{ if or (.IsPage) (.IsSection) }}{{ .Title }} ⭑ {{ .Site.Title }}{{ else }}{{ .Site.Title }}{{ end }}"
+    />
+    <meta
+      name="twitter:description"
+      content="{{ if .IsPage }}{{ .Description }}{{ else }}{{ .Site.Params.description }}{{ end }}"
+    />
+    <meta
+      name="twitter:image:src"
+      content="{{ if .IsPage }}https://api.5calls.org/v1/issue/{{ .Params.issueId }}/share/t{{ else }}https://5calls.org/img/5calls-twitter.png{{ end }}"
+    />
     <!-- Open Graph data -->
-    <meta property="og:title" content="{{ if or (.IsPage) (.IsSection) }}{{ .Title }} ⭑ {{ .Site.Title }}{{ else }}{{ .Site.Title }}{{ end }}" />
+    <meta
+      property="og:title"
+      content="{{ if or (.IsPage) (.IsSection) }}{{ .Title }} ⭑ {{ .Site.Title }}{{ else }}{{ .Site.Title }}{{ end }}"
+    />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="{{ .Permalink }}" />
-    <meta property="og:image" content="{{ if .IsPage }}https://api.5calls.org/v1/issue/{{ .Params.issueId }}/share/f{{ else }}https://5calls.org/img/5calls-twitter.png{{ end }}" />
-    <meta property="og:description" content="{{ if .IsPage }}{{ .Description }}{{ else }}{{ .Site.Params.description }}{{ end }}" />
+    <meta
+      property="og:image"
+      content="{{ if .IsPage }}https://api.5calls.org/v1/issue/{{ .Params.issueId }}/share/f{{ else }}https://5calls.org/img/5calls-twitter.png{{ end }}"
+    />
+    <meta
+      property="og:description"
+      content="{{ if .IsPage }}{{ .Description }}{{ else }}{{ .Site.Params.description }}{{ end }}"
+    />
     <meta property="og:site_name" content="{{ .Site.Title }}" />
     <meta property="fb:app_id" content="1201592636562906" />
 
@@ -40,6 +64,7 @@
     {{ $js := resources.Match "js/*" }} {{ range $js }}
     <script type="text/javascript" src="{{ .RelPermalink }}" defer></script>
     {{ end }}
+    <script src="https://secure.actblue.com/cf/assets/actblue.js" async></script>
   </head>
   <body class="{{ block `bodyclass` . }}{{ end }}">
     <div class="site">{{ partial "header.html" . }} {{ block "main" . }}{{ end }} {{ partial "footer.html" . }}</div>

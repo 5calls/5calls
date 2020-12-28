@@ -3,6 +3,8 @@ import ReactDOM from "react-dom";
 import firebase from "firebase/app";
 import "firebase/auth";
 import ReactGA from "react-ga";
+import $ from "jquery";
+import { Metric } from "web-vitals";
 
 import reportWebVitals from "./utils/reportWebVitals";
 import Location from "./components/Location";
@@ -12,7 +14,8 @@ import Outcomes from "./components/Outcomes";
 import Share from "./components/Share";
 import StateProvider from "./state/stateProvider";
 import "./utils/staticUtils";
-import { Metric } from "web-vitals";
+import { ACTBLUE_EMBED_TOKEN } from "./common/constants";
+import { ActBlue } from "./common/models/actblue";
 
 firebase.initializeApp({
   apiKey: "AIzaSyCqbgwuM82Z4a3oBzzmPgi-208UrOwIgAA",
@@ -26,6 +29,35 @@ firebase.initializeApp({
 
 ReactGA.initialize("G-J9HQRTM3YS");
 ReactGA.pageview(window.location.pathname + window.location.search);
+
+declare global {
+  // actblue injects this object when it loads
+  interface Window {
+    actblue?: ActBlue;
+  }
+}
+
+// this is like the latest $(document).ready()
+$(() => {
+  $("#actblue").on("click", (e) => {
+    if (window.actblue && window.actblue.__initialized) {
+      // double check that actblue has loaded, if it has, prevent that click
+      e.preventDefault();
+      window.actblue
+        .requestContribution({
+          token: ACTBLUE_EMBED_TOKEN,
+          refcodes: ["embed"],
+        })
+        .then((contribution) => {
+          ReactGA.event({
+            category: "donate",
+            action: "donated from embed",
+            value: Math.floor(contribution.amount / 10), // convert to whole dollars
+          });
+        });
+    }
+  });
+});
 
 const handleRootRenderError = (error: any, component: string) => {
   if (`${error}`.includes("Minified React error #200")) {
