@@ -3,6 +3,11 @@ import { Contact } from "./contact";
 export enum ContactArea {
   USSenate = "US Senate",
   USHouse = "US House",
+  Governor = "Governor",
+  AttorneyGeneral = "AttorneyGeneral",
+  SecretaryOfState = "SecretaryOfState",
+  StateUpper = "StateUpper",
+  StateLower = "StateLower",
 }
 
 export class ContactList {
