@@ -69,6 +69,9 @@ class Reps extends React.Component<Props & WithLocationProps & WithCompletedProp
         let activeContactIndex = this.state.activeContactIndex + 1;
         this.setState({ activeContactIndex });
         this.reportUpdatedActiveContact(contacts[activeContactIndex]);
+        document
+          .getElementById("reps-header")
+          ?.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "start" });
       } else {
         if (window.location.host === "5calls.org") {
           window.location.pathname = window.location.pathname + "/done/";

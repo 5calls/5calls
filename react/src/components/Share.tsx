@@ -1,6 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import { APP_URL, SHARE_BUCKET_URL } from "../common/constants";
+import { APP_URL } from "../common/constants";
 
 interface Props {}
 interface State {

@@ -22,7 +22,7 @@
     "build": "react-scripts build",
     "build-content": "yarn run ts-node -O '{\"module\": \"commonjs\"}' scripts/build-content.ts",
     "build-archives": "yarn run ts-node -O '{\"module\": \"commonjs\"}' scripts/build-archives.ts",
-    "deploy-js": "yarn build && yarn move",
+    "build-js": "yarn build && yarn move",
     "move": "node ./scripts/move-built.js",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
