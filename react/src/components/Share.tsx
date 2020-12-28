@@ -48,9 +48,9 @@ class Share extends React.Component<Props, State> {
   render() {
     return (
       <>
-        <h3>📬 Share this call:</h3>
+        <h3>Share this call:</h3>
         <img
-          src={`${SHARE_BUCKET_URL}${this.state.issueId}.png`}
+          src={`https://api.5calls.org/v1/issue/${this.state.issueId}/share/t`}
           alt="Share this issue"
           className="call__complete__share__img"
         />

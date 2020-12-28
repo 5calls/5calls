@@ -9,3 +9,6 @@ assets/js/*
 react/build/
 react/node_modules/
 content/issue/*
+
+# Local Netlify folder
+.netlify
