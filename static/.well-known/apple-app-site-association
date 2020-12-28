@@ -1,0 +1,21 @@
+{
+  "applinks": {
+      "apps": [],
+      "details": [
+           {
+             "appIDs": [ "5A8RM3W5R7.org.fivecalls.FiveCalls-ios" ],
+             "components": [
+               {
+                  "#": "no_universal_links",
+                  "exclude": true,
+                  "comment": "Matches any URL whose fragment equals no_universal_links and instructs the system not to open it as a universal link"
+               },
+               {
+                  "/": "/issue/*",
+                  "comment": "Matches any URL whose path starts with /issue/"
+               },
+             ]
+           }
+       ]
+   }
+}
