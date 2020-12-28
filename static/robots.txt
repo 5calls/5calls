@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://5calls.org/sitemap.txt
