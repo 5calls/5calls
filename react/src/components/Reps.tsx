@@ -73,7 +73,7 @@ class Reps extends React.Component<Props & WithLocationProps & WithCompletedProp
           .getElementById("reps-header")
           ?.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "start" });
       } else {
-        if (window.location.host === "5calls.org") {
+        if (window.location.host.indexOf("localhost") === -1) {
           window.location.pathname = window.location.pathname + "/done/";
         } else {
           // if we're testing, refresh
