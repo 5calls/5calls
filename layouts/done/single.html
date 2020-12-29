@@ -1,7 +1,10 @@
 {{ define "bodyclass" }}done{{ end }} {{ define "main" }}
 <div class="content">
   <div class="g">
+    <!-- prettier-ignore -->
+    {{ .Scratch.Set "issueId" .Params.issueId }}
     {{ partial "sidebar.html" . }}
+
     <div class="done-wrapper">
       <h2>Great work!</h2>
       <p>

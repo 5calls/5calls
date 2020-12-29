@@ -261,6 +261,10 @@
     }
   }
 
+  .i-bar-item.is-active {
+    background: rgba(var(--c-#{$status}-rgb), 0.05);
+  }
+
   .i-bar-item.is-#{$status} {
     --check-color: rgba(var(--c-#{$status}-rgb), 0.8);
 

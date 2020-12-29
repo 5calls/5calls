@@ -5,6 +5,7 @@
     <div class="archive-wrapper">
       <h2>All active topics</h2>
       <ul>
+        <!-- prettier-ignore -->
         {{ with .Site.GetPage "section" "issue" }}
         {{ range .Pages }}
         <li>
@@ -13,6 +14,7 @@
             <a href="{{ .Permalink }}">{{.Title}}</a>
           </p>
         </li>
+        <!-- prettier-ignore -->
         {{ end }}
         {{ end }}
       </ul>
