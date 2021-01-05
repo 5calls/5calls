@@ -7,7 +7,7 @@
     "@5calls/react-components": "0.0.14",
     "@bugsnag/js": "^5.0.2",
     "@bugsnag/plugin-react": "^5.0.2",
-    "axios": "^0.18.0",
+    "axios": "^0.21.1",
     "core-js": "^2.5.7",
     "i18next": "^8.4.3",
     "i18next-browser-languagedetector": "^2.0.0",
