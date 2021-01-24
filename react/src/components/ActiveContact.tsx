@@ -11,10 +11,15 @@ interface State {}
 
 class ActiveContact extends React.Component<Props, State> {
   render() {
+    let photoURL = "/images/no-rep.png";
+    if (this.props.contact.photoURL && this.props.contact.photoURL !== "") {
+      photoURL = this.props.contact.photoURL;
+    }
+
     return (
       <div className="contact">
         <div className="contact-image">
-          <img alt={this.props.contact.name} src={this.props.contact.photoURL} />
+          <img alt={this.props.contact.name} src={photoURL} />
         </div>
         <div>
           <h3 className="contact-name">

@@ -132,9 +132,14 @@ class Reps extends React.Component<Props & WithLocationProps & WithCompletedProp
   }
 
   contactComponent(contact: Contact, index: number, activeIndex: number): JSX.Element {
+    let photoURL = "/images/no-rep.png";
+    if (contact.photoURL && contact.photoURL !== "") {
+      photoURL = contact.photoURL ?? "/images/no-rep.png";
+    }
+
     return (
       <li className={index === activeIndex ? "active" : ""} key={contact.id}>
-        <img alt={contact.name} src={contact.photoURL} />
+        <img alt={contact.name} src={photoURL} />
         <h4>
           {contact.name} ({ContactUtils.partyAndState(contact)})
         </h4>
