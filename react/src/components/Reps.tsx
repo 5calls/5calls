@@ -139,7 +139,13 @@ class Reps extends React.Component<Props & WithLocationProps & WithCompletedProp
 
     return (
       <li className={index === activeIndex ? "active" : ""} key={contact.id}>
-        <img alt={contact.name} src={photoURL} />
+        <img
+          alt={contact.name}
+          src={photoURL}
+          onError={(e) => {
+            e.currentTarget.src = "/images/no-rep.png";
+          }}
+        />
         <h4>
           {contact.name} ({ContactUtils.partyAndState(contact)})
         </h4>
