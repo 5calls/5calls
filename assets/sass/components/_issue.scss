@@ -1,12 +1,14 @@
 // issue page
 
 body.issue {
-  ul {
-    padding-left: 40px;
-  }
+  .issue-wrapper {
+    ul {
+      padding-left: 40px;
+    }
 
-  li {
-    margin-bottom: calc(var(--leading) * 0.5rem);
+    li {
+      margin-bottom: calc(var(--leading) * 0.5rem);
+    }
   }
 
   h4.archive-note {
