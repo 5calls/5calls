@@ -1,3 +1,22 @@
+body.home {
+  h4.notfound-note {
+    background-color: var(--c-blue);
+    padding: 8px 12px;
+    color: #fff;
+    font-size: 1rem;
+    border-radius: 8px;
+    margin-bottom: 0.8rem;
+
+    i {
+      margin-right: 6px;
+    }
+
+    a {
+      color: white;
+    }
+  }
+}
+
 body.archive {
   .archive-wrapper {
     h2 {
