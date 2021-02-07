@@ -31,7 +31,7 @@ const buildContent = async () => {
     .then((res) => res.json())
     .then((data) => {
       const issues = data as Issue[];
-      // console.log("resoponse is", issues);
+      console.log(`building content for ${issues.length} issues`);
       issues.forEach((issue) => {
         fs.writeFileSync(`${contentDirectory}${issue.slug}.md`, postContentFromIssue(issue));
       });
@@ -39,6 +39,9 @@ const buildContent = async () => {
       issues.forEach((issue) => {
         fs.writeFileSync(`${doneDirectory}${issue.slug}.md`, doneContentFromIssue(issue));
       });
+    })
+    .catch((error) => {
+      console.error(`couldn't fetch issues: ${error}`);
     });
 };
 
