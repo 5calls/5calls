@@ -20,8 +20,8 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "build-content": "node_modules/.bin/ts-node -O '{\"module\": \"commonjs\"}' scripts/build-content.ts",
-    "build-archives": "node_modules/.bin/ts-node -O '{\"module\": \"commonjs\"}' scripts/build-archives.ts",
+    "build-content": "yarn run ts-node -O '{\"module\": \"commonjs\"}' scripts/build-content.ts",
+    "build-archives": "yarn run ts-node -O '{\"module\": \"commonjs\"}' scripts/build-archives.ts",
     "build-js": "yarn build && yarn move",
     "move": "node ./scripts/move-built.js",
     "test": "react-scripts test",
