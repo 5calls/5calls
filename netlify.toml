@@ -24,6 +24,3 @@ to = "https://api.5calls.org/v1/report"
 from = "/more"
 status = 301
 to = "/all/"
-
-[[plugins]]
-package = "/plugins/manual-yarn-cache"
