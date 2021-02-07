@@ -1,14 +1,14 @@
 # Settings in the [build] context are global and are applied to all contexts
 # unless otherwise overridden by more specific contexts.
 [build]
-# netlify won't install yarn unless base is a react project :/ which means we also need a publish directory inside base
-# so we force this with hugo. Maybe 
+# netlify won't install yarn unless base is a react project
+# so we symlink the important bits into the root, at build command time yarn is already installed and node modules is ready
 command = "cd react; yarn build-js; yarn build-content; cd ..; hugo -b https://test.5calls.org"
 publish = "public/"
 [build.environment]
 # set hugo version for consistency
 HUGO_VERSION = '0.74.3'
-# need yarn installed manually, even though it doesn't work
+# need yarn installed manually
 NETLIFY_USE_YARN = 'true'
 # don't care about ruby, but the default installs a new version for each build
 RUBY_VERSION = '2.6.2'
