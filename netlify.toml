@@ -5,7 +5,7 @@
 # so we symlink the important bits into the root, at build command time yarn is already installed and node modules is ready
 base = "react/"
 command = "yarn build-js && yarn build-content && cd .. && hugo -b https://test.5calls.org"
-publish = "public/"
+publish = "../public/"
 [build.environment]
 # set hugo version for consistency
 HUGO_VERSION = '0.74.3'
