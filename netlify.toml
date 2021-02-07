@@ -3,6 +3,7 @@
 [build]
 # netlify won't install yarn unless base is a react project
 # so we symlink the important bits into the root, at build command time yarn is already installed and node modules is ready
+base = "react/"
 command = "cd react; yarn build-js; yarn build-content; cd ..; hugo -b https://test.5calls.org"
 publish = "public/"
 [build.environment]
