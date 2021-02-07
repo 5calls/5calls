@@ -3,7 +3,7 @@
 const path = './react/node_modules'
 
 module.exports = {
-  onPreBuild: async () => {
+  onPreBuild: async ({ utils }) => {
     if (!(await utils.cache.has(path))) {
       console.log(`File ${path} not cached`)
     } else {
