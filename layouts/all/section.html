@@ -5,11 +5,10 @@
     <div class="archive-wrapper">
       <h2>All active topics</h2>
       <!-- prettier-ignore -->
-      {{ with .Site.GetPage "section" "issue" }}
-        {{ range $taxonomyname, $taxonomy := .Site.Taxonomies }}
-          {{ if eq "categories" $taxonomyname }}
-            {{ range $key, $value := $taxonomy }}
-      <h3>{{ $key }}</h3>
+      {{ range $taxonomyname, $taxonomy := .Site.Taxonomies }}
+      {{ if eq "categories" $taxonomyname }}
+      {{ range $key, $value := $taxonomy }}
+      <h3>{{ .Page.Title }}</h3>
       <ul>
         {{ range $value.Pages }}
         <li>
@@ -24,7 +23,6 @@
       {{ end }}
           {{ end }}
         {{ end }}
-      {{ end }}
     </div>
   </div>
 </div>

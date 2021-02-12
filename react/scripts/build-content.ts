@@ -116,19 +116,11 @@ const categoriesYAML = (issue: Issue): string => {
   if (issue.categories.length > 0) {
     categoriesText = `categories:`;
     for (const category of issue.categories) {
-      categoriesText += `\r  - "${escapeQuotes(catNameTransform(category.name))}"`;
+      categoriesText += `\r  - "${escapeQuotes(category.name)}"`;
     }
   }
 
   return categoriesText;
-};
-
-const catNameTransform = (name: string): string => {
-  return name
-    .replace("-", " ")
-    .split(" ")
-    .map((w) => w[0].toUpperCase() + w.substr(1).toLowerCase())
-    .join(" ");
 };
 
 buildContent();
