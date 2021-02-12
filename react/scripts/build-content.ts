@@ -13,7 +13,12 @@ interface Issue {
   createdAt: string;
   contactAreas: string[];
   outcomeModels: Outcome[];
+  categories: Category[];
   active: boolean;
+}
+
+interface Category {
+  name: string;
 }
 
 interface Outcome {
@@ -54,6 +59,7 @@ script: |
 ${multilineScript(issue.script)}
 ${contactAreaYAML(issue)}
 ${outcomesYAML(issue)}
+${categoriesYAML(issue)}
 active: ${issue.active ? "true" : "false"}
 ---
 ${issue.reason}
@@ -102,6 +108,27 @@ const outcomesYAML = (issue: Issue): string => {
   }
 
   return outcomesText;
+};
+
+const categoriesYAML = (issue: Issue): string => {
+  let categoriesText = ``;
+
+  if (issue.categories.length > 0) {
+    categoriesText = `categories:`;
+    for (const category of issue.categories) {
+      categoriesText += `\r  - "${escapeQuotes(catNameTransform(category.name))}"`;
+    }
+  }
+
+  return categoriesText;
+};
+
+const catNameTransform = (name: string): string => {
+  return name
+    .replace("-", " ")
+    .split(" ")
+    .map((w) => w[0].toUpperCase() + w.substr(1).toLowerCase())
+    .join(" ");
 };
 
 buildContent();

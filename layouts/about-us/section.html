@@ -57,9 +57,11 @@
         <p><strong>{{ .name }}</strong></p>
 
         <p>
+          {{ if .socialLink }}
           <a href="{{ .socialLink }}"
             ><i class="fa fa-{{ default `twitter` .socialService }}"></i> @{{ .socialUsername }}</a
           >
+          {{ end }}
         </p>
       </div>
       {{ end }}

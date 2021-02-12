@@ -1,22 +1,29 @@
 - title: "Editorial and Social"
   volunteers:
-    - name: Sara
-      socialService: instagram
-      socialUsername: sara.n.g
-      socialLink: https://www.instagram.com/sara.n.g/
-
-    - name: Rachel Perkins
-      socialUsername: djpiebob
-      socialLink: https://twitter.com/djpiebob
+    - name: Flynn B
 
     - name: Rati Gupta
       socialUsername: theRati
       socialLink: https://twitter.com/theRati
 
+    - name: Sara G
+
+    - name: Jess Irvine
+      socialUsername: IrvJess
+      socialLink: https://twitter.com/IrvJess
+
+    - name: Amanda N
+
+    - name: Rachel Perkins
+      socialUsername: djpiebob
+      socialLink: https://twitter.com/djpiebob
+
     - name: Eleanor Wertman
       socialService: medium
       socialUsername: eleanor.wertman
       socialLink: https://medium.com/eleanor.wertman
+
+    - name: Rhiannon W
 
 - title: "Web"
   volunteers:
@@ -31,7 +38,7 @@
 
 - title: "Brand and Design"
   volunteers:
-    - name: Charm
+    - name: Charm B
       socialUsername: charmbtrippin
       socialLink: https://twitter.com/charmbtrippin/
 

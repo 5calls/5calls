@@ -1,13 +1,9 @@
 <div class="footer">
-    <div class="content">
-      <div class="footer-about">
-        <p><strong>© 2020 5 Calls Civic Action</strong></p>
-        <p>We are a 501(c)4 non-profit that helps the public make their voices heard.</p>
-      </div>
-      <div class="g g-4up">
-        {{ range $.Site.Data.footer }}
-          {{ partial "footer_group.html" . }}
-        {{ end }}
-      </div>
+  <div class="content">
+    <div class="footer-about">
+      <p><strong>© 2021 5 Calls Civic Action</strong></p>
+      <p>We are a 501(c)4 non-profit that helps the public make their voices heard.</p>
     </div>
+    <div class="g g-4up">{{ range $.Site.Data.footer }} {{ partial "footer_group.html" . }} {{ end }}</div>
+  </div>
 </div>

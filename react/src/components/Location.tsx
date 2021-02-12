@@ -63,6 +63,10 @@ class Location extends React.Component<Props & WithLocationProps & WithCompleted
     return completedIssueIDs;
   }
 
+  // "what the fuck is jquery doing in react?"
+  // well, we have a bunch of static html on the page that we'd likely to modify
+  // without having to render again in react, plus rerender flashes are ugly
+  // so instead we do some light modification with jquery
   updateIssueCompletion = (completedIssueIDs: string[]) => {
     $(".i-bar-list-section .i-bar-item-check>div").each((_, el) => {
       const itemIssueID = $(el).data("issue-id") as string;
@@ -148,7 +152,7 @@ class Location extends React.Component<Props & WithLocationProps & WithCompleted
       case ComponentLocationState.NoLocation: {
         return (
           <div className="is-visible">
-            <span>Find your representatives</span>
+            <span>Find your legislators</span>
             <form onSubmit={this.setLocationAutomatically}>
               <button className="button button-small button-red">Set your location</button>
             </form>
@@ -170,7 +174,7 @@ class Location extends React.Component<Props & WithLocationProps & WithCompleted
       case ComponentLocationState.HasLocation: {
         return (
           <div className="is-visible">
-            <span>Showing representatives for</span>
+            <span>Your location is</span>
             <strong>{this.props.locationState?.cachedCity || this.props.locationState?.address}</strong>
             <form onSubmit={this.changeLocation}>
               <button className="button-link">Change location</button>

@@ -4,20 +4,27 @@
     {{ partial "sidebar.html" . }}
     <div class="archive-wrapper">
       <h2>All active topics</h2>
+      <!-- prettier-ignore -->
+      {{ with .Site.GetPage "section" "issue" }}
+        {{ range $taxonomyname, $taxonomy := .Site.Taxonomies }}
+          {{ if eq "categories" $taxonomyname }}
+            {{ range $key, $value := $taxonomy }}
+      <h3>{{ $key }}</h3>
       <ul>
-        <!-- prettier-ignore -->
-        {{ with .Site.GetPage "section" "issue" }}
-        {{ range .Pages }}
+        {{ range $value.Pages }}
         <li>
           <span><i class="fa fa-phone-alt" aria-hidden="true"></i></span>
           <p>
             <a href="{{ .Permalink }}">{{.Title}}</a>
           </p>
         </li>
-        <!-- prettier-ignore -->
-        {{ end }}
         {{ end }}
       </ul>
+      <!-- prettier-ignore -->
+      {{ end }}
+          {{ end }}
+        {{ end }}
+      {{ end }}
     </div>
   </div>
 </div>
