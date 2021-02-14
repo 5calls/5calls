@@ -46,7 +46,7 @@
   <div class="content">
     <h2>No matter their politics, calling&nbsp;works.</h2>
     <div class="g g-2up">
-      <div class="card a-ctr borderless" markdown="1">
+      <div class="card a-ctr borderless">
         <p>
           <i class="far fa-thumbs-up"></i>
           <strong>If you support their stance&hellip;</strong>
@@ -57,7 +57,7 @@
         </p>
       </div>
 
-      <div class="card a-ctr borderless" markdown="1">
+      <div class="card a-ctr borderless">
         <p>
           <i class="far fa-thumbs-down"></i>
           <strong>If you oppose or don’t know their&nbsp;stance&hellip;</strong>
@@ -73,10 +73,14 @@
   <!-- /.content -->
 </section>
 
-<div class="content" markdown="1">
+<div class="content">
   <h2>Don’t just take it from us.</h2>
 
   <div class="g g-3up">{{ range $.Site.Data.clips }} {{ partial "clip.html" . }} {{ end }}</div>
+
+  <h2>Reviews of 5 Calls</h2>
+
+  <div class="g g-3up">{{ range $.Site.Data.reviews }} {{ partial "clip.html" . }} {{ end }}</div>
 
   <h2>Ready to get started?</h2>
 
