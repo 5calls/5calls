@@ -1,12 +1,10 @@
 # Settings in the [build] context are global and are applied to all contexts
 # unless otherwise overridden by more specific contexts.
 [build]
-# netlify won't install yarn unless base is a react project
-# so we symlink the important bits into the root, at build command time yarn is already installed and node modules is ready
-base = "react/" 
+base = "react/" # the base is react because that's how we can cache node_modules and reduce the build times
 command = "yarn build-js && yarn build-content && cd .. && hugo -b https://test.5calls.org" 
 ignore = "false" # don't skip builds when they only have hugo edits (outside of base)
-publish = "/final/" 
+publish = "/final/" # we publish back into a directory *inside* of base because we can't specify a publish root above it
 [build.environment]
 # set hugo version for consistency
 HUGO_VERSION = '0.74.3'
