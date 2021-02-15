@@ -28,7 +28,6 @@ firebase.initializeApp({
 });
 
 ReactGA.initialize("G-J9HQRTM3YS");
-ReactGA.pageview(window.location.pathname + window.location.search);
 
 // probably move all this actblue stuff into another file
 declare global {
