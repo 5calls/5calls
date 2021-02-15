@@ -1,12 +1,8 @@
 - title: "Editorial and Social"
   volunteers:
-    - name: Flynn B
-
     - name: Rati Gupta
       socialUsername: theRati
       socialLink: https://twitter.com/theRati
-
-    - name: Sara G
 
     - name: Jess Irvine
       socialUsername: IrvJess
@@ -24,6 +20,8 @@
       socialLink: https://medium.com/eleanor.wertman
 
     - name: Rhiannon W
+    - name: Flynn B
+    - name: Sara G
 
 - title: "Web"
   volunteers:
