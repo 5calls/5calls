@@ -6,25 +6,29 @@
       socialLink: https://twitter.com/theRati
 
     - name: Jess Irvine
+      avatar: /images/vols/jess.png
       socialUsername: IrvJess
       socialLink: https://twitter.com/IrvJess
 
     - name: Amanda Nottke
+      avatar: /images/vols/amanda.png
       socialUsername: amandanottke
       socialLink: https://twitter.com/amandanottke
 
     - name: Rachel Perkins
+      avatar: /images/vols/pie.png
       socialUsername: djpiebob
       socialLink: https://twitter.com/djpiebob
 
     - name: Eleanor Wertman
+      avatar: /images/vols/eleanor.png
       socialService: medium
       socialUsername: eleanor.wertman
       socialLink: https://medium.com/eleanor.wertman
 
     - name: Rhiannon W
     - name: Flynn B
-    - name: Sara G
+      avatar: /images/vols/flynn.png
 
 - title: "Web"
   volunteers:
