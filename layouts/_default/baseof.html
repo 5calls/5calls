@@ -95,6 +95,14 @@
       gtag("config", "G-J9HQRTM3YS");
     </script>
     <script src="https://secure.actblue.com/cf/assets/actblue.js" async></script>
+    <script src="//d2wy8f7a9ursnm.cloudfront.net/v7/bugsnag.min.js"></script>
+    <script>
+      try {
+        Bugsnag.start("67e3931dbe1bbf48991ce7d682ceb676");
+      } catch (error) {
+        /* nbd, sometimes this fails if bugsnag is blocked by ad blockers */
+      }
+    </script>
   </head>
   <body class="{{ block `bodyclass` . }}{{ end }}">
     <div class="site">{{ partial "header.html" . }} {{ block "main" . }}{{ end }} {{ partial "footer.html" . }}</div>
