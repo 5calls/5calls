@@ -11,6 +11,7 @@ HUGO_VERSION = '0.74.3'
 # need yarn installed manually
 NETLIFY_USE_YARN = 'true'
 # don't care about ruby, but the default installs a new version for each build
+NODE_OPTIONS = '--unhandled-rejections=strict'
 RUBY_VERSION = '2.6.2'
 YARN_VERSION = '1.22.5'
 
