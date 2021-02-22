@@ -34,7 +34,7 @@ interface ContactResponse {
 }
 
 export const getContacts = async (location: string): Promise<ContactList> => {
-  if (location === "") {
+  if (!location || location === "") {
     return Promise.reject(noLocationError);
   }
 
