@@ -7,7 +7,7 @@ fsExtra.emptyDirSync("../assets/js/");
 
 // moves all generated files to the assets directory in hugo
 
-glob("build/static/js/*.js", {}, function (er, files) {
+glob("build/static/js/*+(.js|.js.map)", {}, function (er, files) {
   files.forEach((file) => {
     let basename = path.basename(file);
     fs.rename(file, `../assets/js/${basename}`, (err) => {
