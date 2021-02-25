@@ -80,7 +80,7 @@
       rel="stylesheet"
     />
 
-    {{ $js := resources.Match "js/*" }} {{ range $js }}
+    {{ $js := resources.Match "js/*.js" }} {{ range $js }}
     <script type="text/javascript" src="{{ .RelPermalink }}" defer></script>
     {{ end }}
     <!-- Global site tag (gtag.js) - Google Analytics -->
