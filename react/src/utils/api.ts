@@ -33,15 +33,19 @@ interface ContactResponse {
   representatives: Contact[];
 }
 
-export const getContacts = async (location: string): Promise<ContactList> => {
+export const getContacts = async (location: string, areas: string = ""): Promise<ContactList> => {
   if (!location || location === "") {
     return Promise.reject(noLocationError);
   }
 
   const headers = await prepareHeaders();
+  let areasQuery = "";
+  if (areas !== "") {
+    areasQuery = `&areas=${encodeURIComponent(areas)},`;
+  }
 
   return axios
-    .get<ContactResponse>(`${Constants.REPS_API_URL}?location=${location}`, {
+    .get<ContactResponse>(`${Constants.REPS_API_URL}?location=${location}${areasQuery}`, {
       headers: headers,
     })
     .then((result) => {

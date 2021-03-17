@@ -30,16 +30,19 @@ class Reps extends React.Component<Props & WithLocationProps & WithCompletedProp
   };
 
   componentDidMount() {
+    let areaString = "";
+
     const thisComponent = ReactDOM.findDOMNode(this);
     if (thisComponent && thisComponent.parentElement) {
-      const areas = (thisComponent.parentElement.dataset.repAreas ?? "").split(",");
+      areaString = thisComponent.parentElement.dataset.repAreas ?? "";
+      const areas = areaString.split(",");
       const issueId = thisComponent.parentElement.dataset.issueId ?? "";
       this.setState({ areas, issueId });
     }
 
     if (!this.state.contactList) {
       // if we don't have contacts, fetch the contacts
-      this.updateContacts();
+      this.updateContacts(areaString);
     }
 
     document.addEventListener("nextContact", (e) => {
@@ -85,7 +88,7 @@ class Reps extends React.Component<Props & WithLocationProps & WithCompletedProp
 
   componentDidUpdate(prevProps: Props & WithLocationProps) {
     if (prevProps.locationState?.address !== this.props.locationState?.address) {
-      this.updateContacts();
+      this.updateContacts(this.state.areas.join(","));
     }
   }
 
@@ -96,9 +99,9 @@ class Reps extends React.Component<Props & WithLocationProps & WithCompletedProp
     document.dispatchEvent(activeContactEvent);
   }
 
-  updateContacts() {
+  updateContacts(areas: string = "") {
     if (this.props.locationState) {
-      getContacts(this.props.locationState.address)
+      getContacts(this.props.locationState.address, areas)
         .then((contactList) => {
           this.setState({ activeContactIndex: 0, contactList });
           const contacts = this.contactsForArea(this.state.areas, contactList);
