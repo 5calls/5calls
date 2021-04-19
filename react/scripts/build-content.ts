@@ -37,8 +37,8 @@ const buildContent = async () => {
     .then((data) => {
       const issues = data as Issue[];
       console.log(`building content for ${issues.length} issues`);
-      issues.forEach((issue) => {
-        fs.writeFileSync(`${contentDirectory}${issue.slug}.md`, postContentFromIssue(issue));
+      issues.forEach((issue, index) => {
+        fs.writeFileSync(`${contentDirectory}${issue.slug}.md`, postContentFromIssue(issue, index));
       });
       // create the done pages too
       issues.forEach((issue) => {
@@ -51,7 +51,7 @@ const buildContent = async () => {
     });
 };
 
-const postContentFromIssue = (issue: Issue): string => {
+const postContentFromIssue = (issue: Issue, index: number): string => {
   return `---
 title: "${escapeQuotes(issue.name)}"
 date: ${issue.createdAt}
@@ -62,6 +62,7 @@ ${contactAreaYAML(issue)}
 ${outcomesYAML(issue)}
 ${categoriesYAML(issue)}
 active: ${issue.active ? "true" : "false"}
+order: ${index}
 ---
 ${issue.reason}
 `;
