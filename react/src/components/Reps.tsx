@@ -121,6 +121,7 @@ class Reps extends React.Component<Props & WithLocationProps & WithCompletedProp
             }
           }
 
+          // we never previously unloaded reps if a local changed and came back with an error
           this.setState({ contactList: undefined });
           const loadedRepsEvent = new CustomEvent("loadedReps", { detail: false });
           document.dispatchEvent(loadedRepsEvent);

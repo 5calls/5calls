@@ -5,7 +5,6 @@ import { WithLocationProps } from "../state/locationState";
 import { withCompleted, withLocation } from "../state/stateProvider";
 import { getBrowserGeolocation } from "../utils/geolocation";
 import { getCompletedIssues, getContacts } from "../utils/api";
-import localUtils from "../utils/localUtils";
 import { CompletionMap, WithCompletedProps } from "../state/completedState";
 
 enum ComponentLocationState {
@@ -46,6 +45,7 @@ class Location extends React.Component<Props & WithLocationProps & WithCompleted
     }
 
     document.addEventListener("outsideLocalArea", (e) => {
+      // this should never trigger for non-local rep requests, so we don't need to doublecheck that we're in a local page
       this.setState({
         locationWarning: "It looks like you're outside the local area for this call, try updating your location.",
       });
@@ -132,7 +132,6 @@ class Location extends React.Component<Props & WithLocationProps & WithCompleted
           document.dispatchEvent(new Event("updateReps"));
         })
         .catch((error) => {
-          console.log("error:", error);
           // we don't specify different types of location errors, but might in the future
           this.setState({ locationError: "location error", componentLocationState: ComponentLocationState.NoLocation });
           document.dispatchEvent(new Event("updateReps"));
@@ -158,7 +157,7 @@ class Location extends React.Component<Props & WithLocationProps & WithCompleted
             document.dispatchEvent(new Event("updateReps"));
           })
           .catch((error) => {
-            console.log("error getting contacts after geoloc:", error);
+            // console.log("error getting contacts after geoloc:", error);
             // we don't specify different types of location errors, but might in the future
             this.setState({
               locationError: "geolocation error",
