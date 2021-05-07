@@ -6,4 +6,8 @@ const isLocalCall = (): Boolean => {
   return false;
 };
 
-export default { isLocalCall };
+interface LocalUtils {
+  isLocalCall(): boolean;
+}
+
+export default { isLocalCall } as LocalUtils;
