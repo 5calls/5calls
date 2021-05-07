@@ -31,6 +31,8 @@ const buildContent = async () => {
   fsExtra.emptyDirSync(contentDirectory);
   const doneDirectory = `${__dirname}/../../content/done/`;
   fsExtra.emptyDirSync(doneDirectory);
+  const localContentDirectory = `${__dirname}/../../content/local/`;
+  fsExtra.emptyDirSync(localContentDirectory);
 
   fetch(`https://api.5calls.org/v1/issues`)
     .then((res) => res.json())
@@ -48,6 +50,25 @@ const buildContent = async () => {
     .catch((error) => {
       console.error(`couldn't fetch issues: ${error}`);
       throw "error getting issues";
+    });
+
+  // build local content too, sf only for now
+  fetch(`https://api.5calls.org/v1/issues?groupid=sf`)
+    .then((res) => res.json())
+    .then((data) => {
+      const issues = data as Issue[];
+      console.log(`building local content for ${issues.length} issues`);
+      fs.mkdirSync(`${localContentDirectory}san-francisco/done/`, { recursive: true });
+      issues.forEach((issue, index) => {
+        fs.writeFileSync(`${localContentDirectory}san-francisco/${issue.slug}.md`, postContentFromIssue(issue, index));
+      });
+      issues.forEach((issue) => {
+        fs.writeFileSync(`${localContentDirectory}san-francisco/done/${issue.slug}.md`, doneContentFromIssue(issue));
+      });
+    })
+    .catch((error) => {
+      console.error(`couldn't create local issues: ${error}`);
+      throw "error getting local issues";
     });
 };
 

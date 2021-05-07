@@ -5,6 +5,7 @@ import { WithLocationProps } from "../state/locationState";
 import { withCompleted, withLocation } from "../state/stateProvider";
 import { getBrowserGeolocation } from "../utils/geolocation";
 import { getCompletedIssues, getContacts } from "../utils/api";
+import localUtils from "../utils/localUtils";
 import { CompletionMap, WithCompletedProps } from "../state/completedState";
 
 enum ComponentLocationState {
@@ -20,23 +21,35 @@ interface State {
   componentLocationState: ComponentLocationState;
   manualAddress: string | undefined;
   locationError: string | undefined;
+  locationWarning: string | undefined;
 }
 
 class Location extends React.Component<Props & WithLocationProps & WithCompletedProps, State> {
   _defaultManualAddress: string | undefined = undefined;
   _defaultLocationError: string | undefined = undefined;
+  _defaultLocationWarning: string | undefined = undefined;
 
   state = {
     componentLocationState: ComponentLocationState.NoLocation,
     manualAddress: this._defaultManualAddress,
     locationError: this._defaultLocationError,
+    locationWarning: this._defaultLocationWarning,
   };
 
   componentDidMount() {
     // update the local component state based on our global state
     if (this.props.locationState && this.props.locationState.address) {
-      this.setState({ componentLocationState: ComponentLocationState.HasLocation });
+      this.setState({
+        componentLocationState: ComponentLocationState.HasLocation,
+        locationWarning: this.makeLowAccuracyWarning(this.props.locationState.lowAccuracy),
+      });
     }
+
+    document.addEventListener("outsideLocalArea", (e) => {
+      this.setState({
+        locationWarning: "It looks like you're outside the local area for this call, try updating your location.",
+      });
+    });
 
     this.processIssueCompletion();
   }
@@ -89,6 +102,14 @@ class Location extends React.Component<Props & WithLocationProps & WithCompleted
     this.setState({ componentLocationState: ComponentLocationState.EnterManually });
   };
 
+  makeLowAccuracyWarning(lowAccuracy: boolean): string | undefined {
+    if (lowAccuracy) {
+      return "Local reps require a more accurate location. Try an address or cross streets for best results.";
+    }
+
+    return undefined;
+  }
+
   setLocationManually = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     this.setState({ locationError: undefined });
@@ -103,14 +124,18 @@ class Location extends React.Component<Props & WithLocationProps & WithCompleted
       getContacts(this.state.manualAddress)
         .then((contactList) => {
           // console.log("contacts are", contactList);
-          this.props.setLocationAddress(this.state.manualAddress ?? "", contactList.location);
-          this.setState({ componentLocationState: ComponentLocationState.HasLocation });
+          this.props.setLocationAddress(this.state.manualAddress ?? "", contactList.lowAccuracy, contactList.location);
+          this.setState({
+            componentLocationState: ComponentLocationState.HasLocation,
+            locationWarning: this.makeLowAccuracyWarning(contactList.lowAccuracy),
+          });
           document.dispatchEvent(new Event("updateReps"));
         })
         .catch((error) => {
           console.log("error:", error);
           // we don't specify different types of location errors, but might in the future
           this.setState({ locationError: "location error", componentLocationState: ComponentLocationState.NoLocation });
+          document.dispatchEvent(new Event("updateReps"));
         });
     }
   };
@@ -125,12 +150,15 @@ class Location extends React.Component<Props & WithLocationProps & WithCompleted
         const pairedLoc = `${loc.latitude},${loc.longitude}`;
         getContacts(pairedLoc)
           .then((contactList) => {
-            this.props.setLocationAddress(pairedLoc, contactList.location);
-            this.setState({ componentLocationState: ComponentLocationState.HasLocation });
+            this.props.setLocationAddress(pairedLoc, contactList.lowAccuracy, contactList.location);
+            this.setState({
+              componentLocationState: ComponentLocationState.HasLocation,
+              locationWarning: this.makeLowAccuracyWarning(contactList.lowAccuracy),
+            });
             document.dispatchEvent(new Event("updateReps"));
           })
           .catch((error) => {
-            console.log("error getting location after geoloc:", error);
+            console.log("error getting contacts after geoloc:", error);
             // we don't specify different types of location errors, but might in the future
             this.setState({
               locationError: "geolocation error",
@@ -176,6 +204,13 @@ class Location extends React.Component<Props & WithLocationProps & WithCompleted
           <div className="is-visible">
             <span>Your location is</span>
             <strong>{this.props.locationState?.cachedCity || this.props.locationState?.address}</strong>
+            {this.state.locationWarning && (
+              <p className="locationWarnNote">
+                <i className="fas fa-exclamation-circle" aria-hidden="true"></i>
+                {this.state.locationWarning}
+                {/* Local reps require a more accurate location. Try an address or cross streets for best results. */}
+              </p>
+            )}
             <form onSubmit={this.changeLocation}>
               <button className="button-link">Change location</button>
             </form>

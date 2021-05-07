@@ -21,6 +21,7 @@ const allContacts = (contactList: ContactList): Contact[] => {
     contacts.push(houseReps[0]);
   }
   contacts.push(...contactList.senateReps());
+  contacts.push(...contactList.localRep());
 
   return contacts;
 };

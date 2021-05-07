@@ -40,12 +40,13 @@ export default class StateProvider extends React.Component<Props, State> {
     });
   }
 
-  setLocationAddress(address: string, display: string) {
+  setLocationAddress(address: string, lowAccuracy: boolean, display: string) {
     // save the location and cached city in localstorage
     // if the backend passes "unknown address" just remove it
 
     const locationState: LocationState = {
       address: address,
+      lowAccuracy: lowAccuracy,
       cachedCity: display,
       // splitDistrict: false,
       // invalidAddress: false,
@@ -80,7 +81,8 @@ export default class StateProvider extends React.Component<Props, State> {
       <LocationContext.Provider
         value={{
           locationState: this.state.locationState,
-          setLocationAddress: (address: string, display: string) => this.setLocationAddress(address, display),
+          setLocationAddress: (address: string, lowAccuracy: boolean, display: string) =>
+            this.setLocationAddress(address, lowAccuracy, display),
         }}
       >
         <CompletedContext.Provider

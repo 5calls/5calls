@@ -16,6 +16,8 @@ class ActiveContact extends React.Component<Props, State> {
       photoURL = this.props.contact.photoURL;
     }
 
+    let contact = this.props.contact;
+
     return (
       <div className="contact">
         <div className="contact-image">
@@ -29,7 +31,7 @@ class ActiveContact extends React.Component<Props, State> {
         </div>
         <div>
           <h3 className="contact-name">
-            {this.props.contact.name} ({contactUtils.partyAndState(this.props.contact)})
+            {contact.name} {contact.area !== "Local" && `(${contactUtils.partyAndState(contact)})`}
           </h3>
           <p className="contact-phone">{contactUtils.makePhoneLink(this.props.contact.phone)}</p>
           <LocalNumbers contact={this.props.contact} />

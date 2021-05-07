@@ -30,6 +30,7 @@ export const noLocationError = Error("no location entered");
 
 interface ContactResponse {
   location: string;
+  lowAccuracy: boolean;
   representatives: Contact[];
 }
 
@@ -41,7 +42,13 @@ export const getContacts = async (location: string, areas: string = ""): Promise
   const headers = await prepareHeaders();
   let areasQuery = "";
   if (areas !== "") {
+    // this is silly, but the trailing comma is important for... golang reasons
     areasQuery = `&areas=${encodeURIComponent(areas)},`;
+
+    // please revoke my cs degree oh wait I don't have one
+    if (areas === "Local") {
+      areasQuery = `${areasQuery}&group=sf`;
+    }
   }
 
   return axios
@@ -51,6 +58,7 @@ export const getContacts = async (location: string, areas: string = ""): Promise
     .then((result) => {
       const contactList = new ContactList();
       contactList.location = result.data.location;
+      contactList.lowAccuracy = result.data.lowAccuracy;
       contactList.representatives = result.data.representatives;
       return Promise.resolve(contactList);
     })

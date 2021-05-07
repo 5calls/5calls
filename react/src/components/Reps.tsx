@@ -109,12 +109,21 @@ class Reps extends React.Component<Props & WithLocationProps & WithCompletedProp
             // start our script component with an active contact
             this.reportUpdatedActiveContact(contacts[0]);
             // report that reps loaded for outcomes to load
-            const loadedRepsEvent = new CustomEvent("loadedReps");
+            const loadedRepsEvent = new CustomEvent("loadedReps", { detail: true });
             document.dispatchEvent(loadedRepsEvent);
           }
         })
         .catch((error) => {
-          console.log("error getting reps:", error);
+          // love 2 use any types in js
+          if (error && error.response && error.response.data && error.response.data.error) {
+            if (`${error.response.data.error}` === "no district found for local reps") {
+              document.dispatchEvent(new CustomEvent("outsideLocalArea"));
+            }
+          }
+
+          this.setState({ contactList: undefined });
+          const loadedRepsEvent = new CustomEvent("loadedReps", { detail: false });
+          document.dispatchEvent(loadedRepsEvent);
         });
     }
   }
@@ -150,7 +159,7 @@ class Reps extends React.Component<Props & WithLocationProps & WithCompletedProp
           }}
         />
         <h4>
-          {contact.name} ({ContactUtils.partyAndState(contact)})
+          {contact.name} {contact.area !== "Local" && `(${ContactUtils.partyAndState(contact)})`}
         </h4>
         <p>{contact.reason}</p>
       </li>

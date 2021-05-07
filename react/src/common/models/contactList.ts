@@ -8,14 +8,17 @@ export enum ContactArea {
   SecretaryOfState = "SecretaryOfState",
   StateUpper = "StateUpper",
   StateLower = "StateLower",
+  Local = "Local",
 }
 
 export class ContactList {
   public location: string;
+  public lowAccuracy: boolean;
   public representatives: Contact[];
 
   constructor() {
     this.location = "";
+    this.lowAccuracy = false;
     this.representatives = [];
   }
 
@@ -29,6 +32,15 @@ export class ContactList {
     const houseRep = this.representatives.find((contact) => contact.area === ContactArea.USHouse);
     if (houseRep) {
       contacts.push(houseRep);
+    }
+    return contacts;
+  }
+
+  public localRep(): Contact[] {
+    const contacts: Contact[] = [];
+    const localRep = this.representatives.find((contact) => contact.area === ContactArea.Local);
+    if (localRep) {
+      contacts.push(localRep);
     }
     return contacts;
   }

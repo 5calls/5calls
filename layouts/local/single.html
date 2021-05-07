@@ -1,0 +1,41 @@
+{{ define "bodyclass" }}issue{{ end }} {{ define "main" }}
+<div class="content">
+  <div class="g">
+    <!-- prettier-ignore -->
+    {{ .Scratch.Set "issueId" .Params.issueId }}
+    {{ partial "sidebar.html" . }}
+
+    <div class="issue-wrapper">
+      <div class="issue-content">
+        <h2>{{ .Title }}</h2>
+        {{ .Content }}
+      </div>
+      <div class="reps">
+        <h3 id="reps-header">Contacts for this topic:</h3>
+        <div
+          class="rep-list"
+          id="react-reps"
+          data-rep-areas="{{ if isset .Params `contactareas` }}{{ delimit .Params.contactAreas `,` }}{{ end }}"
+          data-issue-id="{{ .Params.issueId }}"
+        ></div>
+        <!-- I want to include this help text but I want it to be under the rep list but not in react since it's not dynamic -->
+        <!-- <p class="help">
+          <a
+            href="https://intercom.help/5calls/using-the-5-calls-website-and-apps/why-do-i-only-see-some-of-my-representatives"
+            target="_blank"
+            >Where are the rest of my representatives?</a
+          >
+        </p> -->
+      </div>
+      <div class="issue-script" id="react-script" data-script-markdown="{{ .Params.script }}">
+        {{ .Params.script | markdownify }}
+      </div>
+      <div
+        class="outcomes"
+        id="react-outcomes"
+        data-outcomes="{{ if isset .Params `outcomes` }}{{ delimit .Params.outcomes `,` }}{{ end }}"
+      ></div>
+    </div>
+  </div>
+</div>
+{{ end }}

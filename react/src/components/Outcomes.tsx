@@ -22,7 +22,8 @@ class Outcomes extends React.Component<Props, State> {
     }
 
     document.addEventListener("loadedReps", (e) => {
-      this.setState({ showReps: true });
+      const showReps: boolean = (e as CustomEvent).detail;
+      this.setState({ showReps: showReps });
     });
   }
 
