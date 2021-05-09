@@ -6,6 +6,7 @@ import { withCompleted, withLocation } from "../state/stateProvider";
 import { getBrowserGeolocation } from "../utils/geolocation";
 import { getCompletedIssues, getContacts } from "../utils/api";
 import { CompletionMap, WithCompletedProps } from "../state/completedState";
+import localUtils from "../utils/localUtils";
 
 enum ComponentLocationState {
   NoLocation,
@@ -103,7 +104,7 @@ class Location extends React.Component<Props & WithLocationProps & WithCompleted
   };
 
   makeLowAccuracyWarning(lowAccuracy: boolean): string | undefined {
-    if (lowAccuracy) {
+    if (lowAccuracy && localUtils.isLocalCall()) {
       return "Local reps require a more accurate location. Try an address or cross streets for best results.";
     }
 
@@ -207,7 +208,6 @@ class Location extends React.Component<Props & WithLocationProps & WithCompleted
               <p className="locationWarnNote">
                 <i className="fas fa-exclamation-circle" aria-hidden="true"></i>
                 {this.state.locationWarning}
-                {/* Local reps require a more accurate location. Try an address or cross streets for best results. */}
               </p>
             )}
             <form onSubmit={this.changeLocation}>
