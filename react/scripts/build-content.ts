@@ -33,6 +33,8 @@ const buildContent = async () => {
   fsExtra.emptyDirSync(doneDirectory);
   const localContentDirectory = `${__dirname}/../../content/local/`;
   fsExtra.emptyDirSync(localContentDirectory);
+  const localDoneContentDirectory = `${__dirname}/../../content/localdone/`;
+  fsExtra.emptyDirSync(localDoneContentDirectory);
 
   fetch(`https://api.5calls.org/v1/issues`)
     .then((res) => res.json())
@@ -63,7 +65,7 @@ const buildContent = async () => {
         fs.writeFileSync(`${localContentDirectory}san-francisco/${issue.slug}.md`, postContentFromIssue(issue, index));
       });
       issues.forEach((issue) => {
-        fs.writeFileSync(`${localContentDirectory}san-francisco/done/${issue.slug}.md`, doneContentFromIssue(issue));
+        fs.writeFileSync(`${localDoneContentDirectory}${issue.slug}.md`, doneContentFromIssue(issue));
       });
     })
     .catch((error) => {

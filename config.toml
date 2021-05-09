@@ -9,3 +9,4 @@ description = "Spend 5 minutes. Make 5 calls. Make your voice heard."
 [permalinks]
 done = "/issue/:filename/done/"
 issue = "/issue/:filename/"
+localdone = "/local/san-francisco/:filename/done/"
