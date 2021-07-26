@@ -21,7 +21,6 @@ YARN_VERSION = '1.22.5'
 # dunno if we can measure how many clients are still using this old endpoint?
 [[redirects]]
 from = "/report"
-status = 200
 to = "https://api.5calls.org/v1/report"
 
 [[redirects]]
