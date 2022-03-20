@@ -10,7 +10,7 @@
       {{ range $key, $value := $taxonomy }}
       <h3>{{ .Page.Title }}</h3>
       <ul>
-        {{ range $value.Pages }}
+        {{ range where $value.Pages "Params.hidden" false }}
         <li>
           <span><i class="fa fa-phone-alt" aria-hidden="true"></i></span>
           <p>

@@ -15,7 +15,7 @@
 
       <!-- prettier-ignore -->
       {{ $passedIssueID := (.Scratch.Get "issueId")}}
-      {{ range sort (where (where .Site.Pages "Type" "issue") ".Params.active" "eq" true) ".Params.order" }}
+      {{ range sort (where (where (where .Site.Pages "Type" "issue") ".Params.active" "eq" true) "Params.hidden" false ) ".Params.order" }}
       <a
         class="i-bar-item is-unsorted{{ if eq $passedIssueID .Params.issueId }} is-active{{ end }}"
         href="{{ .Permalink }}"

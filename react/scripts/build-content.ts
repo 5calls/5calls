@@ -15,6 +15,7 @@ interface Issue {
   outcomeModels: Outcome[];
   categories: Category[];
   active: boolean;
+  hidden: boolean;
 }
 
 interface Category {
@@ -32,7 +33,7 @@ const buildContent = async () => {
   const doneDirectory = `${__dirname}/../../content/done/`;
   fsExtra.emptyDirSync(doneDirectory);
 
-  fetch(`https://api.5calls.org/v1/issues`)
+  fetch(`https://api.5calls.org/v1/issues?includeHidden=true`)
     .then((res) => res.json())
     .then((data) => {
       const issues = data as Issue[];
@@ -62,6 +63,7 @@ ${contactAreaYAML(issue)}
 ${outcomesYAML(issue)}
 ${categoriesYAML(issue)}
 active: ${issue.active ? "true" : "false"}
+hidden: ${issue.hidden ? "true" : "false"}
 order: ${index}
 ---
 ${issue.reason}
