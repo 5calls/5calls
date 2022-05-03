@@ -7,12 +7,12 @@
     </title>
     <meta
       name="description"
-      content="{{ if .IsPage }}{{ .Description }}{{ else }}{{ .Site.Params.description }}{{ end }}"
+      content="{{ if .IsPage }}{{ .Summary | truncate 200 }}{{ else }}{{ .Site.Params.description }}{{ end }}"
     />
     <meta itemprop="name" content="5 Calls: Make Your Voice Heard" />
     <meta
       itemprop="description"
-      content="{{ if .IsPage }}{{ .Description }}{{ else }}{{ .Site.Params.description }}{{ end }}"
+      content="{{ if .IsPage }}{{ .Summary | truncate 200 }}{{ else }}{{ .Site.Params.description }}{{ end }}"
     />
     <meta
       itemprop="image"
@@ -27,7 +27,7 @@
     />
     <meta
       name="twitter:description"
-      content="{{ if .IsPage }}{{ .Description }}{{ else }}{{ .Site.Params.description }}{{ end }}"
+      content="{{ if .IsPage }}{{ .Summary | truncate 200 }}{{ else }}{{ .Site.Params.description }}{{ end }}"
     />
     <meta
       name="twitter:image:src"
@@ -46,7 +46,7 @@
     />
     <meta
       property="og:description"
-      content="{{ if .IsPage }}{{ .Description }}{{ else }}{{ .Site.Params.description }}{{ end }}"
+      content="{{ if .IsPage }}{{ .Summary | truncate 200 }}{{ else }}{{ .Site.Params.description }}{{ end }}"
     />
     <meta property="og:site_name" content="{{ .Site.Title }}" />
     <meta property="fb:app_id" content="1201592636562906" />
