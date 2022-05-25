@@ -1,10 +1,10 @@
 # Settings in the [build] context are global and are applied to all contexts
 # unless otherwise overridden by more specific contexts.
 [build]
-base = "react/" # the base is react because that's how we can cache node_modules and reduce the build times
+base = "react/"                                                           # the base is react because that's how we can cache node_modules and reduce the build times
 command = "yarn build-js && yarn build-content && cd .. && hugo -b $URL/"
-ignore = "false" # don't skip builds when they only have hugo edits (outside of base)
-publish = "/final/" # we publish back into a directory *inside* of base because we can't specify a publish root above it
+ignore = "false"                                                          # don't skip builds when they only have hugo edits (outside of base)
+publish = "/final/"                                                       # we publish back into a directory *inside* of base because we can't specify a publish root above it
 [context.deploy-preview]
 # deploy previews need a specific url to point at
 command = "yarn build-js && yarn build-content && cd .. && hugo -b $DEPLOY_PRIME_URL/"
@@ -17,6 +17,7 @@ NODE_OPTIONS = '--unhandled-rejections=strict'
 # don't care about ruby, but the default installs a new version for each build
 RUBY_VERSION = '2.6.2'
 YARN_VERSION = '1.22.5'
+NODE_VERSION = '16'
 
 # dunno if we can measure how many clients are still using this old endpoint?
 [[redirects]]
