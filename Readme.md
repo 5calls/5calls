@@ -14,8 +14,14 @@ Hi there! Are you here to find out how you can volunteer your time to help with 
 
 ## building
 
+For development:
+- start hugo with `hugo server`
+- move to react folder with `cd react`
+  - make sure yarn is up-to-date with `yarn`
+  - then rebuild the js with `yarn build-js`
+
 - Build the react components:
-  - `yarn deploy-js` will build the react components and move the js files into the hugo directories
+  - `yarn build-js` will build the react components and move the js files into the hugo directories
 - Fetch the current 5 Calls content
   - `yarn build-content` will fetch the latest topics and build hugo content files in the right place
 - Build and deploy hugo

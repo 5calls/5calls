@@ -2,6 +2,9 @@
   "name": "5calls",
   "version": "0.1.0",
   "private": true,
+  "engines" : { 
+    "node" : ">=16.0.0"
+  },
   "dependencies": {
     "@reduxjs/toolkit": "^1.4.0",
     "@types/fs-extra": "^9.0.4",

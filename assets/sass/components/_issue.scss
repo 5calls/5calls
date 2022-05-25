@@ -67,6 +67,7 @@ body.issue {
       margin: 0;
 
       li {
+        list-style: none;
         margin-bottom: 2px;
         padding: 4px;
         height: 50px;
@@ -100,6 +101,7 @@ body.issue {
 
         p {
           font-size: 15px;
+
           a {
             text-decoration: underline;
           }
@@ -268,9 +270,11 @@ body.issue {
         &:focus {
           background-color: darken(rgb(24, 117, 209), 5%);
         }
+
         &:hover {
           box-shadow: 0 1px 10px fade-out(rgb(24, 117, 209), 0.15);
         }
+
         &:focus {
           outline: none;
           box-shadow: 0 0 0 0.2rem fade-out(rgb(24, 117, 209), 0.4);
@@ -287,11 +291,13 @@ body.issue {
         @include bp(large) {
           border-radius: 0;
           border-left-width: 0;
+
           &:first-of-type {
             border-top-left-radius: 6px;
             border-bottom-left-radius: 6px;
             border-left-width: 1px;
           }
+
           &:last-of-type {
             border-top-right-radius: 6px;
             border-bottom-right-radius: 6px;
@@ -458,6 +464,7 @@ body.issue {
     .grid-1 {
       grid-column: 1;
     }
+
     .grid-2 {
       grid-column: 2;
     }
