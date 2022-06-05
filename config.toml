@@ -1,5 +1,5 @@
 baseURL = "https://5calls.org/"
-disableKinds = ["taxonomy"]
+# disableKinds = ["taxonomy"]
 ignoreErrors = ["error-disable-taxonomy"]
 languageCode = "en-us"
 publishDir = "react/final/"

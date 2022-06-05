@@ -1,0 +1,39 @@
+<div class="i-bar">
+  <div class="i-bar-location" id="react-location">
+    <div class="is-visible">
+      <span>&nbsp;</span>
+      <strong>&nbsp;</strong>
+      <button class="button-link">&nbsp;</button>
+    </div>
+  </div>
+
+  <div class="i-bar-list">
+    <section class="i-bar-list-section">
+      <header class="i-bar-header i-bar-header-unsorted">
+        <h3><i class="fa fa-newspaper"></i> What’s important to you?</h3>
+      </header>
+
+      <!-- prettier-ignore -->
+      {{ $passedCategory := (.Scratch.Get "category")}}
+      {{ range (where (where .Site.Pages "Type" "issue") "Params.hidden" false ) }}
+      {{ if in .Params.categories $passedCategory }}
+      <a class="i-bar-item is-unsorted" href="{{ .Permalink }}">
+        <div class="i-bar-item-check">
+          <div class="i-bar-check-completed" data-issue-id="{{ .Params.issueId }}">
+            <i class="fa fa-phone-alt"></i>
+            <span class="sr-only">Needs your calls</span>
+          </div>
+        </div>
+        <strong>{{ .Title }}
+        </strong>
+      </a>
+      {{ end }}
+      {{ end }}
+    </section>
+  </div>
+
+  <a href="/all/" class="i-bar-more">See all {{ len (where .Site.Pages "Type" "issue") }} topics</a>
+</div>
+<div class="i-hidden-bar">
+  <button onclick="window.location='/'">&laquo; Back to all issues</button>
+</div>

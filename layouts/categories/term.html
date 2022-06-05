@@ -1,0 +1,23 @@
+{{ define "bodyclass" }}archive{{ end }} {{ define "main" }}
+<div class="content">
+  <div class="g">
+    {{ .Scratch.Set "category" .Data.Term }}
+    {{ partial "sidebar-category.html" . }}
+    <div class="archive-wrapper">
+      <h2>{{ .Data.Term }} topics</h2>
+      <!-- prettier-ignore -->
+      <ul>
+        {{ range $index, $page := .Pages }}
+        <li>
+          <span><i class="fa fa-phone-alt" aria-hidden="true"></i></span>
+          <p>
+            <a href="{{ .Permalink }}">{{.Title}}</a>
+          </p>
+        </li>
+        {{ end }}
+      </ul>
+      <!-- prettier-ignore -->
+    </div>
+  </div>
+</div>
+{{ end }}
