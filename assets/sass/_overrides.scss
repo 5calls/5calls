@@ -7,6 +7,7 @@
 .home {
   h1 {
     margin-bottom: var(--paragraph-break);
+
     span {
       display: block;
     }
@@ -44,6 +45,7 @@
 
   @media screen and (min-width: 76rem) {
     display: flex;
+
     input[type="text"] {
       margin: 0 0.5rem 0 0;
     }
@@ -102,6 +104,7 @@
   width: 100%;
   display: block;
   margin-top: calc(var(--g-gap) * -1 + 1rem);
+
   a {
     background: rgba(var(--c-blue-rgb), 0.1);
     color: var(--c-dark);
@@ -131,16 +134,20 @@
 .calling-tips {
   .card {
     grid-column: 1 / span 6;
+
     &:nth-child(even) {
       grid-column-start: 7;
     }
+
     @media screen and (min-width: 60rem) {
       grid-column: 2 / span 5;
     }
+
     @media screen and (min-width: 75rem) {
       grid-column: 3 / span 4;
     }
   }
+
   p:first-child {
     margin-bottom: 0.5rem;
   }
@@ -167,10 +174,11 @@
   h2 {
     margin-top: calc(var(--leading) * 2rem);
   }
+
   .g-3up {
     margin: 0 auto 6rem;
 
-    + div .info-box {
+    +div .info-box {
       margin-top: -3rem;
     }
 
@@ -182,6 +190,7 @@
       margin-bottom: 0;
     }
   }
+
   img {
     width: 75%;
     border-radius: var(--radius);
@@ -203,13 +212,16 @@
 // issue page
 
 .issue {
-  .i-bar {
-    display: none;
-  }
 
   @media screen and (max-width: 40rem) {
     .i-hidden-bar {
       display: block;
+    }
+
+    .i-bar-list-section {
+      // rather than hiding the whole issue bar for mobile, hide the list
+      // so users who don't have a location can still set their location
+      display: none;
     }
   }
 
