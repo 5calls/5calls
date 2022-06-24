@@ -28,3 +28,7 @@ to = "https://api.5calls.org/v1/report"
 from = "/more"
 status = 301
 to = "/all/"
+
+[[redirects]]
+from = "/issue/abortion-access-legislation-scotus"
+to = "/issue/abortion-scotus-roe-wade-dobbs/"
