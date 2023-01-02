@@ -51,9 +51,11 @@
   links:
     - title: Download for iOS
       url: https://apps.apple.com/us/app/5-calls-contact-your-congress/id1202558609
+      imgUrl: /images/apps/app-store.svg
       brand: true
       icon: apple
     - title: Download for Android
       url: https://play.google.com/store/apps/details?id=org.a5calls.android.a5calls
+      imgUrl: /images/apps/play-store.png
       brand: true
       icon: google-play
