@@ -2,7 +2,11 @@
     <h4>{{ .group }}</h4>
     <ul>
         {{ range .links }}
+        {{ if .imgUrl }}
+        <li><a href="{{ .url }}"><img src="{{ .imgUrl }}" alt="{{ .title }}" class="footer-appstore" /></a></li>
+        {{ else }}
         <li><i class="fa{{ if .brand }}b{{ end }} fa-fw fa-{{ .icon }}"></i> <a href="{{ .url }}">{{ .title }}</a></li>
+        {{ end }}
         {{ end }}
       </ul>  
 </div>
