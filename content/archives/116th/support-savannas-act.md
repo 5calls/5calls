@@ -1,0 +1,10 @@
+---
+title: "Support “Savanna’s Act” to Address Violence Against Native American Women"
+date: 2019-02-05T20:55:09Z
+session: 116
+---
+Violence against Native American women in the United States is [shockingly](http://www.ncai.org/policy-issues/tribal-governance/public-safety-and-justice/violence-against-women) [common](http://www.uihi.org/wp-content/uploads/2018/11/Missing-and-Murdered-Indigenous-Women-and-Girls-Report.pdf), and murder rates of Native women are [ten times higher](https://newsmaven.io/indiancountrytoday/news/sen-murkowski-keeps-promise-to-heidi-heitkamp-reintroduces-savannah-s-act-r2G5erhPwUqB6S1E1OuRAA/) than the national average. However, limited data collection and a lack of coordination between federal and tribal law enforcement have prevented a robust response to this violence.
+
+Last year, former Sen. Heidi Heitkamp (D-ND) [introduced Savanna’s Act](https://www.huffingtonpost.com/entry/lisa-murkowski-violence-native-women-savannas-act_us_5c4f1d2be4b0287e5b8cfffa) to address this crisis; the bill was named for Savanna LaFontaine-Greywind, a 22-year old pregnant woman from the Spirit Lake Nation who was murdered in 2017. The bill requires the United States to collect and publish statistics on the murder or disappearance of Native women and facilitates sovereign tribal governments’ access to federal crime databases. The bill also requires federal agencies like the Department of Justice to obtain recommendations from tribes on how to protect Native women.
+
+The Senate passed the bill unanimously in 2018, but former Rep. Bob Goodlatte (R-VA) single handedly [blocked a House vote on the legislation](https://www.huffingtonpost.com/entry/bob-goodlatte-abused-native-american-women_us_5c1bf7dbe4b0407e9078b0b7). However, Goodlatte is no longer in Congress, and on January 28, Senators Lisa Murkowski (R-AK) and Catherine Cortez Masto (D-NV) reintroduced Savanna’s Act. Congress must act swiftly to pass this critical legislation to help curb the epidemic of violence against Native women. 

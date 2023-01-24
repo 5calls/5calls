@@ -1,0 +1,10 @@
+---
+title: "Investigate Trump's  Election Interference in Georgia"
+date: 2021-01-04T09:43:18Z
+session: 117
+---
+Since his [decisive defeat](https://www.nbcnews.com/politics/2020-election/blog/2020-11-07-trump-biden-election-results-n1246882) in the 2020 presidential election, Donald Trump has consistently refused to accept his loss. He and his team have mounted scores of [fruitless legal challenges](https://www.businessinsider.com/trump-campaign-lawsuits-election-results-2020-11), [pressured state leaders to ignore electoral results](https://www.nytimes.com/2020/12/08/us/politics/trump-pennsylvania-house-speaker.html), and urged Republican members of Congress to directly [challenge the electoral college’s final vote]( https://www.washingtonpost.com/politics/senators-challenge-election/2021/01/02/81a4e5c4-4c7d-11eb-a9d9-1e3ec4a928b9_story.html). 
+
+On January 2, Donald Trump escalated his desperate attempts to undermine the election with a call to Georgia Secretary of State Brad Raffensperger. During his [hour-long recorded call](https://www.washingtonpost.com/politics/trump-raffensperger-call-transcript-georgia-vote/2021/01/03/2768e0cc-4ddd-11eb-83e3-322644d82356_story.html?itid=lk_inline_manual_3), Trump demanded Raffensperger and his team ignore the Georgia election results and investigate already-debunked claims of voter fraud or face criminal liability. “I just want to find 11,780 votes, which is one more than we have. Because we won the state,” Trump [insisted](https://www.washingtonpost.com/politics/trump-raffensperger-call-georgia-vote/2021/01/03/d45acb92-4dc4-11eb-bda4-615aaefd0555_story.html).  
+
+Donald Trump’s ongoing attempts to overturn election results are an insult to voters and a fundamental threat to free and fair elections in the United States. As legal experts have noted, Trump’s request that Raffensperger “find” votes to change the election outcome [appears to violate both state and federal election laws](https://www.nytimes.com/2021/01/03/us/politics/trump-call-georgia.html). Congress must immediately investigate Trump’s extortionary attempts to subvert democracy.   

@@ -1,0 +1,12 @@
+---
+title: "Protect the Right to Fight Workplace Sexual Harassment - Passed House and Senate"
+date: 2022-02-02T10:21:44Z
+session: 117
+---
+>**UPDATE (02/010/22):** The Senate has passed H.R. 4445. The legislation now moves to President Biden's desk for his signature. 
+
+>**UPDATE (02/07/22):** The House has passed H.R. 4445 with a 335 - 97 vote. The legislation now moves to the Senate for consideration.
+
+Since the beginning of the [Me Too movement](https://www.vox.com/identities/2019/10/4/20852639/me-too-movement-sexual-harassment-law-2019), Americans have been inundated with stories of how high-profile men and women have used their positions of power to [sexually harass](https://www.eeoc.gov/sexual-harassment) and assault others. Sexual assault and harassment allegations have been [levied against people in virtually every industry](https://www.axios.com/global-metoo-movement-convictions-charges-382ff226-7ad3-4b26-ac89-451788192578.html), including chefs, journalists, famous actors, political representatives, business leaders, and others. This massive outpouring of allegations - and businesses' unprecedented willingness to take them seriously - has created a cultural shift in holding harassers accountable for their actions. The long-overdue acknowledgment of the rampant nature of sexual harassment represents an opportunity to enact laws to protect against sexual harassment in the workforce.
+
+The bipartisan Ending Forced Arbitration of Sexual Assault & Sexual Harassment Act has been introduced in both the House [(H.R. 4445)](https://www.congress.gov/bill/117th-congress/house-bill/4445) and the Senate [(S. 2342)](https://www.congress.gov/bill/117th-congress/senate-bill/23420) to bring more accountability to the workplace. The bill would eliminate forced arbitration clauses in employment contracts for sexual harassment and discrimination claims. Forced arbitration clauses are found in [over 50% of American employment contracts](https://www.epi.org/publication/the-growing-use-of-mandatory-arbitration/) and require employees to waive their rights to a jury trial and/or to speak publicly about an incident. Instead, the harassment victim is forced into private meetings, secret settlements, and obligatory non-disclosure agreements. Arbitration clauses are in place to silence victims from coming forward and allow for harassment and assault to continue in the workplace. It is time to bring transparency to workplace sexual harassment claims and to grant victims the right to come forward publicly and in a court of law if they so choose.

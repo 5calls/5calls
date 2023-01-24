@@ -1,0 +1,12 @@
+---
+title: "Support the War Powers Resolution to Stop Trump from Striking Iran - Passed House and Senate"
+date: 2020-01-06T19:45:01Z
+session: 116
+---
+>**UPDATE (03/12/2020):** In a 227 - 186 vote, the House has passed SJ Res 68. The bill now moves to Trump's desk, where he is expected to veto the legislation.
+
+>**UPDATE (02/13/2020):** The Senate has passed [SJ Res 68](https://www.congress.gov/bill/116th-congress/senate-joint-resolution/68) with a [bipartisan vote of 55 to 45](https://www.nytimes.com/2020/02/13/us/politics/iran-war-powers-trump.html). The legislation now moves to the House for final passage. 
+
+Donald Trump dramatically escalated the conflict between Iran and the US by ordering the [assassination of Iranian military leader Qassem Soleimani](https://www.npr.org/2020/01/02/793208096/iraqi-tv-says-top-iranian-military-leader-killed-in-rocket-strikes-on-iraqi-airp) [without congressional approval or support from US allies](https://www.washingtonpost.com/world/us-killing-of-irans-top-commander-rattles-european-allies/2020/01/03/0012822e-2e19-11ea-bffe-020c88b3f120_story.html). Since approving the strike, Trump has continued to exacerbate tensions by issuing ominous threats via Twitter if Iran retaliates. His actions appear to be leading the US into a costly, brutal, and unwanted war with Iran. The sudden escalation of the Iran conflict immediately prior to Trump’s impeachment trial in the Senate casts doubt on Trump’s [stated motivations](https://www.cbsnews.com/news/secretary-of-state-mike-pompeo-says-trump-administration-will-do-our-best-to-provide-details-of-threats-that-justified/) for Soleimani’s killing. [Only Congress holds the power to declare war](https://www.law.cornell.edu/constitution/articlei#section8), but the Trump administration had not even fully briefed Congress on Soleimani’s killing [days after the assassination itself](https://www.politico.com/news/2020/01/06/trump-soleimani-briefing-094713). Congress must act to decisively oppose Trump’s attempts to wage war without congressional approval. 
+ 
+Representative Elissa Slotkin (D-MI) and Senator Tim Kaine (D-VA) have introduced [similar resolutions](https://www.congress.gov/bill/116th-congress/senate-joint-resolution/68) to curtail Trump’s warmongering. Both bills affirm Congress’s war powers by mandating that the Administration’s military hostilities against Iran cease within 30 days unless Congress formally approves further action. Urge your representatives to support these resolutions and prevent a deadly, unconstitutional war against Iran. 

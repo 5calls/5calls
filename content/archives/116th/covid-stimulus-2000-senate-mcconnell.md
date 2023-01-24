@@ -1,0 +1,12 @@
+---
+title: "Demand the Senate Pass $2000 in Direct Stimulus Payments"
+date: 2020-12-29T08:56:40Z
+session: 116
+---
+>**UPDATE (01/03/2021):** On January 3rd, 2021 at 12 noon ET, the 116th US Congress was declared adjourned, and members of the 117th Congress were sworn in. With a new Congress, legislation left unpassed by the last Congress must be reintroduced for consideration, which is now the case with additional COVID stimulus direct payments. Legislation must be reintroduced and passed by the House again and then sent to the Senate. Demand the new Congress make additional COVID stimulus direct payments a first priority in 2021. 
+
+After months of negotiations and failed starts, Congress finally passed [$900B in COVID relief and stimulus](https://www.nytimes.com/2020/12/28/business/economy/second-stimulus-package.html) on December 21st. While this step in the right direction the legislation falls short on many levels, from not providing much needed [assistance to state and local governments]( https://www.washingtonpost.com/us-policy/2020/12/19/stimulus-cuts-city-state-aid/), to a paltry direct payment of $600 to [those who are eligible]( https://abcnews.go.com/Business/600-stimulus-checks/story?id=74933529). 
+
+Over the last 4+ years, Democrats have rarely found themselves on the same side as Donald Trump. However, after the relief legislation passed, Trump [changed his mind](https://www.vox.com/2020/12/23/22197037/trump-2000-stimulus-checks) and decided push for $2000 in direct payments instead of only $600, shocking both Democrats and Republicans alike. House Speaker Pelosi, House Democrats, and some House Republicans agreed that $2000 in direct payments would better serve the public in this time of crisis, and on Monday, December 28th the House passed [HR 9051](https://www.congress.gov/bill/116th-congress/house-bill/9051/), the CASH Act. [The legislation](https://www.cbsnews.com/news/stimulus-check-2000-increase-house-passes-bill/) which passed in a 275-134 vote with 44 Republicans joining Democrats, would add $1400 in direct payments, bringing the total to $2000 per eligible person. 
+
+The final fate of the legislation is now [in the hands of Mitch McConnell and Senate Republicans](https://www.washingtonpost.com/powerpost/stimulus-checks-senate/2020/12/29/344fa850-49d9-11eb-839a-cf4ba7b7c48c_story.html). We must demand they vote and pass the additional direct payments so that the American public can pay bills and feed their children. Demand they pass HR 9051 today.

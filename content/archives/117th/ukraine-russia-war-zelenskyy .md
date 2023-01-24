@@ -1,0 +1,8 @@
+---
+title: "Support the Ukrainian Resistance to the  Russian Invasion"
+date: 2022-03-02T19:11:14Z
+session: 117
+---
+On February 24, 2022, after weeks of warnings from US officials, [Putin invaded Ukraine.](https://www.vox.com/2022/2/23/22948534/russia-ukraine-war-putin-explosions-invasion-explained) For months, Russia amassed troops along their shared border and escalated rhetoric, eventually claiming that Russia must "de-nazify" Ukraine. Ukrainian President Volodymyr Zelenskyy is leading a fierce resistance to this invasion, garnering a breathtaking display of broad world wide support from a multitude of countries, organizations and corporations. In spite of unprecedented financial, diplomatic, technological and social isolation, Putin has continued to ratchet up tensions by putting Russia’s [nuclear deterrent forces on alert](https://www.cnn.com/2022/02/28/politics/russia-nuclear-threats-putin-what-matters/index.html) and [brutally attacking Ukraine](https://www.cnn.com/europe/live-news/ukraine-russia-putin-news-03-01-22/index.html?tab=Catch%20Up) from multiple directions. It is becoming clear that this war will not be short, and the consequences to the Ukrainian people will likely be catastrophic. 
+
+The [United States has acted rapidly](https://www.cfr.org/global-conflict-tracker/conflict/conflict-ukraine) to condemn this war and enacted and coordinated harsh consequences for Russia. President Biden has also reaffirmed the United States will not participate in direct military action, and therefore untenable escalation is off the table. Therefore Congress must continue to take swift and decisive action to help the Ukrainian people and to end this unjust war.

@@ -1,0 +1,10 @@
+---
+title: "Support LGBTQ+ Rights with the Equality Act of 2021  - Passed House"
+date: 2021-02-21T19:14:01Z
+session: 117
+---
+>**UPDATE (02/25/21):** With a final vote of 224 to 206, the House has passed H.R. 5, with three Republicans joining all Democrats voting for the legislation. The bill now moves to be Senate for consideration. 
+
+The Civil Rights Act of 1964 [protects people from discrimination](https://www.loc.gov/exhibits/civil-rights-act/civil-rights-act-of-1964.html) based on race, skin color, sex, religion, and national origin. However, the Act's crucial anti-discrimination provisions do not protect against discrimination based on sexual orientation or gender identity. Thus, in the [29 states without robust LGBTQ anti-discrimination laws](https://www.freedomforallamericans.org/states/), LGBTQ people can legally be fired, harassed at work, barred from businesses, denied housing, and more because of their sexual orientation and/or gender identity. To remedy this issue, Democrats in the House have introduced [H.R. 5,](https://www.congress.gov/bill/117th-congress/house-bill/5) [the Equality Act](https://www.nbcnews.com/feature/nbc-out/house-expected-vote-sweeping-lgbtq-rights-bill-next-week-n1258292).The bill would provide necessary national-level protections for LGBTQ people by updating existing laws, like the Civil Rights Act of 1964, to explicitly ban discrimination based on gender identity and sexual orientation. The law would also revise the Civil Rights Act to ban sex-based discrimination in public spaces and services, such as retail stores, pharmacies, and transit, as well as in federally funded programs. 
+
+While the Equality Act was first introduced in 2015, [polling now demonstrates that majorities of Americans](https://www.prri.org/research/americans-support-protections-lgbt-people/) across nearly all demographic groups, including political party, support nondiscrimination protections for LGBTQ people. We must capitalize on this momentum to secure national-level protections for LGBTQ people and extend protection against sex discrimination beyond federal programs to the private sector.

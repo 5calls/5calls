@@ -1,9 +1,0 @@
----
-title: "Support H.R. 40: Commission to Develop Reparations Proposals"
-date: 2019-07-08T21:00:01-07:00
----
-On June 19th, the House held a hearing on H.R.40, a bill that would launch a commission to study how the government can most effectively pay reparations to African-Americans to mitigate the ongoing damage from racist federal policies. The [racial wealth gap is enormous](https://www.epi.org/blog/the-racial-wealth-gap-how-african-americans-have-been-shortchanged-out-of-the-materials-to-build-wealth/) - black Americans hold only 3% of the nation’s wealth despite being 12-13% of the population, the median wealth of black families is less than 10% of white families, and over 25% of black families have zero or negative net worth. 
-
-[The federal government is responsible for many drivers of this wealth gap](https://www.washingtonpost.com/outlook/reparations-for-slavery-arent-enough-official-racism-lasted-much-longer/2019/06/21/2c0ecbe8-9397-11e9-aadb-74e6b2b46f6a_story.html?utm_term=.2e261e026606), including but not limited to keeping slavery legal until the end of the Civil War, discriminatory housing policies (red-lining so federally-supported mortgages were not available in black neighborhoods), interstate highway design that drove “white flight” and subsequent ghettoization of black neighborhoods in the inner cities, and less funding for predominantly black schools.
-
-This commission would examine the federal government’s responsibility for the ongoing impacts of slavery and racially discriminatory federal policies, and propose financial compensation-based solutions, i.e., reparations. Representatives need to hear from their constituents that we have a responsibility as Americans to examine the impacts of our racist federal policies (past and present), and proactively attempt to repair the damage.

@@ -1,0 +1,10 @@
+---
+title: "Award the Congressional Gold Medal to Officer Eugene Goodman - Needs House Vote"
+date: 2021-01-19T07:44:09Z
+session: 117
+---
+>**UPDATE (02/05/21):** The Senate has passed [S. 35,](https://www.congress.gov/bill/117th-congress/senate-bill/35) identical companion legislation of the House version of the bill. The House must now pass H.R. 305 to award a Congressional Gold Medal to Officer Goodman. 
+
+When Capitol Police officer Eugene Goodman [faced a mob](https://www.washingtonpost.com/local/public-safety/goodman-capitol-police-video/2021/01/13/08ab3eb6-546b-11eb-a931-5b162d0d033d_story.html) of unruly Trump supporters, his quick thinking and experience in high intensity situations proved to be heroic. The events, [captured on video](https://twitter.com/igorbobic/status/1346911809274478594?s=21) show Officer Goodman first attempted to hold the crowd back from advancing up a stairway, and when it became clear he was unable to halt them, Goodman made a critical decision to lead the crowd down corridors and ultimately away from Senate, toward a location where he would have backup. His actions likely averted a violent encounter between the intruders and Senators. Goodman is also an Iraq war veteran serving in the Army XVIII Airborne Corps of the 101 Airborne Division. While Officer Goodman is reluctant to step into the limelight out of concern that he will be targeted by White Supremacists, his actions deserve recognition from the institution that he bravely defended on behalf of all Americans.
+
+Lawmakers introduced [H.R. 305](https://www.congress.gov/bill/117th-congress/house-bill/305) on January 13, 2021 to award Officer Goodman with the Congressional Gold Medal, the “highest expression of national appreciation for [distinguished achievements](https://history.house.gov/Institution/Gold-Medal/Gold-Medal-Recipients/) and contributions.” Congressional Gold Medal legislation must be cosponsored by at least two-thirds of the Members of the House, and the Senate requires that at least 67 Senators to cosponsor. Urge your Representative to support H.R. 305.

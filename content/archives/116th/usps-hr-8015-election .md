@@ -1,0 +1,12 @@
+---
+title: "Demand the Senate Pass Bipartisan USPS House Legislation"
+date: 2020-08-24T21:00:01Z
+session: 116
+---
+With the November presidential election around the corner and the coronavirus pandemic continuing to spread, a record number of voters plan to use mail-in ballots as a safe alternative to voting in person. However, recent changes at the United States Postal Service (USPS) have caused concern that the Trump administration is [deliberately attempting to sabotage delivery service](https://www.politico.com/news/magazine/2020/08/13/trump-usps-postal-service-post-office-history-395024) to undermine usage of vote by mail in the election. 
+
+In May, top GOP and Trump donor Louis DeJoy was [appointed to the USPS as the Postmaster General](https://www.npr.org/2020/05/07/851976464/new-postmaster-general-is-top-gop-fundraiser) even though he has no postal experience. He quickly took steps that have resulted in slower and unpredictable mail service all over the country. These changes have been widespread throughout the USPS and include cutbacks in staffing, restructuring of senior leadership, decommissioning of hundreds of mail sorting machines, and even [the removal of collection boxes](https://www.cnn.com/2020/08/14/politics/usps-removes-letter-collection-boxes-reduces-post-office-operating-hours/index.html). The outcome has caused chaos in the system, with [medication, rotting food, and dead animals](https://www.latimes.com/california/story/2020-08-20/usps-cutbacks-post-office-chaos) stacking up in packages at postal distribution centers. 
+
+To respond to the crisis at the USPS and DeJoy’s politically driven motives, House Democrats, joined by 26 Republicans, [passed legislation blocking any service or operational changes](https://www.npr.org/2020/08/22/905061760/house-approves-bill-that-blocks-changes-at-postal-service-until-after-the-electi) through January at the Postal Service. [The bill](https://www.congress.gov/bill/116th-congress/house-bill/8015) also requires the agency to prioritize delivery of election-related mail and allocates $25 billion in funding to ensure timely mail service. 
+
+Even though a robust Postal Service is necessary not only amid a deadly pandemic, but also during a national election, Mitch McConnell and Senate Republicans have yet to move to help the USPS. Demand they take action immediately and pass [HR 8015](https://www.congress.gov/bill/116th-congress/house-bill/8015). 
