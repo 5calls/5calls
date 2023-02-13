@@ -2,11 +2,8 @@ import React from "react";
 import ReactDOM from "react-dom";
 import firebase from "firebase/app";
 import "firebase/auth";
-import ReactGA from "react-ga";
 import $ from "jquery";
-import { Metric } from "web-vitals";
 
-import reportWebVitals from "./utils/reportWebVitals";
 import Location from "./components/Location";
 import Reps from "./components/Reps";
 import Script from "./components/Script";
@@ -27,8 +24,6 @@ firebase.initializeApp({
   appId: "1:919201105905:web:cb16c071be2bb896dfa650",
 });
 
-ReactGA.initialize("G-J9HQRTM3YS");
-
 // probably move all this actblue stuff into another file
 declare global {
   // actblue injects this object when it loads
@@ -48,13 +43,6 @@ $(() => {
           token: ACTBLUE_EMBED_TOKEN,
           refcodes: ["embed"],
         })
-        .then((contribution) => {
-          ReactGA.event({
-            category: "donate",
-            action: "donated from embed",
-            value: Math.floor(contribution.amount / 10), // convert to whole dollars
-          });
-        });
     }
   });
 });
@@ -141,12 +129,3 @@ const startComponentRenders = () => {
     handleRootRenderError(error, "share");
   }
 };
-
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals(sendToAnalytics);
-
-function sendToAnalytics({ id, name, value }: Metric) {
-  ReactGA.ga("send", "timing", name, id, Math.round(name === "CLS" ? value * 1000 : value));
-}
