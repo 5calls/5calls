@@ -21,9 +21,6 @@
     - title: Troubleshooting
       url: /troubleshooting/
       icon: question-circle
-    - title: Knowledge Base
-      url: https://intercom.help/5calls/en/collections/1497141-using-the-5-calls-website-and-apps
-      icon: book-reader
     - title: Email Us
       url: mailto:hello@5calls.org
       icon: envelope-open-text

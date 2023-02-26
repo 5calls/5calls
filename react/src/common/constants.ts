@@ -19,11 +19,6 @@ export const ACTBLUE_EMBED_TOKEN = "5iuTAwr4Tnr8EvmUeAN5AsoQ";
 export const WRITER_APPLY_URL = "https://airtable.com/shrJBbpixnJ09iVb3";
 export const CODE_PROJECT_URL = "https://github.com/5calls/5calls/wiki/Getting-Involved-with-5-Calls-Development";
 
-export const HELP_SET_LOCATION =
-  "https://intercom.help/5calls/using-the-5-calls-website-and-apps/how-do-i-set-my-location-on-5-calls";
-export const HELP_OTHER_REPRESENTATIVES =
-  "https://intercom.help/5calls/using-the-5-calls-website-and-apps/why-do-i-only-see-some-of-my-representatives";
-
 export const SHARE_BUCKET_URL = "https://shareimages.5calls.org/";
 
 export const zipCodeRegex: RegExp = /^\d{5}(-\d{4})?$/;
