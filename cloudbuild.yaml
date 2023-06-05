@@ -36,6 +36,11 @@ steps:
     tar -C /tmp -xzf /tmp/hugo.tar.gz
     /tmp/hugo -b ${_URL}/
 
+artifacts:
+  objects:
+    location: 'gs://cloud.5calls.org/'
+    paths: ['react/final/*']
+
 substitutions:
   _HUGO_VERSION: 0.112.7
   _URL: https://5calls.org
