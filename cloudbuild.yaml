@@ -1,4 +1,9 @@
 steps:
+# install yarn deps
+- name: node
+  entrypoint: yarn
+  args: ['install']
+
 # run the build step for our react components
 - name: node
   dir: 'react/'
