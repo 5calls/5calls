@@ -17,7 +17,7 @@ steps:
   - '--quiet'
   - '-O'
   - 'hugo.tar.gz'
-  - 'https://github.com/gohugoio/hugo/releases/download/v${_HUGO_VERSION}/hugo_extended_${_HUGO_VERSION}_linux-amd64.tar.gz'
+  - 'https://github.com/gohugoio/hugo/releases/download/v${_HUGO_VERSION}/hugo_${_HUGO_VERSION}_linux-amd64.tar.gz'
   waitFor: ['-']
 
 # build everything together
@@ -31,5 +31,5 @@ steps:
     /tmp/hugo -b ${_URL}/
 
 substitutions:
-  _HUGO_VERSION: 0.74.3
+  _HUGO_VERSION: 0.112.7
   _URL: https://5calls.org
