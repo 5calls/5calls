@@ -1,18 +1,18 @@
 steps:
 # install yarn deps
-- name: node
+- name: node:16
   dir: 'react/'
   entrypoint: yarn
   args: ['install']
 
 # run the build step for our react components
-- name: node
+- name: node:16
   dir: 'react/'
   entrypoint: yarn
   args: ['build-js']
 
 # fetch all the markdown content
-- name: node
+- name: node:16
   dir: 'react/'
   entrypoint: yarn
   args: ['build-content']
