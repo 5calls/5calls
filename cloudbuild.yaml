@@ -1,6 +1,7 @@
 steps:
 # install yarn deps
 - name: node
+  dir: 'react/'
   entrypoint: yarn
   args: ['install']
 
