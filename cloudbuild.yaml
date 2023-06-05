@@ -36,10 +36,10 @@ steps:
     tar -C /tmp -xzf /tmp/hugo.tar.gz
     /tmp/hugo -b ${_URL}/
 
-artifacts:
-  objects:
-    location: 'gs://cloud.5calls.org/'
-    paths: ['react/final/*']
+# push to storage
+- name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+  entrypoint: gcloud
+  args: ['storage', 'cp', '-r', 'react/final/*', 'gs://cloud.5calls.org']
 
 substitutions:
   _HUGO_VERSION: 0.112.7
