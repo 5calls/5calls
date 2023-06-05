@@ -1,0 +1,34 @@
+steps:
+# run the build step for our react components
+- name: node
+  dir: 'react/'
+  entrypoint: yarn
+  args: ['build-js']
+
+# fetch all the markdown content
+- name: node
+  dir: 'react/'
+  entrypoint: yarn
+  args: ['build-content']
+
+# get the hugo binary
+- name: 'gcr.io/cloud-builders/wget'
+  args:
+  - '--quiet'
+  - '-O'
+  - 'hugo.tar.gz'
+  - 'https://github.com/gohugoio/hugo/releases/download/v${_HUGO_VERSION}/hugo_extended_${_HUGO_VERSION}_linux-amd64.tar.gz'
+  waitFor: ['-']
+
+# build everything together
+- name: 'ubuntu:22.04'
+  args:
+  - 'bash'
+  - '-c'
+  - |
+    mv hugo.tar.gz /tmp
+    tar -C /tmp -xzf /tmp/hugo.tar.gz
+    /tmp/hugo -b $URL/
+
+substitutions:
+  _HUGO_VERSION: 0.74.3

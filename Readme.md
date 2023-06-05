@@ -10,7 +10,7 @@ Hi there! Are you here to find out how you can volunteer your time to help with 
 
 ## how the site works
 
-...
+...well
 
 ## building
 
@@ -28,6 +28,10 @@ For development:
   - `hugo` will build the site and content, placing the final built site in `public/`
 
 This happens automatically for production via netlify but you will have to run manually for local installs.
+
+## deployment
+
+New versions are deployed to a google cloud storage bucket automatically with `main` via github actions.
 
 ## archived content
 
