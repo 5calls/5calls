@@ -28,7 +28,8 @@ steps:
   - |
     mv hugo.tar.gz /tmp
     tar -C /tmp -xzf /tmp/hugo.tar.gz
-    /tmp/hugo -b $URL/
+    /tmp/hugo -b ${_URL}/
 
 substitutions:
   _HUGO_VERSION: 0.74.3
+  _URL: https://5calls.org
