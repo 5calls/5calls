@@ -37,9 +37,8 @@ steps:
     /tmp/hugo -b ${_URL}/
 
 # push to storage
-- name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
-  entrypoint: gcloud
-  args: ['storage', 'cp', '-r', 'react/final/*', 'gs://cloud.5calls.org']
+- name: 'gcr.io/cloud-builders/gsutil'
+  args: ['-m', 'rsync', '-r', '-d', 'react/final/*', 'gs://cloud.5calls.org']
 
 substitutions:
   _HUGO_VERSION: 0.112.7
