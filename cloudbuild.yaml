@@ -38,7 +38,7 @@ steps:
 
 # push to storage
 - name: 'gcr.io/cloud-builders/gsutil'
-  args: ['-m', 'rsync', '-r', '-d', 'react/final/*', 'gs://cloud.5calls.org']
+  args: ['-m', 'rsync', '-d', '-r', 'react/final', 'gs://cloud.5calls.org']
 
 substitutions:
   _HUGO_VERSION: 0.112.7
