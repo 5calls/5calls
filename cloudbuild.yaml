@@ -40,6 +40,11 @@ steps:
 - name: 'gcr.io/cloud-builders/gsutil'
   args: ['-m', 'rsync', '-d', '-r', 'react/final', 'gs://cloud.5calls.org']
 
+# invalidate issue cache
+- name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+  entrypoint: gcloud
+  args: ['compute', 'url-maps', 'invalidate-cdn-cache', 'web-balancer', '--path', '/issue/*', '--async']
+
 substitutions:
   _HUGO_VERSION: 0.112.7
   _URL: https://5calls.org
