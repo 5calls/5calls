@@ -10,6 +10,7 @@ import * as Constants from "../common/constants";
 import { OutcomeData } from "../common/models/contactEvent";
 import { UserCallDetails } from "../common/models/userStats";
 import { CompletionMap } from "../state/completedState";
+import uuid from "./uuid";
 
 const prepareHeaders = async (): Promise<Headers> => {
   const idToken = await firebase.auth().currentUser?.getIdTokenResult();
@@ -31,6 +32,9 @@ export const noLocationError = Error("no location entered");
 
 interface ContactResponse {
   location: string;
+  lowAccuracy: boolean;
+  state: string;
+  district: string;
   representatives: Contact[];
 }
 
@@ -51,9 +55,14 @@ export const getContacts = async (location: string, areas: string = ""): Promise
     })
     .then((result) => {
       const contactList = new ContactList();
+      contactList.lowAccuracy = result.data.lowAccuracy;
       contactList.location = result.data.location;
       contactList.representatives = result.data.representatives;
-      OneSignal.sendTag("districtID", contactList.generalizedLocationID);
+      contactList.state = result.data.state;
+      contactList.district = result.data.district
+      if (contactList.generalizedLocationID() !== "-") {
+        OneSignal.sendTag("districtID", contactList.generalizedLocationID());
+      }
       return Promise.resolve(contactList);
     })
     .catch((error) => {
@@ -105,6 +114,7 @@ export const postOutcomeData = async (data: OutcomeData) => {
     contactid: data.contactId,
     issueid: data.issueId,
     via: data.via,
+    callerid: uuid.callerID(),
   });
 
   const headers = await prepareHeaders();
