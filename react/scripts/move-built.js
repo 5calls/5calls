@@ -21,7 +21,7 @@ files = globSync("build/static/js/*.{js,js.map}")
 files.forEach((file) => {
   let basename = path.basename(file);
   console.log(`moving ${basename}`)
-  fs.rename(file, `../assets/js/${basename}`, (err) => {
+  fs.rename(file, `../static/js/${basename}`, (err) => {
     if (err) {
       console.log("js move err:", err);
     }
