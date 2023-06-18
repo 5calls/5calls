@@ -13,6 +13,7 @@ import StateProvider from "./state/stateProvider";
 import "./utils/staticUtils";
 import { ACTBLUE_EMBED_TOKEN } from "./common/constants";
 import { ActBlue } from "./common/models/actblue";
+import OneSignal from 'react-onesignal';
 
 firebase.initializeApp({
   apiKey: "AIzaSyCqbgwuM82Z4a3oBzzmPgi-208UrOwIgAA",
@@ -23,6 +24,8 @@ firebase.initializeApp({
   messagingSenderId: "919201105905",
   appId: "1:919201105905:web:cb16c071be2bb896dfa650",
 });
+
+OneSignal.init({ appId: '5fd4ca41-9f6c-4149-a312-ae3e71b35c0e' });
 
 // probably move all this actblue stuff into another file
 declare global {

@@ -2,6 +2,7 @@ import axios from "axios";
 import * as querystring from "querystring";
 import firebase from "firebase/app";
 import "firebase/auth";
+import OneSignal from 'react-onesignal';
 
 import { Contact } from "../common/models/contact";
 import { ContactList } from "../common/models/contactList";
@@ -52,6 +53,7 @@ export const getContacts = async (location: string, areas: string = ""): Promise
       const contactList = new ContactList();
       contactList.location = result.data.location;
       contactList.representatives = result.data.representatives;
+      OneSignal.sendTag("districtID", contactList.generalizedLocationID);
       return Promise.resolve(contactList);
     })
     .catch((error) => {

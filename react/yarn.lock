@@ -9742,6 +9742,11 @@ react-markdown@^5.0.3:
     unist-util-visit "^2.0.0"
     xtend "^4.0.1"
 
+react-onesignal@^2.0.4:
+  version "2.0.4"
+  resolved "https://registry.yarnpkg.com/react-onesignal/-/react-onesignal-2.0.4.tgz#d3bf7e4ff4c176b542ff4a2fa2a67a899dbb5472"
+  integrity sha512-llZ4PV1+EsWWZDt0BRils6gAxaxMoYP0Z3rlNivQy4xqUaiO1/PcRaIJ6CuzCci/koDsw5IzLOXEHlV4Yn+d9Q==
+
 react-refresh@^0.8.3:
   version "0.8.3"
   resolved "https://registry.yarnpkg.com/react-refresh/-/react-refresh-0.8.3.tgz#721d4657672d400c5e3c75d063c4a85fb2d5d68f"
