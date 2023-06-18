@@ -25,7 +25,7 @@ firebase.initializeApp({
   appId: "1:919201105905:web:cb16c071be2bb896dfa650",
 });
 
-OneSignal.init({ appId: '5fd4ca41-9f6c-4149-a312-ae3e71b35c0e' });
+OneSignal.init({ appId: '5fd4ca41-9f6c-4149-a312-ae3e71b35c0e', serviceWorkerPath: '/js/' });
 
 // probably move all this actblue stuff into another file
 declare global {
