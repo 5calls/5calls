@@ -1,31 +1,27 @@
 const fs = require("fs");
 const fsExtra = require("fs-extra");
-const glob = require("glob");
+const { globSync } = require("glob");
 const path = require("path");
 
-fsExtra.emptyDirSync("../assets/js/");
-// if we have other static js in the future we're going to need to selectively delete here
-fsExtra.emptyDirSync("../static/js/");
+fsExtra.ensureDir("../static/js/");
+fsExtra.ensureDir("../assets/js/");
 
-// moves generated js files to the assets directory in hugo
-glob("build/static/js/*.js", {}, function (er, files) {
+// remove any existing generated files from this dir, though in prod it should be clean
+globSync("build/static/js/*.{js,js.map}", {}, (_, files) => {
+  files.forEach((file) => {
+    if (file.endsWith('chunk.js') || file.endsWith('chunk.js.map') || file.startsWith('runtime-main')) {
+      fsExtra.removeSync(file);
+    }
+  })
+})
+
+// moves js and map files to the assets directory in hugo
+globSync("build/static/js/*.{js,js.map}", {}, (_, files) => {
   files.forEach((file) => {
     let basename = path.basename(file);
     fs.rename(file, `../assets/js/${basename}`, (err) => {
       if (err) {
-        console.log("move err:", err);
-      }
-    });
-  });
-});
-
-// move js.map files to static so they get published, but not processed
-glob("build/static/js/*.js.map", {}, function (er, files) {
-  files.forEach((file) => {
-    let basename = path.basename(file);
-    fs.rename(file, `../static/js/${basename}`, (err) => {
-      if (err) {
-        console.log("map move err:", err);
+        console.log("js move err:", err);
       }
     });
   });
