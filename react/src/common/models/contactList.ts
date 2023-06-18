@@ -12,10 +12,16 @@ export enum ContactArea {
 
 export class ContactList {
   public location: string;
+  public lowAccuracy: boolean;
+  public state: string;
+  public district: string;
   public representatives: Contact[];
 
   constructor() {
     this.location = "";
+    this.lowAccuracy = false;
+    this.state = "";
+    this.district = "";
     this.representatives = [];
   }
 
@@ -50,5 +56,9 @@ export class ContactList {
   }
   public attyGeneral(): Contact[] {
     return this.representatives.filter((contact) => contact.area === "AttorneyGeneral");
+  }
+
+  public generalizedLocationID(): string {
+    return `${this.state}-${this.district}`
   }
 }
