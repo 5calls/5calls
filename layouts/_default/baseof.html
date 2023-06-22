@@ -83,17 +83,6 @@
     {{ $js := resources.Match "js/*.js" }} {{ range $js }}
     <script type="text/javascript" src="{{ .RelPermalink }}" defer></script>
     {{ end }}
-    <!-- Global site tag (gtag.js) - Google Analytics -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-J9HQRTM3YS"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag() {
-        dataLayer.push(arguments);
-      }
-      gtag("js", new Date());
-
-      gtag("config", "G-J9HQRTM3YS");
-    </script>
     <script src="https://secure.actblue.com/cf/assets/actblue.js" async></script>
     <script src="//d2wy8f7a9ursnm.cloudfront.net/v7/bugsnag.min.js"></script>
     <script>
@@ -103,7 +92,7 @@
         /* nbd, sometimes this fails if bugsnag is blocked by ad blockers */
       }
     </script>
-    <script defer data-domain="5calls.org" src="https://plausible.io/js/script.js"></script>
+    <script defer data-domain="5calls.org" src="https://plausible.io/js/script.tagged-events.js"></script>
   </head>
   <body class="{{ block `bodyclass` . }}{{ end }}">
     <div class="site">{{ partial "header.html" . }} {{ block "main" . }}{{ end }} {{ partial "footer.html" . }}</div>

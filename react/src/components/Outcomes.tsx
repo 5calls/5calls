@@ -42,8 +42,9 @@ class Outcomes extends React.Component<Props, State> {
         <h3>Select your call result to show the next representative:</h3>
         <div className="outcomes-items">
           {this.state.outcomes.map((outcome) => {
+            const eventClassName = `plausible-event-name=Outcome-${outcome}`
             return (
-              <button key={outcome} onClick={() => this.next(outcome)}>
+              <button className={eventClassName} key={outcome} onClick={() => this.next(outcome)}>
                 {outcome}
               </button>
             );
