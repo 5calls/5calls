@@ -28,7 +28,7 @@ class PhoneSubscribe extends React.Component<Props, State> {
         placeholder="Phone number"      
         onChange={(phoneValue) => { this.setState({ validPhone: phoneValue ? isValidPhoneNumber(phoneValue) : false, phone: phoneValue ? phoneValue : "" }) }}
         />
-        <button disabled={!this.state.validPhone} onClick={() => { OneSignal.setSMSNumber(this.state.phone).then(() => { this.setState({ submitted: true }) }) }}>Subscribe</button>
+        <button className="plausible-event-name=phone-subscribe" disabled={!this.state.validPhone} onClick={() => { OneSignal.setSMSNumber(this.state.phone).then(() => { this.setState({ submitted: true }) }) }}>Subscribe</button>
       </React.Fragment>)  
     }
   }
