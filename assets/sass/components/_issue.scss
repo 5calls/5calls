@@ -344,7 +344,8 @@ body.issue {
     grid-column: 1;
 
     p {
-      margin: 0;
+      margin: 0 0 10px 0;
+      font-size: 1.2rem;
     }
 
     blockquote {
@@ -373,6 +374,10 @@ body.issue {
       color: #fff;
       border-radius: 6px;
       cursor: pointer;
+
+      &:disabled {
+        opacity: 0.33;
+      }
     }
 
     h5 {

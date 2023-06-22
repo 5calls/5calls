@@ -15,6 +15,7 @@ import { ACTBLUE_EMBED_TOKEN } from "./common/constants";
 import { ActBlue } from "./common/models/actblue";
 import OneSignal from 'react-onesignal';
 import uuid from "./utils/uuid";
+import PhoneSubscribe from "./components/PhoneSubscribe";
 
 firebase.initializeApp({
   apiKey: "AIzaSyCqbgwuM82Z4a3oBzzmPgi-208UrOwIgAA",
@@ -27,9 +28,6 @@ firebase.initializeApp({
 });
 
 OneSignal.init({ appId: '5fd4ca41-9f6c-4149-a312-ae3e71b35c0e', path: '/js/', serviceWorkerParam: { scope: '/js/' } }).then(() => {
-  OneSignal.on('subscriptionChange', function(isSubscribed) {
-    console.log("The user's subscription state is now:", isSubscribed);
-  });
   OneSignal.setExternalUserId(uuid.callerID());
 });
 
@@ -136,5 +134,11 @@ const startComponentRenders = () => {
     ReactDOM.render(<Share />, document.getElementById("react-share"));
   } catch (error) {
     handleRootRenderError(error, "share");
+  }
+
+  try {
+    ReactDOM.render(<PhoneSubscribe />, document.getElementById("react-phone"));
+  } catch (error) {
+    handleRootRenderError(error, "phone");
   }
 };
