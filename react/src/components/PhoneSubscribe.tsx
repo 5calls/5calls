@@ -1,5 +1,4 @@
 import React from "react";
-import ReactDOM from "react-dom";
 import OneSignal from "react-onesignal";
 import Input, { isValidPhoneNumber } from "react-phone-number-input/input";
 
