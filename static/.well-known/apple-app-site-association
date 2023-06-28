@@ -13,7 +13,7 @@
                {
                   "/": "/issue/*",
                   "comment": "Matches any URL whose path starts with /issue/"
-               },
+               }
              ]
            }
        ]
