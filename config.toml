@@ -1,11 +1,11 @@
 baseURL = "https://5calls.org/"
-# disableKinds = ["taxonomy"]
+disableKinds = ["taxonomy"]
 ignoreErrors = ["error-disable-taxonomy"]
 languageCode = "en-us"
 publishDir = "react/final/"
 title = "5 Calls"
 [params]
-description = "Spend 5 minutes. Make 5 calls. Make your voice heard."
+  description = "Spend 5 minutes. Make 5 calls. Make your voice heard."
 [permalinks]
-done = "/issue/:filename/done/"
-issue = "/issue/:filename/"
+  done = "/issue/:filename/done/"
+  issue = "/issue/:filename/"
