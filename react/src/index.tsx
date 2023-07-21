@@ -31,11 +31,12 @@ OneSignal.init({ appId: '5fd4ca41-9f6c-4149-a312-ae3e71b35c0e', path: '/js/', se
   OneSignal.setExternalUserId(uuid.callerID());
 });
 
-// probably move all this actblue stuff into another file
 declare global {
-  // actblue injects this object when it loads
   interface Window {
+    // actblue injects this object when it loads
     actblue?: ActBlue;
+    // available on apple platforms that support apple pay, does not mean the user has a card set up
+    ApplePaySession?: any;
   }
 }
 
@@ -45,11 +46,18 @@ $(() => {
     if (window.actblue && window.actblue.__initialized) {
       // double check that actblue has loaded, if it has, prevent that click
       e.preventDefault();
-      window.actblue
+
+      // actblue express does not have apple pay support, see if directing apple pay-capable browsers
+      // to an actblue window makes a difference in donations
+      if (window.ApplePaySession) {
+        window.fivecalls.openDonate(25, "applepay")
+      } else {
+        window.actblue
         .requestContribution({
           token: ACTBLUE_EMBED_TOKEN,
           refcodes: ["embed",uuid.callerID()],
         })
+      }
     }
   });
 });
