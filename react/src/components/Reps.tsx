@@ -76,7 +76,11 @@ class Reps extends React.Component<Props & WithLocationProps & WithCompletedProp
           .getElementById("reps-header")
           ?.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "start" });
       } else {
-          window.location.pathname = window.location.pathname + "/done/";
+          // if we load the next page too soon, the previous outcome is sometimes skipped
+          // 300ms is something arbitrary I picked
+          setTimeout(() => {
+            window.location.pathname = window.location.pathname + "/done/";
+          }, 300);
       }
     });
   }
