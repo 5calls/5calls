@@ -48,7 +48,7 @@ const buildContent = async () => {
     })
     .catch((error) => {
       console.error(`couldn't fetch issues: ${error}`);
-      throw "error getting issues";
+      throw new Error("error getting issues");
     });
 };
 
