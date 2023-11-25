@@ -16,6 +16,7 @@ import { ActBlue } from "./common/models/actblue";
 import OneSignal from 'react-onesignal';
 import uuid from "./utils/uuid";
 import PhoneSubscribe from "./components/PhoneSubscribe";
+import CallCount from "./components/CallCount";
 
 firebase.initializeApp({
   apiKey: "AIzaSyCqbgwuM82Z4a3oBzzmPgi-208UrOwIgAA",
@@ -148,5 +149,11 @@ const startComponentRenders = () => {
     ReactDOM.render(<PhoneSubscribe />, document.getElementById("react-phone"));
   } catch (error) {
     handleRootRenderError(error, "phone");
+  }
+
+  try {
+    ReactDOM.render(<CallCount />, document.getElementById("react-call-count"));
+  } catch (error) {
+    handleRootRenderError(error, "call-count");
   }
 };
