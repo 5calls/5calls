@@ -32,8 +32,6 @@
         </p>
 
         <p class="founders-social">
-          <a href="https://twitter.com/nickoneill"><i class="fa fa-twitter"></i> @nickoneill</a>
-          <a href="https://twitter.com/syntheticmethod"><i class="fa fa-twitter"></i> @syntheticmethod</a>
           <a href="mailto:nick@5calls.org"><i class="fa fa-envelope-open-text"></i> nick@5calls.org</a>
           <a href="mailto:rebecca@5calls.org"><i class="fa fa-envelope-open-text"></i> rebecca@5calls.org</a>
         </p>
@@ -59,7 +57,7 @@
         <p>
           {{ if .socialLink }}
           <a href="{{ .socialLink }}"
-            ><i class="fa fa-{{ default `twitter` .socialService }}"></i> @{{ .socialUsername }}</a
+            ><i class="fa fa-brands fa-{{ default `twitter` .socialService }}"></i> @{{ .socialUsername }}</a
           >
           {{ end }}
         </p>
@@ -81,7 +79,7 @@
 
   <div class="g g-3up a-ctr">
     <div class="card">
-      <i class="fa fa-twitter"></i>
+      <i class="fa fa-brands fa-twitter"></i>
       <strong>DM us on Twitter</strong>
       <p>Message <a href="https://twitter.com/make5calls">@make5calls</a></p>
     </div>
@@ -93,7 +91,7 @@
     </div>
 
     <div class="card">
-      <i class="fa fa-github"></i>
+      <i class="fa fa-brands fa-github"></i>
       <strong>Contribute on GitHub</strong>
       <p>
         Browse our starter issues for
