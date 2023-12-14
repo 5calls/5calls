@@ -67,6 +67,12 @@
       avatar: /images/vols/patrick.jpg
       socialUsername: mccarron
       socialLink: https://twitter.com/mccarron
+
+    - name: Christopher Selin
+      avatar: /images/vols/cselin.jpg
+      socialService: linkedin
+      socialUsername: cselin
+      socialLink: https://www.linkedin.com/in/christopher-selin-b8873b7/
   fullListUrl: https://github.com/5calls/ios/graphs/contributors
 
 - title: "Android"
