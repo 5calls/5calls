@@ -73,6 +73,11 @@
       socialService: linkedin
       socialUsername: cselin
       socialLink: https://www.linkedin.com/in/christopher-selin-b8873b7/
+
+    - name: Heather Haindel
+      socialService: github
+      socialUsername: heathermh
+      socialLink: https://github.com/heathermh
   fullListUrl: https://github.com/5calls/ios/graphs/contributors
 
 - title: "Android"
