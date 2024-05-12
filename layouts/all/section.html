@@ -3,7 +3,7 @@
   <div class="g">
     {{ partial "sidebar.html" . }}
     <div class="archive-wrapper">
-      <h2>All active topics</h2>
+      <h1>All active topics</h1>
       <!-- prettier-ignore -->
       {{ range $taxonomyname, $taxonomy := .Site.Taxonomies }}
       {{ if eq "categories" $taxonomyname }}

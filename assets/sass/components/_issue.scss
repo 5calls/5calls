@@ -313,6 +313,12 @@ body.issue {
 // done is a kind of issue page
 
 .done-wrapper {
+  h1 {
+    font-size: 1.3rem;
+    font-weight: normal;
+    text-align: left;
+    margin-bottom: 0;
+  }
   h2 {
     margin: 0;
     text-align: left;

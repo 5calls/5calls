@@ -4,7 +4,7 @@
     {{ .Scratch.Set "category" .Data.Term }}
     {{ partial "sidebar-category.html" . }}
     <div class="archive-wrapper">
-      <h2>{{ .Data.Term }} topics</h2>
+      <h1>{{ .Data.Term }} topics</h1>
       <!-- prettier-ignore -->
       <ul>
         {{ range $index, $page := .Pages }}
