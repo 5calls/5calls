@@ -4,7 +4,7 @@
     {{ partial "sidebar.html" . }}
     <div class="issue-wrapper">
       <div class="issue-content">
-        <h2>{{ .Title }}</h2>
+        <h1>{{ .Title }}</h1>
         <h4 class="archive-note">
           <i class="fas fa-exclamation-circle"></i>This content is archived from the {{ .Params.session }}th Congress {{ if eq .Params.session 116 }}(2019-2020){{ else }}(2021-2022){{ end }} and is
           no longer callable, we've provided this copy to remember the topics that you've called on during prevous
