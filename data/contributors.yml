@@ -17,8 +17,9 @@
 
     - name: Rachel Perkins
       avatar: /images/vols/pie.png
-      socialUsername: djpiebob
-      socialLink: https://twitter.com/djpiebob
+      socialUsername: "piebob@metasocial.com"
+      socialLink: https://metasocial.com/@piebob
+      socialService: mastodon
 
     - name: Eleanor Wertman
       avatar: /images/vols/eleanor.png
