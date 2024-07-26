@@ -2,8 +2,9 @@
   volunteers:
     - name: Rati Gupta
       avatar: /images/vols/rati.png
-      socialUsername: theRati
-      socialLink: https://twitter.com/theRati
+      socialUsername: ratigupta
+      socialLink: https://www.threads.net/@ratigupta
+      socialService: threads
 
     - name: Jess Irvine
       avatar: /images/vols/jess.png
