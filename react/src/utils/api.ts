@@ -193,3 +193,13 @@ export const postEmail = (email: string, sub: boolean, idToken: string): Promise
     .then((response) => Promise.resolve(true))
     .catch((e) => Promise.reject(e));
 };
+
+export const postAPIEmail = (email: string): Promise<Boolean> => {
+  const postData = querystring.stringify({
+    email: email,
+  });
+  return axios
+    .post(Constants.API_TOKEN_URL, postData)
+    .then((response) => Promise.resolve(true))
+    .catch((e) => Promise.reject(e));
+};

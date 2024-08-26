@@ -17,6 +17,7 @@ import OneSignal from 'react-onesignal';
 import uuid from "./utils/uuid";
 import PhoneSubscribe from "./components/PhoneSubscribe";
 import CallCount from "./components/CallCount";
+import APIForm from "./components/APIForm";
 
 firebase.initializeApp({
   apiKey: "AIzaSyCqbgwuM82Z4a3oBzzmPgi-208UrOwIgAA",
@@ -155,5 +156,11 @@ const startComponentRenders = () => {
     ReactDOM.render(<CallCount />, document.getElementById("react-call-count"));
   } catch (error) {
     handleRootRenderError(error, "call-count");
+  }
+
+  try {
+    ReactDOM.render(<APIForm />, document.getElementById("api-form"));
+  } catch (error) {
+    handleRootRenderError(error, "api-form");
   }
 };

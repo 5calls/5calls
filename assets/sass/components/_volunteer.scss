@@ -30,3 +30,29 @@
     width: 25%;
   }
 }
+
+// representatives API tacked on here
+
+.token-request {
+  h2 {
+    margin-bottom: 0;
+  }
+  p {
+    font-size: 1.1rem;
+  }
+  .react-container {
+    margin-top: 20px;
+
+    .error {
+      color: red;
+    }
+
+    input {
+      width: 300px;
+      margin: 0 auto 8px auto;
+    }
+    button {
+      width: 300px;
+    }
+  }
+}
