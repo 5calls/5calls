@@ -1,5 +1,17 @@
-.content2025 p {
-  font-size: 1.1em;
+.content2025 {
+  h2 {
+    margin-top: 20px;
+  }
+  h2.h3 {
+    font-size: 1.3em;
+    text-align: left;
+  }
+  p {
+    font-size: 1.1em;
+  }
+  .step {
+    margin-bottom: 2rem;
+  }
 }
 
 .volunteer-wrapper {
