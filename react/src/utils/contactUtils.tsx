@@ -23,6 +23,7 @@ const allContacts = (contactList: ContactList): Contact[] => {
   contacts.push(...contactList.senateReps());
   contacts.push(...contactList.stateLower());
   contacts.push(...contactList.stateUpper());
+  contacts.push(...contactList.governor());
 
   return contacts;
 };
