@@ -18,6 +18,7 @@ import uuid from "./utils/uuid";
 import PhoneSubscribe from "./components/PhoneSubscribe";
 import CallCount from "./components/CallCount";
 import APIForm from "./components/APIForm";
+import Settings from "./components/Settings";
 
 firebase.initializeApp({
   apiKey: "AIzaSyCqbgwuM82Z4a3oBzzmPgi-208UrOwIgAA",
@@ -162,5 +163,13 @@ const startComponentRenders = () => {
     ReactDOM.render(<APIForm />, document.getElementById("api-form"));
   } catch (error) {
     handleRootRenderError(error, "api-form");
+  }
+
+  try {
+    ReactDOM.render(
+    <Settings />,
+    document.getElementById("react-settings"));
+  } catch (error) {
+    handleRootRenderError(error, "settings");
   }
 };
