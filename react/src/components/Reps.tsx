@@ -10,8 +10,12 @@ import { withCompleted, withLocation } from "../state/stateProvider";
 import { getContacts, postOutcomeData } from "../utils/api";
 import ContactUtils from "../utils/contactUtils";
 import ActiveContact from "./ActiveContact";
+import { useSettings } from "../utils/useSettings";
 
-interface Props {}
+interface Props {
+  callingGroup?: string;
+}
+
 interface State {
   areas: string[];
   issueId: string;
@@ -19,9 +23,15 @@ interface State {
   activeContactIndex: number;
 }
 
+const RepsWithSettings = (props: Props & WithLocationProps & WithCompletedProps) => {
+  const { callingGroup } = useSettings();
+  return <Reps {...props} callingGroup={callingGroup} />;
+};
+
 class Reps extends React.Component<Props & WithLocationProps & WithCompletedProps, State> {
   _defaultAreas: string[] = [];
   _defaultContactList: ContactList | undefined = undefined;
+  private callingGroup: string = '';
   state = {
     areas: this._defaultAreas,
     issueId: "0000",
@@ -63,6 +73,7 @@ class Reps extends React.Component<Props & WithLocationProps & WithCompletedProp
           issueId: this.state.issueId,
           contactId: currentContact?.id ?? "no-contact-id",
           via: viaParameter,
+          group: this.props.callingGroup,
         };
         postOutcomeData(outcomeData);
         this.props.setNeedsCompletionFetch(true);
@@ -186,4 +197,4 @@ class Reps extends React.Component<Props & WithLocationProps & WithCompletedProp
   }
 }
 
-export default withLocation(withCompleted(Reps));
+export default withLocation(withCompleted(RepsWithSettings));

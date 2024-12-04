@@ -115,6 +115,7 @@ export const postOutcomeData = async (data: OutcomeData) => {
     issueid: data.issueId,
     via: data.via,
     callerid: uuid.callerID(),
+    ...(data.group ? { group: data.group } : {}),
   });
 
   const headers = await prepareHeaders();

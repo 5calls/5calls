@@ -33,4 +33,6 @@ export interface OutcomeData {
   contactId: string;
   via?: string; // added in submitOutcome()
   userId?: string; // added in submitOutcome()
+  group?: string;
+
 }
