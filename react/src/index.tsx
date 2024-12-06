@@ -19,6 +19,7 @@ import PhoneSubscribe from "./components/PhoneSubscribe";
 import CallCount from "./components/CallCount";
 import APIForm from "./components/APIForm";
 import Settings from "./components/Settings";
+import GroupCallCount from "./components/GroupCallCount";
 
 firebase.initializeApp({
   apiKey: "AIzaSyCqbgwuM82Z4a3oBzzmPgi-208UrOwIgAA",
@@ -172,4 +173,22 @@ const startComponentRenders = () => {
   } catch (error) {
     handleRootRenderError(error, "settings");
   }
+
+  try {
+    const groupId = getGroupFromPath();
+    if (groupId) {
+      ReactDOM.render(
+        <GroupCallCount group={groupId} />,
+        document.getElementById("react-groupcounts")
+      );
+    }
+  } catch (error) {
+    handleRootRenderError(error, "group-counts");
+  }
+};
+
+const getGroupFromPath = (): string | null => {
+  const path = window.location.pathname;
+  const match = path.match(/\/groups\/([^\/]+)\/?$/);
+  return match ? match[1] : null;
 };

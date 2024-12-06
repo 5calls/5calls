@@ -82,31 +82,22 @@ export const getCountData = (): Promise<CountData> => {
     .catch((e) => Promise.reject(e));
 };
 
-// export interface RemoteUserStats {
-//   stats: CallStats;
-//   weeklyStreak: number;
-// }
+export interface IssueCount {
+  name: string;
+  count: number;
+}
 
-// export interface CallStats {
-//   contact: number;
-//   voicemail: number;
-//   unavailable: number;
-// }
+export interface GroupCounts {
+  total: number;
+  issueCounts: IssueCount[];
+}
 
-// export const getUserStats = (idToken: string) => {
-//   return axios
-//     .get(`${Constants.STATS_API_URL}`, {
-//       headers: {
-//         Authorization: "Bearer " + idToken,
-//         "Content-Type": "application/json; charset=utf-8",
-//       },
-//     })
-//     .then((response) => {
-//       let userData = response.data as RemoteUserStats;
-//       return Promise.resolve(userData);
-//     })
-//     .catch((e) => Promise.reject(e));
-// };
+export const getGroupCountData = (group: string): Promise<GroupCounts> => {
+  return axios
+    .get(`${Constants.REPORT_API_URL}?group=${encodeURIComponent(group)}`)
+    .then((response) => Promise.resolve(response.data))
+    .catch((e) => Promise.reject(e));
+};
 
 export const postOutcomeData = async (data: OutcomeData) => {
   const postData = querystring.stringify({
