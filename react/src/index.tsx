@@ -189,6 +189,7 @@ const startComponentRenders = () => {
 
 const getGroupFromPath = (): string | null => {
   const path = window.location.pathname;
+  //eslint-disable-next-line
   const match = path.match(/\/groups\/([^\/]+)\/?$/);
   return match ? match[1] : null;
 };
