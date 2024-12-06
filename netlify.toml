@@ -29,6 +29,13 @@ from = "/more"
 status = 301
 to = "/all/"
 
+# fake dynamic paths for group pages
+[[redirects]]
+from = "/groups/*"
+to = "/groups/index.html"
+status = 200
+force = true
+
 [[redirects]]
 from = "/issue/abortion-access-legislation-scotus"
 to = "/issue/abortion-scotus-roe-wade-dobbs/"
