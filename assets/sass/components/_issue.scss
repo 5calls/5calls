@@ -238,16 +238,34 @@ body.issue {
     margin: 30px auto 24px auto;
     padding: 0;
 
+    &.outcomes-float {
+      position: sticky;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background-color: #fff;
+      margin: 0;
+      box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.1);
+      z-index: 10;
+    }
+
     h3 {
-      font-weight: bold;
+      font-weight: 500;
       font-size: 1.4rem;
       text-align: left;
-      margin-bottom: 10px;
+      margin: 0 4px;
+      padding: 10px 0;
     }
 
     &-items {
       display: flex;
       flex-wrap: wrap;
+
+      @media (max-width: 768px) {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 4px;
+      }
 
       button {
         text-transform: uppercase;
@@ -282,8 +300,10 @@ body.issue {
           box-shadow: 0 0 0 0.2rem fade-out(rgb(24, 117, 209), 0.4);
         }
 
-        @include bp(small) {
+        @media (max-width: 768px) {
           font-size: 1.2rem;
+          flex-basis: auto;
+          margin: 0;
         }
 
         @include bp(medium) {

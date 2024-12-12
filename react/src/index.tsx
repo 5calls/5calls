@@ -100,6 +100,36 @@ firebase.auth().onAuthStateChanged((user) => {
 });
 
 const startComponentRenders = () => {
+  const setupOutcomesFloating = () => {
+    const scriptElement = document.getElementById('react-script');
+    const outcomesElement = document.getElementById('react-outcomes');
+    
+    if (scriptElement && outcomesElement) {
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting || entry.boundingClientRect.top <= 0) {
+              // Add class when script is in view or above viewport
+              outcomesElement.classList.add('outcomes-float');
+            } else if (entry.boundingClientRect.top > 0) {
+              // Remove class when script is below viewport
+              outcomesElement.classList.remove('outcomes-float');
+            }
+          });
+        },
+        {
+          threshold: 0,
+          rootMargin: '0px'
+        }
+      );
+
+      observer.observe(scriptElement);
+    }
+  };
+
+  // Call the setup after a short delay to ensure elements are rendered
+  setTimeout(setupOutcomesFloating, 100);
+  
   try {
     ReactDOM.render(
       <React.StrictMode>

@@ -38,8 +38,8 @@ class Outcomes extends React.Component<Props, State> {
     }
 
     return (
-      <div className="outcomes">
-        <h3>Select your call result to show the next representative:</h3>
+      <div>
+        <h3>After your call, share the result to show the next representative:</h3>
         <div className="outcomes-items">
           {this.state.outcomes.map((outcome) => {
             const eventClassName = `plausible-event-name=Outcome-${outcome}`
