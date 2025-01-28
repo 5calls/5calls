@@ -10,7 +10,7 @@ publish = "/final/"                                                       # we p
 command = "yarn build-js && yarn build-content && cd .. && hugo -b $DEPLOY_PRIME_URL/"
 [build.environment]
 # set hugo version for consistency
-HUGO_VERSION = '0.113.0'
+HUGO_VERSION = '0.133.0'
 # need yarn installed manually
 NETLIFY_USE_YARN = 'true'
 NODE_OPTIONS = '--unhandled-rejections=strict'
