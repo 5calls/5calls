@@ -27,6 +27,9 @@
     - title: Email Us
       url: mailto:hello@5calls.org
       icon: envelope-open-text
+    - title: Donate
+      url: https://secure.actblue.com/donate/5calls-donate?refcode=footer&amount=25
+      icon: circle-dollar-to-slot
 
 - group: "Get Involved"
   links:
@@ -42,7 +45,7 @@
       url: https://www.facebook.com/make5calls
       brand: true
       icon: facebook
-    - title: Open Source on GitHub
+    - title: GitHub
       url: https://github.com/5calls/5calls
       brand: true
       icon: github
