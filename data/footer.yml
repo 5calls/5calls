@@ -33,18 +33,22 @@
 
 - group: "Get Involved"
   links:
-    - title: Twitter
-      url: https://twitter.com/make5calls
-      brand: true
-      icon: twitter
     - title: Instagram
       url: https://www.instagram.com/5calls/
       brand: true
       icon: instagram
+    - title: Bluesky
+      url: https://bsky.app/profile/5calls.org
+      brand: true
+      icon: bluesky
     - title: Facebook
       url: https://www.facebook.com/make5calls
       brand: true
       icon: facebook
+    - title: Mastodon
+      url: https://mastodon.social/@5calls
+      brand: true
+      icon: mastodon
     - title: GitHub
       url: https://github.com/5calls/5calls
       brand: true
