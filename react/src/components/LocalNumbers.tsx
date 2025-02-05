@@ -20,8 +20,8 @@ export class LocalNumbers extends React.Component<Props, State> {
         <h3>Local office numbers:</h3>
         <ul>
           {this.props.contact.field_offices ? (
-            this.props.contact.field_offices.map((office) => (
-              <li key={office.phone}>
+            this.props.contact.field_offices.map((office, index) => (
+              <li key={`${this.props.contact.id}-${office.phone}-${index}`}>
                 {contactUtils.makePhoneLink(office.phone)}
                 {contactUtils.cityFormat(office, this.props.contact)}
               </li>
