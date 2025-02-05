@@ -1337,7 +1337,19 @@
       "bioguide": "B001299",
       "govtrack": 412702
     },
-    "offices": []
+    "offices": [
+      {
+        "id": "B001299-fort_wayne",
+        "address": "1300 S. Harrison St.",
+        "suite": "Suite 3105",
+        "city": "Fort Wayne",
+        "state": "IN",
+        "zip": "46802",
+        "latitude": 41.0737372,
+        "longitude": -85.14045349999999,
+        "phone": "260-321-7130"
+      }
+    ]
   },
   {
     "id": {
@@ -14919,19 +14931,7 @@
       "bioguide": "S001208",
       "govtrack": 412784
     },
-    "offices": [
-      {
-        "id": "S001208-lansing",
-        "address": "315 W. Allegan St.",
-        "suite": "Suite 207",
-        "city": "Lansing",
-        "state": "MI",
-        "zip": "48933",
-        "latitude": 42.73218910000001,
-        "longitude": -84.5562204,
-        "phone": "517-993-0510"
-      }
-    ]
+    "offices": []
   },
   {
     "id": {
