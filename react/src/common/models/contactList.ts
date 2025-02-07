@@ -4,7 +4,7 @@ export enum ContactArea {
   USSenate = "US Senate",
   USHouse = "US House",
   Governor = "Governor",
-  AttorneyGeneral = "AttorneyGeneral",
+  AttorneysGeneral = "AttorneysGeneral",
   SecretaryOfState = "SecretaryOfState",
   StateUpper = "StateUpper",
   StateLower = "StateLower",
@@ -55,7 +55,7 @@ export class ContactList {
     return this.representatives.filter((contact) => contact.area === "SecretaryOfState");
   }
   public attyGeneral(): Contact[] {
-    return this.representatives.filter((contact) => contact.area === "AttorneyGeneral");
+    return this.representatives.filter((contact) => contact.area === "AttorneysGeneral");
   }
 
   public generalizedLocationID(): string {

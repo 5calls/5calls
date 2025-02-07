@@ -37,7 +37,7 @@ class Script extends React.Component<Props & WithLocationProps, State> {
       case "Governor":
         title = "Governor ";
         break;
-      case "AttorneyGeneral":
+      case "AttorneysGeneral":
         title = "Attorney General ";
         break;
       case "SecretaryOfState":
