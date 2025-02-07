@@ -24,6 +24,8 @@ const allContacts = (contactList: ContactList): Contact[] => {
   contacts.push(...contactList.stateLower());
   contacts.push(...contactList.stateUpper());
   contacts.push(...contactList.governor());
+  contacts.push(...contactList.secState());
+  contacts.push(...contactList.attyGeneral());
 
   return contacts;
 };

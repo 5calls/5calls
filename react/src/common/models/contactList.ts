@@ -40,22 +40,22 @@ export class ContactList {
   }
 
   public governor(): Contact[] {
-    return this.representatives.filter((contact) => contact.area === "Governor");
+    return this.representatives.filter((contact) => contact.area === ContactArea.Governor);
   }
 
   public stateUpper(): Contact[] {
-    return this.representatives.filter((contact) => contact.area === "StateUpper");
+    return this.representatives.filter((contact) => contact.area === ContactArea.StateUpper);
   }
 
   public stateLower(): Contact[] {
-    return this.representatives.filter((contact) => contact.area === "StateLower");
+    return this.representatives.filter((contact) => contact.area === ContactArea.StateLower);
   }
 
   public secState(): Contact[] {
-    return this.representatives.filter((contact) => contact.area === "SecretaryOfState");
+    return this.representatives.filter((contact) => contact.area === ContactArea.SecretaryOfState);
   }
   public attyGeneral(): Contact[] {
-    return this.representatives.filter((contact) => contact.area === "AttorneysGeneral");
+    return this.representatives.filter((contact) => contact.area === ContactArea.AttorneysGeneral);
   }
 
   public generalizedLocationID(): string {
