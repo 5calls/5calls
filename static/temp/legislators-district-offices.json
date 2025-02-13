@@ -3407,25 +3407,6 @@
   },
   {
     "id": {
-      "bioguide": "C001114",
-      "govtrack": 412740
-    },
-    "offices": [
-      {
-        "id": "C001114-provo",
-        "address": "3549 North University Avenue",
-        "suite": "Suite 275",
-        "city": "Provo",
-        "state": "UT",
-        "zip": "84604",
-        "latitude": 40.280527,
-        "longitude": -111.6590391,
-        "phone": "801-922-5400"
-      }
-    ]
-  },
-  {
-    "id": {
       "bioguide": "C001115",
       "govtrack": 412746
     },
@@ -17411,6 +17392,899 @@
         "latitude": 48.1894932,
         "longitude": -114.3100105,
         "phone": "406-317-0277"
+      }
+    ]
+  },
+  {
+    "id": {
+      "bioguide": "A000382"
+    },
+    "offices": [
+      {
+        "id": "A000382-bowie",
+        "city": "Bowie",
+        "state": "MD",
+        "phone": "301-860-0414"
+      }
+    ]
+  },
+  {
+    "id": {
+      "bioguide": "S001232"
+    },
+    "offices": [
+      {
+        "id": "S001232-billings",
+        "city": "Billings",
+        "state": "MT",
+        "phone": "406-252-0559"
+      },
+      {
+        "id": "S001232-bozeman",
+        "city": "Bozeman",
+        "state": "MT",
+        "phone": "406-218-2658"
+      },
+      {
+        "id": "S001232-butte",
+        "city": "Butte",
+        "state": "MT",
+        "phone": "406-782-2048"
+      },
+      {
+        "id": "S001232-great-falls",
+        "city": "Great Falls",
+        "state": "MT",
+        "phone": "406-452-9587"
+      },
+      {
+        "id": "S001232-helena",
+        "city": "Helena",
+        "state": "MT",
+        "phone": "406-441-1069"
+      },
+      {
+        "id": "S001232-kalispell",
+        "city": "Kalispell",
+        "state": "MT",
+        "phone": "406-257-3398"
+      },
+      {
+        "id": "S001232-missoula",
+        "city": "Missoula",
+        "state": "MT",
+        "phone": "406-218-2658"
+      }
+    ]
+  },
+  {
+    "id": {
+      "bioguide": "M001242"
+    },
+    "offices": [
+      {
+        "id": "M001242-columbus",
+        "city": "Columbus",
+        "state": "OH",
+        "phone": "614-469-2083"
+      },
+      {
+        "id": "M001242-cleveland",
+        "city": "Cleveland",
+        "state": "OH",
+        "phone": "216-522-7272"
+      },
+      {
+        "id": "M001242-cincinnati",
+        "city": "Cincinnati",
+        "state": "OH",
+        "phone": "513-684-1021"
+      }
+    ]
+  },
+  {
+    "id": {
+      "bioguide": "M001243"
+    },
+    "offices": [
+      {
+        "id": "M001243-harrisburg",
+        "city": "Harrisburg",
+        "state": "PA",
+        "phone": "717-231-7540"
+      },
+      {
+        "id": "M001243-pittsburgh",
+        "city": "Pittsburgh",
+        "state": "PA",
+        "phone": "412-803-7370"
+      },
+      {
+        "id": "M001243-erie",
+        "city": "Erie",
+        "state": "PA",
+        "phone": "814-240-5213"
+      },
+      {
+        "id": "M001243-state-college",
+        "city": "State College",
+        "state": "PA",
+        "phone": "814-357-0314"
+      },
+      {
+        "id": "M001243-philadelphia",
+        "city": "Philadelphia",
+        "state": "PA",
+        "phone": "215-405-9660"
+      },
+      {
+        "id": "M001243-allentown",
+        "city": "Allentown",
+        "state": "PA",
+        "phone": "610-782-9470"
+      },
+      {
+        "id": "M001243-scranton",
+        "city": "Scranton",
+        "state": "PA",
+        "phone": "570-941-0930"
+      }
+    ]
+  },
+  {
+    "id": {
+      "bioguide": "C001114"
+    },
+    "offices": [
+      {
+        "id": "C001114-salt-lake-city",
+        "city": "Salt Lake City",
+        "state": "UT",
+        "phone": "801-524-4380"
+      }
+    ]
+  },
+  {
+    "id": {
+      "bioguide": "J000312"
+    },
+    "offices": [
+      {
+        "id": "J000312-charleston",
+        "city": "Charleston",
+        "state": "WV",
+        "phone": "304-342-5855"
+      }
+    ]
+  },
+  {
+    "id": {
+      "bioguide": "F000481"
+    },
+    "offices": [
+      {
+        "id": "F000481-montgomery",
+        "city": "Montgomery",
+        "state": "AL",
+        "phone": "334-777-5700"
+      },
+      {
+        "id": "F000481-mobile",
+        "city": "Mobile",
+        "state": "AL",
+        "phone": "251-283-6280"
+      }
+    ]
+  },
+  {
+    "id": {
+      "bioguide": "B001323"
+    },
+    "offices": [
+      {
+        "id": "B001323-anchorage",
+        "city": "Anchorage",
+        "state": "AK",
+        "phone": "907-921-6575"
+      }
+    ]
+  },
+  {
+    "id": {
+      "bioguide": "G000605"
+    },
+    "offices": [
+      {
+        "id": "G000605-turlock",
+        "city": "Turlock",
+        "state": "CA",
+        "phone": "209-226-6880"
+      }
+    ]
+  },
+  {
+    "id": {
+      "bioguide": "W000830"
+    },
+    "offices": [
+      {
+        "id": "W000830-palmdale",
+        "city": "Palmdale",
+        "state": "CA",
+        "phone": "661-839-0532"
+      },
+      {
+        "id": "W000830-santa-clarita",
+        "city": "Santa Clarita",
+        "state": "CA",
+        "phone": "661-568-4855"
+      }
+    ]
+  },
+  {
+    "id": {
+      "bioguide": "R000620"
+    },
+    "offices": [
+      {
+        "id": "R000620-arleta",
+        "city": "Arleta",
+        "state": "CA",
+        "phone": "818-253-3535"
+      }
+    ]
+  },
+  {
+    "id": {
+      "bioguide": "F000483"
+    },
+    "offices": [
+      {
+        "id": "F000483-burbank",
+        "city": "Burbank",
+        "state": "CA",
+        "phone": "818-524-4384"
+      }
+    ]
+  },
+  {
+    "id": {
+      "bioguide": "H001100"
+    },
+    "offices": [
+      {
+        "id": "H001100-grand-junction",
+        "city": "Grand Junction",
+        "state": "CO",
+        "phone": "970-208-0455"
+      },
+      {
+        "id": "H001100-pueblo",
+        "city": "Pueblo",
+        "state": "CO",
+        "phone": "719-696-6968"
+      },
+      {
+        "id": "H001100-durango",
+        "city": "Durango",
+        "state": "CO",
+        "phone": "970-317-6167"
+      }
+    ]
+  },
+  {
+    "id": {
+      "bioguide": "C001137"
+    },
+    "offices": [
+      {
+        "id": "C001137-colorado-springs,",
+        "city": "Colorado Springs,",
+        "state": "CO",
+        "phone": "719-520-0055"
+      }
+    ]
+  },
+  {
+    "id": {
+      "bioguide": "E000300"
+    },
+    "offices": [
+      {
+        "id": "E000300-greeley",
+        "city": "Greeley",
+        "state": "CO",
+        "phone": "970-324-2567"
+      },
+      {
+        "id": "E000300-northglenn",
+        "city": "Northglenn",
+        "state": "CO",
+        "phone": "303-723-6560"
+      }
+    ]
+  },
+  {
+    "id": {
+      "bioguide": "H001099"
+    },
+    "offices": [
+      {
+        "id": "H001099-melbourne",
+        "city": "Melbourne",
+        "state": "FL",
+        "phone": "321-632-1776"
+      }
+    ]
+  },
+  {
+    "id": {
+      "bioguide": "J000311"
+    },
+    "offices": [
+      {
+        "id": "J000311-newnan",
+        "city": "Newnan",
+        "state": "GA",
+        "phone": "770-683-2033"
+      }
+    ]
+  },
+  {
+    "id": {
+      "bioguide": "S001229"
+    },
+    "offices": [
+      {
+        "id": "S001229-richmond",
+        "city": "Richmond",
+        "state": "IN",
+        "phone": "317-399-3333"
+      },
+      {
+        "id": "S001229-greenfield",
+        "city": "Greenfield",
+        "state": "IN",
+        "phone": "317-399-3333"
+      },
+      {
+        "id": "S001229-greenwood",
+        "city": "Greenwood",
+        "state": "IN",
+        "phone": "317-399-3333"
+      }
+    ]
+  },
+  {
+    "id": {
+      "bioguide": "M001233"
+    },
+    "offices": [
+      {
+        "id": "M001233-evansville",
+        "city": "Evansville",
+        "state": "IN",
+        "phone": "812-465-6484"
+      },
+      {
+        "id": "M001233-jasper",
+        "city": "Jasper",
+        "state": "IN",
+        "phone": "812-465-6484"
+      }
+    ]
+  },
+  {
+    "id": {
+      "bioguide": "S001228"
+    },
+    "offices": [
+      {
+        "id": "S001228-pittsburg",
+        "city": "Pittsburg",
+        "state": "KS",
+        "phone": "620-308-7450"
+      },
+      {
+        "id": "S001228-topeka",
+        "city": "Topeka",
+        "state": "KS",
+        "phone": "785-205-5253"
+      }
+    ]
+  },
+  {
+    "id": {
+      "bioguide": "O000176"
+    },
+    "offices": [
+      {
+        "id": "O000176-towson",
+        "city": "Towson",
+        "state": "MD",
+        "phone": "410-427-5725"
+      }
+    ]
+  },
+  {
+    "id": {
+      "bioguide": "E000301"
+    },
+    "offices": [
+      {
+        "id": "E000301-columbia",
+        "city": "Columbia",
+        "state": "MD",
+        "phone": "410-832-8890"
+      }
+    ]
+  },
+  {
+    "id": {
+      "bioguide": "M001232"
+    },
+    "offices": [
+      {
+        "id": "M001232-frederick",
+        "city": "Frederick",
+        "state": "MD",
+        "phone": "301-926-0300"
+      }
+    ]
+  },
+  {
+    "id": {
+      "bioguide": "B001321"
+    },
+    "offices": [
+      {
+        "id": "B001321-lansing",
+        "city": "Lansing",
+        "state": "MI",
+        "phone": "517-993-0510"
+      }
+    ]
+  },
+  {
+    "id": {
+      "bioguide": "M001237"
+    },
+    "offices": [
+      {
+        "id": "M001237-flint",
+        "city": "Flint",
+        "state": "MI",
+        "phone": "810-238-8627"
+      }
+    ]
+  },
+  {
+    "id": {
+      "bioguide": "O000177"
+    },
+    "offices": [
+      {
+        "id": "O000177-jefferson-city",
+        "city": "Jefferson City",
+        "state": "MO",
+        "phone": "573-635-7232"
+      }
+    ]
+  },
+  {
+    "id": {
+      "bioguide": "D000634"
+    },
+    "offices": [
+      {
+        "id": "D000634-helena",
+        "city": "Helena",
+        "state": "MT",
+        "phone": "406-502-1435"
+      },
+      {
+        "id": "D000634-billings",
+        "city": "Billings",
+        "state": "MT",
+        "phone": "406-413-6720"
+      }
+    ]
+  },
+  {
+    "id": {
+      "bioguide": "G000604"
+    },
+    "offices": [
+      {
+        "id": "G000604-concord",
+        "city": "Concord",
+        "state": "NH",
+        "phone": "603-226-1002"
+      },
+      {
+        "id": "G000604-nashua",
+        "city": "Nashua",
+        "state": "NH",
+        "phone": "603-595-2006"
+      },
+      {
+        "id": "G000604-littleton",
+        "city": "Littleton",
+        "state": "NH",
+        "phone": "603-444-7700"
+      }
+    ]
+  },
+  {
+    "id": {
+      "bioguide": "P000621"
+    },
+    "offices": [
+      {
+        "id": "P000621-paterson",
+        "city": "Paterson",
+        "state": "NJ",
+        "phone": "973-523-5152"
+      }
+    ]
+  },
+  {
+    "id": {
+      "bioguide": "G000602"
+    },
+    "offices": [
+      {
+        "id": "G000602-garden-city",
+        "city": "Garden City",
+        "state": "NY",
+        "phone": "516-739-3008"
+      }
+    ]
+  },
+  {
+    "id": {
+      "bioguide": "L000606"
+    },
+    "offices": [
+      {
+        "id": "L000606-white-plains",
+        "city": "White Plains",
+        "state": "NY",
+        "phone": "914-323-5550"
+      },
+      {
+        "id": "L000606-bronx",
+        "city": "Bronx",
+        "state": "NY",
+        "phone": "718-530-7888"
+      }
+    ]
+  },
+  {
+    "id": {
+      "bioguide": "R000622"
+    },
+    "offices": [
+      {
+        "id": "R000622-binghamton",
+        "city": "Binghamton",
+        "state": "NY",
+        "phone": "607-242-0200"
+      },
+      {
+        "id": "R000622-leeds",
+        "city": "Leeds",
+        "state": "NY",
+        "phone": "518-625-2100"
+      }
+    ]
+  },
+  {
+    "id": {
+      "bioguide": "M001231"
+    },
+    "offices": [
+      {
+        "id": "M001231-syracuse",
+        "city": "Syracuse",
+        "state": "NY",
+        "phone": "315-233-4333"
+      }
+    ]
+  },
+  {
+    "id": {
+      "bioguide": "H001102"
+    },
+    "offices": [
+      {
+        "id": "H001102-monroe",
+        "city": "Monroe",
+        "state": "NC",
+        "phone": "704-218-5300"
+      }
+    ]
+  },
+  {
+    "id": {
+      "bioguide": "H001101"
+    },
+    "offices": [
+      {
+        "id": "H001101-hickory",
+        "city": "Hickory",
+        "state": "NC",
+        "phone": "828-327-6100"
+      }
+    ]
+  },
+  {
+    "id": {
+      "bioguide": "M001236"
+    },
+    "offices": [
+      {
+        "id": "M001236-gastonia",
+        "city": "Gastonia",
+        "state": "NC",
+        "phone": "980-460-8110"
+      }
+    ]
+  },
+  {
+    "id": {
+      "bioguide": "F000482"
+    },
+    "offices": [
+      {
+        "id": "F000482-fargo",
+        "city": "Fargo",
+        "state": "ND",
+        "phone": "701-353-6665"
+      },
+      {
+        "id": "F000482-bismark",
+        "city": "Bismark",
+        "state": "ND",
+        "phone": "701-354-6700"
+      }
+    ]
+  },
+  {
+    "id": {
+      "bioguide": "T000490"
+    },
+    "offices": [
+      {
+        "id": "T000490-cincinnati",
+        "city": "Cincinnati",
+        "state": "OH",
+        "phone": "513-474-7777"
+      },
+      {
+        "id": "T000490-peebles",
+        "city": "Peebles",
+        "state": "OH",
+        "phone": "513-605-1380"
+      },
+      {
+        "id": "T000490-chillicothe",
+        "city": "Chillicothe",
+        "state": "OH",
+        "phone": "740-672-7040"
+      }
+    ]
+  },
+  {
+    "id": {
+      "bioguide": "D000635"
+    },
+    "offices": [
+      {
+        "id": "D000635-portland",
+        "city": "Portland",
+        "state": "OR",
+        "phone": "503-231-2300"
+      }
+    ]
+  },
+  {
+    "id": {
+      "bioguide": "B001326"
+    },
+    "offices": [
+      {
+        "id": "B001326-oregon-city",
+        "city": "Oregon City",
+        "state": "OR",
+        "phone": "503-387-8651"
+      }
+    ]
+  },
+  {
+    "id": {
+      "bioguide": "M001230"
+    },
+    "offices": [
+      {
+        "id": "M001230-allentown",
+        "city": "Allentown",
+        "state": "PA",
+        "phone": "484-781-6000"
+      }
+    ]
+  },
+  {
+    "id": {
+      "bioguide": "B001325"
+    },
+    "offices": [
+      {
+        "id": "B001325-anderson",
+        "city": "Anderson",
+        "state": "SC",
+        "phone": "864-224-7401"
+      }
+    ]
+  },
+  {
+    "id": {
+      "bioguide": "G000601"
+    },
+    "offices": [
+      {
+        "id": "G000601-fort-worth",
+        "city": "Fort Worth",
+        "state": "TX",
+        "phone": "817-806-9474"
+      }
+    ]
+  },
+  {
+    "id": {
+      "bioguide": "T000489"
+    },
+    "offices": [
+      {
+        "id": "T000489-houston",
+        "city": "Houston",
+        "state": "TX",
+        "phone": "713-655-0050"
+      }
+    ]
+  },
+  {
+    "id": {
+      "bioguide": "G000603"
+    },
+    "offices": [
+      {
+        "id": "G000603-denton",
+        "city": "Denton",
+        "state": "TX",
+        "phone": "972-966-5454"
+      }
+    ]
+  },
+  {
+    "id": {
+      "bioguide": "K000403"
+    },
+    "offices": [
+      {
+        "id": "K000403-provo",
+        "city": "Provo",
+        "state": "UT",
+        "phone": "801-607-3238"
+      }
+    ]
+  },
+  {
+    "id": {
+      "bioguide": "M001239"
+    },
+    "offices": [
+      {
+        "id": "M001239-lynchburg",
+        "city": "Lynchburg",
+        "state": "VA",
+        "phone": "202-225-4711"
+      }
+    ]
+  },
+  {
+    "id": {
+      "bioguide": "V000138"
+    },
+    "offices": [
+      {
+        "id": "V000138-woodbridge",
+        "city": "Woodbridge",
+        "state": "VA",
+        "phone": "703-987-2180"
+      }
+    ]
+  },
+  {
+    "id": {
+      "bioguide": "S001230"
+    },
+    "offices": [
+      {
+        "id": "S001230-leesburg",
+        "city": "Leesburg",
+        "state": "VA",
+        "phone": "703-236-1300"
+      }
+    ]
+  },
+  {
+    "id": {
+      "bioguide": "B001322"
+    },
+    "offices": [
+      {
+        "id": "B001322-spokane",
+        "city": "Spokane",
+        "state": "WA",
+        "phone": "509-353-2374"
+      }
+    ]
+  },
+  {
+    "id": {
+      "bioguide": "R000621"
+    },
+    "offices": [
+      {
+        "id": "R000621-bremerton",
+        "city": "Bremerton",
+        "state": "WA",
+        "phone": "360-373-9725"
+      }
+    ]
+  },
+  {
+    "id": {
+      "bioguide": "M001235"
+    },
+    "offices": [
+      {
+        "id": "M001235-morgantown",
+        "city": "Morgantown",
+        "state": "WV",
+        "phone": "304-350-6995"
+      },
+      {
+        "id": "M001235-martinsburg",
+        "city": "Martinsburg",
+        "state": "WV",
+        "phone": "304-350-6987"
+      }
+    ]
+  },
+  {
+    "id": {
+      "bioguide": "K000404"
+    },
+    "offices": [
+      {
+        "id": "K000404-rota",
+        "city": "Rota",
+        "state": "MP",
+        "phone": "670-532-2647"
+      },
+      {
+        "id": "K000404-tinian",
+        "city": "Tinian",
+        "state": "MP",
+        "phone": "670-433-2647"
+      },
+      {
+        "id": "K000404-saipan",
+        "city": "Saipan",
+        "state": "MP",
+        "phone": "670-323-2647"
       }
     ]
   }
