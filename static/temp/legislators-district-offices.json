@@ -10822,19 +10822,6 @@
         "longitude": -122.6748937,
         "fax": "503-326-2900",
         "phone": "503-326-3386"
-      },
-      {
-        "id": "M001176-portland-1",
-        "address": "1050 SW 6th Ave",
-        "suite": "Suite 140",
-        "building": "United States District Court",
-        "city": "Portland",
-        "state": "OR",
-        "zip": "97204",
-        "latitude": 45.51674389999999,
-        "longitude": -122.67958,
-        "fax": "503-326-3381",
-        "phone": "503-326-7525"
       }
     ]
   },
