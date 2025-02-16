@@ -10079,7 +10079,7 @@
         "zip": "15216",
         "latitude": 40.4107097,
         "longitude": -80.0245061,
-        "phone": "412-412-5000"
+        "phone": "412-214-5000"
       },
       {
         "id": "L000602-jeannette",
@@ -14951,18 +14951,6 @@
         "zip": "55008-1281",
         "latitude": 45.57578,
         "longitude": -93.22133
-      },
-      {
-        "id": "S001212-chisholm",
-        "address": "316 W Lake St",
-        "suite": "Suite 7",
-        "building": "Chisholm City Hall",
-        "city": "Chisholm",
-        "state": "MN",
-        "zip": "55719-3708",
-        "latitude": 47.48942,
-        "longitude": -92.88417,
-        "phone": "218-355-0726"
       },
       {
         "id": "S001212-hermantown",
