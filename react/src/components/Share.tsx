@@ -29,8 +29,7 @@ class Share extends React.Component<Props, State> {
   share(e: React.MouseEvent<HTMLAnchorElement>, type: string) {
     e.preventDefault();
 
-    const issueURL = `${APP_URL}/issue/${this.state.issueSlug}/`;
-    let tweet = encodeURIComponent(
+    const tweet = encodeURIComponent(
       `I just called my reps with 5 Calls, you should too: 5calls.org`
     );
 
@@ -41,7 +40,7 @@ class Share extends React.Component<Props, State> {
         "width=500, height=350"
       );
     } else if (type === 'bluesky') {      
-      let bskyTweet = encodeURIComponent(
+      const bskyTweet = encodeURIComponent(
         `I just called my reps with @5calls.org, you should too: https://5calls.org`
       );
         window.open(`https://bsky.app/intent/compose?text=${bskyTweet}`, "sharewindow", "width=500, height=350");
