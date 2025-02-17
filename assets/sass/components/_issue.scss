@@ -435,11 +435,13 @@ body.issue {
 
     .share-links {
       p {
-        float: left;
-        width: 50%;
-        padding: 2px 8px;
+        padding: 2px 0;
+        margin-bottom: 0;
         background-color: red;
-        font-size: 26px;
+        font-size: 18px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
 
         i {
           margin-right: 8px;
@@ -454,6 +456,18 @@ body.issue {
 
       .share-twitter {
         background-color: #1da1f2 !important;
+      }
+
+      .share-bluesky {
+        background-color: #1185FE !important;
+      }
+
+      .share-threads {
+        background-color: #000000 !important;
+      }
+
+      .share-mastodon {
+        background-color: #6364FF !important;
       }
 
       .share-facebook {
