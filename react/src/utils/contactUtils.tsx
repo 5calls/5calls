@@ -7,6 +7,8 @@ const partyAndState = (contact: Contact): string => {
   if (contact.party && contact.state !== "") {
     const partyLetter = contact.party.substring(0, 1);
     return partyLetter.toUpperCase() + "-" + contact.state.toUpperCase();
+  } else if (contact.state !== "") {
+    return contact.state.toUpperCase();
   }
 
   return "";
