@@ -45,26 +45,26 @@ declare global {
 }
 
 // this is like the latest $(document).ready()
-$(() => {
-  $("#actblue").on("click", (e) => {
-    if (window.actblue && window.actblue.__initialized) {
-      // double check that actblue has loaded, if it has, prevent that click
-      e.preventDefault();
+// $(() => {
+//   $("#actblue").on("click", (e) => {
+//     if (window.actblue && window.actblue.__initialized) {
+//       // double check that actblue has loaded, if it has, prevent that click
+//       e.preventDefault();
 
-      // actblue express does not have apple pay support, see if directing apple pay-capable browsers
-      // to an actblue window makes a difference in donations
-      if (window.ApplePaySession) {
-        window.fivecalls.openDonate(25, "applepay")
-      } else {
-        window.actblue
-        .requestContribution({
-          token: ACTBLUE_EMBED_TOKEN,
-          refcodes: ["embed",uuid.callerID()],
-        })
-      }
-    }
-  });
-});
+//       // actblue express does not have apple pay support, see if directing apple pay-capable browsers
+//       // to an actblue window makes a difference in donations
+//       if (window.ApplePaySession) {
+//         window.fivecalls.openDonate(25, "applepay")
+//       } else {
+//         window.actblue
+//         .requestContribution({
+//           token: ACTBLUE_EMBED_TOKEN,
+//           refcodes: ["embed",uuid.callerID()],
+//         })
+//       }
+//     }
+//   });
+// });
 
 const handleRootRenderError = (error: any, component: string) => {
   if (`${error}`.includes("Minified React error #200")) {
