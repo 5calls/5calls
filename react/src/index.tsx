@@ -2,7 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom";
 import firebase from "firebase/app";
 import "firebase/auth";
-import $ from "jquery";
+// import $ from "jquery";
 
 import Location from "./components/Location";
 import Reps from "./components/Reps";
@@ -11,7 +11,7 @@ import Outcomes from "./components/Outcomes";
 import Share from "./components/Share";
 import StateProvider from "./state/stateProvider";
 import "./utils/staticUtils";
-import { ACTBLUE_EMBED_TOKEN } from "./common/constants";
+// import { ACTBLUE_EMBED_TOKEN } from "./common/constants";
 import { ActBlue } from "./common/models/actblue";
 import OneSignal from 'react-onesignal';
 import uuid from "./utils/uuid";
