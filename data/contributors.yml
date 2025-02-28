@@ -89,8 +89,13 @@
       socialUsername: dektar
       socialLink: https://github.com/dektar
 
-    - name: Greg Lee
+    - name: Ben R
       socialService: github
-      socialUsername: gregliest
-      socialLink: https://github.com/gregliest
+      socialUsername: brericha
+      socialLink: https://github.com/brericha
+
+    # - name: Greg Lee
+    #   socialService: github
+    #   socialUsername: gregliest
+    #   socialLink: https://github.com/gregliest
   fullListUrl: https://github.com/5calls/android/graphs/contributors
