@@ -424,37 +424,16 @@
     },
     "offices": [
       {
-        "id": "B000825-pueblo",
-        "address": "503 N. Main",
-        "suite": "Suite 426",
-        "city": "Pueblo",
+        "id": "B000825-castle-rock",
+        "city": "Castle Rock",
         "state": "CO",
-        "zip": "81003",
-        "latitude": 38.2721512,
-        "longitude": -104.6097798,
-        "phone": "719-696-6970"
+        "phone": "720-639-9165"
       },
       {
-        "id": "B000825-durango",
-        "address": "835 E. 2nd Ave.",
-        "suite": "Suite 204",
-        "city": "Durango",
+        "id": "B000825-eaton",
+        "city": "Eaton",
         "state": "CO",
-        "zip": "81301",
-        "latitude": 37.2726021,
-        "longitude": -107.8800003,
-        "phone": "970-317-6130"
-      },
-      {
-        "id": "B000825-grand_junction",
-        "address": "743 Horizon Court",
-        "suite": "Suite 112",
-        "city": "Grand Junction",
-        "state": "CO",
-        "zip": "81506",
-        "latitude": 39.1123113,
-        "longitude": -108.5341773,
-        "phone": "970-208-0460"
+        "phone": "970-702-2136"
       }
     ]
   },
@@ -18241,6 +18220,31 @@
   {
     "id": {
       "bioguide": "K000404"
+    },
+    "offices": [
+      {
+        "id": "K000404-rota",
+        "city": "Rota",
+        "state": "MP",
+        "phone": "670-532-2647"
+      },
+      {
+        "id": "K000404-tinian",
+        "city": "Tinian",
+        "state": "MP",
+        "phone": "670-433-2647"
+      },
+      {
+        "id": "K000404-saipan",
+        "city": "Saipan",
+        "state": "MP",
+        "phone": "670-323-2647"
+      }
+    ]
+  },
+  {
+    "id": {
+      "bioguide": "S001150"
     },
     "offices": [
       {
