@@ -15600,55 +15600,46 @@
     },
     "offices": [
       {
-        "id": "T000278-clanton",
-        "address": "613 2nd Avenue N",
-        "suite": "A",
-        "building": "Main Street Cafe",
-        "city": "Clanton",
-        "state": "AL",
-        "zip": "35045",
-        "latitude": 32.8391024,
-        "longitude": -86.63050919999999
-      },
-      {
-        "id": "T000278-boaz",
-        "address": "206 College Avenue",
-        "building": "Snead State Community College Cafeteria",
-        "city": "Boaz",
-        "state": "AL",
-        "zip": "35957",
-        "latitude": 34.2013994,
-        "longitude": -86.16917300000001
-      },
-      {
-        "id": "T000278-luverne",
-        "address": "655 Forest Avenue",
-        "building": "The Chicken Shack",
-        "city": "Luverne",
-        "state": "AL",
-        "zip": "36049",
-        "latitude": 31.7063096,
-        "longitude": -86.26342799999999
-      },
-      {
-        "id": "T000278-oxford",
-        "address": "16 Choccolocco Street",
-        "building": "Hubbard\u2019s Off Main",
-        "city": "Oxford",
-        "state": "AL",
-        "zip": "36203",
-        "latitude": 33.6148888,
-        "longitude": -85.83458979999999
-      },
-      {
         "id": "T000278-mobile",
-        "address": "3977 Government Boulevard",
-        "building": "Judy\u2019s Place",
         "city": "Mobile",
         "state": "AL",
-        "zip": "36693",
-        "latitude": 30.6363535,
-        "longitude": -88.1404973
+        "phone": "251-308-7233"
+      },
+      {
+        "id": "T000278-huntsville",
+        "address": "2101 Clinton Avenue West",
+        "suite": "Suite 300",
+        "city": "Huntsville",
+        "state": "AL",
+        "zip": "35805",
+        "phone": "256-692-7500"
+      },
+      {
+        "id": "T000278-birmingham",
+        "address": "3000 Riverchase Galleria",
+        "suite": "Suite 915",
+        "city": "Birmingham",
+        "state": "AL",
+        "zip": "35244",
+        "phone": "205-760-7307"
+      },
+      {
+        "id": "T000278-montgomery",
+        "address": "One Church Street",
+        "suite": "Suite 500-B",
+        "building": "Frank M Johnson Jr. Annex",
+        "city": "Montgomery",
+        "state": "AL",
+        "zip": "36104",
+        "phone": "334-523-7424"
+      },
+      {
+        "id": "T000278-dothan",
+        "address": "100 West Troy Street",
+        "city": "Dothan",
+        "state": "AL",
+        "zip": "36303",
+        "phone": "334-547-7441"
       }
     ]
   },
