@@ -18241,30 +18241,5 @@
         "phone": "670-323-2647"
       }
     ]
-  },
-  {
-    "id": {
-      "bioguide": "S001150"
-    },
-    "offices": [
-      {
-        "id": "K000404-rota",
-        "city": "Rota",
-        "state": "MP",
-        "phone": "670-532-2647"
-      },
-      {
-        "id": "K000404-tinian",
-        "city": "Tinian",
-        "state": "MP",
-        "phone": "670-433-2647"
-      },
-      {
-        "id": "K000404-saipan",
-        "city": "Saipan",
-        "state": "MP",
-        "phone": "670-323-2647"
-      }
-    ]
   }
 ]
