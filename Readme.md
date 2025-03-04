@@ -1,16 +1,17 @@
 # 5 Calls
 
-## ways to help out
-
-Hi there! Are you here to find out how you can volunteer your time to help with 5 Calls? Here are some ways you can help out with various skillsets:
-
-- Web development: xxx
-- Mobile development: xxx
-- Policy and Writing: xxx
-
 ## how the site works
 
-...well
+Pages on the site are static files built with hugo. This makes things speedy to load and cheap to host.
+We make certain sections of the site dynamic by injecting small react components that handle ~1 task. Components are:
+- Location selector
+- Reps list on issue pages
+- Local office list
+- Script customizations
+- Outcome buttons
+- Total calls on home page
+
+Our goal is to keep the pages fast, publish the info that people read first statically in html so it renders ~immediately and then load any dynamic content in small components on the page afterwards.
 
 ## building
 
@@ -31,7 +32,7 @@ This happens automatically for production via netlify but you will have to run m
 
 ## deployment
 
-New versions are deployed to a google cloud storage bucket automatically with `main` via github actions.
+New versions are deployed to netlify automatically from `main`
 
 ## archived content
 
