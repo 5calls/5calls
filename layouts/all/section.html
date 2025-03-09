@@ -4,25 +4,29 @@
     {{ partial "sidebar.html" . }}
     <div class="archive-wrapper">
       <h1>All active topics</h1>
-      <!-- prettier-ignore -->
-      {{ range $taxonomyname, $taxonomy := .Site.Taxonomies }}
+      <div class="archive__grid">
+        <!-- prettier-ignore -->
+        {{ range $taxonomyname, $taxonomy := .Site.Taxonomies }}
       {{ if eq "categories" $taxonomyname }}
       {{ range $key, $value := $taxonomy }}
-      <h3>{{ .Page.Title }}</h3>
-      <ul>
-        {{ range where $value.Pages "Params.hidden" false }}
-        <li>
-          <span><i class="fa fa-phone-alt" aria-hidden="true"></i></span>
-          <p>
-            <a href="{{ .Permalink }}">{{.Title}}</a>
-          </p>
-        </li>
+        <h3 class="archive__page-title">{{ .Page.Title }}</h3>
+        <ul>
+          {{ range where $value.Pages "Params.hidden" false }}
+          <li class="archive__list-item">
+            <a href="{{ .Permalink }}" class="a-subtle">
+              <div class="archive__entry">
+                <i class="fa fa-square-phone archive__phone-icon"></i>
+                <div class="archive__topic-link">{{.Title}}</div>
+              </div>
+            </a>
+          </li>
+          {{ end }}
+        </ul>
+        <!-- prettier-ignore -->
         {{ end }}
-      </ul>
-      <!-- prettier-ignore -->
-      {{ end }}
           {{ end }}
         {{ end }}
+      </div>
     </div>
   </div>
 </div>
