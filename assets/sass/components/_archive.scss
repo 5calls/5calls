@@ -16,14 +16,14 @@ body.home {
     }
   }
 }
-.archive .archive-wrapper h1 {
-  font-size: 3rem;
-  margin: -0.5rem 0 2rem 0;
-  text-align: left;
-}
 
 body.archive {
   .archive-wrapper {
+    h1 {
+      font-size: 3rem;
+      margin: -0.5rem 0 2rem 0;
+      text-align: left;
+    }
     h4.archive-note {
       background-color: var(--c-latest);
       padding: 8px 12px;
@@ -62,7 +62,6 @@ $breakpoint: 76rem;
   vertical-align: top;
 }
 
-
 .archive__page-title {
   text-align: left;
   font-size: 1.4rem;
@@ -70,8 +69,7 @@ $breakpoint: 76rem;
   overflow-wrap: break-word;
 
   @media screen and (min-width: $breakpoint) {
-    margin: -.1rem 0 0 0;
-    
+    margin: -0.1rem 0 0 0;
   }
 }
 
