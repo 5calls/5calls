@@ -18,7 +18,6 @@ export const REMINDER_API_URL = `${API_URL}/remind`;
 export const DONATE_URL = "https://secure.actblue.com/donate/5calls-donate";
 export const ACTBLUE_EMBED_TOKEN = "5iuTAwr4Tnr8EvmUeAN5AsoQ";
 export const WRITER_APPLY_URL = "https://airtable.com/shrJBbpixnJ09iVb3";
-export const CODE_PROJECT_URL = "https://github.com/5calls/5calls/wiki/Getting-Involved-with-5-Calls-Development";
 
 export const SHARE_BUCKET_URL = "https://shareimages.5calls.org/";
 
