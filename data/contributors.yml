@@ -40,7 +40,7 @@
     - name: Rob Brackett
       socialUsername: mr0grog
       socialLink: https://twitter.com/mr0grog
-  fullListUrl: https://github.com/5calls/5calls/graphs/contributors
+  fullListUrl: https://github.com/5calls/static/graphs/contributors
 
 - title: "Brand and Design"
   volunteers:
@@ -56,7 +56,7 @@
     - name: Stewart Scott-Curran
       socialUsername: stewartsc
       socialLink: https://twitter.com/stewartsc
-  fullListUrl: https://github.com/5calls/5calls/graphs/contributors
+  fullListUrl: https://github.com/5calls/static/graphs/contributors
 
 - title: "iOS"
   volunteers:
