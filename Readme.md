@@ -14,7 +14,7 @@ We make certain sections of the site dynamic by injecting small react components
 Our goal is to keep the pages fast, publish the info that people read first statically in html so it renders ~immediately and then load any dynamic content in small components on the page afterwards.
 
 
-## First make sure you're using the old node 16
+## first make sure you're using the old node 16
 - Can use a package manager like [nvm](https://github.com/nvm-sh/nvm)
 - Then: `nvm use 16`
 
@@ -30,7 +30,8 @@ For development:
   - then rebuild the js with `yarn build-js`
 
 - Build the react components:
-  - `yarn build-js` will build the react components and move the js files into the hugo directories
+  - `yarn build-js` will build the react components and move the js files into the hugo directories 1x
+  - For development, run `yarn build-js-watch` to rebuild on every change
 - Fetch the current 5 Calls content
   - `yarn build-content` will fetch the latest topics and build hugo content files in the right place
 - Build and deploy hugo
