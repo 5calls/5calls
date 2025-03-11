@@ -17595,7 +17595,32 @@
       "govtrack": 400361,
       "thomas": "01635"
     },
-    "offices": []
+    "offices": [
+      {
+        "id": "S001150-los_angeles",
+        "city": "Los Angeles",
+        "state": "CA",
+        "phone": "310-914-7300"
+      },
+      {
+        "id": "S001150-san_francisco",
+        "city": "San Francisco",
+        "state": "CA",
+        "phone": "415-393-0707"
+      },
+      {
+        "id": "S001150-san_diego",
+        "city": "San Diego",
+        "state": "CA",
+        "phone": "619-231-9712"
+      },
+      {
+        "id": "S001150-fresno",
+        "city": "Fresno",
+        "state": "CA",
+        "phone": "559-485-7430"
+      }
+    ]
   },
   {
     "id": {
