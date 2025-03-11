@@ -68,10 +68,14 @@
     "babel-preset-react-app": "^10.0.0",
     "eslint": "^7.11.0",
     "eslint-config-react-app": "^6.0.0",
+    "fs-extra": "^11.3.0",
     "identity-obj-proxy": "3.0.0",
     "jest": "26.6.0",
     "jest-watch-typeahead": "0.6.1",
     "node-fetch": "^2.6.1",
+    "path-browserify": "^1.0.0",
+    "process": "^0.11.10",
+    "querystring-es3": "^0.2.1",
     "ts-node": "^9.0.0"
   },
   "source": "public/index.html"
