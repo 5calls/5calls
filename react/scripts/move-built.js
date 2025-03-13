@@ -23,10 +23,10 @@ files.forEach((file, i) => {
   let basename = path.basename(file);
   console.log(`moving ${basename}`)
 
-  // For development only, we rename the files using indices to create a stale file name
+  // For development only, we rename the files using indices to create a static file name
   // this prevents having to restart the hugo server to pick up the new changes
   const newFileName = process.env.NODE_ENV === 'development' ?  `${newFilesDir}/${i}.js` : `${newFilesDir}/${basename}`;
-  
+
   fs.rename(file, newFileName, (err) => {
     if (err) {
       console.log("js move err:", err);
