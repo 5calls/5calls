@@ -9,7 +9,7 @@
     "@reduxjs/toolkit": "^1.4.0",
     "axios": "^0.21.0",
     "firebase": "^8.1.2",
-    "glob": "^10.2.7",
+    "glob": "^10.4.5",
     "jquery": "^3.5.1",
     "parcel": "^2.13.3",
     "querystring": "^0.2.0",
@@ -28,7 +28,7 @@
     "build-content": "yarn run ts-node -O '{\"module\": \"commonjs\"}' scripts/build-content.ts",
     "build-archives": "yarn run ts-node -O '{\"module\": \"commonjs\"}' scripts/build-archives.ts",
     "build-js": "yarn build && yarn move",
-    "build-js-watch": "node ./scripts/watch-changes.js",
+    "build-js-dev": "NODE_ENV=development node ./scripts/watch-changes.js",
     "move": "node ./scripts/move-built.js",
     "test": "jest",
     "lint": "eslint src"

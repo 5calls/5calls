@@ -3,7 +3,7 @@ const { exec } = require('child_process');
 const path = require('path');
 
 const directoryPath = path.join(__dirname, '..', 'src');
-const command = 'npm run build-js';
+const command = 'yarn parcel build --no-optimize && yarn move';
 
 fs.watch(directoryPath, { recursive: true }, (eventType, filename) => {
   if (filename) {
