@@ -30,7 +30,6 @@
     "build-js": "yarn build && yarn move",
     "build-js-dev": "NODE_ENV=development node ./scripts/watch-changes.js",
     "move": "node ./scripts/move-built.js",
-    "test": "jest",
     "lint": "eslint src"
   },
   "eslintConfig": {
