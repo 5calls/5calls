@@ -172,7 +172,6 @@ class Location extends React.Component<Props & WithLocationProps & WithCompleted
         );
       }
       case ComponentLocationState.HasLocation: {
-        console.log("OK", this.props.locationState);
         return (
           <div className="is-visible">
             <span>Your location is</span>
