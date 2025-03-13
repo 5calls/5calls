@@ -17,15 +17,15 @@ Our goal is to keep the pages fast, publish the info that people read first stat
 
 - [Install hugo](https://gohugo.io/installation/) if not already installed
  
-For development:
+  - `yarn build-js` will build the react components and move the js files into the hugo directories 1x
+
+**For development:**
 - start hugo with `hugo server`
 - move to react folder with `cd react`
   - make sure yarn is up-to-date with `yarn`
-  - then rebuild the js with `yarn build-js`
-
+ 
 - Build the react components:
-  - `yarn build-js` will build the react components and move the js files into the hugo directories 1x
-  - For development, run `yarn build-js-watch` to rebuild on every change
+  - For development, run `yarn build-js-dev` to rebuild on every change. Please note that to pick up the new JS you will unfortunately have to reload the web page, we don't support live reload. If you are still not seeing your changes try a hard reload (shift+cmd+r).
 - Fetch the current 5 Calls content
   - `yarn build-content` will fetch the latest topics and build hugo content files in the right place
 - Build and deploy hugo
