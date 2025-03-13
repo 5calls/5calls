@@ -16,8 +16,11 @@ files.forEach((file) => {
   }
 });
 
-// moves js files from react/build/static to the assets directory in hugo, they're linked in html on build
-files = globSync("build/static/js/*.js")
+const compiledFilesDir = path.resolve(__dirname, "../dist");
+
+// moves js files from compiledFilesDirto the assets directory in hugo, they're linked in html on build
+files = globSync(`${compiledFilesDir}/*.js`);
+console.log('found files:', files)
 files.forEach((file) => {
   let basename = path.basename(file);
   console.log(`moving ${basename}`)
@@ -28,8 +31,8 @@ files.forEach((file) => {
   });
 });
 
-// moves map files from react/build/static to the assets directory in hugo, they're NOT linked in
-files = globSync("build/static/js/*.js.map")
+// moves map files from compiledFilesDir to the assets directory in hugo, they're NOT linked in
+files = globSync(`${compiledFilesDir}/*.js.map`);
 files.forEach((file) => {
   let basename = path.basename(file);
   console.log(`moving ${basename}`)
