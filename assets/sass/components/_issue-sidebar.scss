@@ -3,6 +3,7 @@
   --i-bar-padding-h: 1rem;
   --i-bar-check-size: 1.5rem;
   --i-bar-check-margin: 1rem;
+  border-radius: 4px  !important;
 }
 
 .i-hidden-bar {
@@ -39,10 +40,10 @@
 }
 
 .i-bar-location {
-  background: var(--c-dark);
-  color: #fff;
+  color: var(--c-dark);
   padding: 1.125rem 1.5rem 1.5rem;
-  border-top: 0.375rem solid var(--c-red);
+  border-radius: 4px;
+  margin-bottom: 2rem;
 
   span,
   strong,
@@ -143,12 +144,12 @@
 }
 
 .i-bar-list {
-  border: 1px solid rgba(var(--c-dark-rgb), 0.4);
   border-top: 0;
   margin-bottom: 0.5rem;
   button {
     color: #191b1d;
   }
+  border-radius: 6px;
 }
 
 .i-bar-item {
