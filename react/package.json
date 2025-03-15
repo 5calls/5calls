@@ -26,7 +26,7 @@
     "build-content": "yarn run ts-node -O '{\"module\": \"commonjs\"}' scripts/build-content.ts",
     "build-archives": "yarn run ts-node -O '{\"module\": \"commonjs\"}' scripts/build-archives.ts",
     "build-js": "yarn build && yarn move",
-    "build-js:dev": "node ./scripts/watch-changes.js",
+    "build-js:dev": "NODE_ENV=development node ./scripts/watch-changes.js",
     "move": "node ./scripts/move-built.js",
     "lint": "eslint src"
   },
