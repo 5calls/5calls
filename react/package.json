@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@bugsnag/js": "^8.2.0",
     "@reduxjs/toolkit": "^1.4.0",
     "axios": "^0.21.0",
     "firebase": "^8.1.2",
@@ -20,7 +21,7 @@
     "web-vitals": "^3.1.1"
   },
   "source": "src/index.html",
-    "scripts": {
+  "scripts": {
     "start": "parcel",
     "build": "parcel build",
     "build-content": "yarn run ts-node -O '{\"module\": \"commonjs\"}' scripts/build-content.ts",

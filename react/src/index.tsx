@@ -21,6 +21,11 @@ import APIForm from "./components/APIForm";
 import Settings from "./components/Settings";
 import GroupCallCount from "./components/GroupCallCount";
 
+import Bugsnag from "@bugsnag/js";
+
+Bugsnag.start("67e3931dbe1bbf48991ce7d682ceb676");
+
+
 firebase.initializeApp({
   apiKey: "AIzaSyCqbgwuM82Z4a3oBzzmPgi-208UrOwIgAA",
   authDomain: "southern-zephyr-209101.firebaseapp.com",
@@ -30,6 +35,7 @@ firebase.initializeApp({
   messagingSenderId: "919201105905",
   appId: "1:919201105905:web:cb16c071be2bb896dfa650",
 });
+
 
 OneSignal.init({ appId: '5fd4ca41-9f6c-4149-a312-ae3e71b35c0e', path: '/js/', serviceWorkerParam: { scope: '/js/' } }).then(() => {
   OneSignal.setExternalUserId(uuid.callerID());
@@ -103,7 +109,7 @@ const startComponentRenders = () => {
   const setupOutcomesFloating = () => {
     const scriptElement = document.getElementById('react-script');
     const outcomesElement = document.getElementById('react-outcomes');
-    
+
     if (scriptElement && outcomesElement) {
       const observer = new IntersectionObserver(
         (entries) => {
@@ -129,7 +135,7 @@ const startComponentRenders = () => {
 
   // Call the setup after a short delay to ensure elements are rendered
   setTimeout(setupOutcomesFloating, 100);
-  
+
   try {
     ReactDOM.render(
       <React.StrictMode>
@@ -198,8 +204,8 @@ const startComponentRenders = () => {
 
   try {
     ReactDOM.render(
-    <Settings />,
-    document.getElementById("react-settings"));
+      <Settings />,
+      document.getElementById("react-settings"));
   } catch (error) {
     handleRootRenderError(error, "settings");
   }
