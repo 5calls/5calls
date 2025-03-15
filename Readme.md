@@ -25,7 +25,7 @@ Our goal is to keep the pages fast, publish the info that people read first stat
   - make sure yarn is up-to-date with `yarn`
  
 - Build the react components:
-  - For development, run `yarn build-js-dev` to rebuild on every change. Please note that to pick up the new JS you will unfortunately have to reload the web page, we don't support live reload. If you are still not seeing your changes try a hard reload (shift+cmd+r).
+  - For development, run `yarn build-js:dev` to rebuild on every change.The hugo server should automatically reload changes after a few seconds. If you are still not seeing your changes try a hard reload (shift+cmd+r).
 - Fetch the current 5 Calls content
   - `yarn build-content` will fetch the latest topics and build hugo content files in the right place
 - Build and deploy hugo
