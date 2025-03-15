@@ -27,11 +27,11 @@ h2, .h2 {
 }
 
 h1, .h1 {
-  font-size: calc(30rem / var(--base-font-size));
+  font-size: calc(33rem / var(--base-font-size));
   font-weight: 900;
   margin-bottom: calc(var(--leading) * 1rem);
-  font-family: "Libre Caslon Text", serif;
-  color: var(--c-dark)
+  font-family: "Arvo", serif;
+  color: var(--c-red);
 }
 
 h2, .h2 {
@@ -43,7 +43,7 @@ h2, .h2 {
 }
 
 .contact-phone {
-    font-family: "Libre Caslon Text", serif;
+    font-family: "Arvo", serif;
     a {
       text-decoration: none !important;
     }

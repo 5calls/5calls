@@ -3,7 +3,7 @@
   --i-bar-padding-h: 1rem;
   --i-bar-check-size: 1.5rem;
   --i-bar-check-margin: 1rem;
-  border-radius: 4px  !important;
+  border-right: 1px solid #ddd
 }
 
 .i-hidden-bar {
@@ -42,8 +42,15 @@
 .i-bar-location {
   color: var(--c-dark);
   padding: 1.125rem 1.5rem 1.5rem;
-  border-radius: 4px;
-  margin-bottom: 2rem;
+  border-bottom: 1px solid #ddd;
+  border-top: 1px solid #ddd;
+  margin-top: 2.2rem;
+  padding-top: 1.5rem;
+  strong {
+     font-family: "Arvo", serif;
+
+  }
+  
 
   span,
   strong,
@@ -60,13 +67,16 @@
   }
 
   span {
-    @include i-bar-caps;
     line-height: 1;
+    color: var(--c-base);
+    opacity: .9;
+    font-size: 1.1rem;
+    font-weight: bold;
+    margin-bottom: 1rem;
   }
 
   a,
   .button-link {
-    color: rgba(#fff, 0.9);
     font-size: 0.875rem;
   }
 
@@ -169,7 +179,6 @@
   color: #191b1d !important;
 
   strong {
-    font-weight: 400;
   }
 }
 
@@ -214,6 +223,7 @@
     border-radius: 50%;
     width: var(--i-bar-check-size);
     height: var(--i-bar-check-size);
+    display: none
   }
 
   circle {
@@ -262,8 +272,15 @@
     }
   }
 
+  .i-bar-item {
+    color: var(--c-base) !important;
+     border-left: 6px solid white;
+  }
+
   .i-bar-item.is-active {
-    background: rgba(var(--c-#{$status}-rgb), 0.05);
+ color: var(--c-red-darker) !important;
+  background: rgba(211, 71, 71, 0.06) !important;
+  border-left: 6px solid;
   }
 
   .i-bar-item.is-#{$status} {
