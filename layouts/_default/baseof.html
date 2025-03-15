@@ -82,7 +82,7 @@
     />
 
     {{ $js := resources.Match "js/*.js" }} {{ range $js }}
-    <script type="module" src="{{ .RelPermalink }}"></script>
+    <script type="module" src="{{ .RelPermalink }}" defer></script>
     {{ end }}
     
     <script src="https://secure.actblue.com/cf/assets/actblue.js" async></script>
