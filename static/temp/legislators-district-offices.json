@@ -10128,7 +10128,7 @@
         "latitude": 40.4107097,
         "longitude": -80.0245061,
         "hours": "Second and fourth Wednesday of every month 10AM-2PM",
-        "phone": "412-412-5000"
+        "phone": "412-214-5000"
       },
       {
         "id": "L000602-jeannette",
@@ -10483,8 +10483,7 @@
         "zip": "67202",
         "latitude": 37.6865773,
         "longitude": -97.3371211,
-        "fax": "316-269-9257",
-        "phone": "316-269-9259"
+        "phone": "316-269-9257"
       },
       {
         "id": "M000934-manhattan",
@@ -15051,7 +15050,7 @@
         "zip": "48933",
         "latitude": 42.73218910000001,
         "longitude": -84.5562204,
-        "phone": "517-993-0510"
+        "phone": "517-203-1760"
       },
       {
         "id": "S001208-flint",
@@ -15071,7 +15070,8 @@
         "state": "MI",
         "zip": "48226",
         "latitude": 42.330737,
-        "longitude": -83.0506087
+        "longitude": -83.0506087,
+        "phone": "313-961-4330"
       },
       {
         "id": "S001208-traverse_city",
@@ -15081,7 +15081,8 @@
         "state": "MI",
         "zip": "49684",
         "latitude": 44.722152,
-        "longitude": -85.64234
+        "longitude": -85.64234,
+        "phone": "231-929-1031"
       }
     ]
   },
