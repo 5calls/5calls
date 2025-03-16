@@ -76,21 +76,13 @@
     <!-- prettier-ignore -->
     {{ hugo.Generator }} {{ $style := resources.Get "sass/main.scss" | css.Sass | resources.Minify }}
     <link rel="stylesheet" href="{{ $style.Permalink }}" />
- 
 
     {{ $js := resources.Match "js/*.js" }} {{ range $js }}
     <script type="module" src="{{ .RelPermalink }}" defer></script>
     {{ end }}
     
     <script src="https://secure.actblue.com/cf/assets/actblue.js" async></script>
-    <script src="//d2wy8f7a9ursnm.cloudfront.net/v7/bugsnag.min.js"></script>
-    <script>
-      try {
-        Bugsnag.start("67e3931dbe1bbf48991ce7d682ceb676");
-      } catch (error) {
-        /* nbd, sometimes this fails if bugsnag is blocked by ad blockers */
-      }
-    </script>
+  
     <script defer data-domain="5calls.org" src="https://plausible.io/js/script.tagged-events.js"></script>
     <link href="/fontawesome/css/fontawesome.css" rel="stylesheet">
     <link href="/fontawesome/css/brands.css" rel="stylesheet">
