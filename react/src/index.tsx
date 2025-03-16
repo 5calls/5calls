@@ -20,6 +20,10 @@ import CallCount from "./components/CallCount";
 import APIForm from "./components/APIForm";
 import Settings from "./components/Settings";
 import GroupCallCount from "./components/GroupCallCount";
+import Bugsnag from "@bugsnag/js";
+
+Bugsnag.start("67e3931dbe1bbf48991ce7d682ceb676");
+
 
 firebase.initializeApp({
   apiKey: "AIzaSyCqbgwuM82Z4a3oBzzmPgi-208UrOwIgAA",
