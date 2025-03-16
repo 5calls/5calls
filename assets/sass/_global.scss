@@ -3,6 +3,7 @@
 :root {
   // Typography
   --base-font-size: 16;
+  --base-font-family: system-ui, -apple-system, BlinkMacSystemFont, avenir next, avenir, segoe ui, helvetica neue, Cantarell, Ubuntu, roboto, noto, helvetica, arial, sans-serif; 
   --leading: 1.4;
   --leading-rem: calc(var(--leading) * 1rem);
   --paragraph-break: calc(var(--leading) * 0.75rem);
@@ -42,13 +43,14 @@
   }
 }
 
+
 //  Basic layout
 
 html,
 input,
 select,
 button {
-  font-family: "Roboto", sans-serif;
+  font-family: var(--base-font-family);
   color: var(--c-base);
 }
 
