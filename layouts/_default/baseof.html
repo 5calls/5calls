@@ -76,10 +76,6 @@
     <!-- prettier-ignore -->
     {{ hugo.Generator }} {{ $style := resources.Get "sass/main.scss" | css.Sass | resources.Minify }}
     <link rel="stylesheet" href="{{ $style.Permalink }}" />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&display=swap"
-      rel="stylesheet"
-    />
 
     {{ $js := resources.Match "js/*.js" }} {{ range $js }}
     <script type="module" src="{{ .RelPermalink }}" defer></script>
