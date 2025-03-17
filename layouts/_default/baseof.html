@@ -73,6 +73,10 @@
     <meta name="theme-color" content="#0032FF" />
     <link rel="me" href="https://mastodon.social/@5calls" />
 
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:ital,wght@0,800;1,800&display=swap" rel="stylesheet">
+
     <!-- prettier-ignore -->
     {{ hugo.Generator }} {{ $style := resources.Get "sass/main.scss" | css.Sass | resources.Minify }}
     <link rel="stylesheet" href="{{ $style.Permalink }}" />

@@ -1,27 +1,43 @@
-{{ define "bodyclass" }}archive{{ end }} {{ define "main" }}
+{{ define "bodyclass" }}archive{{ end }} {{ define "main" }} {{ $format := "2 Jan 2006" }}
 <div class="content">
-  <div class="g">
-    {{ partial "sidebar.html" . }}
+  <div>
+    <!-- {{ partial "sidebar.html" . }} -->
     <div class="archive-wrapper">
-      <h1>All active topics</h1>
+      <h1>What's important to you?</h1>
       <div class="archive__grid">
         <!-- prettier-ignore -->
         {{ range $taxonomyname, $taxonomy := .Site.Taxonomies }}
       {{ if eq "categories" $taxonomyname }}
       {{ range $key, $value := $taxonomy }}
-        <h3 class="archive__page-title">{{ .Page.Title }}</h3>
-        <ul>
+        <!-- <h3 class="archive__page-title">{{ .Page.Title }}</h3> -->
           {{ range where $value.Pages "Params.hidden" false }}
-          <li class="archive__list-item">
-            <a href="{{ .Permalink }}" class="a-subtle">
-              <div class="archive__entry">
-                <i class="fa fa-square-phone archive__phone-icon"></i>
-                <div class="archive__topic-link">{{.Title}}</div>
+            <a href="{{ .Permalink }}" class="archive__list-item">
+              <div>
+                  <div class="card2__title">{{.Title}}</div>
+
+                 <div class="cta">
+                    <!-- <i class="fa-solid fa-triangle-exclamation"></i> Deadline approaching -->
+                    <i class="fa-solid fa-square-phone"></i>
+                    4 calls remaining
+                    <!-- <i class="fa-solid fa-circle-check"></i> All calls completed -->
+                  </div>
+
               </div>
+                <div style="display: flex" class="card2__header">
+                  <div>
+                    {{ with .GetTerms "categories" }} {{ range . }}
+                    <span class="card2__pill"><i class="fa-solid fa-flag-usa"></i>{{ .LinkTitle }}</span>
+                    {{ end }} {{ end }}
+                  </div>
+                  <div>
+                    <!-- <span class="card2__pill card2__pill--alert"><i class="fa-solid fa-hourglass-start"></i>{{ .Date.Format $format }}</span> -->
+                    <span class="card2__pill"><i class="fa-solid fa-calendar-day"></i>{{ .Date.Format $format }}</span>
+                  </div>
+                </div>
+                
+             
             </a>
-          </li>
           {{ end }}
-        </ul>
         <!-- prettier-ignore -->
         {{ end }}
           {{ end }}
