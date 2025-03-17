@@ -1,5 +1,4 @@
-import React from "react";
-import ReactDOM from "react-dom";
+import React, { createRef } from "react";
 
 import { Contact } from "../common/models/contact";
 import { OutcomeData } from "../common/models/contactEvent";
@@ -32,6 +31,7 @@ class Reps extends React.Component<Props & WithLocationProps & WithCompletedProp
   _defaultAreas: string[] = [];
   _defaultContactList: ContactList | undefined = undefined;
   private callingGroup: string = '';
+  private componentRef = createRef<HTMLDivElement>();
   state = {
     areas: this._defaultAreas,
     issueId: "0000",
@@ -42,7 +42,7 @@ class Reps extends React.Component<Props & WithLocationProps & WithCompletedProp
   componentDidMount() {
     let areaString = "";
 
-    const thisComponent = ReactDOM.findDOMNode(this);
+    const thisComponent = this.componentRef.current;
     if (thisComponent && thisComponent.parentElement) {
       areaString = thisComponent.parentElement.dataset.repAreas ?? "";
       const areas = areaString.split(",");
@@ -187,12 +187,12 @@ class Reps extends React.Component<Props & WithLocationProps & WithCompletedProp
     }
 
     return (
-      <>
+      <div ref={this.componentRef}>
         <ul>
           {contacts.map((contact, index) => this.contactComponent(contact, index, this.state.activeContactIndex))}
         </ul>
         {activeContact && <ActiveContact contact={activeContact} />}
-      </>
+      </div>
     );
   }
 }

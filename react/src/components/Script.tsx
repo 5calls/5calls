@@ -1,5 +1,4 @@
-import React from "react";
-import ReactDOM from "react-dom";
+import React, { createRef } from "react";
 import ReactMarkdown from "react-markdown";
 import { Contact } from "../common/models/contact";
 
@@ -18,6 +17,7 @@ const locationReg = /\[CITY,\s?ZIP\]|\[CITY,\s?STATE\]/gi;
 
 class Script extends React.Component<Props & WithLocationProps, State> {
   state: State = { scriptMarkdown: "" };
+  scriptRef = createRef<HTMLSpanElement>();
 
   getContactNameWithTitle = (contact: Contact) => {
     let title = "";
@@ -64,10 +64,9 @@ class Script extends React.Component<Props & WithLocationProps, State> {
   };
 
   componentDidMount() {
-    const thisComponent = ReactDOM.findDOMNode(this);
     let scriptMarkdown = "";
-    if (thisComponent && thisComponent.parentElement) {
-      scriptMarkdown = thisComponent.parentElement.dataset.scriptMarkdown ?? "";
+    if (this.scriptRef.current && this.scriptRef.current.parentElement) {
+      scriptMarkdown = this.scriptRef.current.parentElement.dataset.scriptMarkdown ?? "";
 
       this.setState({ scriptMarkdown });
     }
@@ -90,7 +89,7 @@ class Script extends React.Component<Props & WithLocationProps, State> {
     }
 
     return (
-      <span>
+      <span ref={this.scriptRef}>
         {/* react-markdown is 20kb, we could probably find a lighter one */}
         <ReactMarkdown>{formattedScriptMarkdown}</ReactMarkdown>
       </span>

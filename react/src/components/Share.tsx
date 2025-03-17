@@ -1,5 +1,4 @@
-import React from "react";
-import ReactDOM from "react-dom";
+import React, { createRef } from "react";
 import { APP_URL } from "../common/constants";
 
 interface Props {}
@@ -10,6 +9,8 @@ interface State {
 }
 
 class Share extends React.Component<Props, State> {
+  private componentRef = createRef<HTMLDivElement>();
+
   state = {
     issueSlug: "",
     issueId: "",
@@ -17,7 +18,7 @@ class Share extends React.Component<Props, State> {
   };
 
   componentDidMount() {
-    const thisComponent = ReactDOM.findDOMNode(this);
+    const thisComponent = this.componentRef.current;
     if (thisComponent && thisComponent.parentElement) {
       const issueId = thisComponent.parentElement.dataset.issueId ?? "";
       const issueSlug = thisComponent.parentElement.dataset.issueSlug ?? "";
@@ -57,13 +58,13 @@ class Share extends React.Component<Props, State> {
 
   render() {
     return (
-      <>
+      <div ref={this.componentRef}>
         <h3>Share this call</h3>
         { this.state.issueId !== "" ? <img
           src={`https://api.5calls.org/v1/issue/${this.state.issueId}/share/t`}
           alt="Share this issue"
           className="call__complete__share__img"
-        /> : React.Fragment }
+        /> : null }
         <div className="share-links">
           <p className="share-bluesky">
             <a href="https://5calls.org" onClick={(e) => this.share(e, "bluesky")}>
@@ -86,7 +87,7 @@ class Share extends React.Component<Props, State> {
             </a>
           </p>
         </div>
-      </>
+        </div>
     );
   }
 }
