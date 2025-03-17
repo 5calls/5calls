@@ -21,7 +21,7 @@ class CallCount extends React.Component<Props, State> {
     if (this.state.callCount > 0) {
       return <span>We've made {this.state.callCount.toLocaleString()} calls so far. Join&nbsp;us.</span>
     } else {
-      return <span>We've made more than 3 million calls so far. Join&nbsp;us.</span>
+      return <span>We've made more than 7 million calls so far. Join&nbsp;us.</span>
     }
   }
 }
