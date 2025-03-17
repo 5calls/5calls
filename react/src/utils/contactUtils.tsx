@@ -15,7 +15,7 @@ const partyAndState = (contact: Contact): string => {
 };
 
 const allContacts = (contactList: ContactList): Contact[] => {
-  let contacts: Contact[] = [];
+  const contacts: Contact[] = [];
 
   // sometimes we pass back multiple house reps, the first is most likely
   const houseReps = contactList.houseRep();

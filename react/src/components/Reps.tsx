@@ -80,7 +80,7 @@ class Reps extends React.Component<Props & WithLocationProps & WithCompletedProp
       }
 
       if (this.state.activeContactIndex < contacts.length - 1) {
-        let activeContactIndex = this.state.activeContactIndex + 1;
+        const activeContactIndex = this.state.activeContactIndex + 1;
         this.setState({ activeContactIndex });
         this.reportUpdatedActiveContact(contacts[activeContactIndex]);
         document

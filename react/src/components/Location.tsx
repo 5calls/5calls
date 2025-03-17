@@ -55,7 +55,7 @@ class Location extends React.Component<Props & WithLocationProps & WithCompleted
   };
 
   completedIDsFromCompletionMap(completionMap: CompletionMap): string[] {
-    let completedIssueIDs: string[] = [];
+    const completedIssueIDs: string[] = [];
     Object.keys(completionMap).forEach((key) => {
       completedIssueIDs.push(key);
     });
