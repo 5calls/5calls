@@ -26,7 +26,7 @@ const saveCompleted = (completed: CompletedState) => {
 
 const getStorageAsObject = (): ApplicationState => {
   const storageString = localStorage.getItem(LocalStorageKey) ?? "{}";
-  let data: StoredData = JSON.parse(storageString) as StoredData;
+  const data: StoredData = JSON.parse(storageString) as StoredData;
   const locationState = JSON.parse(data.locationState ?? "{}") as LocationState;
   const completedState = JSON.parse(data.completedState ?? "{}") as CompletedState;
 

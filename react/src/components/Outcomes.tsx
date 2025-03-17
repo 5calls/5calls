@@ -1,5 +1,4 @@
-import React from "react";
-import ReactDOM from "react-dom";
+import React, { createRef } from "react";
 
 interface Props {}
 interface State {
@@ -14,10 +13,11 @@ class Outcomes extends React.Component<Props, State> {
     showReps: false,
   };
 
+  outcomesRef = createRef<HTMLDivElement>();
+
   componentDidMount() {
-    const thisComponent = ReactDOM.findDOMNode(this);
-    if (thisComponent && thisComponent.parentElement) {
-      const outcomes = (thisComponent.parentElement.dataset.outcomes ?? "").split(",");
+    if (this.outcomesRef.current && this.outcomesRef.current.parentElement) {
+      const outcomes = (this.outcomesRef.current.parentElement.dataset.outcomes ?? "").split(",");
       this.setState({ outcomes });
     }
 
@@ -33,12 +33,12 @@ class Outcomes extends React.Component<Props, State> {
 
   render() {
     if (!this.state.showReps) {
-      // this has to be a real element, not a fragment, because ReactDOM.findDOMNode(this) in didMount will fail for non-rendering elements
-      return <div></div>;
+      // this has to be a real element, not a fragment, because we need a reference to it
+      return <div ref={this.outcomesRef}></div>;
     }
 
     return (
-      <div>
+      <div ref={this.outcomesRef}>
         <h3>After your call, share the result to show the next representative:</h3>
         <div className="outcomes-items">
           {this.state.outcomes.map((outcome) => {

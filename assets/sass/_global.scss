@@ -24,6 +24,7 @@
   --c-dark-rgb: 2, 63, 159;
   --c-darker: rgb(1, 30, 77);
   --c-info-box: #fdf2d4;
+  --c-border: #e5e5e5;
 
   // Issue status colors
   --c-latest: rgb(253, 133, 64);
@@ -41,6 +42,8 @@
   @media screen and (min-width: 60rem) {
     --g-gap: 3rem;
   }
+
+  --border-radius: 6px;
 }
 
 

@@ -1,5 +1,4 @@
-import React from "react";
-import ReactDOM from "react-dom";
+import React, { createRef } from "react";
 
 import { Contact } from "../common/models/contact";
 import { OutcomeData } from "../common/models/contactEvent";
@@ -32,6 +31,7 @@ class Reps extends React.Component<Props & WithLocationProps & WithCompletedProp
   _defaultAreas: string[] = [];
   _defaultContactList: ContactList | undefined = undefined;
   private callingGroup: string = '';
+  private componentRef = createRef<HTMLDivElement>();
   state = {
     areas: this._defaultAreas,
     issueId: "0000",
@@ -42,7 +42,7 @@ class Reps extends React.Component<Props & WithLocationProps & WithCompletedProp
   componentDidMount() {
     let areaString = "";
 
-    const thisComponent = ReactDOM.findDOMNode(this);
+    const thisComponent = this.componentRef.current;
     if (thisComponent && thisComponent.parentElement) {
       areaString = thisComponent.parentElement.dataset.repAreas ?? "";
       const areas = areaString.split(",");
@@ -80,7 +80,7 @@ class Reps extends React.Component<Props & WithLocationProps & WithCompletedProp
       }
 
       if (this.state.activeContactIndex < contacts.length - 1) {
-        let activeContactIndex = this.state.activeContactIndex + 1;
+        const activeContactIndex = this.state.activeContactIndex + 1;
         this.setState({ activeContactIndex });
         this.reportUpdatedActiveContact(contacts[activeContactIndex]);
         document
@@ -170,16 +170,18 @@ class Reps extends React.Component<Props & WithLocationProps & WithCompletedProp
   render() {
     if (!this.state.contactList || !this.props.locationState?.address) {
       return (
-        <ul>
+        <div ref={this.componentRef}>
+        <ul >
           <li>
             <img alt="No representative found" src="/images/no-rep.png" />
             <h4>No reps available</h4>
             <p>Please set your location to find your representatives</p>
           </li>
         </ul>
+        </div>
       );
     }
-
+    
     const contacts = this.contactsForArea(this.state.areas, this.state.contactList);
     let activeContact: Contact | undefined;
     if (contacts.length > 0) {
@@ -187,12 +189,12 @@ class Reps extends React.Component<Props & WithLocationProps & WithCompletedProp
     }
 
     return (
-      <>
+      <div ref={this.componentRef}>
         <ul>
           {contacts.map((contact, index) => this.contactComponent(contact, index, this.state.activeContactIndex))}
         </ul>
         {activeContact && <ActiveContact contact={activeContact} />}
-      </>
+      </div>
     );
   }
 }

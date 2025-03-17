@@ -48,12 +48,12 @@ $icon-color-hover: hsla(217, 98%, 32%, 0.5);
 $breakpoint: 76rem;
 
 .archive__grid {
-  @media screen and (min-width: $breakpoint) {
     display: grid;
-    grid-template-columns: 10rem 1fr;
+    grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));
     row-gap: 2.5rem;
     column-gap: 2rem;
-  }
+    gap: 1rem;
+
 }
 
 .archive__phone-icon {
@@ -62,36 +62,90 @@ $breakpoint: 76rem;
   vertical-align: top;
 }
 
-.archive__page-title {
-  text-align: left;
-  font-size: 1.4rem;
-  margin: 2rem 0 1rem 0;
-  overflow-wrap: break-word;
+.card2 {
+  border-radius: var(--border-radius);
+  border: 1px solid var(--c-border);
+  max-width: 25rem;
+  display: flex;
+  padding: 1rem;
+  flex-direction: column;
+  justify-content: space-between;
+  color: var(--c-base);
+  cursor: pointer;
+  
+    color: var(--c-base);
+    text-decoration: none;
 
-  @media screen and (min-width: $breakpoint) {
-    margin: -0.1rem 0 0 0;
+  overflow: hidden;
+}
+
+.cta {
+ color: var(--c-blue);
+  background-color: rgba(24, 117, 209, 0.14);
+  border-radius: 32px;
+  font-size: .9rem;
+  display: inline-block;
+  padding: .4rem 1rem;
+  align-items: center;
+  font-weight: bold;
+  font-family: system-ui;
+  .fa-solid {
+    margin-right: 0.5rem;
+  }
+
+}
+.card2__title {
+  text-align: left;
+  font-size: 1.3rem;
+  font-weight: bold;
+  margin: 0 0 0.75rem 0;
+  overflow-wrap: break-word;
+color: var(--c-blue-subtle);
+  font-family: Schibsted Grotesk;
+
+  
+}
+
+.card2__pill {
+  font-size: 0.8rem;
+  border-radius: 6px;
+  border: 1px solid var(--c-border);
+  padding: 0.2rem 0.6rem;
+  margin-right: 0.5rem;
+  color: var(--c-base);
+  .fa-solid {
+    margin-right: 0.5rem;
+  }
+
+  &--alert {
+    color: var(--c-red-darker);
+    background-color: rgba(255, 0, 0, 0.1);
+  }
+}
+
+.card2__content {
+  padding: 1rem;
+}
+
+h1 {
+  font-family: Schibsted Grotesk;
+}
+.card2__header {
+  padding: 1rem 0 0 0;
+  border-top: 1px solid var(--c-border);
+  font-size: 0.9rem;
+  margin-top: 1rem;
+display:flex;
+align-items: flex-end;
+width: 100%;
+  .fa-solid {
+    margin-right: 0.2rem;
   }
 }
 
 .archive__list-item {
+  @extend .card2;
   margin-left: 0 !important;
   list-style: none;
-  margin-bottom: 0 !important;
-}
-
-.archive__entry {
-  display: flex;
-  align-items: flex-start;
-  margin-bottom: 1rem;
-  &:hover,
-  &:focus {
-    .archive__phone-icon {
-      color: $icon-color-hover;
-    }
-  }
-}
-
-.archive__topic-link {
-  font-size: 1.22rem;
-  margin-top: -0.16rem;
+  margin-bottom: 0;
 }

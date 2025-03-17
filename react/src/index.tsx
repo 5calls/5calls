@@ -1,8 +1,7 @@
 import React from "react";
-import ReactDOM from "react-dom";
 import firebase from "firebase/app";
 import "firebase/auth";
-// import $ from "jquery";
+import { createRoot } from 'react-dom/client';
 
 import Location from "./components/Location";
 import Reps from "./components/Reps";
@@ -11,7 +10,6 @@ import Outcomes from "./components/Outcomes";
 import Share from "./components/Share";
 import StateProvider from "./state/stateProvider";
 import "./utils/staticUtils";
-// import { ACTBLUE_EMBED_TOKEN } from "./common/constants";
 import { ActBlue } from "./common/models/actblue";
 import OneSignal from 'react-onesignal';
 import uuid from "./utils/uuid";
@@ -24,6 +22,12 @@ import Bugsnag from "@bugsnag/js";
 
 Bugsnag.start("67e3931dbe1bbf48991ce7d682ceb676");
 
+type IslandConfig = {
+  id: string;
+  component: React.ComponentType<any>;
+  hasStateProvider?: boolean;
+  condition?: boolean;
+};
 
 firebase.initializeApp({
   apiKey: "AIzaSyCqbgwuM82Z4a3oBzzmPgi-208UrOwIgAA",
@@ -47,28 +51,6 @@ declare global {
     ApplePaySession?: any;
   }
 }
-
-// this is like the latest $(document).ready()
-// $(() => {
-//   $("#actblue").on("click", (e) => {
-//     if (window.actblue && window.actblue.__initialized) {
-//       // double check that actblue has loaded, if it has, prevent that click
-//       e.preventDefault();
-
-//       // actblue express does not have apple pay support, see if directing apple pay-capable browsers
-//       // to an actblue window makes a difference in donations
-//       if (window.ApplePaySession) {
-//         window.fivecalls.openDonate(25, "applepay")
-//       } else {
-//         window.actblue
-//         .requestContribution({
-//           token: ACTBLUE_EMBED_TOKEN,
-//           refcodes: ["embed",uuid.callerID()],
-//         })
-//       }
-//     }
-//   });
-// });
 
 const handleRootRenderError = (error: any, component: string) => {
   if (`${error}`.includes("Minified React error #200")) {
@@ -107,7 +89,7 @@ const startComponentRenders = () => {
   const setupOutcomesFloating = () => {
     const scriptElement = document.getElementById('react-script');
     const outcomesElement = document.getElementById('react-outcomes');
-    
+
     if (scriptElement && outcomesElement) {
       const observer = new IntersectionObserver(
         (entries) => {
@@ -133,97 +115,50 @@ const startComponentRenders = () => {
 
   // Call the setup after a short delay to ensure elements are rendered
   setTimeout(setupOutcomesFloating, 100);
-  
-  try {
-    ReactDOM.render(
-      <React.StrictMode>
-        <StateProvider>
-          <Location />
-        </StateProvider>
-      </React.StrictMode>,
-      document.getElementById("react-location")
-    );
-  } catch (error) {
-    handleRootRenderError(error, "location");
-  }
 
-  try {
-    ReactDOM.render(
-      // we disabled strict mode here because we use findDOMNode in a very safe way (hopefully)
-      <StateProvider>
-        <Reps />
-      </StateProvider>,
-      document.getElementById("react-reps")
-    );
-  } catch (error) {
-    handleRootRenderError(error, "reps");
-  }
+  const getGroupFromPath = (): string | null => {
+    const path = window.location.pathname;
+    //eslint-disable-next-line
+    const match = path.match(/\/groups\/([^\/]+)\/?$/);
+    return match ? match[1] : null;
+  };
 
-  try {
-    ReactDOM.render(
-      <StateProvider>
-        <Script />
-      </StateProvider>,
-      document.getElementById("react-script")
-    );
-  } catch (error) {
-    handleRootRenderError(error, "script");
-  }
+  const islands: IslandConfig[] = [
+    { id: "react-location", component: Location, hasStateProvider: true },
+    { id: "react-reps", component: Reps, hasStateProvider: true },
+    { id: "react-script", component: Script, hasStateProvider: true },
+    { id: "react-outcomes", component: Outcomes },
+    { id: "react-share", component: Share },
+    { id: "react-phone", component: PhoneSubscribe },
+    { id: "react-call-count", component: CallCount },
+    { id: "api-form", component: APIForm },
+    { id: "react-settings", component: Settings },
+    { id: "react-groupcounts", component: GroupCallCount, condition: Boolean(getGroupFromPath()) },
+  ]
 
-  try {
-    ReactDOM.render(<Outcomes />, document.getElementById("react-outcomes"));
-  } catch (error) {
-    handleRootRenderError(error, "outcomes");
-  }
+  islands.forEach(({ id, component, hasStateProvider, condition }) => {
+    try {
+      if (condition === false) {
+        return;
+      }
+      const element = document.getElementById(id);
+      if (!element) return
+      const el = React.createElement(component)
+      if (hasStateProvider) {
+        createRoot(element).render(
+          <StateProvider>
+            {el}
+          </StateProvider>
+        );
+      } else {
+        createRoot(element).render(
+          el
+        );
+      }
 
-  try {
-    ReactDOM.render(<Share />, document.getElementById("react-share"));
-  } catch (error) {
-    handleRootRenderError(error, "share");
-  }
-
-  try {
-    ReactDOM.render(<PhoneSubscribe />, document.getElementById("react-phone"));
-  } catch (error) {
-    handleRootRenderError(error, "phone");
-  }
-
-  try {
-    ReactDOM.render(<CallCount />, document.getElementById("react-call-count"));
-  } catch (error) {
-    handleRootRenderError(error, "call-count");
-  }
-
-  try {
-    ReactDOM.render(<APIForm />, document.getElementById("api-form"));
-  } catch (error) {
-    handleRootRenderError(error, "api-form");
-  }
-
-  try {
-    ReactDOM.render(
-    <Settings />,
-    document.getElementById("react-settings"));
-  } catch (error) {
-    handleRootRenderError(error, "settings");
-  }
-
-  try {
-    const groupId = getGroupFromPath();
-    if (groupId) {
-      ReactDOM.render(
-        <GroupCallCount group={groupId} />,
-        document.getElementById("react-groupcounts")
-      );
+    } catch (error) {
+      handleRootRenderError(error, id);
     }
-  } catch (error) {
-    handleRootRenderError(error, "group-counts");
-  }
-};
+  });
 
-const getGroupFromPath = (): string | null => {
-  const path = window.location.pathname;
-  //eslint-disable-next-line
-  const match = path.match(/\/groups\/([^\/]+)\/?$/);
-  return match ? match[1] : null;
-};
+}
