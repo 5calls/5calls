@@ -5,7 +5,7 @@ import { Contact } from "../common/models/contact";
 import { LocationState, WithLocationProps } from "../state/locationState";
 import { withLocation } from "../state/stateProvider";
 
-interface Props {}
+interface Props { }
 interface State {
   scriptMarkdown: string;
   currentContact?: Contact;
@@ -65,7 +65,7 @@ class Script extends React.Component<Props & WithLocationProps, State> {
 
   componentDidMount() {
     let scriptMarkdown = "";
-    if (this.scriptRef.current && this.scriptRef.current.parentElement) {
+    if (this.scriptRef.current?.parentElement) {
       scriptMarkdown = this.scriptRef.current.parentElement.dataset.scriptMarkdown ?? "";
 
       this.setState({ scriptMarkdown });
