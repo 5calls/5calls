@@ -41,6 +41,7 @@ class Reps extends React.Component<Props & WithLocationProps & WithCompletedProp
 
   componentDidMount() {
     let areaString = "";
+    debugger
 
     const thisComponent = this.componentRef.current;
     if (thisComponent && thisComponent.parentElement) {
@@ -170,16 +171,18 @@ class Reps extends React.Component<Props & WithLocationProps & WithCompletedProp
   render() {
     if (!this.state.contactList || !this.props.locationState?.address) {
       return (
-        <ul>
+        <div ref={this.componentRef}>
+        <ul >
           <li>
             <img alt="No representative found" src="/images/no-rep.png" />
             <h4>No reps available</h4>
             <p>Please set your location to find your representatives</p>
           </li>
         </ul>
+        </div>
       );
     }
-
+    
     const contacts = this.contactsForArea(this.state.areas, this.state.contactList);
     let activeContact: Contact | undefined;
     if (contacts.length > 0) {
