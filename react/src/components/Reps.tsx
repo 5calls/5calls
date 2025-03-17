@@ -41,7 +41,6 @@ class Reps extends React.Component<Props & WithLocationProps & WithCompletedProp
 
   componentDidMount() {
     let areaString = "";
-    debugger
 
     const thisComponent = this.componentRef.current;
     if (thisComponent && thisComponent.parentElement) {
