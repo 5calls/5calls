@@ -80,7 +80,14 @@
     {{ $js := resources.Match "js/*.js" }} {{ range $js }}
     <script type="module" src="{{ .RelPermalink }}" defer></script>
     {{ end }}
-    
+
+    {{ if hugo.IsProduction }}
+      {{ $jsMap := resources.Match "js/*.js.map" }}
+        {{ range $jsMap }}
+        {{ .Publish }}
+      {{ end }}
+    {{ end }}
+
     <script src="https://secure.actblue.com/cf/assets/actblue.js" async></script>
   
     <script defer data-domain="5calls.org" src="https://plausible.io/js/script.tagged-events.js"></script>
