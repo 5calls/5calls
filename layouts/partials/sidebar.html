@@ -32,8 +32,8 @@
     </section>
   </div>
 
-  <a href="/all/" class="i-bar-more">See all {{ len (where .Site.Pages "Type" "issue") }} topics</a>
+  <a href="/all/" class="i-bar-more"><i class="fa-solid fa-table-list"></i>&nbsp;&nbsp;See all {{ len (where .Site.Pages "Type" "issue") }} topics</a>
 </div>
 <div class="i-hidden-bar">
-  <button onclick="window.location='/'">&laquo; Back to all issues</button>
+   <a href="/" class="i-bar-top-issues"> <i class="fa-solid fa-circle-left"></i>&nbsp;&nbsp;Back to top issues</a>
 </div>
