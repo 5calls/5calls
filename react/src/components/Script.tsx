@@ -5,7 +5,6 @@ import { Contact } from "../common/models/contact";
 import { LocationState, WithLocationProps } from "../state/locationState";
 import { withLocation } from "../state/stateProvider";
 
-interface Props { }
 interface State {
   scriptMarkdown: string;
   currentContact?: Contact;
@@ -15,7 +14,7 @@ interface State {
 const titleReg = /\[REP\/SEN NAME\]|\[SENATOR\/REP NAME\]/gi;
 const locationReg = /\[CITY,\s?ZIP\]|\[CITY,\s?STATE\]/gi;
 
-class Script extends React.Component<Props & WithLocationProps, State> {
+class Script extends React.Component<WithLocationProps, State> {
   state: State = { scriptMarkdown: "" };
   scriptRef = createRef<HTMLSpanElement>();
 

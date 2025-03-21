@@ -1,12 +1,11 @@
 import React from "react";
 import { getCountData } from "../utils/api";
 
-interface Props {}
 interface State {
   callCount: number;
 }
 
-class CallCount extends React.Component<Props, State> {
+class CallCount extends React.Component<null, State> {
   state = {
     callCount: 0,
   };
@@ -19,9 +18,9 @@ class CallCount extends React.Component<Props, State> {
 
   render(): React.ReactNode {
     if (this.state.callCount > 0) {
-      return <span>We've made {this.state.callCount.toLocaleString()} calls so far. Join&nbsp;us.</span>
+      return <span>We&rsquo;ve made {this.state.callCount.toLocaleString()} calls so far. Join&nbsp;us.</span>
     } else {
-      return <span>We've made more than 7 million calls so far. Join&nbsp;us.</span>
+      return <span>We&rsquo;ve made more than 7 million calls so far. Join&nbsp;us.</span>
     }
   }
 }

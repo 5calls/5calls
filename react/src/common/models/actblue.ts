@@ -12,7 +12,7 @@ export interface RequestActBlueContributionConfig {
   amounts?: string | number[]; // new option coming, could be string of comma seperated amounts in cents, or an array of cents in integers
   donor?: ActBlueDonor; // pre-set information about the donor
   embedId?: string; // specify your own id, which is echoed back in the `onContribute` events
-  refcodes?: {}; // an object of {refcodeBlah: 'blah'}
+  refcodes?: Record<string, string>; // an object of {refcodeBlah: 'blah'}
   styleSheetHref?: string; // url to a stylesheet which will be injected in the form
 }
 
@@ -30,5 +30,5 @@ export interface ActBlueContribution {
   name: string; // name of the embed form created in actblue
   order_number: string; // order number, referencable in the actblue management interface
   recurring: boolean; // if the contribution was a recurring one
-  refcodes?: {}; // any refcodes added with the contribution
+  refcodes?: Record<string, string>; // any refcodes added with the contribution
 }

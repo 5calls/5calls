@@ -7,9 +7,8 @@ interface Props {
   contact: Contact;
 }
 
-export interface State {}
 
-export class LocalNumbers extends React.Component<Props, State> {
+export class LocalNumbers extends React.Component<Props> {
   render() {
     if (this.props.contact.field_offices == null || this.props.contact.field_offices.length === 0) {
       return <span />;

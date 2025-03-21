@@ -28,7 +28,7 @@ class GroupCallCount extends React.Component<Props, State> {
           isLoading: false 
         });
       })
-      .catch((error) => {
+      .catch(() => {
         this.setState({ 
           error: "Failed to load call counts",
           isLoading: false 

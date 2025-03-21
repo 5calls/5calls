@@ -1,14 +1,13 @@
 import React, { createRef } from "react";
 import { APP_URL } from "../common/constants";
 
-interface Props {}
 interface State {
   issueSlug: string;
   issueId: string;
   issueTitle: string;
 }
 
-class Share extends React.Component<Props, State> {
+class Share extends React.Component<null, State> {
   private componentRef = createRef<HTMLDivElement>();
 
   state = {
