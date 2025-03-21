@@ -15,7 +15,7 @@ import uuid from "./uuid";
 const prepareHeaders = async (): Promise<Headers> => {
   const idToken = await firebase.auth().currentUser?.getIdTokenResult();
 
-  let headers: Headers = { "Content-Type": "application/json; charset=utf-8" };
+  const headers: Headers = { "Content-Type": "application/json; charset=utf-8" };
   if (idToken) {
     headers.Authorization = "Bearer " + idToken.token;
   }
@@ -143,7 +143,7 @@ export const getCompletedIssues = async (): Promise<CompletionMap> => {
 };
 
 export const getUserCallDetails = (idToken: string) => {
-  let today = new Date();
+  const today = new Date();
   // this is fine for now, we can add moment later
   today.setDate(today.getDate() - 60);
   const dateString =
@@ -154,13 +154,13 @@ export const getUserCallDetails = (idToken: string) => {
       headers: { Authorization: "Bearer " + idToken },
     })
     .then((response) => {
-      let profile = response.data as UserCallDetails;
+      const profile = response.data as UserCallDetails;
       return Promise.resolve(profile);
     })
     .catch((e) => Promise.reject(e));
 };
 
-export const postPhoneRemind = (phone: string): Promise<Boolean> => {
+export const postPhoneRemind = (phone: string): Promise<boolean> => {
   const postData = querystring.stringify({
     phone: phone,
     ref: "",
@@ -171,7 +171,7 @@ export const postPhoneRemind = (phone: string): Promise<Boolean> => {
     .catch((e) => Promise.reject(e));
 };
 
-export const postEmail = (email: string, sub: boolean, idToken: string): Promise<Boolean> => {
+export const postEmail = (email: string, sub: boolean, idToken: string): Promise<boolean> => {
   const subscribe = sub ? "true" : "";
 
   const postData = querystring.stringify({
@@ -186,7 +186,7 @@ export const postEmail = (email: string, sub: boolean, idToken: string): Promise
     .catch((e) => Promise.reject(e));
 };
 
-export const postAPIEmail = (email: string): Promise<Boolean> => {
+export const postAPIEmail = (email: string): Promise<boolean> => {
   const postData = querystring.stringify({
     email: email,
   });
