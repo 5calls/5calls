@@ -21,11 +21,12 @@ jobs:
         with:
           node-version: '22'
 
-      - name: Change to react directory
-        run: cd react
 
       - name: Install dependencies
         run: yarn install
+        working-directory: react
 
       - name: Run linter
         run: npm run lint
+        working-directory: react
+
