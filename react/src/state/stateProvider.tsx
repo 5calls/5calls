@@ -16,8 +16,6 @@ interface State {
 
 export default class StateProvider extends React.Component<Props, State> {
 
-  displayName = "StateProvider";
-
   state: State = {
     locationState: undefined,
     savedStateRestored: false,
