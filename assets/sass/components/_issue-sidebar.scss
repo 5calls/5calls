@@ -21,8 +21,8 @@
 
   .i-bar-top-issues {
     @extend .shared-btn-styles;
-    background-color: var(--c-blue);
-    color: #fff;
+    color: var(--c-blue)  !important;
+    background: var(--c-transparent-blue) !important;
     margin-bottom: 1rem;
   }
 }
