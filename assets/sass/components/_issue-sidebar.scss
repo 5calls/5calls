@@ -5,20 +5,26 @@
   --i-bar-check-margin: 1rem;
 }
 
+.shared-btn-styles {
+  @extend .button;
+  display: block;
+  width: 100%;
+  font-size: 1.2rem;
+  padding: .5rem 1rem;
+  margin-top: 1rem;
+  text-align: left;
+}
+
 .i-hidden-bar {
   // shown in smaller screen sizes via overrides.scss
   display: none;
   margin-bottom: 20px;
 
-  button {
-    width: 100%;
-    font-size: 1.4rem;
-    font-weight: bold;
-    text-align: left;
+  .i-bar-top-issues {
+    @extend .shared-btn-styles;
     background-color: var(--c-blue);
     color: #fff;
-    padding: 4px 8px;
-    text-decoration: underline;
+    margin-bottom: 1rem;
   }
 }
 
@@ -26,6 +32,7 @@
   from {
     transform: scale(1);
   }
+
   to {
     transform: scale(0.8);
   }
@@ -51,6 +58,7 @@
     text-align: center;
     margin-left: auto;
     margin-right: auto;
+
     @media screen and (min-width: 40rem) {
       text-align: left;
       margin-left: 0;
@@ -77,6 +85,7 @@
 
   div {
     display: none;
+
     &.is-visible {
       display: block;
     }
@@ -120,6 +129,7 @@
     input,
     button {
       position: relative;
+
       &:focus {
         box-shadow: 0 0 0 4px rgb(170, 191, 221);
         outline: 0;
@@ -146,6 +156,7 @@
   border: 1px solid rgba(var(--c-dark-rgb), 0.4);
   border-top: 0;
   margin-bottom: 0.5rem;
+
   button {
     color: #191b1d;
   }
@@ -161,9 +172,11 @@
   text-align: left;
   background: #fff;
   line-height: var(--leading);
+
   &:last-child {
     border-bottom-width: 2px;
   }
+
   text-decoration: none;
   color: #191b1d !important;
 
@@ -235,6 +248,7 @@
   font-size: 1rem;
   padding: 0.5rem var(--i-bar-padding-h);
   margin: 0;
+
   h3 {
     @include i-bar-caps;
     text-align: left;
@@ -250,12 +264,16 @@
 }
 
 .i-bar-more {
-  font-size: 1rem;
+  @extend .shared-btn-styles;
+  color: var(--c-base) !important;
+  background: var(--c-xlight-base) !important
 }
+
 
 @mixin i-bar-color($status) {
   .i-bar-header-#{$status} {
     background: rgba(var(--c-#{$status}-rgb), 0.05);
+
     h3 {
       color: var(--c-#{$status});
     }
@@ -276,6 +294,7 @@
     .i-bar-check-initial {
       background: var(--check-color);
     }
+
     .i-bar-check-completed,
     .i-bar-check-percent {
       border: 2px solid var(--check-color);
