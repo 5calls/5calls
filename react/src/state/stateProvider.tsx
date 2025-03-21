@@ -4,7 +4,10 @@ import { LocationState, LocationContext, WithLocationProps } from "./locationSta
 import Storage from "../utils/storage";
 import { CompletedContext, CompletedState, CompletionMap, WithCompletedProps } from "./completedState";
 
-interface Props {}
+interface Props {
+  children: React.ReactNode
+}
+
 interface State {
   locationState?: LocationState;
   completedState?: CompletedState;
@@ -12,6 +15,9 @@ interface State {
 }
 
 export default class StateProvider extends React.Component<Props, State> {
+
+  displayName = "StateProvider";
+
   state: State = {
     locationState: undefined,
     savedStateRestored: false,
@@ -69,7 +75,7 @@ export default class StateProvider extends React.Component<Props, State> {
     });
   }
 
-  render(): JSX.Element {
+  render(): React.ReactNode {
     // simple version of the redux-persist gate where nothing is rendered until the persisted
     // data is loaded for the first time
     if (!this.state.savedStateRestored) {

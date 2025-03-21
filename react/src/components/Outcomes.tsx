@@ -1,12 +1,11 @@
 import React, { createRef } from "react";
 
-interface Props {}
 interface State {
   outcomes: string[];
   showReps: boolean;
 }
 
-class Outcomes extends React.Component<Props, State> {
+class Outcomes extends React.Component<null, State> {
   _defaultOutcomes: string[] = [];
   state = {
     outcomes: this._defaultOutcomes,
@@ -21,7 +20,7 @@ class Outcomes extends React.Component<Props, State> {
       this.setState({ outcomes });
     }
 
-    document.addEventListener("loadedReps", (e) => {
+    document.addEventListener("loadedReps", () => {
       this.setState({ showReps: true });
     });
   }

@@ -116,7 +116,7 @@ export const postOutcomeData = async (data: OutcomeData) => {
     .post(`${Constants.REPORT_API_URL}`, postData, {
       headers,
     })
-    .then((response) => {
+    .then(() => {
       return Promise.resolve(null);
     })
     .catch((e) => Promise.reject(e));
@@ -167,7 +167,7 @@ export const postPhoneRemind = (phone: string): Promise<boolean> => {
   });
   return axios
     .post(Constants.REMINDER_API_URL, postData)
-    .then((response) => Promise.resolve(true))
+    .then(() => Promise.resolve(true))
     .catch((e) => Promise.reject(e));
 };
 
@@ -182,7 +182,7 @@ export const postEmail = (email: string, sub: boolean, idToken: string): Promise
     .post(Constants.PROFILE_API_URL, postData, {
       headers: { Authorization: "Bearer " + idToken },
     })
-    .then((response) => Promise.resolve(true))
+    .then(() => Promise.resolve(true))
     .catch((e) => Promise.reject(e));
 };
 
@@ -192,6 +192,6 @@ export const postAPIEmail = (email: string): Promise<boolean> => {
   });
   return axios
     .post(Constants.API_TOKEN_URL, postData)
-    .then((response) => Promise.resolve(true))
+    .then(() => Promise.resolve(true))
     .catch((e) => Promise.reject(e));
 };

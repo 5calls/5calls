@@ -70,9 +70,7 @@ firebase.auth().onAuthStateChanged((user) => {
     firebase
       .auth()
       .signInAnonymously()
-      .then((user) => {
-        // ok user signed in
-      })
+
       .catch((error) => {
         console.log("error signing in user", error);
       });

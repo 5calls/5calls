@@ -15,14 +15,13 @@ enum ComponentLocationState {
   EnterManually,
 }
 
-interface Props {}
 interface State {
   componentLocationState: ComponentLocationState;
   manualAddress: string | undefined;
   locationError: string | undefined;
 }
 
-class Location extends React.Component<Props & WithLocationProps & WithCompletedProps, State> {
+class Location extends React.Component<WithLocationProps & WithCompletedProps, State> {
   _defaultManualAddress: string | undefined = undefined;
   _defaultLocationError: string | undefined = undefined;
 
@@ -141,7 +140,7 @@ class Location extends React.Component<Props & WithLocationProps & WithCompleted
         // // this.props.setLocation(loc);
         // this.setState({ componentLocationState: ComponentLocationState.HasLocation });
       })
-      .catch((err) => {
+      .catch(() => {
         // nbd, go to manual entry
         this.setState({ componentLocationState: ComponentLocationState.EnterManually });
       });
@@ -196,7 +195,7 @@ class Location extends React.Component<Props & WithLocationProps & WithCompleted
               <button className="button button-small button-red">Go</button>
             </form>
             {this.state.locationError && (
-              <span className="location-error">Couldn't find that location, please try again</span>
+              <span className="location-error">Couldn&rsquo;t find that location, please try again</span>
             )}
           </div>
         );

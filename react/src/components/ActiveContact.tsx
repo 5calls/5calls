@@ -7,9 +7,8 @@ import LocalNumbers from "./LocalNumbers";
 interface Props {
   contact: Contact;
 }
-interface State {}
 
-class ActiveContact extends React.Component<Props, State> {
+class ActiveContact extends React.Component<Props> {
   render() {
     let photoURL = "/images/no-rep.png";
     if (this.props.contact.photoURL && this.props.contact.photoURL !== "") {

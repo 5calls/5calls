@@ -2,14 +2,13 @@ import React from "react";
 import { postAPIEmail } from "../utils/api";
 import { AxiosError } from "axios";
 
-interface Props {}
 interface State {
   emailSent: boolean;
   email: string;
   errorText: string;
 }
 
-class APIForm extends React.Component<Props, State> {
+class APIForm extends React.Component<null, State> {
   state = {
     emailSent: false,
     email: '',
@@ -20,7 +19,7 @@ class APIForm extends React.Component<Props, State> {
     e.preventDefault();
 
     postAPIEmail(this.state.email)
-    .then((d) => {
+    .then(() => {
       this.setState({emailSent: true})
     })
     .catch((error) => {

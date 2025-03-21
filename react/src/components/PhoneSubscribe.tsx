@@ -2,14 +2,13 @@ import React from "react";
 import OneSignal from "react-onesignal";
 import Input, { isValidPhoneNumber } from "react-phone-number-input/input";
 
-interface Props {}
 interface State {
   phone: string;
   validPhone: boolean;
   submitted: boolean;
 }
 
-class PhoneSubscribe extends React.Component<Props, State> {
+class PhoneSubscribe extends React.Component<null, State> {
   state = {
     phone: '',
     validPhone: false,
