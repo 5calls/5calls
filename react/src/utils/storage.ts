@@ -3,7 +3,7 @@ import { ApplicationState } from "../state/appState";
 import { CompletedIssueMap,  } from "../state/completedState";
 
 const LOCATION_KEY = "persist:fivecalls";
-const COMPLETION_KEY = 'persist:fivecalls-completion';
+const COMPLETION_KEY = 'persist:fivecalls-completedIssueMap';
 
 const saveLocation = (location: LocationState) => {
 
