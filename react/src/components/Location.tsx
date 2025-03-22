@@ -4,8 +4,8 @@ import $ from "jquery";
 import { WithLocationProps } from "../state/locationState";
 import { withCompleted, withLocation } from "../state/stateProvider";
 import { getBrowserGeolocation } from "../utils/geolocation";
-import { getCompletedIssues, getContacts } from "../utils/api";
-import { CompletionMap, WithCompletedProps } from "../state/completedState";
+import { getContacts } from "../utils/api";
+import {  WithCompletedProps } from "../state/completedState";
 
 enum ComponentLocationState {
   NoLocation,
@@ -37,41 +37,28 @@ class Location extends React.Component<WithLocationProps & WithCompletedProps, S
       this.setState({ componentLocationState: ComponentLocationState.HasLocation });
     }
 
-    this.processIssueCompletion();
+    this.updateIssueCompletion();
   }
 
-  processIssueCompletion = () => {
-    if (this.props.completed?.needsCompletionFetch) {
-      getCompletedIssues().then((completed) => {
-        this.props.setCompleted(completed);
-        this.updateIssueCompletion(this.completedIDsFromCompletionMap(completed));
-      });
-    } else {
-      if (this.props.completed?.completed) {
-        this.updateIssueCompletion(this.completedIDsFromCompletionMap(this.props.completed?.completed));
-      }
+  componentDidUpdate(prevProps: Readonly<WithLocationProps & WithCompletedProps>, prevState: Readonly<State>, snapshot?: any): void {
+    // if we have a location, update the issue completion
+    if (JSON.stringify(prevProps.completedIssueMap) !== JSON.stringify(this.props.completedIssueMap)) {
+      this.updateIssueCompletion();
     }
-  };
-
-  completedIDsFromCompletionMap(completionMap: CompletionMap): string[] {
-    const completedIssueIDs: string[] = [];
-    Object.keys(completionMap).forEach((key) => {
-      completedIssueIDs.push(key);
-    });
-
-    return completedIssueIDs;
   }
+
 
   // "what the fuck is jquery doing in react?"
   // well, we have a bunch of static html on the page that we'd likely to modify
   // without having to render again in react, plus rerender flashes are ugly
   // so instead we do some light modification with jquery
-  updateIssueCompletion = (completedIssueIDs: string[]) => {
+  updateIssueCompletion = () => {
+    const completedIssueIds = Object.keys(this.props.completedIssueMap || {})
     $(".i-bar-list-section .i-bar-item-check>div").each((_, el) => {
       const itemIssueID = $(el).data("issue-id") as string;
 
       // itemIssueID is VERY insistant that it be a number even with `as string` above
-      if (itemIssueID && completedIssueIDs.indexOf(`${itemIssueID}`) !== -1) {
+      if (itemIssueID && completedIssueIds.indexOf(`${itemIssueID}`) !== -1) {
         $(el).attr("class", "i-bar-check-initial");
         $(el).find("i").first().attr("class", "fa fa-check");
       }
@@ -101,7 +88,6 @@ class Location extends React.Component<WithLocationProps & WithCompletedProps, S
     if (this.state.manualAddress) {
       getContacts(this.state.manualAddress)
         .then((contactList) => {
-          // console.log("contacts are", contactList);
           this.props.setLocationAddress(this.state.manualAddress ?? "", contactList.location);
           this.setState({ componentLocationState: ComponentLocationState.HasLocation });
           document.dispatchEvent(new Event("updateReps"));
