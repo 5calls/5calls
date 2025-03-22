@@ -15,6 +15,7 @@ enum ComponentLocationState {
   EnterManually,
 }
 
+
 interface State {
   componentLocationState: ComponentLocationState;
   manualAddress: string | undefined;
@@ -41,19 +42,21 @@ class Location extends React.Component<WithLocationProps & WithCompletedProps, S
   }
 
   componentDidUpdate(prevProps: Readonly<WithLocationProps & WithCompletedProps>): void {
-    // if we have a location, update the issue completion
-    if (JSON.stringify(prevProps.completedIssueMap) !== JSON.stringify(this.props.completedIssueMap)) {
+    const prevPropsIssueCount = Object.keys(prevProps.completedIssueMap ?? {}).length;
+    const currentPropsIssueCount = Object.keys(this.props.completedIssueMap ?? {}).length;
+    if (prevPropsIssueCount !== currentPropsIssueCount) {
       this.updateIssueCompletion();
     }
   }
 
 
-  // "what the fuck is jquery doing in react?"
-  // well, we have a bunch of static html on the page that we'd likely to modify
-  // without having to render again in react, plus rerender flashes are ugly
-  // so instead we do some light modification with jquery
+  // // "what the fuck is jquery doing in react?"
+  // // well, we have a bunch of static html on the page that we'd likely to modify
+  // // without having to render again in react, plus rerender flashes are ugly
+  // // so instead we do some light modification with jquery
   updateIssueCompletion = () => {
     const completedIssueIds = Object.keys(this.props.completedIssueMap || {})
+    if (completedIssueIds.length === 0) return
     $(".i-bar-list-section .i-bar-item-check>div").each((_, el) => {
       const itemIssueID = $(el).data("issue-id") as string;
 
