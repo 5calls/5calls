@@ -40,7 +40,7 @@ class Location extends React.Component<WithLocationProps & WithCompletedProps, S
     this.updateIssueCompletion();
   }
 
-  componentDidUpdate(prevProps: Readonly<WithLocationProps & WithCompletedProps>, prevState: Readonly<State>, snapshot?: any): void {
+  componentDidUpdate(prevProps: Readonly<WithLocationProps & WithCompletedProps>): void {
     // if we have a location, update the issue completion
     if (JSON.stringify(prevProps.completedIssueMap) !== JSON.stringify(this.props.completedIssueMap)) {
       this.updateIssueCompletion();

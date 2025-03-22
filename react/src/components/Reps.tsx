@@ -91,10 +91,7 @@ class Reps extends React.Component<Props & WithLocationProps & WithCompletedProp
         this.props.setCompletedIssueMap({
           [this.state.issueId]: Date.now()
         })
-
-        const event = new CustomEvent("nextContact", { detail: outcome });
-        document.dispatchEvent(event);
-
+        
         // if we load the next page too soon, the previous outcome is sometimes skipped
         // 300ms is something arbitrary I picked
         setTimeout(() => {
