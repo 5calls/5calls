@@ -1,5 +1,5 @@
-import React from "react";
-import { getGroupCountData, IssueCount } from "../utils/api";
+import React from 'react';
+import { getGroupCountData, IssueCount } from '../utils/api';
 
 interface Props {
   group: string;
@@ -22,16 +22,16 @@ class GroupCallCount extends React.Component<Props, State> {
   componentDidMount() {
     getGroupCountData(this.props.group)
       .then((response) => {
-        this.setState({ 
+        this.setState({
           issueCounts: response.issueCounts,
           total: response.total,
-          isLoading: false 
+          isLoading: false,
         });
       })
       .catch(() => {
-        this.setState({ 
-          error: "Failed to load call counts",
-          isLoading: false 
+        this.setState({
+          error: 'Failed to load call counts',
+          isLoading: false,
         });
       });
   }
@@ -68,4 +68,4 @@ class GroupCallCount extends React.Component<Props, State> {
   }
 }
 
-export default GroupCallCount; 
+export default GroupCallCount;

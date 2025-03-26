@@ -1,8 +1,11 @@
-import { DONATE_URL } from "../common/constants";
-import uuid from "./uuid";
+import { DONATE_URL } from '../common/constants';
+import uuid from './uuid';
 
 const openDonate = (amount: number, refcode: string) => {
-  window.open(`${DONATE_URL}?refcode=${refcode}&refcode2=${uuid.callerID()}&amount=${amount}`, "_blank");
+  window.open(
+    `${DONATE_URL}?refcode=${refcode}&refcode2=${uuid.callerID()}&amount=${amount}`,
+    '_blank',
+  );
 };
 
 // sometimes it's convenient to call small functions from hugo js-world

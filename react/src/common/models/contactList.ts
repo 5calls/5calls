@@ -1,13 +1,13 @@
-import { Contact } from "./contact";
+import { Contact } from './contact';
 
 export enum ContactArea {
-  USSenate = "US Senate",
-  USHouse = "US House",
-  Governor = "Governor",
-  AttorneysGeneral = "AttorneysGeneral",
-  SecretaryOfState = "SecretaryOfState",
-  StateUpper = "StateUpper",
-  StateLower = "StateLower",
+  USSenate = 'US Senate',
+  USHouse = 'US House',
+  Governor = 'Governor',
+  AttorneysGeneral = 'AttorneysGeneral',
+  SecretaryOfState = 'SecretaryOfState',
+  StateUpper = 'StateUpper',
+  StateLower = 'StateLower',
 }
 
 export class ContactList {
@@ -18,21 +18,25 @@ export class ContactList {
   public representatives: Contact[];
 
   constructor() {
-    this.location = "";
+    this.location = '';
     this.lowAccuracy = false;
-    this.state = "";
-    this.district = "";
+    this.state = '';
+    this.district = '';
     this.representatives = [];
   }
 
   public senateReps(): Contact[] {
-    return this.representatives.filter((contact) => contact.area === ContactArea.USSenate);
+    return this.representatives.filter(
+      (contact) => contact.area === ContactArea.USSenate,
+    );
   }
 
   // there may be multiple house reps returned here, only return one for now
   public houseRep(): Contact[] {
     const contacts: Contact[] = [];
-    const houseRep = this.representatives.find((contact) => contact.area === ContactArea.USHouse);
+    const houseRep = this.representatives.find(
+      (contact) => contact.area === ContactArea.USHouse,
+    );
     if (houseRep) {
       contacts.push(houseRep);
     }
@@ -40,25 +44,35 @@ export class ContactList {
   }
 
   public governor(): Contact[] {
-    return this.representatives.filter((contact) => contact.area === ContactArea.Governor);
+    return this.representatives.filter(
+      (contact) => contact.area === ContactArea.Governor,
+    );
   }
 
   public stateUpper(): Contact[] {
-    return this.representatives.filter((contact) => contact.area === ContactArea.StateUpper);
+    return this.representatives.filter(
+      (contact) => contact.area === ContactArea.StateUpper,
+    );
   }
 
   public stateLower(): Contact[] {
-    return this.representatives.filter((contact) => contact.area === ContactArea.StateLower);
+    return this.representatives.filter(
+      (contact) => contact.area === ContactArea.StateLower,
+    );
   }
 
   public secState(): Contact[] {
-    return this.representatives.filter((contact) => contact.area === ContactArea.SecretaryOfState);
+    return this.representatives.filter(
+      (contact) => contact.area === ContactArea.SecretaryOfState,
+    );
   }
   public attyGeneral(): Contact[] {
-    return this.representatives.filter((contact) => contact.area === ContactArea.AttorneysGeneral);
+    return this.representatives.filter(
+      (contact) => contact.area === ContactArea.AttorneysGeneral,
+    );
   }
 
   public generalizedLocationID(): string {
-    return `${this.state}-${this.district}`
+    return `${this.state}-${this.district}`;
   }
 }

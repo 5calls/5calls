@@ -1,9 +1,9 @@
-import React, { createRef } from "react";
-import ReactMarkdown from "react-markdown";
-import { Contact } from "../common/models/contact";
+import React, { createRef } from 'react';
+import ReactMarkdown from 'react-markdown';
+import { Contact } from '../common/models/contact';
 
-import { LocationState, WithLocationProps } from "../state/locationState";
-import { withLocation } from "../state/stateProvider";
+import { LocationState, WithLocationProps } from '../state/locationState';
+import { withLocation } from '../state/stateProvider';
 
 interface State {
   scriptMarkdown: string;
@@ -15,40 +15,44 @@ const titleReg = /\[REP\/SEN NAME\]|\[SENATOR\/REP NAME\]/gi;
 const locationReg = /\[CITY,\s?ZIP\]|\[CITY,\s?STATE\]/gi;
 
 class Script extends React.Component<WithLocationProps, State> {
-  state: State = { scriptMarkdown: "" };
+  state: State = { scriptMarkdown: '' };
   scriptRef = createRef<HTMLSpanElement>();
 
   getContactNameWithTitle = (contact: Contact) => {
-    let title = "";
+    let title = '';
     switch (contact.area) {
-      case "US House":
-      case "House":
-        title = "Rep. ";
+      case 'US House':
+      case 'House':
+        title = 'Rep. ';
         break;
-      case "US Senate":
-      case "Senate":
-        title = "Senator ";
+      case 'US Senate':
+      case 'Senate':
+        title = 'Senator ';
         break;
-      case "StateLower":
-      case "StateUpper":
-        title = "Legislator ";
+      case 'StateLower':
+      case 'StateUpper':
+        title = 'Legislator ';
         break;
-      case "Governor":
-        title = "Governor ";
+      case 'Governor':
+        title = 'Governor ';
         break;
-      case "AttorneysGeneral":
-        title = "Attorney General ";
+      case 'AttorneysGeneral':
+        title = 'Attorney General ';
         break;
-      case "SecretaryOfState":
-        title = "Secretary of State ";
+      case 'SecretaryOfState':
+        title = 'Secretary of State ';
         break;
       default:
-        title = "";
+        title = '';
     }
     return title + contact.name;
   };
 
-  scriptFormat = (script: string, locationState: LocationState, contact: Contact | undefined) => {
+  scriptFormat = (
+    script: string,
+    locationState: LocationState,
+    contact: Contact | undefined,
+  ) => {
     const location = locationState.cachedCity;
     if (location) {
       script = script.replace(locationReg, location);
@@ -63,14 +67,15 @@ class Script extends React.Component<WithLocationProps, State> {
   };
 
   componentDidMount() {
-    let scriptMarkdown = "";
+    let scriptMarkdown = '';
     if (this.scriptRef.current?.parentElement) {
-      scriptMarkdown = this.scriptRef.current.parentElement.dataset.scriptMarkdown ?? "";
+      scriptMarkdown =
+        this.scriptRef.current.parentElement.dataset.scriptMarkdown ?? '';
 
       this.setState({ scriptMarkdown });
     }
 
-    document.addEventListener("activeContact", (e) => {
+    document.addEventListener('activeContact', (e) => {
       const contact = (e as CustomEvent).detail as Contact;
       this.setState({ currentContact: contact });
     });
@@ -83,7 +88,7 @@ class Script extends React.Component<WithLocationProps, State> {
       formattedScriptMarkdown = this.scriptFormat(
         formattedScriptMarkdown,
         this.props.locationState,
-        this.state.currentContact
+        this.state.currentContact,
       );
     }
 

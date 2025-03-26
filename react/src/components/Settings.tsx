@@ -1,24 +1,23 @@
-import React from "react";
-import { useSettings } from "../utils/useSettings";
+import React from 'react';
+import { useSettings } from '../utils/useSettings';
 
 function Settings() {
-  const { callingGroup, setCallingGroup, saveSettings, isSaved } = useSettings();
+  const { callingGroup, setCallingGroup, saveSettings, isSaved } =
+    useSettings();
 
   const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    saveSettings()
+    e.preventDefault();
+    saveSettings();
     setTimeout(() => {
-      window.location.href = '/'
-    }, 2000)
-  }
+      window.location.href = '/';
+    }, 2000);
+  };
 
   return (
     <>
       <h1 className="">Settings</h1>
       <form onSubmit={handleSubmit}>
-        <label>
-          Calling Group
-        </label>
+        <label>Calling Group</label>
         <input
           type="text"
           value={callingGroup}
@@ -26,7 +25,9 @@ function Settings() {
           placeholder="Enter your calling group"
           className=""
         />
-        <p className="small">Set a calling group name to track calls with others</p>
+        <p className="small">
+          Set a calling group name to track calls with others
+        </p>
         <button
           type="submit"
           className={`button button-small ${isSaved ? 'button-disabled' : ''}`}
@@ -34,7 +35,7 @@ function Settings() {
         >
           {isSaved ? 'Saved' : 'Save'}
         </button>
-      </form>  
+      </form>
     </>
   );
 }

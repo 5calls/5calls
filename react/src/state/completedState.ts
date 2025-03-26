@@ -1,12 +1,11 @@
-import React from "react";
+import React from 'react';
 
 // where the value is the timestamp of when the issue was completed
 export type CompletedIssueMap = { [issueID: number]: number };
 
 export const CompletedContext = React.createContext({
   completedIssueMap: {} as CompletedIssueMap,
-  setCompletedIssueMap: () => {
-  },
+  setCompletedIssueMap: () => {},
 });
 
 export type WithCompletedProps = {

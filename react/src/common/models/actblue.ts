@@ -1,10 +1,17 @@
 export interface ActBlue {
   __initialized: boolean; // indicates that the actblue script is loaded and ready to go
-  requestContribution(config: RequestActBlueContributionConfig): Promise<ActBlueContribution>;
-  addEventListener(eventName: string, completion: ActBlueCompletionCallback): void;
+  requestContribution(
+    config: RequestActBlueContributionConfig,
+  ): Promise<ActBlueContribution>;
+  addEventListener(
+    eventName: string,
+    completion: ActBlueCompletionCallback,
+  ): void;
 }
 
-export type ActBlueCompletionCallback = (contribution: ActBlueContribution) => void;
+export type ActBlueCompletionCallback = (
+  contribution: ActBlueContribution,
+) => void;
 
 export interface RequestActBlueContributionConfig {
   token: string; // the config token for this embed, the only required attribute

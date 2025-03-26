@@ -1,11 +1,19 @@
-import React from "react";
+import React from 'react';
 
-import { LocationState, LocationContext, WithLocationProps } from "./locationState";
-import Storage from "../utils/storage";
-import { CompletedContext, CompletedIssueMap, WithCompletedProps } from "./completedState";
+import {
+  LocationState,
+  LocationContext,
+  WithLocationProps,
+} from './locationState';
+import Storage from '../utils/storage';
+import {
+  CompletedContext,
+  CompletedIssueMap,
+  WithCompletedProps,
+} from './completedState';
 
 interface Props {
-  children: React.ReactNode
+  children: React.ReactNode;
 }
 
 interface State {
@@ -15,23 +23,22 @@ interface State {
 }
 
 export default class StateProvider extends React.Component<Props, State> {
-
   state: State = {
     locationState: undefined,
     savedStateRestored: false,
-    completedIssueMap: {}
+    completedIssueMap: {},
   };
 
   componentDidMount() {
     try {
       this.loadFromStorage();
     } catch (error) {
-      console.log("could not parse localstorage, removing:", error);
-      localStorage.removeItem("persist:fivecalls");
+      console.log('could not parse localstorage, removing:', error);
+      localStorage.removeItem('persist:fivecalls');
     }
 
     // if these events are fired, we should reload from storage
-    document.addEventListener("updateReps", () => {
+    document.addEventListener('updateReps', () => {
       this.loadFromStorage();
     });
   }
@@ -64,13 +71,11 @@ export default class StateProvider extends React.Component<Props, State> {
     const newCompletedIssueMap = {
       ...this.state.completedIssueMap,
       ...updatedCompletedIssueMap,
-    }
-    Storage.saveCompleted(
-      newCompletedIssueMap
-    );
+    };
+    Storage.saveCompleted(newCompletedIssueMap);
     this.setState({
-      completedIssueMap: newCompletedIssueMap
-    })
+      completedIssueMap: newCompletedIssueMap,
+    });
   }
 
   render(): React.ReactNode {
@@ -84,13 +89,15 @@ export default class StateProvider extends React.Component<Props, State> {
       <LocationContext.Provider
         value={{
           locationState: this.state.locationState,
-          setLocationAddress: (address: string, display: string) => this.setLocationAddress(address, display),
+          setLocationAddress: (address: string, display: string) =>
+            this.setLocationAddress(address, display),
         }}
       >
         <CompletedContext.Provider
           value={{
             completedIssueMap: this.state.completedIssueMap || {},
-            setCompletedIssueMap: (issueMapUpdates: CompletedIssueMap) => this.setCompletedIssueMap(issueMapUpdates),
+            setCompletedIssueMap: (issueMapUpdates: CompletedIssueMap) =>
+              this.setCompletedIssueMap(issueMapUpdates),
           }}
         >
           {this.props.children}
@@ -100,26 +107,34 @@ export default class StateProvider extends React.Component<Props, State> {
   }
 }
 
-export const withLocation = <P extends object>(
-  Component: React.ComponentType<P>
-): React.FC<Omit<P, keyof WithLocationProps>> => (props) => (
-  <LocationContext.Consumer>
-    {({ locationState, setLocationAddress }) => (
-      <Component {...(props as P)} locationState={locationState} setLocationAddress={setLocationAddress} />
-    )}
-  </LocationContext.Consumer>
-);
+export const withLocation =
+  <P extends object>(
+    Component: React.ComponentType<P>,
+  ): React.FC<Omit<P, keyof WithLocationProps>> =>
+  (props) => (
+    <LocationContext.Consumer>
+      {({ locationState, setLocationAddress }) => (
+        <Component
+          {...(props as P)}
+          locationState={locationState}
+          setLocationAddress={setLocationAddress}
+        />
+      )}
+    </LocationContext.Consumer>
+  );
 
-export const withCompleted = <P extends object>(
-  Component: React.ComponentType<P>
-): React.FC<Omit<P, keyof WithCompletedProps>> => (props) => (
-  <CompletedContext.Consumer>
-    {({ completedIssueMap, setCompletedIssueMap }) => (
-      <Component
-        {...(props as P)}
-        completedIssueMap={completedIssueMap}
-        setCompletedIssueMap={setCompletedIssueMap}
-      />
-    )}
-  </CompletedContext.Consumer>
-);
+export const withCompleted =
+  <P extends object>(
+    Component: React.ComponentType<P>,
+  ): React.FC<Omit<P, keyof WithCompletedProps>> =>
+  (props) => (
+    <CompletedContext.Consumer>
+      {({ completedIssueMap, setCompletedIssueMap }) => (
+        <Component
+          {...(props as P)}
+          completedIssueMap={completedIssueMap}
+          setCompletedIssueMap={setCompletedIssueMap}
+        />
+      )}
+    </CompletedContext.Consumer>
+  );
