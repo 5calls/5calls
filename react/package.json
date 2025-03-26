@@ -29,7 +29,8 @@
     "build-js:dev": "NODE_ENV=development node ./scripts/watch-changes.js",
     "move": "node ./scripts/move-built.js",
     "lint": "eslint src",
-    "format": "prettier --write src; prettier --write ../assets/sass/**/*.scss"
+    "format": "prettier --write src; prettier --write ../assets/sass/**/*.scss",
+    "format:test": "prettier --check src; prettier --write ../assets/sass/**/*.scss"
   },
   "eslintConfig": {
     "extends": [

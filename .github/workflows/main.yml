@@ -30,3 +30,6 @@ jobs:
         run: npm run lint
         working-directory: react
 
+      - name: Check code formatting with Prettier
+        run: npm run format:test
+        working-directory: react
