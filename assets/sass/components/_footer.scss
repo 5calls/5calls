@@ -14,7 +14,10 @@
     color: var(--c-footer);
     text-decoration: none;
     font-weight: bold;
-    &:hover, &:focus, &:active, &:visited {
+    &:hover,
+    &:focus,
+    &:active,
+    &:visited {
       color: var(--c-footer-active);
     }
   }
