@@ -1,4 +1,4 @@
-name: Lint & Check Formatting
+name: Check Pull Request
 
 on:
   pull_request:
