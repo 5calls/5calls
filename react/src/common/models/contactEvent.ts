@@ -12,7 +12,7 @@ export enum UserContactEventType {
   UNAVAILABLE = 'unavailable',
   VOICEMAIL = 'voicemail',
   CONTACT = 'contact',
-  SKIP = 'skip',
+  SKIP = 'skip'
 }
 
 export interface Outcome {

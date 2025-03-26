@@ -16,7 +16,7 @@ class GroupCallCount extends React.Component<Props, State> {
   state: State = {
     issueCounts: [],
     total: 0,
-    isLoading: true,
+    isLoading: true
   };
 
   componentDidMount() {
@@ -25,13 +25,13 @@ class GroupCallCount extends React.Component<Props, State> {
         this.setState({
           issueCounts: response.issueCounts,
           total: response.total,
-          isLoading: false,
+          isLoading: false
         });
       })
       .catch(() => {
         this.setState({
           error: 'Failed to load call counts',
-          isLoading: false,
+          isLoading: false
         });
       });
   }

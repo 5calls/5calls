@@ -25,7 +25,7 @@ export const zipCodeRegex: RegExp = /^\d{5}(-\d{4})?$/;
 
 export const cacheTimeout = {
   default: 24 * 60 * 60 * 1000, // 1 day
-  groups: 24 * 60 * 60 * 1000, // 1 day
+  groups: 24 * 60 * 60 * 1000 // 1 day
 };
 
 export const contact = {
@@ -33,5 +33,5 @@ export const contact = {
   github: 'https://github.com/5calls',
   twitter: 'https://twitter.com/make5calls',
   facebook: 'https://www.facebook.com/make5calls',
-  apps: 'https://crgj.app.link/7R2bEB0R4F',
+  apps: 'https://crgj.app.link/7R2bEB0R4F'
 };

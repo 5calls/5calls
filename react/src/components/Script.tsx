@@ -51,7 +51,7 @@ class Script extends React.Component<WithLocationProps, State> {
   scriptFormat = (
     script: string,
     locationState: LocationState,
-    contact: Contact | undefined,
+    contact: Contact | undefined
   ) => {
     const location = locationState.cachedCity;
     if (location) {
@@ -88,7 +88,7 @@ class Script extends React.Component<WithLocationProps, State> {
       formattedScriptMarkdown = this.scriptFormat(
         formattedScriptMarkdown,
         this.props.locationState,
-        this.state.currentContact,
+        this.state.currentContact
       );
     }
 

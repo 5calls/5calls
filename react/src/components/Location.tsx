@@ -12,7 +12,7 @@ enum ComponentLocationState {
   BadLocation,
   HasLocation,
   GettingAutomatically,
-  EnterManually,
+  EnterManually
 }
 
 interface State {
@@ -31,14 +31,14 @@ class Location extends React.Component<
   state = {
     componentLocationState: ComponentLocationState.NoLocation,
     manualAddress: this._defaultManualAddress,
-    locationError: this._defaultLocationError,
+    locationError: this._defaultLocationError
   };
 
   componentDidMount() {
     // update the local component state based on our global state
     if (this.props.locationState && this.props.locationState.address) {
       this.setState({
-        componentLocationState: ComponentLocationState.HasLocation,
+        componentLocationState: ComponentLocationState.HasLocation
       });
     }
 
@@ -46,13 +46,13 @@ class Location extends React.Component<
   }
 
   componentDidUpdate(
-    prevProps: Readonly<WithLocationProps & WithCompletedProps>,
+    prevProps: Readonly<WithLocationProps & WithCompletedProps>
   ): void {
     const prevPropsIssueCount = Object.keys(
-      prevProps.completedIssueMap ?? {},
+      prevProps.completedIssueMap ?? {}
     ).length;
     const currentPropsIssueCount = Object.keys(
-      this.props.completedIssueMap ?? {},
+      this.props.completedIssueMap ?? {}
     ).length;
     if (prevPropsIssueCount !== currentPropsIssueCount) {
       this.updateIssueCompletion();
@@ -85,7 +85,7 @@ class Location extends React.Component<
     e.preventDefault();
 
     this.setState({
-      componentLocationState: ComponentLocationState.EnterManually,
+      componentLocationState: ComponentLocationState.EnterManually
     });
   };
 
@@ -104,10 +104,10 @@ class Location extends React.Component<
         .then((contactList) => {
           this.props.setLocationAddress(
             this.state.manualAddress ?? '',
-            contactList.location,
+            contactList.location
           );
           this.setState({
-            componentLocationState: ComponentLocationState.HasLocation,
+            componentLocationState: ComponentLocationState.HasLocation
           });
           document.dispatchEvent(new Event('updateReps'));
         })
@@ -116,7 +116,7 @@ class Location extends React.Component<
           // we don't specify different types of location errors, but might in the future
           this.setState({
             locationError: 'location error',
-            componentLocationState: ComponentLocationState.NoLocation,
+            componentLocationState: ComponentLocationState.NoLocation
           });
         });
     }
@@ -125,7 +125,7 @@ class Location extends React.Component<
   setLocationAutomatically = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     this.setState({
-      componentLocationState: ComponentLocationState.GettingAutomatically,
+      componentLocationState: ComponentLocationState.GettingAutomatically
     });
 
     getBrowserGeolocation()
@@ -136,7 +136,7 @@ class Location extends React.Component<
           .then((contactList) => {
             this.props.setLocationAddress(pairedLoc, contactList.location);
             this.setState({
-              componentLocationState: ComponentLocationState.HasLocation,
+              componentLocationState: ComponentLocationState.HasLocation
             });
             document.dispatchEvent(new Event('updateReps'));
           })
@@ -145,7 +145,7 @@ class Location extends React.Component<
             // we don't specify different types of location errors, but might in the future
             this.setState({
               locationError: 'geolocation error',
-              componentLocationState: ComponentLocationState.NoLocation,
+              componentLocationState: ComponentLocationState.NoLocation
             });
           });
 
@@ -155,7 +155,7 @@ class Location extends React.Component<
       .catch(() => {
         // nbd, go to manual entry
         this.setState({
-          componentLocationState: ComponentLocationState.EnterManually,
+          componentLocationState: ComponentLocationState.EnterManually
         });
       });
   };

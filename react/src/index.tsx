@@ -36,13 +36,13 @@ firebase.initializeApp({
   projectId: 'southern-zephyr-209101',
   storageBucket: 'southern-zephyr-209101.appspot.com',
   messagingSenderId: '919201105905',
-  appId: '1:919201105905:web:cb16c071be2bb896dfa650',
+  appId: '1:919201105905:web:cb16c071be2bb896dfa650'
 });
 
 OneSignal.init({
   appId: '5fd4ca41-9f6c-4149-a312-ae3e71b35c0e',
   path: '/js/',
-  serviceWorkerParam: { scope: '/js/' },
+  serviceWorkerParam: { scope: '/js/' }
 }).then(() => {
   OneSignal.setExternalUserId(uuid.callerID());
 });
@@ -107,8 +107,8 @@ const startComponentRenders = () => {
         },
         {
           threshold: 0,
-          rootMargin: '0px',
-        },
+          rootMargin: '0px'
+        }
       );
 
       observer.observe(scriptElement);
@@ -138,8 +138,8 @@ const startComponentRenders = () => {
     {
       id: 'react-groupcounts',
       component: GroupCallCount,
-      condition: Boolean(getGroupFromPath()),
-    },
+      condition: Boolean(getGroupFromPath())
+    }
   ];
 
   islands.forEach(({ id, component, hasStateProvider, condition }) => {

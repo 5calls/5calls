@@ -3,13 +3,13 @@ import React from 'react';
 import {
   LocationState,
   LocationContext,
-  WithLocationProps,
+  WithLocationProps
 } from './locationState';
 import Storage from '../utils/storage';
 import {
   CompletedContext,
   CompletedIssueMap,
-  WithCompletedProps,
+  WithCompletedProps
 } from './completedState';
 
 interface Props {
@@ -26,7 +26,7 @@ export default class StateProvider extends React.Component<Props, State> {
   state: State = {
     locationState: undefined,
     savedStateRestored: false,
-    completedIssueMap: {},
+    completedIssueMap: {}
   };
 
   componentDidMount() {
@@ -48,7 +48,7 @@ export default class StateProvider extends React.Component<Props, State> {
     this.setState({
       locationState: appState.locationState,
       completedIssueMap: appState.completedIssueMap,
-      savedStateRestored: true,
+      savedStateRestored: true
     });
   }
 
@@ -58,7 +58,7 @@ export default class StateProvider extends React.Component<Props, State> {
 
     const locationState: LocationState = {
       address: address,
-      cachedCity: display,
+      cachedCity: display
       // splitDistrict: false,
       // invalidAddress: false,
       // locationFetchType: LocationFetchType.CACHED_ADDRESS,
@@ -70,11 +70,11 @@ export default class StateProvider extends React.Component<Props, State> {
   setCompletedIssueMap(updatedCompletedIssueMap: CompletedIssueMap) {
     const newCompletedIssueMap = {
       ...this.state.completedIssueMap,
-      ...updatedCompletedIssueMap,
+      ...updatedCompletedIssueMap
     };
     Storage.saveCompleted(newCompletedIssueMap);
     this.setState({
-      completedIssueMap: newCompletedIssueMap,
+      completedIssueMap: newCompletedIssueMap
     });
   }
 
@@ -90,14 +90,14 @@ export default class StateProvider extends React.Component<Props, State> {
         value={{
           locationState: this.state.locationState,
           setLocationAddress: (address: string, display: string) =>
-            this.setLocationAddress(address, display),
+            this.setLocationAddress(address, display)
         }}
       >
         <CompletedContext.Provider
           value={{
             completedIssueMap: this.state.completedIssueMap || {},
             setCompletedIssueMap: (issueMapUpdates: CompletedIssueMap) =>
-              this.setCompletedIssueMap(issueMapUpdates),
+              this.setCompletedIssueMap(issueMapUpdates)
           }}
         >
           {this.props.children}
@@ -109,7 +109,7 @@ export default class StateProvider extends React.Component<Props, State> {
 
 export const withLocation =
   <P extends object>(
-    Component: React.ComponentType<P>,
+    Component: React.ComponentType<P>
   ): React.FC<Omit<P, keyof WithLocationProps>> =>
   (props) => (
     <LocationContext.Consumer>
@@ -125,7 +125,7 @@ export const withLocation =
 
 export const withCompleted =
   <P extends object>(
-    Component: React.ComponentType<P>,
+    Component: React.ComponentType<P>
   ): React.FC<Omit<P, keyof WithCompletedProps>> =>
   (props) => (
     <CompletedContext.Consumer>

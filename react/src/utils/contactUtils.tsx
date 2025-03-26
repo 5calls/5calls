@@ -63,5 +63,5 @@ export default {
   partyAndState,
   allContacts,
   makePhoneLink,
-  cityFormat,
+  cityFormat
 } as ContactUtils;

@@ -2,7 +2,7 @@ import React from 'react';
 
 export const LocationContext = React.createContext<WithLocationProps>({
   locationState: undefined,
-  setLocationAddress: () => {},
+  setLocationAddress: () => {}
 });
 
 export type WithLocationProps = {
@@ -18,5 +18,5 @@ export interface LocationState {
 export enum LocationFetchType {
   CACHED_ADDRESS = 'CACHED_ADDRESS',
   BROWSER_GEOLOCATION = 'BROWSER_GEOLOCATION',
-  IP_INFO = 'IP_INFO',
+  IP_INFO = 'IP_INFO'
 }

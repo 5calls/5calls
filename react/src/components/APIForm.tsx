@@ -12,7 +12,7 @@ class APIForm extends React.Component<null, State> {
   state = {
     emailSent: false,
     email: '',
-    errorText: '',
+    errorText: ''
   };
 
   sendForm(e: React.FormEvent<HTMLFormElement>) {

@@ -13,7 +13,7 @@ class Share extends React.Component<null, State> {
   state = {
     issueSlug: '',
     issueId: '',
-    issueTitle: '',
+    issueTitle: ''
   };
 
   componentDidMount() {
@@ -30,35 +30,35 @@ class Share extends React.Component<null, State> {
     e.preventDefault();
 
     const tweet = encodeURIComponent(
-      `I just called my reps with 5 Calls, you should too: 5calls.org`,
+      `I just called my reps with 5 Calls, you should too: 5calls.org`
     );
 
     if (type === 'facebook') {
       window.open(
         'https://www.facebook.com/sharer/sharer.php?u=https://5calls.org',
         'sharewindow',
-        'width=500, height=350',
+        'width=500, height=350'
       );
     } else if (type === 'bluesky') {
       const bskyTweet = encodeURIComponent(
-        `I just called my reps with @5calls.org, you should too: https://5calls.org`,
+        `I just called my reps with @5calls.org, you should too: https://5calls.org`
       );
       window.open(
         `https://bsky.app/intent/compose?text=${bskyTweet}`,
         'sharewindow',
-        'width=500, height=350',
+        'width=500, height=350'
       );
     } else if (type === 'threads') {
       window.open(
         `https://threads.net/intent/post?text=${tweet}`,
         'sharewindow',
-        'width=500, height=350',
+        'width=500, height=350'
       );
     } else if (type === 'mastodon') {
       window.open(
         `https://mastodonshare.com/?text=${tweet}&url=5calls.org`,
         'sharewindow',
-        'width=500, height=350',
+        'width=500, height=350'
       );
     } else {
       const issueURL = `${APP_URL}/issue/${this.state.issueSlug}/`;
@@ -66,7 +66,7 @@ class Share extends React.Component<null, State> {
       window.open(
         `https://twitter.com/share?url=${issueURL}&text=${tweet}`,
         'sharewindow',
-        'width=500, height=350',
+        'width=500, height=350'
       );
     }
   }

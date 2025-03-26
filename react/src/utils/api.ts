@@ -15,7 +15,7 @@ const prepareHeaders = async (): Promise<Headers> => {
   const idToken = await firebase.auth().currentUser?.getIdTokenResult();
 
   const headers: Headers = {
-    'Content-Type': 'application/json; charset=utf-8',
+    'Content-Type': 'application/json; charset=utf-8'
   };
   if (idToken) {
     headers.Authorization = 'Bearer ' + idToken.token;
@@ -41,7 +41,7 @@ interface ContactResponse {
 
 export const getContacts = async (
   location: string,
-  areas: string = '',
+  areas: string = ''
 ): Promise<ContactList> => {
   if (!location || location === '') {
     return Promise.reject(noLocationError);
@@ -57,8 +57,8 @@ export const getContacts = async (
     .get<ContactResponse>(
       `${Constants.REPS_API_URL}?location=${location}${areasQuery}`,
       {
-        headers: headers,
-      },
+        headers: headers
+      }
     )
     .then((result) => {
       const contactList = new ContactList();
@@ -113,7 +113,7 @@ export const postOutcomeData = async (data: OutcomeData) => {
     issueid: data.issueId,
     via: data.via,
     callerid: uuid.callerID(),
-    ...(data.group ? { group: data.group } : {}),
+    ...(data.group ? { group: data.group } : {})
   });
 
   const headers = await prepareHeaders();
@@ -121,7 +121,7 @@ export const postOutcomeData = async (data: OutcomeData) => {
 
   return axios
     .post(`${Constants.REPORT_API_URL}`, postData, {
-      headers,
+      headers
     })
     .then(() => {
       return Promise.resolve(null);
@@ -142,7 +142,7 @@ export const getUserCallDetails = (idToken: string) => {
 
   return axios
     .get(`${Constants.PROFILE_API_URL}?timestamp=${dateString}`, {
-      headers: { Authorization: 'Bearer ' + idToken },
+      headers: { Authorization: 'Bearer ' + idToken }
     })
     .then((response) => {
       const profile = response.data as UserCallDetails;
@@ -154,7 +154,7 @@ export const getUserCallDetails = (idToken: string) => {
 export const postPhoneRemind = (phone: string): Promise<boolean> => {
   const postData = querystring.stringify({
     phone: phone,
-    ref: '',
+    ref: ''
   });
   return axios
     .post(Constants.REMINDER_API_URL, postData)
@@ -165,17 +165,17 @@ export const postPhoneRemind = (phone: string): Promise<boolean> => {
 export const postEmail = (
   email: string,
   sub: boolean,
-  idToken: string,
+  idToken: string
 ): Promise<boolean> => {
   const subscribe = sub ? 'true' : '';
 
   const postData = querystring.stringify({
     email: email,
-    subscribe: subscribe,
+    subscribe: subscribe
   });
   return axios
     .post(Constants.PROFILE_API_URL, postData, {
-      headers: { Authorization: 'Bearer ' + idToken },
+      headers: { Authorization: 'Bearer ' + idToken }
     })
     .then(() => Promise.resolve(true))
     .catch((e) => Promise.reject(e));
@@ -183,7 +183,7 @@ export const postEmail = (
 
 export const postAPIEmail = (email: string): Promise<boolean> => {
   const postData = querystring.stringify({
-    email: email,
+    email: email
   });
   return axios
     .post(Constants.API_TOKEN_URL, postData)

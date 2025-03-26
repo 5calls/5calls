@@ -23,7 +23,7 @@ interface State {
 }
 
 const RepsWithSettings = (
-  props: Props & WithLocationProps & WithCompletedProps,
+  props: Props & WithLocationProps & WithCompletedProps
 ) => {
   const { callingGroup } = useSettings();
   return <Reps {...props} callingGroup={callingGroup} />;
@@ -41,7 +41,7 @@ class Reps extends React.Component<
     areas: this._defaultAreas,
     issueId: '0000',
     contactList: this._defaultContactList,
-    activeContactIndex: 0,
+    activeContactIndex: 0
   };
 
   componentDidMount() {
@@ -65,7 +65,7 @@ class Reps extends React.Component<
 
       const contacts = this.contactsForArea(
         this.state.areas,
-        this.state.contactList ?? ({} as ContactList),
+        this.state.contactList ?? ({} as ContactList)
       );
 
       if (outcome !== 'skip') {
@@ -82,7 +82,7 @@ class Reps extends React.Component<
           issueId: this.state.issueId,
           contactId: currentContact?.id ?? 'no-contact-id',
           via: viaParameter,
-          group: this.props.callingGroup,
+          group: this.props.callingGroup
         };
         postOutcomeData(outcomeData);
       }
@@ -96,11 +96,11 @@ class Reps extends React.Component<
         document.getElementById('reps-header')?.scrollIntoView({
           behavior: 'smooth',
           block: 'nearest',
-          inline: 'start',
+          inline: 'start'
         });
       } else {
         this.props.setCompletedIssueMap({
-          [this.state.issueId]: Date.now(),
+          [this.state.issueId]: Date.now()
         });
 
         // if we load the next page too soon, the previous outcome is sometimes skipped
@@ -124,7 +124,7 @@ class Reps extends React.Component<
     // yuck, I don't have a good way to sync state across different-root components yet
     // so script component just listens to this
     const activeContactEvent = new CustomEvent('activeContact', {
-      detail: contact,
+      detail: contact
     });
     document.dispatchEvent(activeContactEvent);
   }
@@ -167,7 +167,7 @@ class Reps extends React.Component<
   contactComponent(
     contact: Contact,
     index: number,
-    activeIndex: number,
+    activeIndex: number
   ): JSX.Element {
     let photoURL = '/images/no-rep.png';
     if (contact.photoURL && contact.photoURL !== '') {
@@ -208,7 +208,7 @@ class Reps extends React.Component<
 
     const contacts = this.contactsForArea(
       this.state.areas,
-      this.state.contactList,
+      this.state.contactList
     );
     let activeContact: Contact | undefined;
     if (contacts.length > 0) {
@@ -219,11 +219,7 @@ class Reps extends React.Component<
       <div ref={this.componentRef}>
         <ul>
           {contacts.map((contact, index) =>
-            this.contactComponent(
-              contact,
-              index,
-              this.state.activeContactIndex,
-            ),
+            this.contactComponent(contact, index, this.state.activeContactIndex)
           )}
         </ul>
         {activeContact && <ActiveContact contact={activeContact} />}

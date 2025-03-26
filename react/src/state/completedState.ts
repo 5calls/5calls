@@ -5,7 +5,7 @@ export type CompletedIssueMap = { [issueID: number]: number };
 
 export const CompletedContext = React.createContext({
   completedIssueMap: {} as CompletedIssueMap,
-  setCompletedIssueMap: () => {},
+  setCompletedIssueMap: () => {}
 });
 
 export type WithCompletedProps = {

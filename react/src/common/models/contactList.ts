@@ -7,7 +7,7 @@ export enum ContactArea {
   AttorneysGeneral = 'AttorneysGeneral',
   SecretaryOfState = 'SecretaryOfState',
   StateUpper = 'StateUpper',
-  StateLower = 'StateLower',
+  StateLower = 'StateLower'
 }
 
 export class ContactList {
@@ -27,7 +27,7 @@ export class ContactList {
 
   public senateReps(): Contact[] {
     return this.representatives.filter(
-      (contact) => contact.area === ContactArea.USSenate,
+      (contact) => contact.area === ContactArea.USSenate
     );
   }
 
@@ -35,7 +35,7 @@ export class ContactList {
   public houseRep(): Contact[] {
     const contacts: Contact[] = [];
     const houseRep = this.representatives.find(
-      (contact) => contact.area === ContactArea.USHouse,
+      (contact) => contact.area === ContactArea.USHouse
     );
     if (houseRep) {
       contacts.push(houseRep);
@@ -45,30 +45,30 @@ export class ContactList {
 
   public governor(): Contact[] {
     return this.representatives.filter(
-      (contact) => contact.area === ContactArea.Governor,
+      (contact) => contact.area === ContactArea.Governor
     );
   }
 
   public stateUpper(): Contact[] {
     return this.representatives.filter(
-      (contact) => contact.area === ContactArea.StateUpper,
+      (contact) => contact.area === ContactArea.StateUpper
     );
   }
 
   public stateLower(): Contact[] {
     return this.representatives.filter(
-      (contact) => contact.area === ContactArea.StateLower,
+      (contact) => contact.area === ContactArea.StateLower
     );
   }
 
   public secState(): Contact[] {
     return this.representatives.filter(
-      (contact) => contact.area === ContactArea.SecretaryOfState,
+      (contact) => contact.area === ContactArea.SecretaryOfState
     );
   }
   public attyGeneral(): Contact[] {
     return this.representatives.filter(
-      (contact) => contact.area === ContactArea.AttorneysGeneral,
+      (contact) => contact.area === ContactArea.AttorneysGeneral
     );
   }
 

@@ -24,7 +24,7 @@ export function useSettings() {
 
   const saveSettings = () => {
     const settings: Settings = {
-      callingGroup,
+      callingGroup
     };
     localStorage.setItem(STORAGE_KEY, JSON.stringify(settings));
     setIsSaved(true);
@@ -34,6 +34,6 @@ export function useSettings() {
     callingGroup,
     setCallingGroup,
     saveSettings,
-    isSaved,
+    isSaved
   };
 }

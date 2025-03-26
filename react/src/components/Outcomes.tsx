@@ -9,7 +9,7 @@ class Outcomes extends React.Component<null, State> {
   _defaultOutcomes: string[] = [];
   state = {
     outcomes: this._defaultOutcomes,
-    showReps: false,
+    showReps: false
   };
 
   outcomesRef = createRef<HTMLDivElement>();

@@ -7,7 +7,7 @@ interface State {
 
 class CallCount extends React.Component<null, State> {
   state = {
-    callCount: 0,
+    callCount: 0
   };
 
   componentDidMount() {

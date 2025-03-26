@@ -1,16 +1,16 @@
 export interface ActBlue {
   __initialized: boolean; // indicates that the actblue script is loaded and ready to go
   requestContribution(
-    config: RequestActBlueContributionConfig,
+    config: RequestActBlueContributionConfig
   ): Promise<ActBlueContribution>;
   addEventListener(
     eventName: string,
-    completion: ActBlueCompletionCallback,
+    completion: ActBlueCompletionCallback
   ): void;
 }
 
 export type ActBlueCompletionCallback = (
-  contribution: ActBlueContribution,
+  contribution: ActBlueContribution
 ) => void;
 
 export interface RequestActBlueContributionConfig {

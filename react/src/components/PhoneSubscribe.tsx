@@ -12,7 +12,7 @@ class PhoneSubscribe extends React.Component<null, State> {
   state = {
     phone: '',
     validPhone: false,
-    submitted: false,
+    submitted: false
   };
 
   render(): React.ReactNode {
@@ -33,7 +33,7 @@ class PhoneSubscribe extends React.Component<null, State> {
             onChange={(phoneValue) => {
               this.setState({
                 validPhone: phoneValue ? isValidPhoneNumber(phoneValue) : false,
-                phone: phoneValue ? phoneValue : '',
+                phone: phoneValue ? phoneValue : ''
               });
             }}
           />

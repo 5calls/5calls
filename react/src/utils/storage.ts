@@ -7,7 +7,7 @@ const COMPLETION_KEY = 'persist:fivecalls-completedIssueMap';
 
 const saveLocation = (location: LocationState) => {
   const newStoredData: StoredData = {
-    locationState: JSON.stringify(location),
+    locationState: JSON.stringify(location)
   };
   localStorage.setItem(LOCATION_KEY, JSON.stringify(newStoredData));
 };
@@ -24,11 +24,11 @@ const getStorageAsObject = (): ApplicationState => {
 
   const locationData: StoredData = getStoredState<StoredData>(LOCATION_KEY);
   const locationState = JSON.parse(
-    locationData.locationState ?? '{}',
+    locationData.locationState ?? '{}'
   ) as LocationState;
 
   const completedIssueMap = getStoredState<StoredData>(
-    COMPLETION_KEY,
+    COMPLETION_KEY
   ) as CompletedIssueMap;
 
   const appState: ApplicationState = { locationState, completedIssueMap };

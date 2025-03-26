@@ -4,7 +4,7 @@ import uuid from './uuid';
 const openDonate = (amount: number, refcode: string) => {
   window.open(
     `${DONATE_URL}?refcode=${refcode}&refcode2=${uuid.callerID()}&amount=${amount}`,
-    '_blank',
+    '_blank'
   );
 };
 
