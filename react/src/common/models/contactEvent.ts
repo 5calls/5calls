@@ -10,7 +10,7 @@ export type UserOutcomeResult = UserContactEventType | string;
 
 export enum UserContactEventType {
   UNAVAILABLE = 'unavailable',
-  VOICEMAIL = "voicemail",
+  VOICEMAIL = 'voicemail',
   CONTACT = 'contact',
   SKIP = 'skip'
 }
