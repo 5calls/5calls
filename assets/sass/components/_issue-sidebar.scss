@@ -10,7 +10,7 @@
   display: block;
   width: 100%;
   font-size: 1.2rem;
-  padding: .5rem 1rem;
+  padding: 0.5rem 1rem;
   text-align: left;
 }
 
@@ -21,7 +21,7 @@
 
   .i-bar-top-issues {
     @extend .shared-btn-styles;
-    color: var(--c-blue)  !important;
+    color: var(--c-blue) !important;
     background: var(--c-transparent-blue) !important;
     margin-bottom: 2.5rem;
   }
@@ -258,9 +258,8 @@
   color: var(--c-base) !important;
   background: var(--c-xlight-base) !important;
   margin-top: 1.5rem;
-  margin-bottom: .5rem;
+  margin-bottom: 0.5rem;
 }
-
 
 @mixin i-bar-color($status) {
   .i-bar-header-#{$status} {
@@ -275,32 +274,30 @@
     background: rgba(var(--c-#{$status}-rgb), 0.05);
     strong {
       font-weight: bold;
-      color: var(--c-dark)
+      color: var(--c-dark);
     }
-    
   }
 
-    .i-bar-item.is-#{$status} {
-      --check-color: rgba(var(--c-#{$status}-rgb), 0.8);
-  
-      &:hover,
-      &:focus {
-        background: rgba(var(--c-#{$status}-rgb), 0.05);
+  .i-bar-item.is-#{$status} {
+    --check-color: rgba(var(--c-#{$status}-rgb), 0.8);
+
+    &:hover,
+    &:focus {
+      background: rgba(var(--c-#{$status}-rgb), 0.05);
+    }
+
+    .i-bar-check-initial {
+      background: var(--c-success);
+    }
+
+    .i-bar-check-completed,
+    .i-bar-check-percent {
+      border: 2px solid var(--check-color);
+
+      i {
+        color: var(--check-color);
       }
-  
-      .i-bar-check-initial {
-        background: var(--c-success);
-      }
-  
-      .i-bar-check-completed,
-      .i-bar-check-percent {
-        border: 2px solid var(--check-color);
-  
-        i {
-          color: var(--check-color);
-  
-        }
-      }
+    }
     circle {
       fill: var(--check-color);
     }

@@ -32,17 +32,15 @@ body.issue {
 
   .issue-content {
     h1 {
-        font-size: 2rem;
-        font-weight: 700;
-        text-align: left;
-        margin: -0.5rem 0 2rem 0;
-    
-        @media screen and (min-width: $bp-medium) {
-          font-size: 3rem;
-    
-        }
-    
+      font-size: 2rem;
+      font-weight: 700;
+      text-align: left;
+      margin: -0.5rem 0 2rem 0;
+
+      @media screen and (min-width: $bp-medium) {
+        font-size: 3rem;
       }
+    }
 
     p,
     li,
@@ -468,7 +466,7 @@ body.issue {
       }
 
       .share-bluesky {
-        background-color: #1185FE !important;
+        background-color: #1185fe !important;
       }
 
       .share-threads {
@@ -476,7 +474,7 @@ body.issue {
       }
 
       .share-mastodon {
-        background-color: #6364FF !important;
+        background-color: #6364ff !important;
       }
 
       .share-facebook {

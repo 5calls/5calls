@@ -1,4 +1,4 @@
-import React, { createRef } from "react";
+import React, { createRef } from 'react';
 
 interface State {
   outcomes: string[];
@@ -9,24 +9,26 @@ class Outcomes extends React.Component<null, State> {
   _defaultOutcomes: string[] = [];
   state = {
     outcomes: this._defaultOutcomes,
-    showReps: false,
+    showReps: false
   };
 
   outcomesRef = createRef<HTMLDivElement>();
 
   componentDidMount() {
     if (this.outcomesRef.current && this.outcomesRef.current.parentElement) {
-      const outcomes = (this.outcomesRef.current.parentElement.dataset.outcomes ?? "").split(",");
+      const outcomes = (
+        this.outcomesRef.current.parentElement.dataset.outcomes ?? ''
+      ).split(',');
       this.setState({ outcomes });
     }
 
-    document.addEventListener("loadedReps", () => {
+    document.addEventListener('loadedReps', () => {
       this.setState({ showReps: true });
     });
   }
 
   next(outcome: string) {
-    const event = new CustomEvent("nextContact", { detail: outcome });
+    const event = new CustomEvent('nextContact', { detail: outcome });
     document.dispatchEvent(event);
   }
 
@@ -38,12 +40,18 @@ class Outcomes extends React.Component<null, State> {
 
     return (
       <div ref={this.outcomesRef}>
-        <h3>After your call, share the result to show the next representative:</h3>
+        <h3>
+          After your call, share the result to show the next representative:
+        </h3>
         <div className="outcomes-items">
           {this.state.outcomes.map((outcome) => {
-            const eventClassName = `plausible-event-name=Outcome-${outcome}`
+            const eventClassName = `plausible-event-name=Outcome-${outcome}`;
             return (
-              <button className={eventClassName} key={outcome} onClick={() => this.next(outcome)}>
+              <button
+                className={eventClassName}
+                key={outcome}
+                onClick={() => this.next(outcome)}
+              >
                 {outcome}
               </button>
             );

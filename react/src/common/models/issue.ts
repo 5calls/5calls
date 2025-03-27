@@ -1,4 +1,4 @@
-import { Outcome } from "./contactEvent";
+import { Outcome } from './contactEvent';
 
 export interface Issue {
   id: number;

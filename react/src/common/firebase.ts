@@ -1,5 +1,5 @@
-import firebase from "firebase/app";
-import "firebase/auth";
+import firebase from 'firebase/app';
+import 'firebase/auth';
 
 export class Authentication {
   constructor() {
@@ -14,7 +14,7 @@ export class Authentication {
       //     console.log("error signing in", error);
       //   });
     } else {
-      console.log("user already signed in");
+      console.log('user already signed in');
     }
   }
 
