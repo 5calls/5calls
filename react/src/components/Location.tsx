@@ -1,11 +1,12 @@
-import React, { useState, useEffect } from 'react';
-import $ from 'jquery';
-import { toast } from 'react-toastify';
-import { WithLocationProps } from '../state/locationState';
-import { withCompleted, withLocation } from '../state/stateProvider';
-import { getBrowserGeolocation } from '../utils/geolocation';
-import { getContacts } from '../utils/api';
-import { WithCompletedProps } from '../state/completedState';
+import React, { useState, useEffect } from 'react'
+import * as React from 'react'
+import $ from 'jquery'
+import { WithLocationProps } from '../state/locationState'
+import { withCompleted, withLocation } from '../state/stateProvider'
+import { getBrowserGeolocation } from '../utils/geolocation'
+import { getContacts } from '../utils/api'
+import { WithCompletedProps } from '../state/completedState'
+  import { ToastContainer, toast } from 'react-toastify';
 
 enum ComponentLocationState {
   NoLocation,
@@ -16,91 +17,104 @@ enum ComponentLocationState {
 }
 
 const Location: React.FC<WithLocationProps & WithCompletedProps> = (props) => {
+  console.log('sending toast')
+  toast('lol', {
+    position: "top-right",
+    autoClose: 5000,
+    hideProgressBar: false,
+    closeOnClick: true,
+    pauseOnHover: true,
+    draggable: true,
+    progress: undefined,
+  })
+  console.log(toast('lol'))
+
   const [componentLocationState, setComponentLocationState] = useState<ComponentLocationState>(
     ComponentLocationState.NoLocation
-  );
-  const [manualAddress, setManualAddress] = useState<string | undefined>(undefined);
-  const [locationError, setLocationError] = useState<string | undefined>(undefined);
+  )
+  const [manualAddress, setManualAddress] = useState<string | undefined>(undefined)
+  const [locationError, setLocationError] = useState<string | undefined>(undefined)
 
   useEffect(() => {
     if (props.locationState && props.locationState.address) {
-      setComponentLocationState(ComponentLocationState.HasLocation);
+      setComponentLocationState(ComponentLocationState.HasLocation)
     }
-    updateIssueCompletion();
-  }, []);
+    updateIssueCompletion()
+  }, [])
 
   useEffect(() => {
-    updateIssueCompletion();
-  }, [props.completedIssueMap]);
+    updateIssueCompletion()
+    toast('lol')
+  }, [props.completedIssueMap])
 
   const updateIssueCompletion = () => {
-    const completedIssueIds = Object.keys(props.completedIssueMap || {});
-    if (completedIssueIds.length === 0) return;
+    const completedIssueIds = Object.keys(props.completedIssueMap || {})
+    if (completedIssueIds.length === 0) return
     $('.i-bar-list-section .i-bar-item-check>div').each((_, el) => {
-      const itemIssueID = $(el).data('issue-id') as string;
+      const itemIssueID = $(el).data('issue-id') as string
 
       if (itemIssueID && completedIssueIds.indexOf(`${itemIssueID}`) !== -1) {
-        $(el).attr('class', 'i-bar-check-initial');
-        $(el).find('i').first().attr('class', 'fa fa-check');
+        $(el).attr('class', 'i-bar-check-initial')
+        $(el).find('i').first().attr('class', 'fa fa-check')
       }
-    });
-  };
+    })
+  }
 
   const handleManualAddressChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setManualAddress(e.target.value);
-  };
+    setManualAddress(e.target.value)
+  }
 
   const changeLocation = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setComponentLocationState(ComponentLocationState.EnterManually);
-  };
+    e.preventDefault()
+    setComponentLocationState(ComponentLocationState.EnterManually)
+  }
 
   const setLocationManually = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setLocationError(undefined);
+    e.preventDefault()
+    setLocationError(undefined)
 
     if (!manualAddress || manualAddress === '') {
-      return;
+      return
     }
 
     getContacts(manualAddress)
       .then((contactList) => {
-        props.setLocationAddress(manualAddress ?? '', contactList.location);
-        setComponentLocationState(ComponentLocationState.HasLocation);
-        document.dispatchEvent(new Event('updateReps'));
+        props.setLocationAddress(manualAddress ?? '', contactList.location)
+        setComponentLocationState(ComponentLocationState.HasLocation)
+        document.dispatchEvent(new Event('updateReps'))
       })
       .catch((error) => {
-        console.log('error:', error);
-        setLocationError('location error');
-        setComponentLocationState(ComponentLocationState.NoLocation);
-        toast('error!!!');
-      });
-  };
+        console.log('error:', error)
+          toast('lol')
+        setLocationError('location error')
+        setComponentLocationState(ComponentLocationState.NoLocation)
+      })
+  }
 
   const setLocationAutomatically = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setComponentLocationState(ComponentLocationState.GettingAutomatically);
+    e.preventDefault()
+    setComponentLocationState(ComponentLocationState.GettingAutomatically)
 
     getBrowserGeolocation()
       .then((loc) => {
-        const pairedLoc = `${loc.latitude},${loc.longitude}`;
+        const pairedLoc = `${loc.latitude},${loc.longitude}`
         getContacts(pairedLoc)
           .then((contactList) => {
-            props.setLocationAddress(pairedLoc, contactList.location);
-            setComponentLocationState(ComponentLocationState.HasLocation);
-            document.dispatchEvent(new Event('updateReps'));
+            props.setLocationAddress(pairedLoc, contactList.location)
+            setComponentLocationState(ComponentLocationState.HasLocation)
+            document.dispatchEvent(new Event('updateReps'))
           })
           .catch((error) => {
-            console.log('error getting location after geoloc:', error);
-            toast('error!!!');
-            setLocationError('geolocation error');
-            setComponentLocationState(ComponentLocationState.NoLocation);
-          });
+            console.log('error getting location after geoloc:', error)
+            setLocationError('geolocation error')
+            setComponentLocationState(ComponentLocationState.NoLocation)
+          })
       })
       .catch(() => {
-        setComponentLocationState(ComponentLocationState.EnterManually);
-      });
-  };
+          toast('lol')
+        setComponentLocationState(ComponentLocationState.EnterManually)
+      })
+  }
 
   switch (componentLocationState) {
     case ComponentLocationState.NoLocation:
@@ -111,7 +125,7 @@ const Location: React.FC<WithLocationProps & WithCompletedProps> = (props) => {
             <button className="button button-small button-red">Set your location</button>
           </form>
         </div>
-      );
+      )
     case ComponentLocationState.GettingAutomatically:
       return (
         <div className="is-visible">
@@ -122,7 +136,7 @@ const Location: React.FC<WithLocationProps & WithCompletedProps> = (props) => {
             <button className="button-link"> Or enter an address manually</button>
           </form>
         </div>
-      );
+      )
     case ComponentLocationState.HasLocation:
       return (
         <div className="is-visible">
@@ -132,7 +146,7 @@ const Location: React.FC<WithLocationProps & WithCompletedProps> = (props) => {
             <button className="button-link">Change location</button>
           </form>
         </div>
-      );
+      )
     case ComponentLocationState.EnterManually:
       return (
         <div className="is-visible">
@@ -146,20 +160,23 @@ const Location: React.FC<WithLocationProps & WithCompletedProps> = (props) => {
             />
             <button className="button button-small button-red">Go</button>
           </form>
-          {locationError && (
-            <span className="location-error">Couldn&rsquo;t find that location, please try again</span>
-          )}
+          {locationError && <span className="location-error">Couldn&rsquo;t find that location, please try again</span>}
         </div>
-      );
+      )
     case ComponentLocationState.BadLocation:
       return (
         <div className="is-visible">
           <span>no reps for that location</span>
         </div>
-      );
+      )
     default:
-      return null;
+      return null
   }
-};
+}
 
-export default withLocation(withCompleted(Location));
+export default (props) => {
+  return <>
+  <ToastContainer />
+  <Location {...props} />
+  </>
+}

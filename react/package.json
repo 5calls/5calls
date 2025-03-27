@@ -12,6 +12,7 @@
     "querystring": "^0.2.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
+    "react-hot-toast": "^2.5.2",
     "react-markdown": "^8.0.0",
     "react-onesignal": "^2.0.4",
     "react-phone-number-input": "^3.4.12",

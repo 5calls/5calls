@@ -2,7 +2,7 @@ import React from 'react'
 import firebase from 'firebase/app'
 import 'firebase/auth'
 import { createRoot } from 'react-dom/client'
-import { ToastContainer } from 'react-toastify'
+import toast, { Toaster } from 'react-hot-toast';
 
 import Location from './components/Location'
 import Reps from './components/Reps'
@@ -127,7 +127,7 @@ const startComponentRenders = () => {
   }
 
   const islands: IslandConfig[] = [
-    { id: 'react-location', component: Location, hasStateProvider: true },
+    { id: 'react-location', component: Location, hasStateProvider: false },
     { id: 'react-reps', component: Reps, hasStateProvider: true },
     { id: 'react-script', component: Script, hasStateProvider: true },
     { id: 'react-outcomes', component: Outcomes },
@@ -137,7 +137,6 @@ const startComponentRenders = () => {
     { id: 'api-form', component: APIForm },
     { id: 'react-settings', component: Settings },
     { id: 'react-groupcounts', component: GroupCallCount, condition: Boolean(getGroupFromPath()) },
-    {id: 'react-toast-container', component: ToastContainer},
   ]
 
   islands.forEach(({ id, component, hasStateProvider, condition }) => {
