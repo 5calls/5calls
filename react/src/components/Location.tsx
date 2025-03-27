@@ -6,10 +6,8 @@ import { withCompleted, withLocation } from '../state/stateProvider';
 import { getBrowserGeolocation } from '../utils/geolocation';
 import { getContacts } from '../utils/api';
 import { WithCompletedProps } from '../state/completedState';
-import { ToastContainer, toast } from 'react-toastify/unstyled';
+import { ToastContainer, toast } from 'react-toastify';
 
-// also import the css
-import 'react-toastify/dist/ReactToastify.css';
 
 enum ComponentLocationState {
   NoLocation,
@@ -24,7 +22,7 @@ const Location: React.FC<WithLocationProps & WithCompletedProps> = (props) => {
     console.log('test: sending toast');
     toast('test message');
   }, []);
-  
+
   const [componentLocationState, setComponentLocationState] =
     useState<ComponentLocationState>(ComponentLocationState.NoLocation);
   const [manualAddress, setManualAddress] = useState<string | undefined>(
@@ -187,11 +185,13 @@ const Location: React.FC<WithLocationProps & WithCompletedProps> = (props) => {
   }
 };
 
-export default (props) => {
-  return (
-    <>
-      <ToastContainer />
-      <Location {...props} />
-    </>
-  );
-};
+export default withCompleted(
+  withLocation((props) => {
+    return (
+      <>
+        <ToastContainer />
+        <Location {...props} />
+      </>
+    );
+  })
+);
