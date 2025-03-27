@@ -1,7 +1,7 @@
 .i-bar {
   --i-bar-padding-v: 0.75rem;
   --i-bar-padding-h: 1rem;
-  --i-bar-check-size: 1.5rem;
+  --i-bar-check-size: 1.7rem;
   --i-bar-check-margin: 1rem;
 }
 
@@ -194,16 +194,12 @@
     color: #fff;
     font-size: 0.75rem;
     position: absolute;
-    top: 0.375rem;
-    left: 0.375rem;
-    line-height: 1;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    // line-height: 1;
   }
 
-  .fa-check {
-    font-size: 0.625rem;
-    top: 0.4375rem;
-    left: 0.4375rem;
-  }
 
   svg {
     transform: rotate(-90deg);
@@ -290,6 +286,7 @@
   
       .i-bar-check-initial {
         background: var(--c-success);
+        border: 2px solid var(--c-success-dark);
       }
   
       .i-bar-check-completed,
