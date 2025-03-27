@@ -1,7 +1,7 @@
 .i-bar {
   --i-bar-padding-v: 0.75rem;
   --i-bar-padding-h: 1rem;
-  --i-bar-check-size: 1.7rem;
+  --i-bar-check-size: 28px;
   --i-bar-check-margin: 1rem;
 }
 
@@ -197,9 +197,11 @@
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    // line-height: 1;
   }
 
+  .fa-check {
+    font-size: 0.8rem;
+  }
 
   svg {
     transform: rotate(-90deg);
@@ -286,15 +288,15 @@
   
       .i-bar-check-initial {
         background: var(--c-success);
-        border: 2px solid var(--c-success-dark);
       }
   
       .i-bar-check-completed,
       .i-bar-check-percent {
-        border: 2px solid var(--check-color);
+        background-color: var(--c-transparent-blue);
   
         i {
           color: var(--check-color);
+          opacity: .9;
   
         }
       }

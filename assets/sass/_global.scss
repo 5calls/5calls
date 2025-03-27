@@ -16,7 +16,7 @@
   --c-red-darker: #c62b10;
   --c-red-dark-hover: #97210c;
   --c-blue: rgb(24, 117, 209);
-  --c-transparent-blue: rgba(var(--c-blue-rgb), 0.1);
+  --c-transparent-blue: rgba(var(--c-blue-rgb), 0.15);
   --c-blue-subtle: #023e9fc1;
   --c-blue-rgb: 24, 117, 209;
   --c-dark: rgb(2, 63, 159);
@@ -34,8 +34,8 @@
   --c-momentum-rgb: 3, 182, 85;
   --c-unsorted: var(--c-dark);
   --c-unsorted-rgb: var(--c-dark-rgb);
-  --c-success: rgb(95 190 145);
-  --c-success-dark: rgb(50 139 100);
+  --c-success: rgb(95, 190, 145);
+  --c-success-dark: darken(var(--c-success), 10%);
 
   // Layout
   --g-gap: 2rem;
