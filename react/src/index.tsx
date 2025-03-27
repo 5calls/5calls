@@ -126,7 +126,7 @@ const startComponentRenders = () => {
   };
 
   const islands: IslandConfig[] = [
-    { id: 'react-location', component: Location, hasStateProvider: false },
+    { id: 'react-location', component: Location, hasStateProvider: true },
     { id: 'react-reps', component: Reps, hasStateProvider: true },
     { id: 'react-script', component: Script, hasStateProvider: true },
     { id: 'react-outcomes', component: Outcomes },
