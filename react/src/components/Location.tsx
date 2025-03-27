@@ -17,17 +17,9 @@ enum ComponentLocationState {
 }
 
 const Location: React.FC<WithLocationProps & WithCompletedProps> = (props) => {
-  console.log('sending toast')
-  toast('lol', {
-    position: "top-right",
-    autoClose: 5000,
-    hideProgressBar: false,
-    closeOnClick: true,
-    pauseOnHover: true,
-    draggable: true,
-    progress: undefined,
-  })
-  console.log(toast('lol'))
+  console.log('test: sending toast')
+  toast('test message')
+
 
   const [componentLocationState, setComponentLocationState] = useState<ComponentLocationState>(
     ComponentLocationState.NoLocation

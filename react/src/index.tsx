@@ -2,7 +2,6 @@ import React from 'react'
 import firebase from 'firebase/app'
 import 'firebase/auth'
 import { createRoot } from 'react-dom/client'
-import toast, { Toaster } from 'react-hot-toast';
 
 import Location from './components/Location'
 import Reps from './components/Reps'
