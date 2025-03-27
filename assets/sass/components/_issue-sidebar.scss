@@ -242,9 +242,9 @@
     text-align: left;
     display: flex;
     align-items: center;
+    color: var(--c-base-subtle);
 
     i {
-      margin-right: var(--i-bar-check-margin);
       width: var(--i-bar-check-size);
       text-align: center;
     }
@@ -260,14 +260,7 @@
 }
 
 @mixin i-bar-color($status) {
-  .i-bar-header-#{$status} {
-    background: rgba(var(--c-#{$status}-rgb), 0.05);
-
-    h3 {
-      color: var(--c-#{$status});
-    }
-  }
-
+ 
   .i-bar-item.is-active {
     background: rgba(var(--c-#{$status}-rgb), 0.05);
 
@@ -296,7 +289,6 @@
       i {
         color: var(--check-color);
         opacity: .9;
-
       }
     }
   }
@@ -305,7 +297,7 @@
     fill: var(--check-color);
   }
 }
-}
+
 
 @include i-bar-color("latest");
 @include i-bar-color("urgent");
