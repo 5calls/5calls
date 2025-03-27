@@ -13,7 +13,7 @@ enum ComponentLocationState {
   BadLocation,
   HasLocation,
   GettingAutomatically,
-  EnterManually,
+  EnterManually
 }
 
 const Location: React.FC<WithLocationProps & WithCompletedProps> = (props) => {

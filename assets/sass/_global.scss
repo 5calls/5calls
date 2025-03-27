@@ -3,21 +3,21 @@
 :root {
   // Typography
   --base-font-size: 16;
-  --base-font-family: system-ui, -apple-system, BlinkMacSystemFont, avenir next, avenir, segoe ui, helvetica neue, Cantarell, Ubuntu, roboto, noto, helvetica, arial, sans-serif; 
+  --base-font-family: system-ui, -apple-system, BlinkMacSystemFont, avenir next, avenir, segoe ui, helvetica neue, Cantarell, Ubuntu, roboto, noto, helvetica, arial, sans-serif;
   --leading: 1.4;
   --leading-rem: calc(var(--leading) * 1rem);
   --paragraph-break: calc(var(--leading) * 0.75rem);
 
   // Theme Colors
   --c-base: #545555;
+  --c-base-subtle: #323232a4;
   --c-xlight-base: #f5f5f5;
-  --c-emphasis: #191b1d;
   --c-red: rgb(237, 60, 29);
   --c-red-rgb: 237, 60, 29;
   --c-red-darker: #c62b10;
   --c-red-dark-hover: #97210c;
   --c-blue: rgb(24, 117, 209);
-  --c-transparent-blue: rgba(24, 117, 209, 0.2);
+  --c-transparent-blue: rgba(var(--c-blue-rgb), 0.15);
   --c-blue-subtle: #023e9fc1;
   --c-blue-rgb: 24, 117, 209;
   --c-dark: rgb(2, 63, 159);
@@ -35,11 +35,12 @@
   --c-momentum-rgb: 3, 182, 85;
   --c-unsorted: var(--c-dark);
   --c-unsorted-rgb: var(--c-dark-rgb);
-  --c-success: rgb(95 190 145);
+  --c-success: rgb(95, 190, 145);
 
   // Layout
   --g-gap: 2rem;
   --radius: 3px;
+
   @media screen and (min-width: 60rem) {
     --g-gap: 3rem;
   }
@@ -98,10 +99,12 @@ body {
   color: #fff;
   padding: 1.5rem 0;
   margin: 2rem 0;
+
   @media screen and (min-width: 40rem) {
     padding: 3rem 0;
     margin: 3rem 0;
   }
+
   h2 {
     margin-top: 1rem;
   }

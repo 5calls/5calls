@@ -1,17 +1,17 @@
-import React from "react";
+import React from 'react';
 
-import { Contact, FieldOffice } from "../common/models/contact";
-import { ContactList } from "../common/models/contactList";
+import { Contact, FieldOffice } from '../common/models/contact';
+import { ContactList } from '../common/models/contactList';
 
 const partyAndState = (contact: Contact): string => {
-  if (contact.party && contact.state !== "") {
+  if (contact.party && contact.state !== '') {
     const partyLetter = contact.party.substring(0, 1);
-    return partyLetter.toUpperCase() + "-" + contact.state.toUpperCase();
-  } else if (contact.state !== "") {
+    return partyLetter.toUpperCase() + '-' + contact.state.toUpperCase();
+  } else if (contact.state !== '') {
     return contact.state.toUpperCase();
   }
 
-  return "";
+  return '';
 };
 
 const allContacts = (contactList: ContactList): Contact[] => {
@@ -34,7 +34,11 @@ const allContacts = (contactList: ContactList): Contact[] => {
 
 const makePhoneLink = (phoneNumber: string): JSX.Element => {
   if (phoneNumber) {
-    return <a href={`tel:${phoneNumber.replace(/-| /g, "")}`}>{phoneNumber.replace(/^\+1 /, "")}</a>;
+    return (
+      <a href={`tel:${phoneNumber.replace(/-| /g, '')}`}>
+        {phoneNumber.replace(/^\+1 /, '')}
+      </a>
+    );
   } else {
     return <></>;
   }
@@ -55,4 +59,9 @@ interface ContactUtils {
   cityFormat(office: FieldOffice, contact: Contact): JSX.Element;
 }
 
-export default { partyAndState, allContacts, makePhoneLink, cityFormat } as ContactUtils;
+export default {
+  partyAndState,
+  allContacts,
+  makePhoneLink,
+  cityFormat
+} as ContactUtils;

@@ -10,7 +10,7 @@ export interface Contact {
   field_offices?: FieldOffice[];
 }
 
-export type Party = "democrat" | "republican" | "independent" | "";
+export type Party = 'democrat' | 'republican' | 'independent' | '';
 
 export interface FieldOffice {
   city: string;

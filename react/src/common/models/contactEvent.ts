@@ -9,10 +9,10 @@ export interface UserContactEvent {
 export type UserOutcomeResult = UserContactEventType | string;
 
 export enum UserContactEventType {
-  UNAVAILABLE = "unavailable",
-  VOICEMAIL = "voicemail",
-  CONTACT = "contact",
-  SKIP = "skip",
+  UNAVAILABLE = 'unavailable',
+  VOICEMAIL = 'voicemail',
+  CONTACT = 'contact',
+  SKIP = 'skip'
 }
 
 export interface Outcome {
@@ -34,5 +34,4 @@ export interface OutcomeData {
   via?: string; // added in submitOutcome()
   userId?: string; // added in submitOutcome()
   group?: string;
-
 }

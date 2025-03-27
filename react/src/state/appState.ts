@@ -1,5 +1,5 @@
-import { LocationState } from "../state/locationState";
-import { CompletedIssueMap } from "../state/completedState";
+import { LocationState } from '../state/locationState';
+import { CompletedIssueMap } from '../state/completedState';
 
 export interface ApplicationState {
   locationState?: LocationState;

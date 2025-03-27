@@ -1,7 +1,7 @@
 .i-bar {
   --i-bar-padding-v: 0.75rem;
   --i-bar-padding-h: 1rem;
-  --i-bar-check-size: 1.5rem;
+  --i-bar-check-size: 28px;
   --i-bar-check-margin: 1rem;
 }
 
@@ -10,7 +10,7 @@
   display: block;
   width: 100%;
   font-size: 1.2rem;
-  padding: .5rem 1rem;
+  padding: 0.5rem 1rem;
   text-align: left;
 }
 
@@ -21,7 +21,7 @@
 
   .i-bar-top-issues {
     @extend .shared-btn-styles;
-    color: var(--c-blue)  !important;
+    color: var(--c-blue) !important;
     background: var(--c-transparent-blue) !important;
     margin-bottom: 2.5rem;
   }
@@ -194,15 +194,13 @@
     color: #fff;
     font-size: 0.75rem;
     position: absolute;
-    top: 0.375rem;
-    left: 0.375rem;
-    line-height: 1;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
   }
 
   .fa-check {
-    font-size: 0.625rem;
-    top: 0.4375rem;
-    left: 0.4375rem;
+    font-size: 0.8rem;
   }
 
   svg {
@@ -244,9 +242,9 @@
     text-align: left;
     display: flex;
     align-items: center;
+    color: var(--c-base-subtle);
 
     i {
-      margin-right: var(--i-bar-check-margin);
       width: var(--i-bar-check-size);
       text-align: center;
     }
@@ -258,54 +256,48 @@
   color: var(--c-base) !important;
   background: var(--c-xlight-base) !important;
   margin-top: 1.5rem;
-  margin-bottom: .5rem;
+  margin-bottom: 0.5rem;
 }
-
 
 @mixin i-bar-color($status) {
-  .i-bar-header-#{$status} {
-    background: rgba(var(--c-#{$status}-rgb), 0.05);
-
-    h3 {
-      color: var(--c-#{$status});
-    }
-  }
-
+ 
   .i-bar-item.is-active {
     background: rgba(var(--c-#{$status}-rgb), 0.05);
+
     strong {
       font-weight: bold;
-      color: var(--c-dark)
+      color: var(--c-dark);
     }
-    
   }
 
-    .i-bar-item.is-#{$status} {
-      --check-color: rgba(var(--c-#{$status}-rgb), 0.8);
-  
-      &:hover,
-      &:focus {
-        background: rgba(var(--c-#{$status}-rgb), 0.05);
+  .i-bar-item.is-#{$status} {
+    --check-color: rgba(var(--c-#{$status}-rgb), 0.8);
+
+    &:hover,
+    &:focus {
+      background: rgba(var(--c-#{$status}-rgb), 0.05);
+    }
+
+    .i-bar-check-initial {
+      background: var(--c-success);
+    }
+
+    .i-bar-check-completed,
+    .i-bar-check-percent {
+      background-color: var(--c-transparent-blue);
+
+      i {
+        color: var(--check-color);
+        opacity: .9;
       }
-  
-      .i-bar-check-initial {
-        background: var(--c-success);
-      }
-  
-      .i-bar-check-completed,
-      .i-bar-check-percent {
-        border: 2px solid var(--check-color);
-  
-        i {
-          color: var(--check-color);
-  
-        }
-      }
-    circle {
-      fill: var(--check-color);
     }
   }
+
+  circle {
+    fill: var(--check-color);
+  }
 }
+
 
 @include i-bar-color("latest");
 @include i-bar-color("urgent");
