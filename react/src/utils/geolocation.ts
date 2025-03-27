@@ -1,4 +1,4 @@
-import { GeolocationPosition } from "../common/models/geolocation";
+import { GeolocationPosition } from '../common/models/geolocation';
 
 // Geolocation PositionOptions properties
 // Browser geolocation timeout in milliseconds
@@ -17,7 +17,7 @@ export const getBrowserGeolocation = (): Promise<GeolocationPosition> => {
           // tslint:disable-next-line:no-shadowed-variable
           const geolocation: GeolocationPosition = {
             latitude: coords.latitude,
-            longitude: coords.longitude,
+            longitude: coords.longitude
           };
           resolve(geolocation);
         },
@@ -47,11 +47,11 @@ export const getBrowserGeolocation = (): Promise<GeolocationPosition> => {
         {
           enableHighAccuracy: true,
           timeout: GEOLOCATION_TIMEOUT,
-          maximumAge: GEOLOCATION_MAX_AGE,
+          maximumAge: GEOLOCATION_MAX_AGE
         }
       );
     } else {
-      reject(new Error("Browser Geolocation API not available"));
+      reject(new Error('Browser Geolocation API not available'));
     }
   });
 };
