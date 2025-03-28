@@ -1,17 +1,17 @@
 
-  /**
-     * Checks if a value is JSON serializable.
-     * @param value - The value to check.
-     * @returns True if the value is JSON serializable, false otherwise.
-     */
-    export function isJSONSerializable(value: unknown): boolean {
-      try {
-        JSON.stringify(value);
-        return true;
-      } catch {
-        return false;
-      }
-    }
+/**
+   * Checks if a value is JSON serializable.
+   * @param value - The value to check.
+   * @returns True if the value is JSON serializable, false otherwise.
+   */
+export function isJSONSerializable(value: unknown): boolean {
+  try {
+    JSON.stringify(value);
+    return true;
+  } catch {
+    return false;
+  }
+}
 /**
  * Retrieves a value from localStorage by key.
  * @param key - The key of the item to retrieve.
@@ -22,7 +22,7 @@ export function getFromLocalStorage<T>(key: string): T | null {
   if (!item) return null;
   try {
     return JSON.parse(item);
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
   } catch (err) {
     return item as unknown as T;
   }

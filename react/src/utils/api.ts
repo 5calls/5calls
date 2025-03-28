@@ -14,11 +14,14 @@ import { setToLocalStorage } from './localStorage';
 
 const prepareHeaders = async (): Promise<Headers> => {
   const localStorageIdToken = localStorage.getItem(Constants.USER_ID_TOKEN_KEY);
-  const idToken = localStorageIdToken ? localStorageIdToken : await firebase.auth().currentUser?.getIdTokenResult();
+  const idToken = localStorageIdToken
+    ? localStorageIdToken
+    : await firebase.auth().currentUser?.getIdTokenResult();
   if (idToken && !localStorageIdToken) {
     setToLocalStorage(
       Constants.USER_ID_TOKEN_KEY,
-      idToken ? idToken.token : null)
+      idToken ? idToken.token : null
+    );
   }
 
   const headers: Headers = {
