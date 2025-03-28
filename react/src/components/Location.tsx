@@ -8,7 +8,6 @@ import { getContacts } from '../utils/api';
 import { WithCompletedProps } from '../state/completedState';
 import { ToastContainer, toast } from 'react-toastify';
 
-
 enum ComponentLocationState {
   NoLocation,
   BadLocation,
@@ -84,7 +83,6 @@ const Location: React.FC<WithLocationProps & WithCompletedProps> = (props) => {
       })
       .catch((error) => {
         console.log('error:', error);
-        toast('lol');
         setLocationError('location error');
         setComponentLocationState(ComponentLocationState.NoLocation);
       });
@@ -110,7 +108,6 @@ const Location: React.FC<WithLocationProps & WithCompletedProps> = (props) => {
           });
       })
       .catch(() => {
-        toast('lol');
         setComponentLocationState(ComponentLocationState.EnterManually);
       });
   };
@@ -121,6 +118,7 @@ const Location: React.FC<WithLocationProps & WithCompletedProps> = (props) => {
         <div className="is-visible">
           <span>Find your legislators</span>
           <form onSubmit={setLocationAutomatically}>
+        
             <button className="button button-small button-red">
               Set your location
             </button>
@@ -190,6 +188,9 @@ export default withCompleted(
     return (
       <>
         <ToastContainer />
+        <button className="button button-small" onClick={() => {toast('test'); console.log('attempted to send toast')}}>
+          test toast
+        </button>
         <Location {...props} />
       </>
     );
