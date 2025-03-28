@@ -15,7 +15,12 @@ enum ComponentLocationState {
   EnterManually
 }
 
-const ERROR_MESSAGE = `We weren't able to find that location! Please try again with a different address.`;
+const ERROR_MESSAGE = (
+  <div>
+    <div>We weren&rsquo;t able to find that location!</div>
+    <div> Please try again with a different address.</div>
+  </div>
+);
 
 const Location: React.FC<WithLocationProps & WithCompletedProps> = (props) => {
   const [componentLocationState, setComponentLocationState] =
