@@ -44,6 +44,8 @@
   @media screen and (min-width: 60rem) {
     --g-gap: 3rem;
   }
+
+  --toastify-toast-width: 520px;
 }
 
 
@@ -142,4 +144,12 @@ body {
 
 .sr-only {
   font-size: 1px;
+}
+
+.Toastify__toast {
+  font-size: 1rem;
+}
+
+.Toastify__toast--small {
+  width: 320px !important;
 }
