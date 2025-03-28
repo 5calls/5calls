@@ -10,7 +10,7 @@ import { getContacts, postOutcomeData } from '../utils/api';
 import ContactUtils from '../utils/contactUtils';
 import ActiveContact from './ActiveContact';
 import { useSettings } from '../utils/useSettings';
-import { toast } from 'react-toastify';
+import { toast, ToastPosition } from 'react-toastify';
 
 interface Props {
   callingGroup?: string;
@@ -23,15 +23,12 @@ interface State {
   activeContactIndex: number;
 }
 
-const getCelebratoryIcon = (num: number) => {
-  const emojis = ['🎉', '🎊', '🥳', '👏', '🎈', '✨', '🔥', '🌟'];
-  return emojis[num % emojis.length];
-};
-
-const getCongratulations = (num: number) => {
-  const messages = ['Great job!', 'Nice!', 'Way to go!', 'Keep it up!'];
-  return messages[num % messages.length];
-};
+const TOAST_SETTINGS = {
+  autoClose: 2000,
+  position: 'top-right' as ToastPosition,
+  hideProgressBar: true,
+  className: 'Toastify__toast--small'
+} 
 
 const RepsWithSettings = (
   props: Props & WithLocationProps & WithCompletedProps
@@ -79,14 +76,14 @@ class Reps extends React.Component<
         this.state.contactList ?? ({} as ContactList)
       );
 
+      let currentContact: Contact | undefined;
+      if (contacts.length >= this.state.activeContactIndex) {
+        currentContact = contacts[this.state.activeContactIndex];
+      }
+
       if (outcome !== 'skip') {
         const viaParameter =
           window.location.host === '5calls.org' ? 'web' : 'test';
-
-        let currentContact: Contact | undefined;
-        if (contacts.length >= this.state.activeContactIndex) {
-          currentContact = contacts[this.state.activeContactIndex];
-        }
 
         const outcomeData: OutcomeData = {
           outcome: outcome,
@@ -105,17 +102,23 @@ class Reps extends React.Component<
         this.setState({ activeContactIndex });
         const remainingCalls =
           contacts.length - this.state.activeContactIndex - 1;
-        toast.success(
-          `${getCongratulations(activeContactIndex * this._randomSeed)} You have ${remainingCalls} call${remainingCalls > 1 ? 's' : ''} left.`,
-          {
-            icon: () =>
-              getCelebratoryIcon(activeContactIndex * this._randomSeed),
-            autoClose: 2000,
-            position: 'top-right',
-            hideProgressBar: true,
-            className: 'Toastify__toast--small'
-          }
-        );
+        if (!(outcome === 'contact' || outcome === 'voicemail')) {
+          toast.info(
+           <div>
+              <div>{outcome === 'skip' ? 'Skipped': 'Unable to contact'} {currentContact?.name}.</div>
+              <div>You have <b>{remainingCalls} call{remainingCalls > 1 ? 's' : ''} left.</b></div>
+            </div>,
+            TOAST_SETTINGS
+          );
+        } else {
+          toast.success(
+            <div>
+              <div>Contacted {currentContact?.name}!</div>
+              <div>You have <b>{remainingCalls} call{remainingCalls > 1 ? 's' : ''} left.</b></div>
+            </div>,
+            TOAST_SETTINGS
+          );
+        }
         this.reportUpdatedActiveContact(contacts[activeContactIndex]);
         document.getElementById('reps-header')?.scrollIntoView({
           behavior: 'smooth',

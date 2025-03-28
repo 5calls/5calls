@@ -46,6 +46,10 @@
   }
 
   --toastify-toast-width: 520px;
+  --toastify-color-success: var(--c-success);
+  --toastify-color-error: var(--c-red);
+  --toastify-color-dark: var(--c-base);
+  --toastify-color-info: var(--c-blue);
 }
 
 
@@ -151,5 +155,5 @@ body {
 }
 
 .Toastify__toast--small {
-  width: 320px !important;
+  max-width: 380px !important;
 }
