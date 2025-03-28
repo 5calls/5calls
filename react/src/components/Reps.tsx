@@ -43,7 +43,7 @@ class Reps extends React.Component<
 > {
   _defaultAreas: string[] = [];
   _defaultContactList: ContactList | undefined = undefined;
-  _randomSeed: number = Math.floor(Math.random() * 1000);
+
   private componentRef = createRef<HTMLDivElement>();
   state = {
     areas: this._defaultAreas,
