@@ -130,7 +130,7 @@ const startComponentRenders = () => {
     { id: 'react-location', component: Location, hasStateProvider: true },
     { id: 'react-reps', component: Reps, hasStateProvider: true },
     { id: 'react-script', component: Script, hasStateProvider: true },
-    { id: 'react-outcomes', component: Outcomes  },
+    { id: 'react-outcomes', component: Outcomes },
     { id: 'react-share', component: Share },
     { id: 'react-phone', component: PhoneSubscribe },
     { id: 'react-call-count', component: CallCount },

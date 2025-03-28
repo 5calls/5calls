@@ -15,10 +15,9 @@ enum ComponentLocationState {
   EnterManually
 }
 
-const ERROR_MESSAGE = `We weren't able to find that location! Please try again with a different address.`
+const ERROR_MESSAGE = `We weren't able to find that location! Please try again with a different address.`;
 
 const Location: React.FC<WithLocationProps & WithCompletedProps> = (props) => {
-
   const [componentLocationState, setComponentLocationState] =
     useState<ComponentLocationState>(ComponentLocationState.NoLocation);
   const [manualAddress, setManualAddress] = useState<string | undefined>(
@@ -74,7 +73,7 @@ const Location: React.FC<WithLocationProps & WithCompletedProps> = (props) => {
         document.dispatchEvent(new Event('updateReps'));
       })
       .catch((error) => {
-        console.error(error)
+        console.error(error);
         toast.error(ERROR_MESSAGE);
         setComponentLocationState(ComponentLocationState.NoLocation);
       });
@@ -110,7 +109,6 @@ const Location: React.FC<WithLocationProps & WithCompletedProps> = (props) => {
         <div>
           <span>Find your legislators</span>
           <form onSubmit={setLocationAutomatically}>
-        
             <button className="button button-small button-red">
               Set your location
             </button>

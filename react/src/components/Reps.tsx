@@ -28,7 +28,7 @@ const TOAST_SETTINGS = {
   position: 'top-right' as ToastPosition,
   hideProgressBar: true,
   className: 'Toastify__toast--small'
-} 
+};
 
 const RepsWithSettings = (
   props: Props & WithLocationProps & WithCompletedProps
@@ -104,9 +104,17 @@ class Reps extends React.Component<
           contacts.length - this.state.activeContactIndex - 1;
         if (!(outcome === 'contact' || outcome === 'voicemail')) {
           toast.info(
-           <div>
-              <div>{outcome === 'skip' ? 'Skipped': 'Unable to contact'} {currentContact?.name}.</div>
-              <div>You have <b>{remainingCalls} call{remainingCalls > 1 ? 's' : ''} left.</b></div>
+            <div>
+              <div>
+                {outcome === 'skip' ? 'Skipped' : 'Unable to contact'}{' '}
+                {currentContact?.name}.
+              </div>
+              <div>
+                You have{' '}
+                <b>
+                  {remainingCalls} call{remainingCalls > 1 ? 's' : ''} left.
+                </b>
+              </div>
             </div>,
             TOAST_SETTINGS
           );
@@ -114,7 +122,12 @@ class Reps extends React.Component<
           toast.success(
             <div>
               <div>Contacted {currentContact?.name}!</div>
-              <div>You have <b>{remainingCalls} call{remainingCalls > 1 ? 's' : ''} left.</b></div>
+              <div>
+                You have{' '}
+                <b>
+                  {remainingCalls} call{remainingCalls > 1 ? 's' : ''} left.
+                </b>
+              </div>
             </div>,
             TOAST_SETTINGS
           );
