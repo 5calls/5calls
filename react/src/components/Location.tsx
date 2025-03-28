@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import * as React from 'react';
 import $ from 'jquery';
 import { WithLocationProps } from '../state/locationState';
 import { withCompleted, withLocation } from '../state/stateProvider';
 import { getBrowserGeolocation } from '../utils/geolocation';
 import { getContacts } from '../utils/api';
 import { WithCompletedProps } from '../state/completedState';
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 
 enum ComponentLocationState {
   NoLocation,
@@ -16,18 +15,13 @@ enum ComponentLocationState {
   EnterManually
 }
 
+const ERROR_MESSAGE = `We weren't able to find that location! Please try again with a different address.`
+
 const Location: React.FC<WithLocationProps & WithCompletedProps> = (props) => {
-  useEffect(() => {
-    console.log('test: sending toast');
-    toast('test message');
-  }, []);
 
   const [componentLocationState, setComponentLocationState] =
     useState<ComponentLocationState>(ComponentLocationState.NoLocation);
   const [manualAddress, setManualAddress] = useState<string | undefined>(
-    undefined
-  );
-  const [locationError, setLocationError] = useState<string | undefined>(
     undefined
   );
 
@@ -40,7 +34,6 @@ const Location: React.FC<WithLocationProps & WithCompletedProps> = (props) => {
 
   useEffect(() => {
     updateIssueCompletion();
-    toast('lol');
   }, [props.completedIssueMap]);
 
   const updateIssueCompletion = () => {
@@ -69,7 +62,6 @@ const Location: React.FC<WithLocationProps & WithCompletedProps> = (props) => {
 
   const setLocationManually = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setLocationError(undefined);
 
     if (!manualAddress || manualAddress === '') {
       return;
@@ -82,8 +74,8 @@ const Location: React.FC<WithLocationProps & WithCompletedProps> = (props) => {
         document.dispatchEvent(new Event('updateReps'));
       })
       .catch((error) => {
-        console.log('error:', error);
-        setLocationError('location error');
+        console.error(error)
+        toast.error(ERROR_MESSAGE);
         setComponentLocationState(ComponentLocationState.NoLocation);
       });
   };
@@ -103,7 +95,7 @@ const Location: React.FC<WithLocationProps & WithCompletedProps> = (props) => {
           })
           .catch((error) => {
             console.log('error getting location after geoloc:', error);
-            setLocationError('geolocation error');
+            toast.error(ERROR_MESSAGE);
             setComponentLocationState(ComponentLocationState.NoLocation);
           });
       })
@@ -115,7 +107,7 @@ const Location: React.FC<WithLocationProps & WithCompletedProps> = (props) => {
   switch (componentLocationState) {
     case ComponentLocationState.NoLocation:
       return (
-        <div className="is-visible">
+        <div>
           <span>Find your legislators</span>
           <form onSubmit={setLocationAutomatically}>
         
@@ -127,14 +119,13 @@ const Location: React.FC<WithLocationProps & WithCompletedProps> = (props) => {
       );
     case ComponentLocationState.GettingAutomatically:
       return (
-        <div className="is-visible">
+        <div>
           <span className="i-bar-loading">
             <i className="fa fa-map-marker"></i>{' '}
             <b>Getting your location automatically&hellip;</b>
           </span>
           <form onSubmit={changeLocation}>
             <button className="button-link">
-              {' '}
               Or enter an address manually
             </button>
           </form>
@@ -142,7 +133,7 @@ const Location: React.FC<WithLocationProps & WithCompletedProps> = (props) => {
       );
     case ComponentLocationState.HasLocation:
       return (
-        <div className="is-visible">
+        <div>
           <span>Your location is</span>
           <strong>
             {props.locationState?.cachedCity || props.locationState?.address}
@@ -154,7 +145,7 @@ const Location: React.FC<WithLocationProps & WithCompletedProps> = (props) => {
       );
     case ComponentLocationState.EnterManually:
       return (
-        <div className="is-visible">
+        <div>
           <span>Enter an address or ZIP code</span>
           <form onSubmit={setLocationManually}>
             <input
@@ -165,16 +156,11 @@ const Location: React.FC<WithLocationProps & WithCompletedProps> = (props) => {
             />
             <button className="button button-small button-red">Go</button>
           </form>
-          {locationError && (
-            <span className="location-error">
-              Couldn&rsquo;t find that location, please try again
-            </span>
-          )}
         </div>
       );
     case ComponentLocationState.BadLocation:
       return (
-        <div className="is-visible">
+        <div>
           <span>no reps for that location</span>
         </div>
       );
@@ -187,10 +173,6 @@ export default withCompleted(
   withLocation((props) => {
     return (
       <>
-        <ToastContainer />
-        <button className="button button-small" onClick={() => {toast('test'); console.log('attempted to send toast')}}>
-          test toast
-        </button>
         <Location {...props} />
       </>
     );

@@ -10,6 +10,7 @@ import { getContacts, postOutcomeData } from '../utils/api';
 import ContactUtils from '../utils/contactUtils';
 import ActiveContact from './ActiveContact';
 import { useSettings } from '../utils/useSettings';
+import { toast } from 'react-toastify';
 
 interface Props {
   callingGroup?: string;
@@ -21,6 +22,16 @@ interface State {
   contactList: ContactList | undefined;
   activeContactIndex: number;
 }
+
+const getCelebratoryIcon = (num: number) => {
+  const emojis = ['🎉', '🎊', '🥳', '👏', '🎈', '✨', '🔥', '🌟'];
+  return emojis[num % emojis.length];
+};
+
+const getCongratulations = (num: number) => {
+  const messages = ['Great job!', 'Nice!', 'Way to go!', 'Keep it up!'];
+  return messages[num % messages.length];
+};
 
 const RepsWithSettings = (
   props: Props & WithLocationProps & WithCompletedProps
@@ -35,7 +46,7 @@ class Reps extends React.Component<
 > {
   _defaultAreas: string[] = [];
   _defaultContactList: ContactList | undefined = undefined;
-  private callingGroup: string = '';
+  _randomSeed: number = Math.floor(Math.random() * 1000);
   private componentRef = createRef<HTMLDivElement>();
   state = {
     areas: this._defaultAreas,
@@ -92,6 +103,19 @@ class Reps extends React.Component<
       if (!isFinished) {
         const activeContactIndex = this.state.activeContactIndex + 1;
         this.setState({ activeContactIndex });
+        const remainingCalls =
+          contacts.length - this.state.activeContactIndex - 1;
+        toast.success(
+          `${getCongratulations(activeContactIndex * this._randomSeed)} You have ${remainingCalls} call${remainingCalls > 1 ? 's' : ''} left.`,
+          {
+            icon: () =>
+              getCelebratoryIcon(activeContactIndex * this._randomSeed),
+            autoClose: 2000,
+            position: 'top-right',
+            hideProgressBar: true,
+            className: 'Toastify__toast--small'
+          }
+        );
         this.reportUpdatedActiveContact(contacts[activeContactIndex]);
         document.getElementById('reps-header')?.scrollIntoView({
           behavior: 'smooth',
