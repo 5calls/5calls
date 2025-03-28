@@ -1,9 +1,8 @@
-
 /**
-   * Checks if a value is JSON serializable.
-   * @param value - The value to check.
-   * @returns True if the value is JSON serializable, false otherwise.
-   */
+ * Checks if a value is JSON serializable.
+ * @param value - The value to check.
+ * @returns True if the value is JSON serializable, false otherwise.
+ */
 export function isJSONSerializable(value: unknown): boolean {
   try {
     JSON.stringify(value);
@@ -34,6 +33,8 @@ export function getFromLocalStorage<T>(key: string): T | null {
  * @param value - The value to store. If it's an object, it will be stringified before saving.
  */
 export function setToLocalStorage<T>(key: string, value: T): void {
-  const storedValue = isJSONSerializable(value) ? (value as unknown as string) : JSON.stringify(value);
+  const storedValue = isJSONSerializable(value)
+    ? (value as unknown as string)
+    : JSON.stringify(value);
   localStorage.setItem(key, storedValue);
 }
