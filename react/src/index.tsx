@@ -56,6 +56,28 @@ declare global {
   }
 }
 
+$(() => {
+  // sub_id is the subscriber id from buttondown that we send in emails
+  // if it exists, we want to store it so we can keep district info up to date
+  const urlParams = new URLSearchParams(window.location.search);
+  const subId = urlParams.get('sub_id');
+
+  if (subId) {
+    localStorage.setItem('sub_id', subId);
+
+    // Remove sub_id from URL without reloading the page
+    urlParams.delete('sub_id');
+    const newUrl = window.location.pathname + (urlParams.toString() ? '?' + urlParams.toString() : '') + window.location.hash;
+    window.history.replaceState({}, '', newUrl);
+
+    // if there's already a district set, post it to the server
+    const district = localStorage.getItem("district");
+    if (district) {
+      postSubscriberDistrict(subId, district);
+    }
+  }
+});
+
 const handleRootRenderError = (error: any, component: string) => {
   if (`${error}`.includes('Minified React error #200')) {
     // nbd, we're on a page where no reps element is
