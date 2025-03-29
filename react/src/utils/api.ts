@@ -199,7 +199,7 @@ export const postAPIEmail = (email: string): Promise<boolean> => {
     .catch((e) => Promise.reject(e));
 };
 
-export const postSubscriberDistrict = (sub_id: string, district: string): Promise<Boolean> => {
+export const postSubscriberDistrict = (sub_id: string, district: string): Promise<boolean> => {
   const postData = querystring.stringify({
     subscriber: sub_id,
     district: district,
@@ -207,6 +207,6 @@ export const postSubscriberDistrict = (sub_id: string, district: string): Promis
   });
   return axios
     .post(Constants.UPDATE_DISTRICT_API_URL, postData, {})
-    .then((response) => Promise.resolve(true))
+    .then((_) => Promise.resolve(true))
     .catch((e) => Promise.reject(e));
 };
