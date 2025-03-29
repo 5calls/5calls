@@ -201,7 +201,7 @@ export const postAPIEmail = (email: string): Promise<boolean> => {
 
 export const postSubscriberDistrict = (sub_id: string, district: string): Promise<Boolean> => {
   const postData = querystring.stringify({
-    sub_id: sub_id,
+    subscriber: sub_id,
     district: district,
     cid: uuid.callerID(),
   });

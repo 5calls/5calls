@@ -2,6 +2,7 @@ import React from 'react';
 import firebase from 'firebase/app';
 import 'firebase/auth';
 import { createRoot } from 'react-dom/client';
+import $ from "jquery";
 
 import Location from './components/Location';
 import Reps from './components/Reps';
@@ -13,13 +14,13 @@ import './utils/staticUtils';
 import { ActBlue } from './common/models/actblue';
 import OneSignal from 'react-onesignal';
 import uuid from './utils/uuid';
+import { postSubscriberDistrict } from './utils/api';
 import PhoneSubscribe from './components/PhoneSubscribe';
 import CallCount from './components/CallCount';
 import APIForm from './components/APIForm';
 import Settings from './components/Settings';
 import GroupCallCount from './components/GroupCallCount';
 import Bugsnag from '@bugsnag/js';
-
 Bugsnag.start('67e3931dbe1bbf48991ce7d682ceb676');
 
 type IslandConfig = {
@@ -56,7 +57,7 @@ declare global {
   }
 }
 
-$(() => {
+$(() => { 
   // sub_id is the subscriber id from buttondown that we send in emails
   // if it exists, we want to store it so we can keep district info up to date
   const urlParams = new URLSearchParams(window.location.search);
