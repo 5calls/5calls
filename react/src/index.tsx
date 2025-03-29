@@ -2,7 +2,7 @@ import React from 'react';
 import firebase from 'firebase/app';
 import 'firebase/auth';
 import { createRoot } from 'react-dom/client';
-import $ from "jquery";
+import $ from 'jquery';
 
 import Location from './components/Location';
 import Reps from './components/Reps';
@@ -57,7 +57,7 @@ declare global {
   }
 }
 
-$(() => { 
+$(() => {
   // sub_id is the subscriber id from buttondown that we send in emails
   // if it exists, we want to store it so we can keep district info up to date
   const urlParams = new URLSearchParams(window.location.search);
@@ -68,11 +68,14 @@ $(() => {
 
     // Remove sub_id from URL without reloading the page
     urlParams.delete('sub_id');
-    const newUrl = window.location.pathname + (urlParams.toString() ? '?' + urlParams.toString() : '') + window.location.hash;
+    const newUrl =
+      window.location.pathname +
+      (urlParams.toString() ? '?' + urlParams.toString() : '') +
+      window.location.hash;
     window.history.replaceState({}, '', newUrl);
 
     // if there's already a district set, post it to the server
-    const district = localStorage.getItem("district");
+    const district = localStorage.getItem('district');
     if (district) {
       postSubscriberDistrict(subId, district);
     }
