@@ -207,6 +207,6 @@ export const postSubscriberDistrict = (sub_id: string, district: string): Promis
   });
   return axios
     .post(Constants.UPDATE_DISTRICT_API_URL, postData, {})
-    .then((_) => Promise.resolve(true))
+    .then(() => Promise.resolve(true))
     .catch((e) => Promise.reject(e));
 };
