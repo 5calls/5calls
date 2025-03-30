@@ -1,5 +1,6 @@
 import React, { createRef } from 'react';
 
+import { cssTransition, toast } from 'react-toastify';
 import { Contact } from '../common/models/contact';
 import { OutcomeData } from '../common/models/contactEvent';
 import { ContactList } from '../common/models/contactList';
@@ -8,9 +9,8 @@ import { WithLocationProps } from '../state/locationState';
 import { withCompleted, withLocation } from '../state/stateProvider';
 import { getContacts, postOutcomeData } from '../utils/api';
 import ContactUtils from '../utils/contactUtils';
-import ActiveContact from './ActiveContact';
 import { useSettings } from '../utils/useSettings';
-import { toast, ToastPosition } from 'react-toastify';
+import ActiveContact from './ActiveContact';
 
 interface Props {
   callingGroup?: string;
@@ -24,10 +24,58 @@ interface State {
 }
 
 const TOAST_SETTINGS = {
-  autoClose: 2000,
-  position: 'top-right' as ToastPosition,
+  autoClose: 3000,
   hideProgressBar: true,
-  className: 'Toastify__toast--small'
+  transition: cssTransition({
+    enter: 'toastFadeIn',
+    exit: 'toastFadeOut',
+}),
+
+}
+
+// make sure to initiate scrolling before showing the toast
+const TOAST_DELAY = 500;
+
+type Outcome = 'contact' | 'voicemail' | 'skip' | 'unavailable';
+
+const createAndSendToast = ({
+  outcome,
+  currentContact,
+  nextContact
+}: {
+  outcome: Outcome;
+  currentContact: Contact | undefined;
+  nextContact: Contact | undefined;
+}) => {
+  let outcomeMessage = '';
+  if (outcome === 'contact') {
+    outcomeMessage = `Contacted ${currentContact?.name}!`;
+  } else if (outcome === 'voicemail') {
+    outcomeMessage = `Left a voicemail for ${currentContact?.name}!`;
+  } else if (outcome === 'skip') {
+    outcomeMessage = `Skipped ${currentContact?.name}.`;
+  } else if (outcome === 'unavailable') {
+    outcomeMessage = `${currentContact?.name} was unavailable.`;
+  }
+
+  const finalMessage = (
+    <div style={{marginLeft: '.5rem'}}>
+      <div>
+        {outcomeMessage}
+      </div>
+      {nextContact?.name && (
+        <div style={{ marginTop: '.2rem' }}>
+          Next up: call <b>{nextContact?.name}</b>.
+        </div>
+      )}
+    </div>
+  );
+
+  if (outcome === 'contact' || outcome === 'voicemail') {
+    toast.success(finalMessage, TOAST_SETTINGS);
+  } else {
+    toast.info(finalMessage, TOAST_SETTINGS);
+  }
 };
 
 const RepsWithSettings = (
@@ -100,44 +148,20 @@ class Reps extends React.Component<
       if (!isFinished) {
         const activeContactIndex = this.state.activeContactIndex + 1;
         this.setState({ activeContactIndex });
-        const remainingCalls =
-          contacts.length - this.state.activeContactIndex - 1;
-        if (!(outcome === 'contact' || outcome === 'voicemail')) {
-          toast.info(
-            <div>
-              <div>
-                {outcome === 'skip' ? 'Skipped' : 'Unable to contact'}{' '}
-                {currentContact?.name}.
-              </div>
-              <div>
-                You have{' '}
-                <b>
-                  {remainingCalls} call{remainingCalls > 1 ? 's' : ''} left.
-                </b>
-              </div>
-            </div>,
-            TOAST_SETTINGS
-          );
-        } else {
-          toast.success(
-            <div>
-              <div>Contacted {currentContact?.name}!</div>
-              <div>
-                You have{' '}
-                <b>
-                  {remainingCalls} call{remainingCalls > 1 ? 's' : ''} left.
-                </b>
-              </div>
-            </div>,
-            TOAST_SETTINGS
-          );
-        }
         this.reportUpdatedActiveContact(contacts[activeContactIndex]);
         document.getElementById('reps-header')?.scrollIntoView({
           behavior: 'smooth',
           block: 'nearest',
           inline: 'start'
         });
+
+        setTimeout(() => {
+          createAndSendToast({
+            outcome: outcome as Outcome,
+            currentContact,
+            nextContact: contacts[activeContactIndex]
+          });
+        }, TOAST_DELAY);
       } else {
         this.props.setCompletedIssueMap({
           [this.state.issueId]: Date.now()

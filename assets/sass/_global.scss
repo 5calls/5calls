@@ -151,9 +151,42 @@ body {
 }
 
 .Toastify__toast {
-  font-size: 1rem;
+  font-size: 1.1rem;
+
 }
 
-.Toastify__toast--small {
-  max-width: 380px !important;
+@keyframes fadeIn {
+  0% {
+    transform: translateY(0) translateX(0);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0) translateX(0);
+    opacity: 1;
+  }
 }
+
+@keyframes fadeOut {
+  0% {
+    transform: translateY(0) translateX(0);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(0) translateX(0);
+    opacity: 0;
+  }
+}
+
+$anim-duration: 300ms;
+
+.toastFadeIn {
+  animation-name: fadeIn;
+  animation-duration: $anim-duration;
+}
+
+.toastFadeOut {
+  animation-name: fadeOut;
+  animation-duration: $anim-duration;
+  animation-fill-mode: forwards; 
+}
+
