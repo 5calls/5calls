@@ -28,10 +28,9 @@ const TOAST_SETTINGS = {
   hideProgressBar: true,
   transition: cssTransition({
     enter: 'toastFadeIn',
-    exit: 'toastFadeOut',
-}),
-
-}
+    exit: 'toastFadeOut'
+  })
+};
 
 // make sure to initiate scrolling before showing the toast
 const TOAST_DELAY = 500;
@@ -59,10 +58,8 @@ const createAndSendToast = ({
   }
 
   const finalMessage = (
-    <div style={{marginLeft: '.5rem'}}>
-      <div>
-        {outcomeMessage}
-      </div>
+    <div style={{ marginLeft: '.5rem' }}>
+      <div>{outcomeMessage}</div>
       {nextContact?.name && (
         <div style={{ marginTop: '.2rem' }}>
           Next up: call <b>{nextContact?.name}</b>.
