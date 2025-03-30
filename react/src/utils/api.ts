@@ -10,6 +10,7 @@ import * as Constants from '../common/constants';
 import { OutcomeData } from '../common/models/contactEvent';
 import { UserCallDetails } from '../common/models/userStats';
 import uuid from './uuid';
+import { LOCAL_STORAGE_KEYS } from '../common/constants';
 
 const prepareHeaders = async (): Promise<Headers> => {
   const idToken = await firebase.auth().currentUser?.getIdTokenResult();
@@ -70,10 +71,10 @@ export const getContacts = async (
       if (contactList.generalizedLocationID() !== '-') {
         const locationId = contactList.generalizedLocationID();
         OneSignal.sendTag('districtID', locationId);
-        localStorage.setItem('district', locationId);
+        localStorage.setItem(LOCAL_STORAGE_KEYS.DISTRICT, locationId);
 
         // if there's a sub_id in local storage, post it to the server since we've updated the district
-        const subId = localStorage.getItem('sub_id');
+        const subId = localStorage.getItem(LOCAL_STORAGE_KEYS.SUBSCRIBER);
         if (subId) {
           postSubscriberDistrict(subId, locationId);
         }

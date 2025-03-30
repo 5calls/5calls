@@ -21,6 +21,7 @@ import APIForm from './components/APIForm';
 import Settings from './components/Settings';
 import GroupCallCount from './components/GroupCallCount';
 import Bugsnag from '@bugsnag/js';
+import { LOCAL_STORAGE_KEYS } from './common/constants';
 Bugsnag.start('67e3931dbe1bbf48991ce7d682ceb676');
 
 type IslandConfig = {
@@ -64,7 +65,7 @@ $(() => {
   const subId = urlParams.get('sub_id');
 
   if (subId) {
-    localStorage.setItem('sub_id', subId);
+    localStorage.setItem(LOCAL_STORAGE_KEYS.SUBSCRIBER, subId);
 
     // Remove sub_id from URL without reloading the page
     urlParams.delete('sub_id');
@@ -75,7 +76,7 @@ $(() => {
     window.history.replaceState({}, '', newUrl);
 
     // if there's already a district set, post it to the server
-    const district = localStorage.getItem('district');
+    const district = localStorage.getItem(LOCAL_STORAGE_KEYS.DISTRICT);
     if (district) {
       postSubscriberDistrict(subId, district);
     }

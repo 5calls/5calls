@@ -1,19 +1,17 @@
 import { LocationState } from '../state/locationState';
 import { ApplicationState } from '../state/appState';
 import { CompletedIssueMap } from '../state/completedState';
-
-const LOCATION_KEY = 'persist:fivecalls';
-const COMPLETION_KEY = 'persist:fivecalls-completedIssueMap';
+import { LOCAL_STORAGE_KEYS } from '../common/constants';
 
 const saveLocation = (location: LocationState) => {
   const newStoredData: StoredData = {
     locationState: JSON.stringify(location)
   };
-  localStorage.setItem(LOCATION_KEY, JSON.stringify(newStoredData));
+  localStorage.setItem(LOCAL_STORAGE_KEYS.LOCATION_KEY, JSON.stringify(newStoredData));
 };
 
 const saveCompleted = (completedIssueMap: CompletedIssueMap) => {
-  localStorage.setItem(COMPLETION_KEY, JSON.stringify(completedIssueMap));
+  localStorage.setItem(LOCAL_STORAGE_KEYS.COMPLETION_KEY, JSON.stringify(completedIssueMap));
 };
 
 const getStorageAsObject = (): ApplicationState => {
@@ -22,13 +20,13 @@ const getStorageAsObject = (): ApplicationState => {
     return JSON.parse(storageString) as T;
   };
 
-  const locationData: StoredData = getStoredState<StoredData>(LOCATION_KEY);
+  const locationData: StoredData = getStoredState<StoredData>(LOCAL_STORAGE_KEYS.LOCATION_KEY);
   const locationState = JSON.parse(
     locationData.locationState ?? '{}'
   ) as LocationState;
 
   const completedIssueMap = getStoredState<StoredData>(
-    COMPLETION_KEY
+    LOCAL_STORAGE_KEYS.COMPLETION_KEY
   ) as CompletedIssueMap;
 
   const appState: ApplicationState = { locationState, completedIssueMap };
