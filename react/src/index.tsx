@@ -63,23 +63,25 @@ $(() => {
   // if it exists, we want to store it so we can keep district info up to date
   const urlParams = new URLSearchParams(window.location.search);
   const subId = urlParams.get('sub_id');
+  
+  if (!subId) {
+    return
+  }
 
-  if (subId) {
-    localStorage.setItem(LOCAL_STORAGE_KEYS.SUBSCRIBER, subId);
+  localStorage.setItem(LOCAL_STORAGE_KEYS.SUBSCRIBER, subId);
 
-    // Remove sub_id from URL without reloading the page
-    urlParams.delete('sub_id');
-    const newUrl =
-      window.location.pathname +
-      (urlParams.toString() ? '?' + urlParams.toString() : '') +
-      window.location.hash;
-    window.history.replaceState({}, '', newUrl);
+  // Remove sub_id from URL without reloading the page
+  urlParams.delete('sub_id');
+  const newUrl =
+    window.location.pathname +
+    (urlParams.toString() ? '?' + urlParams.toString() : '') +
+    window.location.hash;
+  window.history.replaceState({}, '', newUrl);
 
-    // if there's already a district set, post it to the server
-    const district = localStorage.getItem(LOCAL_STORAGE_KEYS.DISTRICT);
-    if (district) {
-      postSubscriberDistrict(subId, district);
-    }
+  // if there's already a district set, post it to the server
+  const district = localStorage.getItem(LOCAL_STORAGE_KEYS.DISTRICT);
+  if (district) {
+    postSubscriberDistrict(subId, district);
   }
 });
 

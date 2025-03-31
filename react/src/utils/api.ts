@@ -69,14 +69,14 @@ export const getContacts = async (
       contactList.state = result.data.state;
       contactList.district = result.data.district;
       if (contactList.generalizedLocationID() !== '-') {
-        const locationId = contactList.generalizedLocationID();
-        OneSignal.sendTag('districtID', locationId);
-        localStorage.setItem(LOCAL_STORAGE_KEYS.DISTRICT, locationId);
+        const districtId = contactList.generalizedLocationID();
+        OneSignal.sendTag('districtID', districtId);
+        localStorage.setItem(LOCAL_STORAGE_KEYS.DISTRICT, districtId);
 
         // if there's a sub_id in local storage, post it to the server since we've updated the district
         const subId = localStorage.getItem(LOCAL_STORAGE_KEYS.SUBSCRIBER);
         if (subId) {
-          postSubscriberDistrict(subId, locationId);
+          postSubscriberDistrict(subId, districtId);
         }
       }
       return Promise.resolve(contactList);
@@ -132,10 +132,6 @@ export const postOutcomeData = async (data: OutcomeData) => {
     .post(`${Constants.REPORT_API_URL}`, postData, {
       headers
     })
-    .then(() => {
-      return Promise.resolve(null);
-    })
-    .catch((e) => Promise.reject(e));
 };
 
 export const getUserCallDetails = (idToken: string) => {
@@ -167,8 +163,6 @@ export const postPhoneRemind = (phone: string): Promise<boolean> => {
   });
   return axios
     .post(Constants.REMINDER_API_URL, postData)
-    .then(() => Promise.resolve(true))
-    .catch((e) => Promise.reject(e));
 };
 
 export const postEmail = (
@@ -186,8 +180,6 @@ export const postEmail = (
     .post(Constants.PROFILE_API_URL, postData, {
       headers: { Authorization: 'Bearer ' + idToken }
     })
-    .then(() => Promise.resolve(true))
-    .catch((e) => Promise.reject(e));
 };
 
 export const postAPIEmail = (email: string): Promise<boolean> => {
@@ -196,8 +188,6 @@ export const postAPIEmail = (email: string): Promise<boolean> => {
   });
   return axios
     .post(Constants.API_TOKEN_URL, postData)
-    .then(() => Promise.resolve(true))
-    .catch((e) => Promise.reject(e));
 };
 
 export const postSubscriberDistrict = (
@@ -211,6 +201,4 @@ export const postSubscriberDistrict = (
   });
   return axios
     .post(Constants.UPDATE_DISTRICT_API_URL, postData, {})
-    .then(() => Promise.resolve(true))
-    .catch((e) => Promise.reject(e));
 };
