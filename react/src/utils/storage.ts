@@ -7,11 +7,17 @@ const saveLocation = (location: LocationState) => {
   const newStoredData: StoredData = {
     locationState: JSON.stringify(location)
   };
-  localStorage.setItem(LOCAL_STORAGE_KEYS.LOCATION_KEY, JSON.stringify(newStoredData));
+  localStorage.setItem(
+    LOCAL_STORAGE_KEYS.LOCATION_KEY,
+    JSON.stringify(newStoredData)
+  );
 };
 
 const saveCompleted = (completedIssueMap: CompletedIssueMap) => {
-  localStorage.setItem(LOCAL_STORAGE_KEYS.COMPLETION_KEY, JSON.stringify(completedIssueMap));
+  localStorage.setItem(
+    LOCAL_STORAGE_KEYS.COMPLETION_KEY,
+    JSON.stringify(completedIssueMap)
+  );
 };
 
 const getStorageAsObject = (): ApplicationState => {
@@ -20,7 +26,9 @@ const getStorageAsObject = (): ApplicationState => {
     return JSON.parse(storageString) as T;
   };
 
-  const locationData: StoredData = getStoredState<StoredData>(LOCAL_STORAGE_KEYS.LOCATION_KEY);
+  const locationData: StoredData = getStoredState<StoredData>(
+    LOCAL_STORAGE_KEYS.LOCATION_KEY
+  );
   const locationState = JSON.parse(
     locationData.locationState ?? '{}'
   ) as LocationState;

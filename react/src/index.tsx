@@ -63,9 +63,9 @@ $(() => {
   // if it exists, we want to store it so we can keep district info up to date
   const urlParams = new URLSearchParams(window.location.search);
   const subId = urlParams.get('sub_id');
-  
+
   if (!subId) {
-    return
+    return;
   }
 
   localStorage.setItem(LOCAL_STORAGE_KEYS.SUBSCRIBER, subId);

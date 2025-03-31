@@ -128,10 +128,9 @@ export const postOutcomeData = async (data: OutcomeData) => {
   const headers = await prepareHeaders();
   headers['Content-Type'] = 'application/x-www-form-urlencoded';
 
-  return axios
-    .post(`${Constants.REPORT_API_URL}`, postData, {
-      headers
-    })
+  return axios.post(`${Constants.REPORT_API_URL}`, postData, {
+    headers
+  });
 };
 
 export const getUserCallDetails = (idToken: string) => {
@@ -161,8 +160,7 @@ export const postPhoneRemind = (phone: string): Promise<boolean> => {
     phone: phone,
     ref: ''
   });
-  return axios
-    .post(Constants.REMINDER_API_URL, postData)
+  return axios.post(Constants.REMINDER_API_URL, postData);
 };
 
 export const postEmail = (
@@ -176,18 +174,16 @@ export const postEmail = (
     email: email,
     subscribe: subscribe
   });
-  return axios
-    .post(Constants.PROFILE_API_URL, postData, {
-      headers: { Authorization: 'Bearer ' + idToken }
-    })
+  return axios.post(Constants.PROFILE_API_URL, postData, {
+    headers: { Authorization: 'Bearer ' + idToken }
+  });
 };
 
 export const postAPIEmail = (email: string): Promise<boolean> => {
   const postData = querystring.stringify({
     email: email
   });
-  return axios
-    .post(Constants.API_TOKEN_URL, postData)
+  return axios.post(Constants.API_TOKEN_URL, postData);
 };
 
 export const postSubscriberDistrict = (
@@ -199,6 +195,5 @@ export const postSubscriberDistrict = (
     district: district,
     cid: uuid.callerID()
   });
-  return axios
-    .post(Constants.UPDATE_DISTRICT_API_URL, postData, {})
+  return axios.post(Constants.UPDATE_DISTRICT_API_URL, postData, {});
 };
