@@ -16,7 +16,7 @@ class ActiveContact extends React.Component<Props> {
     }
 
     return (
-      <div className="contact">
+      <div className="contact" id="rep-contact">
         <div className="contact-image">
           <img
             alt={this.props.contact.name}

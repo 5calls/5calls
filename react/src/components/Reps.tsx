@@ -11,6 +11,7 @@ import { getContacts, postOutcomeData } from '../utils/api';
 import ContactUtils from '../utils/contactUtils';
 import { useSettings } from '../utils/useSettings';
 import ActiveContact from './ActiveContact';
+import { posix } from 'path';
 
 interface Props {
   callingGroup?: string;
@@ -24,16 +25,11 @@ interface State {
 }
 
 const TOAST_SETTINGS = {
-  autoClose: 3000,
-  hideProgressBar: true,
-  transition: cssTransition({
-    enter: 'toastFadeIn',
-    exit: 'toastFadeOut'
-  })
+  autoClose: 2500,
+  position:'bottom-center'
 };
 
-// make sure to initiate scrolling before showing the toast
-const TOAST_DELAY = 500;
+const TOAST_DELAY = 750;
 
 type Outcome = 'contact' | 'voicemail' | 'skip' | 'unavailable';
 
@@ -146,7 +142,8 @@ class Reps extends React.Component<
         const activeContactIndex = this.state.activeContactIndex + 1;
         this.setState({ activeContactIndex });
         this.reportUpdatedActiveContact(contacts[activeContactIndex]);
-        document.getElementById('reps-header')?.scrollIntoView({
+
+        document.getElementById('rep-contact')?.scrollIntoView({
           behavior: 'smooth',
           block: 'nearest',
           inline: 'start'
