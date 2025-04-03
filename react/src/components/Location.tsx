@@ -70,6 +70,8 @@ const Location: React.FC<WithLocationProps & WithCompletedProps> = (props) => {
     if (!manualAddress || manualAddress === '') {
       return;
     }
+    // close any possibly open toasts to prevent user confusion
+    toast.dismiss();
 
     getContacts(manualAddress)
       .then((contactList) => {
@@ -87,6 +89,9 @@ const Location: React.FC<WithLocationProps & WithCompletedProps> = (props) => {
   const setLocationAutomatically = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setComponentLocationState(ComponentLocationState.GettingAutomatically);
+
+    // close any possibly open toasts to prevent user confusion
+    toast.dismiss();
 
     getBrowserGeolocation()
       .then((loc) => {
