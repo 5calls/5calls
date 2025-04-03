@@ -53,16 +53,6 @@ const buildArchives = async () => {
       });
     });
 
-    fsExtra.mkdir(`${contentDirectory}118th`)
-    fetch(`https://api.5calls.org/v1/issues/archive?congress=118`)
-      .then((res) => res.json())
-      .then((data) => {
-        const issues = data as Issue[];
-        issues.forEach((issue) => {
-          fs.writeFileSync(`${contentDirectory}118th/${issue.slug}.md`, archiveContentFromIssue(issue, "118"));
-        });
-      });
-
     
 };
 
