@@ -1,6 +1,6 @@
 import React, { createRef } from 'react';
 
-import { cssTransition, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import { Contact } from '../common/models/contact';
 import { OutcomeData } from '../common/models/contactEvent';
 import { ContactList } from '../common/models/contactList';
@@ -11,7 +11,6 @@ import { getContacts, postOutcomeData } from '../utils/api';
 import ContactUtils from '../utils/contactUtils';
 import { useSettings } from '../utils/useSettings';
 import ActiveContact from './ActiveContact';
-import { posix } from 'path';
 
 interface Props {
   callingGroup?: string;
@@ -26,7 +25,7 @@ interface State {
 
 const TOAST_SETTINGS = {
   autoClose: 2500,
-  position:'bottom-center'
+  position: 'bottom-center'
 };
 
 const TOAST_DELAY = 750;
