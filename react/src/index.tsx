@@ -2,6 +2,7 @@ import React from 'react';
 import firebase from 'firebase/app';
 import 'firebase/auth';
 import { createRoot } from 'react-dom/client';
+import $ from 'jquery';
 
 import Location from './components/Location';
 import Reps from './components/Reps';
@@ -13,6 +14,7 @@ import './utils/staticUtils';
 import { ActBlue } from './common/models/actblue';
 import OneSignal from 'react-onesignal';
 import uuid from './utils/uuid';
+import { postSubscriberDistrict } from './utils/api';
 import PhoneSubscribe from './components/PhoneSubscribe';
 import CallCount from './components/CallCount';
 import APIForm from './components/APIForm';
@@ -20,7 +22,7 @@ import Settings from './components/Settings';
 import GroupCallCount from './components/GroupCallCount';
 import Bugsnag from '@bugsnag/js';
 import { Slide, ToastContainer } from 'react-toastify';
-
+import { LOCAL_STORAGE_KEYS } from './common/constants';
 Bugsnag.start('67e3931dbe1bbf48991ce7d682ceb676');
 
 type IslandConfig = {
@@ -56,6 +58,33 @@ declare global {
     ApplePaySession?: any;
   }
 }
+
+$(() => {
+  // sub_id is the subscriber id from buttondown that we send in emails
+  // if it exists, we want to store it so we can keep district info up to date
+  const urlParams = new URLSearchParams(window.location.search);
+  const subId = urlParams.get('sub_id');
+
+  if (!subId) {
+    return;
+  }
+
+  localStorage.setItem(LOCAL_STORAGE_KEYS.SUBSCRIBER, subId);
+
+  // Remove sub_id from URL without reloading the page
+  urlParams.delete('sub_id');
+  const newUrl =
+    window.location.pathname +
+    (urlParams.toString() ? '?' + urlParams.toString() : '') +
+    window.location.hash;
+  window.history.replaceState({}, '', newUrl);
+
+  // if there's already a district set, post it to the server
+  const district = localStorage.getItem(LOCAL_STORAGE_KEYS.DISTRICT);
+  if (district) {
+    postSubscriberDistrict(subId, district);
+  }
+});
 
 const handleRootRenderError = (error: any, component: string) => {
   if (`${error}`.includes('Minified React error #200')) {
