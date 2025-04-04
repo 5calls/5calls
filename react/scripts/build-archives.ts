@@ -52,8 +52,6 @@ const buildArchives = async () => {
         fs.writeFileSync(`${contentDirectory}117th/${issue.slug}.md`, archiveContentFromIssue(issue, "117"));
       });
     });
-
-    
 };
 
 const archiveContentFromIssue = (issue: Issue, session: string): string => {
