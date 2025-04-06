@@ -1,5 +1,6 @@
 import React, { createRef } from 'react';
 
+import { toast } from 'react-toastify';
 import { Contact } from '../common/models/contact';
 import { OutcomeData } from '../common/models/contactEvent';
 import { ContactList } from '../common/models/contactList';
@@ -8,8 +9,8 @@ import { WithLocationProps } from '../state/locationState';
 import { withCompleted, withLocation } from '../state/stateProvider';
 import { getContacts, postOutcomeData } from '../utils/api';
 import ContactUtils from '../utils/contactUtils';
-import ActiveContact from './ActiveContact';
 import { useSettings } from '../utils/useSettings';
+import ActiveContact from './ActiveContact';
 
 interface Props {
   callingGroup?: string;
@@ -21,6 +22,53 @@ interface State {
   contactList: ContactList | undefined;
   activeContactIndex: number;
 }
+
+const TOAST_SETTINGS = {
+  autoClose: 2500,
+  position: 'bottom-center'
+};
+
+const TOAST_DELAY = 750;
+
+type Outcome = 'contact' | 'voicemail' | 'skip' | 'unavailable';
+
+const createAndSendToast = ({
+  outcome,
+  currentContact,
+  nextContact
+}: {
+  outcome: Outcome;
+  currentContact: Contact | undefined;
+  nextContact: Contact | undefined;
+}) => {
+  let outcomeMessage = '';
+  if (outcome === 'contact') {
+    outcomeMessage = `Contacted ${currentContact?.name}!`;
+  } else if (outcome === 'voicemail') {
+    outcomeMessage = `Left a voicemail for ${currentContact?.name}!`;
+  } else if (outcome === 'skip') {
+    outcomeMessage = `Skipped ${currentContact?.name}.`;
+  } else if (outcome === 'unavailable') {
+    outcomeMessage = `${currentContact?.name} was unavailable.`;
+  }
+
+  const finalMessage = (
+    <div style={{ marginLeft: '.5rem' }}>
+      <div>{outcomeMessage}</div>
+      {nextContact?.name && (
+        <div style={{ marginTop: '.2rem' }}>
+          Next up: call <b>{nextContact?.name}</b>.
+        </div>
+      )}
+    </div>
+  );
+
+  if (outcome === 'contact' || outcome === 'voicemail') {
+    toast.success(finalMessage, TOAST_SETTINGS);
+  } else {
+    toast.info(finalMessage, TOAST_SETTINGS);
+  }
+};
 
 const RepsWithSettings = (
   props: Props & WithLocationProps & WithCompletedProps
@@ -35,7 +83,7 @@ class Reps extends React.Component<
 > {
   _defaultAreas: string[] = [];
   _defaultContactList: ContactList | undefined = undefined;
-  private callingGroup: string = '';
+
   private componentRef = createRef<HTMLDivElement>();
   state = {
     areas: this._defaultAreas,
@@ -68,14 +116,18 @@ class Reps extends React.Component<
         this.state.contactList ?? ({} as ContactList)
       );
 
+      let currentContact: Contact | undefined;
+      if (contacts.length >= this.state.activeContactIndex) {
+        currentContact = contacts[this.state.activeContactIndex];
+      }
+
       if (outcome !== 'skip') {
         const viaParameter =
           window.location.host === '5calls.org' ? 'web' : 'test';
 
-        let currentContact: Contact | undefined;
-        if (contacts.length >= this.state.activeContactIndex) {
-          currentContact = contacts[this.state.activeContactIndex];
-        }
+        gtag('event', 'conversion', {
+            'send_to': 'AW-16875388196/mI3GCNKZurMaEKT65-4-'
+        });
 
         const outcomeData: OutcomeData = {
           outcome: outcome,
@@ -93,11 +145,20 @@ class Reps extends React.Component<
         const activeContactIndex = this.state.activeContactIndex + 1;
         this.setState({ activeContactIndex });
         this.reportUpdatedActiveContact(contacts[activeContactIndex]);
-        document.getElementById('reps-header')?.scrollIntoView({
+
+        document.getElementById('rep-contact')?.scrollIntoView({
           behavior: 'smooth',
           block: 'nearest',
           inline: 'start'
         });
+
+        setTimeout(() => {
+          createAndSendToast({
+            outcome: outcome as Outcome,
+            currentContact,
+            nextContact: contacts[activeContactIndex]
+          });
+        }, TOAST_DELAY);
       } else {
         this.props.setCompletedIssueMap({
           [this.state.issueId]: Date.now()
