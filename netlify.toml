@@ -24,6 +24,11 @@ NODE_VERSION = '22'
 from = "/report"
 to = "https://api.5calls.org/v1/report"
 
+# an easy link for the google drive printables
+[[redirects]]
+from = "/printables"
+to = "https://drive.google.com/file/d/1mT3NNnLXBLRvkHuyjwVy2DDoIUQAM2eP/view?usp=sharing"
+
 [[redirects]]
 from = "/more"
 status = 301
