@@ -7,9 +7,9 @@ The United States has more guns per capita than any other peer nation; Americans
 
 Gun violence prevention experts have recommended a number of policy approaches to reduce gun violence:
 
-— Congress can close legal loopholes that allow people to buy guns without background checks from private sellers, websites, or gun shows. A move that over 80% of gun owners support.
-— Congress can institute universal background checks for both gun and ammo purchasers and require gun licenses, all measures supported by the vast majority of Americans.
-— Congress can adequately fund community-based interventions such as the nearly 20-year-old Ceasefire program, an underfunded effort that has helped to reduce gun violence in cities through education and public health crisis strategies.
-— Congress can reinstate the assault weapons ban that expired in 2004, or pass new legislation banning the purchase of high-capacity magazines and military-style assault weapons.
+- Congress can close legal loopholes that allow people to buy guns without background checks from private sellers, websites, or gun shows. A move that over 80% of gun owners support.
+- Congress can institute universal background checks for both gun and ammo purchasers and require gun licenses, all measures supported by the vast majority of Americans.
+- Congress can adequately fund community-based interventions such as the nearly 20-year-old Ceasefire program, an underfunded effort that has helped to reduce gun violence in cities through education and public health crisis strategies.
+- Congress can reinstate the assault weapons ban that expired in 2004, or pass new legislation banning the purchase of high-capacity magazines and military-style assault weapons.
 
 America's disproportionately high rates of gun-related deaths are both tragic and shameful. Congress can save lives by passing common-sense legislation to reduce gun violence. 

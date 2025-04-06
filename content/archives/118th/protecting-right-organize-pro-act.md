@@ -1,0 +1,12 @@
+---
+title: "Support Workers Right to Organize: Support the PRO Act"
+date: 2023-03-03T18:48:18Z
+session: 118
+---
+Income and wealth inequality (how evenly or unevenly income is distributed across the population) is higher in the United States than [in almost any other developed nation.](https://www.cfr.org/backgrounder/us-inequality-debate) From 1979 to 2020, annual wages for the bottom 90% of households increased by only 26%, while average incomes for the [wealthiest 1% increased by more than 160%.](https://www.epi.org/blog/wages-for-the-top-1-skyrocketed-160-since-1979-while-the-share-of-wages-for-the-bottom-90-shrunk-time-to-remake-wage-pattern-with-economic-policies-that-generate-robust-wage-growth-for-vast-majority/)
+
+The right for workers to organize and collectively bargain for salary and conditions of employment is a cornerstone of fair and just labor practices. And Americans agree – labor unions currently have the highest approval rating since 1968, with [71% of Americans now approving of labor unions.](https://news.gallup.com/poll/398303/approval-labor-unions-highest-point-1965.aspx). However, corporations such as Amazon and Starbucks have [reacted to labor organizing with aggressive union busting practices](https://www.theguardian.com/us-news/2023/feb/26/amazon-trader-joes-starbucks-anti-union-measures) in an attempt to stop their employees from gaining collective bargaining power.
+
+The Protecting the Right to Organize (PRO) Act [(H.R. 20 /](https://www.congress.gov/bill/118th-congress/house-bill/20) [S.567](https://www.congress.gov/bill/118th-congress/senate-bill/567)) is bipartisan legislation introduced in the House and Senate that would strengthen federal laws protecting workers’ right to join a union. The bill [strengthens the rights of workers to organize a union](https://democrats-edworkforce.house.gov/imo/media/doc/richard_l_trumka_protecting_the_right_to_organize_act_hr20factsheet1.pdf) by empowering workers to exercise their right to organize, forbidding employers from interfering in union elections, penalizing employers for violating workers' rights, and forbidding so-called 'right to work' laws which enable employees to opt out of unions (but still be protected under union contracts).
+
+Union membership should be open to workers without backlash and other negative consequences from wealthy individuals and corporations. Demand your congressperson support the Pro Act to strengthen organized labor in the United States. 

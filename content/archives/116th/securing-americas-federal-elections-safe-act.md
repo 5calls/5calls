@@ -1,5 +1,5 @@
 ---
-title: "Support Securing America’s Federal Elections with the SAFE Act - Needs Senate Vote"
+title: "Support Securing Americas Federal Elections with the SAFE Act - Needs Senate Vote"
 date: 2019-06-24T21:30:01Z
 session: 116
 ---

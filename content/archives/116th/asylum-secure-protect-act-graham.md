@@ -1,5 +1,5 @@
 ---
-title: "Reject Lindsey Graham’s Punitive Asylum Reform Legislation"
+title: "Reject Lindsey Grahams Punitive Asylum Reform Legislation"
 date: 2019-08-06T20:55:07Z
 session: 116
 ---

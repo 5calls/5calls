@@ -1,5 +1,5 @@
 ---
-title: "Support “Savanna’s Act” to Address Violence Against Native American Women"
+title: "Support Savannas Act to Address Violence Against Native American Women"
 date: 2019-02-05T20:55:09Z
 session: 116
 ---

@@ -1,0 +1,23 @@
+---
+title: "Call for De-escalation and Ceasefire in Israel and Occupied Palestine"
+date: 2023-10-17T22:23:05Z
+session: 118
+---
+**Update (04/24/24):** Even as the unconscionable war on Gaza continues, the US House and Senate have [passed more aid to Israel](https://www.politico.eu/article/israel-strike-rafah-kill-13-gaza-death-toll-surpass-34000/). While the new package includes $9 billion in humanitarian aid for Gaza in the overall $26.3 billion package, it calls for no de-escalation of the war and provides no guardrails on Israel's right wing government and its indiscriminate bombing of Gaza. The current death toll from the invasion now tops [34,000 people](https://www.yahoo.com/news/death-toll-among-gaza-innocents-145706558.html) and is expected to continue to climb as Israel begins a ground invasion of Rafia, where over [1.5 million Palestinians are sheltering from the war](https://www.aljazeera.com/news/liveblog/2024/4/23/israels-war-on-gaza-live-palestinians-urge-donors-to-resume-unrwa-funding). We must end the US funding of this war, and instead demand a permanent ceasefire. 
+
+Your pressure is continuing to work: as of now, at least 85 Members of Congress have joined in support of H.R. 786 and/or in a ceasefire in Gaza. You can check the status of your Representative [on this tracker](https://workingfamilies.org/ceasefire-tracker/). 
+
+
+**Update (01/11/24):** Since the beginning of the war with Hamas, the right-wing Netanyahu government has been bombing Gaza indiscriminately, resulting in levels of destruction not seen in modern times. Over [23,000 people, 70% of them women and children](https://abcnews.go.com/International/wireStory/live-updates-top-court-hear-genocide-allegation-israel-106285071) have been killed since October 7th, representing [1% of the total population in Gaza](https://abcnews.go.com/International/grim-milestone-1-gaza-strip-population-killed-israel/story?id=106218611). Furthermore, [1.9 million Palestinians - roughly 85% of the total population -](https://unfoundation.org/humanitarian-crisis-in-the-middle-east/) have been displaced and 90% of the population is facing [acute food insecurity](https://www.newyorker.com/news/q-and-a/gaza-is-starving) where virtually all households are skipping meals daily. Over [70% of homes](https://www.aljazeera.com/news/2023/12/31/israeli-bombardment-destroyed-over-70-of-gaza-homes-media-office) in Gaza have been destroyed by the bombardment leaving Palestinians with nowhere to live or sleep. This destruction must come to an end. Continue calling and demanding your representatives support a de-escalation and ceasefire. 
+
+Your pressure has been working: as of now, at least 64 Members of Congress have joined in support of H.R. 786 and/or in a ceasefire in Gaza. You can check the status of your Representative [on this tracker](https://workingfamilies.org/ceasefire-tracker/). 
+
+---
+
+War erupted when [the Palestinian group Hamas launched a highly coordinated attack against Israel from the besieged Gaza Strip, killing hundreds and taking two hundred or more people captive](https://abcnews.go.com/International/timeline-surprise-rocket-attack-hamas-israel/story?id=103816006). 
+
+Israel has responded with a relentless bombing campaign that has killed thousands of Palestinians, including hundreds of children in Gaza. [The World Health Organization has also documented dozens of attacks on medical facilities in Gaza](https://www.aljazeera.com/news/2023/10/12/war-crime-gaza-medics-say-israel-targeting-ambulances-health-facilities), which have killed at least 12 health workers.
+
+This is a humanitarian crisis, and the Biden administration, while roundly condemning the actions of Hamas, should push for an end to the siege and bombing of innocent and helpless residents of Gaza, which is home to 2.2 million people [who are unable to leave due to decades of blockades by Egypt and Israel](https://www.msn.com/en-us/news/world/why-cant-people-leave-gaza-gaza-strip-blockade-explained-amid-israel-evacuation-order/ar-AA1iaUmv). [Collective punishment](https://en.wikipedia.org/wiki/Collective_punishment) is considered a war crime by the Geneva Convention and should be condemned. 
+
+Progressive legislators have introduced [H.Res.786](https://www.congress.gov/bill/118th-congress/house-resolution/786), [a congressional resolution](https://bush.house.gov/imo/media/doc/bushceasefirenowresolution.pdf) urging “an immediate de-escalation and ceasefire in Israel and occupied Palestine.” The proposed resolution reads, “All human life is precious, and the targeting of civilians, no matter their faith or ethnicity, is a violation of international humanitarian law.”

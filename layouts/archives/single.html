@@ -6,7 +6,7 @@
       <div class="issue-content">
         <h1>{{ .Title }}</h1>
         <h4 class="archive-note">
-          <i class="fas fa-exclamation-circle"></i>This content is archived from the {{ .Params.session }}th Congress {{ if eq .Params.session 116 }}(2019-2020){{ else }}(2021-2022){{ end }} and is
+          <i class="fas fa-exclamation-circle"></i>This content is archived from the {{ .Params.session }}th Congress {{ if eq .Params.session 116 }}(2019-2020){{ else if eq .Params.session 117 }}(2021-2022){{ else }}(2023-2024){{ end }} and is
           no longer callable, we've provided this copy to remember the topics that you've called on during prevous
           Congressional sessions. Head <a href="/">back to the front page</a> to see current topics to call on.
         </h4>

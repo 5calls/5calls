@@ -1,0 +1,19 @@
+---
+title: "Demand a Clean Aid Package to Ukraine - Funding Package Passed Congress"
+date: 2023-12-12T23:05:29Z
+session: 118
+---
+**UPDATE (04/24/24):** The House and Senate have passed a new aid package to Ukraine.
+
+**UPDATE (02/21/24):** After months of bipartisan negotiations, Republicans [killed a compromise bill](https://www.nbcnews.com/politics/congress/senate-republicans-knife-bipartisan-border-security-bill-declaring-dea-rcna137572) that would have instituted new immigration and border controls, which they claimed to require in exchange for any further funding for Ukraine. In response, Senate Majority leader Chuck Schumer (D-NY) put forth a standalone bill with no changes to immigration policies which [passed in the Senate 70 to 29](https://www.cnn.com/2024/02/12/politics/senate-foreign-aid-bill-ukraine/index.html). However, House Speaker Mike Johnson (R-LA) has decided to not move forward with the Senate-passed legislation.
+Instead, House GOP members are now again requiring a [border security package](https://abcnews.go.com/Politics/bipartisan-house-members-unveil-new-border-foreign-aid/story?id=107348740)in exchange for Ukraine aid, bringing Congress back to square one. Republicans are going in circles with no end in sight. They demanded a border security package but then rejected the legislation that granted their demands. Enough is enough, Ukraine is suffering due to a [lack of GOP leadership](https://www.cnn.com/2024/02/19/politics/johnson-ukraine-aid-critical-decision/index.html) and continuing to [give Putin an advantage in Ukraine](https://www.cnbc.com/2024/02/17/ukrainian-troops-withdraw-from-avdiivka-as-ammunition-shortage-bites.html). Demand your House Representatives immediately pass much needed financial aid to Ukraine
+
+**UPDATE (01/24/24):** The Pentagon is [officially out of money to aid Ukraine](https://apnews.com/article/ukraine-russia-money-congress-weapons-dd5076b30bf8fab5c914a1222186e7f0), leaving them unable to send ammunition and supplies to support Ukraine's war with Russia. Without additional aid, [Russia could win the war in a matter of weeks](https://www.nbcnews.com/politics/white-house/incredibly-stark-biden-aides-give-lawmakers-grim-assessment-ukraine-ai-rcna134792). Demand lawmakers stop playing politics and provide the much needed funds immediately. 
+
+---
+
+As the war in Ukraine rages on, Congressional Republicans have decided to play politics in providing aid to the Ukrainian effort to thwart Russia. In late September, Republicans removed aid to Ukraine and passed a budgetary continuing resolution [without any additional appropriations for the war torn country.](https://rollcall.com/2023/10/03/analysis-fight-over-ukraine-in-cr-was-undercard/) This was a major blow to Ukraine and a gift to Putin and his regime. The office of Management and Budget has already warned that funding for Ukraine could run out by the end of the year, adding that [“if Ukraine’s economy collapses, they will not be able to keep fighting, full stop.”](https://apnews.com/article/biden-ukraine-congress-military-assistance-economy-557cbced7f7c1242ea08c52dadefc33b)
+
+Instead of providing a clean aid package to Ukraine, Congressional Republicans have demanded major immigration reform in exchange for Ukrainian aid. Their [demands include permanent changes](https://apnews.com/article/immigration-border-congress-humanitarian-parole-asylum-trump-5b5808183c1642bae520b7d9456cc36d) to the asylum program, humanitarian parole, and increased deportations through expedited removal. Such changes to immigration have nothing to do with Ukrainian aid and pairing such drastic measures with much needed support to an ally is a disgrace. 
+
+Demand your representatives pass a clean aid package to Ukraine and to do so immediately. Time is of the essence, we must stand with Ukraine while they fight for their freedom from Putin and his oppressive regime.  

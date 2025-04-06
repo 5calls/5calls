@@ -1,0 +1,14 @@
+---
+title: "Support a Clean Debt Ceiling Increase - Reject House Bill"
+date: 2023-01-17T20:08:40Z
+session: 118
+---
+>**UPDATE (05/01/23):**  House Republicans [narrowly passed legislation](https://www.nytimes.com/2023/04/26/us/politics/debt-limit-vote-republicans.html) that would raise the debt ceiling but the bill includes drastic cuts to popular social programs. If enacted, [the bill would](https://www.nytimes.com/live/2023/04/26/us/debt-ceiling-vote-news#heres-whats-in-the-gop-debt-limit-bill) freeze federal spending to 2022 levels for a decade, roll back major parts of the Biden administration’s landmark health and climate legislation, cut funds to the IRS intended to crackdown on tax cheats, establish stringent work requirements for recipients of food stamps and Medicaid benefits, and block student loan forgiveness. Demand your Senator reject this legislation and pass a clean debt ceiling increase.
+
+On January 13th, Treasury Secretary Janet Yellen [informed Congress](https://home.treasury.gov/system/files/136/Debt-Limit-Letter-to-Congress-McCarthy-20230113.pdf) that the United States would reach its debt limit on January 19, and would need to use “extraordinary measures” in order to meet government obligations. While these extraordinary measures will buy some time, breaching the debt limit is expected to occur in [early June](https://www.washingtonpost.com/us-policy/2023/01/13/debt-limit-extraordinary-measures-treasury/) unless Congress acts. 
+
+The debt limit, also known as the debt ceiling, is a legal limit set by Congress on how much debt the U.S government can incur. First [established in 1917](https://en.wikipedia.org/wiki/History_of_the_United_States_debt_ceiling) as a means to make government spending more flexible during WWI, the debt ceiling has been [raised or revised over 78 times since 1960](https://home.treasury.gov/policy-issues/financial-markets-financial-institutions-and-fiscal-service/debt-limit) – 49 times under Republican presidents and 29 times under Democratic presidents – to ensure the government did not default on its debt. 
+
+Despite the fact that raising the debt limit is not a vote on spending but rather a vote on paying for spending that has already been approved by Congress, Republicans are using the issue as a bargaining chip to push for drastic budget cuts to [Social Security, Medicare, and Medicaid](https://www.nytimes.com/2023/01/13/business/economy/debt-limit-us-economy.html) which would have a devastating impact on millions of Americans. Furthermore, if default were to occur, it would result in [catastrophic effects to the US economy](https://www.nytimes.com/2023/01/11/us/politics/debt-ceiling-economy-congress.html), affecting all Americans. 
+
+Demand your representatives end the political brinkmanship and support a clean, no-strings-attached, debt ceiling increase so the US can meet its debt and obligations. 
