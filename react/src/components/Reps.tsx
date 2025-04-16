@@ -126,7 +126,7 @@ class Reps extends React.Component<
           window.location.host === '5calls.org' ? 'web' : 'test';
 
         gtag('event', 'conversion', {
-            'send_to': 'AW-16875388196/mI3GCNKZurMaEKT65-4-'
+          send_to: 'AW-16875388196/mI3GCNKZurMaEKT65-4-'
         });
 
         const outcomeData: OutcomeData = {
