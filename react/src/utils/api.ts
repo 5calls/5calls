@@ -10,8 +10,6 @@ import { OutcomeData } from '../common/models/contactEvent';
 import uuid from './uuid';
 import { LOCAL_STORAGE_KEYS } from '../common/constants';
 
-
-
 export const noLocationError = Error('no location entered');
 
 interface ContactResponse {
@@ -114,7 +112,6 @@ export const postOutcomeData = async (data: OutcomeData) => {
     }
   });
 };
-
 
 export const postAPIEmail = (email: string): Promise<boolean> => {
   const postData = querystring.stringify({
