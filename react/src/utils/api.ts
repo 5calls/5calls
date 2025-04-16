@@ -7,17 +7,10 @@ import { Contact } from '../common/models/contact';
 import { ContactList } from '../common/models/contactList';
 import * as Constants from '../common/constants';
 import { OutcomeData } from '../common/models/contactEvent';
-import { UserCallDetails } from '../common/models/userStats';
 import uuid from './uuid';
 import { LOCAL_STORAGE_KEYS } from '../common/constants';
 
-interface Headers {
-  'Content-Type': string;
-}
 
-const headers: Headers = {
-  'Content-Type': 'application/json; charset=utf-8'
-};
 
 export const noLocationError = Error('no location entered');
 
@@ -46,7 +39,9 @@ export const getContacts = async (
     .get<ContactResponse>(
       `${Constants.REPS_API_URL}?location=${location}${areasQuery}`,
       {
-        headers: headers
+        headers: {
+          'Content-Type': 'application/json; charset=utf-8'
+        }
       }
     )
     .then((result) => {
@@ -113,58 +108,13 @@ export const postOutcomeData = async (data: OutcomeData) => {
     ...(data.group ? { group: data.group } : {})
   });
 
-  headers['Content-Type'] = 'application/x-www-form-urlencoded';
-
   return axios.post(`${Constants.REPORT_API_URL}`, postData, {
-    headers
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded'
+    }
   });
 };
 
-export const getUserCallDetails = (idToken: string) => {
-  const today = new Date();
-  // this is fine for now, we can add moment later
-  today.setDate(today.getDate() - 60);
-  const dateString =
-    today.getFullYear() +
-    '-' +
-    ('0' + (today.getMonth() + 1)).slice(-2) +
-    '-' +
-    ('0' + today.getDate()).slice(-2);
-
-  return axios
-    .get(`${Constants.PROFILE_API_URL}?timestamp=${dateString}`, {
-      headers: { Authorization: 'Bearer ' + idToken }
-    })
-    .then((response) => {
-      const profile = response.data as UserCallDetails;
-      return Promise.resolve(profile);
-    })
-    .catch((e) => Promise.reject(e));
-};
-
-export const postPhoneRemind = (phone: string): Promise<boolean> => {
-  const postData = querystring.stringify({
-    phone: phone,
-    ref: ''
-  });
-  return axios.post(Constants.REMINDER_API_URL, postData);
-};
-
-export const postEmail = (
-  email: string,
-  sub: boolean,
-  idToken: string
-): Promise<boolean> => {
-  const subscribe = sub ? 'true' : '';
-
-  const postData = querystring.stringify({
-    email: email,
-    subscribe: subscribe
-  });
-  return axios.post(Constants.PROFILE_API_URL, postData, {
-    headers: { Authorization: 'Bearer ' + idToken }
-  });
-};
 
 export const postAPIEmail = (email: string): Promise<boolean> => {
   const postData = querystring.stringify({
