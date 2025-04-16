@@ -31,38 +31,27 @@ const buildArchives = async () => {
     }
   });
 
-  fsExtra.mkdir(`${contentDirectory}116th`)
-  fetch(`https://api.5calls.org/v1/issues/archive?congress=116`)
-    .then((res) => res.json())
-    .then((data) => {
-      const issues = data as Issue[];
-      // console.log("response is", issues);
-      issues.forEach((issue) => {
-        fs.writeFileSync(`${contentDirectory}116th/${issue.slug}.md`, archiveContentFromIssue(issue, "116"));
-      });
+  const congressSessions = [{
+    congress: 116,
+    sessionName: '116th'
+  }, {
+    congress: 117,
+    sessionName: '117th'
+  }, {
+    congress: 118,
+    sessionName: '118th'
+  }]
+
+  congressSessions.forEach(async ({congress, sessionName}) => {
+    fsExtra.mkdir(`${contentDirectory}${sessionName}`)
+    const response = await fetch(`https://api.5calls.org/v1/issues/archive?congress=${congress}`)
+    const data = await response.json()
+    const issues = data as Issue[]
+    issues.forEach((issue) => {
+      fs.writeFileSync(`${contentDirectory}${sessionName}/${issue.slug}.md`, archiveContentFromIssue(issue, sessionName));
     });
-
-  fsExtra.mkdir(`${contentDirectory}117th`)
-  fetch(`https://api.5calls.org/v1/issues/archive?congress=117`)
-    .then((res) => res.json())
-    .then((data) => {
-      const issues = data as Issue[];
-      // console.log("response is", issues);
-      issues.forEach((issue) => {
-        fs.writeFileSync(`${contentDirectory}117th/${issue.slug}.md`, archiveContentFromIssue(issue, "117"));
-      });
-    });
-
-    fsExtra.mkdir(`${contentDirectory}118th`)
-    fetch(`https://api.5calls.org/v1/issues/archive?congress=118`)
-      .then((res) => res.json())
-      .then((data) => {
-        const issues = data as Issue[];
-        issues.forEach((issue) => {
-          fs.writeFileSync(`${contentDirectory}118th/${issue.slug}.md`, archiveContentFromIssue(issue, "118"));
-        });
-      });
-
+  })
+  
     
 };
 
