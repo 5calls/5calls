@@ -31,6 +31,7 @@ const buildArchives = async () => {
     }
   });
 
+  // ADD NEW CONGRESS SESSIONS HERE
   const congressSessions = [{
     congress: 116,
     sessionName: '116th'
@@ -51,7 +52,7 @@ const buildArchives = async () => {
       fs.writeFileSync(`${contentDirectory}${sessionName}/${issue.slug}.md`, archiveContentFromIssue(issue, sessionName));
     });
   })
-  
+
     
 };
 
