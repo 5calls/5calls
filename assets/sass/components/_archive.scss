@@ -3,16 +3,25 @@ body.home {
     background-color: var(--c-blue);
     padding: 8px 12px;
     color: #fff;
-    font-size: 1rem;
+    font-size: 1.1rem;
     border-radius: 8px;
     margin-bottom: 0.8rem;
+    font-weight: normal;
 
     i {
-      margin-right: 6px;
+      margin-right: .5rem;
+      display: inline-block;
     }
 
     a {
       color: white;
+      text-decoration-color: rgba(255, 255, 255, 0.5);
+      font-weight: bold;
+    }
+    &:hover {
+      a {
+        text-decoration-color: rgba(255, 255, 255, 1);
+      }
     }
   }
 }
