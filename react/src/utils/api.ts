@@ -1,7 +1,6 @@
 import axios from 'axios';
 import * as querystring from 'querystring';
-import firebase from 'firebase/app';
-import 'firebase/auth';
+
 import OneSignal from 'react-onesignal';
 
 import { Contact } from '../common/models/contact';
@@ -12,23 +11,14 @@ import { UserCallDetails } from '../common/models/userStats';
 import uuid from './uuid';
 import { LOCAL_STORAGE_KEYS } from '../common/constants';
 
-const prepareHeaders = async (): Promise<Headers> => {
-  const idToken = await firebase.auth().currentUser?.getIdTokenResult();
-
-  const headers: Headers = {
-    'Content-Type': 'application/json; charset=utf-8'
-  };
-  if (idToken) {
-    headers.Authorization = 'Bearer ' + idToken.token;
-  }
-
-  return Promise.resolve(headers);
-};
-
 interface Headers {
-  Authorization?: string;
   'Content-Type': string;
 }
+
+ const headers: Headers = {
+    'Content-Type': 'application/json; charset=utf-8'
+  };
+
 
 export const noLocationError = Error('no location entered');
 
@@ -48,7 +38,6 @@ export const getContacts = async (
     return Promise.reject(noLocationError);
   }
 
-  const headers = await prepareHeaders();
   let areasQuery = '';
   if (areas !== '') {
     areasQuery = `&areas=${encodeURIComponent(areas)},`;
@@ -125,7 +114,6 @@ export const postOutcomeData = async (data: OutcomeData) => {
     ...(data.group ? { group: data.group } : {})
   });
 
-  const headers = await prepareHeaders();
   headers['Content-Type'] = 'application/x-www-form-urlencoded';
 
   return axios.post(`${Constants.REPORT_API_URL}`, postData, {
