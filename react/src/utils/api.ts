@@ -15,10 +15,9 @@ interface Headers {
   'Content-Type': string;
 }
 
- const headers: Headers = {
-    'Content-Type': 'application/json; charset=utf-8'
-  };
-
+const headers: Headers = {
+  'Content-Type': 'application/json; charset=utf-8'
+};
 
 export const noLocationError = Error('no location entered');
 

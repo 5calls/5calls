@@ -30,7 +30,6 @@ type IslandConfig = {
   condition?: boolean;
 };
 
-
 OneSignal.init({
   appId: '5fd4ca41-9f6c-4149-a312-ae3e71b35c0e',
   path: '/js/',
@@ -84,8 +83,6 @@ const handleRootRenderError = (error: any, component: string) => {
     console.error(`error loading ${component} component: ${error}`);
   }
 };
-
-
 
 const startComponentRenders = () => {
   const setupOutcomesFloating = () => {
