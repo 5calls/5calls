@@ -59,6 +59,16 @@ body.issue {
     }
   }
 
+  .contact-phone a,
+  .contact-local-numbers a {
+    text-decoration: none;
+  }
+
+  #reps-header {
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+  }
+
   .reps {
     margin: 30px 0;
 
@@ -77,6 +87,8 @@ body.issue {
       li {
         list-style: none;
         margin-bottom: 2px;
+        margin-left: 0;
+        padding-left: 0;
         padding: 4px;
         height: 50px;
         background-color: var(--c-xlight-base);
