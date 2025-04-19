@@ -48,6 +48,15 @@ declare global {
 }
 
 $(() => {
+  // Set the district tag in the newsletter form if district exists
+  const district = localStorage.getItem(LOCAL_STORAGE_KEYS.DISTRICT);
+  if (district) {
+    const districtTagInput = document.getElementById('district-tag');
+    if (districtTagInput) {
+      districtTagInput.setAttribute('value', district);
+    }
+  }
+
   // sub_id is the subscriber id from buttondown that we send in emails
   // if it exists, we want to store it so we can keep district info up to date
   const urlParams = new URLSearchParams(window.location.search);
@@ -68,7 +77,6 @@ $(() => {
   window.history.replaceState({}, '', newUrl);
 
   // if there's already a district set, post it to the server
-  const district = localStorage.getItem(LOCAL_STORAGE_KEYS.DISTRICT);
   if (district) {
     postSubscriberDistrict(subId, district);
   }
