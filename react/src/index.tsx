@@ -1,6 +1,4 @@
 import React from 'react';
-import firebase from 'firebase/app';
-import 'firebase/auth';
 import { createRoot } from 'react-dom/client';
 import $ from 'jquery';
 
@@ -31,16 +29,6 @@ type IslandConfig = {
   hasStateProvider?: boolean;
   condition?: boolean;
 };
-
-firebase.initializeApp({
-  apiKey: 'AIzaSyCqbgwuM82Z4a3oBzzmPgi-208UrOwIgAA',
-  authDomain: 'southern-zephyr-209101.firebaseapp.com',
-  databaseURL: 'https://southern-zephyr-209101.firebaseio.com',
-  projectId: 'southern-zephyr-209101',
-  storageBucket: 'southern-zephyr-209101.appspot.com',
-  messagingSenderId: '919201105905',
-  appId: '1:919201105905:web:cb16c071be2bb896dfa650'
-});
 
 OneSignal.init({
   appId: '5fd4ca41-9f6c-4149-a312-ae3e71b35c0e',
@@ -95,27 +83,6 @@ const handleRootRenderError = (error: any, component: string) => {
     console.error(`error loading ${component} component: ${error}`);
   }
 };
-
-let firebaseAuthStartedUp = false;
-firebase.auth().onAuthStateChanged((user) => {
-  // console.log("auth state change with user:", user);
-
-  if (!user) {
-    firebase
-      .auth()
-      .signInAnonymously()
-
-      .catch((error) => {
-        console.log('error signing in user', error);
-      });
-  }
-
-  // only run the initial react renders once
-  if (!firebaseAuthStartedUp) {
-    startComponentRenders();
-  }
-  firebaseAuthStartedUp = true;
-});
 
 const startComponentRenders = () => {
   const setupOutcomesFloating = () => {
@@ -199,3 +166,5 @@ const startComponentRenders = () => {
     }
   });
 };
+
+startComponentRenders();
