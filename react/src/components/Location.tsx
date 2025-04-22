@@ -28,7 +28,8 @@ const Location: React.FC<WithLocationProps & WithCompletedProps> = (props) => {
   const [manualAddress, setManualAddress] = useState<string | undefined>(
     undefined
   );
-  const [hasGeolocationFailed, setHasGeolocationFailed] = useState<boolean>(false);
+  const [hasGeolocationFailed, setHasGeolocationFailed] =
+    useState<boolean>(false);
 
   useEffect(() => {
     if (props.locationState && props.locationState.address) {
@@ -116,7 +117,8 @@ const Location: React.FC<WithLocationProps & WithCompletedProps> = (props) => {
             setHasGeolocationFailed(true);
             setComponentLocationState(ComponentLocationState.NoLocation);
           });
-      }).catch(() => {
+      })
+      .catch(() => {
         // this is failure of geolocation permission
         setComponentLocationState(ComponentLocationState.EnterManually);
       });
