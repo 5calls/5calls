@@ -116,7 +116,10 @@ const Location: React.FC<WithLocationProps & WithCompletedProps> = (props) => {
             setHasGeolocationFailed(true);
             setComponentLocationState(ComponentLocationState.NoLocation);
           });
-      })
+      }).catch(() => {
+        // this is failure of geolocation permission
+        setComponentLocationState(ComponentLocationState.EnterManually);
+      });
   };
 
   switch (componentLocationState) {
