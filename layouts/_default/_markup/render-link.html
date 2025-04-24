@@ -3,6 +3,6 @@
   {{- with .Title }} title="{{ . }}"{{ end -}}
   {{- if $u.IsAbs }} target="_blank"{{ end -}}
 >
-  {{- with .Text }}{{ . }}{{ end -}}
+  {{- with .Text }}{{ . | safeHTML }}{{ end -}}
 </a>
 {{- /* chomp trailing newline */ -}}
