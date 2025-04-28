@@ -51,7 +51,7 @@ $(() => {
   // Set the district tag in the newsletter form if district exists
   const district = localStorage.getItem(LOCAL_STORAGE_KEYS.DISTRICT);
   const districtTagInput = document.getElementById('district-tag');
-  
+
   if (district && districtTagInput) {
     districtTagInput.setAttribute('value', district);
   } else if (districtTagInput) {

@@ -28,6 +28,8 @@ const Location: React.FC<WithLocationProps & WithCompletedProps> = (props) => {
   const [manualAddress, setManualAddress] = useState<string | undefined>(
     undefined
   );
+  const [hasGeolocationFailed, setHasGeolocationFailed] =
+    useState<boolean>(false);
 
   useEffect(() => {
     if (props.locationState && props.locationState.address) {
@@ -88,6 +90,13 @@ const Location: React.FC<WithLocationProps & WithCompletedProps> = (props) => {
 
   const setLocationAutomatically = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    // if we've previously had geolocation fail, go to manually set location
+    if (hasGeolocationFailed) {
+      setComponentLocationState(ComponentLocationState.EnterManually);
+      return;
+    }
+
     setComponentLocationState(ComponentLocationState.GettingAutomatically);
 
     // close any possibly open toasts to prevent user confusion
@@ -105,10 +114,12 @@ const Location: React.FC<WithLocationProps & WithCompletedProps> = (props) => {
           .catch((error) => {
             console.log('error getting location after geoloc:', error);
             toast.error(ERROR_MESSAGE);
+            setHasGeolocationFailed(true);
             setComponentLocationState(ComponentLocationState.NoLocation);
           });
       })
       .catch(() => {
+        // this is failure of geolocation permission
         setComponentLocationState(ComponentLocationState.EnterManually);
       });
   };
