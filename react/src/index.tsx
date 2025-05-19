@@ -12,7 +12,7 @@ import './utils/staticUtils';
 import { ActBlue } from './common/models/actblue';
 import OneSignal from 'react-onesignal';
 import uuid from './utils/uuid';
-import { postSubscriberDistrict } from './utils/api';
+import { postGCLID, postSubscriberDistrict } from './utils/api';
 import PhoneSubscribe from './components/PhoneSubscribe';
 import CallCount from './components/CallCount';
 import APIForm from './components/APIForm';
@@ -48,7 +48,13 @@ declare global {
 }
 
 $(() => {
-  // Set the district tag in the newsletter form if district exists
+  const district = checkForDistrict();
+  checkForSubID(district);
+});
+
+
+// Set the district tag in the newsletter form if district exists
+const checkForDistrict = (): string | null => {
   const district = localStorage.getItem(LOCAL_STORAGE_KEYS.DISTRICT);
   const districtTagInput = document.getElementById('district-tag');
 
@@ -58,8 +64,12 @@ $(() => {
     districtTagInput.remove();
   }
 
-  // sub_id is the subscriber id from buttondown that we send in emails
-  // if it exists, we want to store it so we can keep district info up to date
+  return district;
+};
+
+// sub_id is the subscriber id from buttondown that we send in emails
+// if it exists, we want to store it so we can keep district info up to date
+const checkForSubID = (district: string | null) => {
   const urlParams = new URLSearchParams(window.location.search);
   const subId = urlParams.get('sub_id');
 
@@ -69,19 +79,39 @@ $(() => {
 
   localStorage.setItem(LOCAL_STORAGE_KEYS.SUBSCRIBER, subId);
 
-  // Remove sub_id from URL without reloading the page
-  urlParams.delete('sub_id');
-  const newUrl =
-    window.location.pathname +
-    (urlParams.toString() ? '?' + urlParams.toString() : '') +
-    window.location.hash;
-  window.history.replaceState({}, '', newUrl);
+  // then remove it
+  removeParam('sub_id');
 
   // if there's already a district set, post it to the server
   if (district) {
     postSubscriberDistrict(subId, district);
   }
-});
+};
+
+const checkForGCLID = () => {
+  const urlParams = new URLSearchParams(window.location.search);
+  const gclid = urlParams.get('gclid');
+
+  if (!gclid) {
+    return;
+  }
+
+  removeParam('gclid');
+
+  postGCLID(gclid);
+};
+
+// Remove a param from URL without reloading the page
+const removeParam = (param: string) => {
+  const urlParams = new URLSearchParams(window.location.search);
+
+  urlParams.delete(param);
+  const newUrl =
+    window.location.pathname +
+    (urlParams.toString() ? '?' + urlParams.toString() : '') +
+    window.location.hash;
+  window.history.replaceState({}, '', newUrl);
+};
 
 const handleRootRenderError = (error: any, component: string) => {
   if (`${error}`.includes('Minified React error #200')) {

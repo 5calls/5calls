@@ -131,3 +131,12 @@ export const postSubscriberDistrict = (
   });
   return axios.post(Constants.UPDATE_DISTRICT_API_URL, postData, {});
 };
+
+// sends a message to the server indicating the gclid and caller id
+export const postGCLID = (gclid: string) => {
+  const postData = querystring.stringify({
+    gclid: gclid,
+    cid: uuid.callerID()
+  });
+  return axios.post(Constants.GCLID_API_URL, postData, {});
+};
