@@ -50,6 +50,7 @@ declare global {
 $(() => {
   const district = checkForDistrict();
   checkForSubID(district);
+  checkForGCLID();
 });
 
 
