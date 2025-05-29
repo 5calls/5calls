@@ -132,11 +132,17 @@ export const postSubscriberDistrict = (
   return axios.post(Constants.UPDATE_DISTRICT_API_URL, postData, {});
 };
 
-// sends a message to the server indicating the gclid and caller id
+// sends a message to the server indicating an ad click
 export const postGCLID = (gclid: string) => {
+  postReferral('gclid', gclid);
+};
+
+// sends a message to the server indicating a referral
+export const postReferral = (ref: string, meta: string | null) => {
   const postData = querystring.stringify({
-    gclid: gclid,
+    ref: ref,
+    meta: meta,
     cid: uuid.callerID()
   });
-  return axios.post(Constants.GCLID_API_URL, postData, {});
+  return axios.post(Constants.REFERRAL_API_URL, postData, {});
 };

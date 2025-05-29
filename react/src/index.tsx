@@ -12,7 +12,7 @@ import './utils/staticUtils';
 import { ActBlue } from './common/models/actblue';
 import OneSignal from 'react-onesignal';
 import uuid from './utils/uuid';
-import { postGCLID, postSubscriberDistrict } from './utils/api';
+import { postGCLID, postReferral, postSubscriberDistrict } from './utils/api';
 import PhoneSubscribe from './components/PhoneSubscribe';
 import CallCount from './components/CallCount';
 import APIForm from './components/APIForm';
@@ -51,6 +51,7 @@ $(() => {
   const district = checkForDistrict();
   checkForSubID(district);
   checkForGCLID();
+  checkForReferral();
 });
 
 
@@ -100,6 +101,19 @@ const checkForGCLID = () => {
   removeParam('gclid');
 
   postGCLID(gclid);
+};
+
+const checkForReferral = () => {
+  const urlParams = new URLSearchParams(window.location.search);
+  const refCode = urlParams.get('ref');
+
+  if (!refCode) {
+    return;
+  }
+
+  removeParam('ref');
+
+  postReferral(refCode, null);
 };
 
 // Remove a param from URL without reloading the page
