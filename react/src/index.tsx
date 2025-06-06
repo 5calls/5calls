@@ -113,7 +113,7 @@ const checkForReferral = () => {
 
   removeParam('ref');
 
-  postReferral(refCode, null);
+  postReferral(refCode, window.location.pathname, null);
 };
 
 // Remove a param from URL without reloading the page

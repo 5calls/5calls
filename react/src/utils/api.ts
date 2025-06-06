@@ -134,14 +134,15 @@ export const postSubscriberDistrict = (
 
 // sends a message to the server indicating an ad click
 export const postGCLID = (gclid: string) => {
-  postReferral('gclid', gclid);
+  postReferral('gclid', window.location.pathname, gclid);
 };
 
 // sends a message to the server indicating a referral
-export const postReferral = (ref: string, meta: string | null) => {
+export const postReferral = (ref: string, path: string, meta: string | null) => {
   const postData = querystring.stringify({
     ref: ref,
     meta: meta,
+    path: path,
     cid: uuid.callerID()
   });
   return axios.post(Constants.REFERRAL_API_URL, postData, {});
