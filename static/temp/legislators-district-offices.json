@@ -19354,6 +19354,15 @@
         "phone": "513-318-1100"
       },
       {
+        "id": "H001104-columbus",
+        "address": "37 West Broad Street",
+        "suite": "300",
+        "city": "Columbus",
+        "state": "OH",
+        "zip": "43215",
+        "phone": "614-369-4925"
+      },
+      {
         "id": "H001104-cleveland",
         "address": "1240 East 9th Street",
         "suite": "3061",
