@@ -19389,5 +19389,31 @@
         "phone": "714-960-6483"
       }
     ]
+  },
+  {
+    "id": {
+      "bioguide": "B001323",
+      "govtrack": 456970
+    },
+    "offices": [
+      {
+        "id": "B001323-fairbanks",
+        "address": "542 4th Avenue",
+        "suite": "Suite #210",
+        "city": "Fairbanks",
+        "state": "AK",
+        "zip": "99701",
+        "phone": "907-251-4560"
+      },
+      {
+        "id": "B001323-anchorage",
+        "address": "1016 W Sixth Ave",
+        "suite": "Suite #406",
+        "city": "Anchorage",
+        "state": "AK",
+        "zip": "99501",
+        "phone": "907-921-6575"
+      }
+    ]
   }
 ]
