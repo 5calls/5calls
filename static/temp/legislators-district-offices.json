@@ -19334,6 +19334,34 @@
       "bioguide": "H001104",
       "govtrack": 457032
     },
-    "offices": []
+    "offices": [
+      {
+        "id": "H001104-toledo",
+        "address": "420 Madison Avenue",
+        "suite": "1210",
+        "city": "Toledo",
+        "state": "OH",
+        "zip": "43604",
+        "phone": "567-304-3777"
+      },
+      {
+        "id": "H001104-middletown",
+        "address": "300 North Main Street",
+        "suite": "200",
+        "city": "Middletown",
+        "state": "OH",
+        "zip": "45042",
+        "phone": "513-318-1100"
+      },
+      {
+        "id": "H001104-cleveland",
+        "address": "1240 East 9th Street",
+        "suite": "3061",
+        "city": "Cleveland",
+        "state": "OH",
+        "zip": "44114",
+        "phone": "216-539-7877"
+      }
+    ]
   }
 ]
