@@ -1,4 +1,8 @@
 {{ define "bodyclass" }}home{{ end }} {{ define "main" }}
+<script type="module" src="https://d3js.org/d3.v6.js"></script>
+<script src="https://d3js.org/topojson.v1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vega-tooltip"></script>
+<!-- <script src="dashboard.js"></script> -->
 <div class="content">
   <h1>Make your voice heard.</h1>
   <div class="g">
@@ -14,6 +18,13 @@
         <div class="card-home-body">
           <h2 class="h3">Calling your congressperson is the most effective way to influence policy.</h2>
           <p><a href="/why-calling-works/">Learn more about why calling works.</a></p>
+        </div>
+      </div>
+
+      <div class="card card-home">
+        <div class="card-home-body">
+          <div id="react-dashboard"></div>
+          <div id="graph-place"></div>
         </div>
       </div>
 

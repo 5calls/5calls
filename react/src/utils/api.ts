@@ -79,6 +79,17 @@ export const getCountData = (): Promise<CountData> => {
     .catch((e) => Promise.reject(e));
 };
 
+export interface IssueData {
+
+}
+
+export const getIssues = (): Promise<IssueData> => {
+  return axios
+    .get("https://api.5calls.org/v1/issues")
+    .then((response) => Promise.resolve(response.data))
+    .catch((e) => Promise.reject(e));
+};
+
 export interface IssueCount {
   name: string;
   count: number;

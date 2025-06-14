@@ -18,6 +18,7 @@ import CallCount from './components/CallCount';
 import APIForm from './components/APIForm';
 import Settings from './components/Settings';
 import GroupCallCount from './components/GroupCallCount';
+import Dashboard from './components/Dashboard';
 import Bugsnag from '@bugsnag/js';
 import { Slide, ToastContainer } from 'react-toastify';
 import { LOCAL_STORAGE_KEYS } from './common/constants';
@@ -196,7 +197,8 @@ const startComponentRenders = () => {
       component: () => (
         <ToastContainer position="top-center" draggable transition={Slide} />
       )
-    }
+    },
+    { id: 'react-dashboard', component: Dashboard },
   ];
 
   islands.forEach(({ id, component, hasStateProvider, condition }) => {
