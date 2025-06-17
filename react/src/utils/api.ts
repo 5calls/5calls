@@ -79,13 +79,28 @@ export const getCountData = (): Promise<CountData> => {
     .catch((e) => Promise.reject(e));
 };
 
-export interface IssueData {
-
+export interface IssueCountData {
+  issue_id: number;
+  name: string;
+  slug: string;
+  count: number;
 }
 
-export const getIssues = (): Promise<IssueData> => {
+export interface RegionSummaryData {
+  id: string;
+  name: string;
+  total: number;
+  issueCounts: Array<IssueCountData>;
+}
+
+export interface UsaSummaryData {
+  usa: RegionSummaryData;
+  states: Array<RegionSummaryData>;
+}
+
+export const getUsaSummary = (): Promise<UsaSummaryData> => {
   return axios
-    .get("https://api.5calls.org/v1/issues")
+    .get("https://api.5calls.org/v1/reps/usaSummary")
     .then((response) => Promise.resolve(response.data))
     .catch((e) => Promise.reject(e));
 };
