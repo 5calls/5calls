@@ -15,7 +15,7 @@
       <div id="topNav" role="tablist"></div>
       <div id="nav" role="tablist"></div>
     </div>
-    <div class="card" id="card_usa">
+    <div class="dashboard_card" id="card_usa">
       <div class="total_card">
         <div class="subtitle_detail"></div>
         <div class="highlight" id="total_all"></div>
@@ -31,6 +31,11 @@
         <ol id="top_five_all_holder">
       </div>
       <div id="state_map_section">
+        <div class="overlayBox">
+          <div class="title">Statewide top issue</div>
+          <ol id="state_map_key">
+          </ol>
+        </div>
         <div id="state_map">
           <h3 class="detail_title">Top Call per State this week: 
             <select class="picker" id="state_select">
@@ -39,12 +44,7 @@
           </h3>
           <div class="description">The most called issue in each state in the past week, as recorded with 5 Calls</div>
         </div>
-        <div class="overlayBox">
-          <div class="title">Statewide top issue</div>
-          <ol id="state_map_key">
-
-          </ol>
-        </div>
+       
         <div id="state_map_label" class="overlayBox label absolute" hidden>
           <input type="button" alt="close" value="X" id="close_label_btn"/>
           <div class="title"></div>

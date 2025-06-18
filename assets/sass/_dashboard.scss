@@ -1,0 +1,412 @@
+#dashboard-content {
+  --c-dark-rgb: 2, 63, 159;
+  --c-dark: rgb(2, 63, 159);
+  --c-blue: rgb(24, 117, 209);
+  --c-red-rgb: 237, 60, 29;
+  --c-red: rgb(237, 60, 29);
+  --base-font-size: 1.2rem;
+  font-size: var(--base-font-size);
+  
+  .heading {
+    text-align: center;
+  }
+  
+  #topNav {
+    margin-bottom: 16px;
+  }
+  
+  #topNav button {
+    background-color: rgba(2, 63, 159, 0.05);
+    height: 48px;
+    min-width: 100px;
+    padding-left: 10px;
+    padding-right: 10px;
+    color: #000;
+    font-size: calc(24rem / var(--base-font-size));
+    margin-left: 8px;
+    margin-right: 8px;
+    border: none;
+    cursor: pointer;
+  }
+  
+  #topNav button:hover {
+    background-color: #ccc;
+  }
+  
+  #topNav > button.selected {
+    background-color: var(--c-blue);
+    color: #fff;
+  }
+  
+  #nav {
+    border-bottom: 1px solid rgba(var(--c-dark-rgb), .4);
+  }
+  
+  #nav button {
+    background-color: #fff;
+    height: 48px;
+    min-width: 100px;
+    padding-left: 10px;
+    padding-right: 10px;
+    color: #000;
+    font-size: calc(18rem / var(--base-font-size));
+    margin-left: 2px;
+    margin-right: 2px;
+    margin-bottom: -1px;
+    border: 1px solid #fff;
+    border-top-left-radius: 2px;
+    border-top-right-radius: 2px;
+    border-bottom: none;
+    cursor: pointer;
+  }
+  
+  #nav button:hover {
+    border: 1px solid rgba(var(--c-dark-rgb), .2);
+    border-bottom: none;
+  }
+  
+  #nav > button.selected {
+    border: 1px solid rgba(var(--c-dark-rgb), .4);
+    border-bottom: 2px solid #fff;
+    cursor:default;
+  }
+  
+  a {
+    color: var(--c-dark);
+  }
+  
+  h3 {
+    font-weight: 500;
+    margin-top: 10px;
+    margin-bottom: 10px;
+  }
+  
+  .dashboard_card {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    justify-content: space-around;
+    margin: 1em;
+    max-width: 1000px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  
+  .subtitle {
+    background: var(--c-dark);
+    color: #fff;
+    padding: 1.125rem 1.5rem 1.5rem;
+    border-top: .375rem solid var(--c-red);
+    text-align: left;
+  }
+  
+  .subtitle .subtitle_main {
+    /* Todo: this cannot be nowrap and also 33 rem. */
+    font-size: calc(33rem / var(--base-font-size));
+    /* font-size: clamp(1rem, 5vw, 33rem / var(--base-font-size)); */
+    /* font-size: 5cqw; */
+    /* container-type: inline-size; */
+    line-height: 1.1;
+    /* text-wrap: nowrap; */
+  }
+  
+  .subtitle_detail {
+    text-align: center;
+    padding: .5rem 1.5rem 0;
+  }
+  
+  .description {
+    font-size: .9em;
+  }
+  
+  .stat {
+    padding-left: 5px;
+    padding-right: 5px;
+    white-space: nowrap;
+  }
+  
+  .detail ol {
+    list-style: none;
+    counter-reset: top-counter;
+    display: flex;
+    flex-wrap: wrap;
+    padding: 0px;
+  }
+  .detail ol li {
+    counter-increment: top-counter;
+    display: flex;
+    align-items: center;
+  }
+  .detail ol li::before {
+    /* content: "0" counter(top-counter); */
+    content: counter(top-counter);
+    font-size: 3rem;  /* match .highlight */
+    margin-right: 0.5rem;
+    line-height: 1;
+    min-width: 32px;
+  }
+  
+  .overlayBox ol {
+    list-style: none;
+    padding: 0px;
+  }
+  
+  
+  /* Use this for reps tabs too */
+  .picker {
+    font-size: calc(24rem / var(--base-font-size));
+    text-transform: uppercase;
+  }
+  
+  select,
+  ::picker(select) {
+    appearance: base-select;
+  }
+  
+  select {
+    border: 0px;
+    transition: 0.4s;
+    color: #555;
+  }
+  
+  select:hover,
+  select:focus {
+    background: #ddd;
+  }
+  
+  ::picker(select) {
+    text-transform: none;
+    font-size: var(--base-font-size);
+  }
+  
+  .total_card {
+    width: 345px;
+    border: 1px solid rgba(var(--c-dark-rgb), .4);
+    text-align: center;
+  }
+  
+  .reachability {
+    max-width: 345px;
+    margin-top: 24px;
+    margin-bottom: 24px;
+  }
+  
+  .highlight {
+    font-size: 3rem;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+  }
+  
+  .bar {
+    width: 10px;
+    height: 1.2em;
+    background-color: #330a5f;
+  }
+  
+  .detail {
+    flex: 1 1 auto;
+    vertical-align: middle;
+    max-width: 600px;
+    position: relative;
+  }
+  
+  .detail_title {
+    font-size: calc(24rem / var(--base-font-size));
+    line-height: 1.1;
+  }
+  
+  .detail .detail_item {
+    margin: 0 0 0 10px;
+    display: inline-block;
+    vertical-align: top;
+  }
+  
+  .top_five_issue a {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    color: black;
+    text-decoration: none;
+  }
+  
+  .top_five_issue a:hover, a:focus {
+    color: var(--c-dark);
+  }
+  
+  .top_five {
+    padding: 8px;
+    margin-bottom: 8px;
+  }
+  
+  .top_five_issue {
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .top_five_item_holder {
+    max-width: 552px;
+    padding: 4px;
+  }
+  
+  .viz_holder {
+    /* min-width: 60px; */
+    min-width: 180px;
+    flex-shrink: 0;
+  }
+  
+  img {
+    margin: 3px 6px 0 0px;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    object-fit: cover;
+    float: left;
+    border: 3px solid white;
+  }
+  
+  .rep_call_count {
+    float: left;
+    font-size: calc(33rem / var(--base-font-size));
+    margin-left: 24px;
+  }
+  
+  .rep_info {
+    float: left;
+  }
+  
+  .with_padding {
+    margin-top: 10px;
+    margin-bottom: 10px;
+  }
+  
+  .overlayBox {
+    background-color: white;
+    fill: white;
+    filter:  drop-shadow(2px 2px 4px #888c);
+    margin: 8px;
+    padding: 8px;
+    width: 200px;
+    font-size: 1rem;
+  }
+  
+  .absolute {
+    position: absolute;
+  }
+  
+  .overlayBox .title {
+    text-align: left;
+    text-transform: uppercase;
+  }
+  
+  .overlayBox input {
+    float: right;
+    cursor: pointer;
+    background-color: #fff;
+    border: none;
+    min-width: 24px;
+    min-height: 24px;
+    width: auto;
+    padding: 0px;
+  }
+  
+  .overlayBox input:hover {
+    background-color: #ccc;
+  }
+  
+  .overlayBox .issue_name {
+    text-align: left;
+    margin-top: 8px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    text-wrap: nowrap;
+    font-size: .9rem;
+  
+  }
+  
+  .overlayBox .issue_long_name {
+    text-align: left;
+    font-size: .9rem;
+  }
+  
+  /* Thanks to https://projects.verou.me/bubbly/ */
+  .label :after {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 50%;
+    width: 0;
+    height: 0;
+    border: 10px solid transparent;
+    border-right-color: #fff;
+    border-left: 0;
+    margin-top: -10px;
+    margin-left: -10px;
+  }
+  
+  .topLabel :after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 20px;
+    width: 0;
+    height: 0;
+    border: 10px solid transparent;
+    border-bottom-color: #fff;
+    border-top: 0;
+    margin-top: -10px;
+    margin-left: -10px;
+  }
+  
+  .overlayBox .key {
+    border-left: 6px solid white;
+    padding-left: 8px;
+    margin-top: 8px;
+    margin-bottom: 8px;
+    text-align: left;
+  }
+  
+  #state_map_section {
+    display:flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    position: relative;
+    width: 100%;
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+    align-items: center;
+    flex-direction: row-reverse;
+  }
+  
+  #state_map {
+    min-width: 630px;
+    flex: auto;
+  }
+  
+  .tooltipBox {
+    background-color: white;
+    fill: white;
+  }
+  
+  .results_vm {
+    color: #9467bd;
+    font-weight: bold;
+  }
+  
+  .results_contact {
+    color: rgb(24, 117, 209);
+    font-weight: bold;
+  }
+  
+  .results_unavailable {
+    color: #ed3c1d;
+    font-weight: bold;
+  }
+  
+  footer {
+    max-width: 1000px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+}
