@@ -56,9 +56,6 @@ const updateStateLabelPosition = (parent: SVGGraphicsElement) => {
 
   const yCoord = screenCoords.y - svgBb.y;
   const xCoord = screenCoords.x - svgBb.x;
-
-  // const translateX = boundingBox.x + 3 / 4 * boundingBox.width;// - svgBb.x + groupBb.x;
-  // const translateY = boundingBox.y + 3 / 4 * boundingBox.height;// - svgBb.y + groupBb.y + 24;
   d3.select('div#state_map_label')
     .style('top', `${yCoord}px`)
     .style('left', `${xCoord}px`);
@@ -67,14 +64,16 @@ const updateStateLabelPosition = (parent: SVGGraphicsElement) => {
 const drawStateResults = (allStateResults: RegionSummaryData[], state: string, issueColor: d3.ScaleOrdinal<number, string>, duration: string) => {
   const stateResults = allStateResults.find(d => d.id === state);
   if (!stateResults) {
-    // TODO: Handle this more gracefully.
+    // TODO: Handle this more gracefully with some sort of user message that there were no
+    // calls during the time period for this state.
     return;
   }
   d3.select("h3#state_detail_title").attr('class', 'detail_title').html(`Top 5 Calls in ${stateResults.name} ${duration}`);
   d3.selectAll('div#total_state')
     .html(stateResults.total.toLocaleString());
   d3.selectAll('div#state_name_subtitle').html(stateResults.name);
-  // TODO: Use D3 to transform rather than clearing and redrawing everything.
+  // TODO: Use D3 to transform rather than clearing and redrawing everything, for better performance
+  // and also so animation doesn't always start at 0.
   document.getElementById('top_five_state_holder')!.innerHTML = '';
   drawTopFiveIssues('ol#top_five_state_holder', stateResults.issueCounts, issueColor, stateResults.total);
 };
@@ -140,7 +139,7 @@ const drawTopFiveIssues = (holder: string, data: IssueCountData[], issueColor: d
     .attr('fill', '#fff0')
     .attr('stroke', '#555');
 
-  // TODO make a helper for the select/deselect repeated code.
+  // TODO: make a helper for the select/deselect repeated code.
 
   // Only show beeswarm if there's enough calls.
   if (beeswarmData !== null && beeswarmData.length >= MIN_FOR_BEESWARM) {
@@ -172,7 +171,8 @@ const drawTopFiveIssues = (holder: string, data: IssueCountData[], issueColor: d
           d3.select(this.parentNode.parentNode.parentNode).selectAll('circle')
             .data(beeswarmData, b => b.data.id)
             .transition().delay(0)
-            .attr('fill', b => b.data.issue_id === selectedIssueId ? issueColor(selectedIssueId) : '#ccc');
+            .attr('fill', 
+                b => b.data.issue_id === selectedIssueId ? issueColor(selectedIssueId) : '#ccc');
         }
       })
       .on('pointerout', function (_, d: IssueCountData) {
@@ -181,12 +181,14 @@ const drawTopFiveIssues = (holder: string, data: IssueCountData[], issueColor: d
           d3.select(this.parentNode.parentNode.parentNode).selectAll('circle')
             .data(beeswarmData, b => b.data.id)
             .transition().delay(0)
-            .attr('fill', b => b.data.issue_id === selectedIssueId ? issueColor(selectedIssueId) : '#ccc');
+            .attr('fill', 
+                b => b.data.issue_id === selectedIssueId ? issueColor(selectedIssueId) : '#ccc');
         }
       });
 
     // Perform the initial selection.
-    topFiveRow.style('background-color', d => d.issue_id === selectedIssueId ? hoverColor : '#fff');
+    topFiveRow.style('background-color',
+      (d: IssueCountData) => d.issue_id === selectedIssueId ? hoverColor : '#fff');
   }
 };
 
@@ -255,7 +257,7 @@ const drawUsaMap = (statesResults: RegionSummaryData[], issueColor: d3.ScaleOrdi
 
     // Add them to the dropdown.
     d3.select('select#state_select')
-      .on('input', (event: Event, d) => {
+      .on('input', (event: Event, d: Feature) => {
         const selectElement = event.target as HTMLSelectElement;
         const state = selectElement.options[selectElement.selectedIndex].id;
         if (state !== 'none') {
@@ -268,9 +270,9 @@ const drawUsaMap = (statesResults: RegionSummaryData[], issueColor: d3.ScaleOrdi
       .data(data)
       .enter()
       .append('option')
-      .attr('selected', d => d.id === initialState ? 'true' : null)
-      .attr('id', d => d.id)
-      .html(d => d.properties.name);
+      .attr('selected', (d: Feature) => d.id === initialState ? 'true' : null)
+      .attr('id', (d: Feature) => d.id)
+      .html((d: Feature) => d.properties!.name);
 
     const deselectState = (event: Event | null = null) => {
       d3.select('div#state_map_label')
@@ -358,7 +360,7 @@ const drawUsaMap = (statesResults: RegionSummaryData[], issueColor: d3.ScaleOrdi
               this.parentNode.appendChild(group.select(`path#state_${selectedState}`).node());
             }
           })
-          .on('click', function (event: Event, d) {
+          .on('click', function (event: Event, d: Feature) {
             selectState(d.id);
           })
           .on('pointerout', function (event: Event, d: Feature) {
