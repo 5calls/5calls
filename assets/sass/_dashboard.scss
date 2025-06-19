@@ -130,28 +130,6 @@
     white-space: nowrap;
   }
   
-  .detail ol {
-    list-style: none;
-    counter-reset: top-counter;
-    display: flex;
-    flex-wrap: wrap;
-    padding: 0px;
-  }
-  .detail ol li {
-    counter-increment: top-counter;
-    display: flex;
-    align-items: center;
-  }
-  .detail ol li::before {
-    /* content: "0" counter(top-counter); */
-    content: counter(top-counter);
-    font-size: 3rem;  /* match .highlight */
-    margin-right: 0.5rem;
-    line-height: 1;
-    min-width: 32px;
-  }
-
-  
   /* Use this for reps tabs too */
   .picker {
     font-size: calc(24rem / var(--base-font-size));
@@ -187,8 +165,8 @@
   
   .reachability {
     max-width: 345px;
-    margin-top: 24px;
-    margin-bottom: 24px;
+    margin: 1rem;
+    font-size: calc(16rem / var(--base-font-size));
   }
   
   .highlight {
@@ -220,6 +198,29 @@
       margin: 0 0 0 10px;
       display: inline-block;
       vertical-align: top;
+    }
+
+    ol {
+      list-style: none;
+      counter-reset: top-counter;
+      display: flex;
+      flex-wrap: wrap;
+      padding: 0px;
+    }
+  
+    ol li {
+      counter-increment: top-counter;
+      display: flex;
+      align-items: center;
+    }
+
+    ol li::before {
+      /* content: "0" counter(top-counter); */
+      content: counter(top-counter);
+      font-size: 3rem;  /* match .highlight */
+      margin-right: 0.5rem;
+      line-height: 1;
+      min-width: 32px;
     }
   }
   
@@ -384,7 +385,7 @@
     margin-left: auto;
     margin-right: auto;
     align-items: center;
-    flex-direction: row-reverse;
+    // flex-direction: row-reverse;
     margin-bottom: 1rem;
 
     h3 {
