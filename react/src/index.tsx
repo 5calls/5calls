@@ -18,6 +18,7 @@ import CallCount from './components/CallCount';
 import APIForm from './components/APIForm';
 import Settings from './components/Settings';
 import GroupCallCount from './components/GroupCallCount';
+import IssueSearch from './components/IssueSearch';
 import Bugsnag from '@bugsnag/js';
 import { Slide, ToastContainer } from 'react-toastify';
 import { LOCAL_STORAGE_KEYS } from './common/constants';
@@ -53,7 +54,6 @@ $(() => {
   checkForGCLID();
   checkForReferral();
 });
-
 
 // Set the district tag in the newsletter form if district exists
 const checkForDistrict = (): string | null => {
@@ -186,6 +186,7 @@ const startComponentRenders = () => {
     { id: 'react-call-count', component: CallCount },
     { id: 'api-form', component: APIForm },
     { id: 'react-settings', component: Settings },
+    { id: 'react-search', component: IssueSearch },
     {
       id: 'react-groupcounts',
       component: GroupCallCount,
