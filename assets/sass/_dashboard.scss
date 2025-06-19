@@ -4,8 +4,6 @@
   --c-blue: rgb(24, 117, 209);
   --c-red-rgb: 237, 60, 29;
   --c-red: rgb(237, 60, 29);
-  --base-font-size: 1.2rem;
-  font-size: var(--base-font-size);
   
   .heading {
     text-align: center;
@@ -13,36 +11,39 @@
   
   #topNav {
     margin-bottom: 16px;
-  }
   
-  #topNav button {
-    background-color: rgba(2, 63, 159, 0.05);
-    height: 48px;
-    min-width: 100px;
-    padding-left: 10px;
-    padding-right: 10px;
-    color: #000;
-    font-size: calc(24rem / var(--base-font-size));
-    margin-left: 8px;
-    margin-right: 8px;
-    border: none;
-    cursor: pointer;
-  }
+    button {
+      background-color: rgba(2, 63, 159, 0.05);
+      height: 48px;
+      min-width: 100px;
+      padding-left: 10px;
+      padding-right: 10px;
+      color: #000;
+      font-size: calc(24rem / var(--base-font-size));
+      margin-left: 8px;
+      margin-right: 8px;
+      border: none;
+      cursor: pointer;
+    }
   
-  #topNav button:hover {
-    background-color: #ccc;
+    button:hover {
+      background-color: #ccc;
+    }
+
+    button.selected {
+      background-color: var(--c-blue);
+      color: #fff;
+    }
   }
-  
-  #topNav > button.selected {
-    background-color: var(--c-blue);
-    color: #fff;
-  }
+  // #topNav > button.selected {
+  //   background-color: var(--c-blue);
+  //   color: #fff;
+  // }
   
   #nav {
     border-bottom: 1px solid rgba(var(--c-dark-rgb), .4);
-  }
   
-  #nav button {
+    button {
     background-color: #fff;
     height: 48px;
     min-width: 100px;
@@ -58,27 +59,32 @@
     border-top-right-radius: 2px;
     border-bottom: none;
     cursor: pointer;
+    }
+
+    button:hover {
+      border: 1px solid rgba(var(--c-dark-rgb), .2);
+      border-bottom: none;
+    }
+
+    button.selected {
+      border: 1px solid rgba(var(--c-dark-rgb), .4);
+      border-bottom: 2px solid #fff;
+      cursor:default;
+    }
   }
   
-  #nav button:hover {
-    border: 1px solid rgba(var(--c-dark-rgb), .2);
-    border-bottom: none;
-  }
-  
-  #nav > button.selected {
-    border: 1px solid rgba(var(--c-dark-rgb), .4);
-    border-bottom: 2px solid #fff;
-    cursor:default;
-  }
-  
-  a {
-    color: var(--c-dark);
-  }
-  
+  // #nav > button.selected {
+  //   border: 1px solid rgba(var(--c-dark-rgb), .4);
+  //   border-bottom: 2px solid #fff;
+  //   cursor:default;
+  // }
+
   h3 {
-    font-weight: 500;
+    text-align: start;
+    // font-weight: 500;
     margin-top: 10px;
     margin-bottom: 10px;
+    font-size: calc(24rem / var(--base-font-size));
   }
   
   .dashboard_card {
@@ -86,15 +92,15 @@
     flex-wrap: wrap;
     align-items: flex-start;
     justify-content: space-around;
-    margin: 1em;
+    margin: 1rem;
     max-width: 1000px;
     margin-left: auto;
     margin-right: auto;
   }
   
   .subtitle {
-    background: var(--c-dark);
-    color: #fff;
+    // background: var(--c-dark);
+    // color: #fff;
     padding: 1.125rem 1.5rem 1.5rem;
     border-top: .375rem solid var(--c-red);
     text-align: left;
@@ -111,12 +117,11 @@
   }
   
   .subtitle_detail {
-    text-align: center;
     padding: .5rem 1.5rem 0;
   }
   
   .description {
-    font-size: .9em;
+    font-size: calc(16rem / var(--base-font-size));
   }
   
   .stat {
@@ -145,12 +150,7 @@
     line-height: 1;
     min-width: 32px;
   }
-  
-  .overlayBox ol {
-    list-style: none;
-    padding: 0px;
-  }
-  
+
   
   /* Use this for reps tabs too */
   .picker {
@@ -182,7 +182,7 @@
   .total_card {
     width: 345px;
     border: 1px solid rgba(var(--c-dark-rgb), .4);
-    text-align: center;
+    margin: 1rem;
   }
   
   .reachability {
@@ -195,11 +195,12 @@
     font-size: 3rem;
     padding-top: 1rem;
     padding-bottom: 1rem;
+    padding-left: 1.5rem;
   }
   
   .bar {
     width: 10px;
-    height: 1.2em;
+    height: 1.2rem;
     background-color: #330a5f;
   }
   
@@ -208,40 +209,43 @@
     vertical-align: middle;
     max-width: 600px;
     position: relative;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+
+    .detail_title {
+      line-height: 1.1;
+    }
+    
+    .detail_item {
+      margin: 0 0 0 10px;
+      display: inline-block;
+      vertical-align: top;
+    }
   }
   
-  .detail_title {
-    font-size: calc(24rem / var(--base-font-size));
-    line-height: 1.1;
-  }
-  
-  .detail .detail_item {
-    margin: 0 0 0 10px;
-    display: inline-block;
-    vertical-align: top;
-  }
-  
-  .top_five_issue a {
-    text-overflow: ellipsis;
-    overflow: hidden;
-    white-space: nowrap;
-    color: black;
-    text-decoration: none;
-  }
-  
-  .top_five_issue a:hover, a:focus {
-    color: var(--c-dark);
+  .top_five_issue {
+    display: flex;
+    justify-content: space-between;
+    font-size: calc(18rem / var(--base-font-size));
+
+    a {
+      text-overflow: ellipsis;
+      overflow: hidden;
+      white-space: nowrap;
+      color: black;
+      text-decoration: none;
+    }
+
+    a:hover, a:focus {
+      color: var(--c-dark);
+    }
   }
   
   .top_five {
     padding: 8px;
     margin-bottom: 8px;
   }
-  
-  .top_five_issue {
-    display: flex;
-    justify-content: space-between;
-  }
+
   
   .top_five_item_holder {
     max-width: 552px;
@@ -287,47 +291,60 @@
     padding: 8px;
     width: 200px;
     font-size: 1rem;
+
+    .title {
+      text-align: left;
+      text-transform: uppercase;
+    }
+
+    input {
+      float: right;
+      cursor: pointer;
+      background-color: #fff;
+      border: none;
+      min-width: 24px;
+      min-height: 24px;
+      width: auto;
+      padding: 0px;
+    }
+
+    input:hover {
+      background-color: #ccc;
+    }
+
+    .issue_name {
+      text-align: left;
+      margin-top: 8px;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      text-wrap: nowrap;
+      font-size: calc(16rem / var(--base-font-size));
+    }
+
+    .issue_long_name {
+      text-align: left;
+      font-size: calc(16rem / var(--base-font-size));
+    }
+
+    .key {
+      border-left: 6px solid white;
+      padding-left: 8px;
+      margin-top: 8px;
+      margin-bottom: 8px;
+      text-align: left;
+    }
+
+    ol {
+      list-style: none;
+      padding: 0px;
+    }
+    
   }
   
   .absolute {
     position: absolute;
   }
-  
-  .overlayBox .title {
-    text-align: left;
-    text-transform: uppercase;
-  }
-  
-  .overlayBox input {
-    float: right;
-    cursor: pointer;
-    background-color: #fff;
-    border: none;
-    min-width: 24px;
-    min-height: 24px;
-    width: auto;
-    padding: 0px;
-  }
-  
-  .overlayBox input:hover {
-    background-color: #ccc;
-  }
-  
-  .overlayBox .issue_name {
-    text-align: left;
-    margin-top: 8px;
-    text-overflow: ellipsis;
-    overflow: hidden;
-    text-wrap: nowrap;
-    font-size: .9rem;
-  
-  }
-  
-  .overlayBox .issue_long_name {
-    text-align: left;
-    font-size: .9rem;
-  }
-  
+        
   /* Thanks to https://projects.verou.me/bubbly/ */
   .label :after {
     content: '';
@@ -356,15 +373,7 @@
     margin-top: -10px;
     margin-left: -10px;
   }
-  
-  .overlayBox .key {
-    border-left: 6px solid white;
-    padding-left: 8px;
-    margin-top: 8px;
-    margin-bottom: 8px;
-    text-align: left;
-  }
-  
+    
   #state_map_section {
     display:flex;
     flex-wrap: wrap;
@@ -376,11 +385,16 @@
     margin-right: auto;
     align-items: center;
     flex-direction: row-reverse;
-  }
-  
-  #state_map {
-    min-width: 630px;
-    flex: auto;
+    margin-bottom: 1rem;
+
+    h3 {
+      text-align: center;
+    }
+
+    #state_map {
+      min-width: 630px;
+      flex: auto;
+    }
   }
   
   .tooltipBox {

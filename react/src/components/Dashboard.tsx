@@ -68,10 +68,10 @@ const drawStateResults = (allStateResults: RegionSummaryData[], state: string, i
     // calls during the time period for this state.
     return;
   }
-  d3.select("h3#state_detail_title").attr('class', 'detail_title').html(`Top 5 Calls in ${stateResults.name} ${duration}`);
+  d3.select("h3#state_detail_title").attr('class', 'detail_title').html(`Top 5 calls in ${stateResults.name} ${duration}`);
   d3.selectAll('div#total_state')
     .html(stateResults.total.toLocaleString());
-  d3.selectAll('div#state_name_subtitle').html(stateResults.name);
+  d3.selectAll('div#state_name_subtitle').html(`From ${stateResults.name}`);
   // TODO: Use D3 to transform rather than clearing and redrawing everything, for better performance
   // and also so animation doesn't always start at 0.
   document.getElementById('top_five_state_holder')!.innerHTML = '';
@@ -105,7 +105,7 @@ const drawTopFiveIssues = (holder: string, data: IssueCountData[], issueColor: d
   const issueSection = rowContent.append('div').attr('class', 'top_five_issue');
   issueSection.append('a')
     .attr('class', 'issue_name')
-    .attr('href', (d: IssueCountData) => `https://5calls.org/issue/${d.slug}`)
+    .attr('href', (d: IssueCountData) => `/issue/${d.slug}`)
     .html((d: IssueCountData) => `&rarr; ${d.name}`);
   const linkStatSection = issueSection.append('div')
     .attr('class', 'stat')
@@ -233,7 +233,7 @@ const drawUsaMap = (statesResults: RegionSummaryData[], issueColor: d3.ScaleOrdi
       .append('li')
       .attr('class', 'key')
       .style('border-color', (d: IssueCountData) => issueColor(d.issue_id))
-      .html((d: IssueCountData) => `<b>${d.count} states</b>: ${d.name}`);
+      .html((d: IssueCountData) => `<b>${d.count} state${d.count == 1 ? '' : 's'}</b>: ${d.name}`);
 
     let selectedState: string | null = null;
     const width = 630;
@@ -449,7 +449,7 @@ class Dashboard extends React.Component<null, State> {
       return agg;
     }, {} as { [key: number]: string });
 
-    d3.selectAll('div.subtitle_detail').html(`Total calls ${duration}`)
+    d3.selectAll('h3.subtitle_detail').html(`Total calls ${duration}`)
     drawUsaPane(usaData, localStorage.district.split('-')[0], issueColor, duration);
 
     d3.select('div#dashboard-content').attr('hidden', null);
