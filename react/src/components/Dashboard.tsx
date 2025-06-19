@@ -458,14 +458,13 @@ const drawRepsPane = (repsData, finalDate, issueColor, issueIdToName, duration) 
         }
         return text;
       });
-  const repTopCalls = repDetail
-      .append('ol')
+  repDetail.append('ol')
       .attr('id', d => `${d.id}_top`);
   repsData.repsData.forEach(d => {
     drawTopFiveIssues(`ol#${d.id}_top`, d.topIssues, issueColor, d.total, d.beeswarm);
   });
     
-  drawBeeswarms(repDetail.append('div').style('position', 'relative'), beeswarmScale, issueIdToName, issueColor, duration);
+  drawBeeswarms(repDetail.append('div'), beeswarmScale, issueIdToName, issueColor, duration);
 
   const pieSize = 60;
   const size = 40;
@@ -522,11 +521,88 @@ const drawRepsPane = (repsData, finalDate, issueColor, issueIdToName, duration) 
 };
 
 const drawBeeswarms = (repDetail, beeswarmScale, issueIdToName, issueColor, duration) => {
-  repDetail.append('div')
+  const description = repDetail.append('div')
     .attr('class', 'description')
-    .attr('hidden', d => d.total < MIN_FOR_BEESWARM ? true : null)
-    .html(d => `<h3>All calls to ${d.repInfo.name} about this issue ${duration}</h3><p>One dot represents one call. Tap an issue in the list above to highlight those calls. Your calls make a difference.</p>`);
-  repDetail.append('div')
+    .attr('hidden', d => d.total < MIN_FOR_BEESWARM ? true : null);
+
+  description.append('h3').html(d => `All calls to ${d.repInfo.name} about this issue ${duration}`);
+  const paragraph = description.append('p');
+  paragraph.append('span').html('One dot represents one call. Tap an issue in the list above to highlight those calls visually, or ');
+  paragraph.append('input')
+    .attr('type', 'button').attr('value', 'listen').on('click', function(event, d) {
+        
+    // Thanks ChatGPT for the help with sonification.
+    let startAudioTime;
+    const context = new (window.AudioContext || window.webkitAudioContext)();
+    const playTone = (frequency, offsetSeconds) => {
+      const oscillator = context.createOscillator();
+      const gainNode = context.createGain();
+
+      oscillator.type = "sine";
+      oscillator.frequency.setValueAtTime(frequency, context.currentTime);
+
+      oscillator.connect(gainNode);
+      gainNode.connect(context.destination);
+
+      gainNode.gain.setValueAtTime(0.2, context.currentTime + offsetSeconds);
+      oscillator.start(context.currentTime + offsetSeconds);
+      oscillator.stop(context.currentTime + offsetSeconds + 0.15);
+    }
+    const playBackgroundTone = (durationSeconds) => {
+      const droneOsc = context.createOscillator();
+      const droneGain = context.createGain();
+    
+      droneOsc.type = "triangle"; // Some texture
+      droneOsc.frequency.setValueAtTime(220, context.currentTime); // Low tone
+      droneGain.gain.setValueAtTime(0.05, context.currentTime); // Subtle volume
+    
+      droneOsc.connect(droneGain);
+      droneGain.connect(context.destination);
+    
+      droneOsc.start(context.currentTime);
+      droneOsc.stop(context.currentTime + durationSeconds);
+    }
+    const playData = (beeswarm) => {
+      // We assume data has the oldest element first.
+      for (let i = beeswarm.length - 1; i >= 0; i--) {
+        const item = beeswarm[i];
+        // Skip things rendered too early. TODO: Just start earlier instead.
+        if (item.x < 0) {
+          continue;
+        }
+        // 600 width / 85 -> about one second per day
+        const timeOffsetSeconds = item.x / 85; // x0 is the preferred offset, x is where it is rendered.
+        const freq = 300 + (item.data.issue_id % 25) * 10; // TODO: Better to map based on the whole set of issues.
+        // TOD: Change amplitude depending on if issueID is selected.
+        playTone(freq, timeOffsetSeconds);
+      }
+      beeswarmScale.ticks().forEach(t => {
+        playTone(212, beeswarmScale(t) / 85);
+      });
+      playBackgroundTone(600 / 85);
+      startAudioTime = context.currentTime;
+    }
+    const animateD3Update = () => {
+      const now = context.currentTime;
+      const elapsed = now - startAudioTime;
+      const expectedTotal = 600 / 85;
+      const currentProgress = elapsed / expectedTotal;
+      if (currentProgress >= 1) {
+        d3.select('svg#beeswarm_svg_' + d.id).selectAll('g#playbackLine').select('line').attr('stroke', 'none');
+        return;
+      }
+      d3.select('svg#beeswarm_svg_' + d.id).selectAll('g#playbackLine')
+        .attr('transform', `translate(${currentProgress * 600}, 0)`)
+      requestAnimationFrame(animateD3Update);
+    }
+    d3.select('svg#beeswarm_svg_' + d.id).selectAll('g#playbackLine').select('line').attr('stroke', 'red');
+    playData(d.beeswarm);
+    requestAnimationFrame(animateD3Update);
+  });
+  paragraph.append('span').html(` to all the calls ${duration}. Your calls make a difference.`)
+
+  const svgBox = repDetail.append('div').style('position', 'relative');
+  svgBox.append('div')
     .attr('id', 'dot_label')
     .attr('class', 'overlayBox topLabel absolute')
     .attr('hidden', true)
@@ -552,7 +628,7 @@ const drawBeeswarms = (repDetail, beeswarmScale, issueIdToName, issueColor, dura
     point.y = boundingBox.y + boundingBox.height;
     const screenCoords = point.matrixTransform(matrix);
     screenCoords.x -= 28; // Has to do with the tab on the overlay box
-    screenCoords.y += 86; // height of the description stuff above.
+    screenCoords.y += 4; // Slightly below
 
     // Bounding box of the SVG.
     const svgBb = this.parentElement.parentElement.getBoundingClientRect();
@@ -568,7 +644,7 @@ const drawBeeswarms = (repDetail, beeswarmScale, issueIdToName, issueColor, dura
       .html(`${dateFormatter.format(new Date(dot.data.time * 1000))}: ${issueIdToName[dot.data.issue_id]}`);
   };
 
-  repDetail.append('svg')
+  svgBox.append('svg')
     .attr('width', 600)
     .attr('id', d => 'beeswarm_svg_' + d.id)
     .style('margin-bottom', '48px')
@@ -607,77 +683,15 @@ const drawBeeswarms = (repDetail, beeswarmScale, issueIdToName, issueColor, dura
       const height = g.getBBox().height;
       const axisHeight = 20;
       g.setAttribute('transform', `translate(0, -${middle - height / 2 - 1})`);
-      svg.append('g').attr('id', 'playbackLine').append('line')
-        .attr('stroke', 'red')
+      svg.append('g').attr('id', 'playbackLine')
+        .append('line')
+        .attr('stroke', 'none')
         .attr('stroke-width', '2')
         .attr('x0', 0)
         .attr('x1', 0)
         .attr('y0', 0)
         .attr('y1', height);
       document.getElementById('beeswarm_svg_' + data.id).setAttribute('height', height + axisHeight);
-      d3.select(g).on('click', function(event, d) {
-        
-        // Thanks ChatGPT for the help with sonification.
-        let startAudioTime;
-        const context = new (window.AudioContext || window.webkitAudioContext)();
-        const playTone = (frequency, offsetSeconds) => {
-          const oscillator = context.createOscillator();
-          const gainNode = context.createGain();
-    
-          oscillator.type = "sine";
-          oscillator.frequency.setValueAtTime(frequency, context.currentTime);
-    
-          oscillator.connect(gainNode);
-          gainNode.connect(context.destination);
-    
-          gainNode.gain.setValueAtTime(0.2, context.currentTime + offsetSeconds);
-          oscillator.start(context.currentTime + offsetSeconds);
-          oscillator.stop(context.currentTime + offsetSeconds + 0.15);
-        }
-        const playBackgroundTone = (durationSeconds) => {
-          const droneOsc = context.createOscillator();
-          const droneGain = context.createGain();
-        
-          droneOsc.type = "triangle"; // Some texture
-          droneOsc.frequency.setValueAtTime(220, context.currentTime); // Low tone
-          droneGain.gain.setValueAtTime(0.05, context.currentTime); // Subtle volume
-        
-          droneOsc.connect(droneGain);
-          droneGain.connect(context.destination);
-        
-          droneOsc.start(context.currentTime);
-          droneOsc.stop(context.currentTime + durationSeconds);
-        }
-        const playData = (beeswarm) => {
-          // We assume data has the oldest element first.
-          for (let i = beeswarm.length - 1; i >= 0; i--) {
-            const item = beeswarm[i];
-            // 600 width / 85 -> about one second per day
-            const timeOffsetSeconds = item.x / 85; // x0 is the preferred offset, x is where it is rendered.
-            const baseFreq = 300 + (item.data.issue_id % 25) * 10; // TODO: Better to map based on the whole set of issues.
-            playTone(baseFreq, timeOffsetSeconds);
-          }
-          beeswarmScale.ticks().forEach(t => {
-            playTone(212, beeswarmScale(t) / 85);
-          });
-          playBackgroundTone(600 / 85);
-          startAudioTime = context.currentTime;
-        }
-        const animateD3Update = () => {
-          const now = context.currentTime;
-          const elapsed = now - startAudioTime;
-          const expectedTotal = 600 / 85;
-          const currentProgress = elapsed / expectedTotal;
-          if (currentProgress >= 1) {
-            return;
-          }
-          d3.select('svg#beeswarm_svg_' + d.id).selectAll('g#playbackLine')
-            .attr('transform', `translate(${currentProgress * 600}, 0)`)
-          requestAnimationFrame(animateD3Update);
-        }
-        playData(d.beeswarm);
-        requestAnimationFrame(animateD3Update);
-      });
 
       // Add the axis.
       d3.select(g.parentElement).append('g')
