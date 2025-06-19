@@ -16,3 +16,9 @@ export interface FieldOffice {
   city: string;
   phone: string;
 }
+
+export interface MissingSeat {
+  id: string;
+  reason: string;
+  area?: string;
+}
