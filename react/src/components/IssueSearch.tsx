@@ -92,12 +92,23 @@ const IssueSearch: React.FC<IssueSearchProps> = () => {
     }
 
     const lowercaseSearch = searchTerm.toLowerCase();
-    return issues.filter(
+    const filtered = issues.filter(
       (issue) =>
         issue.name.toLowerCase().includes(lowercaseSearch) ||
         issue.reason.toLowerCase().includes(lowercaseSearch) ||
+        issue.script.toLowerCase().includes(lowercaseSearch) ||
         issue.slug.toLowerCase().includes(lowercaseSearch)
     );
+
+    // Sort to prioritize name matches first
+    return filtered.sort((a, b) => {
+      const aNameMatch = a.name.toLowerCase().includes(lowercaseSearch);
+      const bNameMatch = b.name.toLowerCase().includes(lowercaseSearch);
+      
+      if (aNameMatch && !bNameMatch) return -1;
+      if (!aNameMatch && bNameMatch) return 1;
+      return 0; // Both have same priority (both name matches or both non-name matches)
+    });
   };
 
   const filteredIssues = filterIssues(state.issues, state.searchTerm);
@@ -105,7 +116,7 @@ const IssueSearch: React.FC<IssueSearchProps> = () => {
 
   return (
     <div className="i-bar-search">
-      <div className="i-bar-search-input">
+      <div className="i-bar-search-field">
         <input
           ref={searchInputRef}
           type="text"
@@ -114,7 +125,7 @@ const IssueSearch: React.FC<IssueSearchProps> = () => {
           onChange={handleSearchChange}
           onFocus={handleSearchFocus}
           onBlur={handleSearchBlur}
-          className="i-bar-search-field"
+          className="i-bar-search-input"
         />
         {state.searchTerm && (
           <button

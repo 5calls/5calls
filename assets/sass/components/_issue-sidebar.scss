@@ -288,18 +288,20 @@
 
 // Search component styles
 .i-bar-search {
-  margin-bottom: 1rem;
+  margin-bottom: 0;
 }
 
-.i-bar-search-input {
+.i-bar-search-field {
   position: relative;
   margin-bottom: 0.5rem;
 }
 
-.i-bar-search-field {
+.i-bar-search-input[type="text"] {
   width: 100%;
   padding: 0.75rem;
-  border: 1px solid rgba(25, 27, 29, 0.4);
+  border: 0;
+  border-top: 2px solid var(--c-blue);
+  border-bottom: 2px solid var(--c-blue);
   border-radius: 0;
   font-size: 1rem;
   padding-right: 2.5rem;
