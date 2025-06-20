@@ -3,6 +3,7 @@ import * as d3 from 'd3';
 import * as topojson from 'topojson-client';
 import { Feature } from 'geojson';
 import {
+  AggregatedCallCount,
   ContactSummaryData,
   getLocationSummary,
   getUsaSummary,
@@ -561,8 +562,7 @@ const drawRepsPane = (
   issueIdToName: { [key: number]: string },
   duration: string
 ) => {
-  const beeswarmScale = d3
-    .scaleTime()
+  const beeswarmScale = d3.scaleTime()
     .domain([finalDate - 7 * 24 * 60 * 60 * 1000, finalDate])
     .range([30, 570])
     .nice();
@@ -745,9 +745,9 @@ const drawRepsPane = (
 const drawBeeswarms = (
   repDetail,
   beeswarmScale,
-  issueIdToName,
-  issueColor,
-  duration
+  issueIdToName: { [x: string]: any;[x: number]: string; },
+  issueColor: d3.ScaleOrdinal<number, string>,
+  duration: string
 ) => {
   const description = repDetail
     .append('div')
@@ -766,12 +766,15 @@ const drawBeeswarms = (
   paragraph
     .append('input')
     .attr('type', 'button')
+    .attr('id', 'sonify_btn')
     .attr('value', 'listen')
-    .on('click', function (_, d) {
+    .on('click', function (_: Event, d: RepsSummaryData) {
+      d3.selectAll('input#sonify_btn').attr('disabled', true);
+
       // Thanks ChatGPT for the help with sonification.
-      let startAudioTime;
+      let startAudioTime = 0;
       const context = new (window.AudioContext || window.webkitAudioContext)();
-      const playTone = (frequency, offsetSeconds) => {
+      const playTone = (frequency: number, offsetSeconds: number) => {
         const oscillator = context.createOscillator();
         const gainNode = context.createGain();
 
@@ -785,7 +788,7 @@ const drawBeeswarms = (
         oscillator.start(context.currentTime + offsetSeconds);
         oscillator.stop(context.currentTime + offsetSeconds + 0.15);
       };
-      const playBackgroundTone = (durationSeconds) => {
+      const playBackgroundTone = (durationSeconds : number) => {
         const droneOsc = context.createOscillator();
         const droneGain = context.createGain();
 
@@ -825,10 +828,12 @@ const drawBeeswarms = (
         const expectedTotal = 600 / 85;
         const currentProgress = elapsed / expectedTotal;
         if (currentProgress >= 1) {
+          // Playback is complete.
           d3.select('svg#beeswarm_svg_' + d.id)
             .selectAll('g#playbackLine')
             .select('line')
             .attr('stroke', 'none');
+          d3.selectAll('input#sonify_btn').attr('disabled', null);
           return;
         }
         d3.select('svg#beeswarm_svg_' + d.id)
@@ -941,7 +946,7 @@ const drawBeeswarms = (
             .attr('hidden', true);
         });
 
-      const g = document.getElementById('beeswarm_g_' + data.id);
+      const g = document.getElementById('beeswarm_g_' + data.id)!;
       const height = g.getBBox().height;
       const axisHeight = 20;
       g.setAttribute('transform', `translate(0, -${middle - height / 2 - 1})`);
@@ -963,52 +968,57 @@ const drawBeeswarms = (
       d3.select(g.parentElement)
         .append('g')
         .attr('transform', `translate(0,${height})`)
-        .call(d3.axisBottom(beeswarmScale).tickSizeOuter(0).ticks(d3.timeDay));
+        .call(
+          d3.axisBottom(beeswarmScale)
+          .tickSizeOuter(0)
+          .ticks(d3.timeDay)
+          .tickFormat(d3.timeFormat("%a %-d")));
     });
 };
 
+interface BeeswarmNode<T> extends d3.SimulationNodeDatum {
+  x0: number;
+  y0: number;
+  r: number;
+  data: T;
+}
+
 // `beeswarmForce` is from
-// https://observablehq.com/@harrystevens/force-directed-beeswarm
-const beeswarmForce = () => {
-  let x = (d) => d[0];
-  let y = (d) => d[1];
-  let r = (d) => d[2];
+// https://observablehq.com/@harrystevens/force-directed-beeswarm.
+// ChatGPT helped with the typescript typing.
+function beeswarmForce<T>() {
+  let x: (d: T) => number = (d) => (d as any)[0];
+  let y: (d: T) => number = (d) => (d as any)[1];
+  let r: (d: T) => number = (d) => (d as any)[2];
   let ticks = 300;
 
-  function beeswarm(data) {
-    const entries = data.map((d) => {
-      return {
-        x0: typeof x === 'function' ? x(d) : x,
-        y0: typeof y === 'function' ? y(d) : y,
-        r: typeof r === 'function' ? r(d) : r,
-        data: d
-      };
-    });
+  function beeswarm(data: T[]) {
+    const entries: BeeswarmNode<T>[] = data.map((d) => ({
+      x0: typeof x === 'function' ? x(d) : x,
+      y0: typeof y === 'function' ? y(d) : y,
+      r: typeof r === 'function' ? r(d) : r,
+      data: d,
+    }));
 
     const simulation = d3
       .forceSimulation(entries)
-      .force(
-        'x',
-        d3.forceX((d) => d.x0)
-      )
-      .force(
-        'y',
-        d3.forceY((d) => d.y0)
-      )
-      .force(
-        'collide',
-        d3.forceCollide((d) => d.r)
-      );
+      .force('x', d3.forceX<BeeswarmNode<T>>((d: BeeswarmNode<T>) => d.x0))
+      .force('y', d3.forceY<BeeswarmNode<T>>((d: BeeswarmNode<T>) => d.y0))
+      .force('collide', d3.forceCollide<BeeswarmNode<T>>((d: BeeswarmNode<T>) => d.r));
 
     for (let i = 0; i < ticks; i++) simulation.tick();
 
     return entries;
   }
 
-  beeswarm.x = (f) => (f ? ((x = f), beeswarm) : x);
-  beeswarm.y = (f) => (f ? ((y = f), beeswarm) : y);
-  beeswarm.r = (f) => (f ? ((r = f), beeswarm) : r);
-  beeswarm.ticks = (n) => (n ? ((ticks = n), beeswarm) : ticks);
+  beeswarm.x = (f?: (d: T) => number) =>
+    f ? ((x = f), beeswarm) : x;
+  beeswarm.y = (f?: (d: T) => number) =>
+    f ? ((y = f), beeswarm) : y;
+  beeswarm.r = (f?: (d: T) => number) =>
+    f ? ((r = f), beeswarm) : r;
+  beeswarm.ticks = (n?: number) =>
+    typeof n === "number" ? ((ticks = n), beeswarm) : ticks;
 
   return beeswarm;
 };
@@ -1046,11 +1056,6 @@ class Dashboard extends React.Component<null, State> {
 
     const usaData = this.state.usaData;
     const hasRepsData = this.state.repsData !== null;
-    // if ( this.state.repsData !== null) {
-    //   hasRepsData = hasRepsData && this.state.repsData.reps.length >0;
-    // }
-
-    // TODO: Handle null repsData (no location set)
 
     const duration = 'this week';
     // IDs of top issues, to be used for coloring.
@@ -1186,7 +1191,11 @@ class Dashboard extends React.Component<null, State> {
       repsData.repsData.forEach((r) => {
         // In-place expand to individual calls.
         expandRepResults(r.aggregatedResults);
+
+        // Pull the rep's info into this item.
         r.repInfo = repsData.reps.find((s) => s.id === r.id);
+
+        // Add aggregated reachability stats.
         const vmOutcomes = r.outcomes.find((s) => s.result === 'voicemail');
         const contactOutcomes = r.outcomes.find((s) => s.result === 'contact');
         const unavailableOutcomes = r.outcomes.find(

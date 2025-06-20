@@ -129,6 +129,10 @@
     }
 
     input:hover {
+      background-color: #ccc;
+    }
+
+    input:disabled {
       background-color: #bbb;
     }
   }
