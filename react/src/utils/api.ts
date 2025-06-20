@@ -138,7 +138,11 @@ export const postGCLID = (gclid: string) => {
 };
 
 // sends a message to the server indicating a referral
-export const postReferral = (ref: string, path: string, meta: string | null) => {
+export const postReferral = (
+  ref: string,
+  path: string,
+  meta: string | null
+) => {
   const postData = querystring.stringify({
     ref: ref,
     meta: meta,
