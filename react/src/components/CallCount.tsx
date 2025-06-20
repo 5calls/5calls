@@ -27,7 +27,7 @@ class CallCount extends React.Component<null, State> {
     } else {
       return (
         <span>
-          We&rsquo;ve made more than 7 million calls so far. Join&nbsp;us.
+          We&rsquo;ve made more than 8 million calls so far. Join&nbsp;us.
         </span>
       );
     }
