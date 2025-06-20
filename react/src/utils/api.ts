@@ -6,10 +6,12 @@ import OneSignal from 'react-onesignal';
 import { Contact } from '../common/models/contact';
 import { ContactList } from '../common/models/contactList';
 import * as Constants from '../common/constants';
-import { OutcomeData, UserContactEventType } from '../common/models/contactEvent';
+import {
+  OutcomeData,
+  UserContactEventType
+} from '../common/models/contactEvent';
 import uuid from './uuid';
 import { LOCAL_STORAGE_KEYS } from '../common/constants';
-import { resolve } from 'dns';
 
 export const noLocationError = Error('no location entered');
 
@@ -101,7 +103,7 @@ export interface UsaSummaryData {
 
 export const getUsaSummary = (): Promise<UsaSummaryData> => {
   return axios
-    .get("https://api.5calls.org/v1/reps/usaSummary")
+    .get('https://api.5calls.org/v1/reps/usaSummary')
     .then((response) => Promise.resolve(response.data))
     .catch((e) => Promise.reject(e));
 };
@@ -132,14 +134,20 @@ export interface RepsSummaryData {
 
 export const getLocationSummary = (): Promise<RepsSummaryData | null> => {
   const districtId = localStorage.getItem(LOCAL_STORAGE_KEYS.DISTRICT);
-  if (districtId === null || districtId === undefined || districtId.length === 0) {
+  if (
+    districtId === null ||
+    districtId === undefined ||
+    districtId.length === 0
+  ) {
     return Promise.resolve(null);
   }
   return axios
-    .get(`https://api.5calls.org/v1/reps/districtSummary?district=${districtId}`)
+    .get(
+      `https://api.5calls.org/v1/reps/districtSummary?district=${districtId}`
+    )
     .then((response) => Promise.resolve(response.data))
     .catch((e) => Promise.reject(e));
-}
+};
 
 export interface IssueCount {
   name: string;
@@ -200,7 +208,11 @@ export const postGCLID = (gclid: string) => {
 };
 
 // sends a message to the server indicating a referral
-export const postReferral = (ref: string, path: string, meta: string | null) => {
+export const postReferral = (
+  ref: string,
+  path: string,
+  meta: string | null
+) => {
   const postData = querystring.stringify({
     ref: ref,
     meta: meta,

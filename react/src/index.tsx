@@ -55,7 +55,6 @@ $(() => {
   checkForReferral();
 });
 
-
 // Set the district tag in the newsletter form if district exists
 const checkForDistrict = (): string | null => {
   const district = localStorage.getItem(LOCAL_STORAGE_KEYS.DISTRICT);
@@ -198,7 +197,7 @@ const startComponentRenders = () => {
         <ToastContainer position="top-center" draggable transition={Slide} />
       )
     },
-    { id: 'react-dashboard', component: Dashboard },
+    { id: 'react-dashboard', component: Dashboard }
   ];
 
   islands.forEach(({ id, component, hasStateProvider, condition }) => {
