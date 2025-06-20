@@ -242,8 +242,10 @@ body.issue {
   }
 
   .issue-script {
-    background-color: #f5f5f5;
-    padding: 20px;
+    .contact-content {
+      background-color: #f5f5f5;
+      padding: 20px;
+    }
 
     p,
     li,

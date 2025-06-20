@@ -82,9 +82,11 @@ class Script extends React.Component<WithLocationProps, State> {
   }
 
   render() {
-    let formattedScriptMarkdown = this.state.scriptMarkdown;
+    let formattedScriptMarkdown = this.state.currentContact
+      ? this.state.scriptMarkdown
+      : '';
 
-    if (this.props.locationState) {
+    if (this.props.locationState && this.state.currentContact) {
       formattedScriptMarkdown = this.scriptFormat(
         formattedScriptMarkdown,
         this.props.locationState,
@@ -94,8 +96,14 @@ class Script extends React.Component<WithLocationProps, State> {
 
     return (
       <span ref={this.scriptRef}>
-        {/* react-markdown is 20kb, we could probably find a lighter one */}
-        <ReactMarkdown>{formattedScriptMarkdown}</ReactMarkdown>
+        <div
+          className={
+            formattedScriptMarkdown.length > 0 ? 'contact-content' : ''
+          }
+        >
+          {/* react-markdown is 20kb, we could probably find a lighter one */}
+          <ReactMarkdown>{formattedScriptMarkdown}</ReactMarkdown>
+        </div>
       </span>
     );
   }
