@@ -104,7 +104,7 @@ const IssueSearch: React.FC<IssueSearchProps> = () => {
     return filtered.sort((a, b) => {
       const aNameMatch = a.name.toLowerCase().includes(lowercaseSearch);
       const bNameMatch = b.name.toLowerCase().includes(lowercaseSearch);
-      
+
       if (aNameMatch && !bNameMatch) return -1;
       if (!aNameMatch && bNameMatch) return 1;
       return 0; // Both have same priority (both name matches or both non-name matches)
