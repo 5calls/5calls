@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import * as Constants from '../common/constants';
 import { Issue } from '../common/models/issue';
+import { postSearchTerm } from '../utils/api';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
 interface IssueSearchProps {}
@@ -31,6 +32,17 @@ const IssueSearch: React.FC<IssueSearchProps> = () => {
     if (staticSection) {
       const shouldHide = state.searchTerm.length >= 3;
       (staticSection as HTMLElement).style.display = shouldHide ? 'none' : '';
+    }
+  }, [state.searchTerm]);
+
+  // Debounced search term tracking
+  useEffect(() => {
+    if (state.searchTerm.length >= 3) {
+      const timeoutId = setTimeout(() => {
+        postSearchTerm(state.searchTerm);
+      }, 1000); // Wait 1 second after user stops typing
+
+      return () => clearTimeout(timeoutId);
     }
   }, [state.searchTerm]);
 
