@@ -1,9 +1,9 @@
 import React, { createRef } from 'react';
 
 import { toast } from 'react-toastify';
-import { Contact } from '../common/models/contact';
+import { Contact, MissingSeat } from '../common/models/contact';
 import { OutcomeData } from '../common/models/contactEvent';
-import { ContactList } from '../common/models/contactList';
+import { ContactArea, ContactList } from '../common/models/contactList';
 import { WithCompletedProps } from '../state/completedState';
 import { WithLocationProps } from '../state/locationState';
 import { withCompleted, withLocation } from '../state/stateProvider';
@@ -225,6 +225,40 @@ class Reps extends React.Component<
     return contacts;
   }
 
+  vacantSeats(areas: string[], contactList: ContactList): MissingSeat[] {
+    const missingSeats: MissingSeat[] = [];
+
+    if (areas.includes(ContactArea.USSenate)) {
+      // Handle missing Senate seat(s)
+      const senateReps = contactList.senateReps();
+      if (senateReps.length < 2) {
+        // Assuming Senate seat(s) is vacant if there's < 2
+        const numVacancies = 2 - senateReps.length; // handle multiple vacancies
+        for (let i = 0; i < numVacancies; i++) {
+          missingSeats.push({
+            id: `vacant-senate-seat-${i + 1}`,
+            reason: `This ${ContactArea.USSenate} seat is currently vacant.`,
+            area: ContactArea.USSenate
+          });
+        }
+      }
+    }
+    if (areas.includes(ContactArea.USHouse)) {
+      // Handle missing House seat
+      const houseReps = contactList.houseRep();
+      // Assuming House seat is vacant if there's not at least one
+      if (houseReps.length < 1) {
+        missingSeats.push({
+          id: 'vacant-house-seat',
+          reason: `This ${ContactArea.USHouse} seat is currently vacant.`,
+          area: ContactArea.USHouse
+        });
+      }
+    }
+
+    return missingSeats;
+  }
+
   contactComponent(
     contact: Contact,
     index: number,
@@ -252,6 +286,26 @@ class Reps extends React.Component<
     );
   }
 
+  vacantSeatComponent(missing: MissingSeat): JSX.Element {
+    const photoURL = '/images/no-rep.png';
+
+    return (
+      <li key={missing.id}>
+        <div className="vacant">
+          <img
+            alt={missing.id}
+            src={photoURL}
+            onError={(e) => {
+              e.currentTarget.src = photoURL;
+            }}
+          />
+          <h4>Vacant Seat</h4>
+          <p>{missing.reason}</p>
+        </div>
+      </li>
+    );
+  }
+
   render() {
     if (!this.state.contactList || !this.props.locationState?.address) {
       return (
@@ -271,6 +325,12 @@ class Reps extends React.Component<
       this.state.areas,
       this.state.contactList
     );
+
+    const missingSeats = this.vacantSeats(
+      this.state.areas,
+      this.state.contactList
+    );
+
     let activeContact: Contact | undefined;
     if (contacts.length > 0) {
       activeContact = contacts[this.state.activeContactIndex];
@@ -282,6 +342,7 @@ class Reps extends React.Component<
           {contacts.map((contact, index) =>
             this.contactComponent(contact, index, this.state.activeContactIndex)
           )}
+          {missingSeats.map((missing) => this.vacantSeatComponent(missing))}
         </ul>
         {activeContact && <ActiveContact contact={activeContact} />}
       </div>
