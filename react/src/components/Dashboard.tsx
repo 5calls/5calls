@@ -8,17 +8,32 @@ import {
   getLocationSummary,
   getUsaSummary,
   IssueCountData,
+  OutcomeSummaryData,
   RegionSummaryData,
   RepsSummaryData,
   UsaSummaryData
 } from '../utils/api';
-import { Contact } from '../common/models/contact';
+import { Contact, Party } from '../common/models/contact';
 import { LOCAL_STORAGE_KEYS } from '../common/constants';
 
-// Dashboard state, not State as a region
+interface ExpandedRepData {
+    id: string;
+    repInfo: Contact;
+    total: number;
+    outcomes: OutcomeSummaryData[];
+    topIssues: IssueCountData[];
+    callResults: AggregatedCallCount[];
+    beeswarm: BeeswarmNode<AggregatedCallCount>[];
+    numVoicemail: number;
+    percentVM: number;
+    percentContact: number;
+    percentUnavailable: number;
+}
+
+// Dashboard state.
 interface State {
   usaData: UsaSummaryData;
-  repsData: RepsSummaryData | null;
+  repsData: ExpandedRepData[] | null;
   isLoading: boolean;
 }
 
@@ -139,7 +154,7 @@ const drawTopFiveIssues = (
   data: IssueCountData[],
   issueColor: d3.ScaleOrdinal<number, string>,
   total: number,
-  beeswarmData = null
+  beeswarmData: BeeswarmNode<AggregatedCallCount>[] | null = null
 ) => {
   const rowWidth = 552;
   const topFiveRow = d3
@@ -211,7 +226,7 @@ const drawTopFiveIssues = (
           d3.select(this).style('background-color', hoverColor);
           d3.select(this.parentNode.parentNode.parentNode)
             .selectAll('circle')
-            .data(beeswarmData, (b) => b.data.id)
+            .data(beeswarmData, (b: BeeswarmNode<AggregatedCallCount>) => b.data.id)
             .transition()
             .delay(0)
             .style('fill', (b) =>
@@ -536,11 +551,12 @@ const drawUsaMap = (
   });
 };
 
-const expandRepResults = (results) => {
-  const addedPoints = [];
+const expandRepResults = (results: AggregatedCallCount[]) => {
+  const addedPoints: AggregatedCallCount[] = [];
   // Add a unique ID for the D3 animation later.
   let indexForId = 0;
   results.forEach((r) => {
+    // TODO: Would be better to cast to another type rather than adding the ID field.
     r.id = indexForId++;
     for (let i = 1; i < r.count; i++) {
       // Expand the data based on the count to create enough dots.
@@ -556,7 +572,7 @@ const expandRepResults = (results) => {
 };
 
 const drawRepsPane = (
-  repsData: RepsSummaryData,
+  repData: ExpandedRepData,
   finalDate: number,
   issueColor: d3.ScaleOrdinal<number, string>,
   issueIdToName: { [key: number]: string },
@@ -567,30 +583,25 @@ const drawRepsPane = (
     .range([30, 570])
     .nice();
 
-  repsData.repsData.forEach((d) => {
-    d.beeswarm = beeswarmForce()
+  repData.beeswarm = beeswarmForce()
       .y(300)
       .x((e) => beeswarmScale(new Date(e.time * 1000))) // seconds since epoch --> ms
       .r(
-        d.total > 500
+        repData.total > 500
           ? 3
-          : d.total > 300
+          : repData.total > 300
             ? 4
-            : d.total > 100
+            : repData.total > 100
               ? 5
-              : d.total > 50
+              : repData.total > 50
                 ? 6
                 : 10
-      )(d.aggregatedResults);
-  });
+      )(repData.callResults);
 
   const repCard = d3
     .select('div#reps_section')
-    .selectAll('.dashboard_card')
-    .data(repsData.repsData)
-    .enter()
     .append('div')
-    .attr('id', (d) => `card_${d.id}`)
+    .attr('id', `card_${repData.id}`)
     .attr('class', 'dashboard_card');
 
   const leftSide = repCard.append('div');
@@ -602,28 +613,24 @@ const drawRepsPane = (
   totalCard
     .append('div')
     .attr('class', 'highlight')
-    .html((d) => d.total.toLocaleString());
+    .html(repData.total.toLocaleString());
   const totalSubtitle = totalCard.append('div').attr('class', 'subtitle');
   totalSubtitle
     .append('img')
-    .attr('src', (d) => d.repInfo.photoURL)
+    .attr('src', repData.repInfo.photoURL)
     .style('float', 'left')
     .attr('alt', '');
   const nameSubtitleSection = totalSubtitle.append('div');
   nameSubtitleSection
     .append('div')
     .attr('class', 'subtitle_main')
-    .html((d) => {
-      return `${d.repInfo.name}`;
-    });
+    .html(`${repData.repInfo.name}`);
   nameSubtitleSection
     .append('div')
     .attr('class', '')
-    .html((d) => {
-      const district =
-        d.repInfo.area === 'US House' ? localStorage.district : d.repInfo.state;
-      return `${d.repInfo.party} from ${district}`;
-    });
+    .html(
+      `${repData.repInfo.party} from ${repData.repInfo.area === 'US House' ? localStorage.district : repData.repInfo.state}`
+    );
 
   const reachability = leftSide.append('div').attr('class', 'reachability');
 
@@ -635,26 +642,25 @@ const drawRepsPane = (
   repDetail
     .append('div')
     .attr('class', 'description')
-    .html((d) => {
-      let text = `The five most-called issues to ${d.repInfo.name} ${duration} as recorded with 5 Calls, and call count for each in that time.`;
-      if (d.total >= MIN_FOR_BEESWARM) {
+    .html(() => {
+      let text = `The five most-called issues to ${repData.repInfo.name} ${duration} as recorded with 5 Calls, and call count for each in that time.`;
+      if (repData.total >= MIN_FOR_BEESWARM) {
         text += ' Tap an issue to see its calls below.';
       }
       return text;
     });
-  repDetail.append('ol').attr('id', (d) => `${d.id}_top`);
-  repsData.repsData.forEach((d) => {
-    drawTopFiveIssues(
-      `ol#${d.id}_top`,
-      d.topIssues,
+  repDetail.append('ol').attr('id', `${repData.id}_top`);
+  drawTopFiveIssues(
+      `ol#${repData.id}_top`,
+      repData.topIssues,
       issueColor,
-      d.total,
-      d.beeswarm
+      repData.total,
+      repData.beeswarm
     );
-  });
 
-  drawBeeswarms(
+  drawBeeswarm(
     repDetail.append('div'),
+    repData,
     beeswarmScale,
     issueIdToName,
     issueColor,
@@ -668,7 +674,7 @@ const drawRepsPane = (
     .append('div')
     .attr('class', 'description')
     .style('margin-bottom', '10px')
-    .html((d) => `${d.repInfo.name}'s office's availability ${duration}.`);
+    .html(`${repData.repInfo.name}'s office's availability ${duration}.`);
   const callResultsGroup = reachability
     .append('svg')
     .attr('width', pieSize)
@@ -689,7 +695,7 @@ const drawRepsPane = (
         .innerRadius(`${size / 2}`)
         .outerRadius(`${pieSize / 2}`)
         .startAngle(0)
-        .endAngle((d) => 2 * Math.PI * d.percentVM)
+        .endAngle(2 * Math.PI * repData.percentVM)
     );
   callResultsGroup
     .append('path')
@@ -701,8 +707,8 @@ const drawRepsPane = (
         .arc()
         .innerRadius(`${size / 2}`)
         .outerRadius(`${pieSize / 2}`)
-        .startAngle((d) => 2 * Math.PI * d.percentVM)
-        .endAngle((d) => 2 * Math.PI * (d.percentVM + d.percentContact))
+        .startAngle(2 * Math.PI * repData.percentVM)
+        .endAngle(2 * Math.PI * (repData.percentVM + repData.percentContact))
     );
   callResultsGroup
     .append('path')
@@ -714,7 +720,7 @@ const drawRepsPane = (
         .arc()
         .innerRadius(`${size / 2}`)
         .outerRadius(`${pieSize / 2}`)
-        .startAngle((d) => 2 * Math.PI * (d.percentVM + d.percentContact))
+        .startAngle(2 * Math.PI * (repData.percentVM + repData.percentContact))
         .endAngle(2 * Math.PI)
     );
   const resultsTextHolder = reachability
@@ -724,26 +730,21 @@ const drawRepsPane = (
     .style('margin-left', '16px');
   resultsTextHolder
     .append('div')
-    .html(
-      (d) =>
-        `<span class="results_vm">${(d.percentVM * 100).toFixed(0)}%</span> of calls went to voicemail`
+    .html(`<span class="results_vm">${(repData.percentVM * 100).toFixed(0)}%</span> of calls went to voicemail`
     );
   resultsTextHolder
     .append('div')
-    .html(
-      (d) =>
-        `<span class="results_contact">${(d.percentContact * 100).toFixed(0)}%</span> of calls were answered`
+    .html(`<span class="results_contact">${(repData.percentContact * 100).toFixed(0)}%</span> of calls were answered`
     );
   resultsTextHolder
     .append('div')
-    .html(
-      (d) =>
-        `<span class="results_unavailable">${(d.percentUnavailable * 100).toFixed(0)}%</span> of calls were unavailable`
+    .html(`<span class="results_unavailable">${(repData.percentUnavailable * 100).toFixed(0)}%</span> of calls were unavailable`
     );
 };
 
-const drawBeeswarms = (
+const drawBeeswarm = (
   repDetail,
+  repData: ExpandedRepData,
   beeswarmScale,
   issueIdToName: { [x: string]: any;[x: number]: string; },
   issueColor: d3.ScaleOrdinal<number, string>,
@@ -752,11 +753,11 @@ const drawBeeswarms = (
   const description = repDetail
     .append('div')
     .attr('class', 'description')
-    .attr('hidden', (d) => (d.total < MIN_FOR_BEESWARM ? true : null));
+    .attr('hidden', repData.total < MIN_FOR_BEESWARM ? true : null);
 
   description
     .append('h3')
-    .html((d) => `All calls to ${d.repInfo.name} about this issue ${duration}`);
+    .html(`All calls to ${repData.repInfo.name} about this issue ${duration}`);
   const paragraph = description.append('p');
   paragraph
     .append('span')
@@ -802,7 +803,7 @@ const drawBeeswarms = (
         droneOsc.start(context.currentTime);
         droneOsc.stop(context.currentTime + durationSeconds);
       };
-      const playData = (beeswarm) => {
+      const playData = (beeswarm: BeeswarmNode<AggregatedCallCount>[]) => {
         // We assume data has the oldest element first.
         for (let i = beeswarm.length - 1; i >= 0; i--) {
           const item = beeswarm[i];
@@ -829,23 +830,23 @@ const drawBeeswarms = (
         const currentProgress = elapsed / expectedTotal;
         if (currentProgress >= 1) {
           // Playback is complete.
-          d3.select('svg#beeswarm_svg_' + d.id)
+          d3.select('svg#beeswarm_svg_' + repData.id)
             .selectAll('g#playbackLine')
             .select('line')
             .attr('stroke', 'none');
           d3.selectAll('input#sonify_btn').attr('disabled', null);
           return;
         }
-        d3.select('svg#beeswarm_svg_' + d.id)
+        d3.select('svg#beeswarm_svg_' + repData.id)
           .selectAll('g#playbackLine')
           .attr('transform', `translate(${currentProgress * 600}, 0)`);
         requestAnimationFrame(animateD3Update);
       };
-      d3.select('svg#beeswarm_svg_' + d.id)
+      d3.select('svg#beeswarm_svg_' + repData.id)
         .selectAll('g#playbackLine')
         .select('line')
         .attr('stroke', 'red');
-      playData(d.beeswarm);
+      playData(repData.beeswarm);
       requestAnimationFrame(animateD3Update);
     });
   paragraph
@@ -867,7 +868,7 @@ const drawBeeswarms = (
     day: 'numeric'
   });
 
-  const selectDot = function (event, dot) {
+  const selectDot = function (_, dot : BeeswarmNode<AggregatedCallCount>) {
     // Bring to front
     this.parentElement.appendChild(this);
     d3.select(this).attr('stroke', '#333');
@@ -899,41 +900,45 @@ const drawBeeswarms = (
       );
   };
 
-  svgBox
+  const svg = svgBox
     .append('svg')
     .attr('width', 600)
-    .attr('id', (d) => 'beeswarm_svg_' + d.id)
-    .style('margin-bottom', '48px')
-    .each(function (data) {
-      // For each rep's data
-      const svg = d3.select(this);
-      if (data.total < MIN_FOR_BEESWARM) {
-        svg.attr('width', 0).attr('height', 0).attr('hidden', true);
-        return;
-      }
+    .attr('id', 'beeswarm_svg_' + repData.id)
+    .style('margin-bottom', '48px');
+  
+  if (repData.total < MIN_FOR_BEESWARM) {
+    // Skip drawing beeswarm.
+    svg.attr('width', 0).attr('height', 0).attr('hidden', true);
+    return;
+  }
+
+
+  // TODO: Need to get rid of "this" perhaps?
+  // No beeswarm_g yet! SO cannot select it.
+
       svg.attr(
         'title',
-        `${data.total} dots representing calls, ordered by time on the x axis`
+        `${repData.total} dots representing calls, ordered by time on the x axis`
       );
-      const initialIssueId = data.topIssues[0].issue_id;
+      const initialIssueId = repData.topIssues[0].issue_id;
       const initialIssueColor = issueColor(initialIssueId);
       const group = svg
         .append('g')
         .attr('aria-hidden', true) // Not useful for screen readers
-        .attr('id', (d) => 'beeswarm_g_' + d.id);
+        .attr('id', 'beeswarm_g_' + repData.id);
       const middle = 300;
       group
         .selectAll('circle')
-        .data(
-          (d) => d.beeswarm,
-          (r) => r.data.id
+        .data(repData.beeswarm,
+          // We've added the 'id' field to the call count to allow for transitions.
+          (r: BeeswarmNode<AggregatedCallCount>) => r.data.id
         )
         .enter()
         .append('circle')
         .attr('stroke', `#fff5`)
-        .attr('cx', (d) => d.x)
-        .attr('cy', (d) => d.y)
-        .attr('r', (d) => d.r)
+        .attr('cx', (d: BeeswarmNode<ContactSummaryData>) => d.x)
+        .attr('cy', (d: BeeswarmNode<ContactSummaryData>) => d.y)
+        .attr('r', (d: BeeswarmNode<ContactSummaryData>) => d.r)
         .style('fill', (d) =>
           d.data.issue_id === initialIssueId ? initialIssueColor : defaultColor
         )
@@ -946,10 +951,9 @@ const drawBeeswarms = (
             .attr('hidden', true);
         });
 
-      const g = document.getElementById('beeswarm_g_' + data.id)!;
-      const height = g.getBBox().height;
+      const height = group.node().getBBox().height;
       const axisHeight = 20;
-      g.setAttribute('transform', `translate(0, -${middle - height / 2 - 1})`);
+      group.attr('transform', `translate(0, -${middle - height / 2 - 1})`);
       svg
         .append('g')
         .attr('id', 'playbackLine')
@@ -960,26 +964,28 @@ const drawBeeswarms = (
         .attr('x1', 0)
         .attr('y0', 0)
         .attr('y1', height);
-      document
-        .getElementById('beeswarm_svg_' + data.id)!
-        .setAttribute('height', height + axisHeight);
+      svg.attr('height', height + axisHeight);
 
       // Add the axis.
-      d3.select(g.parentElement)
-        .append('g')
+      svg.append('g')
         .attr('transform', `translate(0,${height})`)
         .call(
           d3.axisBottom(beeswarmScale)
           .tickSizeOuter(0)
           .ticks(d3.timeDay)
           .tickFormat(d3.timeFormat("%a %-d")));
-    });
 };
 
 interface BeeswarmNode<T> extends d3.SimulationNodeDatum {
+  // Target x
   x0: number;
+  // Target y
   y0: number;
   r: number;
+  // Actual x
+  x: number;
+  // Actual y
+  y: number;
   data: T;
 }
 
@@ -1039,12 +1045,59 @@ class Dashboard extends React.Component<null, State> {
 
   componentDidMount() {
     getUsaSummary().then((usaSummaryData) => {
+      // TODO: Perhaps do some work after USA summary and get location in parallel.
       getLocationSummary().then((repsSummaryData) => {
-        this.setState({
-          usaData: usaSummaryData,
-          repsData: repsSummaryData,
-          isLoading: false
-        });
+        const repsData : ExpandedRepData[] = [];
+        // Add each matched contact, whether or not they have calls.
+        repsSummaryData?.reps.forEach(r => {
+          const expandedResult : ExpandedRepData = {
+            id: r.id,
+            repInfo: r,
+            total: 0,
+            outcomes: [],
+            topIssues: [],
+            callResults: [],
+            beeswarm: [],
+            numVoicemail: 0,
+            percentVM: 0,
+            percentContact: 0,
+            percentUnavailable: 0
+          };
+          // Add the call data, if it exists.
+          const contactSummaryData : ContactSummaryData | undefined = 
+              repsSummaryData.repsData.find(c => c.id === r.id);
+          if (contactSummaryData !== undefined) {
+            expandedResult.total = contactSummaryData.total;
+            expandedResult.outcomes = contactSummaryData.outcomes;
+            expandedResult.topIssues = contactSummaryData.topIssues;
+            expandedResult.callResults = contactSummaryData.aggregatedResults;
+
+            // In-place expand to individual calls.
+            expandRepResults(expandedResult.callResults);
+
+            // Calculate aggregated reachability stats.
+            const vmOutcomes = contactSummaryData.outcomes.find((s) => s.result === 'voicemail');
+            const contactOutcomes = contactSummaryData.outcomes.find((s) => s.result === 'contact');
+            const unavailableOutcomes = contactSummaryData.outcomes.find(
+              (s) => s.result === 'unavailable'
+            );
+            const numVm = !vmOutcomes ? 0 : vmOutcomes.count;
+            const numContact = !contactOutcomes ? 0 : contactOutcomes.count;
+            const numUnavailable = !unavailableOutcomes
+              ? 0
+              : unavailableOutcomes.count;
+            expandedResult.percentVM = numVm / contactSummaryData.total;
+            expandedResult.percentContact = numContact / contactSummaryData.total;
+            expandedResult.percentUnavailable = numUnavailable / contactSummaryData.total;
+            }
+            repsData.push(expandedResult);
+          });
+          // Set the state, which will cause rendering to happen.
+          this.setState({
+            usaData: usaSummaryData,
+            repsData: repsData,
+            isLoading: false
+          });
       });
     });
   }
@@ -1080,40 +1133,53 @@ class Dashboard extends React.Component<null, State> {
       ])
       .domain(topIssueIds);
 
+    const issueIdToName: { [key: number]: string } =
+      usaData.usa.issueCounts.reduce(
+        (agg, row) => {
+          if (!agg[row.issue_id]) {
+            agg[row.issue_id] = row.name;
+          }
+          return agg;
+        },
+        {} as { [key: number]: string }
+      );
+
     interface TabData {
       name: string;
       id: string;
       selected: boolean;
+      drawn: boolean;
     }
 
     const top_tabs: TabData[] = [];
     top_tabs.push({
       name: 'Your reps',
       id: 'your_reps',
-      selected: hasRepsData
+      selected: hasRepsData,
+      drawn: false,
     });
     top_tabs.push({
       name: 'Nationwide',
       id: 'usa',
-      selected: !hasRepsData
+      selected: !hasRepsData,
+      drawn: false
     });
 
     const tabs: TabData[] = [];
     if (this.state.repsData !== null) {
-      const repsData: RepsSummaryData = this.state.repsData;
-      repsData.reps.forEach((r: Contact) =>
+      const repsData: ExpandedRepData[] = this.state.repsData;
+      repsData.forEach((r: ExpandedRepData) =>
         tabs.push({
-          name: r.name,
+          name: r.repInfo.name,
           id: r.id,
-          selected: false
+          selected: false,
+          drawn: false,
         })
       ); // would take their reps directly so can show 0?
       tabs[0].selected = true;
     }
 
-    let usaPaneDrawn = false;
-
-    const handleTopNavClick = function (_, newTab: TabData) {
+    const handleTopNavClick = function(_, newTab: TabData) {
       top_tabs.forEach((t) => (t.selected = false));
       newTab.selected = true;
       topNavButtons
@@ -1122,7 +1188,7 @@ class Dashboard extends React.Component<null, State> {
       d3.selectAll('div.dashboard_card').style('display', 'none');
       if (newTab.id === 'usa') {
         d3.select(`div#card_usa.dashboard_card`).style('display', 'flex');
-        if (!usaPaneDrawn) {
+        if (!top_tabs[1].drawn) {  // TODO: lookup instead of index for less brittle.
           // Draw it the first time it is needed.
           // TODO: Check with PR, DC that this works as expected.
           let initialState: string | null = null;
@@ -1131,7 +1197,7 @@ class Dashboard extends React.Component<null, State> {
             initialState = localStorage.district.split('-')[0];
           }
           drawUsaPane(usaData, initialState, issueColor, duration);
-          usaPaneDrawn = true;
+          top_tabs[1].drawn = true;
         }
         d3.select('div#nav')
           .style('visibility', 'hidden')
@@ -1152,7 +1218,7 @@ class Dashboard extends React.Component<null, State> {
 
     // TODO: Refactor button creation to shared helper?
     const topNavButtons = d3
-      .select('div#topNav')
+      .select('div#topNav') 
       .selectAll('button')
       .data(top_tabs)
       .enter()
@@ -1163,72 +1229,41 @@ class Dashboard extends React.Component<null, State> {
       .html((t: TabData) => t.name);
     topNavButtons.on('click', handleTopNavClick);
 
-    const navButtons = d3
-      .select('div#nav')
-      .selectAll('button')
-      .data(tabs)
-      .enter()
-      .append('button')
-      .attr('role', 'tab')
-      .attr('aria-selected', (t: TabData) => t.selected)
-      .attr('class', (t: TabData) => (t.selected ? 'selected' : null))
-      .html((t: TabData) => t.name);
-    navButtons.on('click', function (_, newTab: TabData) {
-      tabs.forEach((t) => (t.selected = false));
-      newTab.selected = true;
-      navButtons
-        .attr('aria-selected', (t: TabData) => t.selected)
-        .attr('class', (t: TabData) => (t.selected ? 'selected' : null));
-      d3.selectAll('div.dashboard_card').style('display', 'none');
-      d3.select(`div#card_${newTab.id}.dashboard_card`).style(
-        'display',
-        'flex'
-      );
-    });
-
     if (this.state.repsData !== null) {
-      const repsData: RepsSummaryData = this.state.repsData;
-      repsData.repsData.forEach((r) => {
-        // In-place expand to individual calls.
-        expandRepResults(r.aggregatedResults);
-
-        // Pull the rep's info into this item.
-        r.repInfo = repsData.reps.find((s) => s.id === r.id);
-
-        // Add aggregated reachability stats.
-        const vmOutcomes = r.outcomes.find((s) => s.result === 'voicemail');
-        const contactOutcomes = r.outcomes.find((s) => s.result === 'contact');
-        const unavailableOutcomes = r.outcomes.find(
-          (s) => s.result === 'unavailable'
+      const repsData: ExpandedRepData[] = this.state.repsData;
+      const handleRepTabClick = function(_, newTab: TabData) {
+        tabs.forEach((t) => (t.selected = false));
+        newTab.selected = true;
+        navButtons
+          .attr('aria-selected', (t: TabData) => t.selected)
+          .attr('class', (t: TabData) => (t.selected ? 'selected' : null));
+        d3.selectAll('div.dashboard_card').style('display', 'none');
+        d3.select(`div#card_${newTab.id}.dashboard_card`).style(
+          'display',
+          'flex'
         );
-        const numVm = !vmOutcomes ? 0 : vmOutcomes.count;
-        const numContact = !contactOutcomes ? 0 : contactOutcomes.count;
-        const numUnavailable = !unavailableOutcomes
-          ? 0
-          : unavailableOutcomes.count;
-        r.percentVM = numVm / r.total;
-        r.percentContact = numContact / r.total;
-        r.percentUnavailable = numUnavailable / r.total;
-      });
-      const issueIdToName: { [key: number]: string } =
-        usaData.usa.issueCounts.reduce(
-          (agg, row) => {
-            if (!agg[row.issue_id]) {
-              agg[row.issue_id] = row.name;
-            }
-            return agg;
-          },
-          {} as { [key: number]: string }
-        );
-      if (repsData) {
-        drawRepsPane(repsData, Date.now(), issueColor, issueIdToName, duration);
-      }
+        if (!newTab.drawn) {
+          drawRepsPane(repsData.find(r => r.id === newTab.id), Date.now(), issueColor, issueIdToName, duration);
+        }
+      };
+
+      const navButtons = d3
+        .select('div#nav')
+        .selectAll('button')
+        .data(tabs)
+        .enter()
+        .append('button')
+        .attr('role', 'tab')
+        .attr('aria-selected', (t: TabData) => t.selected)
+        .attr('class', (t: TabData) => (t.selected ? 'selected' : null))
+        .html((t: TabData) => t.name);
+      navButtons.on('click', handleRepTabClick);
+
+      handleRepTabClick(null, tabs.find(t => t.selected)!);
     }
-
+  
     d3.selectAll('h3.subtitle_detail').html(`Total calls ${duration}`);
-
     handleTopNavClick(null, top_tabs.find((t) => t.selected)!);
-
     d3.select('div#dashboard-content').style('visibility', 'visible');
 
     // No message.
