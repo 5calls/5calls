@@ -13,6 +13,7 @@ interface SearchState {
   isLoading: boolean;
   isSearchFocused: boolean;
   hasSearched: boolean;
+  hasLoggedSearch: boolean;
 }
 
 const IssueSearch: React.FC<IssueSearchProps> = () => {
@@ -21,7 +22,8 @@ const IssueSearch: React.FC<IssueSearchProps> = () => {
     issues: [],
     isLoading: false,
     isSearchFocused: false,
-    hasSearched: false
+    hasSearched: false,
+    hasLoggedSearch: false
   });
 
   const searchInputRef = useRef<HTMLInputElement>(null);
@@ -37,14 +39,15 @@ const IssueSearch: React.FC<IssueSearchProps> = () => {
 
   // Debounced search term tracking
   useEffect(() => {
-    if (state.searchTerm.length >= 3) {
+    if (state.searchTerm.length >= 3 && !state.hasLoggedSearch) {
       const timeoutId = setTimeout(() => {
         postSearchTerm(state.searchTerm);
+        setState((prev) => ({ ...prev, hasLoggedSearch: true }));
       }, 1000); // Wait 1 second after user stops typing
 
       return () => clearTimeout(timeoutId);
     }
-  }, [state.searchTerm]);
+  }, [state.searchTerm, state.hasLoggedSearch]);
 
   const fetchIssues = async (): Promise<Issue[]> => {
     const response = await axios.get<Issue[]>(Constants.ISSUES_API_URL);
@@ -91,7 +94,8 @@ const IssueSearch: React.FC<IssueSearchProps> = () => {
     setState((prev) => ({
       ...prev,
       searchTerm: '',
-      isSearchFocused: false
+      isSearchFocused: false,
+      hasLoggedSearch: false
     }));
     if (searchInputRef.current) {
       searchInputRef.current.blur();
@@ -138,6 +142,7 @@ const IssueSearch: React.FC<IssueSearchProps> = () => {
           onFocus={handleSearchFocus}
           onBlur={handleSearchBlur}
           className="i-bar-search-input"
+          maxLength={30}
         />
         {state.searchTerm && (
           <button
