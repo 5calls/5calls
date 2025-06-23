@@ -391,10 +391,6 @@ const drawUsaMap = (
       .attr('stroke-width', 1)
       .attr('stroke-linecap', 'round')
       .style('cursor', 'pointer')
-      // .attr('aria-label', d => {
-      //   const topIssueId = summaryResults.find(state => state.state_geo_id === d.id).top_issue_id;
-      //   return d.properties.name + ': ' + issues.get(topIssueId).name;
-      // })
       .attr('id', (d: Feature) => 'state_' + d.id)
       .attr('fill', defaultColor)
       .attr('d', path)
@@ -820,18 +816,18 @@ const drawBeeswarm = (
         // We assume data has the oldest element first.
         for (let i = beeswarm.length - 1; i >= 0; i--) {
           const item = beeswarm[i];
-          // Skip things rendered too early. TODO: Just start earlier instead.
+          // Skip things rendered too early. TODO: Maybe just start earlier instead.
           if (item.x < 0) {
             continue;
           }
           // 600 width / 85 -> about one second per day
           const timeOffsetSeconds = item.x / 85; // x0 is the preferred offset, x is where it is rendered.
           const freq = 300 + (item.data.issue_id % 25) * 10; // TODO: Better to map based on the whole set of issues.
-          // TOD: Change amplitude depending on if issueID is selected.
+          // TOD: Change amplitude depending on if issueID is selected (needs knowledge of selection!)
           playTone(freq, timeOffsetSeconds);
         }
-        beeswarmScale.ticks().forEach((t) => {
-          playTone(212, beeswarmScale(t) / 85);
+        beeswarmScale.ticks().forEach((tick: number) => {
+          playTone(212, beeswarmScale(tick) / 85);
         });
         playBackgroundTone(600 / 85);
         startAudioTime = context.currentTime;
@@ -886,7 +882,7 @@ const drawBeeswarm = (
     dot: BeeswarmNode<AggregatedCallCount>
   ) {
     // Deselect everything else.
-    d3.selectAll(`svg#beeswarm_svg_${repData.id}`).attr('stroke', `#fff5`);
+    d3.select(`svg#beeswarm_svg_${repData.id}`).selectAll('circle').attr('stroke', `#fff5`);
 
     // Bring selected dot to front
     this.parentElement.appendChild(this);
@@ -1249,6 +1245,7 @@ class Dashboard extends React.Component<null, State> {
             'flex'
           );
         } else {
+          document.getElementById('location_picker')!.removeAttribute('hidden');
           // TODO: Show information about how to set a location within 5calls. Handle location clicks.
         }
       }
@@ -1287,6 +1284,7 @@ class Dashboard extends React.Component<null, State> {
           'display',
           'flex'
         );
+        // Ensure it's only drawn once.
         if (!newTab.drawn) {
           drawRepsPane(
             repsData.find((r) => r.id === newTab.id)!,
@@ -1295,6 +1293,7 @@ class Dashboard extends React.Component<null, State> {
             issueIdToName,
             duration
           );
+          newTab.drawn = true;
         }
       };
 
