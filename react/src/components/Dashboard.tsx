@@ -233,6 +233,9 @@ const drawUsaMap = (
       );
       if (stateResult) {
         d.id = stateResult.id;
+      } else {
+        // ID must not start with a number, which it does if the state data is missing and ID was not overwritten.
+        d.id = '_' + d.id;
       }
     });
 
@@ -323,7 +326,7 @@ const drawUsaMap = (
       d3.select('div#state_map_label').attr('hidden', true);
       if (selectedState !== null) {
         d3.select('select#state_select')
-          .selectAll(`option#${selectedState}`)
+          .selectAll(`option#_${selectedState}`)
           .attr('selected', null);
         group
           .select(`path#state_${selectedState}`)
@@ -533,9 +536,14 @@ const drawRepsPane = (
       `${repData.repInfo.party} from ${repData.repInfo.area === 'US House' ? localStorage.district : repData.repInfo.state}`
     );
 
-  const reachability = leftSide.append('div').attr('class', 'reachability');
-
   const repDetail = repCard.append('div').attr('class', 'detail');
+  if (repData.total == 0) {
+    repDetail.append('div').html(`There were no calls to ${repData.repInfo.name} recorded via 5 Calls ${duration}. Make your voice heard: see <a href="/all">all active issues</a>.`)
+    return;
+  }
+
+  // At this point, this rep does have at least 1 call made to them.
+
   repDetail
     .append('h3')
     .attr('class', 'detail_title')
@@ -561,6 +569,7 @@ const drawRepsPane = (
 
   const pieSize = 60;
   const size = 40;
+  const reachability = leftSide.append('div').attr('class', 'reachability');
   reachability.append('h3').attr('class', 'detail_title').html('Reachability');
   reachability
     .append('div')
@@ -641,7 +650,7 @@ const drawRepsPane = (
     if (repData.total >= MIN_FOR_BEESWARM) {
       repData.beeswarm = beeswarmForce()
         .y(300)
-        .x((e) => beeswarmScale(new Date(e.time * 1000))) // seconds since epoch --> ms
+        .x((e: AggregatedCallCount) => beeswarmScale(new Date(e.time * 1000))) // seconds since epoch --> ms
         .r(
           repData.total > 500
             ? 3
@@ -751,6 +760,8 @@ const drawRepsPane = (
   }, 0);
 };
 
+/* ---- Beeswarm methods ---- */
+
 const drawBeeswarm = (
   repDetail: d3.Selection,
   repData: ExpandedRepData,
@@ -781,57 +792,8 @@ const drawBeeswarm = (
     .on('click', function () {
       d3.selectAll('input#sonify_btn').attr('disabled', true);
 
-      // Thanks ChatGPT for the help with sonification.
-      let startAudioTime = 0;
+      const startAudioTime = 0;
       const context = new (window.AudioContext || window.webkitAudioContext)();
-      const playTone = (frequency: number, offsetSeconds: number) => {
-        const oscillator = context.createOscillator();
-        const gainNode = context.createGain();
-
-        oscillator.type = 'sine';
-        oscillator.frequency.setValueAtTime(frequency, context.currentTime);
-
-        oscillator.connect(gainNode);
-        gainNode.connect(context.destination);
-
-        gainNode.gain.setValueAtTime(0.2, context.currentTime + offsetSeconds);
-        oscillator.start(context.currentTime + offsetSeconds);
-        oscillator.stop(context.currentTime + offsetSeconds + 0.15);
-      };
-      const playBackgroundTone = (durationSeconds: number) => {
-        const droneOsc = context.createOscillator();
-        const droneGain = context.createGain();
-
-        droneOsc.type = 'triangle'; // Some texture
-        droneOsc.frequency.setValueAtTime(220, context.currentTime); // Low tone
-        droneGain.gain.setValueAtTime(0.05, context.currentTime); // Subtle volume
-
-        droneOsc.connect(droneGain);
-        droneGain.connect(context.destination);
-
-        droneOsc.start(context.currentTime);
-        droneOsc.stop(context.currentTime + durationSeconds);
-      };
-      const playData = (beeswarm: BeeswarmNode<AggregatedCallCount>[]) => {
-        // We assume data has the oldest element first.
-        for (let i = beeswarm.length - 1; i >= 0; i--) {
-          const item = beeswarm[i];
-          // Skip things rendered too early. TODO: Maybe just start earlier instead.
-          if (item.x < 0) {
-            continue;
-          }
-          // 600 width / 85 -> about one second per day
-          const timeOffsetSeconds = item.x / 85; // x0 is the preferred offset, x is where it is rendered.
-          const freq = 300 + (item.data.issue_id % 25) * 10; // TODO: Better to map based on the whole set of issues.
-          // TOD: Change amplitude depending on if issueID is selected (needs knowledge of selection!)
-          playTone(freq, timeOffsetSeconds);
-        }
-        beeswarmScale.ticks().forEach((tick: number) => {
-          playTone(212, beeswarmScale(tick) / 85);
-        });
-        playBackgroundTone(600 / 85);
-        startAudioTime = context.currentTime;
-      };
       const animateD3Update = () => {
         const now = context.currentTime;
         const elapsed = now - startAudioTime;
@@ -855,7 +817,7 @@ const drawBeeswarm = (
         .selectAll('g#playbackLine')
         .select('line')
         .attr('stroke', 'red');
-      playData(repData.beeswarm);
+      playData(context, repData.beeswarm, beeswarmScale);
       requestAnimationFrame(animateD3Update);
     });
   paragraph
@@ -872,17 +834,22 @@ const drawBeeswarm = (
     .attr('class', 'issue_long_name');
   // TODO maybe append close button if clicking makes it stay up.
 
-  const dateFormatter = new Intl.DateTimeFormat('en-US', {
-    month: 'short',
-    day: 'numeric'
-  });
-
+  /**
+   * Called when a dot on the beeswarm chart is selected by hover or click.
+   * @param _ The event that caused the dot to be selected
+   * @param dot The beeswarm node that was selected
+   */
   const selectDot = function (
     _: Event,
     dot: BeeswarmNode<AggregatedCallCount>
   ) {
+    const dateFormatter = new Intl.DateTimeFormat('en-US', {
+      month: 'short',
+      day: 'numeric'
+    });
+    
     // Deselect everything else.
-    d3.select(`svg#beeswarm_svg_${repData.id}`).selectAll('circle').attr('stroke', `#fff5`);
+    d3.select(this.parentElement).selectAll('circle').attr('stroke', `#fff5`);
 
     // Bring selected dot to front
     this.parentElement.appendChild(this);
@@ -948,9 +915,9 @@ const drawBeeswarm = (
     .enter()
     .append('circle')
     .attr('stroke', `#fff5`)
-    .attr('cx', (d: BeeswarmNode<ContactSummaryData>) => d.x)
-    .attr('cy', (d: BeeswarmNode<ContactSummaryData>) => d.y)
-    .attr('r', (d: BeeswarmNode<ContactSummaryData>) => d.r)
+    .attr('cx', (d: BeeswarmNode<AggregatedCallCount>) => d.x)
+    .attr('cy', (d: BeeswarmNode<AggregatedCallCount>) => d.y)
+    .attr('r', (d: BeeswarmNode<AggregatedCallCount>) => d.r)
     .style('fill', (d: BeeswarmNode<AggregatedCallCount>) =>
       d.data.issue_id === initialIssueId ? initialIssueColor : defaultColor
     )
@@ -1051,6 +1018,66 @@ function beeswarmForce<T>() {
 
   return beeswarm;
 }
+
+/* ---- End beeswarm methods ---- */
+
+
+/* ---- Sonification methods ---- */
+// Thanks ChatGPT for the help with sonification.
+
+const playTone = (context: AudioContext, frequency: number, offsetSeconds: number) => {
+  const oscillator = context.createOscillator();
+  const gainNode = context.createGain();
+
+  oscillator.type = 'sine';
+  oscillator.frequency.setValueAtTime(frequency, context.currentTime);
+
+  oscillator.connect(gainNode);
+  gainNode.connect(context.destination);
+
+  gainNode.gain.setValueAtTime(0.2, context.currentTime + offsetSeconds);
+  oscillator.start(context.currentTime + offsetSeconds);
+  oscillator.stop(context.currentTime + offsetSeconds + 0.15);
+};
+
+const playBackgroundTone = (context: AudioContext, durationSeconds: number) => {
+  const droneOsc = context.createOscillator();
+  const droneGain = context.createGain();
+
+  droneOsc.type = 'triangle'; // Some texture
+  droneOsc.frequency.setValueAtTime(220, context.currentTime); // Low tone
+  droneGain.gain.setValueAtTime(0.05, context.currentTime); // Subtle volume
+
+  droneOsc.connect(droneGain);
+  droneGain.connect(context.destination);
+
+  droneOsc.start(context.currentTime);
+  droneOsc.stop(context.currentTime + durationSeconds);
+};
+
+const playData = (context: AudioContext, beeswarm: BeeswarmNode<AggregatedCallCount>[], 
+    beeswarmScale: d3.ScaleTime<number, number>) => {
+  // We assume data has the oldest element first.
+  for (let i = beeswarm.length - 1; i >= 0; i--) {
+    const item = beeswarm[i];
+    // Skip things rendered too early. TODO: Maybe just start earlier instead.
+    if (item.x < 0) {
+      continue;
+    }
+    // 600 width / 85 -> about one second per day
+    const timeOffsetSeconds = item.x / 85; // x0 is the preferred offset, x is where it is rendered.
+    const freq = 300 + (item.data.issue_id % 25) * 10; // TODO: Better to map based on the whole set of issues.
+    // TOD: Change amplitude depending on if issueID is selected (needs knowledge of selection!)
+    playTone(context, freq, timeOffsetSeconds);
+  }
+  beeswarmScale.ticks().forEach((tick: number) => {
+    playTone(context, 212, beeswarmScale(tick) / 85);
+  });
+  playBackgroundTone(context, 600 / 85);
+  return context.currentTime;
+};
+
+/* ---- End sonification methods ---- */
 
 class Dashboard extends React.Component<null, State> {
   _defaultUsa: RegionSummaryData = {
@@ -1204,7 +1231,7 @@ class Dashboard extends React.Component<null, State> {
           selected: false,
           drawn: false
         })
-      ); // would take their reps directly so can show 0?
+      );
       tabs[0].selected = true;
     }
 
