@@ -782,6 +782,63 @@ const drawBeeswarm = (
   description
     .append('h3')
     .html(`All calls to ${repData.repInfo.name} about this issue ${duration}`);
+
+  let renderFrameId: number | null = null;
+  let audioContext: AudioContext | null = null;
+
+  const startSonification = function () {
+    d3.selectAll('input#sonify_btn')
+      .on('click', stopSonification)
+      .style('outline', `1px solid var(--c-red)`);
+    const startAudioTime = 0;
+    audioContext = new (window.AudioContext || window.webkitAudioContext)();
+    const animateD3Update = () => {
+      const now = audioContext!.currentTime;
+      const elapsed = now - startAudioTime;
+      const expectedTotal = 600 / 85;
+      const currentProgress = elapsed / expectedTotal;
+      if (currentProgress >= 1) {
+        // Playback is complete.
+        d3.select('svg#beeswarm_svg_' + repData.id)
+          .selectAll('g#playbackLine')
+          .select('line')
+          .attr('stroke', 'none');
+        d3.selectAll('input#sonify_btn')
+          .on('click', startSonification)
+          .style('outline', '1px solid white');
+        return;
+      }
+      d3.select('svg#beeswarm_svg_' + repData.id)
+        .selectAll('g#playbackLine')
+        .attr('transform', `translate(${currentProgress * 600}, 0)`);
+      renderFrameId = requestAnimationFrame(animateD3Update);
+    };
+    d3.select('svg#beeswarm_svg_' + repData.id)
+      .selectAll('g#playbackLine')
+      .select('line')
+      .attr('stroke', 'red');
+    playData(audioContext, repData.beeswarm, beeswarmScale);
+    renderFrameId = requestAnimationFrame(animateD3Update);
+  };
+
+  const stopSonification = function () {
+    if (renderFrameId) {
+      cancelAnimationFrame(renderFrameId);
+      renderFrameId = null;
+    }
+    if (audioContext) {
+      audioContext.close();
+      audioContext = null;
+    }
+    d3.select('svg#beeswarm_svg_' + repData.id)
+      .selectAll('g#playbackLine')
+      .select('line')
+      .attr('stroke', 'none');
+    d3.selectAll('input#sonify_btn')
+      .on('click', startSonification)
+      .style('outline', '1px solid white');
+  };
+
   const paragraph = description.append('p');
   paragraph
     .append('span')
@@ -793,37 +850,7 @@ const drawBeeswarm = (
     .attr('type', 'button')
     .attr('id', 'sonify_btn')
     .attr('value', 'listen')
-    .on('click', function () {
-      d3.selectAll('input#sonify_btn').attr('disabled', true);
-
-      const startAudioTime = 0;
-      const context = new (window.AudioContext || window.webkitAudioContext)();
-      const animateD3Update = () => {
-        const now = context.currentTime;
-        const elapsed = now - startAudioTime;
-        const expectedTotal = 600 / 85;
-        const currentProgress = elapsed / expectedTotal;
-        if (currentProgress >= 1) {
-          // Playback is complete.
-          d3.select('svg#beeswarm_svg_' + repData.id)
-            .selectAll('g#playbackLine')
-            .select('line')
-            .attr('stroke', 'none');
-          d3.selectAll('input#sonify_btn').attr('disabled', null);
-          return;
-        }
-        d3.select('svg#beeswarm_svg_' + repData.id)
-          .selectAll('g#playbackLine')
-          .attr('transform', `translate(${currentProgress * 600}, 0)`);
-        requestAnimationFrame(animateD3Update);
-      };
-      d3.select('svg#beeswarm_svg_' + repData.id)
-        .selectAll('g#playbackLine')
-        .select('line')
-        .attr('stroke', 'red');
-      playData(context, repData.beeswarm, beeswarmScale);
-      requestAnimationFrame(animateD3Update);
-    });
+    .on('click', startSonification);
   paragraph
     .append('span')
     .html(` to this chart. Your calls make a difference.`);
