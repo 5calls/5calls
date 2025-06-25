@@ -538,7 +538,11 @@ const drawRepsPane = (
 
   const repDetail = repCard.append('div').attr('class', 'detail');
   if (repData.total == 0) {
-    repDetail.append('div').html(`There were no calls to ${repData.repInfo.name} recorded via 5 Calls ${duration}. Make your voice heard: see <a href="/all">all active issues</a>.`)
+    repDetail
+      .append('div')
+      .html(
+        `There were no calls to ${repData.repInfo.name} recorded via 5 Calls ${duration}. Make your voice heard: see <a href="/all">all active issues</a>.`
+      );
     return;
   }
 
@@ -847,7 +851,7 @@ const drawBeeswarm = (
       month: 'short',
       day: 'numeric'
     });
-    
+
     // Deselect everything else.
     d3.select(this.parentElement).selectAll('circle').attr('stroke', `#fff5`);
 
@@ -1021,11 +1025,14 @@ function beeswarmForce<T>() {
 
 /* ---- End beeswarm methods ---- */
 
-
 /* ---- Sonification methods ---- */
 // Thanks ChatGPT for the help with sonification.
 
-const playTone = (context: AudioContext, frequency: number, offsetSeconds: number) => {
+const playTone = (
+  context: AudioContext,
+  frequency: number,
+  offsetSeconds: number
+) => {
   const oscillator = context.createOscillator();
   const gainNode = context.createGain();
 
@@ -1055,8 +1062,11 @@ const playBackgroundTone = (context: AudioContext, durationSeconds: number) => {
   droneOsc.stop(context.currentTime + durationSeconds);
 };
 
-const playData = (context: AudioContext, beeswarm: BeeswarmNode<AggregatedCallCount>[], 
-    beeswarmScale: d3.ScaleTime<number, number>) => {
+const playData = (
+  context: AudioContext,
+  beeswarm: BeeswarmNode<AggregatedCallCount>[],
+  beeswarmScale: d3.ScaleTime<number, number>
+) => {
   // We assume data has the oldest element first.
   for (let i = beeswarm.length - 1; i >= 0; i--) {
     const item = beeswarm[i];
