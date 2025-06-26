@@ -46,6 +46,7 @@ const hoverColor = `rgba(2, 63, 159, .05)`;
 const selectedStateStroke = 'rgba(255, 217, 52)';
 const USA_TOPOJSON = 'https://cdn.jsdelivr.net/npm/us-atlas@2/us/10m.json';
 const MIN_FOR_BEESWARM = 7;
+const MAX_FOR_SONIFICATION = 2000;
 
 const drawStateLabel = (
   parentState: SVGGraphicsElement,
@@ -524,11 +525,16 @@ const drawRepsPane = (
     .attr('src', repData.repInfo.photoURL)
     .style('float', 'left')
     .attr('alt', '');
-  const nameSubtitleSection = totalSubtitle.append('div');
-  nameSubtitleSection
+  const nameSubtitleSection = totalSubtitle.append('div').style('width', '241px');
+  const nameDiv = nameSubtitleSection
     .append('div')
     .attr('class', 'subtitle_main')
-    .html(`${repData.repInfo.name}`);
+    .html(`${repData.repInfo.name}`).node();
+  let fontSize = 33;
+  // Example long name case: FL-25's house rep.
+  while (nameDiv.scrollWidth > nameDiv.clientWidth) {
+    nameDiv.style.fontSize = `${fontSize--}px`;
+  }
   nameSubtitleSection
     .append('div')
     .attr('class', '')
@@ -843,17 +849,25 @@ const drawBeeswarm = (
   paragraph
     .append('span')
     .html(
-      'One dot represents one call. Tap an issue in the list above to highlight those calls visually, or '
+      'One dot represents one call. Tap an issue in the list above to highlight those calls visually'
     );
-  paragraph
-    .append('input')
-    .attr('type', 'button')
-    .attr('id', 'sonify_btn')
-    .attr('value', 'listen')
-    .on('click', startSonification);
-  paragraph
-    .append('span')
-    .html(` to this chart. Your calls make a difference.`);
+  if (repData.total <= MAX_FOR_SONIFICATION) {
+    // Only add button to listen if there's a reasonable number of calls. Otherwise it's just
+    // way too noisy.
+    paragraph.append('span').html(', or ');
+    paragraph
+      .append('input')
+      .attr('type', 'button')
+      .attr('id', 'sonify_btn')
+      .attr('value', 'listen')
+      .on('click', startSonification);
+    paragraph
+      .append('span')
+      .html(' to this chart.');
+  } else {
+    paragraph.append('span').html('. ');
+  }
+  paragraph.append('span').html('Your calls make a difference.');
 
   const svgBox = repDetail.append('div').style('position', 'relative');
   svgBox
@@ -917,7 +931,7 @@ const drawBeeswarm = (
     .append('svg')
     .attr('width', 600)
     .attr('id', 'beeswarm_svg_' + repData.id)
-    .style('margin-bottom', '48px');
+    .style('margin-bottom', '1.5rem');
 
   if (repData.total < MIN_FOR_BEESWARM) {
     // Skip drawing beeswarm.

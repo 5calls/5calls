@@ -27,7 +27,10 @@
       </div>
       <div class="detail">
         <h3 class="detail_title">Top 5 calls this week</h3>
-        <div class="description">The five most-called issues in the past week recorded with 5 Calls and the number of calls for each during the week.</div>
+        <div class="description">
+          The five most-called issues this week as recorded with 5 Calls and the call count for each
+          in that time.
+        </div>
         <ol id="top_five_all_holder">
       </div>
       <div id="state_map_section">
@@ -37,7 +40,9 @@
               <option id="none">Select a state</option>
             </select>
           </h3>
-          <div class="description">The most called issue in each state in the past week, as recorded with 5 Calls</div>
+          <div class="description">
+            The most called issue in each state in the past week, as recorded with 5 Calls
+          </div>
         </div>
        
         <div id="state_map_label" class="overlayBox label absolute" hidden>
@@ -61,15 +66,20 @@
           </div>
         </div>      
       </div>
+
       <div class="detail" id="state_detail" hidden>
         <h3 id="state_detail_title"></h3>
-        <div class="description">The five most-called issues in the past week in the state as recorded via 5Calls and the number of calls for each during the week.</div>
+        <div class="description">
+          The five most-called issues this week in the state as recorded with 5 Calls and the
+          call count for each in that time.
+        </div>
         <ol id="top_five_state_holder">
       </div>
     </div>
-   <!-- TODO: Put the location picker here. -->
+
     <div id="location_picker" hidden>
-      <div>After setting your location, refresh this page. (Placeholder functionality!)</div>
+     <!-- TODO: Put the proper location picker here. -->
+     <div>After setting your location, refresh this page. (Placeholder functionality!)</div>
       <div class="i-bar-location" id="react-location">
         <div>
           <span>&nbsp;</span>
@@ -81,11 +91,16 @@
   
     <div id="reps_section"></div>
   </div>
+
   <footer>
-    This data is from calls recorded by people using 5calls.org or the 5 Calls Android and iOS apps
-    to tally their call results. It does not reflect every call made to Congress nationwide. Data is not
-    guaranteed to be accurate but we hope it is a reflection of public interest across the country.
+    <p>This data is from calls recorded by people using 5calls.org or the 5 Calls Android and iOS apps
+    to tally their call results. It does not reflect every call made to Congress nationwide.
+    User-generated data is not guaranteed to be accurate but we hope it is a reflection of public
+    interest across the country.</p>
+    <p>Each time a person shares their call result for an issue, 5 Calls knows which representative
+    was called, what they were called about, and whether their office was able to take the call, 
+    whether it went to voicemail, or whether they were unavailable. In aggregate, these statistics
+    can give a view into public interest across the country.</p>
   </footer>
-  </div>
 </div>
 {{ end }}

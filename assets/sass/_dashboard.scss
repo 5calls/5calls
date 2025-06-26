@@ -83,7 +83,7 @@
     align-items: flex-start;
     justify-content: space-around;
     margin: 1rem;
-    max-width: 1000px;
+    max-width: 72rem;
     margin-left: auto;
     margin-right: auto;
   }
@@ -91,19 +91,15 @@
   .subtitle {
     background: #eee;
     padding: 1.125rem 1.5rem 1.5rem;
-    text-align: left;
+    display: flex;
+    align-items: center;
   }
   
-  /* TODO: resize subtitle depending on text length; eventually wrap.
-     Example worst case: FL-25. For now, allow wrapping. */
   .subtitle .subtitle_main {
     /* Todo: this cannot be nowrap and also 33 rem. */
     font-size: calc(33rem / var(--base-font-size));
-    /* font-size: clamp(1rem, 5vw, 33rem / var(--base-font-size)); */
-    /* font-size: 5cqw; */
-    /* container-type: inline-size; */
     line-height: 1.1;
-    /* text-wrap: nowrap; */
+    white-space: nowrap;
   }
   
   .subtitle_detail {
@@ -276,8 +272,8 @@
     height: 48px;
     border-radius: 50%;
     object-fit: cover;
-    float: left;
-    border: 3px solid white;
+    border: 3px solid var(--c-dark);
+    background-color: #888;
   }
   
   .rep_call_count {
