@@ -525,11 +525,14 @@ const drawRepsPane = (
     .attr('src', repData.repInfo.photoURL)
     .style('float', 'left')
     .attr('alt', '');
-  const nameSubtitleSection = totalSubtitle.append('div').style('width', '241px');
+  const nameSubtitleSection = totalSubtitle
+    .append('div')
+    .style('width', '241px');
   const nameDiv = nameSubtitleSection
     .append('div')
     .attr('class', 'subtitle_main')
-    .html(`${repData.repInfo.name}`).node();
+    .html(`${repData.repInfo.name}`)
+    .node();
   let fontSize = 33;
   // Example long name case: FL-25's house rep.
   while (nameDiv.scrollWidth > nameDiv.clientWidth) {
@@ -861,9 +864,7 @@ const drawBeeswarm = (
       .attr('id', 'sonify_btn')
       .attr('value', 'listen')
       .on('click', startSonification);
-    paragraph
-      .append('span')
-      .html(' to this chart.');
+    paragraph.append('span').html(' to this chart.');
   } else {
     paragraph.append('span').html('. ');
   }
