@@ -3,7 +3,6 @@ import * as d3 from 'd3';
 import * as topojson from 'topojson-client';
 import { Feature } from 'geojson';
 import {
-  AggregatedCallCount,
   ContactSummaryData,
   getLocationSummary,
   getUsaSummary,
@@ -15,14 +14,22 @@ import {
 import { Contact } from '../common/models/contact';
 import { LOCAL_STORAGE_KEYS } from '../common/constants';
 
+interface BeeswarmCallCount {
+  issue_id: number;
+  count: number;
+  time: number;
+  id: number;
+  selected: boolean;
+}
+
 interface ExpandedRepData {
   id: string;
   repInfo: Contact;
   total: number;
   outcomes: OutcomeSummaryData[];
   topIssues: IssueCountData[];
-  callResults: AggregatedCallCount[];
-  beeswarm: BeeswarmNode<AggregatedCallCount>[];
+  callResults: BeeswarmCallCount[];
+  beeswarm: BeeswarmNode<BeeswarmCallCount>[];
   numVoicemail: number;
   percentVM: number;
   percentContact: number;
@@ -196,6 +203,14 @@ const drawTopFiveIssues = (
   const issueBar = issueBarSvg.append('g').attr('aria-hidden', true);
   issueBar
     .append('rect')
+    .attr('width', rowWidth)
+    .attr('height', 8)
+    .attr('y', 0)
+    .attr('x', 0)
+    .attr('fill', defaultColor)
+    .attr('stroke', '#555');
+  issueBar
+    .append('rect')
     .attr('width', 0)
     .attr('height', 8)
     .attr('y', 0)
@@ -205,14 +220,6 @@ const drawTopFiveIssues = (
     .delay(500)
     .duration(1000)
     .attr('width', (d: IssueCountData) => (d.count / total) * rowWidth);
-  issueBar
-    .append('rect')
-    .attr('width', rowWidth)
-    .attr('height', 8)
-    .attr('y', 0)
-    .attr('x', 0)
-    .attr('fill', '#fff0')
-    .attr('stroke', '#555');
 };
 
 const drawUsaMap = (
@@ -474,21 +481,21 @@ const drawUsaMap = (
   });
 };
 
-const expandRepResults = (results: AggregatedCallCount[]) => {
-  const addedPoints: AggregatedCallCount[] = [];
+const expandRepResults = (results: BeeswarmCallCount[]) => {
+  const addedPoints: BeeswarmCallCount[] = [];
   // Add a unique ID for the D3 animation later.
   let indexForId = 0;
   results.forEach((r) => {
-    // TODO: Would be better to cast to another type rather than adding the ID field.
-
     // Add an ID for this point, and subsequent IDs for its expanded points.
     r.id = indexForId++;
+    r.selected = false;
     for (let i = 1; i < r.count; i++) {
       // Expand the data based on the count to create enough dots.
       addedPoints.push({
         time: r.time,
         issue_id: r.issue_id,
         count: 1,
+        selected: false,
         id: indexForId++
       });
     }
@@ -663,7 +670,7 @@ const drawRepsPane = (
     if (repData.total >= MIN_FOR_BEESWARM) {
       repData.beeswarm = beeswarmForce()
         .y(300)
-        .x((e: AggregatedCallCount) => beeswarmScale(new Date(e.time * 1000))) // seconds since epoch --> ms
+        .x((e: BeeswarmCallCount) => beeswarmScale(new Date(e.time * 1000))) // seconds since epoch --> ms
         .r(
           repData.total > 500
             ? 3
@@ -693,26 +700,24 @@ const drawRepsPane = (
     topFiveRow
       .on('pointerover', function (_: Event, d: IssueCountData) {
         if (selectedIssueId !== d.issue_id) {
+          repData.beeswarm.forEach(b => b.data.selected = b.data.issue_id === selectedIssueId || b.data.issue_id === d.issue_id);
           d3.select(this).style('background-color', hoverColor);
           d3.select(this.parentNode.parentNode.parentNode)
             .selectAll('circle')
             .data(
               repData.beeswarm,
-              (b: BeeswarmNode<AggregatedCallCount>) => b.data.id
+              (b: BeeswarmNode<BeeswarmCallCount>) => b.data.id
             )
             .transition()
             .delay(0)
-            .style('fill', (b: BeeswarmNode<AggregatedCallCount>) =>
-              b.data.issue_id === selectedIssueId
-                ? issueColor(selectedIssueId)
-                : b.data.issue_id === d.issue_id
-                  ? `${issueColor(d.issue_id)}`
-                  : '#ccc'
-            );
+            .style('fill', (d: BeeswarmNode<BeeswarmCallCount>) =>
+              d.data.selected ? issueColor(d.data.issue_id) : defaultColor
+            )
         }
       })
       .on('click', function (_, d: IssueCountData) {
         if (selectedIssueId === d.issue_id) {
+          repData.beeswarm.forEach(b => b.data.selected = false);
           // deselect
           selectedIssueId = null;
           d3.select(this).style('background-color', hoverColor);
@@ -720,14 +725,16 @@ const drawRepsPane = (
             .selectAll('circle')
             .data(
               repData.beeswarm,
-              (b: BeeswarmNode<AggregatedCallCount>) => b.data.id
+              (b: BeeswarmNode<BeeswarmCallCount>) => b.data.id
             )
-            .transition()
-            .delay(0)
-            .style('fill', '#ccc');
+            .transition().delay(0)
+            .style('fill', (d: BeeswarmNode<BeeswarmCallCount>) =>
+              d.data.selected ? issueColor(d.data.issue_id) : defaultColor
+            );
         } else {
           // select
           selectedIssueId = d.issue_id;
+          repData.beeswarm.forEach(b => b.data.selected = b.data.issue_id === selectedIssueId);
           d3.select(topFiveHolderSelector)
             .selectAll('li.top_five')
             .style('background-color', '#fff');
@@ -736,32 +743,27 @@ const drawRepsPane = (
             .selectAll('circle')
             .data(
               repData.beeswarm,
-              (b: BeeswarmNode<AggregatedCallCount>) => b.data.id
+              (b: BeeswarmNode<BeeswarmCallCount>) => b.data.id
             )
-            .transition()
-            .delay(0)
-            .style('fill', (b: BeeswarmNode<AggregatedCallCount>) =>
-              b.data.issue_id === selectedIssueId
-                ? issueColor(selectedIssueId)
-                : '#ccc'
+            .transition().delay(0)
+            .style('fill', (d: BeeswarmNode<BeeswarmCallCount>) =>
+              d.data.selected ? issueColor(d.data.issue_id) : defaultColor
             );
         }
       })
       .on('pointerout', function (_, d: IssueCountData) {
         if (selectedIssueId !== d.issue_id) {
+          repData.beeswarm.forEach(b => b.data.selected = b.data.issue_id === selectedIssueId);
           d3.select(this).style('background-color', '#fff');
           d3.select(this.parentNode.parentNode.parentNode)
             .selectAll('circle')
             .data(
               repData.beeswarm,
-              (b: BeeswarmNode<AggregatedCallCount>) => b.data.id
+              (b: BeeswarmNode<BeeswarmCallCount>) => b.data.id
             )
-            .transition()
-            .delay(0)
-            .style('fill', (b: BeeswarmNode<AggregatedCallCount>) =>
-              b.data.issue_id === selectedIssueId
-                ? issueColor(selectedIssueId)
-                : '#ccc'
+            .transition().delay(0)
+            .style('fill', (d: BeeswarmNode<BeeswarmCallCount>) =>
+              d.data.selected ? issueColor(d.data.issue_id) : defaultColor
             );
         }
       });
@@ -864,7 +866,7 @@ const drawBeeswarm = (
       .attr('id', 'sonify_btn')
       .attr('value', 'listen')
       .on('click', startSonification);
-    paragraph.append('span').html(' to this chart.');
+    paragraph.append('span').html(' to this chart. ');
   } else {
     paragraph.append('span').html('. ');
   }
@@ -887,7 +889,7 @@ const drawBeeswarm = (
    */
   const selectDot = function (
     _: Event,
-    dot: BeeswarmNode<AggregatedCallCount>
+    dot: BeeswarmNode<BeeswarmCallCount>
   ) {
     const dateFormatter = new Intl.DateTimeFormat('en-US', {
       month: 'short',
@@ -942,10 +944,10 @@ const drawBeeswarm = (
 
   svg.attr(
     'title',
-    `${repData.total} dots representing calls, ordered by time on the x axis`
+    `${repData.total} dots representing calls, ordered by time on the x axis.`
   );
   const initialIssueId = repData.topIssues[0].issue_id;
-  const initialIssueColor = issueColor(initialIssueId);
+  repData.beeswarm.forEach(b => b.data.selected = b.data.issue_id === initialIssueId);
   const group = svg
     .append('g')
     .attr('aria-hidden', true) // Not useful for screen readers
@@ -956,17 +958,15 @@ const drawBeeswarm = (
     .data(
       repData.beeswarm,
       // We've added the 'id' field to the call count to allow for transitions.
-      (r: BeeswarmNode<AggregatedCallCount>) => r.data.id
+      (r: BeeswarmNode<BeeswarmCallCount>) => r.data.id
     )
     .enter()
     .append('circle')
     .attr('stroke', `#fff5`)
-    .attr('cx', (d: BeeswarmNode<AggregatedCallCount>) => d.x)
-    .attr('cy', (d: BeeswarmNode<AggregatedCallCount>) => d.y)
-    .attr('r', (d: BeeswarmNode<AggregatedCallCount>) => d.r)
-    .style('fill', (d: BeeswarmNode<AggregatedCallCount>) =>
-      d.data.issue_id === initialIssueId ? initialIssueColor : defaultColor
-    )
+    .attr('cx', (d: BeeswarmNode<BeeswarmCallCount>) => d.x)
+    .attr('cy', (d: BeeswarmNode<BeeswarmCallCount>) => d.y)
+    .attr('r', (d: BeeswarmNode<BeeswarmCallCount>) => d.r)
+    .style('fill', (d: BeeswarmNode<BeeswarmCallCount>) => defaultColor)
     .on('pointerover', selectDot)
     .on('click', selectDot)
     .on('pointerout', function () {
@@ -974,7 +974,12 @@ const drawBeeswarm = (
       d3.select(this.parentElement.parentElement.parentElement)
         .select('div#dot_label')
         .attr('hidden', true);
-    });
+    })
+    .transition().delay(0)
+    .style('fill', (d: BeeswarmNode<BeeswarmCallCount>) =>
+      d.data.selected ? issueColor(d.data.issue_id) : defaultColor
+    );
+
 
   const height = group.node().getBBox().height;
   const axisHeight = 20;
@@ -1073,6 +1078,7 @@ function beeswarmForce<T>() {
 const playTone = (
   context: AudioContext,
   frequency: number,
+  gain: number,
   offsetSeconds: number
 ) => {
   const oscillator = context.createOscillator();
@@ -1084,7 +1090,7 @@ const playTone = (
   oscillator.connect(gainNode);
   gainNode.connect(context.destination);
 
-  gainNode.gain.setValueAtTime(0.2, context.currentTime + offsetSeconds);
+  gainNode.gain.setValueAtTime(gain, context.currentTime + offsetSeconds);
   oscillator.start(context.currentTime + offsetSeconds);
   oscillator.stop(context.currentTime + offsetSeconds + 0.15);
 };
@@ -1106,7 +1112,7 @@ const playBackgroundTone = (context: AudioContext, durationSeconds: number) => {
 
 const playData = (
   context: AudioContext,
-  beeswarm: BeeswarmNode<AggregatedCallCount>[],
+  beeswarm: BeeswarmNode<BeeswarmCallCount>[],
   beeswarmScale: d3.ScaleTime<number, number>
 ) => {
   // We assume data has the oldest element first.
@@ -1118,12 +1124,12 @@ const playData = (
     }
     // 600 width / 85 -> about one second per day
     const timeOffsetSeconds = item.x / 85; // x0 is the preferred offset, x is where it is rendered.
-    const freq = 300 + (item.data.issue_id % 25) * 10; // TODO: Better to map based on the whole set of issues.
-    // TOD: Change amplitude depending on if issueID is selected (needs knowledge of selection!)
-    playTone(context, freq, timeOffsetSeconds);
+    const freq = item.data.selected ? 523.25 : 261.63; // Middle C if not, the higher C if so.
+    const gain = item.data.selected ? 0.2 : 0.1;
+    playTone(context, freq, gain, timeOffsetSeconds);
   }
   beeswarmScale.ticks().forEach((tick: number) => {
-    playTone(context, 212, beeswarmScale(tick) / 85);
+    playTone(context, 212, 0.1, beeswarmScale(tick) / 85);
   });
   playBackgroundTone(context, 600 / 85);
   return context.currentTime;
@@ -1172,7 +1178,7 @@ class Dashboard extends React.Component<null, State> {
             expandedResult.total = contactSummaryData.total;
             expandedResult.outcomes = contactSummaryData.outcomes;
             expandedResult.topIssues = contactSummaryData.topIssues;
-            expandedResult.callResults = contactSummaryData.aggregatedResults;
+            expandedResult.callResults = contactSummaryData.aggregatedResults as unknown as BeeswarmCallCount[];
 
             // In-place expand to individual calls.
             expandRepResults(expandedResult.callResults);
