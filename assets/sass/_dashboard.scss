@@ -109,26 +109,21 @@
   .description {
     font-size: calc(16rem / var(--base-font-size));
 
-    input {
-      display: inline-block;
+    button {
       cursor: pointer;
       color: var(--c-dark);
       background-color: rgba(2, 63, 159, 0.1);
       border: none;
       min-width: 1rem;
-      width: auto;
-      padding-left: 4px;
-      padding-right: 4px;
-      padding-top: 4px;
-      padding-left: 4px;
-      padding-right: 4px;
+      min-height: 24px;
+      border-radius: .3rem;
     }
 
-    input:hover {
+    button:hover {
       background-color: #ccc;
     }
 
-    input:disabled {
+    button:disabled {
       background-color: #bbb;
     }
   }
@@ -305,7 +300,7 @@
       text-transform: uppercase;
     }
 
-    input {
+    button {
       float: right;
       cursor: pointer;
       background-color: #fff;
@@ -316,7 +311,7 @@
       padding: 0px;
     }
 
-    input:hover {
+    button:hover {
       background-color: #ccc;
     }
 

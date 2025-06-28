@@ -64,7 +64,7 @@ const drawStateLabel = (
   const labelBox = d3.select('div#state_map_label').attr('hidden', null);
   labelBox.select('div.title').html(state_name);
   labelBox.select('div.issue_name').html(topIssue.name);
-  labelBox.select('input#close_label_btn').on('click', function (event: Event) {
+  labelBox.select('button#close_label_btn').on('click', function (event: Event) {
     onClose(event);
   });
   updateStateLabelPosition(parentState);
@@ -692,12 +692,64 @@ const drawRepsPane = (
       duration
     );
 
+    const onIssueSelected = function (event: Event, d: IssueCountData) {
+      if (event instanceof KeyboardEvent) {
+        if (
+          (event.key === ' ' || event.key === 'Enter') &&
+          event.target === this
+        ) {
+          event.preventDefault();
+        } else {
+          return;
+        }
+      }
+      if (selectedIssueId === d.issue_id) {
+        repData.beeswarm.forEach((b) => (b.data.selected = false));
+        // deselect
+        selectedIssueId = null;
+        d3.select(this).style('background-color', hoverColor);
+        d3.select(this.parentNode.parentNode.parentNode)
+          .selectAll('circle')
+          .data(
+            repData.beeswarm,
+            (b: BeeswarmNode<BeeswarmCallCount>) => b.data.id
+          )
+          .transition()
+          .delay(0)
+          .style('fill', (d: BeeswarmNode<BeeswarmCallCount>) =>
+            d.data.selected ? issueColor(d.data.issue_id) : defaultColor
+          );
+      } else {
+        // select
+        selectedIssueId = d.issue_id;
+        repData.beeswarm.forEach(
+          (b) => (b.data.selected = b.data.issue_id === selectedIssueId)
+        );
+        d3.select(topFiveHolderSelector)
+          .selectAll('li.top_five')
+          .style('background-color', '#fff');
+        d3.select(this).style('background-color', hoverColor);
+        d3.select(this.parentNode.parentNode.parentNode)
+          .selectAll('circle')
+          .data(
+            repData.beeswarm,
+            (b: BeeswarmNode<BeeswarmCallCount>) => b.data.id
+          )
+          .transition()
+          .delay(0)
+          .style('fill', (d: BeeswarmNode<BeeswarmCallCount>) =>
+            d.data.selected ? issueColor(d.data.issue_id) : defaultColor
+          );
+      }
+    };
+
     // Only show beeswarm if there's enough calls.
     let selectedIssueId: number | null = repData.topIssues[0].issue_id;
     const topFiveRow = d3
       .select(topFiveHolderSelector)
       .selectAll('li.top_five');
     topFiveRow
+      .attr('tabindex', '0') // Makes it keyboard selectable
       .on('pointerover', function (_: Event, d: IssueCountData) {
         if (selectedIssueId !== d.issue_id) {
           repData.beeswarm.forEach(
@@ -720,46 +772,8 @@ const drawRepsPane = (
             );
         }
       })
-      .on('click', function (_, d: IssueCountData) {
-        if (selectedIssueId === d.issue_id) {
-          repData.beeswarm.forEach((b) => (b.data.selected = false));
-          // deselect
-          selectedIssueId = null;
-          d3.select(this).style('background-color', hoverColor);
-          d3.select(this.parentNode.parentNode.parentNode)
-            .selectAll('circle')
-            .data(
-              repData.beeswarm,
-              (b: BeeswarmNode<BeeswarmCallCount>) => b.data.id
-            )
-            .transition()
-            .delay(0)
-            .style('fill', (d: BeeswarmNode<BeeswarmCallCount>) =>
-              d.data.selected ? issueColor(d.data.issue_id) : defaultColor
-            );
-        } else {
-          // select
-          selectedIssueId = d.issue_id;
-          repData.beeswarm.forEach(
-            (b) => (b.data.selected = b.data.issue_id === selectedIssueId)
-          );
-          d3.select(topFiveHolderSelector)
-            .selectAll('li.top_five')
-            .style('background-color', '#fff');
-          d3.select(this).style('background-color', hoverColor);
-          d3.select(this.parentNode.parentNode.parentNode)
-            .selectAll('circle')
-            .data(
-              repData.beeswarm,
-              (b: BeeswarmNode<BeeswarmCallCount>) => b.data.id
-            )
-            .transition()
-            .delay(0)
-            .style('fill', (d: BeeswarmNode<BeeswarmCallCount>) =>
-              d.data.selected ? issueColor(d.data.issue_id) : defaultColor
-            );
-        }
-      })
+      .on('click', onIssueSelected)
+      .on('keydown', onIssueSelected)
       .on('pointerout', function (_, d: IssueCountData) {
         if (selectedIssueId !== d.issue_id) {
           repData.beeswarm.forEach(
@@ -810,7 +824,7 @@ const drawBeeswarm = (
   let audioContext: AudioContext | null = null;
 
   const startSonification = function () {
-    d3.selectAll('input#sonify_btn')
+    d3.selectAll('button#sonify_btn')
       .on('click', stopSonification)
       .style('outline', `1px solid var(--c-red)`);
     const startAudioTime = 0;
@@ -826,7 +840,7 @@ const drawBeeswarm = (
           .selectAll('g#playbackLine')
           .select('line')
           .attr('stroke', 'none');
-        d3.selectAll('input#sonify_btn')
+        d3.selectAll('button#sonify_btn')
           .on('click', startSonification)
           .style('outline', '1px solid white');
         return;
@@ -857,7 +871,7 @@ const drawBeeswarm = (
       .selectAll('g#playbackLine')
       .select('line')
       .attr('stroke', 'none');
-    d3.selectAll('input#sonify_btn')
+    d3.selectAll('button#sonify_btn')
       .on('click', startSonification)
       .style('outline', '1px solid white');
   };
@@ -873,10 +887,9 @@ const drawBeeswarm = (
     // way too noisy.
     paragraph.append('span').html(', or ');
     paragraph
-      .append('input')
-      .attr('type', 'button')
+      .append('button')
       .attr('id', 'sonify_btn')
-      .attr('value', 'listen')
+      .html('listen')
       .on('click', startSonification);
     paragraph.append('span').html(' to this chart. ');
   } else {
