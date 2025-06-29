@@ -41,21 +41,21 @@
     border-bottom: 1px solid rgba(var(--c-dark-rgb), .4);
   
     button {
-    background-color: #fff;
-    height: 48px;
-    min-width: 100px;
-    padding-left: 10px;
-    padding-right: 10px;
-    color: #000;
-    font-size: calc(18rem / var(--base-font-size));
-    margin-left: 2px;
-    margin-right: 2px;
-    margin-bottom: -1px;
-    border: 1px solid #fff;
-    border-top-left-radius: .3rem;
-    border-top-right-radius: .3rem;
-    border-bottom: none;
-    cursor: pointer;
+      background-color: #fff;
+      height: 48px;
+      min-width: 100px;
+      padding-left: 10px;
+      padding-right: 10px;
+      color: #000;
+      font-size: calc(18rem / var(--base-font-size));
+      margin-left: 2px;
+      margin-right: 2px;
+      margin-bottom: -1px;
+      border: 1px solid #fff;
+      border-top-left-radius: .3rem;
+      border-top-right-radius: .3rem;
+      border-bottom: none;
+      cursor: pointer;
     }
 
     button:hover {
@@ -108,30 +108,6 @@
   
   .description {
     font-size: calc(16rem / var(--base-font-size));
-
-    button {
-      cursor: pointer;
-      color: var(--c-dark);
-      background-color: rgba(2, 63, 159, 0.1);
-      border: none;
-      min-width: 1rem;
-      min-height: 24px;
-      border-radius: .3rem;
-    }
-
-    button:hover {
-      background-color: #ccc;
-    }
-
-    button:disabled {
-      background-color: #bbb;
-    }
-  }
-  
-  .stat {
-    padding-left: 5px;
-    padding-right: 5px;
-    white-space: nowrap;
   }
   
   /* Use this for reps tabs too */
@@ -210,20 +186,84 @@
       display: flex;
       flex-wrap: wrap;
       padding: 0px;
-    }
   
-    ol li {
-      counter-increment: top-counter;
-      display: flex;
-      align-items: center;
+      li {
+        counter-increment: top-counter;
+        display: flex;
+        align-items: center;
+      }
+
+      /** No beeswarm */
+      li::before {
+        content: counter(top-counter);
+        font-size: 3rem;  /* match .highlight */
+        min-width: 32px;
+        // width: 2.3rem;
+        margin-right: 0.3rem;
+        line-height: 1;
+        // text-align: center;
+      }
+
+      // li.withBeeswarm::before {
+      //   content: counter(top-counter);
+      //   font-size: 2.3rem;
+      //   min-width: 32px;
+      //   width: 2.3rem;
+      //   margin-right: 0.3rem;
+      //   line-height: 1;
+      //   // outline: 3px solid #eee;
+      //   border-radius: 50%;
+      //   text-align: center;
+      //   // background-color: #eee;
+      // }
+
+
+      // li.selected::before {
+      //   // background-color: #ccc;
+      //   // color: white;
+      //   // outline-color: #666;
+      //   color: red;
+      // }
+
+      .selected {
+        // font-weight: bold;
+        // background-color: rgba(2, 63, 159, .05);
+
+        // This isn't applying to the before properly.
+        // I need a wrapper div or to just do it properly with an element.
+        
+      }
     }
 
-    ol li::before {
-      content: counter(top-counter);
-      font-size: 3rem;  /* match .highlight */
-      margin-right: 0.5rem;
-      line-height: 1;
-      min-width: 32px;
+    button {
+      cursor: pointer;
+      color: var(--c-dark);
+      background: rgba(2, 63, 159, 0.05);
+      border: none;
+      min-height: 24px;
+      border-radius: .3rem;
+      white-space: nowrap;
+      border: 1px solid #fff;
+    }
+  
+    button:hover {
+      // background-color: rgba(2, 63, 159, 0.1);;
+      border: 1px solid #aaa;
+    }
+
+    button.selected {
+      border: 1px solid #aaa;
+    }
+
+    button.active {
+      border: 1px solid var(--c-red);
+    }
+    
+    .stat {
+      margin-left: 5px;
+      // padding-right: 5px;
+      white-space: nowrap;
+      font-weight: 600;
     }
   }
   
@@ -242,6 +282,7 @@
 
     a:hover, a:focus {
       color: var(--c-dark);
+      text-decoration: underline;
     }
   }
   
@@ -250,7 +291,6 @@
     margin-bottom: 8px;
   }
 
-  
   .top_five_item_holder {
     max-width: 552px;
     padding: 4px;

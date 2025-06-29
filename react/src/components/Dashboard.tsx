@@ -49,7 +49,6 @@ const purple = '#9467bd';
 const themeAccentColor = '#ed3c1d';
 const defaultColor = '#ccc';
 const defaultDarkColor = '#666';
-const hoverColor = `rgba(2, 63, 159, .05)`;
 const selectedStateStroke = 'rgba(255, 217, 52)';
 const USA_TOPOJSON = 'https://cdn.jsdelivr.net/npm/us-atlas@2/us/10m.json';
 const MIN_FOR_BEESWARM = 7;
@@ -64,9 +63,11 @@ const drawStateLabel = (
   const labelBox = d3.select('div#state_map_label').attr('hidden', null);
   labelBox.select('div.title').html(state_name);
   labelBox.select('div.issue_name').html(topIssue.name);
-  labelBox.select('button#close_label_btn').on('click', function (event: Event) {
-    onClose(event);
-  });
+  labelBox
+    .select('button#close_label_btn')
+    .on('click', function (event: Event) {
+      onClose(event);
+    });
   updateStateLabelPosition(parentState);
 };
 
@@ -132,7 +133,8 @@ const drawStateResults = (
     'ol#top_five_state_holder',
     stateResults.issueCounts,
     issueColor,
-    stateResults.total
+    stateResults.total,
+    /* shouldShowBeeswarm= */ false
   );
 };
 
@@ -148,7 +150,8 @@ const drawUsaPane = (
     'ol#top_five_all_holder',
     topIssues,
     issueColor,
-    usaData.usa.total
+    usaData.usa.total,
+    /* shouldShowBeeswarm= */ false
   );
   drawStateResults(usaData.states, state, issueColor, duration);
   drawUsaMap(usaData.states, issueColor, state, duration, (new_state) => {
@@ -160,7 +163,8 @@ const drawTopFiveIssues = (
   holder: string,
   data: IssueCountData[],
   issueColor: d3.ScaleOrdinal<number, string>,
-  total: number
+  total: number,
+  shouldShowBeeswarm: boolean
 ) => {
   const rowWidth = 552;
   const topFiveRow = d3
@@ -184,12 +188,20 @@ const drawTopFiveIssues = (
     .append('a')
     .attr('class', 'issue_name')
     .attr('href', (d: IssueCountData) => `/issue/${d.slug}`)
-    .html((d: IssueCountData) => `&rarr; ${d.name}`);
-  issueSection
-    .append('div')
+    // .html((d: IssueCountData) => `&rarr; ${d.name}`);
+    .html((d: IssueCountData) => `${d.name}`);
+
+  // TODO: Show as text instead of button if not enough beeswarm.
+  let stat;
+  if (shouldShowBeeswarm) {
+    stat = issueSection.append('button');
+  } else {
+    stat = issueSection.append('div');
+  }
+  stat
     .attr('class', 'stat')
     .style('color', (d: IssueCountData) => issueColor(d.issue_id))
-    .html((d: IssueCountData) => `<b>${d.count.toLocaleString()}</b> calls`);
+    .html((d: IssueCountData) => `${d.count.toLocaleString()} calls`);
 
   const issueBarSvg = rowContent
     .append('div')
@@ -198,8 +210,10 @@ const drawTopFiveIssues = (
     .append('svg')
     .attr('width', rowWidth)
     .attr('height', 8)
-    // This is expressed in the title of the parent element and can be hidden here.
-    .attr('aria-hidden', true);
+    .attr(
+      'title',
+      (d: IssueCountData) => `${((d.count / total) * 100).toFixed(1)}% of calls`
+    );
   const issueBar = issueBarSvg.append('g').attr('aria-hidden', true);
   issueBar
     .append('rect')
@@ -584,7 +598,8 @@ const drawRepsPane = (
     topFiveHolderSelector,
     repData.topIssues,
     issueColor,
-    repData.total
+    repData.total,
+    repData.total >= MIN_FOR_BEESWARM
   );
 
   const pieSize = 60;
@@ -707,8 +722,9 @@ const drawRepsPane = (
         repData.beeswarm.forEach((b) => (b.data.selected = false));
         // deselect
         selectedIssueId = null;
-        d3.select(this).style('background-color', hoverColor);
-        d3.select(this.parentNode.parentNode.parentNode)
+        // d3.select(this).classed('selected', false).attr('aria-selected', false);
+        d3.select(this).classed('selected', false).attr('aria-pressed', false);
+        d3.select(`svg#beeswarm_svg_${repData.id}`)
           .selectAll('circle')
           .data(
             repData.beeswarm,
@@ -725,11 +741,14 @@ const drawRepsPane = (
         repData.beeswarm.forEach(
           (b) => (b.data.selected = b.data.issue_id === selectedIssueId)
         );
+        // Ensure everything else is deselected visually.
         d3.select(topFiveHolderSelector)
-          .selectAll('li.top_five')
-          .style('background-color', '#fff');
-        d3.select(this).style('background-color', hoverColor);
-        d3.select(this.parentNode.parentNode.parentNode)
+          .selectAll('button')
+          .classed('selected', false)
+          .attr('aria-pressed', false);
+        // Select just this one visually.
+        d3.select(this).classed('selected', true).attr('aria-pressed', true);
+        d3.select(`svg#beeswarm_svg_${repData.id}`)
           .selectAll('circle')
           .data(
             repData.beeswarm,
@@ -745,11 +764,8 @@ const drawRepsPane = (
 
     // Only show beeswarm if there's enough calls.
     let selectedIssueId: number | null = repData.topIssues[0].issue_id;
-    const topFiveRow = d3
-      .select(topFiveHolderSelector)
-      .selectAll('li.top_five');
-    topFiveRow
-      .attr('tabindex', '0') // Makes it keyboard selectable
+    const showCallsBtns = d3.select(topFiveHolderSelector).selectAll('button');
+    showCallsBtns
       .on('pointerover', function (_: Event, d: IssueCountData) {
         if (selectedIssueId !== d.issue_id) {
           repData.beeswarm.forEach(
@@ -758,8 +774,8 @@ const drawRepsPane = (
                 b.data.issue_id === selectedIssueId ||
                 b.data.issue_id === d.issue_id)
           );
-          d3.select(this).style('background-color', hoverColor);
-          d3.select(this.parentNode.parentNode.parentNode)
+          d3.select(this).classed('selected', true).attr('aria-pressed', true);
+          d3.select(`svg#beeswarm_svg_${repData.id}`)
             .selectAll('circle')
             .data(
               repData.beeswarm,
@@ -779,8 +795,10 @@ const drawRepsPane = (
           repData.beeswarm.forEach(
             (b) => (b.data.selected = b.data.issue_id === selectedIssueId)
           );
-          d3.select(this).style('background-color', '#fff');
-          d3.select(this.parentNode.parentNode.parentNode)
+          d3.select(this)
+            .classed('selected', false)
+            .attr('aria-pressed', false);
+          d3.select(`svg#beeswarm_svg_${repData.id}`)
             .selectAll('circle')
             .data(
               repData.beeswarm,
@@ -795,9 +813,15 @@ const drawRepsPane = (
       });
 
     // Perform the initial selection.
-    topFiveRow.style('background-color', (d: IssueCountData) =>
-      d.issue_id === selectedIssueId ? hoverColor : '#fff'
-    );
+    showCallsBtns
+      .classed(
+        'selected',
+        (d: IssueCountData) => d.issue_id === selectedIssueId
+      )
+      .attr(
+        'aria-pressed',
+        (d: IssueCountData) => d.issue_id === selectedIssueId
+      );
   }, 0);
 };
 
@@ -825,8 +849,8 @@ const drawBeeswarm = (
 
   const startSonification = function () {
     d3.selectAll('button#sonify_btn')
-      .on('click', stopSonification)
-      .style('outline', `1px solid var(--c-red)`);
+      .classed('active', true)
+      .on('click', stopSonification);
     const startAudioTime = 0;
     audioContext = new (window.AudioContext || window.webkitAudioContext)();
     const animateD3Update = () => {
@@ -842,7 +866,7 @@ const drawBeeswarm = (
           .attr('stroke', 'none');
         d3.selectAll('button#sonify_btn')
           .on('click', startSonification)
-          .style('outline', '1px solid white');
+          .classed('active', false);
         return;
       }
       d3.select('svg#beeswarm_svg_' + repData.id)
@@ -873,7 +897,7 @@ const drawBeeswarm = (
       .attr('stroke', 'none');
     d3.selectAll('button#sonify_btn')
       .on('click', startSonification)
-      .style('outline', '1px solid white');
+      .classed('active', false);
   };
 
   const paragraph = description.append('p');
