@@ -194,7 +194,9 @@ const drawTopFiveIssues = (
   // TODO: Show as text instead of button if not enough beeswarm.
   let stat;
   if (shouldShowBeeswarm) {
-    stat = issueSection.append('button');
+    stat = issueSection
+      .append('button')
+      .attr('title', 'Highlight these calls below');
   } else {
     stat = issueSection.append('div');
   }
@@ -528,7 +530,9 @@ const drawRepsPane = (
     .select('div#reps_section')
     .append('div')
     .attr('id', `card_${repData.id}`)
-    .attr('class', 'dashboard_card');
+    .attr('class', 'dashboard_card')
+    .attr('aria-labelledby', `tab_${repData.id}`)
+    .attr('role', 'tabpanel');
 
   const leftSide = repCard.append('div');
   const totalCard = leftSide.append('div').attr('class', 'total_card');
@@ -1308,35 +1312,44 @@ class Dashboard extends React.Component<null, State> {
       );
 
     interface TabData {
-      name: string;
+      index: number;
+      name: string; // Visual name.
       id: string;
       selected: boolean;
-      drawn: boolean;
+      drawn: boolean; // Whether the contents are drawn.
+      controls: string; // The tab panel ID that this aria-controls.
     }
 
     const top_tabs: TabData[] = [];
     top_tabs.push({
+      index: 0,
       name: 'Your reps',
       id: 'your_reps',
       selected: hasRepsData,
-      drawn: false
+      drawn: false,
+      controls: 'reps_section'
     });
     top_tabs.push({
+      index: 1,
       name: 'Nationwide',
       id: 'usa',
       selected: !hasRepsData,
-      drawn: false
+      drawn: false,
+      controls: 'card_usa'
     });
 
     const tabs: TabData[] = [];
     if (this.state.repsData.length > 0) {
       const repsData: ExpandedRepData[] = this.state.repsData;
+      let index = 0;
       repsData.forEach((r: ExpandedRepData) =>
         tabs.push({
+          index: index++,
           name: r.repInfo.name,
           id: r.id,
           selected: false,
-          drawn: false
+          drawn: false,
+          controls: `card_${r.id}`
         })
       );
       tabs[0].selected = true;
@@ -1347,6 +1360,7 @@ class Dashboard extends React.Component<null, State> {
       newTab.selected = true;
       topNavButtons
         .attr('aria-selected', (t: TabData) => t.selected)
+        .attr('tabindex', (t: TabData) => (t.selected ? 0 : -1))
         .attr('class', (t: TabData) => (t.selected ? 'selected' : null));
       d3.selectAll('div.dashboard_card').style('display', 'none');
       if (newTab.id === 'usa') {
@@ -1385,7 +1399,7 @@ class Dashboard extends React.Component<null, State> {
       }
     };
 
-    // TODO: Refactor button creation to shared helper?
+    // TODO: Nav through tabs using arrow keys
     const topNavButtons = d3
       .select('div#topNav')
       .selectAll('button')
@@ -1394,8 +1408,22 @@ class Dashboard extends React.Component<null, State> {
       .append('button')
       .attr('role', 'tab')
       .attr('aria-selected', (t: TabData) => t.selected)
+      .attr('aria-controls', (t: TabData) => t.controls)
+      .attr('tabindex', (t: TabData) => (t.selected ? 0 : -1))
+      .attr('id', (t: TabData) => `tab_${t.id}`)
       .attr('class', (t: TabData) => (t.selected ? 'selected' : null))
-      .html((t: TabData) => t.name);
+      .html((t: TabData) => t.name)
+      .on('keydown', function (event: KeyboardEvent, t: TabData) {
+        if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') {
+          const increment = event.key === 'ArrowLeft' ? -1 : 1;
+          // Find the next or prev tab
+          const nextIndex =
+            (t.index + increment + top_tabs.length) % top_tabs.length;
+          const nextTab = top_tabs[nextIndex];
+          handleTopNavClick(event, nextTab);
+          d3.select(`button#tab_${nextTab.id}`).node().focus();
+        }
+      });
     topNavButtons.on('click', handleTopNavClick);
 
     if (this.state.repsData.length) {
@@ -1412,7 +1440,21 @@ class Dashboard extends React.Component<null, State> {
         newTab.selected = true;
         navButtons
           .attr('aria-selected', (t: TabData) => t.selected)
-          .attr('class', (t: TabData) => (t.selected ? 'selected' : null));
+          .attr('aria-controls', (t: TabData) => t.controls)
+          .attr('tabindex', (t: TabData) => (t.selected ? 0 : -1))
+          .attr('id', (t: TabData) => `tab_${t.id}`)
+          .attr('class', (t: TabData) => (t.selected ? 'selected' : null))
+          .on('keydown', function (event: KeyboardEvent, t: TabData) {
+            if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') {
+              const increment = event.key === 'ArrowLeft' ? -1 : 1;
+              const nextIndex =
+                (t.index + increment + tabs.length) % tabs.length;
+              // Find the next or prev tab
+              const nextTab = tabs[nextIndex];
+              handleRepTabClick(event, nextTab);
+              d3.select(`button#tab_${nextTab.id}`).node().focus();
+            }
+          });
         d3.selectAll('div.dashboard_card').style('display', 'none');
         d3.select(`div#card_${newTab.id}.dashboard_card`).style(
           'display',

@@ -13,9 +13,8 @@
   <div id="dashboard-content" style="visibility:hidden;">
     <div class="heading">
       <div id="topNav" role="tablist"></div>
-      <div id="nav" role="tablist"></div>
     </div>
-    <div class="dashboard_card" id="card_usa">
+    <div class="dashboard_card" id="card_usa" role="tabpanel" aria-labelledby="tab_usa">
       <div class="total_card">
         <h3 class="subtitle_detail"></h3>
         <div class="highlight" id="total_all"></div>
@@ -76,20 +75,23 @@
         <ol id="top_five_state_holder">
       </div>
     </div>
-
-    <div id="location_picker" hidden>
-     <!-- TODO: Put the proper location picker here. -->
-     <div>After setting your location, refresh this page. (Placeholder functionality!)</div>
-      <div class="i-bar-location" id="react-location">
-        <div>
-          <span>&nbsp;</span>
-          <strong>&nbsp;</strong>
-          <button class="button-link">&nbsp;</button>
-        </div>
-      </div>
-    </div>
   
-    <div id="reps_section"></div>
+    <div id="reps_section" role="tabpanel" aria-labelledby="tab_your_reps">
+      <div class="heading">
+        <div id="nav" role="tablist"></div>
+      </div>
+      <div id="location_picker" hidden>
+        <!-- TODO: Put the proper location picker here. -->
+        <div>After setting your location, refresh this page. (Placeholder functionality!)</div>
+         <div class="i-bar-location" id="react-location">
+           <div>
+             <span>&nbsp;</span>
+             <strong>&nbsp;</strong>
+             <button class="button-link">&nbsp;</button>
+           </div>
+         </div>
+       </div>
+    </div>
   </div>
 
   <footer>
