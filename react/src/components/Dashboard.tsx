@@ -1204,6 +1204,17 @@ class Dashboard extends React.Component<null, State> {
   };
 
   componentDidMount() {
+    this.requestDashboardData();
+
+    // Sent by the location page.
+    document.addEventListener('updateReps', () => {
+      // This is a bit of a hack; would be better to just pull in new
+      // reps data, but first must detangle loading reps data from USA data.
+      location.reload();
+    });
+  }
+
+  requestDashboardData() {
     getUsaSummary().then((usaSummaryData) => {
       // TODO: Perhaps do some work after USA summary and get location in parallel.
       getLocationSummary().then((repsSummaryData) => {

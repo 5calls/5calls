@@ -1,10 +1,5 @@
 #dashboard-content {
-  --c-dark-rgb: 2, 63, 159;
-  --c-dark: rgb(2, 63, 159);
-  --c-blue: rgb(24, 117, 209);
-  --c-red-rgb: 237, 60, 29;
-  --c-red: rgb(237, 60, 29);
-  
+ 
   .heading {
     text-align: center;
   }
@@ -96,7 +91,6 @@
   }
   
   .subtitle .subtitle_main {
-    /* Todo: this cannot be nowrap and also 33 rem. */
     font-size: calc(33rem / var(--base-font-size));
     line-height: 1.1;
     white-space: nowrap;
@@ -198,40 +192,8 @@
         content: counter(top-counter);
         font-size: 3rem;  /* match .highlight */
         min-width: 32px;
-        // width: 2.3rem;
         margin-right: 0.3rem;
         line-height: 1;
-        // text-align: center;
-      }
-
-      // li.withBeeswarm::before {
-      //   content: counter(top-counter);
-      //   font-size: 2.3rem;
-      //   min-width: 32px;
-      //   width: 2.3rem;
-      //   margin-right: 0.3rem;
-      //   line-height: 1;
-      //   // outline: 3px solid #eee;
-      //   border-radius: 50%;
-      //   text-align: center;
-      //   // background-color: #eee;
-      // }
-
-
-      // li.selected::before {
-      //   // background-color: #ccc;
-      //   // color: white;
-      //   // outline-color: #666;
-      //   color: red;
-      // }
-
-      .selected {
-        // font-weight: bold;
-        // background-color: rgba(2, 63, 159, .05);
-
-        // This isn't applying to the before properly.
-        // I need a wrapper div or to just do it properly with an element.
-        
       }
     }
 
@@ -247,7 +209,6 @@
     }
   
     button:hover {
-      // background-color: rgba(2, 63, 159, 0.1);;
       border: 1px solid #aaa;
     }
 
@@ -261,7 +222,6 @@
     
     .stat {
       margin-left: 5px;
-      // padding-right: 5px;
       white-space: nowrap;
       font-weight: 600;
     }
@@ -462,6 +422,23 @@
   footer {
     margin-left: auto;
     margin-right: auto;
+    margin-top: 4rem;
+  }
+
+  // Override normal i-bar-location styling.
+  .i-bar-location {
+    color:#000;
+    background-color: white;
+    border-top: 0px;
+
+    a,
+    .button-link {
+      color: rgba(#000, 0.9);
+    }
+
+    form input {
+      border: 2px solid var(--c-blue);
+    }
   }
 
 }
