@@ -187,8 +187,8 @@ const drawTopFiveIssues = (
   issueSection
     .append('a')
     .attr('class', 'issue_name')
+    .attr('target', '_blank')
     .attr('href', (d: IssueCountData) => `/issue/${d.slug}`)
-    // .html((d: IssueCountData) => `&rarr; ${d.name}`);
     .html((d: IssueCountData) => `${d.name}`);
 
   // TODO: Show as text instead of button if not enough beeswarm.
@@ -198,11 +198,12 @@ const drawTopFiveIssues = (
       .append('button')
       .attr('title', 'Highlight these calls below');
   } else {
-    stat = issueSection.append('div');
+    stat = issueSection
+      .append('div')
+      .style('color', (d: IssueCountData) => issueColor(d.issue_id));
   }
   stat
     .attr('class', 'stat')
-    .style('color', (d: IssueCountData) => issueColor(d.issue_id))
     .html((d: IssueCountData) => `${d.count.toLocaleString()} calls`);
 
   const issueBarSvg = rowContent
@@ -726,8 +727,11 @@ const drawRepsPane = (
         repData.beeswarm.forEach((b) => (b.data.selected = false));
         // deselect
         selectedIssueId = null;
-        // d3.select(this).classed('selected', false).attr('aria-selected', false);
-        d3.select(this).classed('selected', false).attr('aria-pressed', false);
+        d3.select(this)
+          .classed('selected', false)
+          .style('background-color', null)
+          .style('color', issueColor(d.issue_id))
+          .attr('aria-pressed', false);
         d3.select(`svg#beeswarm_svg_${repData.id}`)
           .selectAll('circle')
           .data(
@@ -749,9 +753,15 @@ const drawRepsPane = (
         d3.select(topFiveHolderSelector)
           .selectAll('button')
           .classed('selected', false)
+          .style('background-color', null)
+          .style('color', (i) => issueColor(i.issue_id))
           .attr('aria-pressed', false);
         // Select just this one visually.
-        d3.select(this).classed('selected', true).attr('aria-pressed', true);
+        d3.select(this)
+          .classed('selected', true)
+          .style('background-color', issueColor(d.issue_id))
+          .style('color', null)
+          .attr('aria-pressed', true);
         d3.select(`svg#beeswarm_svg_${repData.id}`)
           .selectAll('circle')
           .data(
@@ -778,7 +788,11 @@ const drawRepsPane = (
                 b.data.issue_id === selectedIssueId ||
                 b.data.issue_id === d.issue_id)
           );
-          d3.select(this).classed('selected', true).attr('aria-pressed', true);
+          d3.select(this)
+            .classed('selected', true)
+            .style('background-color', issueColor(d.issue_id))
+            .style('color', null)
+            .attr('aria-pressed', true);
           d3.select(`svg#beeswarm_svg_${repData.id}`)
             .selectAll('circle')
             .data(
@@ -801,6 +815,8 @@ const drawRepsPane = (
           );
           d3.select(this)
             .classed('selected', false)
+            .style('background-color', null)
+            .style('color', issueColor(d.issue_id))
             .attr('aria-pressed', false);
           d3.select(`svg#beeswarm_svg_${repData.id}`)
             .selectAll('circle')
@@ -821,6 +837,12 @@ const drawRepsPane = (
       .classed(
         'selected',
         (d: IssueCountData) => d.issue_id === selectedIssueId
+      )
+      .style('background-color', (d: IssueCountData) =>
+        d.issue_id === selectedIssueId ? issueColor(d.issue_id) : null
+      )
+      .style('color', (d: IssueCountData) =>
+        d.issue_id === selectedIssueId ? null : issueColor(d.issue_id)
       )
       .attr(
         'aria-pressed',
