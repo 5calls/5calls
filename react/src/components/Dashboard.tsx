@@ -166,7 +166,6 @@ const drawTopFiveIssues = (
   total: number,
   shouldShowBeeswarm: boolean
 ) => {
-  const rowWidth = 552;
   const topFiveRow = d3
     .select(holder)
     .selectAll('li.top_five')
@@ -190,6 +189,7 @@ const drawTopFiveIssues = (
     .attr('target', '_blank')
     .attr('href', (d: IssueCountData) => `/issue/${d.slug}`)
     .html((d: IssueCountData) => `${d.name}`);
+  const rowWidth = issueSection.node().clientWidth;
 
   // TODO: Show as text instead of button if not enough beeswarm.
   let stat;
@@ -208,11 +208,10 @@ const drawTopFiveIssues = (
 
   const issueBarSvg = rowContent
     .append('div')
-    .style('line-height', '10px')
-    .style('padding-bottom', '4px')
+    .attr('class', 'issue_bar_holder')
     .append('svg')
-    .attr('width', rowWidth)
-    .attr('height', 8)
+    .attr('width', '100%')
+    .attr('height', '.5rem')
     .attr(
       'title',
       (d: IssueCountData) => `${((d.count / total) * 100).toFixed(1)}% of calls`
@@ -220,8 +219,8 @@ const drawTopFiveIssues = (
   const issueBar = issueBarSvg.append('g').attr('aria-hidden', true);
   issueBar
     .append('rect')
-    .attr('width', rowWidth)
-    .attr('height', 8)
+    .attr('width', '100%')
+    .attr('height', '.5rem')
     .attr('y', 0)
     .attr('x', 0)
     .attr('fill', defaultColor)
@@ -229,14 +228,14 @@ const drawTopFiveIssues = (
   issueBar
     .append('rect')
     .attr('width', 0)
-    .attr('height', 8)
+    .attr('height', '.5rem')
     .attr('y', 0)
     .attr('x', 0)
     .attr('fill', (d: IssueCountData) => issueColor(d.issue_id))
     .transition()
     .delay(500)
     .duration(1000)
-    .attr('width', (d: IssueCountData) => (d.count / total) * rowWidth);
+    .attr('width', (d: IssueCountData) => `${(d.count / total) * 100}%`);
 };
 
 const drawUsaMap = (
@@ -1397,7 +1396,7 @@ class Dashboard extends React.Component<null, State> {
         .attr('class', (t: TabData) => (t.selected ? 'selected' : null));
       d3.selectAll('div.dashboard_card').style('display', 'none');
       if (newTab.id === 'usa') {
-        d3.select(`div#card_usa.dashboard_card`).style('display', 'flex');
+        d3.select(`div#card_usa.dashboard_card`).style('display', null);
         if (!top_tabs[1].drawn) {
           // TODO: lookup instead of index for less brittle.
           // Draw it the first time it is needed.
@@ -1423,7 +1422,7 @@ class Dashboard extends React.Component<null, State> {
           )!.id;
           d3.select(`div#card_${selectedRepId}.dashboard_card`).style(
             'display',
-            'flex'
+            null
           );
         } else {
           document.getElementById('location_picker')!.removeAttribute('hidden');
@@ -1491,7 +1490,7 @@ class Dashboard extends React.Component<null, State> {
         d3.selectAll('div.dashboard_card').style('display', 'none');
         d3.select(`div#card_${newTab.id}.dashboard_card`).style(
           'display',
-          'flex'
+          null
         );
         // Ensure it's only drawn once.
         if (!newTab.drawn) {
