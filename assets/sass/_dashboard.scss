@@ -43,7 +43,6 @@
     button {
       background-color: #fff;
       height: 3rem;
-      min-width: 100px;
       padding-left: .6rem;
       padding-right: .6rem;
       color: #000;
@@ -174,7 +173,7 @@
   .detail {
     flex: 1 1 auto;
     vertical-align: middle;
-    max-width: 345px;
+    width: 100%;
     position: relative;
     margin-top: 1rem;
     margin-bottom: 1rem;
@@ -200,6 +199,8 @@
         counter-increment: top-counter;
         display: flex;
         align-items: center;
+        width: 100%;
+        min-width: 20rem;
       }
 
       /** No beeswarm */
@@ -296,7 +297,9 @@
   }
 
   .top_five_item_holder {
-    max-width: 20rem;
+    // max-width: 20rem;
+    max-width: 100%;
+    width: 100%;
     padding: .25rem;
   }
 
@@ -434,6 +437,7 @@
     justify-content: space-evenly;
     position: relative;
     width: 100%;
+    min-width: 350px;
     text-align: center;
     margin-left: auto;
     margin-right: auto;
@@ -445,8 +449,11 @@
     }
 
     #state_map {
-      min-width: 630px;
       flex: auto;
+    }
+
+    #state_map_key_box {
+      z-index: -1;
     }
   }
   

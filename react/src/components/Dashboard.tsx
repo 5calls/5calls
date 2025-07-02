@@ -81,7 +81,7 @@ const updateStateLabelPosition = (parent: SVGGraphicsElement) => {
   point.x = boundingBox.x + (3 / 4) * boundingBox.width;
   point.y = boundingBox.y + (3 / 4) * boundingBox.height;
   const screenCoords = point.matrixTransform(matrix);
-  screenCoords.y += 24; // Has to do with where the < is on the label.
+  screenCoords.y += 24; // Has to do with where the < is on the label.  // TODO: This doesn't work quite right now at small widths.
 
   // SVG's bounding box.
   const svgBb = parent.parentElement!.parentElement!.getBoundingClientRect();
@@ -310,12 +310,12 @@ const drawUsaMap = (
       .select('div#state_map')
       .append('svg')
       .attr('width', '100%')
-      .attr('height', height)
+      .attr('height', 'auto')
+      .attr('viewBox', `0 0 ${width} ${height}`)
       .attr(
         'title',
         'Map showing states colored by top issue. Select a state above.'
       );
-    const svgWidth = svg.node().getBoundingClientRect().width;
 
     const path = d3.geoPath();
     // Use the path to plot the US map based on the geometry data.
@@ -412,7 +412,7 @@ const drawUsaMap = (
       .append('path')
       .attr(
         'transform',
-        `translate(${(svgWidth - width) / 2}, 0) scale(0.66, 0.66)`
+        `translate(0, 0) scale(0.66, 0.66)`
       )
       .attr('stroke', '#fff')
       .attr('stroke-width', 1)
@@ -479,8 +479,8 @@ const drawUsaMap = (
           [width, height]
         ])
         .translateExtent([
-          [-svgWidth, 0],
-          [svgWidth, height]
+          [-2 * width, 0],
+          [width, height]
         ])
         .scaleExtent([1, 4])
         .on('zoom', zoomed)
@@ -1003,7 +1003,8 @@ const drawBeeswarm = (
 
   const svg = svgBox
     .append('svg')
-    .attr('width', 600)
+    .attr('width', '100%')
+    .attr('height', 'auto')
     .attr('id', 'beeswarm_svg_' + repData.id)
     .style('margin-bottom', '1.5rem');
 
@@ -1067,7 +1068,8 @@ const drawBeeswarm = (
     .attr('x1', 0)
     .attr('y0', 0)
     .attr('y1', height);
-  svg.attr('height', height + axisHeight);
+  // svg.attr('height', height + axisHeight);
+  svg.attr('viewBox', `0 0 600 ${height + axisHeight}`);
 
   // Add the axis.
   svg
