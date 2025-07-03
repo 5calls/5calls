@@ -1303,16 +1303,18 @@ class Dashboard extends React.Component<null, State> {
 
   render(): React.ReactNode {
     if (this.state.isLoading) {
-      return <div>
-        <h2>Loading the latest data...</h2>
-        <div id="loader" aria-label="loading icon" role="status"></div>
-      </div>;
+      return (
+        <div>
+          <h2>Loading the latest data...</h2>
+          <div id="loader" aria-label="loading icon" role="status"></div>
+        </div>
+      );
     }
 
     const usaData = this.state.usaData;
     if (this.state.usaData.states.length == 0) {
       // Happens if the data isn't populated properly (like after an outage).
-      return <h2>Failed to load dashboard content. Please try again later.</h2>
+      return <h2>Failed to load dashboard content. Please try again later.</h2>;
     }
 
     const hasRepsData = this.state.repsData.length > 0;
