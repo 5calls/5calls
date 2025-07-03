@@ -622,6 +622,7 @@ const drawRepsPane = (
     .attr('aria-hidden', true) // Empty alt text because this graphic is redundant with the percentages.
     .style('float', 'left')
     .style('align-content', 'center')
+    .style('margin-right', '16px')
     .append('g')
     .attr('transform', `translate(${pieSize / 2}, ${pieSize / 2})`);
   callResultsGroup

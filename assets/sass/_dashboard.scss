@@ -43,6 +43,7 @@
     border-bottom: .1rem solid rgba(var(--c-dark-rgb), .4);
     display: flex;
     overflow-x: auto;
+    overflow-y: clip;
     -webkit-overflow-scrolling: touch;
   
     button {
@@ -80,6 +81,7 @@
     #nav {
       display: block;
       overflow-x: initial;
+      overflow-y: initial;
       -webkit-overflow-scrolling: initial;
     }
   }
@@ -177,20 +179,36 @@
   }
   
   .total_card {
-    width: 345px;
     border: .1rem solid rgba(var(--c-dark-rgb), .4);
     margin: 1rem;
+    margin-left: auto;
+    margin-right: auto;
+    width: 100%;
+  }
+
+  @media (min-width: 40rem) {
+    .total_card {
+      margin: 1rem;
+      width: 22rem;
+    }
   }
   
   .reachability {
     margin: 1rem;
+    margin-left: auto;
+    margin-right: auto;
     font-size: calc(16rem / var(--base-font-size));
 
     .reachability_stats {
       float: left;
       align-content: center;
-      margin-left: 16px;
       font-size: 1.2rem;
+    }
+  }
+
+  @media (min-width: 40rem) {
+    .reachability {
+      margin: 1rem;
     }
   }
   
