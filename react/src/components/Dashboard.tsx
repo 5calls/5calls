@@ -78,18 +78,22 @@ const updateStateLabelPosition = (parent: SVGGraphicsElement) => {
   // Thanks ChatGPT for the matrix conversion math.
   const matrix = parent.getScreenCTM()!;
   const point = parent.ownerSVGElement!.createSVGPoint();
-  point.x = boundingBox.x + (3 / 4) * boundingBox.width;
-  point.y = boundingBox.y + (3 / 4) * boundingBox.height;
+  point.x = boundingBox.x + (2 / 3) * boundingBox.width;
+  point.y = boundingBox.y + (1 / 2) * boundingBox.height;
   const screenCoords = point.matrixTransform(matrix);
-  screenCoords.y += 24; // Has to do with where the < is on the label.  // TODO: This doesn't work quite right now at small widths.
 
   // SVG's bounding box.
   const svgBb = parent.parentElement!.parentElement!.getBoundingClientRect();
+  const holderBb =
+    parent.parentElement!.parentElement!.parentElement!.getBoundingClientRect();
+  const svgOffsetY = svgBb.y - holderBb.y;
+
+  screenCoords.y += svgOffsetY - 24; // 24 has to do with where the < is on the label.
 
   // Check it is within the drawing bounds.
   if (
-    screenCoords.y > svgBb.height + svgBb.y ||
-    screenCoords.y < svgBb.y ||
+    screenCoords.y + 24 > svgBb.height + svgOffsetY + svgBb.y ||
+    screenCoords.y + 24 < svgBb.y + svgOffsetY ||
     screenCoords.x > svgBb.width + svgBb.x ||
     screenCoords.x + 24 < svgBb.x
   ) {
@@ -189,7 +193,6 @@ const drawTopFiveIssues = (
     .attr('target', '_blank')
     .attr('href', (d: IssueCountData) => `/issue/${d.slug}`)
     .html((d: IssueCountData) => `${d.name}`);
-  const rowWidth = issueSection.node().clientWidth;
 
   // TODO: Show as text instead of button if not enough beeswarm.
   let stat;
@@ -309,8 +312,8 @@ const drawUsaMap = (
     const svg = d3
       .select('div#state_map')
       .append('svg')
-      .attr('width', '100%')
-      .attr('height', 'auto')
+      .style('width', '100%')
+      .style('height', 'auto')
       .attr('viewBox', `0 0 ${width} ${height}`)
       .attr(
         'title',
@@ -410,10 +413,7 @@ const drawUsaMap = (
       .data(data)
       .enter()
       .append('path')
-      .attr(
-        'transform',
-        `translate(0, 0) scale(0.66, 0.66)`
-      )
+      .attr('transform', `translate(0, 0) scale(0.66, 0.66)`)
       .attr('stroke', '#fff')
       .attr('stroke-width', 1)
       .attr('stroke-linecap', 'round')
@@ -1003,8 +1003,8 @@ const drawBeeswarm = (
 
   const svg = svgBox
     .append('svg')
-    .attr('width', '100%')
-    .attr('height', 'auto')
+    .style('width', '100%')
+    .style('height', 'auto')
     .attr('id', 'beeswarm_svg_' + repData.id)
     .style('margin-bottom', '1.5rem');
 
