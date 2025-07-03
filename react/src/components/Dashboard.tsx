@@ -118,13 +118,13 @@ const drawStateResults = (
   d3.select('div#state_detail').attr('hidden', state === null ? true : null);
   const stateResults = allStateResults.find((d) => d.id === state);
   if (!stateResults) {
-    d3.select('h3#state_detail_title').html(
+    d3.select('h2#state_detail_title').html(
       `There were no calls in ${state} recorded with 5 Calls ${duration}`
     );
     d3.select('div#state_total_card').attr('hidden', true);
     return;
   }
-  d3.select('h3#state_detail_title')
+  d3.select('h2#state_detail_title')
     .attr('class', 'detail_title')
     .html(`Top 5 calls in ${stateResults.name} ${duration}`);
   d3.selectAll('div#total_state').html(stateResults.total.toLocaleString());
@@ -537,7 +537,7 @@ const drawRepsPane = (
   const leftSide = repCard.append('div');
   const totalCard = leftSide.append('div').attr('class', 'total_card');
   totalCard
-    .append('h3')
+    .append('h2')
     .attr('class', 'subtitle_detail')
     .html(`Total calls ${duration}`);
   totalCard
@@ -583,7 +583,7 @@ const drawRepsPane = (
   // At this point, this rep does have at least 1 call made to them.
 
   repDetail
-    .append('h3')
+    .append('h2')
     .attr('class', 'detail_title')
     .html(`Top 5 Calls ${duration}`);
   repDetail
@@ -606,10 +606,10 @@ const drawRepsPane = (
     repData.total >= MIN_FOR_BEESWARM
   );
 
-  const pieSize = 60;
-  const size = 40;
+  const pieSize = 80;
+  const size = 60;
   const reachability = leftSide.append('div').attr('class', 'reachability');
-  reachability.append('h3').attr('class', 'detail_title').html('Reachability');
+  reachability.append('h2').attr('class', 'detail_title').html('Reachability');
   reachability
     .append('div')
     .attr('class', 'description')
@@ -665,9 +665,7 @@ const drawRepsPane = (
     );
   const resultsTextHolder = reachability
     .append('div')
-    .style('float', 'left')
-    .style('align-content', 'center')
-    .style('margin-left', '16px');
+    .attr('class', 'reachability_stats');
   resultsTextHolder
     .append('div')
     .html(
@@ -866,7 +864,7 @@ const drawBeeswarm = (
     .attr('hidden', repData.total < MIN_FOR_BEESWARM ? true : null);
 
   description
-    .append('h3')
+    .append('h2')
     .html(`All calls to ${repData.repInfo.name} about this issue ${duration}`);
 
   let renderFrameId: number | null = null;
@@ -1306,7 +1304,7 @@ class Dashboard extends React.Component<null, State> {
   render(): React.ReactNode {
     if (this.state.isLoading) {
       return <div>
-        <h3>Loading the latest data...</h3>
+        <h2>Loading the latest data...</h2>
         <div id="loader" aria-label="loading icon" role="status"></div>
       </div>;
     }
@@ -1314,7 +1312,7 @@ class Dashboard extends React.Component<null, State> {
     const usaData = this.state.usaData;
     if (this.state.usaData.states.length == 0) {
       // Happens if the data isn't populated properly (like after an outage).
-      return <h3>Failed to load dashboard content. Please try again later.</h3>
+      return <h2>Failed to load dashboard content. Please try again later.</h2>
     }
 
     const hasRepsData = this.state.repsData.length > 0;
@@ -1530,7 +1528,7 @@ class Dashboard extends React.Component<null, State> {
       handleRepTabClick(null, tabs.find((t) => t.selected)!);
     }
 
-    d3.selectAll('h3.subtitle_detail').html(`Total calls ${duration}`);
+    d3.selectAll('h2.subtitle_detail').html(`Total calls ${duration}`);
     handleTopNavClick(null, top_tabs.find((t) => t.selected)!);
     d3.select('div#dashboard-content').style('visibility', 'visible');
 

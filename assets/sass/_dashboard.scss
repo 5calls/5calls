@@ -69,15 +69,16 @@
     }
   }
 
-  h3 {
+  h2 {
     text-align: start;
     margin-top: .6rem;
     margin-bottom: .6rem;
+    font-weight: normal;
     font-size: calc(20rem / var(--base-font-size));
   }
 
   @media (min-width: 40rem) {
-    h3 {
+    h2 {
       font-size: calc(24rem / var(--base-font-size));
       display: inline-block;
     }
@@ -167,9 +168,15 @@
   }
   
   .reachability {
-    max-width: 345px;
     margin: 1rem;
     font-size: calc(16rem / var(--base-font-size));
+
+    .reachability_stats {
+      float: left;
+      align-content: center;
+      margin-left: 16px;
+      font-size: 1.2rem;
+    }
   }
   
   .highlight {
@@ -267,6 +274,7 @@
       margin-bottom: auto;
       white-space: nowrap;
       font-weight: 600;
+      font-size: 1.2rem; // Must be at least 19px and bold for a11y.
     }
   }
 
@@ -475,7 +483,7 @@
     align-items: center;
     margin-bottom: 1rem;
 
-    h3 {
+    h2 {
       text-align: center;
     }
 
