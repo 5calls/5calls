@@ -11,6 +11,7 @@ export const STATS_API_URL = `${API_URL}/users/stats`;
 export const PROFILE_API_URL = `${API_URL}/users/profile`;
 export const UPDATE_DISTRICT_API_URL = `${API_URL}/users/updateDistrict`;
 export const REFERRAL_API_URL = `${API_URL}/users/refs`;
+export const SEARCH_TERM_API_URL = `${API_URL}/users/search`;
 export const API_TOKEN_URL = `${API_URL}/users/sendAPIToken`;
 export const DONATIONS_API_URL = `${API_URL}/donations`;
 export const MIDTERMS_API_URL = `${API_URL}/midterms`;

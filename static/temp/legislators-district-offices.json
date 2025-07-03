@@ -15123,8 +15123,7 @@
         "state": "MN",
         "zip": "56401-3595",
         "latitude": 46.35587,
-        "longitude": -94.20074,
-        "phone": "218-355-0862"
+        "longitude": -94.20074
       },
       {
         "id": "S001212-cambridge",
@@ -15145,8 +15144,7 @@
         "state": "MN",
         "zip": "55719-3708",
         "latitude": 47.48942,
-        "longitude": -92.88417,
-        "phone": "218-355-0726"
+        "longitude": -92.88417
       },
       {
         "id": "S001212-hermantown",
@@ -19413,6 +19411,68 @@
         "state": "AK",
         "zip": "99501",
         "phone": "907-921-6575"
+      }
+    ]
+  },
+  {
+    "id": {
+      "bioguide": "M001244",
+      "govtrack": 457033
+    },
+    "offices": [
+      {
+        "id": "M001244-tallahassee",
+        "address": "402 S. Monroe St.",
+        "suite": "Suite 2105",
+        "city": "Tallahassee",
+        "state": "FL",
+        "zip": "32399",
+        "phone": "850-590-9100"
+      },
+      {
+        "id": "M001244-palm_beach_gardens",
+        "address": "4822 Northlake Boulevard",
+        "suite": "Suite B-1",
+        "city": "Palm Beach Gardens",
+        "state": "FL",
+        "zip": "33418",
+        "phone": "561-775-3360"
+      },
+      {
+        "id": "M001244-jacksonville",
+        "address": "300 North Hogan Street",
+        "suite": "Suite 8-111",
+        "city": "Jacksonville",
+        "state": "FL",
+        "zip": "32202",
+        "phone": "904-354-4300"
+      },
+      {
+        "id": "M001244-miami",
+        "address": "9130 S Dadeland Blvd.",
+        "suite": "Suite 1510",
+        "city": "Miami",
+        "state": "FL",
+        "zip": "33156",
+        "phone": "305-596-4224"
+      },
+      {
+        "id": "M001244-orlando",
+        "address": "201 S Orange Av.",
+        "suite": "Suite 350",
+        "city": "Orlando",
+        "state": "FL",
+        "zip": "32801",
+        "phone": "407-254-2573"
+      },
+      {
+        "id": "M001244-fort_myers",
+        "address": "2120 Main Street",
+        "suite": "Suite 200",
+        "city": "Fort Myers",
+        "state": "FL",
+        "zip": "33901",
+        "phone": "239-318-6464"
       }
     ]
   }

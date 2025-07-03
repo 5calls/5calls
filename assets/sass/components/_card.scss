@@ -18,7 +18,8 @@
     box-shadow: none;
   }
 
-  i, .card-home-icon {
+  i,
+  .card-home-icon {
     font-size: 5em;
     display: block;
     text-align: center;
@@ -53,7 +54,8 @@
       text-align: left;
     }
 
-    i, .card-home-icon {
+    i,
+    .card-home-icon {
       font-size: 2em;
       margin: 0 var(--g-gap) 0 0;
     }
@@ -77,7 +79,8 @@
       font-weight: 700;
     }
 
-    i, .card-home-icon {
+    i,
+    .card-home-icon {
       font-size: 3.5em;
       color: var(--c-dark);
     }

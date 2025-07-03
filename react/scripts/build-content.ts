@@ -33,7 +33,7 @@ const buildContent = async () => {
   const doneDirectory = `${__dirname}/../../content/done/`;
   fsExtra.emptyDirSync(doneDirectory);
 
-  fetch(`https://api.5calls.org/v1/issues?includeHidden=true`)
+  fetch(`https://api.5calls.org/v1/issues?includeActuallyHidden=true`)
     .then((res) => res.json())
     .then((data) => {
       const issues = data as Issue[];
