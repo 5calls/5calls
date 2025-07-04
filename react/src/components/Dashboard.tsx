@@ -53,6 +53,8 @@ const selectedStateStroke = 'rgba(255, 217, 52)';
 const USA_TOPOJSON = 'https://cdn.jsdelivr.net/npm/us-atlas@2/us/10m.json';
 const MIN_FOR_BEESWARM = 7;
 const MAX_FOR_SONIFICATION = 2000;
+const BEESWARM_TARGET_WIDTH = 600;
+const SONFICATION_DURATION = 7; // In seconds.
 
 const drawStateLabel = (
   parentState: SVGGraphicsElement,
@@ -592,7 +594,7 @@ const drawRepsPane = (
     .html(() => {
       let text = `The five most-called issues to ${repData.repInfo.name} ${duration} as recorded with 5 Calls, and call count for each in that time.`;
       if (repData.total >= MIN_FOR_BEESWARM) {
-        text += ' Tap an issue to see its calls below.';
+        text += ' Select the total calls to see them highlighted below.';
       }
       return text;
     });
@@ -614,7 +616,9 @@ const drawRepsPane = (
     .append('div')
     .attr('class', 'description')
     .style('margin-bottom', '10px')
-    .html(`${repData.repInfo.name}'s office's availability ${duration}.`);
+    .html(
+      `${repData.repInfo.name}'s office's reported availability ${duration}.`
+    );
   const callResultsGroup = reachability
     .append('svg')
     .attr('width', pieSize)
@@ -670,17 +674,17 @@ const drawRepsPane = (
   resultsTextHolder
     .append('div')
     .html(
-      `<span class="results_vm">${(repData.percentVM * 100).toFixed(0)}%</span> of calls went to voicemail`
+      `<span class="results_vm">${(repData.percentVM * 100).toFixed(0)}%</span> voicemail`
     );
   resultsTextHolder
     .append('div')
     .html(
-      `<span class="results_contact">${(repData.percentContact * 100).toFixed(0)}%</span> of calls were answered`
+      `<span class="results_contact">${(repData.percentContact * 100).toFixed(0)}%</span> answered`
     );
   resultsTextHolder
     .append('div')
     .html(
-      `<span class="results_unavailable">${(repData.percentUnavailable * 100).toFixed(0)}%</span> of calls were unavailable`
+      `<span class="results_unavailable">${(repData.percentUnavailable * 100).toFixed(0)}%</span> unavailable`
     );
 
   // Draw beeswarm async so that it doesn't block rendering.
@@ -702,7 +706,7 @@ const drawRepsPane = (
         )(repData.callResults);
     }
     drawBeeswarm(
-      repDetail.append('div'),
+      repCard.append('div'),
       repData,
       beeswarmScale,
       issueIdToName,
@@ -852,14 +856,15 @@ const drawRepsPane = (
 /* ---- Beeswarm methods ---- */
 
 const drawBeeswarm = (
-  repDetail: d3.Selection,
+  parentDiv: d3.Selection,
   repData: ExpandedRepData,
   beeswarmScale: d3.ScaleTime<number, number>,
   issueIdToName: { [x: string]: any; [x: number]: string },
   issueColor: d3.ScaleOrdinal<number, string>,
   duration: string
 ) => {
-  const description = repDetail
+  parentDiv.attr('class', 'graphic_section');
+  const description = parentDiv
     .append('div')
     .attr('class', 'description')
     .attr('hidden', repData.total < MIN_FOR_BEESWARM ? true : null);
@@ -880,8 +885,7 @@ const drawBeeswarm = (
     const animateD3Update = () => {
       const now = audioContext!.currentTime;
       const elapsed = now - startAudioTime;
-      const expectedTotal = 600 / 85;
-      const currentProgress = elapsed / expectedTotal;
+      const currentProgress = elapsed / SONFICATION_DURATION;
       if (currentProgress >= 1) {
         // Playback is complete.
         d3.select('svg#beeswarm_svg_' + repData.id)
@@ -895,7 +899,10 @@ const drawBeeswarm = (
       }
       d3.select('svg#beeswarm_svg_' + repData.id)
         .selectAll('g#playbackLine')
-        .attr('transform', `translate(${currentProgress * 600}, 0)`);
+        .attr(
+          'transform',
+          `translate(${currentProgress * BEESWARM_TARGET_WIDTH}, 0)`
+        );
       renderFrameId = requestAnimationFrame(animateD3Update);
     };
     d3.select('svg#beeswarm_svg_' + repData.id)
@@ -928,7 +935,7 @@ const drawBeeswarm = (
   paragraph
     .append('span')
     .html(
-      'One dot represents one call. Tap an issue in the list above to highlight those calls visually'
+      'One dot represents one call. Select calls above to highlight visually'
     );
   if (repData.total <= MAX_FOR_SONIFICATION) {
     // Only add button to listen if there's a reasonable number of calls. Otherwise it's just
@@ -945,7 +952,7 @@ const drawBeeswarm = (
   }
   paragraph.append('span').html('Your calls make a difference.');
 
-  const svgBox = repDetail.append('div').style('position', 'relative');
+  const svgBox = parentDiv.append('div').style('position', 'relative');
   svgBox
     .append('div')
     .attr('id', 'dot_label')
@@ -1025,7 +1032,7 @@ const drawBeeswarm = (
     .append('g')
     .attr('aria-hidden', true) // Not useful for screen readers
     .attr('id', 'beeswarm_g_' + repData.id);
-  const middle = 300;
+  const middle = BEESWARM_TARGET_WIDTH / 2;
   group
     .selectAll('circle')
     .data(
@@ -1067,8 +1074,7 @@ const drawBeeswarm = (
     .attr('x1', 0)
     .attr('y0', 0)
     .attr('y1', height);
-  // svg.attr('height', height + axisHeight);
-  svg.attr('viewBox', `0 0 600 ${height + axisHeight}`);
+  svg.attr('viewBox', `0 0 ${BEESWARM_TARGET_WIDTH} ${height + axisHeight}`);
 
   // Add the axis.
   svg
@@ -1196,8 +1202,8 @@ const playData = (
     if (item.x < 0) {
       continue;
     }
-    // 600 width / 85 -> about one second per day
-    const timeOffsetSeconds = item.x / 85; // x0 is the preferred offset, x is where it is rendered.
+    const timeOffsetSeconds =
+      (item.x / BEESWARM_TARGET_WIDTH) * SONFICATION_DURATION; // x0 is the preferred offset, x is where it is rendered.
     const freq = item.data.selected ? 523.25 : 261.63; // Middle C if not, the higher C if so.
     const gain = item.data.selected ? 0.2 : 0.1;
     playTone(context, freq, gain, timeOffsetSeconds);
@@ -1205,7 +1211,7 @@ const playData = (
   beeswarmScale.ticks().forEach((tick: number) => {
     playTone(context, 212, 0.1, beeswarmScale(tick) / 85);
   });
-  playBackgroundTone(context, 600 / 85);
+  playBackgroundTone(context, SONFICATION_DURATION);
   return context.currentTime;
 };
 
@@ -1330,14 +1336,14 @@ class Dashboard extends React.Component<null, State> {
     // Use consistent coloring throughout the dashboard.
     const issueColor = d3
       .scaleOrdinal<number, string>([
-        themeColor,
-        themeAccentColor,
-        purple, //"#7570b3", // purple
+        themeColor, // blue
+        purple, // purple
         '#66a61e', // bright green
         '#e7298a', // pink
         '#e6ab02', // yellow
         '#a6761d', // brown
         '#1b9e77', // teal
+        themeAccentColor, // red
         defaultDarkColor
         // Now it repeats
       ])
