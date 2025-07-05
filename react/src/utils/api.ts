@@ -6,7 +6,10 @@ import OneSignal from 'react-onesignal';
 import { Contact } from '../common/models/contact';
 import { ContactList } from '../common/models/contactList';
 import * as Constants from '../common/constants';
-import { OutcomeData } from '../common/models/contactEvent';
+import {
+  OutcomeData,
+  UserContactEventType
+} from '../common/models/contactEvent';
 import uuid from './uuid';
 import { LOCAL_STORAGE_KEYS } from '../common/constants';
 
@@ -75,6 +78,73 @@ export interface CountData {
 export const getCountData = (): Promise<CountData> => {
   return axios
     .get(`${Constants.REPORT_API_URL}`)
+    .then((response) => Promise.resolve(response.data))
+    .catch((e) => Promise.reject(e));
+};
+
+export interface IssueCountData {
+  issue_id: number;
+  name: string;
+  slug: string;
+  count: number;
+}
+
+export interface RegionSummaryData {
+  id: string;
+  name: string;
+  total: number;
+  issueCounts: Array<IssueCountData>;
+}
+
+export interface UsaSummaryData {
+  usa: RegionSummaryData;
+  states: Array<RegionSummaryData>;
+}
+
+export const getUsaSummary = (): Promise<UsaSummaryData> => {
+  return axios
+    .get('https://api.5calls.org/v1/reps/usaSummary')
+    .then((response) => Promise.resolve(response.data))
+    .catch((e) => Promise.reject(e));
+};
+
+export interface OutcomeSummaryData {
+  result: UserContactEventType;
+  count: number;
+}
+
+export interface AggregatedCallCount {
+  issue_id: number;
+  count: number;
+  time: number;
+}
+
+export interface ContactSummaryData {
+  id: string;
+  total: number;
+  outcomes: OutcomeSummaryData[];
+  topIssues: IssueCountData[];
+  aggregatedResults: AggregatedCallCount[];
+}
+
+export interface RepsSummaryData {
+  reps: Contact[];
+  repsData: ContactSummaryData[];
+}
+
+export const getLocationSummary = (): Promise<RepsSummaryData | null> => {
+  const districtId = localStorage.getItem(LOCAL_STORAGE_KEYS.DISTRICT);
+  if (
+    districtId === null ||
+    districtId === undefined ||
+    districtId.length === 0
+  ) {
+    return Promise.resolve(null);
+  }
+  return axios
+    .get(
+      `https://api.5calls.org/v1/reps/districtSummary?district=${districtId}`
+    )
     .then((response) => Promise.resolve(response.data))
     .catch((e) => Promise.reject(e));
 };
