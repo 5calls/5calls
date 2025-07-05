@@ -80,7 +80,7 @@ const updateStateLabelPosition = (parent: SVGGraphicsElement) => {
   // Thanks ChatGPT for the matrix conversion math.
   const matrix = parent.getScreenCTM()!;
   const point = parent.ownerSVGElement!.createSVGPoint();
-  point.x = boundingBox.x + (2 / 3) * boundingBox.width;
+  point.x = boundingBox.x + (1 / 2) * boundingBox.width;
   point.y = boundingBox.y + (1 / 2) * boundingBox.height;
   const screenCoords = point.matrixTransform(matrix);
 
@@ -92,23 +92,31 @@ const updateStateLabelPosition = (parent: SVGGraphicsElement) => {
 
   screenCoords.y += svgOffsetY - 24; // 24 has to do with where the < is on the label.
 
+  const label = d3.select('div#state_map_label');
+  const labelWidth = label.node().getBoundingClientRect().width;
+  if (labelWidth + screenCoords.x > svgBb.width) {
+    label.classed('rightLabel', true);
+    label.classed('leftLabel', null);
+    screenCoords.x -= labelWidth + 24;
+  } else {
+    label.classed('rightLabel', null);
+    label.classed('leftLabel', true);
+    screenCoords.x += 24;
+  }
+
   // Check it is within the drawing bounds.
   if (
     screenCoords.y + 24 > svgBb.height + svgOffsetY + svgBb.y ||
-    screenCoords.y + 24 < svgBb.y + svgOffsetY ||
-    screenCoords.x > svgBb.width + svgBb.x ||
-    screenCoords.x + 24 < svgBb.x
+    screenCoords.y + 24 < svgBb.y + svgOffsetY
   ) {
-    d3.select('div#state_map_label').attr('hidden', true);
+    label.attr('hidden', true);
   } else {
-    d3.select('div#state_map_label').attr('hidden', null);
+    label.attr('hidden', null);
   }
 
   const yCoord = screenCoords.y - svgBb.y;
   const xCoord = screenCoords.x - svgBb.x;
-  d3.select('div#state_map_label')
-    .style('top', `${yCoord}px`)
-    .style('left', `${xCoord}px`);
+  label.style('top', `${yCoord}px`).style('left', `${xCoord}px`);
 };
 
 const drawStateResults = (
@@ -355,7 +363,7 @@ const drawUsaMap = (
       d3.select('div#state_map_label').attr('hidden', true);
       if (selectedState !== null) {
         d3.select('select#state_select')
-          .selectAll(`option#_${selectedState}`)
+          .selectAll('option')
           .attr('selected', null);
         group
           .select(`path#state_${selectedState}`)
@@ -592,7 +600,7 @@ const drawRepsPane = (
     .append('div')
     .attr('class', 'description')
     .html(() => {
-      let text = `The five most-called issues to ${repData.repInfo.name} ${duration} as recorded with 5 Calls, and call count for each in that time.`;
+      let text = `The most-called issues to ${repData.repInfo.name} ${duration} as recorded with 5 Calls.`;
       if (repData.total >= MIN_FOR_BEESWARM) {
         text += ' Select the total calls to see them highlighted below.';
       }

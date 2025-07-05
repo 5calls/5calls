@@ -242,7 +242,6 @@
 
   button {
     cursor: pointer;
-    background: rgba(2, 63, 159, 0.05);
     min-height: 1.5rem;
     border-radius: .3rem;
     white-space: nowrap;
@@ -430,7 +429,7 @@
     filter:  drop-shadow(.125rem .125rem .25rem #888c);
     margin: .5rem;
     padding: .5rem;
-    width: 200px;
+    width: 12.5rem;
     font-size: 1rem;
 
     .title {
@@ -487,7 +486,7 @@
   }
         
   /* Thanks to https://projects.verou.me/bubbly/ */
-  .label :after {
+  .leftLabel :after {
     content: '';
     position: absolute;
     left: 0;
@@ -499,6 +498,20 @@
     border-left: 0;
     margin-top: -.6rem;
     margin-left: -.6rem;
+  }
+
+  .rightLabel :after {
+    content: '';
+    position: absolute;
+    right: 0;
+    top: 24px;
+    width: 0;
+    height: 0;
+    border: .7rem solid transparent;
+    border-left-color: #fff;
+    border-right: 0;
+    margin-top: -.6rem;
+    margin-right: -.6rem;
   }
   
   .topLabel :after {
