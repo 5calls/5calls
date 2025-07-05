@@ -527,23 +527,29 @@
     margin-top: -.6rem;
     margin-left: -.6rem;
   }
+
+  #state_map_title {
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+    align-items: center;
+    width: 100%;
+
+    h2 {
+      text-align: center;
+      display: inline-block;
+    }
+  }
     
   #state_map_section {
     display:flex;
     flex-wrap: wrap;
     justify-content: space-evenly;
     position: relative;
+    align-items: center;
     width: 100%;
     min-width: 350px;
-    text-align: center;
-    margin-left: auto;
-    margin-right: auto;
-    align-items: center;
     margin-bottom: 1rem;
-
-    h2 {
-      text-align: center;
-    }
 
     #state_map {
       flex: auto;
@@ -551,6 +557,13 @@
 
     #state_map_key_box {
       z-index: -1;
+      width: 100%;
+    }
+
+    @media (min-width: 40rem) {
+      #state_map_key_box {
+        width: 12rem;
+      }
     }
   }
   
