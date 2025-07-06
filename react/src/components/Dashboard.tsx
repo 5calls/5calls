@@ -108,8 +108,8 @@ const updateStateLabelPosition = (parent: SVGGraphicsElement) => {
   if (
     screenCoords.y + 24 > svgBb.height + svgOffsetY + svgBb.y ||
     screenCoords.y + 24 < svgBb.y + svgOffsetY ||
-    screenCoords.x > svgBb.width - labelWidth + 24 ||
-    screenCoords.x < -24
+    screenCoords.x > svgBb.width - labelWidth / 2 ||
+    screenCoords.x < -labelWidth / 2
   ) {
     label.attr('hidden', true);
   } else {
