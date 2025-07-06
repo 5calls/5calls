@@ -602,9 +602,9 @@ const drawRepsPane = (
     .append('div')
     .attr('class', 'description')
     .html(() => {
-      let text = `The most-called issues to ${repData.repInfo.name} ${duration} as recorded with 5 Calls.`;
+      let text = `The most-called issues for ${repData.repInfo.name} ${duration} from 5 Calls.`;
       if (repData.total >= MIN_FOR_BEESWARM) {
-        text += ' Select the total calls to see them highlighted below.';
+        text += ' Select the call counts to see them highlighted below.';
       }
       return text;
     });
@@ -881,7 +881,7 @@ const drawBeeswarm = (
 
   description
     .append('h2')
-    .html(`All calls to ${repData.repInfo.name} about this issue ${duration}`);
+    .html(`All ${repData.repInfo.name}'s calls ${duration}`);
 
   let renderFrameId: number | null = null;
   let audioContext: AudioContext | null = null;
@@ -945,7 +945,7 @@ const drawBeeswarm = (
   paragraph
     .append('span')
     .html(
-      'One dot represents one call. Select calls above to highlight visually'
+      'One dot represents one call. Select calls above to highlight'
     );
   if (repData.total <= MAX_FOR_SONIFICATION) {
     // Only add button to listen if there's a reasonable number of calls. Otherwise it's just
