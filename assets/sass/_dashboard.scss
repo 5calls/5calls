@@ -190,6 +190,13 @@
   .total_card {
     border: .1rem solid rgba(var(--c-dark-rgb), .4);
     width: 100%;
+    min-width: 20rem;
+  }
+
+  @media (min-width: 40rem) {
+    .total_card {
+      width: 25rem;
+    }
   }
   
   .reachability {
@@ -207,6 +214,7 @@
   @media (min-width: 40rem) {
     .reachability {
       margin-top: 1rem;
+      width: 25rem;
     }
   }
   
