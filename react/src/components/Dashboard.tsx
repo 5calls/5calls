@@ -219,7 +219,10 @@ const drawTopFiveIssues = (
   }
   stat
     .attr('class', 'stat')
-    .html((d: IssueCountData) => `${d.count.toLocaleString()} calls`);
+    .html(
+      (d: IssueCountData) =>
+        `${d.count.toLocaleString()} call${d.count > 1 ? 's' : ''}`
+    );
 
   const issueBarSvg = rowContent
     .append('div')
@@ -755,6 +758,7 @@ const drawRepsPane = (
           .style('fill', (d: BeeswarmNode<BeeswarmCallCount>) =>
             d.data.selected ? issueColor(d.data.issue_id) : defaultColor
           );
+        d3.select(`div#dot_key_${repData.id}`).style('display', 'none');
       } else {
         // select
         selectedIssueId = d.issue_id;
@@ -784,6 +788,12 @@ const drawRepsPane = (
           .delay(0)
           .style('fill', (d: BeeswarmNode<BeeswarmCallCount>) =>
             d.data.selected ? issueColor(d.data.issue_id) : defaultColor
+          );
+        d3.select(`div#dot_key_${repData.id}`)
+          .style('display', null)
+          .style('--dot-color', issueColor(d.issue_id))
+          .html(
+            `A call for <i>${repData.topIssues.find((i) => i.issue_id === d.issue_id)?.name}</i>`
           );
       }
     };
@@ -941,12 +951,8 @@ const drawBeeswarm = (
       .classed('active', false);
   };
 
-  const paragraph = description.append('p');
-  paragraph
-    .append('span')
-    .html(
-      'One dot represents one call. Select calls above to highlight'
-    );
+  const paragraph = description.append('div');
+  paragraph.append('span').html('Select calls above to highlight');
   if (repData.total <= MAX_FOR_SONIFICATION) {
     // Only add button to listen if there's a reasonable number of calls. Otherwise it's just
     // way too noisy.
@@ -961,6 +967,20 @@ const drawBeeswarm = (
     paragraph.append('span').html('. ');
   }
   paragraph.append('span').html('Your calls make a difference.');
+
+  const dotsKey = description.append('div').attr('class', 'dot_key');
+  dotsKey
+    .append('div')
+    .attr('class', 'dot')
+    .attr('aria-label', 'grey dot (lower pitch)')
+    .html('A call');
+  dotsKey
+    .append('div')
+    .attr('class', 'dot')
+    .attr('aria-label', 'colored dot (high pitch)')
+    .attr('id', `dot_key_${repData.id}`)
+    .style('--dot-color', issueColor(repData.topIssues[0].issue_id))
+    .html(`A call for <i>${repData.topIssues[0].name}</i>`);
 
   const svgBox = parentDiv.append('div').style('position', 'relative');
   svgBox
