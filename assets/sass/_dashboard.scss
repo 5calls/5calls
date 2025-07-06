@@ -102,10 +102,9 @@
   
   .dashboard_card {
     display: block;
-    margin: 1rem;
+    margin: 1rem auto;
     max-width: 72rem;
-    margin-left: auto;
-    margin-right: auto;
+    gap: 1rem;
   }
 
   @media (min-width: 40rem) {
@@ -190,23 +189,11 @@
   
   .total_card {
     border: .1rem solid rgba(var(--c-dark-rgb), .4);
-    margin: 1rem;
-    margin-left: auto;
-    margin-right: auto;
     width: 100%;
-  }
-
-  @media (min-width: 40rem) {
-    .total_card {
-      margin: 1rem;
-      width: 22rem;
-    }
   }
   
   .reachability {
-    margin: 1rem;
-    margin-left: auto;
-    margin-right: auto;
+    margin: 1rem auto;
     display: inline-block;;
     font-size: calc(16rem / var(--base-font-size));
 
@@ -219,7 +206,7 @@
 
   @media (min-width: 40rem) {
     .reachability {
-      margin: 1rem;
+      margin-top: 1rem;
     }
   }
   
@@ -266,8 +253,6 @@
     vertical-align: middle;
     width: 100%;
     position: relative;
-    margin-top: 1rem;
-    margin-bottom: 1rem;
 
     .detail_title {
       line-height: 1.1;
@@ -429,7 +414,7 @@
     filter:  drop-shadow(.125rem .125rem .25rem #888c);
     margin: .5rem;
     padding: .5rem;
-    width: 12.5rem;
+    width: 12.5rem; // 200px; note this is hard-coded in updateStateLabelPosition.
     font-size: 1rem;
 
     .title {
@@ -562,7 +547,7 @@
 
     @media (min-width: 40rem) {
       #state_map_key_box {
-        width: 12rem;
+        width: 12rem; 
       }
     }
   }
@@ -573,17 +558,17 @@
   }
   
   .results_vm {
-    color: #9467bd;
+    color: #6a51a3;
     font-weight: bold;
   }
   
   .results_contact {
-    color: rgb(24, 117, 209);
+    color: #807dba;
     font-weight: bold;
   }
   
   .results_unavailable {
-    color: #ed3c1d;
+    color: #4a1486;
     font-weight: bold;
   }
   

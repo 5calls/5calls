@@ -93,7 +93,7 @@ const updateStateLabelPosition = (parent: SVGGraphicsElement) => {
   screenCoords.y += svgOffsetY - 24; // 24 has to do with where the < is on the label.
 
   const label = d3.select('div#state_map_label');
-  const labelWidth = label.node().getBoundingClientRect().width;
+  const labelWidth = 200;
   if (labelWidth + screenCoords.x > svgBb.width) {
     label.classed('rightLabel', true);
     label.classed('leftLabel', null);
@@ -104,10 +104,12 @@ const updateStateLabelPosition = (parent: SVGGraphicsElement) => {
     screenCoords.x += 24;
   }
 
-  // Check it is within the drawing bounds.
+  // Check it is within the drawing bounds, with some reasonable buffer.
   if (
     screenCoords.y + 24 > svgBb.height + svgOffsetY + svgBb.y ||
-    screenCoords.y + 24 < svgBb.y + svgOffsetY
+    screenCoords.y + 24 < svgBb.y + svgOffsetY ||
+    screenCoords.x > svgBb.width - labelWidth + 24 ||
+    screenCoords.x < -24
   ) {
     label.attr('hidden', true);
   } else {
@@ -489,8 +491,8 @@ const drawUsaMap = (
           [width, height]
         ])
         .translateExtent([
-          [-2 * width, 0],
-          [width, height]
+          [-width / 2, 0],
+          [width * 2, height]
         ])
         .scaleExtent([1, 4])
         .on('zoom', zoomed)
@@ -639,7 +641,7 @@ const drawRepsPane = (
     .attr('transform', `translate(${pieSize / 2}, ${pieSize / 2})`);
   callResultsGroup
     .append('path')
-    .attr('fill', purple)
+    .attr('fill', '#807dba')
     .attr('stroke', '#fff')
     .attr(
       'd',
@@ -648,11 +650,11 @@ const drawRepsPane = (
         .innerRadius(`${size / 2}`)
         .outerRadius(`${pieSize / 2}`)
         .startAngle(0)
-        .endAngle(2 * Math.PI * repData.percentVM)
+        .endAngle(2 * Math.PI * repData.percentContact)
     );
   callResultsGroup
     .append('path')
-    .attr('fill', themeColor)
+    .attr('fill', '#6a51a3')
     .attr('stroke', '#fff')
     .attr(
       'd',
@@ -660,12 +662,12 @@ const drawRepsPane = (
         .arc()
         .innerRadius(`${size / 2}`)
         .outerRadius(`${pieSize / 2}`)
-        .startAngle(2 * Math.PI * repData.percentVM)
+        .startAngle(2 * Math.PI * repData.percentContact)
         .endAngle(2 * Math.PI * (repData.percentVM + repData.percentContact))
     );
   callResultsGroup
     .append('path')
-    .attr('fill', themeAccentColor)
+    .attr('fill', '#4a1486')
     .attr('stroke', '#fff')
     .attr(
       'd',
@@ -682,12 +684,12 @@ const drawRepsPane = (
   resultsTextHolder
     .append('div')
     .html(
-      `<span class="results_vm">${(repData.percentVM * 100).toFixed(0)}%</span> voicemail`
+      `<span class="results_contact">${(repData.percentContact * 100).toFixed(0)}%</span> answered`
     );
   resultsTextHolder
     .append('div')
     .html(
-      `<span class="results_contact">${(repData.percentContact * 100).toFixed(0)}%</span> answered`
+      `<span class="results_vm">${(repData.percentVM * 100).toFixed(0)}%</span> voicemail`
     );
   resultsTextHolder
     .append('div')
