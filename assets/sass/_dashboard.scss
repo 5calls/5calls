@@ -245,6 +245,7 @@
     border-radius: var(--radius);
     white-space: nowrap;
     border: 0.1rem solid #aaa;
+    background: #efefef;
 
     &:hover {
       border: 0.1rem solid #777;
@@ -315,6 +316,10 @@
       font-size: 1.2rem;
     }
 
+    button {
+      background: #efefef;
+    }
+
     @media (min-width: 40rem) {
       max-width: 600px;
     }
@@ -357,6 +362,13 @@
 
     @media (min-width: 40rem) {
       font-size: calc(18rem / var(--base-font-size));
+
+      a {
+        @supports (-webkit-line-clamp: 2) {
+          display: block;
+          white-space: nowrap;
+        }
+      }
     }
   }
 

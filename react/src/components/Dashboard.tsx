@@ -897,7 +897,7 @@ const drawBeeswarm = (
   let audioContext: AudioContext | null = null;
 
   const startSonification = function () {
-    d3.selectAll('button#sonify_btn')
+    d3.select(`button#sonify_btn_${repData.id}`)
       .classed('active', true)
       .on('click', stopSonification);
     const startAudioTime = 0;
@@ -912,7 +912,7 @@ const drawBeeswarm = (
           .selectAll('g#playbackLine')
           .select('line')
           .attr('stroke', 'none');
-        d3.selectAll('button#sonify_btn')
+        d3.selectAll(`button#sonify_btn_${repData.id}`)
           .on('click', startSonification)
           .classed('active', false);
         return;
@@ -946,7 +946,7 @@ const drawBeeswarm = (
       .selectAll('g#playbackLine')
       .select('line')
       .attr('stroke', 'none');
-    d3.selectAll('button#sonify_btn')
+    d3.selectAll(`button#sonify_btn_${repData.id}`)
       .on('click', startSonification)
       .classed('active', false);
   };
@@ -959,7 +959,7 @@ const drawBeeswarm = (
     paragraph.append('span').html(', or ');
     paragraph
       .append('button')
-      .attr('id', 'sonify_btn')
+      .attr('id', `sonify_btn_${repData.id}`)
       .html('listen')
       .on('click', startSonification);
     paragraph.append('span').html(' to this chart. ');
