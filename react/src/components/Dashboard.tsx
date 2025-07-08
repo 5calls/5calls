@@ -1056,7 +1056,7 @@ const drawBeeswarm = (
     });
 
     // Deselect everything else.
-    d3.select(this.parentElement).selectAll('circle').attr('stroke', `#9995`);
+    d3.select(this.parentElement).selectAll('circle').attr('stroke', `#fff4`);
 
     // Bring selected dot to front
     this.parentElement.appendChild(this);
@@ -1124,7 +1124,7 @@ const drawBeeswarm = (
     )
     .enter()
     .append('circle')
-    .attr('stroke', `#9995`)
+    .attr('stroke', `#fff4`)
     .attr('cx', (d: BeeswarmNode<BeeswarmCallCount>) => d.x)
     .attr('cy', (d: BeeswarmNode<BeeswarmCallCount>) => d.y)
     .attr('r', (d: BeeswarmNode<BeeswarmCallCount>) => d.r)
@@ -1132,7 +1132,7 @@ const drawBeeswarm = (
     .on('pointerover', selectDot)
     .on('click', selectDot)
     .on('pointerout', function () {
-      d3.select(this).attr('stroke', `#9995`);
+      d3.select(this).attr('stroke', `#fff4`);
       d3.select(this.parentElement.parentElement.parentElement)
         .select('div#dot_label')
         .attr('hidden', true);
@@ -1493,8 +1493,8 @@ class Dashboard extends React.Component<null, State> {
         .attr('aria-selected', (t: TabData) => t.selected)
         .attr('tabindex', (t: TabData) => (t.selected ? 0 : -1))
         .attr('class', (t: TabData) => (t.selected ? 'selected' : null));
-      d3.selectAll('div.dashboard_card').style('display', 'none');
       if (newTab.id === 'usa') {
+        d3.select('div#reps_section').style('display', 'none');
         d3.select(`div#card_usa.dashboard_card`).style('display', null);
         if (!top_tabs[1].drawn) {
           // TODO: lookup instead of index for less brittle.
@@ -1512,6 +1512,8 @@ class Dashboard extends React.Component<null, State> {
           .style('visibility', 'hidden')
           .attr('aria-hidden', true);
       } else {
+        d3.select('div#reps_section').style('display', null);
+        d3.select(`div#card_usa.dashboard_card`).style('display', 'none');
         d3.select('div#nav')
           .style('visibility', 'visible')
           .attr('aria-hidden', null);
