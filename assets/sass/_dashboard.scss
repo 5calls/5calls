@@ -99,14 +99,15 @@
   }
 
   .dashboard_card {
-    display: block;
+    display: flex;
+    flex-direction: column;
     margin: var(--spacing-m) auto;
     max-width: 72rem;
     gap: var(--spacing-m);
 
     @media (min-width: 40rem) {
-      display: flex;
       flex-wrap: wrap;
+      flex-direction: row;
       align-items: flex-start;
       justify-content: space-between;
     }
@@ -283,7 +284,6 @@
       display: flex;
       flex-wrap: wrap;
       padding: 0;
-      margin-top: 1rem;
 
       li {
         counter-increment: top-counter;
@@ -417,9 +417,6 @@
   }
 
   .overlayBox {
-    background: #fff;
-    fill: #fff;
-    filter: drop-shadow(0.125rem 0.125rem 0.25rem #888c);
     margin: 0.5rem;
     padding: 0.5rem;
     width: 12.5rem; /* 200px; note this is hard-coded in updateStateLabelPosition. */
@@ -470,6 +467,13 @@
     }
   }
 
+  #state_map_label, #dot_label {
+    filter: drop-shadow(0.125rem 0.125rem 0.25rem #888c);
+    z-index: 10;
+    background: #fff;
+    fill: #fff;
+  }
+
   .absolute {
     position: absolute;
   }
@@ -516,6 +520,8 @@
     margin: 0 auto;
     align-items: center;
     width: 100%;
+    background: #efefef;
+    padding-bottom: 0.5rem;
 
     h2 {
       text-align: center;
@@ -524,6 +530,13 @@
   }
 
   #state_map_section {
+    width: 100%;
+    min-width: 350px;
+    border: 0.1rem solid var(--c-light-border);
+    margin-bottom: 1rem;
+  }
+
+  #state_map_content {
     display: flex;
     flex-wrap: wrap;
     justify-content: space-evenly;
@@ -531,14 +544,12 @@
     align-items: center;
     width: 100%;
     min-width: 350px;
-    margin-bottom: 1rem;
 
     #state_map {
       flex: auto;
     }
 
     #state_map_key_box {
-      z-index: -1;
       width: 100%;
 
       @media (min-width: 40rem) {

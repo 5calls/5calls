@@ -76,6 +76,19 @@ const drawStateLabel = (
 const updateStateLabelPosition = (parent: SVGGraphicsElement) => {
   // The state's bounding box.
   const boundingBox = parent.getBBox();
+  const label = d3.select('div#state_map_label');
+  const labelWidth = 200;
+  // SVG's bounding box.
+  const svgBb = parent.parentElement!.parentElement!.getBoundingClientRect();
+
+  if (boundingBox.width === 0 || boundingBox.height === 0) {
+    label
+      .style('top', `${svgBb.height / 2}px`)
+      .style('left', `${(svgBb.width - labelWidth) / 2}px`)
+      .classed('leftLabel', null)
+      .classed('rightLabel', null);
+    return;
+  }
 
   // Thanks ChatGPT for the matrix conversion math.
   const matrix = parent.getScreenCTM()!;
@@ -84,16 +97,12 @@ const updateStateLabelPosition = (parent: SVGGraphicsElement) => {
   point.y = boundingBox.y + (1 / 2) * boundingBox.height;
   const screenCoords = point.matrixTransform(matrix);
 
-  // SVG's bounding box.
-  const svgBb = parent.parentElement!.parentElement!.getBoundingClientRect();
   const holderBb =
     parent.parentElement!.parentElement!.parentElement!.getBoundingClientRect();
   const svgOffsetY = svgBb.y - holderBb.y;
 
   screenCoords.y += svgOffsetY - 24; // 24 has to do with where the < is on the label.
 
-  const label = d3.select('div#state_map_label');
-  const labelWidth = 200;
   if (labelWidth + screenCoords.x > svgBb.width) {
     label.classed('rightLabel', true);
     label.classed('leftLabel', null);
@@ -128,23 +137,30 @@ const drawStateResults = (
   duration: string
 ) => {
   d3.select('div#state_detail').attr('hidden', state === null ? true : null);
+  // TODO: Use D3 to transform rather than clearing and redrawing everything, for better performance
+  // and also so animation doesn't always start at 0.
+  d3.select('ol#top_five_state_holder').html('');
   const stateResults = allStateResults.find((d) => d.id === state);
-  if (!stateResults) {
+  if (stateResults) {
+    d3.selectAll('div#total_state').html(stateResults.total.toLocaleString());
+    d3.selectAll('div#state_name_subtitle').html(`From ${stateResults.name}`);
+    d3.select('div#state_total_card').attr('hidden', null);
+  }
+  if (!stateResults || stateResults.total === 0) {
     d3.select('h2#state_detail_title').html(
-      `There were no calls in ${state} recorded with 5 Calls ${duration}`
+      `There were no calls in ${stateResults ? stateResults.name : state} recorded with 5 Calls ${duration}`
     );
-    d3.select('div#state_total_card').attr('hidden', true);
+    if (!stateResults) {
+      d3.select('div#state_total_card').attr('hidden', true);
+    }
     return;
   }
   d3.select('h2#state_detail_title')
     .attr('class', 'detail_title')
     .html(`Top 5 calls in ${stateResults.name} ${duration}`);
-  d3.selectAll('div#total_state').html(stateResults.total.toLocaleString());
-  d3.selectAll('div#state_name_subtitle').html(`From ${stateResults.name}`);
-  d3.select('div#state_total_card').attr('hidden', null);
-  // TODO: Use D3 to transform rather than clearing and redrawing everything, for better performance
-  // and also so animation doesn't always start at 0.
-  d3.select('ol#top_five_state_holder').html('');
+  if (!stateResults || stateResults.total === 0) {
+    return;
+  }
   drawTopFiveIssues(
     'ol#top_five_state_holder',
     stateResults.issueCounts,
@@ -267,6 +283,45 @@ const drawUsaMap = (
   d3.json(USA_TOPOJSON).then((usa: { objects: { states: any } }) => {
     // The data is the states loaded from the topojson file.
     const data: Feature[] = topojson.feature(usa, usa.objects.states).features;
+    const territories: Feature[] = [
+      {
+        type: 'Feature',
+        id: 'PR',
+        properties: { name: 'Puerto Rico' },
+        geometry: {
+          type: 'Polygon',
+          coordinates: [[]]
+        }
+      },
+      {
+        type: 'Feature',
+        id: 'AS',
+        properties: { name: 'American Samoa' },
+        geometry: {
+          type: 'Polygon',
+          coordinates: [[]]
+        }
+      },
+      {
+        type: 'Feature',
+        id: 'GU',
+        properties: { name: 'Guam' },
+        geometry: {
+          type: 'Polygon',
+          coordinates: [[]]
+        }
+      },
+      {
+        type: 'Feature',
+        id: 'VI',
+        properties: { name: 'Virgin Islands' },
+        geometry: {
+          type: 'Polygon',
+          coordinates: [[]]
+        }
+      }
+    ];
+    data.push(...territories);
     // Alphabetize the states
     data.sort((a, b) => a.properties!.name.localeCompare(b.properties!.name));
     data.forEach((d) => {
@@ -281,14 +336,11 @@ const drawUsaMap = (
       }
     });
 
-    // TODO: Add geojson or little rects for PR and DC, then add them to the legend.
-    // Note that DC is technically in the map, but too small to be useful.
-    const filteredStatesResults = statesResults.filter(
-      (stateResults) =>
-        stateResults.id !== 'DC' && data.find((d) => d.id === stateResults.id)
+    const filteredStatesResults = statesResults.filter((stateResults) =>
+      data.find((d) => d.id === stateResults.id)
     );
     const keyData = filteredStatesResults.reduce((agg, row) => {
-      if (row.issueCounts.length === 0) {
+      if (!row.issueCounts || row.issueCounts.length === 0) {
         return agg;
       }
       const topIssue = row.issueCounts[0];
@@ -318,7 +370,7 @@ const drawUsaMap = (
       .style('border-color', (d: IssueCountData) => issueColor(d.issue_id))
       .html(
         (d: IssueCountData) =>
-          `<b>${d.count} state${d.count == 1 ? '' : 's'}</b>: ${d.name}`
+          `<b>${d.count} jurisdiction${d.count == 1 ? '' : 's'}</b>: ${d.name}`
       );
 
     let selectedState: string | null = null;
@@ -405,7 +457,7 @@ const drawUsaMap = (
       const state_results = statesResults.find((s) => s.id === state);
       const state_issues = state_results ? state_results.issueCounts : [];
       const topIssue =
-        state_issues.length > 0
+        state_issues && state_issues.length > 0
           ? state_issues[0]
           : { name: 'No recorded calls' };
       d3.select('div#state_map')
@@ -443,11 +495,11 @@ const drawUsaMap = (
       .attr('fill', (d: Feature) => {
         const stateResult = statesResults.find((state) => state.id === d.id);
         const stateTopIssues = stateResult ? stateResult.issueCounts : [];
-        if (stateTopIssues.length > 0) {
+        if (stateTopIssues && stateTopIssues.length > 0) {
           return issueColor(stateTopIssues[0].issue_id);
         }
-        // Default white for no calls at all.
-        return '#fff';
+        // Default grey for no calls at all.
+        return '#ccc';
       })
       .on('end', function () {
         if (initialState !== null) {
@@ -1004,7 +1056,7 @@ const drawBeeswarm = (
     });
 
     // Deselect everything else.
-    d3.select(this.parentElement).selectAll('circle').attr('stroke', `#fff5`);
+    d3.select(this.parentElement).selectAll('circle').attr('stroke', `#9995`);
 
     // Bring selected dot to front
     this.parentElement.appendChild(this);
@@ -1072,7 +1124,7 @@ const drawBeeswarm = (
     )
     .enter()
     .append('circle')
-    .attr('stroke', `#fff5`)
+    .attr('stroke', `#9995`)
     .attr('cx', (d: BeeswarmNode<BeeswarmCallCount>) => d.x)
     .attr('cy', (d: BeeswarmNode<BeeswarmCallCount>) => d.y)
     .attr('r', (d: BeeswarmNode<BeeswarmCallCount>) => d.r)
@@ -1080,7 +1132,7 @@ const drawBeeswarm = (
     .on('pointerover', selectDot)
     .on('click', selectDot)
     .on('pointerout', function () {
-      d3.select(this).attr('stroke', `#fff5`);
+      d3.select(this).attr('stroke', `#9995`);
       d3.select(this.parentElement.parentElement.parentElement)
         .select('div#dot_label')
         .attr('hidden', true);
@@ -1478,7 +1530,6 @@ class Dashboard extends React.Component<null, State> {
       }
     };
 
-    // TODO: Nav through tabs using arrow keys
     const topNavButtons = d3
       .select('div#topNav')
       .selectAll('button')
