@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "@bugsnag/js": "^8.2.0",
+    "@types/geojson": "^7946.0.16",
     "axios": "^0.21.0",
     "glob": "^10.4.5",
     "jquery": "^3.5.1",
@@ -50,6 +51,7 @@
     "@types/react": "^19.0.10",
     "@types/react-dom": "^19.0.4",
     "@types/uuid": "^9.0.8",
+    "d3": "^7.9.0",
     "eslint": "^9.22.0",
     "eslint-config-react-app": "^7.0.1",
     "eslint-plugin-react": "^7.37.4",
@@ -61,6 +63,7 @@
     "prettier": "3.5.3",
     "process": "^0.11.10",
     "querystring-es3": "^0.2.1",
+    "topojson-client": "^3.1.0",
     "ts-node": "^9.1.1",
     "typescript-eslint": "^8.26.1"
   }

@@ -1,0 +1,110 @@
+{{ define "main" }}
+<script type="module" src="https://d3js.org/d3.v6.js"></script>
+<script src="https://d3js.org/topojson.v1.min.js"></script>
+<div class="content">
+  <h1 id="dashboard_title">Your call makes a difference</h1>
+
+  <!-- React component messages -->
+  <div id="react-dashboard"></div>
+</div>
+
+<div class="content">
+  <!-- dashboard contents are populated with d3 -->
+  <div id="dashboard-content" style="visibility:hidden;">
+    <div class="heading">
+      <div id="topNav" role="tablist"></div>
+    </div>
+    <div class="dashboard_card" id="card_usa" role="tabpanel" aria-labelledby="tab_usa">
+      <div>
+        <div class="total_card">
+          <h2 class="subtitle_detail"></h2>
+          <div class="highlight" id="total_all"></div>
+          <div class="subtitle">
+            <div class="subtitle_main">
+              Across the nation
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="detail">
+        <h2 class="detail_title">Top 5 calls this week</h2>
+        <div class="description">
+          The most-called issues this week as recorded with 5 Calls.
+        </div>
+        <ol id="top_five_all_holder">
+      </div>
+      <div id="state_map_section">
+        <div id="state_map_title">
+          <h2 class="detail_title">
+            Top Call per State this week: 
+          </h2>
+          <select class="picker" id="state_select">
+            <option id="none">Select a state</option>
+          </select>
+          <div class="description">
+            The top issue in each state in the past week, as recorded with 5 Calls
+          </div>
+        </div>
+
+        <div id="state_map_content">
+          <div id="state_map"></div>
+        
+          <div id="state_map_label" class="overlayBox leftLabel absolute" hidden>
+            <button aria-label="close" id="close_label_btn">X</button>
+            <div class="title"></div>
+            <div class="issue_name"></div>
+          </div>
+
+          <div class="overlayBox" id="state_map_key_box">
+            <div class="title">Top Calls:</div>
+            <ol id="state_map_key">
+            </ol>
+          </div>
+        </div>
+      </div>
+    
+      <div>
+        <div class="total_card" id="state_total_card">
+          <h2 class="subtitle_detail"></h2>
+          <div class="highlight" id="total_state"></div>
+          <div class="subtitle">
+            <div class="subtitle_main" id="state_name_subtitle">
+            </div>
+          </div>      
+        </div>
+      </div>
+
+      <div class="detail" id="state_detail" hidden>
+        <h2 id="state_detail_title"></h2>
+        <div class="description">
+          The most-called issues this week in the state as recorded with 5 Calls.
+        </div>
+        <ol id="top_five_state_holder">
+      </div>
+    </div>
+  
+    <div id="reps_section" role="tabpanel" aria-labelledby="tab_your_reps">
+      <div class="heading">
+        <div id="nav" role="tablist"></div>
+      </div>
+      <div id="location_picker" hidden>
+        <!-- TODO: Put the proper location picker here. -->
+         <div class="i-bar-location" id="react-location">
+           <div>
+             <span>&nbsp;</span>
+             <strong>&nbsp;</strong>
+             <button class="button-link">&nbsp;</button>
+           </div>
+         </div>
+       </div>
+    </div>
+  </div>
+
+  <footer>
+    <p>
+      This data is from calls recorded by people using 5calls.org or the 5 Calls Android and iOS apps
+      to tally their call results. It does not reflect every call made to Congress nationwide.
+    </p>
+  </footer>
+</div>
+{{ end }}
