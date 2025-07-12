@@ -43,13 +43,14 @@ interface State {
   isLoading: boolean;
 }
 
-// TODO: Move hard-coded colors into CSS.
+// Colors used by D3.
 const themeColor = 'rgb(24, 117, 209)';
 const purple = '#9467bd';
 const themeAccentColor = '#ed3c1d';
 const defaultColor = '#ccc';
 const defaultDarkColor = '#666';
 const selectedStateStroke = 'rgba(255, 217, 52)';
+
 const USA_TOPOJSON = 'https://cdn.jsdelivr.net/npm/us-atlas@2/us/10m.json';
 const MIN_FOR_BEESWARM = 7;
 const MAX_FOR_SONIFICATION = 2000;
@@ -81,6 +82,8 @@ const updateStateLabelPosition = (parent: SVGGraphicsElement) => {
   // SVG's bounding box.
   const svgBb = parent.parentElement!.parentElement!.getBoundingClientRect();
 
+  // State has no bounds because it's a territory like PR, VI, etc.
+  // Show the label in the middle.
   if (boundingBox.width === 0 || boundingBox.height === 0) {
     label
       .style('top', `${svgBb.height / 2}px`)
@@ -499,7 +502,7 @@ const drawUsaMap = (
           return issueColor(stateTopIssues[0].issue_id);
         }
         // Default grey for no calls at all.
-        return '#ccc';
+        return defaultColor;
       })
       .on('end', function () {
         if (initialState !== null) {
@@ -1419,7 +1422,7 @@ class Dashboard extends React.Component<null, State> {
     const issueColor = d3
       .scaleOrdinal<number, string>([
         themeColor, // blue
-        purple, // purple
+        purple,
         '#66a61e', // bright green
         '#e7298a', // pink
         '#e6ab02', // yellow
@@ -1527,7 +1530,6 @@ class Dashboard extends React.Component<null, State> {
           );
         } else {
           document.getElementById('location_picker')!.removeAttribute('hidden');
-          // TODO: Show information about how to set a location within 5calls. Handle location clicks.
         }
       }
     };

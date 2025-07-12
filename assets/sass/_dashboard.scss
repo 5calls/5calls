@@ -51,6 +51,7 @@
     overflow-y: clip;
     border-bottom: 0.1rem solid var(--c-light-border);
     -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
 
     button {
       background: var(--c-tab-bg);
@@ -115,7 +116,7 @@
 
   .subtitle {
     background: #eee;
-    padding: 0.5rem 1.5rem;
+    padding: 0.5rem 1rem;
     display: flex;
     align-items: center;
 
@@ -130,12 +131,17 @@
     }
 
     @media (min-width: 40rem) {
-      padding: 1.125rem 1.5rem 1.5rem;
+      padding: 1.125rem 1.5rem 1.25rem;
     }
   }
 
   .subtitle_detail {
-    padding: 0.5rem 1.5rem 0;
+    padding: 0 1rem 0;
+    margin: .6rem 0 0;
+
+    @media (min-width: 40rem) {
+      padding: 0.5rem 1.5rem 0;
+    }
   }
 
   .description {
@@ -227,9 +233,10 @@
 
   .highlight {
     font-size: 2rem;
-    padding-left: 1.5rem;
+    padding-left: 1rem;
 
     @media (min-width: 40rem) {
+      padding-left: 1.5rem;
       font-size: 3rem;
     }
   }
@@ -524,7 +531,7 @@
     align-items: center;
     width: 100%;
     background: #efefef;
-    padding-bottom: 0.5rem;
+    padding: 0 1rem 0.5rem;
 
     h2 {
       text-align: center;
@@ -570,10 +577,6 @@
   .results_contact { color: #807dba; font-weight: bold; }
   .results_unavailable { color: #4a1486; font-weight: bold; }
 
-  footer {
-    margin: 4rem auto 0;
-  }
-
   .i-bar-location {
     color: #000;
     background: #fff;
@@ -614,10 +617,17 @@
 }
 
 #dashboard_title {
-  font-size: calc(28rem / var(--base-font-size));
-  margin-bottom: calc(var(--leading) * 1rem);
+  margin-bottom: .5rem;
 
   @media (min-width: 40rem) {
+    margin-bottom: calc(var(--leading) * 1rem);
     font-size: calc(48rem / var(--base-font-size));
+  }
+}
+
+footer {
+  margin: 1rem auto 0;
+  p {
+    font-size: calc(16rem / var(--base-font-size));
   }
 }
