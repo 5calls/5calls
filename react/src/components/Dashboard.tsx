@@ -146,12 +146,12 @@ const drawStateResults = (
   const stateResults = allStateResults.find((d) => d.id === state);
   if (stateResults) {
     d3.selectAll('div#total_state').html(stateResults.total.toLocaleString());
-    d3.selectAll('div#state_name_subtitle').html(`From ${stateResults.name}`);
+    d3.selectAll('div#state_name_subtitle').html(stateResults.name);
     d3.select('div#state_total_card').attr('hidden', null);
   }
   if (!stateResults || stateResults.total === 0) {
     d3.select('h2#state_detail_title').html(
-      `There were no calls in ${stateResults ? stateResults.name : state} recorded with 5 Calls ${duration}`
+      `There were no calls in ${stateResults ? stateResults.name : state} recorded with 5 Calls, ${duration}`
     );
     if (!stateResults) {
       d3.select('div#state_total_card').attr('hidden', true);
@@ -160,7 +160,7 @@ const drawStateResults = (
   }
   d3.select('h2#state_detail_title')
     .attr('class', 'detail_title')
-    .html(`Top 5 calls in ${stateResults.name} ${duration}`);
+    .html(`Most called issues in ${stateResults.name}, ${duration}`);
   if (!stateResults || stateResults.total === 0) {
     return;
   }
@@ -609,7 +609,7 @@ const drawRepsPane = (
   totalCard
     .append('h2')
     .attr('class', 'subtitle_detail')
-    .html(`Total calls ${duration}`);
+    .html(`Total calls, ${duration}`);
   totalCard
     .append('div')
     .attr('class', 'highlight')
@@ -621,31 +621,35 @@ const drawRepsPane = (
     .style('float', 'left')
     .attr('alt', '');
   const nameSubtitleSection = totalSubtitle
-    .append('div')
-    .style('width', '241px');
+    .append('div').style('overflow', 'hidden');
   const nameDiv = nameSubtitleSection
     .append('div')
     .attr('class', 'subtitle_main')
-    .html(`${repData.repInfo.name}`)
-    .node();
+    .html(`${repData.repInfo.name}`).node();
   let fontSize = 33;
   // Example long name case: FL-25's house rep.
   while (nameDiv.scrollWidth > nameDiv.clientWidth) {
     nameDiv.style.fontSize = `${fontSize--}px`;
   }
+  let nameSubtitle = repData.repInfo.area === 'US House' ? 'House Representative' : 
+      repData.repInfo.area === 'US Senate' ? 'Senator' : repData.repInfo.area;
+  if (repData.repInfo.party && repData.repInfo.party.length > 0) {
+    nameSubtitle += ` (${repData.repInfo.party[0]}-${repData.repInfo.area === 'US House' ? 
+        localStorage.district : repData.repInfo.state})`;
+  } else {
+    nameSubtitle += ` (${repData.repInfo.state})`;
+  }
   nameSubtitleSection
     .append('div')
-    .attr('class', '')
-    .html(
-      `${repData.repInfo.party} from ${repData.repInfo.area === 'US House' ? localStorage.district : repData.repInfo.state}`
-    );
+    .attr('class', 'subtitle_secondary')
+    .html(nameSubtitle);
 
   const repDetail = repCard.append('div').attr('class', 'detail');
   if (repData.total == 0) {
     repDetail
       .append('div')
       .html(
-        `There were no calls to ${repData.repInfo.name} recorded via 5 Calls ${duration}. Make your voice heard: see <a href="/all">all active issues</a>.`
+        `There were no calls to ${repData.repInfo.name} recorded via 5 Calls, ${duration}. Make your voice heard: see <a href="/all">all active issues</a>.`
       );
     return;
   }
@@ -655,12 +659,12 @@ const drawRepsPane = (
   repDetail
     .append('h2')
     .attr('class', 'detail_title')
-    .html(`Top 5 Calls ${duration}`);
+    .html(`Most called issues for ${repData.repInfo.name}, ${duration}`);
   repDetail
     .append('div')
     .attr('class', 'description')
     .html(() => {
-      let text = `The most-called issues for ${repData.repInfo.name} ${duration} from 5 Calls.`;
+      let text = ''; //`The most-called issues for ${repData.repInfo.name} ${duration} from 5 Calls.`;
       if (repData.total >= MIN_FOR_BEESWARM) {
         text += ' Select the call counts to see them highlighted below.';
       }
@@ -685,7 +689,7 @@ const drawRepsPane = (
     .attr('class', 'description')
     .style('margin-bottom', '10px')
     .html(
-      `${repData.repInfo.name}'s office's reported availability ${duration}.`
+      `${repData.repInfo.name}'s availability, ${duration}.`
     );
   const callResultsGroup = reachability
     .append('svg')
@@ -946,7 +950,7 @@ const drawBeeswarm = (
 
   description
     .append('h2')
-    .html(`All ${repData.repInfo.name}'s calls ${duration}`);
+    .html(`Calls to ${repData.repInfo.name}, ${duration}`);
 
   let renderFrameId: number | null = null;
   let audioContext: AudioContext | null = null;
@@ -1007,35 +1011,34 @@ const drawBeeswarm = (
   };
 
   const paragraph = description.append('div');
-  paragraph.append('span').html('Select calls above to highlight');
+  paragraph.append('span').html('Select call count above to highlight');
   if (repData.total <= MAX_FOR_SONIFICATION) {
     // Only add button to listen if there's a reasonable number of calls. Otherwise it's just
     // way too noisy.
-    paragraph.append('span').html(', or ');
+    paragraph.append('span').html(' or ');
     paragraph
       .append('button')
       .attr('id', `sonify_btn_${repData.id}`)
       .html('listen')
       .on('click', startSonification);
-    paragraph.append('span').html(' to this chart. ');
+    paragraph.append('span').html(' to this chart.');
   } else {
-    paragraph.append('span').html('. ');
+    paragraph.append('span').html('.');
   }
-  paragraph.append('span').html('Your calls make a difference.');
 
   const dotsKey = description.append('div').attr('class', 'dot_key');
   dotsKey
     .append('div')
     .attr('class', 'dot')
     .attr('aria-label', 'grey dot (lower pitch)')
-    .html('A call');
+    .html('One call');
   dotsKey
     .append('div')
     .attr('class', 'dot')
     .attr('aria-label', 'colored dot (high pitch)')
     .attr('id', `dot_key_${repData.id}`)
     .style('--dot-color', issueColor(repData.topIssues[0].issue_id))
-    .html(`A call for <i>${repData.topIssues[0].name}</i>`);
+    .html(`<i>${repData.topIssues[0].name}</i>`);
 
   const svgBox = parentDiv.append('div').style('position', 'relative');
   svgBox
@@ -1097,7 +1100,8 @@ const drawBeeswarm = (
     .style('width', '100%')
     .style('height', 'auto')
     .attr('id', 'beeswarm_svg_' + repData.id)
-    .style('margin-bottom', '1.5rem');
+    .style('margin-bottom', '1.5rem')
+    .style('overflow', 'visible');
 
   if (repData.total < MIN_FOR_BEESWARM) {
     // Skip drawing beeswarm.
@@ -1361,25 +1365,27 @@ class Dashboard extends React.Component<null, State> {
             expandRepResults(expandedResult.callResults);
 
             // Calculate aggregated reachability stats.
-            const vmOutcomes = contactSummaryData.outcomes.find(
-              (s) => s.result === 'voicemail'
-            );
-            const contactOutcomes = contactSummaryData.outcomes.find(
-              (s) => s.result === 'contact'
-            );
-            const unavailableOutcomes = contactSummaryData.outcomes.find(
-              (s) => s.result === 'unavailable'
-            );
-            const numVm = !vmOutcomes ? 0 : vmOutcomes.count;
-            const numContact = !contactOutcomes ? 0 : contactOutcomes.count;
-            const numUnavailable = !unavailableOutcomes
-              ? 0
-              : unavailableOutcomes.count;
-            expandedResult.percentVM = numVm / contactSummaryData.total;
-            expandedResult.percentContact =
-              numContact / contactSummaryData.total;
-            expandedResult.percentUnavailable =
-              numUnavailable / contactSummaryData.total;
+            if (contactSummaryData.outcomes) {
+              const vmOutcomes = contactSummaryData.outcomes.find(
+                (s) => s.result === 'voicemail'
+              );
+              const contactOutcomes = contactSummaryData.outcomes.find(
+                (s) => s.result === 'contact'
+              );
+              const unavailableOutcomes = contactSummaryData.outcomes.find(
+                (s) => s.result === 'unavailable'
+              );
+              const numVm = !vmOutcomes ? 0 : vmOutcomes.count;
+              const numContact = !contactOutcomes ? 0 : contactOutcomes.count;
+              const numUnavailable = !unavailableOutcomes
+                ? 0
+                : unavailableOutcomes.count;
+              expandedResult.percentVM = numVm / contactSummaryData.total;
+              expandedResult.percentContact =
+                numContact / contactSummaryData.total;
+              expandedResult.percentUnavailable =
+                numUnavailable / contactSummaryData.total;
+            }
           }
           repsData.push(expandedResult);
         });
@@ -1411,7 +1417,7 @@ class Dashboard extends React.Component<null, State> {
 
     const hasRepsData = this.state.repsData.length > 0;
 
-    const duration = 'this week';
+    const duration = 'last 7 days';
     // IDs of top issues, to be used for coloring.
     const topIssueIds: number[] = usaData.usa.issueCounts.reduce((agg, row) => {
       agg.push(row.issue_id);
@@ -1457,7 +1463,7 @@ class Dashboard extends React.Component<null, State> {
     const top_tabs: TabData[] = [];
     top_tabs.push({
       index: 0,
-      name: 'Your reps',
+      name: 'Your Reps',
       id: 'your_reps',
       selected: hasRepsData,
       drawn: false,
@@ -1566,7 +1572,7 @@ class Dashboard extends React.Component<null, State> {
       const beeswarmScale = d3
         .scaleTime()
         .domain([finalDate - 7 * 24 * 60 * 60 * 1000, finalDate])
-        .range([30, 570])
+        .range([25, BEESWARM_TARGET_WIDTH - 25])
         .nice();
 
       const handleRepTabClick = function (_: Event | null, newTab: TabData) {
@@ -1622,7 +1628,7 @@ class Dashboard extends React.Component<null, State> {
       handleRepTabClick(null, tabs.find((t) => t.selected)!);
     }
 
-    d3.selectAll('h2.subtitle_detail').html(`Total calls ${duration}`);
+    d3.selectAll('h2.subtitle_detail').html(`Total calls, ${duration}`);
     handleTopNavClick(null, top_tabs.find((t) => t.selected)!);
     d3.select('div#dashboard-content').style('visibility', 'visible');
 
