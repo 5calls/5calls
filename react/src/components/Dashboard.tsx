@@ -621,21 +621,30 @@ const drawRepsPane = (
     .style('float', 'left')
     .attr('alt', '');
   const nameSubtitleSection = totalSubtitle
-    .append('div').style('overflow', 'hidden');
+    .append('div')
+    .style('overflow', 'hidden');
   const nameDiv = nameSubtitleSection
     .append('div')
     .attr('class', 'subtitle_main')
-    .html(`${repData.repInfo.name}`).node();
+    .html(`${repData.repInfo.name}`)
+    .node();
   let fontSize = 33;
   // Example long name case: FL-25's house rep.
   while (nameDiv.scrollWidth > nameDiv.clientWidth) {
     nameDiv.style.fontSize = `${fontSize--}px`;
   }
-  let nameSubtitle = repData.repInfo.area === 'US House' ? 'House Representative' : 
-      repData.repInfo.area === 'US Senate' ? 'Senator' : repData.repInfo.area;
+  let nameSubtitle =
+    repData.repInfo.area === 'US House'
+      ? 'House Representative'
+      : repData.repInfo.area === 'US Senate'
+        ? 'Senator'
+        : repData.repInfo.area;
   if (repData.repInfo.party && repData.repInfo.party.length > 0) {
-    nameSubtitle += ` (${repData.repInfo.party[0]}-${repData.repInfo.area === 'US House' ? 
-        localStorage.district : repData.repInfo.state})`;
+    nameSubtitle += ` (${repData.repInfo.party[0]}-${
+      repData.repInfo.area === 'US House'
+        ? localStorage.district
+        : repData.repInfo.state
+    })`;
   } else {
     nameSubtitle += ` (${repData.repInfo.state})`;
   }
@@ -688,9 +697,7 @@ const drawRepsPane = (
     .append('div')
     .attr('class', 'description')
     .style('margin-bottom', '10px')
-    .html(
-      `${repData.repInfo.name}'s availability, ${duration}.`
-    );
+    .html(`${repData.repInfo.name}'s availability, ${duration}.`);
   const callResultsGroup = reachability
     .append('svg')
     .attr('width', pieSize)
