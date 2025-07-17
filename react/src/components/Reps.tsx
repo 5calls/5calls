@@ -28,8 +28,6 @@ const TOAST_SETTINGS = {
   position: 'bottom-center'
 };
 
-const ALWAYS_VISIBLE_AREAS = [ContactArea.USHouse, ContactArea.USSenate];
-
 const TOAST_DELAY = 750;
 
 type Outcome = 'contact' | 'voicemail' | 'skip' | 'unavailable';
@@ -194,10 +192,21 @@ class Reps extends React.Component<
 
   addAlwaysAvailableAreas(areas: string[]) {
     const irrelevantVisibleAreas = [];
-    for (const area of ALWAYS_VISIBLE_AREAS) {
-      if (!areas.includes(area)) irrelevantVisibleAreas.push(area);
+    const houseOrSenateAreas = [ContactArea.USHouse, ContactArea.USSenate];
+    const hasHouseOrSenate =
+      areas.includes(ContactArea.USHouse) ||
+      areas.includes(ContactArea.USSenate);
+
+    if (hasHouseOrSenate) {
+      // Show both house and senate if at least one is relevant
+      for (const area of houseOrSenateAreas) {
+        if (!areas.includes(area)) irrelevantVisibleAreas.push(area);
+      }
+      return [...areas, ...irrelevantVisibleAreas];
+    } else {
+      // Don't show house and senate if neither is relevant
+      return areas;
     }
-    return [...areas, ...irrelevantVisibleAreas];
   }
 
   updateContacts(areas: string[] = []) {
@@ -265,8 +274,15 @@ class Reps extends React.Component<
     return contacts;
   }
 
-  vacantSeats(areas: string[], contactList: ContactList): Contact[] {
+  vacantHouseSenateSeats(areas: string[], contactList: ContactList): Contact[] {
     const missingSeats: Contact[] = [];
+    if (
+      !areas.includes(ContactArea.USHouse) &&
+      !areas.includes(ContactArea.USSenate)
+    ) {
+      return missingSeats;
+    }
+
     const party: Party = '';
     const commonVacantSeatProps = {
       name: 'Vacant Seat',
@@ -326,7 +342,7 @@ class Reps extends React.Component<
 
     return (
       <li className={index === activeIndex ? 'active' : ''} key={contact.id}>
-        <div className={type}>
+        <div className={`rep-info ${type}`}>
           <img
             alt={contact.name}
             src={photoURL}
@@ -334,11 +350,13 @@ class Reps extends React.Component<
               e.currentTarget.src = '/images/no-rep.png';
             }}
           />
-          <h4>
-            {contact.name}{' '}
-            {type !== 'vacant' && `(${ContactUtils.partyAndState(contact)})`}
-          </h4>
-          <p>{contact.reason}</p>
+          <div className="rep-info-content">
+            <h4>
+              {contact.name}{' '}
+              {type !== 'vacant' && `(${ContactUtils.partyAndState(contact)})`}
+            </h4>
+            <p>{contact.reason}</p>
+          </div>
         </div>
       </li>
     );
@@ -369,7 +387,7 @@ class Reps extends React.Component<
       this.state.contactList
     );
 
-    const vacantSeats = this.vacantSeats(
+    const vacantSeats = this.vacantHouseSenateSeats(
       this.state.areas,
       this.state.contactList
     );
