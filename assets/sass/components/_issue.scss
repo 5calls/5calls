@@ -127,6 +127,13 @@ body.issue {
           }
         }
 
+        .rep-info {
+          display: flex;
+          flex-direction: row;
+          align-items: flex-start;
+          gap: 6px;
+        }
+
         .vacant,
         .irrelevant {
           opacity: 0.5;
