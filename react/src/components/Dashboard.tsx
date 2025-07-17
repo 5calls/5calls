@@ -666,7 +666,7 @@ const drawRepsPane = (
     .html(() => {
       let text = ''; //`The most-called issues for ${repData.repInfo.name} ${duration} from 5 Calls.`;
       if (repData.total >= MIN_FOR_BEESWARM) {
-        text += ' Select the call counts to see them highlighted below.';
+        text += ' Select a call counts to see it highlighted below.';
       }
       return text;
     });
