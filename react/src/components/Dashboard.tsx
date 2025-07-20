@@ -100,8 +100,10 @@ const updateStateLabelPosition = (parent: SVGGraphicsElement) => {
   point.y = boundingBox.y + (1 / 2) * boundingBox.height;
   const screenCoords = point.matrixTransform(matrix);
 
-  const holderBb =
-    d3.select('div#state_map_content').node().getBoundingClientRect();
+  const holderBb = d3
+    .select('div#state_map_content')
+    .node()
+    .getBoundingClientRect();
   const svgOffsetY = svgBb.y - holderBb.y;
 
   screenCoords.y += svgOffsetY - 24; // 24 has to do with where the < is on the label.
