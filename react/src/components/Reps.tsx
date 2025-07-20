@@ -1,7 +1,7 @@
 import React, { createRef } from 'react';
 
 import { toast } from 'react-toastify';
-import { Contact, MissingSeat } from '../common/models/contact';
+import { Contact, Party } from '../common/models/contact';
 import { OutcomeData } from '../common/models/contactEvent';
 import { ContactArea, ContactList } from '../common/models/contactList';
 import { WithCompletedProps } from '../state/completedState';
@@ -105,7 +105,7 @@ class Reps extends React.Component<
 
     if (!this.state.contactList) {
       // if we don't have contacts, fetch the contacts
-      this.updateContacts(areaString);
+      this.updateContacts(areaString.split(','));
     }
 
     document.addEventListener('nextContact', (e) => {
@@ -177,7 +177,7 @@ class Reps extends React.Component<
     if (
       prevProps.locationState?.address !== this.props.locationState?.address
     ) {
-      this.updateContacts(this.state.areas.join(','));
+      this.updateContacts(this.state.areas);
     }
   }
 
@@ -190,9 +190,32 @@ class Reps extends React.Component<
     document.dispatchEvent(activeContactEvent);
   }
 
-  updateContacts(areas: string = '') {
+  addAlwaysAvailableAreas(areas: string[]) {
+    const irrelevantVisibleAreas = [];
+    const houseOrSenateAreas = [ContactArea.USHouse, ContactArea.USSenate];
+    const hasHouseOrSenate =
+      areas.includes(ContactArea.USHouse) ||
+      areas.includes(ContactArea.USSenate);
+
+    if (hasHouseOrSenate) {
+      // Show both house and senate if at least one is relevant
+      for (const area of houseOrSenateAreas) {
+        if (!areas.includes(area)) irrelevantVisibleAreas.push(area);
+      }
+      return [...areas, ...irrelevantVisibleAreas];
+    } else {
+      // Don't show house and senate if neither is relevant
+      return areas;
+    }
+  }
+
+  updateContacts(areas: string[] = []) {
+    // Make sure we're fetching all reps even if irrelevant
+    const completeAreas = this.addAlwaysAvailableAreas(areas);
+    const completeAreasString = completeAreas.join(',');
+
     if (this.props.locationState) {
-      getContacts(this.props.locationState.address, areas)
+      getContacts(this.props.locationState.address, completeAreasString)
         .then((contactList) => {
           this.setState({ activeContactIndex: 0, contactList });
           const contacts = this.contactsForArea(this.state.areas, contactList);
@@ -214,7 +237,7 @@ class Reps extends React.Component<
     let contacts: Contact[] = [];
 
     contacts = ContactUtils.allContacts(contactList).filter((contact) => {
-      for (const area of this.state.areas) {
+      for (const area of areas) {
         if (area === contact.area) {
           return true;
         }
@@ -225,35 +248,82 @@ class Reps extends React.Component<
     return contacts;
   }
 
-  vacantSeats(areas: string[], contactList: ContactList): MissingSeat[] {
-    const missingSeats: MissingSeat[] = [];
+  visibleIrrelevantContacts(
+    areas: string[],
+    contactList: ContactList
+  ): Contact[] {
+    let contacts: Contact[] = [];
 
-    if (areas.includes(ContactArea.USSenate)) {
-      // Handle missing Senate seat(s)
-      const senateReps = contactList.senateReps();
-      if (senateReps.length < 2) {
-        // Assuming Senate seat(s) is vacant if there's < 2
-        const numVacancies = 2 - senateReps.length; // handle multiple vacancies
-        for (let i = 0; i < numVacancies; i++) {
-          missingSeats.push({
-            id: `vacant-senate-seat-${i + 1}`,
-            reason: `This ${ContactArea.USSenate} seat is currently vacant.`,
-            area: ContactArea.USSenate
-          });
+    // filter out the relevant contacts
+    contacts = ContactUtils.allContacts(contactList)
+      .filter((contact) => {
+        for (const area of areas) {
+          if (area === contact.area) {
+            return false;
+          }
         }
-      }
+        return true;
+      })
+      .map((contact) => {
+        return {
+          ...contact,
+          reason: `${contact.area === ContactArea.USHouse ? 'House reps' : 'Senators'} are not currently relevant to this issue.`
+        };
+      });
+
+    return contacts;
+  }
+
+  vacantHouseSenateSeats(areas: string[], contactList: ContactList): Contact[] {
+    const missingSeats: Contact[] = [];
+    if (
+      !areas.includes(ContactArea.USHouse) &&
+      !areas.includes(ContactArea.USSenate)
+    ) {
+      return missingSeats;
     }
-    if (areas.includes(ContactArea.USHouse)) {
-      // Handle missing House seat
-      const houseReps = contactList.houseRep();
-      // Assuming House seat is vacant if there's not at least one
-      if (houseReps.length < 1) {
+
+    const party: Party = '';
+    const commonVacantSeatProps = {
+      name: 'Vacant Seat',
+      phone: '',
+      party,
+      state: contactList.state
+    };
+
+    // Handle missing Senate seat(s)
+    const senateReps = contactList.senateReps();
+    if (senateReps.length < 2) {
+      // Assuming Senate seat(s) is vacant if there's < 2
+      const numVacancies = 2 - senateReps.length; // handle multiple vacancies
+      for (let i = 0; i < numVacancies; i++) {
         missingSeats.push({
-          id: 'vacant-house-seat',
-          reason: `This ${ContactArea.USHouse} seat is currently vacant.`,
-          area: ContactArea.USHouse
+          id: `vacant-senate-seat-${i + 1}`,
+          reason: `This ${ContactArea.USSenate} seat is currently vacant${
+            areas.includes(ContactArea.USSenate)
+              ? ''
+              : ' and not relevant to this issue'
+          }.`,
+          area: ContactArea.USSenate,
+          ...commonVacantSeatProps
         });
       }
+    }
+
+    // Handle missing House seat
+    const houseReps = contactList.houseRep();
+    // Assuming House seat is vacant if there's not at least one
+    if (houseReps.length < 1) {
+      missingSeats.push({
+        id: 'vacant-house-seat',
+        reason: `This ${ContactArea.USHouse} seat is currently vacant${
+          areas.includes(ContactArea.USHouse)
+            ? ''
+            : ' and not relevant to this issue'
+        }.`,
+        area: ContactArea.USHouse,
+        ...commonVacantSeatProps
+      });
     }
 
     return missingSeats;
@@ -262,7 +332,8 @@ class Reps extends React.Component<
   contactComponent(
     contact: Contact,
     index: number,
-    activeIndex: number
+    activeIndex: number,
+    type: 'targeted' | 'irrelevant' | 'vacant'
   ): JSX.Element {
     let photoURL = '/images/no-rep.png';
     if (contact.photoURL && contact.photoURL !== '') {
@@ -271,36 +342,21 @@ class Reps extends React.Component<
 
     return (
       <li className={index === activeIndex ? 'active' : ''} key={contact.id}>
-        <img
-          alt={contact.name}
-          src={photoURL}
-          onError={(e) => {
-            e.currentTarget.src = '/images/no-rep.png';
-          }}
-        />
-        <h4>
-          {contact.name} ({ContactUtils.partyAndState(contact)})
-        </h4>
-        <p>{contact.reason}</p>
-      </li>
-    );
-  }
-
-  vacantSeatComponent(missing: MissingSeat): JSX.Element {
-    const photoURL = '/images/no-rep.png';
-
-    return (
-      <li key={missing.id}>
-        <div className="vacant">
+        <div className={`rep-info ${type}`}>
           <img
-            alt={missing.id}
+            alt={contact.name}
             src={photoURL}
             onError={(e) => {
-              e.currentTarget.src = photoURL;
+              e.currentTarget.src = '/images/no-rep.png';
             }}
           />
-          <h4>Vacant Seat</h4>
-          <p>{missing.reason}</p>
+          <div className="rep-info-content">
+            <h4>
+              {contact.name}{' '}
+              {type !== 'vacant' && `(${ContactUtils.partyAndState(contact)})`}
+            </h4>
+            <p>{contact.reason}</p>
+          </div>
         </div>
       </li>
     );
@@ -321,28 +377,53 @@ class Reps extends React.Component<
       );
     }
 
-    const contacts = this.contactsForArea(
+    const targetedContacts = this.contactsForArea(
       this.state.areas,
       this.state.contactList
     );
 
-    const missingSeats = this.vacantSeats(
+    const irrelevantContacts = this.visibleIrrelevantContacts(
+      this.state.areas,
+      this.state.contactList
+    );
+
+    const vacantSeats = this.vacantHouseSenateSeats(
       this.state.areas,
       this.state.contactList
     );
 
     let activeContact: Contact | undefined;
-    if (contacts.length > 0) {
-      activeContact = contacts[this.state.activeContactIndex];
+    if (targetedContacts.length > 0) {
+      activeContact = targetedContacts[this.state.activeContactIndex];
     }
 
     return (
       <div ref={this.componentRef}>
         <ul>
-          {contacts.map((contact, index) =>
-            this.contactComponent(contact, index, this.state.activeContactIndex)
+          {targetedContacts.map((contact, index) =>
+            this.contactComponent(
+              contact,
+              index,
+              this.state.activeContactIndex,
+              'targeted'
+            )
           )}
-          {missingSeats.map((missing) => this.vacantSeatComponent(missing))}
+          {vacantSeats.map((contact) =>
+            this.contactComponent(
+              contact,
+              -1,
+              this.state.activeContactIndex,
+              'vacant'
+            )
+          )}
+          {irrelevantContacts.map((contact) =>
+            this.contactComponent(
+              contact,
+              -1,
+              this.state.activeContactIndex,
+              'irrelevant'
+            )
+          )}
         </ul>
         {activeContact && <ActiveContact contact={activeContact} />}
       </div>

@@ -89,9 +89,10 @@
 
   h2 {
     text-align: start;
-    margin: 0.6rem 0;
+    margin: .6rem 0 0.2rem;
     font-weight: normal;
     font-size: calc(20rem / var(--base-font-size));
+    color: #000;
 
     @media (min-width: 40rem) {
       font-size: calc(24rem / var(--base-font-size));
@@ -128,6 +129,10 @@
       @media (min-width: 40rem) {
         font-size: calc(33rem / var(--base-font-size));
       }
+    }
+
+    .subtitle_secondary {
+      font-size: calc(18rem / var(--base-font-size));
     }
 
     @media (min-width: 40rem) {
@@ -178,7 +183,6 @@
   }
 
   .picker {
-    text-transform: uppercase;
     font-size: calc(20rem / var(--base-font-size));
 
     @media (min-width: 40rem) {
@@ -191,6 +195,7 @@
     transition: 0.4s;
     color: #555;
     appearance: base-select;
+    line-height: 1;
   
     :hover,
     :focus {
@@ -234,6 +239,7 @@
   .highlight {
     font-size: 2rem;
     padding-left: 1rem;
+    color: #000;
 
     @media (min-width: 40rem) {
       padding-left: 1.5rem;
@@ -290,6 +296,7 @@
       display: flex;
       flex-wrap: wrap;
       padding: 0;
+      margin-top: 0.4rem;
 
       li {
         counter-increment: top-counter;
@@ -300,10 +307,11 @@
 
         &::before {
           content: counter(top-counter);
-          font-size: 2rem;
+          font-size: 2.5rem;
           min-width: 1.5rem;
           margin-right: 0.3rem;
           line-height: 1;
+          color: #000;
 
           @media (min-width: 40rem) {
             font-size: 3rem;
@@ -351,6 +359,11 @@
       text-overflow: ellipsis;
       color: black;
       text-decoration: none;
+      margin-right: 0.5rem;
+      text-underline-offset: .1rem;
+      line-height: 1.1;
+      margin-top: auto;
+      margin-bottom: auto;
 
       @supports (-webkit-line-clamp: 2) {
         display: -webkit-box;
@@ -366,6 +379,7 @@
       }
 
       @media (min-width: 40rem) {
+        line-height: initial;
         white-space: nowrap;
       }
     }
@@ -531,7 +545,7 @@
     align-items: center;
     width: 100%;
     background: #efefef;
-    padding: 0 1rem 0.5rem;
+    padding: 0.5rem 1rem 1rem;
 
     h2 {
       text-align: center;
@@ -563,7 +577,7 @@
       width: 100%;
 
       @media (min-width: 40rem) {
-        width: 12rem;
+        width: 14rem;
       }
     }
   }
@@ -618,6 +632,7 @@
 
 #dashboard_title {
   margin-bottom: .5rem;
+  line-height: 1;
 
   @media (min-width: 40rem) {
     margin-bottom: calc(var(--leading) * 1rem);

@@ -90,7 +90,7 @@ body.issue {
         margin-left: 0;
         padding-left: 0;
         padding: 4px;
-        height: 50px;
+        height: fit-content;
         background-color: var(--c-xlight-base);
         border-left: 3px solid var(--c-xlight-base);
         overflow: hidden;
@@ -100,7 +100,7 @@ body.issue {
         }
 
         img {
-          margin: 3px 6px 0 3px;
+          margin: 3px 6px 6px 3px;
           width: 36px;
           height: 36px;
           border-radius: 18px;
@@ -121,13 +121,21 @@ body.issue {
 
         p {
           font-size: 15px;
-
+          margin-bottom: 0px;
           a {
             text-decoration: underline;
           }
         }
 
-        .vacant {
+        .rep-info {
+          display: flex;
+          flex-direction: row;
+          align-items: flex-start;
+          gap: 6px;
+        }
+
+        .vacant,
+        .irrelevant {
           opacity: 0.5;
         }
       }

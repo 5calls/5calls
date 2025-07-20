@@ -2,7 +2,7 @@
 <script type="module" src="https://d3js.org/d3.v6.js"></script>
 <script src="https://d3js.org/topojson.v1.min.js"></script>
 <div class="content">
-  <h1 id="dashboard_title">Your call makes a difference</h1>
+  <h1 id="dashboard_title">Your calls make a difference.</h1>
 
   <!-- React component messages -->
   <div id="react-dashboard"></div>
@@ -21,16 +21,13 @@
           <div class="highlight" id="total_all"></div>
           <div class="subtitle">
             <div class="subtitle_main">
-              Across the nation
+              Nationwide
             </div>
           </div>
         </div>
       </div>
       <div class="detail">
-        <h2 class="detail_title">Top 5 calls this week</h2>
-        <div class="description">
-          The most-called issues this week as recorded with 5 Calls.
-        </div>
+        <h2 class="detail_title">Most called issues, last 7 days</h2>
         <ol id="top_five_all_holder">
       </div>
       <div id="state_map_section">
@@ -40,13 +37,13 @@
             <option id="total">Total calls</option>
           </select>
           <h2 class="detail_title">
-            per State this week: 
+            per state, last 7 days
           </h2>
           <select class="picker" id="state_select">
-            <option id="none">Select a state</option>
+            <option id="none">State</option>
           </select>
           <div class="description">
-            The top issue in each state in the past week, as recorded with 5 Calls
+            The most-called issue by state. Select a state in the dropdown for more details below.
           </div>
         </div>
 
@@ -60,7 +57,7 @@
           </div>
 
           <div class="overlayBox" id="state_map_key_box">
-            <div class="title">Top Calls:</div>
+            <div class="title">Top Issues Nationwide</div>
             <ol id="state_map_key">
             </ol>
           </div>
@@ -80,9 +77,6 @@
 
       <div class="detail" id="state_detail" hidden>
         <h2 id="state_detail_title"></h2>
-        <div class="description">
-          The most-called issues this week in the state as recorded with 5 Calls.
-        </div>
         <ol id="top_five_state_holder">
       </div>
     </div>
@@ -106,8 +100,7 @@
 
   <footer>
     <p>
-      This data is from calls recorded by people using 5calls.org or the 5 Calls Android and iOS apps
-      to tally their call results. It does not reflect every call made to Congress nationwide.
+      This data is logged by users of 5 Calls. It does not reflect all calls made to Congress.
     </p>
   </footer>
 </div>
