@@ -35,8 +35,12 @@
       </div>
       <div id="state_map_section">
         <div id="state_map_title">
+          <select class="picker" id="map_select">
+            <option id="top" selected="true">Top call</option>
+            <option id="total">Total calls</option>
+          </select>
           <h2 class="detail_title">
-            Top Call per State this week: 
+            per State this week: 
           </h2>
           <select class="picker" id="state_select">
             <option id="none">Select a state</option>
@@ -52,7 +56,7 @@
           <div id="state_map_label" class="overlayBox leftLabel absolute" hidden>
             <button aria-label="close" id="close_label_btn">X</button>
             <div class="title"></div>
-            <div class="issue_name"></div>
+            <div class="contents"></div>
           </div>
 
           <div class="overlayBox" id="state_map_key_box">
