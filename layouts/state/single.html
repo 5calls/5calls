@@ -1,0 +1,24 @@
+{{ define "bodyclass" }}issue{{ end }}
+{{ define "main" }}
+{{ .Scratch.Set "issueId" .Params.issueId }}
+<div class="content">
+  <div class="g">
+    {{ partial "sidebar-state.html" . }}
+    <div class="issue-wrapper">
+      <article class="issue-header">
+        <h1>{{ .Title }}</h1>
+        <div class="issue-categories">
+          {{ range .Params.categories }}
+          <span class="issue-category">{{ . }}</span>
+          {{ end }}
+        </div>
+      </article>
+
+      <div class="issue-content">
+        {{ .Content }}
+      </div>
+
+    </div>
+  </div>
+</div>
+{{ end }}

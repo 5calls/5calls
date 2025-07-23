@@ -14,42 +14,9 @@
     <div id="react-search"></div>
     <section class="i-bar-list-section">
 
-      <!-- Get the state name from the page title -->
-      {{ $stateName := .Title }}
       {{ $passedIssueID := (.Scratch.Get "issueId")}}
       
-      <!-- Filter issues that:
-           1. Are NOT active (so they don't appear on main page)
-           2. Are not hidden
-           3. Contain the state name in their content or are specifically for that state
-      -->
-      {{ $stateIssues := slice }}
-      {{ range where (where .Site.Pages "Type" "issue") "Params.hidden" false }}
-        {{ $shouldInclude := false }}
-        
-        <!-- Check if issue mentions the state in content -->
-        {{ if in .Content $stateName }}
-          {{ $shouldInclude = true }}
-        {{ end }}
-        
-        <!-- Check if issue mentions the state in title -->
-        {{ if in .Title $stateName }}
-          {{ $shouldInclude = true }}
-        {{ end }}
-        
-        <!-- Check if it's an AttorneysGeneral issue (state-specific) -->
-        {{ if in .Params.contactAreas "AttorneysGeneral" }}
-          {{ $shouldInclude = true }}
-        {{ end }}
-        
-        <!-- Only include if it's not already on the main page (not active) -->
-        {{ if and $shouldInclude (not .Params.active) }}
-          {{ $stateIssues = $stateIssues | append . }}
-        {{ end }}
-      {{ end }}
-      
-      <!-- Sort by order parameter -->
-      {{ range sort $stateIssues ".Params.order" }}
+      {{ range sort (where (where .CurrentSection.Pages "Kind" "page") "Params.hidden" false) ".Params.order" }}
       <a
         class="i-bar-item is-unsorted{{ if eq $passedIssueID .Params.issueId }} is-active{{ end }}"
         href="{{ .Permalink }}"
@@ -66,7 +33,7 @@
     </section>
   </div>
 
-  <a href="/all/" class="i-bar-more"><i class="fa-solid fa-table-list"></i>&nbsp;&nbsp;See all {{ len (where (where .Site.Pages "Type" "issue") "Params.hidden" false) }} issues</a>
+  <a href="/all/" class="i-bar-more"><i class="fa-solid fa-table-list"></i>&nbsp;&nbsp;See all issues</a>
 </div>
 <div class="i-hidden-bar">
    <a href="/" class="i-bar-top-issues"> <i class="fa-solid fa-circle-left"></i>&nbsp;&nbsp;Back to top issues</a>
