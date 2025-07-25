@@ -169,6 +169,9 @@ const drawStateResults = (
   drawTopFiveIssues(
     'ol#top_five_state_holder',
     stateResults.issueCounts,
+    stateResults.id,
+    ` in ${stateResults.name}`,
+    duration,
     issueColor,
     stateResults.total,
     /* shouldShowBeeswarm= */ false
@@ -186,6 +189,9 @@ const drawUsaPane = (
   drawTopFiveIssues(
     'ol#top_five_all_holder',
     topIssues,
+    'usa',
+    ' across the nation',
+    duration,
     issueColor,
     usaData.usa.total,
     /* shouldShowBeeswarm= */ false
@@ -199,6 +205,9 @@ const drawUsaPane = (
 const drawTopFiveIssues = (
   holder: string,
   data: IssueCountData[],
+  sectionId: string,
+  countTextModifier: string,
+  duration: string,
   issueColor: d3.ScaleOrdinal<number, string>,
   total: number,
   shouldShowBeeswarm: boolean
@@ -209,23 +218,50 @@ const drawTopFiveIssues = (
     .data(data)
     .enter()
     .append('li')
-    .attr('class', 'top_five')
-    .attr('id', (d: IssueCountData) => `top_five_${d.issue_id}`);
+    .classed('top_five', true)
+    .attr('id', (d: IssueCountData) => `top_five_${sectionId}_${d.issue_id}`);
   const rowContent = topFiveRow
     .append('div')
-    .attr('class', 'top_five_item_holder')
+    .classed('top_five_item_holder', true)
     .attr(
       'title',
       (d: IssueCountData) =>
         `${((d.count / total) * 100).toFixed(1)}% of calls: ${d.name}`
-    );
-  const issueSection = rowContent.append('div').attr('class', 'top_five_issue');
-  issueSection
-    .append('a')
-    .attr('class', 'issue_name')
+  );
+  const issueSection = rowContent.append('div')
+      .attr('class', 'top_five_issue_row')
+      .attr('id', (d: IssueCountData) => `issue_row_${sectionId}_${d.issue_id}`);
+
+  const collapseIssueRow = (event: Event, d: IssueCountData) => {
+    const row = d3.select(`li#top_five_${sectionId}_${d.issue_id}`);
+    row.select('a').on('click', null).classed('short', true).transition().delay(500).attr('class', 'issue_name truncated').on('end', () => {
+      row.on('click', expandIssueRow);
+    });
+    row.select('div.row_detail').classed('expanded', false);
+    event.stopPropagation();
+  };
+
+  const expandIssueRow = (event: Event, d: IssueCountData) => {
+    const row = d3.select(`li#top_five_${sectionId}_${d.issue_id}`);
+    row.select('a').classed('truncated', false).on('click', collapseIssueRow);
+    row.select('div.row_detail').classed('expanded', true);
+    event.stopPropagation();
+  };
+
+  const rowDetails = rowContent.append('div').classed('row_detail', true);
+  rowDetails.append('div').html((d: IssueCountData) => `${d.count} calls ${countTextModifier}, ${duration}`);
+  rowDetails.append('div').html((d: IssueCountData) => `1234 calls nationwide, ${duration}`); // TODO: Nationwide total in 7 days
+  rowDetails.append('a')
     .attr('target', '_blank')
     .attr('href', (d: IssueCountData) => `/issue/${d.slug}`)
-    .html((d: IssueCountData) => `${d.name}`);
+    .html('Make this call'); // TODO: Show a different text / link if it is archived.
+
+  issueSection
+    .append('a')
+    .classed('issue_name', true)
+    .classed('truncated', true)
+    .html((d: IssueCountData) => `${d.name}`)
+    .on('click', expandIssueRow);
 
   // TODO: Show as text instead of button if not enough beeswarm.
   let stat;
@@ -686,6 +722,9 @@ const drawRepsPane = (
   drawTopFiveIssues(
     topFiveHolderSelector,
     repData.topIssues,
+    repData.id,
+    ` to ${repData.repInfo.name}`,
+    duration,
     issueColor,
     repData.total,
     repData.total >= MIN_FOR_BEESWARM
@@ -798,13 +837,14 @@ const drawRepsPane = (
     const onIssueSelected = function (event: Event, d: IssueCountData) {
       if (event instanceof KeyboardEvent) {
         if (
-          (event.key === ' ' || event.key === 'Enter') &&
-          event.target === this
-        ) {
+          (event.key === ' ' || event.key === 'Enter') && event.target === this) {
           event.preventDefault();
         } else {
           return;
         }
+      } else if (event.target === this) {
+        event.stopPropagation();
+        
       }
       if (selectedIssueId === d.issue_id) {
         repData.beeswarm.forEach((b) => (b.data.selected = false));
