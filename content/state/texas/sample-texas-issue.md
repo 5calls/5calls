@@ -10,8 +10,13 @@ script: |
     Thank you for your time and consideration.
     
     **IF LEAVING VOICEMAIL:** Please leave your full street address to ensure your call is tallied.
-contactAreas:  - StateUpper
-outcomes:  - unavailable  - voicemail  - contact  - skip
+contactAreas: - StateUpper
+  - StateUpper
+outcomes:
+  - unavailable
+  - voicemail
+  - contact
+  - skip
 
 active: true
 hidden: false
