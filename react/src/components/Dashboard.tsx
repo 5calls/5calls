@@ -170,7 +170,7 @@ const drawStateResults = (
     'ol#top_five_state_holder',
     stateResults.issueCounts,
     stateResults.id,
-    ` in ${stateResults.name}`,
+    `${stateResults.name}'s`,
     duration,
     issueColor,
     stateResults.total,
@@ -190,7 +190,7 @@ const drawUsaPane = (
     'ol#top_five_all_holder',
     topIssues,
     'usa',
-    ' across the nation',
+    'nationwide',
     duration,
     issueColor,
     usaData.usa.total,
@@ -227,41 +227,85 @@ const drawTopFiveIssues = (
       'title',
       (d: IssueCountData) =>
         `${((d.count / total) * 100).toFixed(1)}% of calls: ${d.name}`
-  );
-  const issueSection = rowContent.append('div')
-      .attr('class', 'top_five_issue_row')
-      .attr('id', (d: IssueCountData) => `issue_row_${sectionId}_${d.issue_id}`);
+    );
+  const issueSection = rowContent
+    .append('div')
+    .attr('class', 'top_five_issue_row')
+    .attr('id', (d: IssueCountData) => `issue_row_${sectionId}_${d.issue_id}`);
 
   const collapseIssueRow = (event: Event, d: IssueCountData) => {
+    if (event instanceof KeyboardEvent) {
+      if (
+        (event.key === ' ' || event.key === 'Enter') &&
+        event.target === this
+      ) {
+        event.preventDefault();
+      } else {
+        return;
+      }
+    }
     const row = d3.select(`li#top_five_${sectionId}_${d.issue_id}`);
-    row.select('a').on('click', null).classed('short', true).transition().delay(500).attr('class', 'issue_name truncated').on('end', () => {
-      row.on('click', expandIssueRow);
-    });
+    row
+      .select('button.issue_name')
+      .on('click', null)
+      .on('keydown', null)
+      .classed('short', true)
+      .transition()
+      .delay(500)
+      .attr('class', 'issue_name truncated')
+      .on('end', () => {
+        row.select('div.row_detail').attr('hidden', true);
+        row.on('click', expandIssueRow).on('keydown', expandIssueRow);
+      });
     row.select('div.row_detail').classed('expanded', false);
     event.stopPropagation();
   };
 
   const expandIssueRow = (event: Event, d: IssueCountData) => {
+    if (event instanceof KeyboardEvent) {
+      if (
+        (event.key === ' ' || event.key === 'Enter') &&
+        event.target === this
+      ) {
+        event.preventDefault();
+      } else {
+        return;
+      }
+    }
     const row = d3.select(`li#top_five_${sectionId}_${d.issue_id}`);
-    row.select('a').classed('truncated', false).on('click', collapseIssueRow);
-    row.select('div.row_detail').classed('expanded', true);
+    row
+      .select('button.issue_name')
+      .classed('truncated', false)
+      .on('click', collapseIssueRow)
+      .on('keydown', collapseIssueRow);
+    row.select('div.row_detail').attr('hidden', null).classed('expanded', true);
     event.stopPropagation();
   };
 
-  const rowDetails = rowContent.append('div').classed('row_detail', true);
-  rowDetails.append('div').html((d: IssueCountData) => `${d.count} calls ${countTextModifier}, ${duration}`);
-  rowDetails.append('div').html((d: IssueCountData) => `1234 calls nationwide, ${duration}`); // TODO: Nationwide total in 7 days
-  rowDetails.append('a')
+  const rowDetails = rowContent
+    .append('div')
+    .classed('row_detail', true)
+    .attr('hidden', true);
+  rowDetails
+    .append('div')
+    .html(
+      (d: IssueCountData) =>
+        `${((d.count / total) * 100).toFixed(1)}% of ${countTextModifier} calls in the ${duration}`
+    );
+  // rowDetails.append('div').html((d: IssueCountData) => `1234 calls nationwide, ${duration}`); // TODO: Nationwide total in 7 days
+  rowDetails
+    .append('a')
     .attr('target', '_blank')
     .attr('href', (d: IssueCountData) => `/issue/${d.slug}`)
     .html('Make this call'); // TODO: Show a different text / link if it is archived.
 
   issueSection
-    .append('a')
+    .append('button')
     .classed('issue_name', true)
     .classed('truncated', true)
     .html((d: IssueCountData) => `${d.name}`)
-    .on('click', expandIssueRow);
+    .on('click', expandIssueRow)
+    .on('keydown', expandIssueRow);
 
   // TODO: Show as text instead of button if not enough beeswarm.
   let stat;
@@ -723,7 +767,7 @@ const drawRepsPane = (
     topFiveHolderSelector,
     repData.topIssues,
     repData.id,
-    ` to ${repData.repInfo.name}`,
+    `${repData.repInfo.name}'s`,
     duration,
     issueColor,
     repData.total,
@@ -837,14 +881,15 @@ const drawRepsPane = (
     const onIssueSelected = function (event: Event, d: IssueCountData) {
       if (event instanceof KeyboardEvent) {
         if (
-          (event.key === ' ' || event.key === 'Enter') && event.target === this) {
+          (event.key === ' ' || event.key === 'Enter') &&
+          event.target === this
+        ) {
           event.preventDefault();
         } else {
           return;
         }
       } else if (event.target === this) {
         event.stopPropagation();
-        
       }
       if (selectedIssueId === d.issue_id) {
         repData.beeswarm.forEach((b) => (b.data.selected = false));
@@ -875,7 +920,7 @@ const drawRepsPane = (
         );
         // Ensure everything else is deselected visually.
         d3.select(topFiveHolderSelector)
-          .selectAll('button')
+          .selectAll('button.stat')
           .classed('selected', false)
           .style('background-color', null)
           .style('color', (i) => issueColor(i.issue_id))
@@ -908,7 +953,9 @@ const drawRepsPane = (
 
     // Only show beeswarm if there's enough calls.
     let selectedIssueId: number | null = repData.topIssues[0].issue_id;
-    const showCallsBtns = d3.select(topFiveHolderSelector).selectAll('button');
+    const showCallsBtns = d3
+      .select(topFiveHolderSelector)
+      .selectAll('button.stat');
     showCallsBtns
       .on('pointerover', function (_: Event, d: IssueCountData) {
         if (selectedIssueId !== d.issue_id) {
