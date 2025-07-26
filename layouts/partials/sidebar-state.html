@@ -1,0 +1,40 @@
+<div class="i-bar">
+  <div class="i-bar-location" id="react-location">
+    <div>
+      <span>&nbsp;</span>
+      <strong>&nbsp;</strong>
+      <button class="button-link">&nbsp;</button>
+    </div>
+  </div>
+
+  <div class="i-bar-list">
+    <header class="i-bar-header i-bar-header-unsorted">
+      <h3><i class="fa fa-newspaper"></i> {{ .Title }} Issues</h3>
+    </header>
+    <div id="react-search"></div>
+    <section class="i-bar-list-section">
+
+      {{ $passedIssueID := (.Scratch.Get "issueId")}}
+      
+      {{ range sort (where (where .CurrentSection.Pages "Kind" "page") "Params.hidden" false) ".Params.order" }}
+      <a
+        class="i-bar-item is-unsorted{{ if eq $passedIssueID .Params.issueId }} is-active{{ end }}"
+        href="{{ .Permalink }}"
+      >
+        <div class="i-bar-item-check">
+          <div class="i-bar-check-completed" data-issue-id="{{ .Params.issueId }}">
+            <i class="fa fa-phone"></i>
+            <span class="sr-only">Needs your calls</span>
+          </div>
+        </div>
+        <strong>{{ .Title }}</strong>
+      </a>
+      {{ end }}
+    </section>
+  </div>
+
+  <a href="/all/" class="i-bar-more"><i class="fa-solid fa-table-list"></i>&nbsp;&nbsp;See all issues</a>
+</div>
+<div class="i-hidden-bar">
+   <a href="/" class="i-bar-top-issues"> <i class="fa-solid fa-circle-left"></i>&nbsp;&nbsp;Back to top issues</a>
+</div>

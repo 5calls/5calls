@@ -1,0 +1,56 @@
+{{ define "bodyclass" }}state{{ end }}
+{{ define "main" }}
+<div class="content">
+  <div class="g">
+    {{ partial "sidebar-state.html" . }}
+    
+    <div class="state-content-wrapper">
+      <h1>{{ .Title }} Issues</h1>
+      <div class="measure a-ctr">
+        <p>Issues specific to {{ .Title }} that aren't included in our main priority list.</p>
+      </div>
+
+      <div class="card-home-wrapper">
+        <div class="card card-home">
+          <i class="fa fa-fw fa-phone-alt"></i>
+          <div class="card-home-body">
+            <h2 class="h3">Calling your representatives about state-specific issues.</h2>
+            <p><a href="/why-calling-works/">Learn more about why calling works.</a></p>
+          </div>
+        </div>
+
+        <div class="card card-home">
+          <i class="fa fa-chart-line"></i>
+          <div class="card-home-body">
+            <h2 class="h3" id="react-call-count">We've made more than 7 million calls so far. Join&nbsp;us.</h2>
+            <p>Pick an issue from the list, or <a href="/getting-started/">read our guide to getting started.</a></p>
+          </div>
+        </div>
+
+        <div class="card card-home">
+          <i class="fa fa-fw fa-envelope-open-text"></i>
+          <div>
+            <h2 class="h3">Get updates on the latest issues.</h2>
+            <p>Subscribe to our newsletter. One email per week at most, no spam.</p>
+
+            <form
+    action="https://buttondown.com/api/emails/embed-subscribe/5calls"
+    method="post"
+    target="popupwindow"
+    onsubmit="window.open('https://buttondown.com/5calls?tag=website', 'popupwindow')"
+    class="embeddable-buttondown-form subscribe"
+  >              <label for="email" class="sr-only">Enter your email address</label>
+              <div class="subscribe-body">
+                <input type="text" placeholder="youremail@example.com" name="email" id="email" />
+                <input type="hidden" name="tag" value="website" />
+                <input type="hidden" name="tag" id="district-tag" />
+                <input type="submit" class="button" value="Subscribe" />
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{{ end }}

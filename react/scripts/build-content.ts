@@ -27,23 +27,52 @@ interface Outcome {
   status: string;
 }
 
+interface PublishedIssues {
+  issues: Issue[];
+  stateIssues: Record<string, Issue[]>;
+}
+
 const buildContent = async () => {
   const contentDirectory = `${__dirname}/../../content/issue/`;
   fsExtra.emptyDirSync(contentDirectory);
   const doneDirectory = `${__dirname}/../../content/done/`;
   fsExtra.emptyDirSync(doneDirectory);
+  const stateContentBaseDirectory = `${__dirname}/../../content/state/`;
+  fsExtra.emptyDirSync(stateContentBaseDirectory);
 
-  fetch(`https://api.5calls.org/v1/issues?includeActuallyHidden=true`)
+  fetch(`https://api.5calls.org/v1/issuesForPublishing`)
     .then((res) => res.json())
     .then((data) => {
-      const issues = data as Issue[];
-      console.log(`building content for ${issues.length} issues`);
-      issues.forEach((issue, index) => {
+      const published = data as PublishedIssues;
+      console.log(`building content for ${published.issues.length} issues`);
+      published.issues.forEach((issue, index) => {
         fs.writeFileSync(`${contentDirectory}${issue.slug}.md`, postContentFromIssue(issue, index));
       });
       // create the done pages too
-      issues.forEach((issue) => {
+      published.issues.forEach((issue) => {
         fs.writeFileSync(`${doneDirectory}${issue.slug}.md`, doneContentFromIssue(issue));
+      });
+
+      console.log("building content for state issues:");
+      Object.keys(published.stateIssues).forEach((state) => {
+        const stateIssues = published.stateIssues[state];
+        console.log(`${state}: ${stateIssues.length} issues`);
+        
+        // Create the state directory if it doesn't exist
+        const stateDirectory = `${stateContentBaseDirectory}${state}/`;
+        fsExtra.ensureDirSync(stateDirectory);
+        
+        // Create the _index.md file for the state
+        const stateIndexContent = `---
+title: "${state}"
+---
+Issues specific to ${state} that aren't included in our main priority list.
+`;
+        fs.writeFileSync(`${stateDirectory}_index.md`, stateIndexContent);
+        
+        stateIssues.forEach((issue, index) => {
+          fs.writeFileSync(`${stateDirectory}${issue.slug}.md`, postContentFromIssue(issue, index));
+        });
       });
     })
     .catch((error) => {
