@@ -169,6 +169,9 @@ const drawStateResults = (
   drawTopFiveIssues(
     'ol#top_five_state_holder',
     stateResults.issueCounts,
+    stateResults.id,
+    `${stateResults.name}'s`,
+    duration,
     issueColor,
     stateResults.total,
     /* shouldShowBeeswarm= */ false
@@ -186,6 +189,9 @@ const drawUsaPane = (
   drawTopFiveIssues(
     'ol#top_five_all_holder',
     topIssues,
+    'usa',
+    'nationwide',
+    duration,
     issueColor,
     usaData.usa.total,
     /* shouldShowBeeswarm= */ false
@@ -199,6 +205,9 @@ const drawUsaPane = (
 const drawTopFiveIssues = (
   holder: string,
   data: IssueCountData[],
+  sectionId: string,
+  countTextModifier: string,
+  duration: string,
   issueColor: d3.ScaleOrdinal<number, string>,
   total: number,
   shouldShowBeeswarm: boolean
@@ -209,23 +218,97 @@ const drawTopFiveIssues = (
     .data(data)
     .enter()
     .append('li')
-    .attr('class', 'top_five')
-    .attr('id', (d: IssueCountData) => `top_five_${d.issue_id}`);
+    .classed('top_five', true)
+    .attr('id', (d: IssueCountData) => `top_five_${sectionId}_${d.issue_id}`);
   const rowContent = topFiveRow
     .append('div')
-    .attr('class', 'top_five_item_holder')
+    .classed('top_five_item_holder', true)
     .attr(
       'title',
       (d: IssueCountData) =>
         `${((d.count / total) * 100).toFixed(1)}% of calls: ${d.name}`
     );
-  const issueSection = rowContent.append('div').attr('class', 'top_five_issue');
-  issueSection
+  const issueSection = rowContent
+    .append('div')
+    .attr('class', 'top_five_issue_row')
+    .attr('id', (d: IssueCountData) => `issue_row_${sectionId}_${d.issue_id}`);
+
+  const collapseIssueRow = (event: Event, d: IssueCountData) => {
+    if (event instanceof KeyboardEvent) {
+      if (
+        (event.key === ' ' || event.key === 'Enter') &&
+        event.target === this
+      ) {
+        event.preventDefault();
+      } else {
+        return;
+      }
+    }
+    const row = d3.select(`li#top_five_${sectionId}_${d.issue_id}`);
+    row
+      .select('button.issue_name')
+      .on('click', null)
+      .on('keydown', null)
+      .classed('short', true)
+      .attr('aria-expanded', false)
+      .transition()
+      .delay(500)
+      .attr('class', 'issue_name truncated')
+      .on('end', () => {
+        row.select('div.row_detail').attr('hidden', true);
+        row.on('click', expandIssueRow).on('keydown', expandIssueRow);
+      });
+    row.select('div.row_detail').classed('expanded', false);
+    event.stopPropagation();
+  };
+
+  const expandIssueRow = (event: Event, d: IssueCountData) => {
+    if (event instanceof KeyboardEvent) {
+      if (
+        (event.key === ' ' || event.key === 'Enter') &&
+        event.target === this
+      ) {
+        event.preventDefault();
+      } else {
+        return;
+      }
+    }
+    const row = d3.select(`li#top_five_${sectionId}_${d.issue_id}`);
+    row
+      .select('button.issue_name')
+      .classed('truncated', false)
+      .attr('aria-expanded', true)
+      .on('click', collapseIssueRow)
+      .on('keydown', collapseIssueRow);
+    row.select('div.row_detail').attr('hidden', null).classed('expanded', true);
+    event.stopPropagation();
+  };
+
+  const rowDetails = rowContent
+    .append('div')
+    .classed('row_detail', true)
+    .attr('hidden', true);
+  rowDetails
+    .append('div')
+    .html(
+      (d: IssueCountData) =>
+        `${((d.count / total) * 100).toFixed(1)}% of ${countTextModifier} calls in the ${duration}`
+    );
+  // rowDetails.append('div').html((d: IssueCountData) => `1234 calls nationwide, ${duration}`); // TODO: Nationwide total in 7 days
+  rowDetails
     .append('a')
-    .attr('class', 'issue_name')
     .attr('target', '_blank')
     .attr('href', (d: IssueCountData) => `/issue/${d.slug}`)
-    .html((d: IssueCountData) => `${d.name}`);
+    .html('Make this call'); // TODO: Show a different text / link if it is archived.
+
+  issueSection
+    .append('button')
+    .classed('issue_name', true)
+    .classed('truncated', true)
+    .attr('aria-expanded', false)
+    .html((d: IssueCountData) => `${d.name}`)
+    .on('click', expandIssueRow)
+    .on('keydown', expandIssueRow);
 
   // TODO: Show as text instead of button if not enough beeswarm.
   let stat;
@@ -686,6 +769,9 @@ const drawRepsPane = (
   drawTopFiveIssues(
     topFiveHolderSelector,
     repData.topIssues,
+    repData.id,
+    `${repData.repInfo.name}'s`,
+    duration,
     issueColor,
     repData.total,
     repData.total >= MIN_FOR_BEESWARM
@@ -805,6 +891,8 @@ const drawRepsPane = (
         } else {
           return;
         }
+      } else if (event.target === this) {
+        event.stopPropagation();
       }
       if (selectedIssueId === d.issue_id) {
         repData.beeswarm.forEach((b) => (b.data.selected = false));
@@ -835,7 +923,7 @@ const drawRepsPane = (
         );
         // Ensure everything else is deselected visually.
         d3.select(topFiveHolderSelector)
-          .selectAll('button')
+          .selectAll('button.stat')
           .classed('selected', false)
           .style('background-color', null)
           .style('color', (i) => issueColor(i.issue_id))
@@ -868,7 +956,9 @@ const drawRepsPane = (
 
     // Only show beeswarm if there's enough calls.
     let selectedIssueId: number | null = repData.topIssues[0].issue_id;
-    const showCallsBtns = d3.select(topFiveHolderSelector).selectAll('button');
+    const showCallsBtns = d3
+      .select(topFiveHolderSelector)
+      .selectAll('button.stat');
     showCallsBtns
       .on('pointerover', function (_: Event, d: IssueCountData) {
         if (selectedIssueId !== d.issue_id) {
