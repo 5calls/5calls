@@ -250,6 +250,7 @@ const drawTopFiveIssues = (
       .on('click', null)
       .on('keydown', null)
       .classed('short', true)
+      .attr('aria-expanded', false)
       .transition()
       .delay(500)
       .attr('class', 'issue_name truncated')
@@ -276,6 +277,7 @@ const drawTopFiveIssues = (
     row
       .select('button.issue_name')
       .classed('truncated', false)
+      .attr('aria-expanded', true)
       .on('click', collapseIssueRow)
       .on('keydown', collapseIssueRow);
     row.select('div.row_detail').attr('hidden', null).classed('expanded', true);
@@ -303,6 +305,7 @@ const drawTopFiveIssues = (
     .append('button')
     .classed('issue_name', true)
     .classed('truncated', true)
+    .attr('aria-expanded', false)
     .html((d: IssueCountData) => `${d.name}`)
     .on('click', expandIssueRow)
     .on('keydown', expandIssueRow);

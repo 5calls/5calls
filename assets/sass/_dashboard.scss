@@ -356,6 +356,33 @@
       background: #efefef;
     }
 
+    button.issue_name {
+      background: none;
+      border: none;
+      padding: 0;
+      display: inline;
+      text-align: start;
+      white-space: initial;
+
+      &::before {
+        content: "";
+        display: inline-block;
+        width: 0;
+        height: 0;
+        border-top: .5rem solid var(--c-base);
+        border-right: .3rem solid transparent;
+        border-bottom: 0;
+        border-left: .3rem solid transparent;
+        margin-right: .5rem;
+        transform: rotate(120deg) translate(-.25rem);
+        transition: transform 0.5s ease;
+      }
+
+      &:hover::before {
+        border-top: .5rem solid var(--c-blue);
+      }
+    }
+
     a, button.issue_name {
       color: black;
       text-decoration: none;
@@ -367,12 +394,6 @@
       max-height: 40rem;
       min-height: initial;
       overflow: hidden;
-      background: none;
-      border: none;
-      padding: 0;
-      display: inline;
-      text-align: start;
-      white-space: initial;
 
       &:hover,
       &:focus {
@@ -392,6 +413,10 @@
 
       @media (min-width: 40rem) {
         max-height: calc(var(--row-line-height) * var(--row-font-size));
+      }
+
+      &::before {
+        transform: rotate(30deg);
       }
     }
 
@@ -415,6 +440,10 @@
         white-space: nowrap;
         display: block;
         max-height: calc(var(--row-line-height) * var(--row-font-size));
+      }
+
+      &::before {
+        transform: rotate(30deg);
       }
     }
   }
@@ -440,9 +469,10 @@
     }
 
     .row_detail {
+      padding-top: .2rem;
       overflow: hidden;
       max-height: 0;
-      transition: max-height 0.5s ease;
+      transition: max-height .5s ease;
       font-size: calc(16rem / var(--base-font-size));
       @media (min-width: 40rem) {
         font-size: calc(18rem / var(--base-font-size));
@@ -463,7 +493,6 @@
     }
 
     .row_detail.expanded {
-      transition: max-height 0.5s ease;
       overflow: visible;
       max-height: 50rem; /* must be larger than the tallest possible content */
     }
