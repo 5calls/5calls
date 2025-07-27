@@ -294,12 +294,14 @@ const drawTopFiveIssues = (
       (d: IssueCountData) =>
         `${((d.count / total) * 100).toFixed(1)}% of ${countTextModifier} calls in the ${duration}`
     );
-  // rowDetails.append('div').html((d: IssueCountData) => `1234 calls nationwide, ${duration}`); // TODO: Nationwide total in 7 days
-  rowDetails
-    .append('a')
-    .attr('target', '_blank')
-    .attr('href', (d: IssueCountData) => `/issue/${d.slug}`)
-    .html('Make this call'); // TODO: Show a different text / link if it is archived.
+  rowDetails.append('div').html((d: IssueCountData) => {
+    if (d.archived) {
+      // TODO: Add a link to the archive when possible.
+      return 'This call is no longer active.';
+    } else {
+      return `<a target="_blank" href="/issue/${d.slug}">Make this call</a>`;
+    }
+  });
 
   issueSection
     .append('button')
@@ -760,7 +762,7 @@ const drawRepsPane = (
     .html(() => {
       let text = ''; //`The most-called issues for ${repData.repInfo.name} ${duration} from 5 Calls.`;
       if (repData.total >= MIN_FOR_BEESWARM) {
-        text += ' Select a call counts to see it highlighted below.';
+        text += ' Select a call count to see it highlighted below.';
       }
       return text;
     });
