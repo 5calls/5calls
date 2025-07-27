@@ -50,7 +50,6 @@ class Outcomes extends React.Component<WithLocationProps, State> {
 
     return (
       <div ref={this.outcomesRef}>
-        <p>|{this.state.requiredState}|</p>
         <h3>
           After your call, share the result to show the next representative:
         </h3>
