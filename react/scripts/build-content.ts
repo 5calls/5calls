@@ -14,6 +14,7 @@ interface Issue {
   contactAreas: string[];
   outcomeModels: Outcome[];
   categories: Category[];
+  meta: string;
   active: boolean;
   hidden: boolean;
 }
@@ -71,7 +72,7 @@ Issues specific to ${state} that aren't included in our main priority list.
         fs.writeFileSync(`${stateDirectory}_index.md`, stateIndexContent);
         
         stateIssues.forEach((issue, index) => {
-          fs.writeFileSync(`${stateDirectory}${issue.slug}.md`, postContentFromIssue(issue, index));
+          fs.writeFileSync(`${stateDirectory}${issue.slug}.md`, postContentFromStateIssue(issue, index));
         });
       });
     })
@@ -91,6 +92,25 @@ ${multilineScript(issue.script)}
 ${contactAreaYAML(issue)}
 ${outcomesYAML(issue)}
 ${categoriesYAML(issue)}
+active: ${issue.active ? "true" : "false"}
+hidden: ${issue.hidden ? "true" : "false"}
+order: ${index}
+---
+${issue.reason}
+`;
+};
+
+const postContentFromStateIssue = (issue: Issue, index: number): string => {
+  return `---
+title: "${escapeQuotes(issue.name)}"
+date: ${issue.createdAt}
+issueId: ${issue.id}
+script: |
+${multilineScript(issue.script)}
+${contactAreaYAML(issue)}
+${outcomesYAML(issue)}
+${categoriesYAML(issue)}
+requiredState: "${issue.meta}"
 active: ${issue.active ? "true" : "false"}
 hidden: ${issue.hidden ? "true" : "false"}
 order: ${index}
