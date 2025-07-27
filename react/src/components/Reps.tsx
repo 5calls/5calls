@@ -419,7 +419,6 @@ class Reps extends React.Component<
 
     return (
       <div ref={this.componentRef}>
-        <p>req: {this.state.requiredState}</p>
         <ul>
           {targetedContacts.map((contact, index) =>
             this.contactComponent(
