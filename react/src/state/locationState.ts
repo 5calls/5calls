@@ -7,11 +7,12 @@ export const LocationContext = React.createContext<WithLocationProps>({
 
 export type WithLocationProps = {
   locationState?: LocationState;
-  setLocationAddress(address: string, display: string): void;
+  setLocationAddress(address: string, display: string, state: string): void;
 };
 
 export interface LocationState {
   address: string;
+  state: string
   cachedCity: string;
 }
 

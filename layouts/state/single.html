@@ -3,7 +3,7 @@
   <div class="g">
     <!-- prettier-ignore -->
     {{ .Scratch.Set "issueId" .Params.issueId }}
-    {{ partial "sidebar.html" . }}
+    {{ partial "sidebar-state.html" . }}
 
     <div class="issue-wrapper">
       <div class="issue-content">
@@ -17,15 +17,22 @@
           id="react-reps"
           data-rep-areas="{{ if isset .Params `contactareas` }}{{ delimit .Params.contactAreas `,` }}{{ end }}"
           data-issue-id="{{ .Params.issueId }}"
+          data-required-state="{{ .Params.requiredState }}"
         ></div>
       </div>
-      <div class="issue-script" id="react-script" data-script-markdown="{{ .Params.script }}">
+      <div
+        class="issue-script"
+        id="react-script"
+        data-script-markdown="{{ .Params.script }}"
+        data-required-state="{{ .Params.requiredState }}"
+      >
         {{ .Params.script | markdownify }}
       </div>
       <div
         class="outcomes"
         id="react-outcomes"
         data-outcomes="{{ if isset .Params `outcomes` }}{{ delimit .Params.outcomes `,` }}{{ end }}"
+        data-required-state="{{ .Params.requiredState }}"
       ></div>
     </div>
   </div>

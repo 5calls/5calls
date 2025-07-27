@@ -10,6 +10,7 @@ react/build/
 react/node_modules/
 content/issue/*
 content/done/
+content/state/
 react/final/
 static/js/*.js.map
 .parcel-cache

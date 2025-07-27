@@ -1,27 +1,33 @@
 import React, { createRef } from 'react';
+import { WithLocationProps } from '../state/locationState';
+import { withLocation } from '../state/stateProvider';
 
 interface State {
   outcomes: string[];
   showReps: boolean;
+  requiredState: string;
 }
 
-class Outcomes extends React.Component<null, State> {
+class Outcomes extends React.Component<WithLocationProps, State> {
   _defaultOutcomes: string[] = [];
   state = {
     outcomes: this._defaultOutcomes,
-    showReps: false
+    showReps: false,
+    requiredState: '',
   };
 
   outcomesRef = createRef<HTMLDivElement>();
 
   componentDidMount() {
+    let requiredState = "";
     if (this.outcomesRef.current && this.outcomesRef.current.parentElement) {
       const outcomes = (
         this.outcomesRef.current.parentElement.dataset.outcomes ?? ''
       ).split(',');
-      this.setState({ outcomes });
+      requiredState = this.outcomesRef.current.parentElement.dataset.requiredState ?? '';
+      this.setState({ outcomes, requiredState });
     }
-
+    
     document.addEventListener('loadedReps', () => {
       this.setState({ showReps: true });
     });
@@ -38,8 +44,13 @@ class Outcomes extends React.Component<null, State> {
       return <div ref={this.outcomesRef}></div>;
     }
 
+    if (this.state.requiredState !== '' && (this.state.requiredState !== this.props.locationState?.state)) {
+      return <div ref={this.outcomesRef}></div>;
+    }
+
     return (
       <div ref={this.outcomesRef}>
+        <p>|{this.state.requiredState}|</p>
         <h3>
           After your call, share the result to show the next representative:
         </h3>
@@ -62,4 +73,4 @@ class Outcomes extends React.Component<null, State> {
   }
 }
 
-export default Outcomes;
+export default withLocation(Outcomes);
