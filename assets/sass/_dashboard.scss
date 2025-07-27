@@ -89,7 +89,7 @@
 
   h2 {
     text-align: start;
-    margin: .6rem 0 0.2rem;
+    margin: 0.6rem 0 0.2rem;
     font-weight: normal;
     font-size: calc(20rem / var(--base-font-size));
     color: #000;
@@ -142,7 +142,7 @@
 
   .subtitle_detail {
     padding: 0 1rem 0;
-    margin: .6rem 0 0;
+    margin: 0.6rem 0 0;
 
     @media (min-width: 40rem) {
       padding: 0.5rem 1.5rem 0;
@@ -196,7 +196,7 @@
     color: #555;
     appearance: base-select;
     line-height: 1;
-  
+
     :hover,
     :focus {
       background: #ddd;
@@ -369,25 +369,26 @@
         display: inline-block;
         width: 0;
         height: 0;
-        border-top: .5rem solid var(--c-base);
-        border-right: .3rem solid transparent;
+        border-top: 0.5rem solid var(--c-base);
+        border-right: 0.3rem solid transparent;
         border-bottom: 0;
-        border-left: .3rem solid transparent;
-        margin-right: .5rem;
-        transform: rotate(120deg) translate(-.25rem);
+        border-left: 0.3rem solid transparent;
+        margin-right: 0.5rem;
+        transform: rotate(120deg) translate(-0.25rem);
         transition: transform 0.5s ease;
       }
 
       &:hover::before {
-        border-top: .5rem solid var(--c-dark);
+        border-top: 0.5rem solid var(--c-dark);
       }
     }
 
-    a, button.issue_name {
+    a,
+    button.issue_name {
       color: black;
       text-decoration: none;
       margin-right: 0.5rem;
-      text-underline-offset: .1rem;
+      text-underline-offset: 0.1rem;
       font-size: var(--row-font-size);
       line-height: var(--row-line-height);
       transition: max-height 0.5s ease;
@@ -471,19 +472,19 @@
     .row_detail {
       overflow: hidden;
       max-height: 0;
-      transition: max-height .5s ease;
+      transition: max-height 0.5s ease;
       font-size: calc(16rem / var(--base-font-size));
       @media (min-width: 40rem) {
         font-size: calc(18rem / var(--base-font-size));
       }
 
       div {
-        padding-top: .2rem;
+        padding-top: 0.2rem;
       }
 
       a {
         text-decoration: none;
-        text-underline-offset: .1rem;
+        text-underline-offset: 0.1rem;
         line-height: var(--row-line-height);
         font-weight: bold;
 
@@ -574,7 +575,8 @@
     }
   }
 
-  #state_map_label, #dot_label {
+  #state_map_label,
+  #dot_label {
     filter: drop-shadow(0.125rem 0.125rem 0.25rem #888c);
     z-index: 10;
     background: #fff;
@@ -590,7 +592,7 @@
   .leftLabel:after,
   .rightLabel:after,
   .topLabel:after {
-    content: '';
+    content: "";
     position: absolute;
     width: 0;
     height: 0;
@@ -670,17 +672,27 @@
     fill: #fff;
   }
 
-  .results_vm { color: #6a51a3; font-weight: bold; }
-  .results_contact { color: #807dba; font-weight: bold; }
-  .results_unavailable { color: #4a1486; font-weight: bold; }
+  .results_vm {
+    color: #6a51a3;
+    font-weight: bold;
+  }
+  .results_contact {
+    color: #807dba;
+    font-weight: bold;
+  }
+  .results_unavailable {
+    color: #4a1486;
+    font-weight: bold;
+  }
 
   .i-bar-location {
     color: #000;
     background: #fff;
     border-top: 0;
 
-    a, .button-link {
-      color: rgba(0,0,0,0.9);
+    a,
+    .button-link {
+      color: rgba(0, 0, 0, 0.9);
     }
 
     form input {
@@ -700,21 +712,33 @@
 }
 
 @keyframes loaderBounce {
-  from { transform: scale(1); opacity: 0.6; }
-  to { transform: scale(1.4); opacity: 1; }
+  from {
+    transform: scale(1);
+    opacity: 0.6;
+  }
+  to {
+    transform: scale(1.4);
+    opacity: 1;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  #loader { animation: loaderFade 1.5s infinite alternate; }
+  #loader {
+    animation: loaderFade 1.5s infinite alternate;
+  }
 
   @keyframes loaderFade {
-    from { opacity: 0.4; }
-    to { opacity: 1; }
+    from {
+      opacity: 0.4;
+    }
+    to {
+      opacity: 1;
+    }
   }
 }
 
 #dashboard_title {
-  margin-bottom: .5rem;
+  margin-bottom: 0.5rem;
   line-height: 1;
 
   @media (min-width: 40rem) {
