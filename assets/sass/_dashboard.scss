@@ -379,7 +379,7 @@
       }
 
       &:hover::before {
-        border-top: .5rem solid var(--c-blue);
+        border-top: .5rem solid var(--c-dark);
       }
     }
 
@@ -469,13 +469,16 @@
     }
 
     .row_detail {
-      padding-top: .2rem;
       overflow: hidden;
       max-height: 0;
       transition: max-height .5s ease;
       font-size: calc(16rem / var(--base-font-size));
       @media (min-width: 40rem) {
         font-size: calc(18rem / var(--base-font-size));
+      }
+
+      div {
+        padding-top: .2rem;
       }
 
       a {
