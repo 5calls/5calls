@@ -8,6 +8,7 @@ import { withLocation } from '../state/stateProvider';
 interface State {
   scriptMarkdown: string;
   currentContact?: Contact;
+  requiredState?: string;
 }
 
 // Replacement regexes, ideally standardize copy to avoid complex regexs
@@ -50,10 +51,10 @@ class Script extends React.Component<WithLocationProps, State> {
 
   scriptFormat = (
     script: string,
-    locationState: LocationState,
+    locationState: LocationState | undefined,
     contact: Contact | undefined
   ) => {
-    const location = locationState.cachedCity;
+    const location = locationState?.cachedCity;
     if (location) {
       script = script.replace(locationReg, location);
     }
@@ -68,11 +69,13 @@ class Script extends React.Component<WithLocationProps, State> {
 
   componentDidMount() {
     let scriptMarkdown = '';
+    let requiredState: string | undefined = undefined;
     if (this.scriptRef.current?.parentElement) {
       scriptMarkdown =
         this.scriptRef.current.parentElement.dataset.scriptMarkdown ?? '';
+      requiredState = this.scriptRef.current.parentElement.dataset.requiredState;
 
-      this.setState({ scriptMarkdown });
+      this.setState({ scriptMarkdown, requiredState });
     }
 
     document.addEventListener('activeContact', (e) => {
@@ -82,17 +85,17 @@ class Script extends React.Component<WithLocationProps, State> {
   }
 
   render() {
-    let formattedScriptMarkdown = this.state.currentContact
-      ? this.state.scriptMarkdown
-      : '';
-
-    if (this.props.locationState && this.state.currentContact) {
-      formattedScriptMarkdown = this.scriptFormat(
-        formattedScriptMarkdown,
-        this.props.locationState,
-        this.state.currentContact
-      );
+    let contact = this.state.currentContact;
+    // if the current location does not match the required state, set the contact back to undefined for the script
+    if (this.state.requiredState !== '' && (this.state.requiredState !== this.props.locationState?.state)) {
+      contact = undefined;
     }
+
+    const formattedScriptMarkdown = this.scriptFormat(
+      this.state.scriptMarkdown,
+      this.props.locationState,
+      contact
+    );
 
     return (
       <span ref={this.scriptRef}>

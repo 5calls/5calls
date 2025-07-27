@@ -18,14 +18,6 @@
           data-rep-areas="{{ if isset .Params `contactareas` }}{{ delimit .Params.contactAreas `,` }}{{ end }}"
           data-issue-id="{{ .Params.issueId }}"
         ></div>
-        <!-- I want to include this help text but I want it to be under the rep list but not in react since it's not dynamic -->
-        <!-- <p class="help">
-          <a
-            href="https://intercom.help/5calls/using-the-5-calls-website-and-apps/why-do-i-only-see-some-of-my-representatives"
-            target="_blank"
-            >Where are the rest of my representatives?</a
-          >
-        </p> -->
       </div>
       <div class="issue-script" id="react-script" data-script-markdown="{{ .Params.script }}">
         {{ .Params.script | markdownify }}

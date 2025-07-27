@@ -11,6 +11,7 @@ import { getContacts, postOutcomeData } from '../utils/api';
 import ContactUtils from '../utils/contactUtils';
 import { useSettings } from '../utils/useSettings';
 import ActiveContact from './ActiveContact';
+import stateNameFromAbbr from '../utils/stateNames';
 
 interface Props {
   callingGroup?: string;
@@ -19,6 +20,7 @@ interface Props {
 interface State {
   areas: string[];
   issueId: string;
+  requiredState: string;
   contactList: ContactList | undefined;
   activeContactIndex: number;
 }
@@ -88,19 +90,22 @@ class Reps extends React.Component<
   state = {
     areas: this._defaultAreas,
     issueId: '0000',
+    requiredState: '',
     contactList: this._defaultContactList,
     activeContactIndex: 0
   };
 
   componentDidMount() {
     let areaString = '';
+    let requiredState = '';
 
     const thisComponent = this.componentRef.current;
     if (thisComponent && thisComponent.parentElement) {
       areaString = thisComponent.parentElement.dataset.repAreas ?? '';
+      requiredState = thisComponent.parentElement.dataset.requiredState ?? '';
       const areas = areaString.split(',');
       const issueId = thisComponent.parentElement.dataset.issueId ?? '';
-      this.setState({ areas, issueId });
+      this.setState({ areas, issueId, requiredState });
     }
 
     if (!this.state.contactList) {
@@ -377,6 +382,21 @@ class Reps extends React.Component<
       );
     }
 
+    if (this.state.requiredState !== '' && (this.state.requiredState !== this.props.locationState.state)) {
+      const stateName = stateNameFromAbbr(this.state.requiredState);
+      return (
+        <div ref={this.componentRef}>
+          <ul>
+            <li>
+              <img alt="No representative found" src="/images/no-rep.png" />
+              <h4>Not available</h4>
+              <p>This topic is only available in {stateName}</p>
+            </li>
+          </ul>
+        </div>
+      );
+    }
+
     const targetedContacts = this.contactsForArea(
       this.state.areas,
       this.state.contactList
@@ -399,6 +419,7 @@ class Reps extends React.Component<
 
     return (
       <div ref={this.componentRef}>
+        <p>req: {this.state.requiredState}</p>
         <ul>
           {targetedContacts.map((contact, index) =>
             this.contactComponent(

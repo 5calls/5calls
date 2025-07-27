@@ -10,14 +10,15 @@ script: |
     Thank you for your time and consideration.
     
     **IF LEAVING VOICEMAIL:** Please leave your full street address to ensure your call is tallied.
-contactAreas: - StateUpper
+contactAreas:
   - StateUpper
+  - StateLower
 outcomes:
   - unavailable
   - voicemail
   - contact
   - skip
-
+requiredState: TX
 active: true
 hidden: false
 order: 0
