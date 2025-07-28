@@ -1,6 +1,7 @@
 import fetch from "node-fetch";
 import fs from "fs";
 import fsExtra from "fs-extra";
+import stateNameFromAbbr from "../src/utils/stateNames";
 
 // yarn run ts-node -O '{"module": "commonjs"}' scripts/build-content.ts
 
@@ -57,17 +58,18 @@ const buildContent = async () => {
       console.log("building content for state issues:");
       Object.keys(published.stateIssues).forEach((state) => {
         const stateIssues = published.stateIssues[state];
+        const stateName = stateNameFromAbbr(state);
         console.log(`${state}: ${stateIssues.length} issues`);
         
         // Create the state directory if it doesn't exist
-        const stateDirectory = `${stateContentBaseDirectory}${state}/`;
+        const stateDirectory = `${stateContentBaseDirectory}${stateName.toLowerCase()}/`;
         fsExtra.ensureDirSync(stateDirectory);
         
         // Create the _index.md file for the state
         const stateIndexContent = `---
-title: "${state}"
+title: "${stateName}"
 ---
-Issues specific to ${state} that aren't included in our main priority list.
+Issues specific to ${stateName} that aren't included in our main priority list.
 `;
         fs.writeFileSync(`${stateDirectory}_index.md`, stateIndexContent);
         
