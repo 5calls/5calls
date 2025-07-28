@@ -30,36 +30,40 @@
         <h2 class="detail_title">Most called issues, last 7 days</h2>
         <ol id="top_five_all_holder">
       </div>
-      <div id="state_map_section">
-        <div id="state_map_title">
-          <select class="picker" id="map_select">
-            <option id="top" selected="true">Top call</option>
-            <option id="total">Total calls</option>
-          </select>
-          <h2 class="detail_title">
-            per state, last 7 days
-          </h2>
-          <select class="picker" id="state_select">
-            <option id="none">State</option>
-          </select>
-          <div class="description">
-            The most-called issue by state. Select a state in the dropdown for more details below.
-          </div>
+      <div class="full_width">
+        <div role="tablist" class="tab_container">
+          <button id="tab_top_calls" role="tab" aria-selected="true" 
+              aria-controls="state_map_section" tabindex="0" class="selected">Top calls</button>
+          <button id="tab_total_calls" role="tab" aria-selected="true" 
+              aria-controls="state_map_section" tabindex="-1">Total calls</button>
         </div>
-
-        <div id="state_map_content">
-          <div id="state_map"></div>
-        
-          <div id="state_map_label" class="overlayBox leftLabel absolute" hidden>
-            <button aria-label="close" id="close_label_btn">X</button>
-            <div class="title"></div>
-            <div class="contents"></div>
+        <div id="state_map_section" role="tabpanel" aria-labelledby="tab_top_calls">
+          <div id="state_map_title">
+            <h2 class="detail_title">
+              Top call per state, last 7 days
+            </h2>
+            <select class="picker" id="state_select">
+              <option id="none">State</option>
+            </select>
+            <div class="description">
+              The most-called issue by state. Select a state in the dropdown for more details below.
+            </div>
           </div>
 
-          <div class="overlayBox" id="state_map_key_box">
-            <div class="title">Top Issues Nationwide</div>
-            <ol id="state_map_key">
-            </ol>
+          <div id="state_map_content">
+            <div id="state_map"></div>
+          
+            <div id="state_map_label" class="overlayBox leftLabel absolute" hidden>
+              <button aria-label="close" id="close_label_btn">X</button>
+              <div class="title"></div>
+              <div class="contents"></div>
+            </div>
+
+            <div class="overlayBox" id="state_map_key_box">
+              <div class="title">Top Issues Nationwide</div>
+              <ol id="state_map_key">
+              </ol>
+            </div>
           </div>
         </div>
       </div>
@@ -83,7 +87,7 @@
   
     <div id="reps_section" role="tabpanel" aria-labelledby="tab_your_reps">
       <div class="heading">
-        <div id="nav" role="tablist"></div>
+        <div id="nav" role="tablist" class="tab_container"></div>
       </div>
       <div id="location_picker" hidden>
         <!-- TODO: Put the proper location picker here. -->
