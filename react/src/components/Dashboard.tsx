@@ -460,7 +460,7 @@ const drawUsaMap = (
       .style('border-color', (d: IssueCountData) => issueColor(d.issue_id))
       .html(
         (d: IssueCountData) =>
-          `<b>${d.count} jurisdiction${d.count == 1 ? '' : 's'}</b>: ${d.name}`
+          `<b>${d.count} state${d.count == 1 ? '' : 's'}</b>: ${d.name}`
       );
 
     let selectedState: string | null = null;

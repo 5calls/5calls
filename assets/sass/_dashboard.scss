@@ -643,6 +643,11 @@
     min-width: 350px;
     border: 0.1rem solid var(--c-light-border);
     margin-bottom: 1rem;
+
+    .footnote {
+      padding: .5rem 1rem 1rem;
+      font-size: calc(16rem / var(--base-font-size));
+    }
   }
 
   #state_map_content {
