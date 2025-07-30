@@ -1,6 +1,7 @@
 import fetch from "node-fetch";
 import fs from "fs";
 import fsExtra from "fs-extra";
+import stateNameFromAbbr from "../src/utils/stateNames";
 
 // yarn run ts-node -O '{"module": "commonjs"}' scripts/build-content.ts
 
@@ -14,6 +15,7 @@ interface Issue {
   contactAreas: string[];
   outcomeModels: Outcome[];
   categories: Category[];
+  meta: string;
   active: boolean;
   hidden: boolean;
 }
@@ -56,22 +58,23 @@ const buildContent = async () => {
       console.log("building content for state issues:");
       Object.keys(published.stateIssues).forEach((state) => {
         const stateIssues = published.stateIssues[state];
+        const stateName = stateNameFromAbbr(state);
         console.log(`${state}: ${stateIssues.length} issues`);
         
         // Create the state directory if it doesn't exist
-        const stateDirectory = `${stateContentBaseDirectory}${state}/`;
+        const stateDirectory = `${stateContentBaseDirectory}${stateName.toLowerCase()}/`;
         fsExtra.ensureDirSync(stateDirectory);
         
         // Create the _index.md file for the state
         const stateIndexContent = `---
-title: "${state}"
+title: "${stateName}"
 ---
-Issues specific to ${state} that aren't included in our main priority list.
+Issues specific to ${stateName} that aren't included in our main priority list.
 `;
         fs.writeFileSync(`${stateDirectory}_index.md`, stateIndexContent);
         
         stateIssues.forEach((issue, index) => {
-          fs.writeFileSync(`${stateDirectory}${issue.slug}.md`, postContentFromIssue(issue, index));
+          fs.writeFileSync(`${stateDirectory}${issue.slug}.md`, postContentFromStateIssue(issue, index));
         });
       });
     })
@@ -91,6 +94,25 @@ ${multilineScript(issue.script)}
 ${contactAreaYAML(issue)}
 ${outcomesYAML(issue)}
 ${categoriesYAML(issue)}
+active: ${issue.active ? "true" : "false"}
+hidden: ${issue.hidden ? "true" : "false"}
+order: ${index}
+---
+${issue.reason}
+`;
+};
+
+const postContentFromStateIssue = (issue: Issue, index: number): string => {
+  return `---
+title: "${escapeQuotes(issue.name)}"
+date: ${issue.createdAt}
+issueId: ${issue.id}
+script: |
+${multilineScript(issue.script)}
+${contactAreaYAML(issue)}
+${outcomesYAML(issue)}
+${categoriesYAML(issue)}
+requiredState: "${issue.meta}"
 active: ${issue.active ? "true" : "false"}
 hidden: ${issue.hidden ? "true" : "false"}
 order: ${index}
