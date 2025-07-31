@@ -453,7 +453,7 @@ class Reps extends React.Component<
           )}
         </ul>
         {contactWarning && 
-          <p className='contact-warning'>
+          <p className='contact-warning' role='alert'>
             <i className='fa-solid fa-triangle-exclamation'></i>
             {contactWarning}
           </p>
