@@ -13,21 +13,22 @@ class Outcomes extends React.Component<WithLocationProps, State> {
   state = {
     outcomes: this._defaultOutcomes,
     showReps: false,
-    requiredState: '',
+    requiredState: ''
   };
 
   outcomesRef = createRef<HTMLDivElement>();
 
   componentDidMount() {
-    let requiredState = "";
+    let requiredState = '';
     if (this.outcomesRef.current && this.outcomesRef.current.parentElement) {
       const outcomes = (
         this.outcomesRef.current.parentElement.dataset.outcomes ?? ''
       ).split(',');
-      requiredState = this.outcomesRef.current.parentElement.dataset.requiredState ?? '';
+      requiredState =
+        this.outcomesRef.current.parentElement.dataset.requiredState ?? '';
       this.setState({ outcomes, requiredState });
     }
-    
+
     document.addEventListener('loadedReps', () => {
       this.setState({ showReps: true });
     });
@@ -44,7 +45,10 @@ class Outcomes extends React.Component<WithLocationProps, State> {
       return <div ref={this.outcomesRef}></div>;
     }
 
-    if (this.state.requiredState !== '' && (this.state.requiredState !== this.props.locationState?.state)) {
+    if (
+      this.state.requiredState !== '' &&
+      this.state.requiredState !== this.props.locationState?.state
+    ) {
       return <div ref={this.outcomesRef}></div>;
     }
 

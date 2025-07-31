@@ -73,7 +73,8 @@ class Script extends React.Component<WithLocationProps, State> {
     if (this.scriptRef.current?.parentElement) {
       scriptMarkdown =
         this.scriptRef.current.parentElement.dataset.scriptMarkdown ?? '';
-      requiredState = this.scriptRef.current.parentElement.dataset.requiredState;
+      requiredState =
+        this.scriptRef.current.parentElement.dataset.requiredState;
 
       this.setState({ scriptMarkdown, requiredState });
     }
@@ -87,7 +88,10 @@ class Script extends React.Component<WithLocationProps, State> {
   render() {
     let contact = this.state.currentContact;
     // if the current location does not match the required state, set the contact back to undefined for the script
-    if (this.state.requiredState !== '' && (this.state.requiredState !== this.props.locationState?.state)) {
+    if (
+      this.state.requiredState !== '' &&
+      this.state.requiredState !== this.props.locationState?.state
+    ) {
       contact = undefined;
     }
 
