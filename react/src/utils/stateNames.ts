@@ -60,7 +60,7 @@ const stateAbbreviationToName: Record<string, string> = {
 /**
  * Converts a state abbreviation to its full name.
  * If the abbreviation is not recognized, returns the input string unchanged.
- * 
+ *
  * @param abbreviation - The state abbreviation (e.g., "CA", "TX")
  * @returns The full state name (e.g., "California", "Texas") or the original string if not found
  */

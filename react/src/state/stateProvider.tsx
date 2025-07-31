@@ -59,7 +59,7 @@ export default class StateProvider extends React.Component<Props, State> {
     const locationState: LocationState = {
       address: address,
       cachedCity: display,
-      state: state,
+      state: state
       // splitDistrict: false,
       // invalidAddress: false,
       // locationFetchType: LocationFetchType.CACHED_ADDRESS,
@@ -90,8 +90,11 @@ export default class StateProvider extends React.Component<Props, State> {
       <LocationContext.Provider
         value={{
           locationState: this.state.locationState,
-          setLocationAddress: (address: string, display: string, state: string) =>
-            this.setLocationAddress(address, display, state)
+          setLocationAddress: (
+            address: string,
+            display: string,
+            state: string
+          ) => this.setLocationAddress(address, display, state)
         }}
       >
         <CompletedContext.Provider
