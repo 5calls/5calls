@@ -3,6 +3,7 @@
   <div class="g">
     <!-- prettier-ignore -->
     {{ .Scratch.Set "issueId" .Params.issueId }}
+    {{ .Scratch.Set "back-url" "/state/texas/" }}
     {{ partial "sidebar-state.html" . }}
 
     <div class="done-wrapper">
@@ -34,16 +35,16 @@
           like you to keep our activities fresh and develop new ways to make your voice heard!
         </p>
         <div class="donate-grid">
-          <button onclick="window.fivecalls.openDonate(10, 'done')" class="grid-1 plausible-event-name=donate-done-10">
+          <button onclick="window.location.href='https://secure.actblue.com/donate/5calls-state?amount=10'" class="grid-1">
             $10<span>Supports 200 calls to Congress</span>
           </button>
-          <button onclick="window.fivecalls.openDonate(15, 'done')" class="grid-2 plausible-event-name=donate-done-15">
+          <button onclick="window.location.href='https://secure.actblue.com/donate/5calls-state?amount=15'" class="grid-2">
             $15<span>Supports outreach to new activists</span>
           </button>
-          <button onclick="window.fivecalls.openDonate(25, 'done')" class="donate-best grid-1 plausible-event-name=donate-done-25">
+          <button onclick="window.location.href='https://secure.actblue.com/donate/5calls-state?amount=25'" class="donate-best grid-1">
             $25<span>Supports issue research and writeups</span>
           </button>
-          <button onclick="window.fivecalls.openDonate(100, 'done')" class="grid-2 plausible-event-name=donate-done-100">
+          <button onclick="window.location.href='https://secure.actblue.com/donate/5calls-state?amount=100'" class="grid-2">
             $100<span>Keeps the site running for a month</span>
           </button>
         </div>
