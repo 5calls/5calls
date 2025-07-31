@@ -11,7 +11,6 @@
     <header class="i-bar-header i-bar-header-unsorted">
       <h3><i class="fa fa-newspaper"></i>What's important to you?</h3>
     </header>
-    <div id="react-search"></div>
     <section class="i-bar-list-section">
 
       {{ $passedIssueID := (.Scratch.Get "issueId")}}
@@ -32,8 +31,6 @@
       {{ end }}
     </section>
   </div>
-
-  <a href="/all/" class="i-bar-more"><i class="fa-solid fa-table-list"></i>&nbsp;&nbsp;See all issues</a>
 </div>
 <div class="i-hidden-bar">
    <a href="/" class="i-bar-top-issues"> <i class="fa-solid fa-circle-left"></i>&nbsp;&nbsp;Back to all issues</a>

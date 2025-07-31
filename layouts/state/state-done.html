@@ -1,0 +1,54 @@
+{{ define "bodyclass" }}done{{ end }} {{ define "main" }}
+<div class="content">
+  <div class="g">
+    <!-- prettier-ignore -->
+    {{ .Scratch.Set "issueId" .Params.issueId }}
+    {{ partial "sidebar-state.html" . }}
+
+    <div class="done-wrapper">
+      <h2>Great work!</h2>
+      <p>
+        Your calls help your representatives decide what issues are most important to their constituents and can help
+        direct their positions on policy that makes a difference in the lives of all Americans.
+      </p>
+      <div class="done-grid">
+        <div class="done-remind">
+          <h3>Check your registration</h3>
+          <blockquote class="clearfix">
+            <p><strong>Make a permanent impact.</strong> Check if you're registered to vote or register for the first time. Vote in your next election to ensure your voice continues to be represented.</p>
+            <a href="https://www.feelgoodimpact.org/partners/5calls-verify?utm_source=partner&utm_medium=web&utm_campaign=5calls&utm_term=verify&utm_content=5calls_lp_1" target="_blank"><button>Check your registration</button></a>
+          </blockquote>
+        </div>
+        <div
+          class="done-share"
+          id="react-share"
+          data-issue-id="{{ .Params.issueId }}"
+          data-issue-title="{{ .Title }}"
+          data-issue-slug="{{ .File.BaseFileName }}"
+        ></div>
+      </div>
+      <div class="done-donate">
+        <h3>Donate to 5 Calls</h3>
+        <p>
+          5 Calls is a <strong>grassroots supported non-profit organization</strong>, we rely on donations from members
+          like you to keep our activities fresh and develop new ways to make your voice heard!
+        </p>
+        <div class="donate-grid">
+          <button onclick="window.fivecalls.openDonate(10, 'done')" class="grid-1 plausible-event-name=donate-done-10">
+            $10<span>Supports 200 calls to Congress</span>
+          </button>
+          <button onclick="window.fivecalls.openDonate(15, 'done')" class="grid-2 plausible-event-name=donate-done-15">
+            $15<span>Supports outreach to new activists</span>
+          </button>
+          <button onclick="window.fivecalls.openDonate(25, 'done')" class="donate-best grid-1 plausible-event-name=donate-done-25">
+            $25<span>Supports issue research and writeups</span>
+          </button>
+          <button onclick="window.fivecalls.openDonate(100, 'done')" class="grid-2 plausible-event-name=donate-done-100">
+            $100<span>Keeps the site running for a month</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{{ end }}

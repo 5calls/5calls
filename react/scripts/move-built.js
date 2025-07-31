@@ -16,4 +16,5 @@ if (process.env.NODE_ENV === "development") {
   });
 }
 
+console.log(`Moving built files from ${compiledFilesDir} to ${newFilesDir}`);
 fsExtra.moveSync(compiledFilesDir, newFilesDir, { overwrite: true });
