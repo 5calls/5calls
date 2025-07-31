@@ -417,6 +417,13 @@ class Reps extends React.Component<
       activeContact = targetedContacts[this.state.activeContactIndex];
     }
 
+    let contactWarning = "";
+    const hasStateReps = this.state.areas.includes("StateUpper") || this.state.areas.includes("StateLower");
+    // only show this contact warning for issues with state reps, but maybe extend to the split zip thing too
+    if (hasStateReps && this.state.contactList.lowAccuracy) {
+      contactWarning = "Warning: your location is set to a zip code or other approximate location, please enter an address or zip+4 for accurate state level reps.";
+    }
+
     return (
       <div ref={this.componentRef}>
         <ul>
@@ -445,6 +452,12 @@ class Reps extends React.Component<
             )
           )}
         </ul>
+        {contactWarning && 
+          <p className='contact-warning'>
+            <i className='fa-solid fa-triangle-exclamation'></i>
+            {contactWarning}
+          </p>
+        }
         {activeContact && <ActiveContact contact={activeContact} />}
       </div>
     );

@@ -12,7 +12,7 @@ export type WithLocationProps = {
 
 export interface LocationState {
   address: string;
-  state: string
+  state: string;
   cachedCity: string;
 }
 
