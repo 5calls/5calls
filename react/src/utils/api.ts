@@ -87,6 +87,7 @@ export interface IssueCountData {
   name: string;
   slug: string;
   count: number;
+  archived: boolean;
 }
 
 export interface RegionSummaryData {
