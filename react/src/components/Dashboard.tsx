@@ -366,17 +366,25 @@ const drawUsaMap = (
     }, [] as IssueCountData[]);
     // Sort by number of states with this top issue.
     keyData.sort((a, b) => b.count - a.count);
-    d3.select('ol#state_map_key')
-      .selectAll('.key')
-      .data(keyData)
-      .enter()
-      .append('li')
-      .attr('class', 'key')
-      .style('border-color', (d: IssueCountData) => issueColor(d.issue_id))
-      .html(
-        (d: IssueCountData) =>
-          `<b>${d.count} jurisdiction${d.count == 1 ? '' : 's'}</b>: ${d.name}`
-      );
+
+    const drawTopIssuesKey = () => {
+      d3.select('div#state_map_key_box')
+        .select('div.title')
+        .html('Top Issues Nationwide');
+      d3.select('ol#state_map_key')
+        .html('')
+        .selectAll('.key')
+        .data(keyData)
+        .enter()
+        .append('li')
+        .attr('class', 'key')
+        .style('border-color', (d: IssueCountData) => issueColor(d.issue_id))
+        .html(
+          (d: IssueCountData) =>
+            `<b>${d.count} jurisdiction${d.count == 1 ? '' : 's'}</b>: ${d.name}`
+        );
+    };
+    drawTopIssuesKey();
 
     let selectedState: string | null = null;
     const width = 630;
@@ -473,9 +481,14 @@ const drawUsaMap = (
           `${state}'s top: ${topIssue.name}. Map showing states colored by top issue. Select a state above.`
         );
       if (d3.select('button#tab_top_calls').attr('aria-selected') == 'true') {
-        drawStateLabel(state_node, state_name, topIssue.name, deselectState);      
+        drawStateLabel(state_node, state_name, topIssue.name, deselectState);
       } else {
-        drawStateLabel(state_node, state_name, `${total_calls.toLocaleString()} calls`, deselectState);
+        drawStateLabel(
+          state_node,
+          state_name,
+          `${total_calls.toLocaleString()} calls`,
+          deselectState
+        );
       }
       state_path
         .transition()
@@ -492,72 +505,201 @@ const drawUsaMap = (
     }, 0);
     const scaleColor = d3.scaleLinear([0, maxTotal], [defaultColor, purple]);
 
+    const drawColorKey = () => {
+      d3.select('div#state_map_key_box')
+        .select('div.title')
+        .html('Total calls per state');
+      // TODO: Sizing at various font sizes -- maybe 8.5 isn't right
+      const height = 6;
+      const keySvg = d3
+        .select('ol#state_map_key')
+        .html('')
+        .append('svg')
+        .style('overflow', 'visible')
+        .style('font-size', '1rem')
+        .style('line-height', '1')
+        .attr('height', `${height}rem`)
+        .style('float', 'left')
+        .style('margin-right', '.5rem')
+        .attr('alt', '');
+      const gradient = keySvg
+        .append('linearGradient')
+        .attr('id', 'keyLinearGradient')
+        .attr('x1', '0%')
+        .attr('y1', '0%')
+        .attr('x2', '0%')
+        .attr('y2', '100%');
+      gradient.append('stop').attr('offset', '0%').attr('stop-color', purple);
+      gradient
+        .append('stop')
+        .attr('offset', '100%')
+        .attr('stop-color', defaultColor);
+      keySvg
+        .append('rect')
+        .attr('width', '16px')
+        .attr('height', '5rem')
+        .attr('y', '0.5rem')
+        .style('fill', 'url(#keyLinearGradient)');
+      keySvg
+        .append('line')
+        .attr('stroke', 'black')
+        .attr('x1', 0)
+        .attr('x2', 20)
+        .attr('y1', '0.5rem')
+        .attr('y2', '0.5rem');
+      keySvg
+        .append('line')
+        .attr('stroke', 'black')
+        .attr('x1', 0)
+        .attr('x2', 20)
+        .attr('y1', '3rem')
+        .attr('y2', '3rem');
+      keySvg
+        .append('line')
+        .attr('stroke', 'black')
+        .attr('x1', 0)
+        .attr('x2', 20)
+        .attr('y1', '5.5rem')
+        .attr('y2', '5.5rem');
+      const maxText = keySvg
+        .append('text')
+        .attr('x', '24')
+        .attr('y', 0)
+        .attr('dy', '1rem')
+        .attr('fill', 'black')
+        .html(`${maxTotal.toLocaleString()} calls`);
+      keySvg
+        .append('text')
+        .attr('x', '24')
+        .attr('y', `${height / 2}rem`)
+        .attr('dy', '.5rem')
+        .attr('fill', 'black')
+        .html(`${(maxTotal / 2).toFixed(0).toLocaleString()} calls`);
+      keySvg
+        .append('text')
+        .attr('x', '24')
+        .attr('y', `${height}rem`)
+        .attr('fill', 'black')
+        .html(`0 calls`);
+      keySvg.attr('width', maxText.node().getBBox().width + 24);
+    };
+
     const totalCallsPerStateClicked = () => {
-      d3.select('button#tab_top_calls').attr('tabindex', -1).classed('selected', null).attr('aria-selected', false);
-      d3.select('button#tab_total_calls').attr('tabindex', 0).classed('selected', true).attr('aria-selected', true);
+      d3.select('button#tab_top_calls')
+        .attr('tabindex', -1)
+        .classed('selected', null)
+        .attr('aria-selected', false);
+      d3.select('button#tab_total_calls')
+        .attr('tabindex', 0)
+        .classed('selected', true)
+        .attr('aria-selected', true);
       const mapSection = d3.select('div#state_map_section');
-      mapSection.select('div#state_map').select('svg').selectAll('path')
+      mapSection
+        .select('div#state_map')
+        .select('svg')
+        .selectAll('path')
         .attr('fill', (d: Feature) => {
-            const stateResult = statesResults.find((state) => state.id === d.id);
-            const stateTotal = stateResult ? stateResult.total : 0;
-            return scaleColor(stateTotal);
-      });
-      mapSection.select('h2.detail_title').html(`Total calls per state, ${duration}`);
-      mapSection.select('div.description').html('The number of calls by state. Select a state in the dropdown for more details below.');
+          const stateResult = statesResults.find((state) => state.id === d.id);
+          const stateTotal = stateResult ? stateResult.total : 0;
+          return scaleColor(stateTotal);
+        });
+      mapSection
+        .select('h2.detail_title')
+        .html(`Total calls per state, ${duration}`);
+      mapSection
+        .select('div.description')
+        .html(
+          'The number of calls by state. Select a state in the dropdown for more details below.'
+        );
       if (selectedState) {
-        // TODO remove fluff & refactor to share code.
-        const state_node = mapSection.select(`path#state_${selectedState}`).node();
+        const state_node = mapSection
+          .select(`path#state_${selectedState}`)
+          .node();
         const state_feature = data.find((s) => s.id === selectedState);
         const state_name = state_feature
           ? state_feature.properties!.name
           : 'Unknown';
         const state_results = statesResults.find((s) => s.id === selectedState);
         const total_calls = state_results ? state_results.total : 0;
-        const state_issues = state_results ? state_results.issueCounts : [];
-        const topIssue =
-          state_issues && state_issues.length > 0
-            ? state_issues[0]
-            : { name: 'No recorded calls' };
-        drawStateLabel(state_node, state_name, `${total_calls.toLocaleString()} calls`, deselectState);
+        drawStateLabel(
+          state_node,
+          state_name,
+          `${total_calls.toLocaleString()} call${total_calls == 1 ? '' : 's'}`,
+          deselectState
+        );
       }
+      drawColorKey();
     };
 
     const topCallPerStateClicked = () => {
-      d3.select('button#tab_total_calls').attr('tabindex', -1).classed('selected', null).attr('aria-selected', false);
-      d3.select('button#tab_top_calls').attr('tabindex', 0).classed('selected', true).attr('aria-selected', true);
+      d3.select('button#tab_total_calls')
+        .attr('tabindex', -1)
+        .classed('selected', null)
+        .attr('aria-selected', false);
+      d3.select('button#tab_top_calls')
+        .attr('tabindex', 0)
+        .classed('selected', true)
+        .attr('aria-selected', true);
       const mapSection = d3.select('div#state_map_section');
-      mapSection.select('div#state_map').select('svg').selectAll('path')
+      mapSection
+        .select('div#state_map')
+        .select('svg')
+        .selectAll('path')
         .attr('fill', (d: Feature) => {
-            const stateResult = statesResults.find((state) => state.id === d.id);
-            const stateTopIssues = stateResult ? stateResult.issueCounts : [];
-            if (stateTopIssues && stateTopIssues.length > 0) {
-              return issueColor(stateTopIssues[0].issue_id);
-            }
-            // Default grey for no calls at all.
-            return defaultColor;
-      });
-      mapSection.select('h2.detail_title').html(`Top call per state, ${duration}`);
-      mapSection.select('div.description').html('The most-called issue by state. Select a state in the dropdown for more details below.');
+          const stateResult = statesResults.find((state) => state.id === d.id);
+          const stateTopIssues = stateResult ? stateResult.issueCounts : [];
+          if (stateTopIssues && stateTopIssues.length > 0) {
+            return issueColor(stateTopIssues[0].issue_id);
+          }
+          // Default grey for no calls at all.
+          return defaultColor;
+        });
+      mapSection
+        .select('h2.detail_title')
+        .html(`Top call per state, ${duration}`);
+      mapSection
+        .select('div.description')
+        .html(
+          'The most-called issue by state. Select a state in the dropdown for more details below.'
+        );
       if (selectedState) {
-        const state_node = mapSection.select(`path#state_${selectedState}`).node();
+        const state_node = mapSection
+          .select(`path#state_${selectedState}`)
+          .node();
         const state_feature = data.find((s) => s.id === selectedState);
         const state_name = state_feature
           ? state_feature.properties!.name
           : 'Unknown';
         const state_results = statesResults.find((s) => s.id === selectedState);
-        const total_calls = state_results ? state_results.total : 0;
         const state_issues = state_results ? state_results.issueCounts : [];
         const topIssue =
           state_issues && state_issues.length > 0
             ? state_issues[0]
             : { name: 'No recorded calls' };
-        drawStateLabel(state_node, state_name, topIssue.name, deselectState);  
-      }    
+        drawStateLabel(state_node, state_name, topIssue.name, deselectState);
+      }
+      drawTopIssuesKey();
     };
 
-    d3.select('button#tab_top_calls').on('click', topCallPerStateClicked);
-    d3.select('button#tab_total_calls').on('click', totalCallsPerStateClicked);
+    // Toggles between the two map tabs on arrow events.
+    const handleMapTabEvent = (event: KeyboardEvent) => {
+      if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') {
+        if (event.target.id === 'tab_top_calls') {
+          totalCallsPerStateClicked();
+          document.getElementById('tab_total_calls')?.focus();
+        } else {
+          topCallPerStateClicked();
+          document.getElementById('tab_top_calls')?.focus();
+        }
+      }
+    };
 
+    d3.select('button#tab_top_calls')
+      .on('click', topCallPerStateClicked)
+      .on('keydown', handleMapTabEvent);
+    d3.select('button#tab_total_calls')
+      .on('click', totalCallsPerStateClicked)
+      .on('keydown', handleMapTabEvent);
 
     // Draw the states
     group
