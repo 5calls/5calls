@@ -375,7 +375,7 @@
         border-left: 0.3rem solid transparent;
         margin-right: 0.5rem;
         transform: rotate(120deg) translate(-0.25rem);
-        transition: transform 0.5s ease;
+        transition: transform 0.5s ease-in-out;
       }
 
       &:hover::before {
@@ -391,7 +391,7 @@
       text-underline-offset: 0.1rem;
       font-size: var(--row-font-size);
       line-height: var(--row-line-height);
-      transition: max-height 0.5s ease;
+      transition: max-height 0.5s ease-out;
       max-height: 40rem;
       min-height: initial;
       overflow: hidden;
@@ -425,7 +425,7 @@
       overflow: hidden;
       white-space: nowrap;
       text-overflow: ellipsis;
-      transition: max-height 0.5s ease;
+      transition: max-height 0.5s ease-out;
       max-height: calc(var(--row-line-height) * var(--row-font-size));
 
       @supports (-webkit-line-clamp: 2) {
@@ -472,7 +472,7 @@
     .row_detail {
       overflow: hidden;
       max-height: 0;
-      transition: max-height 0.5s ease;
+      transition: max-height 0.5s ease-out;
       font-size: calc(16rem / var(--base-font-size));
       @media (min-width: 40rem) {
         font-size: calc(18rem / var(--base-font-size));
@@ -497,8 +497,8 @@
     }
 
     .row_detail.expanded {
-      overflow: visible;
-      max-height: 50rem; /* must be larger than the tallest possible content */
+      transition: max-height 0.5s ease-out;
+      max-height: calc(16rem * 5 / var(--base-font-size)); /* must be larger than the tallest possible content, but shorter means a better transition */
     }
   }
 
