@@ -510,6 +510,8 @@ const drawUsaMap = (
         .select('div.title')
         .html('Total calls per state');
       // TODO: Sizing at various font sizes -- maybe 8.5 isn't right
+      // TODO: Ditch the 'ol'
+      // TODO: don't redraw if it's already there!
       const height = 6;
       const keySvg = d3
         .select('ol#state_map_key')
