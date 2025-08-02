@@ -255,9 +255,10 @@ const drawTopFiveIssues = (
       .delay(500)
       .attr('class', 'issue_name truncated')
       .on('end', () => {
-        row.select('div.row_detail')
-            .style('visibility', 'visible')
-            .attr('aria-hidden', true);
+        row
+          .select('div.row_detail')
+          .style('visibility', 'visible')
+          .attr('aria-hidden', true);
         row.on('click', expandIssueRow).on('keydown', expandIssueRow);
       });
     row.select('div.row_detail').classed('expanded', null);
@@ -282,7 +283,8 @@ const drawTopFiveIssues = (
       .attr('aria-expanded', true)
       .on('click', collapseIssueRow)
       .on('keydown', collapseIssueRow);
-    row.select('div.row_detail')
+    row
+      .select('div.row_detail')
       .attr('aria-hidden', false)
       .style('visibility', 'visible')
       .classed('expanded', true);
