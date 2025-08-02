@@ -87,6 +87,7 @@ export interface IssueCountData {
   name: string;
   slug: string;
   count: number;
+  archived: boolean;
 }
 
 export interface RegionSummaryData {
@@ -230,4 +231,15 @@ export const postSearchTerm = async (searchTerm: string) => {
     // Silently fail - we don't want to disrupt the user experience
     console.debug('Failed to track search term:', error);
   }
+};
+
+export interface DonationStatsData {
+  total: number;
+}
+
+export const getDonationStats = (): Promise<DonationStatsData> => {
+  return axios
+    .get(`${Constants.DONATIONS_API_URL}`)
+    .then((response) => Promise.resolve(response.data))
+    .catch((e) => Promise.reject(e));
 };

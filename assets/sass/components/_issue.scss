@@ -148,6 +148,12 @@ body.issue {
     }
   }
 
+  .contact-warning {
+    font-size: 1rem;
+    color: var(--c-red);
+    padding: 0 6px;
+  }
+
   .contact {
     margin-top: 2rem;
     display: flex;

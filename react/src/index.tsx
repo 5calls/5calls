@@ -20,6 +20,7 @@ import Settings from './components/Settings';
 import GroupCallCount from './components/GroupCallCount';
 import Dashboard from './components/Dashboard';
 import IssueSearch from './components/IssueSearch';
+import FundraisingProgress from './components/FundraisingProgress';
 import Bugsnag from '@bugsnag/js';
 import { Slide, ToastContainer } from 'react-toastify';
 import { LOCAL_STORAGE_KEYS } from './common/constants';
@@ -181,7 +182,7 @@ const startComponentRenders = () => {
     { id: 'react-location', component: Location, hasStateProvider: true },
     { id: 'react-reps', component: Reps, hasStateProvider: true },
     { id: 'react-script', component: Script, hasStateProvider: true },
-    { id: 'react-outcomes', component: Outcomes },
+    { id: 'react-outcomes', component: Outcomes, hasStateProvider: true },
     { id: 'react-share', component: Share },
     { id: 'react-phone', component: PhoneSubscribe },
     { id: 'react-call-count', component: CallCount },
@@ -199,7 +200,8 @@ const startComponentRenders = () => {
         <ToastContainer position="top-center" draggable transition={Slide} />
       )
     },
-    { id: 'react-dashboard', component: Dashboard }
+    { id: 'react-dashboard', component: Dashboard },
+    { id: 'react-fundraising', component: FundraisingProgress }
   ];
 
   islands.forEach(({ id, component, hasStateProvider, condition }) => {

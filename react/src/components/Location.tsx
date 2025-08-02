@@ -77,7 +77,11 @@ const Location: React.FC<WithLocationProps & WithCompletedProps> = (props) => {
 
     getContacts(manualAddress)
       .then((contactList) => {
-        props.setLocationAddress(manualAddress ?? '', contactList.location, contactList.state);
+        props.setLocationAddress(
+          manualAddress ?? '',
+          contactList.location,
+          contactList.state
+        );
         setComponentLocationState(ComponentLocationState.HasLocation);
         document.dispatchEvent(new Event('updateReps'));
       })
@@ -107,7 +111,11 @@ const Location: React.FC<WithLocationProps & WithCompletedProps> = (props) => {
         const pairedLoc = `${loc.latitude},${loc.longitude}`;
         getContacts(pairedLoc)
           .then((contactList) => {
-            props.setLocationAddress(pairedLoc, contactList.location, contactList.state);
+            props.setLocationAddress(
+              pairedLoc,
+              contactList.location,
+              contactList.state
+            );
             setComponentLocationState(ComponentLocationState.HasLocation);
             document.dispatchEvent(new Event('updateReps'));
           })

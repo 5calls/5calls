@@ -49,9 +49,6 @@ const buildContent = async () => {
       console.log(`building content for ${published.issues.length} issues`);
       published.issues.forEach((issue, index) => {
         fs.writeFileSync(`${contentDirectory}${issue.slug}.md`, postContentFromIssue(issue, index));
-      });
-      // create the done pages too
-      published.issues.forEach((issue) => {
         fs.writeFileSync(`${doneDirectory}${issue.slug}.md`, doneContentFromIssue(issue));
       });
 
@@ -75,6 +72,13 @@ Issues specific to ${stateName} that aren't included in our main priority list.
         
         stateIssues.forEach((issue, index) => {
           fs.writeFileSync(`${stateDirectory}${issue.slug}.md`, postContentFromStateIssue(issue, index));
+          
+          // Create done directory for each issue: state/texas/sample-texas-issue/done/
+          const issueDirectory = `${stateDirectory}${issue.slug}/`;
+          fsExtra.ensureDirSync(issueDirectory);
+          const issueDoneDirectory = `${issueDirectory}done/`;
+          fsExtra.ensureDirSync(issueDoneDirectory);
+          fs.writeFileSync(`${issueDoneDirectory}index.md`, doneContentFromStateIssue(issue));
         });
       });
     })
@@ -126,6 +130,17 @@ const doneContentFromIssue = (issue: Issue): string => {
 title: "${escapeQuotes(issue.name)}"
 date: ${issue.createdAt}
 issueId: ${issue.id}
+---
+`;
+};
+
+const doneContentFromStateIssue = (issue: Issue): string => {
+  return `---
+title: "${escapeQuotes(issue.name)}"
+date: ${issue.createdAt}
+issueId: ${issue.id}
+requiredState: "${issue.meta}"
+layout: "state-done"
 ---
 `;
 };
