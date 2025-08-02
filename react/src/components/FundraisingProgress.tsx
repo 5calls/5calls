@@ -12,10 +12,10 @@ interface State {
   targetAmount: number;
 }
 
-const FundraisingProgress: React.FC<FundraisingProgressProps> = ({ 
-  target = 100000, 
+const FundraisingProgress: React.FC<FundraisingProgressProps> = ({
+  target = 100000,
   current = 0,
-  donateUrl = "https://secure.actblue.com/donate/5calls-state"
+  donateUrl = 'https://secure.actblue.com/donate/5calls-state'
 }) => {
   const [state, setState] = useState<State>({
     currentAmount: current,
@@ -25,7 +25,7 @@ const FundraisingProgress: React.FC<FundraisingProgressProps> = ({
   useEffect(() => {
     getDonationStats()
       .then((donationData) => {
-        setState(prevState => ({
+        setState((prevState) => ({
           ...prevState,
           currentAmount: donationData.total
         }));
@@ -33,21 +33,24 @@ const FundraisingProgress: React.FC<FundraisingProgressProps> = ({
       .catch((error) => {
         console.error('Failed to fetch donation stats:', error);
         // Fallback to placeholder amount if API fails
-        setState(prevState => ({
+        setState((prevState) => ({
           ...prevState,
           currentAmount: 12500
         }));
       });
   }, []);
 
-  const progressPercentage = Math.min((state.currentAmount / state.targetAmount) * 100, 100);
+  const progressPercentage = Math.min(
+    (state.currentAmount / state.targetAmount) * 100,
+    100
+  );
 
   const formatCurrency = (amount: number): string => {
     return new Intl.NumberFormat('en-US', {
       style: 'currency',
       currency: 'USD',
       minimumFractionDigits: 0,
-      maximumFractionDigits: 0,
+      maximumFractionDigits: 0
     }).format(amount);
   };
 
@@ -59,7 +62,7 @@ const FundraisingProgress: React.FC<FundraisingProgressProps> = ({
     <div className="fundraising-progress">
       <div className="progress-header">
         <div className="progress-amounts">
-          <a 
+          <a
             href={donateUrl}
             target="_blank"
             rel="noopener noreferrer"
@@ -71,7 +74,7 @@ const FundraisingProgress: React.FC<FundraisingProgressProps> = ({
           >
             {formatCurrency(state.currentAmount)}
           </a>
-          <a 
+          <a
             href={donateUrl}
             target="_blank"
             rel="noopener noreferrer"
@@ -84,16 +87,18 @@ const FundraisingProgress: React.FC<FundraisingProgressProps> = ({
             of {formatCurrency(state.targetAmount)} goal
           </a>
         </div>
-        <div className="progress-percentage">{Math.round(progressPercentage)}%</div>
+        <div className="progress-percentage">
+          {Math.round(progressPercentage)}%
+        </div>
       </div>
       <div className="progress-bar">
-        <div 
-          className="progress-fill" 
+        <div
+          className="progress-fill"
           style={{ width: `${progressPercentage}%` }}
         />
       </div>
       <div className="donate-button-container">
-        <a 
+        <a
           href={donateUrl}
           target="_blank"
           rel="noopener noreferrer"

@@ -117,27 +117,32 @@ const IssueSearch: React.FC<IssueSearchProps> = () => {
     );
 
     // Create word boundary regex for whole-word matching
-    const wholeWordRegex = new RegExp(`\\b${lowercaseSearch.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\b`, 'i');
+    const wholeWordRegex = new RegExp(
+      `\\b${lowercaseSearch.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\b`,
+      'i'
+    );
 
     // Sort with enhanced prioritization
     return filtered.sort((a, b) => {
       // Check for whole-word matches in name
       const aNameWholeWord = wholeWordRegex.test(a.name);
       const bNameWholeWord = wholeWordRegex.test(b.name);
-      
+
       // Check for any name matches (including partial)
       const aNameMatch = a.name.toLowerCase().includes(lowercaseSearch);
       const bNameMatch = b.name.toLowerCase().includes(lowercaseSearch);
 
       // Check for whole-word matches in any field
-      const aAnyWholeWord = wholeWordRegex.test(a.name) || 
-                           wholeWordRegex.test(a.reason) || 
-                           wholeWordRegex.test(a.script) || 
-                           wholeWordRegex.test(a.slug);
-      const bAnyWholeWord = wholeWordRegex.test(b.name) || 
-                           wholeWordRegex.test(b.reason) || 
-                           wholeWordRegex.test(b.script) || 
-                           wholeWordRegex.test(b.slug);
+      const aAnyWholeWord =
+        wholeWordRegex.test(a.name) ||
+        wholeWordRegex.test(a.reason) ||
+        wholeWordRegex.test(a.script) ||
+        wholeWordRegex.test(a.slug);
+      const bAnyWholeWord =
+        wholeWordRegex.test(b.name) ||
+        wholeWordRegex.test(b.reason) ||
+        wholeWordRegex.test(b.script) ||
+        wholeWordRegex.test(b.slug);
 
       // Priority order:
       // 1. Whole-word match in name
@@ -147,13 +152,13 @@ const IssueSearch: React.FC<IssueSearchProps> = () => {
 
       if (aNameWholeWord && !bNameWholeWord) return -1;
       if (!aNameWholeWord && bNameWholeWord) return 1;
-      
+
       if (aNameMatch && !bNameMatch) return -1;
       if (!aNameMatch && bNameMatch) return 1;
-      
+
       if (aAnyWholeWord && !bAnyWholeWord) return -1;
       if (!aAnyWholeWord && bAnyWholeWord) return 1;
-      
+
       return 0;
     });
   };
