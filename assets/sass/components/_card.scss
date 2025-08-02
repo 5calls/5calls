@@ -32,6 +32,15 @@
     height: 1em;
     object-fit: contain;
   }
+
+  .card-home-svg-icon {
+    font-size: 5em;
+    display: block;
+    text-align: center;
+    margin: 0 auto 1rem;
+    width: 1em;
+    height: 1em;
+  }
 }
 
 .card-home {
@@ -59,6 +68,13 @@
       font-size: 2em;
       margin: 0 var(--g-gap) 0 0;
     }
+
+    .card-home-svg-icon {
+      font-size: 2em;
+      margin: 0 var(--g-gap) 0 0;
+      width: 1em;
+      height: 1em;
+    }
   }
 }
 
@@ -83,6 +99,12 @@
     .card-home-icon {
       font-size: 3.5em;
       color: var(--c-dark);
+    }
+
+    .card-home-svg-icon {
+      font-size: 3.5em;
+      width: 1em;
+      height: 1em;
     }
   }
 }
