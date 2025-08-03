@@ -465,8 +465,9 @@ const drawUsaMap = (
       d3.select('div#state_map_key_box')
         .select('div.title')
         .html('Top Issue Per State*');
-      d3.select('ol#state_map_key')
+      d3.select('div#state_map_key')
         .html('')
+        .append('ol')
         .selectAll('.key')
         .data(keyData)
         .enter()
@@ -591,24 +592,28 @@ const drawUsaMap = (
       redrawStateResults(state);
     };
 
-    const maxTotal = statesResults.reduce((agg, row) => {
+    let maxTotal = statesResults.reduce((agg, row) => {
       if (row && row.total > agg) {
         agg = row.total;
       }
       return agg;
     }, 0);
-    const scaleColor = d3.scaleLinear([0, maxTotal], [defaultColor, purple]);
+    // Use colors linearly around `purple`.
+    const minColor = '#d7d1de';
+    const maxColor = '#6319a8';
+    // Round the max to a round number.
+    maxTotal = Math.ceil(maxTotal / 100) * 100
+    const scaleColor = d3.scaleLinear([0, maxTotal], [minColor, maxColor])
 
     const drawColorKey = () => {
       d3.select('div#state_map_key_box')
         .select('div.title')
-        .html('Total calls per state');
+        .html('Total calls per state*');
       // TODO: Sizing at various font sizes -- maybe 8.5 isn't right
-      // TODO: Ditch the 'ol'
-      // TODO: don't redraw if it's already there!
+      // TODO: don't redraw if it's already there.
       const height = 6;
       const keySvg = d3
-        .select('ol#state_map_key')
+        .select('div#state_map_key')
         .html('')
         .append('svg')
         .style('overflow', 'visible')
@@ -625,11 +630,11 @@ const drawUsaMap = (
         .attr('y1', '0%')
         .attr('x2', '0%')
         .attr('y2', '100%');
-      gradient.append('stop').attr('offset', '0%').attr('stop-color', purple);
+      gradient.append('stop').attr('offset', '0%').attr('stop-color', maxColor);
       gradient
         .append('stop')
         .attr('offset', '100%')
-        .attr('stop-color', defaultColor);
+        .attr('stop-color', minColor);
       keySvg
         .append('rect')
         .attr('width', '16px')
@@ -707,6 +712,7 @@ const drawUsaMap = (
         .html(
           'The number of calls by state. Select a state in the dropdown for more details below.'
         );
+      drawColorKey();
       if (selectedState) {
         const state_node = mapSection
           .select(`path#state_${selectedState}`)
@@ -724,7 +730,6 @@ const drawUsaMap = (
           deselectState
         );
       }
-      drawColorKey();
     };
 
     const topCallPerStateClicked = () => {
@@ -758,6 +763,7 @@ const drawUsaMap = (
         .html(
           'The most-called issue by state. Select a state in the dropdown for more details below.'
         );
+      drawTopIssuesKey();
       if (selectedState) {
         const state_node = mapSection
           .select(`path#state_${selectedState}`)
@@ -774,7 +780,6 @@ const drawUsaMap = (
             : { name: 'No recorded calls' };
         drawStateLabel(state_node, state_name, topIssue.name, deselectState);
       }
-      drawTopIssuesKey();
     };
 
     // Toggles between the two map tabs on arrow events.
