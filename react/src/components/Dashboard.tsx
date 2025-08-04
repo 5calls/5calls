@@ -642,7 +642,7 @@ const drawUsaMap = (
         });
       mapSection
         .select('h2.detail_title')
-        .html(`Top call per state, ${duration}`);
+        .html(`Top issue per state, ${duration}`);
       mapSection
         .select('div.description')
         .html(
