@@ -462,17 +462,17 @@ const drawUsaMap = (
     keyData.sort((a, b) => b.count - a.count);
 
     d3.select('div#state_map_key')
-        .append('ol')
-        .selectAll('.key')
-        .data(keyData)
-        .enter()
-        .append('li')
-        .attr('class', 'key')
-        .style('border-color', (d: IssueCountData) => issueColor(d.issue_id))
-        .html(
-          (d: IssueCountData) =>
-            `<b>${d.count} state${d.count == 1 ? '' : 's'}</b>: ${d.name}`
-        );
+      .append('ol')
+      .selectAll('.key')
+      .data(keyData)
+      .enter()
+      .append('li')
+      .attr('class', 'key')
+      .style('border-color', (d: IssueCountData) => issueColor(d.issue_id))
+      .html(
+        (d: IssueCountData) =>
+          `<b>${d.count} state${d.count == 1 ? '' : 's'}</b>: ${d.name}`
+      );
 
     let maxTotal = statesResults.reduce((agg, row) => {
       if (row && row.total > agg) {
@@ -506,10 +506,7 @@ const drawUsaMap = (
       .attr('x2', '0%')
       .attr('y2', '100%');
     gradient.append('stop').attr('offset', '0%').attr('stop-color', maxColor);
-    gradient
-      .append('stop')
-      .attr('offset', '100%')
-      .attr('stop-color', minColor);
+    gradient.append('stop').attr('offset', '100%').attr('stop-color', minColor);
     keySvg
       .append('rect')
       .attr('width', '16px')
@@ -557,7 +554,9 @@ const drawUsaMap = (
       .attr('y', `${gradientHeight}rem`)
       .attr('fill', 'black')
       .html(`0 calls`);
-    keySvg.attr('width', maxText.node().getBBox().width + 24).style('display', 'none');
+    keySvg
+      .attr('width', maxText.node().getBBox().width + 24)
+      .style('display', 'none');
 
     const totalCallsPerStateClicked = () => {
       d3.select('button#tab_top_calls')
@@ -590,7 +589,7 @@ const drawUsaMap = (
         .select('div.title')
         .html('Total calls per state*');
       d3.select('div#state_map_key').select('svg').style('display', null);
-      d3.select('div#state_map_key').select('ol').style('display', 'none'); 
+      d3.select('div#state_map_key').select('ol').style('display', 'none');
 
       if (selectedState) {
         const state_node = mapSection
@@ -620,7 +619,7 @@ const drawUsaMap = (
         .attr('tabindex', 0)
         .classed('selected', true)
         .attr('aria-selected', true);
-        
+
       d3.select('div#state_map_key_box')
         .select('div.title')
         .html('Top Issue Per State*');
