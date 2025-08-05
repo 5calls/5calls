@@ -10,7 +10,14 @@ import {
   UsaSummaryData
 } from '../utils/api';
 import { LOCAL_STORAGE_KEYS } from '../common/constants';
-import { BeeswarmCallCount, BeeswarmNode, ExpandedRepData, processRepsData } from '../utils/dashboardData';
+import {
+  BeeswarmCallCount,
+  BeeswarmNode,
+  ExpandedRepData,
+  getTopIssueData,
+  getUsaMapKeyData,
+  processRepsData
+} from '../utils/dashboardData';
 
 // Dashboard state.
 interface State {
@@ -411,31 +418,7 @@ const drawUsaMap = (
       }
     });
 
-    const filteredStatesResults = statesResults.filter((stateResults) =>
-      data.find((d) => d.id === stateResults.id)
-    );
-    const keyData = filteredStatesResults.reduce((agg, row) => {
-      if (!row.issueCounts || row.issueCounts.length === 0) {
-        return agg;
-      }
-      const topIssue = row.issueCounts[0];
-      let issueInKey = agg.find(
-        (i: IssueCountData) => topIssue.issue_id === i.issue_id
-      );
-      if (issueInKey === undefined) {
-        issueInKey = {
-          issue_id: topIssue.issue_id,
-          name: topIssue.name,
-          count: 0,
-          slug: ''
-        };
-        agg.push(issueInKey);
-      }
-      issueInKey.count++;
-      return agg;
-    }, [] as IssueCountData[]);
-    // Sort by number of states with this top issue.
-    keyData.sort((a, b) => b.count - a.count);
+    const keyData = getUsaMapKeyData(statesResults, data);
     d3.select('ol#state_map_key')
       .selectAll('.key')
       .data(keyData)
@@ -1417,11 +1400,7 @@ class Dashboard extends React.Component<null, State> {
     const hasRepsData = this.state.repsData.length > 0;
 
     const duration = 'last 7 days';
-    // IDs of top issues, to be used for coloring.
-    const topIssueIds: number[] = usaData.usa.issueCounts.reduce((agg, row) => {
-      agg.push(row.issue_id);
-      return agg;
-    }, [] as number[]);
+    const { topIssueIds, issueIdToName } = getTopIssueData(usaData);
 
     // Use consistent coloring throughout the dashboard.
     const issueColor = d3
@@ -1438,17 +1417,6 @@ class Dashboard extends React.Component<null, State> {
         // Now it repeats
       ])
       .domain(topIssueIds);
-
-    const issueIdToName: { [key: number]: string } =
-      usaData.usa.issueCounts.reduce(
-        (agg, row) => {
-          if (!agg[row.issue_id]) {
-            agg[row.issue_id] = row.name;
-          }
-          return agg;
-        },
-        {} as { [key: number]: string }
-      );
 
     interface TabData {
       index: number;
