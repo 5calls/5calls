@@ -87,9 +87,10 @@ class Script extends React.Component<WithLocationProps, State> {
 
   render() {
     let contact = this.state.currentContact;
+
     // if the current location does not match the required state, set the contact back to undefined for the script
     if (
-      this.state.requiredState !== '' &&
+      this.state.requiredState &&
       this.state.requiredState !== this.props.locationState?.state
     ) {
       contact = undefined;
