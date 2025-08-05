@@ -3,38 +3,14 @@ import * as d3 from 'd3';
 import * as topojson from 'topojson-client';
 import { Feature } from 'geojson';
 import {
-  ContactSummaryData,
   getLocationSummary,
   getUsaSummary,
   IssueCountData,
-  OutcomeSummaryData,
   RegionSummaryData,
   UsaSummaryData
 } from '../utils/api';
-import { Contact } from '../common/models/contact';
 import { LOCAL_STORAGE_KEYS } from '../common/constants';
-
-interface BeeswarmCallCount {
-  issue_id: number;
-  count: number;
-  time: number;
-  id: number;
-  selected: boolean;
-}
-
-interface ExpandedRepData {
-  id: string;
-  repInfo: Contact;
-  total: number;
-  outcomes: OutcomeSummaryData[];
-  topIssues: IssueCountData[];
-  callResults: BeeswarmCallCount[];
-  beeswarm: BeeswarmNode<BeeswarmCallCount>[];
-  numVoicemail: number;
-  percentVM: number;
-  percentContact: number;
-  percentUnavailable: number;
-}
+import { BeeswarmCallCount, BeeswarmNode, ExpandedRepData, processRepsData } from '../utils/dashboardData';
 
 // Dashboard state.
 interface State {
@@ -663,28 +639,6 @@ const drawUsaMap = (
   });
 };
 
-const expandRepResults = (results: BeeswarmCallCount[]) => {
-  const addedPoints: BeeswarmCallCount[] = [];
-  // Add a unique ID for the D3 animation later.
-  let indexForId = 0;
-  results.forEach((r) => {
-    // Add an ID for this point, and subsequent IDs for its expanded points.
-    r.id = indexForId++;
-    r.selected = false;
-    for (let i = 1; i < r.count; i++) {
-      // Expand the data based on the count to create enough dots.
-      addedPoints.push({
-        time: r.time,
-        issue_id: r.issue_id,
-        count: 1,
-        selected: false,
-        id: indexForId++
-      });
-    }
-  });
-  results.push(...addedPoints);
-};
-
 const drawRepsPane = (
   repData: ExpandedRepData,
   beeswarmScale: d3.ScaleTime<number, number>,
@@ -1288,19 +1242,6 @@ const drawBeeswarm = (
     );
 };
 
-interface BeeswarmNode<T> extends d3.SimulationNodeDatum {
-  // Target x
-  x0: number;
-  // Target y
-  y0: number;
-  r: number;
-  // Actual x
-  x: number;
-  // Actual y
-  y: number;
-  data: T;
-}
-
 // `beeswarmForce` is from
 // https://observablehq.com/@harrystevens/force-directed-beeswarm.
 // ChatGPT helped with the typescript typing.
@@ -1441,71 +1382,19 @@ class Dashboard extends React.Component<null, State> {
     });
   }
 
-  requestDashboardData() {
-    getUsaSummary().then((usaSummaryData) => {
-      // TODO: Perhaps do some work after USA summary and get location in parallel.
-      getLocationSummary().then((repsSummaryData) => {
-        const repsData: ExpandedRepData[] = [];
-        // Add each matched contact, whether or not they have calls.
-        repsSummaryData?.reps.forEach((r) => {
-          const expandedResult: ExpandedRepData = {
-            id: r.id,
-            repInfo: r,
-            total: 0,
-            outcomes: [],
-            topIssues: [],
-            callResults: [],
-            beeswarm: [],
-            numVoicemail: 0,
-            percentVM: 0,
-            percentContact: 0,
-            percentUnavailable: 0
-          };
-          // Add the call data, if it exists.
-          const contactSummaryData: ContactSummaryData | undefined =
-            repsSummaryData.repsData.find((c) => c.id === r.id);
-          if (contactSummaryData !== undefined) {
-            expandedResult.total = contactSummaryData.total;
-            expandedResult.outcomes = contactSummaryData.outcomes;
-            expandedResult.topIssues = contactSummaryData.topIssues;
-            expandedResult.callResults =
-              contactSummaryData.aggregatedResults as unknown as BeeswarmCallCount[];
+  async requestDashboardData() {
+    const [usaSummaryData, repsSummaryData] = await Promise.all([
+      getUsaSummary(),
+      getLocationSummary()
+    ]);
 
-            // In-place expand to individual calls.
-            expandRepResults(expandedResult.callResults);
+    const repsData = processRepsData(repsSummaryData);
 
-            // Calculate aggregated reachability stats.
-            if (contactSummaryData.outcomes) {
-              const vmOutcomes = contactSummaryData.outcomes.find(
-                (s) => s.result === 'voicemail'
-              );
-              const contactOutcomes = contactSummaryData.outcomes.find(
-                (s) => s.result === 'contact'
-              );
-              const unavailableOutcomes = contactSummaryData.outcomes.find(
-                (s) => s.result === 'unavailable'
-              );
-              const numVm = !vmOutcomes ? 0 : vmOutcomes.count;
-              const numContact = !contactOutcomes ? 0 : contactOutcomes.count;
-              const numUnavailable = !unavailableOutcomes
-                ? 0
-                : unavailableOutcomes.count;
-              expandedResult.percentVM = numVm / contactSummaryData.total;
-              expandedResult.percentContact =
-                numContact / contactSummaryData.total;
-              expandedResult.percentUnavailable =
-                numUnavailable / contactSummaryData.total;
-            }
-          }
-          repsData.push(expandedResult);
-        });
-        // Set the state, which will cause rendering to happen.
-        this.setState({
-          usaData: usaSummaryData,
-          repsData: repsData,
-          isLoading: false
-        });
-      });
+    // Set the state, which will cause rendering to happen.
+    this.setState({
+      usaData: usaSummaryData,
+      repsData: repsData,
+      isLoading: false
     });
   }
 
