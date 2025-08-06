@@ -9,8 +9,12 @@ import {
 } from './api';
 import { Feature } from 'geojson';
 
+//
 // Data processing utilities for the Dashboard.
+//
 
+// Represents the information and call details about a single representative.
+// Used to draw a representative's tab pane in the dashboard.
 export interface ExpandedRepData {
   id: string;
   repInfo: Contact;
@@ -25,6 +29,7 @@ export interface ExpandedRepData {
   percentUnavailable: number;
 }
 
+// Represents a single call to a representative, about a particular issue and at a given time.
 export interface BeeswarmCallCount {
   issue_id: number;
   count: number;
@@ -33,11 +38,13 @@ export interface BeeswarmCallCount {
   selected: boolean;
 }
 
+// Describes call outcomes (e.g. 73 calls to voicemail).
 export interface OutcomeSummaryData {
   result: string;
   count: number;
 }
 
+// Represents an individual point in the beeswarm plot.
 export interface BeeswarmNode<T> extends d3.SimulationNodeDatum {
   // Target x
   x0: number;
@@ -108,10 +115,13 @@ export function processRepsData(
         const numUnavailable = !unavailableOutcomes
           ? 0
           : unavailableOutcomes.count;
-        expandedResult.percentVM = numVm / contactSummaryData.total;
-        expandedResult.percentContact = numContact / contactSummaryData.total;
-        expandedResult.percentUnavailable =
-          numUnavailable / contactSummaryData.total;
+
+        if (contactSummaryData.total > 0) {
+          expandedResult.percentVM = numVm / contactSummaryData.total;
+          expandedResult.percentContact = numContact / contactSummaryData.total;
+          expandedResult.percentUnavailable =
+            numUnavailable / contactSummaryData.total;
+        }
       }
     }
     repsData.push(expandedResult);
