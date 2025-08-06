@@ -420,7 +420,7 @@ const drawUsaMap = (
 
     const keyData = getUsaMapKeyData(statesResults, data);
     d3.select('div#state_map_key')
-      .select('ol')
+      .append('ol')
       .selectAll('.key')
       .data(keyData)
       .enter()

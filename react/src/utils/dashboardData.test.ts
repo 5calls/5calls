@@ -37,11 +37,11 @@ describe('processRepsData', () => {
           ],
           topIssues: [],
           aggregatedResults: [
-            {issue_id: 1, count: 2, time: 1000},
-            {issue_id: 2, count: 4, time: 1000},
-            {issue_id: 1, count: 1, time: 1001},
-            {issue_id: 2, count: 1, time: 1001},
-            {issue_id: 3, count: 2, time: 1002},
+            { issue_id: 1, count: 2, time: 1000 },
+            { issue_id: 2, count: 4, time: 1000 },
+            { issue_id: 1, count: 1, time: 1001 },
+            { issue_id: 2, count: 1, time: 1001 },
+            { issue_id: 3, count: 2, time: 1002 }
           ]
         }
       ]
@@ -59,9 +59,9 @@ describe('processRepsData', () => {
 
     // Check call results were expanded properly.
     expect(repData.callResults.length).toBe(10);
-    expect(repData.callResults.filter(c => c.issue_id == 1).length).toBe(3);
-    expect(repData.callResults.filter(c => c.issue_id == 2).length).toBe(5);
-    expect(repData.callResults.filter(c => c.issue_id == 3).length).toBe(2);
+    expect(repData.callResults.filter((c) => c.issue_id == 1).length).toBe(3);
+    expect(repData.callResults.filter((c) => c.issue_id == 2).length).toBe(5);
+    expect(repData.callResults.filter((c) => c.issue_id == 3).length).toBe(2);
   });
 
   it('should handle a rep with no call data', () => {
@@ -261,7 +261,13 @@ describe('getUsaMapKeyData', () => {
         name: 'California',
         total: 100,
         issueCounts: [
-          { issue_id: 1, name: 'Issue 1', count: 50, slug: 'issue-1', archived: false }
+          {
+            issue_id: 1,
+            name: 'Issue 1',
+            count: 50,
+            slug: 'issue-1',
+            archived: false
+          }
         ]
       },
       { id: 'TX', name: 'Texas', total: 80, issueCounts: [] }
@@ -307,9 +313,27 @@ describe('getTopIssueData', () => {
         name: 'USA',
         total: 200,
         issueCounts: [
-          { issue_id: 1, name: 'Issue 1', count: 100, slug: 'issue-1', archived: true },
-          { issue_id: 2, name: 'Issue 2', count: 50, slug: 'issue-2', archived: false },
-          { issue_id: 3, name: 'Issue 3', count: 50, slug: 'issue-3', archived: false }
+          {
+            issue_id: 1,
+            name: 'Issue 1',
+            count: 100,
+            slug: 'issue-1',
+            archived: true
+          },
+          {
+            issue_id: 2,
+            name: 'Issue 2',
+            count: 50,
+            slug: 'issue-2',
+            archived: false
+          },
+          {
+            issue_id: 3,
+            name: 'Issue 3',
+            count: 50,
+            slug: 'issue-3',
+            archived: false
+          }
         ]
       },
       states: []
