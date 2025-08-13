@@ -86,7 +86,8 @@ export interface IssueCountData {
   issue_id: number;
   name: string;
   slug: string;
-  count: number;
+  count: number; // Total in the time period.
+  total_count: number; // All-time total.
   archived: boolean;
 }
 
