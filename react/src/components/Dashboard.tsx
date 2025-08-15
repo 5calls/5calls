@@ -154,6 +154,7 @@ const drawStateResults = (
     stateResults.issueCounts,
     stateResults.id,
     `${stateResults.name}'s`,
+    `in ${stateResults.name}`,
     duration,
     issueColor,
     stateResults.total,
@@ -174,6 +175,7 @@ const drawUsaPane = (
     topIssues,
     'usa',
     'nationwide',
+    'nationwide',
     duration,
     issueColor,
     usaData.usa.total,
@@ -190,6 +192,7 @@ const drawTopFiveIssues = (
   data: IssueCountData[],
   sectionId: string,
   countTextModifier: string,
+  totalCountTextModifier: string,
   duration: string,
   issueColor: d3.ScaleOrdinal<number, string>,
   total: number,
@@ -285,6 +288,12 @@ const drawTopFiveIssues = (
     .html(
       (d: IssueCountData) =>
         `${((d.count / total) * 100).toFixed(1)}% of ${countTextModifier} calls in the ${duration}`
+    );
+  rowDetails
+    .append('div')
+    .html(
+      (d: IssueCountData) =>
+        `${d.total_count.toLocaleString()} total calls ${totalCountTextModifier}`
     );
   rowDetails.append('div').html((d: IssueCountData) => {
     if (d.archived) {
@@ -943,6 +952,7 @@ const drawRepsPane = (
     repData.topIssues,
     repData.id,
     `${repData.repInfo.name}'s`,
+    `to ${repData.repInfo.name}`,
     duration,
     issueColor,
     repData.total,

@@ -190,6 +190,7 @@ describe('getUsaMapKeyData', () => {
             issue_id: 1,
             name: 'Issue 1',
             count: 50,
+            total_count: 60,
             slug: 'issue-1',
             archived: false
           }
@@ -204,6 +205,7 @@ describe('getUsaMapKeyData', () => {
             issue_id: 2,
             name: 'Issue 2',
             count: 40,
+            total_count: 80,
             slug: 'issue-2',
             archived: false
           }
@@ -218,6 +220,7 @@ describe('getUsaMapKeyData', () => {
             issue_id: 1,
             name: 'Issue 1',
             count: 60,
+            total_count: 60,
             slug: 'issue-1',
             archived: false
           }
@@ -265,6 +268,7 @@ describe('getUsaMapKeyData', () => {
             issue_id: 1,
             name: 'Issue 1',
             count: 50,
+            total_count: 51,
             slug: 'issue-1',
             archived: false
           }
@@ -317,6 +321,7 @@ describe('getTopIssueData', () => {
             issue_id: 1,
             name: 'Issue 1',
             count: 100,
+            total_count: 1000,
             slug: 'issue-1',
             archived: true
           },
@@ -324,6 +329,7 @@ describe('getTopIssueData', () => {
             issue_id: 2,
             name: 'Issue 2',
             count: 50,
+            total_count: 55,
             slug: 'issue-2',
             archived: false
           },
@@ -331,6 +337,7 @@ describe('getTopIssueData', () => {
             issue_id: 3,
             name: 'Issue 3',
             count: 50,
+            total_count: 50,
             slug: 'issue-3',
             archived: false
           }
