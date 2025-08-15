@@ -47,7 +47,7 @@ export default class StateProvider extends React.Component<Props, State> {
     const appState = Storage.getStorageAsObject();
     const hadLocation = !!this.state.locationState;
     const newLocationState = appState.locationState;
-    
+
     this.setState({
       locationState: newLocationState,
       completedIssueMap: appState.completedIssueMap,

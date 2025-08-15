@@ -25,7 +25,9 @@ interface IssuesResponse {
   stateIssues: Record<string, Issue[]>;
 }
 
-const IssueSearch: React.FC<IssueSearchProps & WithLocationProps> = ({ locationState }) => {
+const IssueSearch: React.FC<IssueSearchProps & WithLocationProps> = ({
+  locationState
+}) => {
   const [state, setState] = useState<SearchState>({
     searchTerm: '',
     nationalIssues: [],
@@ -39,7 +41,9 @@ const IssueSearch: React.FC<IssueSearchProps & WithLocationProps> = ({ locationS
   const searchInputRef = useRef<HTMLInputElement>(null);
 
   const fetchIssues = async (): Promise<IssuesResponse> => {
-    const response = await axios.get<IssuesResponse>(Constants.ISSUES_FOR_PUBLISHING_API_URL);
+    const response = await axios.get<IssuesResponse>(
+      Constants.ISSUES_FOR_PUBLISHING_API_URL
+    );
     return response.data;
   };
 
@@ -118,7 +122,7 @@ const IssueSearch: React.FC<IssueSearchProps & WithLocationProps> = ({ locationS
   const handleSearchFocus = async () => {
     if (!state.isSearchFocused) {
       setState((prev) => ({ ...prev, isSearchFocused: true }));
-      
+
       // Only load issues on focus if we don't have location
       if (!locationState && !state.hasSearched) {
         await loadIssues();
@@ -150,17 +154,25 @@ const IssueSearch: React.FC<IssueSearchProps & WithLocationProps> = ({ locationS
 
   const getOrderedIssues = (): Issue[] => {
     const userState = locationState?.state;
-    const userStateIssues = userState ? (state.stateIssues[userState] || []).filter(issue => !issue.hidden && issue.active) : [];
-    const nationalIssues = state.nationalIssues.filter(issue => !issue.hidden && issue.active);
-    
+    const userStateIssues = userState
+      ? (state.stateIssues[userState] || []).filter(
+          (issue) => !issue.hidden && issue.active
+        )
+      : [];
+    const nationalIssues = state.nationalIssues.filter(
+      (issue) => !issue.hidden && issue.active
+    );
+
     // Return user's state issues first, then national issues (only active ones)
     return [...userStateIssues, ...nationalIssues];
   };
 
   const getIssueState = (issue: Issue): string | null => {
     // Check if this issue exists in any state's issue array
-    for (const [stateAbbr, stateIssuesArray] of Object.entries(state.stateIssues)) {
-      if (stateIssuesArray.some(stateIssue => stateIssue.id === issue.id)) {
+    for (const [stateAbbr, stateIssuesArray] of Object.entries(
+      state.stateIssues
+    )) {
+      if (stateIssuesArray.some((stateIssue) => stateIssue.id === issue.id)) {
         return stateAbbr;
       }
     }
@@ -179,30 +191,29 @@ const IssueSearch: React.FC<IssueSearchProps & WithLocationProps> = ({ locationS
         style={{ position: 'relative' }}
       >
         <div className="i-bar-item-check">
-          <div
-            className="i-bar-check-completed"
-            data-issue-id={issue.id}
-          >
+          <div className="i-bar-check-completed" data-issue-id={issue.id}>
             <i className="fa fa-phone"></i>
             <span className="sr-only">Needs your calls</span>
           </div>
         </div>
         <strong>{issue.name}</strong>
         {stateName && (
-          <div style={{
-            position: 'absolute',
-            bottom: '0',
-            right: '0',
-            backgroundColor: '#dc3545',
-            color: 'white',
-            fontSize: '10px',
-            fontWeight: 'bold',
-            padding: '2px 8px 2px 14px',
-            textTransform: 'uppercase',
-            clipPath: 'polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%, 8px 50%)',
-            minWidth: '40px',
-            textAlign: 'center'
-          }}>
+          <div
+            style={{
+              position: 'absolute',
+              bottom: '0',
+              right: '0',
+              backgroundColor: '#dc3545',
+              color: 'white',
+              fontSize: '10px',
+              fontWeight: 'bold',
+              padding: '2px 8px 2px 14px',
+              textTransform: 'uppercase',
+              clipPath: 'polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%, 8px 50%)',
+              minWidth: '40px',
+              textAlign: 'center'
+            }}
+          >
             {stateName}
           </div>
         )}
@@ -217,9 +228,14 @@ const IssueSearch: React.FC<IssueSearchProps & WithLocationProps> = ({ locationS
 
     // Only search within user's state issues + national issues if location is available
     const userState = locationState?.state;
-    const searchableIssues = userState 
-      ? [...(state.stateIssues[userState] || []).filter(issue => !issue.hidden), ...state.nationalIssues.filter(issue => !issue.hidden)]
-      : state.nationalIssues.filter(issue => !issue.hidden);
+    const searchableIssues = userState
+      ? [
+          ...(state.stateIssues[userState] || []).filter(
+            (issue) => !issue.hidden
+          ),
+          ...state.nationalIssues.filter((issue) => !issue.hidden)
+        ]
+      : state.nationalIssues.filter((issue) => !issue.hidden);
 
     const lowercaseSearch = searchTerm.toLowerCase();
     const filtered = searchableIssues.filter(
@@ -237,44 +253,46 @@ const IssueSearch: React.FC<IssueSearchProps & WithLocationProps> = ({ locationS
     );
 
     // Sort with enhanced prioritization
-    return filtered.sort((a, b) => {
-      // Check for whole-word matches in name
-      const aNameWholeWord = wholeWordRegex.test(a.name);
-      const bNameWholeWord = wholeWordRegex.test(b.name);
+    return filtered
+      .sort((a, b) => {
+        // Check for whole-word matches in name
+        const aNameWholeWord = wholeWordRegex.test(a.name);
+        const bNameWholeWord = wholeWordRegex.test(b.name);
 
-      // Check for any name matches (including partial)
-      const aNameMatch = a.name.toLowerCase().includes(lowercaseSearch);
-      const bNameMatch = b.name.toLowerCase().includes(lowercaseSearch);
+        // Check for any name matches (including partial)
+        const aNameMatch = a.name.toLowerCase().includes(lowercaseSearch);
+        const bNameMatch = b.name.toLowerCase().includes(lowercaseSearch);
 
-      // Check for whole-word matches in any field
-      const aAnyWholeWord =
-        wholeWordRegex.test(a.name) ||
-        wholeWordRegex.test(a.reason) ||
-        wholeWordRegex.test(a.script) ||
-        wholeWordRegex.test(a.slug);
-      const bAnyWholeWord =
-        wholeWordRegex.test(b.name) ||
-        wholeWordRegex.test(b.reason) ||
-        wholeWordRegex.test(b.script) ||
-        wholeWordRegex.test(b.slug);
+        // Check for whole-word matches in any field
+        const aAnyWholeWord =
+          wholeWordRegex.test(a.name) ||
+          wholeWordRegex.test(a.reason) ||
+          wholeWordRegex.test(a.script) ||
+          wholeWordRegex.test(a.slug);
+        const bAnyWholeWord =
+          wholeWordRegex.test(b.name) ||
+          wholeWordRegex.test(b.reason) ||
+          wholeWordRegex.test(b.script) ||
+          wholeWordRegex.test(b.slug);
 
-      // Priority order:
-      // 1. Whole-word match in name
-      // 2. Partial match in name
-      // 3. Whole-word match in any field
-      // 4. Partial match in any field
+        // Priority order:
+        // 1. Whole-word match in name
+        // 2. Partial match in name
+        // 3. Whole-word match in any field
+        // 4. Partial match in any field
 
-      if (aNameWholeWord && !bNameWholeWord) return -1;
-      if (!aNameWholeWord && bNameWholeWord) return 1;
+        if (aNameWholeWord && !bNameWholeWord) return -1;
+        if (!aNameWholeWord && bNameWholeWord) return 1;
 
-      if (aNameMatch && !bNameMatch) return -1;
-      if (!aNameMatch && bNameMatch) return 1;
+        if (aNameMatch && !bNameMatch) return -1;
+        if (!aNameMatch && bNameMatch) return 1;
 
-      if (aAnyWholeWord && !bAnyWholeWord) return -1;
-      if (!aAnyWholeWord && bAnyWholeWord) return 1;
+        if (aAnyWholeWord && !bAnyWholeWord) return -1;
+        if (!aAnyWholeWord && bAnyWholeWord) return 1;
 
-      return 0;
-    }).slice(0, 10); // Limit to top 10 results
+        return 0;
+      })
+      .slice(0, 10); // Limit to top 10 results
   };
 
   const filteredIssues = filterIssues(state.searchTerm);
@@ -313,7 +331,10 @@ const IssueSearch: React.FC<IssueSearchProps & WithLocationProps> = ({ locationS
         </div>
       )}
 
-      {((shouldShowSearchResults && !state.isLoading) || (!shouldShowSearchResults && orderedIssues.length > 0 && state.hasSearched)) && (
+      {((shouldShowSearchResults && !state.isLoading) ||
+        (!shouldShowSearchResults &&
+          orderedIssues.length > 0 &&
+          state.hasSearched)) && (
         <div className="i-bar-search-results">
           {shouldShowSearchResults ? (
             filteredIssues.length > 0 ? (

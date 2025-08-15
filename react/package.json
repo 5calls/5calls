@@ -40,7 +40,7 @@
       "react-app/jest"
     ]
   },
-  "browserlist": [
+  "browserslist": [
     "defaults"
   ],
   "devDependencies": {

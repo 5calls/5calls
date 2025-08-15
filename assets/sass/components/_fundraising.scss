@@ -1,42 +1,42 @@
 .fundraising-progress {
   margin: 1rem 0;
-  
+
   .progress-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 0.5rem;
-    
+
     .progress-amounts {
       display: flex;
       flex-direction: column;
-      
+
       .current-amount {
         font-size: 1.25rem;
         font-weight: bold;
         color: #2c5aa0;
-        
+
         &.clickable-amount {
           text-decoration: none;
           cursor: pointer;
           transition: color 0.2s ease;
-          
+
           &:hover {
             color: #1e3f6f;
             text-decoration: underline;
           }
         }
       }
-      
+
       .target-amount {
         font-size: 0.875rem;
         color: #666;
-        
+
         &.clickable-amount {
           text-decoration: none;
           cursor: pointer;
           transition: color 0.2s ease;
-          
+
           &:hover {
             color: #444;
             text-decoration: underline;
@@ -44,21 +44,21 @@
         }
       }
     }
-    
+
     .progress-percentage {
       font-size: 1.125rem;
       font-weight: bold;
       color: #2c5aa0;
     }
   }
-  
+
   .progress-bar {
     width: 100%;
     height: 12px;
     background-color: #e5e5e5;
     border-radius: 6px;
     overflow: hidden;
-    
+
     .progress-fill {
       height: 100%;
       background: linear-gradient(90deg, #2c5aa0 0%, #4a90d9 100%);
@@ -67,11 +67,11 @@
       min-width: 0;
     }
   }
-  
+
   .donate-button-container {
     margin-top: 1rem;
     text-align: center;
-    
+
     .donate-button {
       display: inline-block;
       padding: 0.75rem 1.5rem;
@@ -83,7 +83,7 @@
       font-size: 1rem;
       transition: all 0.2s ease;
       box-shadow: 0 2px 4px rgba(44, 90, 160, 0.2);
-      
+
       &:hover {
         background: linear-gradient(135deg, #1e3f6f 0%, #2c5aa0 100%);
         transform: translateY(-1px);
@@ -91,7 +91,7 @@
         color: white;
         text-decoration: none;
       }
-      
+
       &:active {
         transform: translateY(0);
         box-shadow: 0 2px 4px rgba(44, 90, 160, 0.2);
@@ -101,23 +101,23 @@
 }
 
 @media (max-width: 768px) {
-  .fundraising-progress {    
+  .fundraising-progress {
     .progress-header {
       .progress-amounts {
         .current-amount {
           font-size: 1.125rem;
         }
-        
+
         .target-amount {
           font-size: 0.8rem;
         }
       }
-      
+
       .progress-percentage {
         font-size: 1rem;
       }
     }
-    
+
     .donate-button-container {
       .donate-button {
         padding: 0.625rem 1.25rem;
