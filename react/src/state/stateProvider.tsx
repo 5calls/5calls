@@ -45,11 +45,22 @@ export default class StateProvider extends React.Component<Props, State> {
 
   loadFromStorage() {
     const appState = Storage.getStorageAsObject();
+    const hadLocation = !!this.state.locationState;
+    const newLocationState = appState.locationState;
+    
     this.setState({
-      locationState: appState.locationState,
+      locationState: newLocationState,
       completedIssueMap: appState.completedIssueMap,
       savedStateRestored: true
     });
+
+    // Dispatch event if location became available
+    if (!hadLocation && newLocationState) {
+      const locationLoadedEvent = new CustomEvent('locationLoaded', {
+        detail: newLocationState
+      });
+      document.dispatchEvent(locationLoadedEvent);
+    }
   }
 
   setLocationAddress(address: string, display: string, state: string) {
@@ -66,6 +77,12 @@ export default class StateProvider extends React.Component<Props, State> {
     };
     Storage.saveLocation(locationState);
     this.setState({ locationState });
+
+    // Dispatch event when location is updated
+    const locationLoadedEvent = new CustomEvent('locationLoaded', {
+      detail: locationState
+    });
+    document.dispatchEvent(locationLoadedEvent);
   }
 
   setCompletedIssueMap(updatedCompletedIssueMap: CompletedIssueMap) {

@@ -9,6 +9,7 @@ export interface Issue {
   script: string;
   categories: Category[];
   active: boolean;
+  hidden: boolean;
   createdAt: string;
   slug: string;
   outcomeModels: Outcome[];
