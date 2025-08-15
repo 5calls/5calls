@@ -73,7 +73,7 @@ const IssueSearch: React.FC<IssueSearchProps & WithLocationProps> = ({ locationS
 
   // Listen for location loaded event and load issues immediately
   useEffect(() => {
-    const handleLocationLoaded = (e: Event) => {
+    const handleLocationLoaded = () => {
       if (!state.hasSearched) {
         loadIssues();
       }
@@ -146,17 +146,6 @@ const IssueSearch: React.FC<IssueSearchProps & WithLocationProps> = ({ locationS
     if (searchInputRef.current) {
       searchInputRef.current.blur();
     }
-  };
-
-  const getAllIssues = (): Issue[] => {
-    const allIssues = [...state.nationalIssues.filter(issue => !issue.hidden)];
-    
-    // Add all state issues (filtered)
-    Object.values(state.stateIssues).forEach(stateIssueArray => {
-      allIssues.push(...stateIssueArray.filter(issue => !issue.hidden));
-    });
-    
-    return allIssues;
   };
 
   const getOrderedIssues = (): Issue[] => {
