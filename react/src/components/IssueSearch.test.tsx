@@ -23,9 +23,9 @@ jest.mock('../utils/api', () => ({
 jest.mock('../utils/stateNames', () => ({
   stateNameFromAbbr: (abbr: string) => {
     const stateMap: Record<string, string> = {
-      'CA': 'California',
-      'TX': 'Texas',
-      'NY': 'New York'
+      CA: 'California',
+      TX: 'Texas',
+      NY: 'New York'
     };
     return stateMap[abbr] || abbr;
   }
@@ -123,8 +123,11 @@ const mockIssues: Issue[] = [
 const mockApiResponse = {
   issues: mockIssues,
   stateIssues: {
-    'CA': [{...mockIssues[0], id: 10}, {...mockIssues[1], id: 11}],
-    'TX': [{...mockIssues[2], id: 12}]
+    CA: [
+      { ...mockIssues[0], id: 10 },
+      { ...mockIssues[1], id: 11 }
+    ],
+    TX: [{ ...mockIssues[2], id: 12 }]
   }
 };
 
@@ -132,7 +135,7 @@ describe('IssueSearch Search Functionality', () => {
   beforeEach(() => {
     jest.clearAllMocks();
     mockedAxios.get.mockResolvedValue({ data: mockApiResponse });
-    
+
     // Mock DOM querySelector for static section
     const mockElement = { style: { display: '' } };
     jest.spyOn(document, 'querySelector').mockReturnValue(mockElement as any);
@@ -148,24 +151,28 @@ describe('IssueSearch Search Functionality', () => {
   describe('Search Result Detection', () => {
     it('should find issues by exact title match', async () => {
       renderComponent();
-      
+
       await waitFor(() => {
         expect(mockedAxios.get).toHaveBeenCalled();
       });
 
       const searchInput = screen.getByPlaceholderText('Search all issues...');
-      fireEvent.change(searchInput, { target: { value: 'Climate Change Action' } });
+      fireEvent.change(searchInput, {
+        target: { value: 'Climate Change Action' }
+      });
 
       await waitFor(() => {
         const results = screen.getAllByRole('link');
-        const issueNames = results.map(result => result.textContent);
-        expect(issueNames.some(name => name?.includes('Climate Change Action'))).toBe(true);
+        const issueNames = results.map((result) => result.textContent);
+        expect(
+          issueNames.some((name) => name?.includes('Climate Change Action'))
+        ).toBe(true);
       });
     });
 
     it('should find issues by partial title match', async () => {
       renderComponent();
-      
+
       await waitFor(() => {
         expect(mockedAxios.get).toHaveBeenCalled();
       });
@@ -175,15 +182,19 @@ describe('IssueSearch Search Functionality', () => {
 
       await waitFor(() => {
         const results = screen.getAllByRole('link');
-        const issueNames = results.map(result => result.textContent);
-        expect(issueNames.some(name => name?.includes('Climate Change Action'))).toBe(true);
-        expect(issueNames.some(name => name?.includes('Tax Climate Incentives'))).toBe(true);
+        const issueNames = results.map((result) => result.textContent);
+        expect(
+          issueNames.some((name) => name?.includes('Climate Change Action'))
+        ).toBe(true);
+        expect(
+          issueNames.some((name) => name?.includes('Tax Climate Incentives'))
+        ).toBe(true);
       });
     });
 
     it('should find issues by whole word matches', async () => {
       renderComponent();
-      
+
       await waitFor(() => {
         expect(mockedAxios.get).toHaveBeenCalled();
       });
@@ -193,15 +204,19 @@ describe('IssueSearch Search Functionality', () => {
 
       await waitFor(() => {
         const results = screen.getAllByRole('link');
-        const issueNames = results.map(result => result.textContent);
-        expect(issueNames.some(name => name?.includes('Healthcare Reform'))).toBe(true);
-        expect(issueNames.some(name => name?.includes('Reform Immigration'))).toBe(true);
+        const issueNames = results.map((result) => result.textContent);
+        expect(
+          issueNames.some((name) => name?.includes('Healthcare Reform'))
+        ).toBe(true);
+        expect(
+          issueNames.some((name) => name?.includes('Reform Immigration'))
+        ).toBe(true);
       });
     });
 
     it('should search in reason field', async () => {
       renderComponent();
-      
+
       await waitFor(() => {
         expect(mockedAxios.get).toHaveBeenCalled();
       });
@@ -211,14 +226,16 @@ describe('IssueSearch Search Functionality', () => {
 
       await waitFor(() => {
         const results = screen.getAllByRole('link');
-        const issueNames = results.map(result => result.textContent);
-        expect(issueNames.some(name => name?.includes('Healthcare Reform'))).toBe(true);
+        const issueNames = results.map((result) => result.textContent);
+        expect(
+          issueNames.some((name) => name?.includes('Healthcare Reform'))
+        ).toBe(true);
       });
     });
 
     it('should search in script field', async () => {
       renderComponent();
-      
+
       await waitFor(() => {
         expect(mockedAxios.get).toHaveBeenCalled();
       });
@@ -228,14 +245,16 @@ describe('IssueSearch Search Functionality', () => {
 
       await waitFor(() => {
         const results = screen.getAllByRole('link');
-        const issueNames = results.map(result => result.textContent);
-        expect(issueNames.some(name => name?.includes('Climate Change Action'))).toBe(true);
+        const issueNames = results.map((result) => result.textContent);
+        expect(
+          issueNames.some((name) => name?.includes('Climate Change Action'))
+        ).toBe(true);
       });
     });
 
     it('should be case insensitive', async () => {
       renderComponent();
-      
+
       await waitFor(() => {
         expect(mockedAxios.get).toHaveBeenCalled();
       });
@@ -245,8 +264,10 @@ describe('IssueSearch Search Functionality', () => {
 
       await waitFor(() => {
         const results = screen.getAllByRole('link');
-        const issueNames = results.map(result => result.textContent);
-        expect(issueNames.some(name => name?.includes('Climate Change Action'))).toBe(true);
+        const issueNames = results.map((result) => result.textContent);
+        expect(
+          issueNames.some((name) => name?.includes('Climate Change Action'))
+        ).toBe(true);
       });
     });
   });
@@ -254,7 +275,7 @@ describe('IssueSearch Search Functionality', () => {
   describe('Search Prioritization Logic', () => {
     it('should prioritize title matches first', async () => {
       renderComponent();
-      
+
       await waitFor(() => {
         expect(mockedAxios.get).toHaveBeenCalled();
       });
@@ -265,19 +286,19 @@ describe('IssueSearch Search Functionality', () => {
       await waitFor(() => {
         const results = screen.getAllByRole('link');
         expect(results.length).toBeGreaterThan(0);
-        
+
         // First result should be a title match (Climate Change Action or Tax Climate Incentives)
         const firstResult = results[0].textContent;
         expect(
-          firstResult?.includes('Climate Change Action') || 
-          firstResult?.includes('Tax Climate Incentives')
+          firstResult?.includes('Climate Change Action') ||
+            firstResult?.includes('Tax Climate Incentives')
         ).toBe(true);
       });
     });
 
     it('should find whole word matches properly', async () => {
       renderComponent();
-      
+
       await waitFor(() => {
         expect(mockedAxios.get).toHaveBeenCalled();
       });
@@ -287,8 +308,10 @@ describe('IssueSearch Search Functionality', () => {
 
       await waitFor(() => {
         const results = screen.getAllByRole('link');
-        const issueNames = results.map(result => result.textContent);
-        expect(issueNames.some(name => name?.includes('Tax Climate Incentives'))).toBe(true);
+        const issueNames = results.map((result) => result.textContent);
+        expect(
+          issueNames.some((name) => name?.includes('Tax Climate Incentives'))
+        ).toBe(true);
       });
     });
   });
@@ -296,31 +319,31 @@ describe('IssueSearch Search Functionality', () => {
   describe('Search Input Behavior', () => {
     it('should not show search results for queries shorter than 3 characters', async () => {
       renderComponent();
-      
+
       await waitFor(() => {
         expect(mockedAxios.get).toHaveBeenCalled();
       });
 
       const searchInput = screen.getByPlaceholderText('Search all issues...');
-      
+
       // Clear the search first to ensure we're starting fresh
       fireEvent.change(searchInput, { target: { value: '' } });
-      
+
       // Type short queries - these should not trigger search results mode
       fireEvent.change(searchInput, { target: { value: 'c' } });
-      
+
       // The component should not show search-specific results for < 3 chars
       // But it may show the regular ordered issues list
       // We can check that no "no results" message appears
       expect(screen.queryByText(/No issues found matching/)).toBeNull();
-      
+
       fireEvent.change(searchInput, { target: { value: 'cl' } });
       expect(screen.queryByText(/No issues found matching/)).toBeNull();
     });
 
     it('should show results for queries with 3 or more characters', async () => {
       renderComponent();
-      
+
       await waitFor(() => {
         expect(mockedAxios.get).toHaveBeenCalled();
       });
@@ -336,7 +359,7 @@ describe('IssueSearch Search Functionality', () => {
 
     it('should show "no results" message when no matches found', async () => {
       renderComponent();
-      
+
       await waitFor(() => {
         expect(mockedAxios.get).toHaveBeenCalled();
       });
@@ -345,7 +368,9 @@ describe('IssueSearch Search Functionality', () => {
       fireEvent.change(searchInput, { target: { value: 'nonexistentterm' } });
 
       await waitFor(() => {
-        expect(screen.getByText(/No issues found matching/)).toBeInTheDocument();
+        expect(
+          screen.getByText(/No issues found matching/)
+        ).toBeInTheDocument();
       });
     });
 
@@ -363,15 +388,15 @@ describe('IssueSearch Search Functionality', () => {
         contacts: []
       }));
 
-      mockedAxios.get.mockResolvedValue({ 
-        data: { 
-          issues: manyIssues, 
-          stateIssues: {} 
-        } 
+      mockedAxios.get.mockResolvedValue({
+        data: {
+          issues: manyIssues,
+          stateIssues: {}
+        }
       });
 
       renderComponent();
-      
+
       await waitFor(() => {
         expect(mockedAxios.get).toHaveBeenCalled();
       });
@@ -390,7 +415,7 @@ describe('IssueSearch Search Functionality', () => {
     it('should include state issues when location is available', async () => {
       const locationState = { state: 'CA', district: '1' };
       renderComponent(locationState);
-      
+
       await waitFor(() => {
         expect(mockedAxios.get).toHaveBeenCalled();
       });
@@ -406,7 +431,7 @@ describe('IssueSearch Search Functionality', () => {
 
     it('should search only national issues when no location is available', async () => {
       renderComponent(null);
-      
+
       await waitFor(() => {
         expect(mockedAxios.get).toHaveBeenCalled();
       });
