@@ -188,12 +188,17 @@ const IssueSearch: React.FC<IssueSearchProps & WithLocationProps> = ({
   const renderIssueItem = (issue: Issue) => {
     const stateAbbr = getIssueState(issue);
     const stateName = stateAbbr ? stateNameFromAbbr(stateAbbr) : null;
+    
+    // Generate correct URL format: state issues use /state/<state name lowercase>/<slug>/, national issues use /issue/<slug>/
+    const issueUrl = stateName 
+      ? `/state/${stateName.toLowerCase()}/${issue.slug}/`
+      : `/issue/${issue.slug}/`;
 
     return (
       <a
         key={issue.id}
         className="i-bar-item is-unsorted"
-        href={`/issue/${issue.slug}/`}
+        href={issueUrl}
         style={{ position: 'relative' }}
       >
         <div className="i-bar-item-check">
