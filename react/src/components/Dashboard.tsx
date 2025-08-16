@@ -1701,7 +1701,9 @@ class Dashboard extends React.Component<null, State> {
           // Draw it the first time it is needed.
           // TODO: Check with PR, DC that this works as expected.
           let initialState: string | null = null;
-          const district = localStorage.getItem(Constants.LOCAL_STORAGE_KEYS.DISTRICT);
+          const district = localStorage.getItem(
+            Constants.LOCAL_STORAGE_KEYS.DISTRICT
+          );
           if (district) {
             initialState = localStorage.district.split('-')[0];
           }

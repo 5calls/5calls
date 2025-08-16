@@ -118,7 +118,9 @@ const Location: React.FC<WithLocationProps & WithCompletedProps> = (props) => {
               contactList.state
             );
             setComponentLocationState(ComponentLocationState.HasLocation);
-            document.dispatchEvent(new Event(Constants.CUSTOM_EVENTS.UPDATE_REPS));
+            document.dispatchEvent(
+              new Event(Constants.CUSTOM_EVENTS.UPDATE_REPS)
+            );
           })
           .catch((error) => {
             console.log('error getting location after geoloc:', error);

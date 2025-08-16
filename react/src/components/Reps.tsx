@@ -190,9 +190,12 @@ class Reps extends React.Component<
   reportUpdatedActiveContact(contact: Contact) {
     // yuck, I don't have a good way to sync state across different-root components yet
     // so script component just listens to this
-    const activeContactEvent = new CustomEvent(Constants.CUSTOM_EVENTS.ACTIVE_CONTACT, {
-      detail: contact
-    });
+    const activeContactEvent = new CustomEvent(
+      Constants.CUSTOM_EVENTS.ACTIVE_CONTACT,
+      {
+        detail: contact
+      }
+    );
     document.dispatchEvent(activeContactEvent);
   }
 
@@ -229,7 +232,9 @@ class Reps extends React.Component<
             // start our script component with an active contact
             this.reportUpdatedActiveContact(contacts[0]);
             // report that reps loaded for outcomes to load
-            const loadedRepsEvent = new CustomEvent(Constants.CUSTOM_EVENTS.LOADED_REPS);
+            const loadedRepsEvent = new CustomEvent(
+              Constants.CUSTOM_EVENTS.LOADED_REPS
+            );
             document.dispatchEvent(loadedRepsEvent);
           }
         })

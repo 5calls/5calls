@@ -36,7 +36,9 @@ class Outcomes extends React.Component<WithLocationProps, State> {
   }
 
   next(outcome: string) {
-    const event = new CustomEvent(Constants.CUSTOM_EVENTS.NEXT_CONTACT, { detail: outcome });
+    const event = new CustomEvent(Constants.CUSTOM_EVENTS.NEXT_CONTACT, {
+      detail: outcome
+    });
     document.dispatchEvent(event);
   }
 
