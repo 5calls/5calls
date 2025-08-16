@@ -57,9 +57,12 @@ export default class StateProvider extends React.Component<Props, State> {
 
     // Dispatch event if location became available
     if (!hadLocation && newLocationState) {
-      const locationLoadedEvent = new CustomEvent(Constants.CUSTOM_EVENTS.LOCATION_LOADED, {
-        detail: newLocationState
-      });
+      const locationLoadedEvent = new CustomEvent(
+        Constants.CUSTOM_EVENTS.LOCATION_LOADED,
+        {
+          detail: newLocationState
+        }
+      );
       document.dispatchEvent(locationLoadedEvent);
     }
   }
@@ -80,9 +83,12 @@ export default class StateProvider extends React.Component<Props, State> {
     this.setState({ locationState });
 
     // Dispatch event when location is updated
-    const locationLoadedEvent = new CustomEvent(Constants.CUSTOM_EVENTS.LOCATION_LOADED, {
-      detail: locationState
-    });
+    const locationLoadedEvent = new CustomEvent(
+      Constants.CUSTOM_EVENTS.LOCATION_LOADED,
+      {
+        detail: locationState
+      }
+    );
     document.dispatchEvent(locationLoadedEvent);
   }
 
