@@ -1,6 +1,7 @@
 import React, { createRef } from 'react';
 import { WithLocationProps } from '../state/locationState';
 import { withLocation } from '../state/stateProvider';
+import * as Constants from '../common/constants';
 
 interface State {
   outcomes: string[];
@@ -29,13 +30,15 @@ class Outcomes extends React.Component<WithLocationProps, State> {
       this.setState({ outcomes, requiredState });
     }
 
-    document.addEventListener('loadedReps', () => {
+    document.addEventListener(Constants.CUSTOM_EVENTS.LOADED_REPS, () => {
       this.setState({ showReps: true });
     });
   }
 
   next(outcome: string) {
-    const event = new CustomEvent('nextContact', { detail: outcome });
+    const event = new CustomEvent(Constants.CUSTOM_EVENTS.NEXT_CONTACT, {
+      detail: outcome
+    });
     document.dispatchEvent(event);
   }
 

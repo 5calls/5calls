@@ -8,6 +8,7 @@ resources/
 assets/js/*
 react/build/
 react/node_modules/
+react/coverage/
 content/issue/*
 content/done/
 content/state/

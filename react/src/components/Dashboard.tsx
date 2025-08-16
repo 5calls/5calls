@@ -9,7 +9,7 @@ import {
   RegionSummaryData,
   UsaSummaryData
 } from '../utils/api';
-import { LOCAL_STORAGE_KEYS } from '../common/constants';
+import * as Constants from '../common/constants';
 import {
   BeeswarmCallCount,
   BeeswarmNode,
@@ -1592,7 +1592,7 @@ class Dashboard extends React.Component<null, State> {
     this.requestDashboardData();
 
     // Sent by the location page.
-    document.addEventListener('updateReps', () => {
+    document.addEventListener(Constants.CUSTOM_EVENTS.UPDATE_REPS, () => {
       // This is a bit of a hack; would be better to just pull in new
       // reps data, but first must detangle loading reps data from USA data.
       location.reload();
@@ -1711,7 +1711,9 @@ class Dashboard extends React.Component<null, State> {
           // Draw it the first time it is needed.
           // TODO: Check with PR, DC that this works as expected.
           let initialState: string | null = null;
-          const district = localStorage.getItem(LOCAL_STORAGE_KEYS.DISTRICT);
+          const district = localStorage.getItem(
+            Constants.LOCAL_STORAGE_KEYS.DISTRICT
+          );
           if (district) {
             initialState = localStorage.district.split('-')[0];
           }
