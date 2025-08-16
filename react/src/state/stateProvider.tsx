@@ -11,6 +11,7 @@ import {
   CompletedIssueMap,
   WithCompletedProps
 } from './completedState';
+import * as Constants from '../common/constants';
 
 interface Props {
   children: React.ReactNode;
@@ -38,7 +39,7 @@ export default class StateProvider extends React.Component<Props, State> {
     }
 
     // if these events are fired, we should reload from storage
-    document.addEventListener('updateReps', () => {
+    document.addEventListener(Constants.CUSTOM_EVENTS.UPDATE_REPS, () => {
       this.loadFromStorage();
     });
   }
@@ -56,7 +57,7 @@ export default class StateProvider extends React.Component<Props, State> {
 
     // Dispatch event if location became available
     if (!hadLocation && newLocationState) {
-      const locationLoadedEvent = new CustomEvent('locationLoaded', {
+      const locationLoadedEvent = new CustomEvent(Constants.CUSTOM_EVENTS.LOCATION_LOADED, {
         detail: newLocationState
       });
       document.dispatchEvent(locationLoadedEvent);
@@ -79,7 +80,7 @@ export default class StateProvider extends React.Component<Props, State> {
     this.setState({ locationState });
 
     // Dispatch event when location is updated
-    const locationLoadedEvent = new CustomEvent('locationLoaded', {
+    const locationLoadedEvent = new CustomEvent(Constants.CUSTOM_EVENTS.LOCATION_LOADED, {
       detail: locationState
     });
     document.dispatchEvent(locationLoadedEvent);

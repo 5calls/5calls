@@ -83,7 +83,7 @@ const IssueSearch: React.FC<IssueSearchProps & WithLocationProps> = ({
       }
     };
 
-    document.addEventListener('locationLoaded', handleLocationLoaded);
+    document.addEventListener(Constants.CUSTOM_EVENTS.LOCATION_LOADED, handleLocationLoaded);
 
     // Also load issues on mount if no location is set (fallback for users without location)
     const timer = setTimeout(() => {
@@ -93,7 +93,7 @@ const IssueSearch: React.FC<IssueSearchProps & WithLocationProps> = ({
     }, 100); // Reduced timeout since we have the event listener
 
     return () => {
-      document.removeEventListener('locationLoaded', handleLocationLoaded);
+      document.removeEventListener(Constants.CUSTOM_EVENTS.LOCATION_LOADED, handleLocationLoaded);
       clearTimeout(timer);
     };
   }, []);

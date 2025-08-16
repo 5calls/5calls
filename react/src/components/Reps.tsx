@@ -12,6 +12,7 @@ import ContactUtils from '../utils/contactUtils';
 import { useSettings } from '../utils/useSettings';
 import ActiveContact from './ActiveContact';
 import stateNameFromAbbr from '../utils/stateNames';
+import * as Constants from '../common/constants';
 
 interface Props {
   callingGroup?: string;
@@ -113,7 +114,7 @@ class Reps extends React.Component<
       this.updateContacts(areaString.split(','));
     }
 
-    document.addEventListener('nextContact', (e) => {
+    document.addEventListener(Constants.CUSTOM_EVENTS.NEXT_CONTACT, (e) => {
       const outcome: string = (e as CustomEvent).detail;
 
       const contacts = this.contactsForArea(
@@ -189,7 +190,7 @@ class Reps extends React.Component<
   reportUpdatedActiveContact(contact: Contact) {
     // yuck, I don't have a good way to sync state across different-root components yet
     // so script component just listens to this
-    const activeContactEvent = new CustomEvent('activeContact', {
+    const activeContactEvent = new CustomEvent(Constants.CUSTOM_EVENTS.ACTIVE_CONTACT, {
       detail: contact
     });
     document.dispatchEvent(activeContactEvent);
@@ -228,7 +229,7 @@ class Reps extends React.Component<
             // start our script component with an active contact
             this.reportUpdatedActiveContact(contacts[0]);
             // report that reps loaded for outcomes to load
-            const loadedRepsEvent = new CustomEvent('loadedReps');
+            const loadedRepsEvent = new CustomEvent(Constants.CUSTOM_EVENTS.LOADED_REPS);
             document.dispatchEvent(loadedRepsEvent);
           }
         })

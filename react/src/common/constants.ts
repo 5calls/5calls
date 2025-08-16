@@ -44,3 +44,11 @@ export const contact = {
   facebook: 'https://www.facebook.com/make5calls',
   apps: 'https://crgj.app.link/7R2bEB0R4F'
 };
+
+export const CUSTOM_EVENTS = {
+  LOCATION_LOADED: 'locationLoaded',
+  UPDATE_REPS: 'updateReps',
+  ACTIVE_CONTACT: 'activeContact',
+  NEXT_CONTACT: 'nextContact',
+  LOADED_REPS: 'loadedReps'
+};
