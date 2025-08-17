@@ -24,6 +24,7 @@ interface State {
   usaData: UsaSummaryData;
   repsData: ExpandedRepData[];
   isLoading: boolean;
+  isError: boolean;
 }
 
 // Colors used by D3.
@@ -1585,7 +1586,8 @@ class Dashboard extends React.Component<null, State> {
   state = {
     usaData: this._defaultUsaSummary,
     repsData: [],
-    isLoading: true
+    isLoading: true,
+    isError: false
   };
 
   componentDidMount() {
@@ -1600,18 +1602,47 @@ class Dashboard extends React.Component<null, State> {
   }
 
   async requestDashboardData() {
-    const [usaSummaryData, repsSummaryData] = await Promise.all([
-      getUsaSummary(),
-      getLocationSummary()
-    ]);
+    const urlParams = new URLSearchParams(window.location.search);
+    let districtId = localStorage.getItem(LOCAL_STORAGE_KEYS.DISTRICT);
+    if (urlParams.has(LOCAL_STORAGE_KEYS.DISTRICT)) {
+      // Override from URL parameter if present.
+      const urlDistrict = urlParams.get(LOCAL_STORAGE_KEYS.DISTRICT);
+      if (urlDistrict && urlDistrict.length >= 4 && urlDistrict.length <= 7) {
+        districtId = urlDistrict;
+      }
+    }
 
+    let usaSummaryData = null;
+    let repsSummaryData = null;
+
+    if (
+      districtId === null ||
+      districtId === undefined ||
+      districtId.length === 0
+    ) {
+      usaSummaryData = await getUsaSummary().catch(() => null);
+    } else {
+      [usaSummaryData, repsSummaryData] = await Promise.all([
+        getUsaSummary().catch(() => null),
+        getLocationSummary(districtId).catch(() => null)
+      ]);
+    }
+
+    if (usaSummaryData === null) {
+      this.setState({
+        isLoading: false,
+        isError: true
+      });
+      return;
+    }
     const repsData = processRepsData(repsSummaryData);
 
     // Set the state, which will cause rendering to happen.
     this.setState({
       usaData: usaSummaryData,
       repsData: repsData,
-      isLoading: false
+      isLoading: false,
+      isError: false
     });
   }
 
@@ -1621,6 +1652,15 @@ class Dashboard extends React.Component<null, State> {
         <div>
           <h2>Loading the latest data...</h2>
           <div id="loader" aria-label="loading icon" role="status"></div>
+        </div>
+      );
+    }
+
+    if (this.state.isError) {
+      return (
+        <div>
+          <h2>Error loading the dashboard</h2>
+          <p>Please try again later</p>
         </div>
       );
     }
