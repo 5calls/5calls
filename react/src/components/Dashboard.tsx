@@ -23,6 +23,7 @@ import {
 interface State {
   usaData: UsaSummaryData;
   repsData: ExpandedRepData[];
+  district: string;
   isLoading: boolean;
   isError: boolean;
 }
@@ -858,6 +859,7 @@ const drawUsaMap = (
 
 const drawRepsPane = (
   repData: ExpandedRepData,
+  district: string,
   beeswarmScale: d3.ScaleTime<number, number>,
   issueColor: d3.ScaleOrdinal<number, string>,
   issueIdToName: { [key: number]: string },
@@ -909,7 +911,7 @@ const drawRepsPane = (
   if (repData.repInfo.party && repData.repInfo.party.length > 0) {
     nameSubtitle += ` (${repData.repInfo.party[0]}-${
       repData.repInfo.area === 'US House'
-        ? localStorage.district
+        ? district
         : repData.repInfo.state
     })`;
   } else {
@@ -1586,6 +1588,7 @@ class Dashboard extends React.Component<null, State> {
   state = {
     usaData: this._defaultUsaSummary,
     repsData: [],
+    district: '',
     isLoading: true,
     isError: false
   };
@@ -1621,6 +1624,7 @@ class Dashboard extends React.Component<null, State> {
       districtId.length === 0
     ) {
       usaSummaryData = await getUsaSummary().catch(() => null);
+      districtId = '';
     } else {
       [usaSummaryData, repsSummaryData] = await Promise.all([
         getUsaSummary().catch(() => null),
@@ -1641,6 +1645,7 @@ class Dashboard extends React.Component<null, State> {
     this.setState({
       usaData: usaSummaryData,
       repsData: repsData,
+      district: districtId,
       isLoading: false,
       isError: false
     });
@@ -1656,7 +1661,9 @@ class Dashboard extends React.Component<null, State> {
       );
     }
 
-    if (this.state.isError) {
+    const usaData = this.state.usaData;
+    if (this.state.isError || this.state.usaData.states.length == 0) {
+      // Happens if the data isn't populated properly (like after an outage).
       return (
         <div>
           <h2>Error loading the dashboard</h2>
@@ -1665,12 +1672,7 @@ class Dashboard extends React.Component<null, State> {
       );
     }
 
-    const usaData = this.state.usaData;
-    if (this.state.usaData.states.length == 0) {
-      // Happens if the data isn't populated properly (like after an outage).
-      return <h2>Failed to load dashboard content. Please try again later.</h2>;
-    }
-
+    const district = this.state.district;
     const hasRepsData = this.state.repsData.length > 0;
 
     const duration = 'last 7 days';
@@ -1751,9 +1753,8 @@ class Dashboard extends React.Component<null, State> {
           // Draw it the first time it is needed.
           // TODO: Check with PR, DC that this works as expected.
           let initialState: string | null = null;
-          const district = localStorage.getItem(LOCAL_STORAGE_KEYS.DISTRICT);
-          if (district) {
-            initialState = localStorage.district.split('-')[0];
+          if (district.length > 0) {
+            initialState = district.split('-')[0];
           }
           drawUsaPane(usaData, initialState, issueColor, duration);
           top_tabs[1].drawn = true;
@@ -1845,6 +1846,7 @@ class Dashboard extends React.Component<null, State> {
         if (!newTab.drawn) {
           drawRepsPane(
             repsData.find((r) => r.id === newTab.id)!,
+            district,
             beeswarmScale,
             issueColor,
             issueIdToName,
