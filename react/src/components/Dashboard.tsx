@@ -910,9 +910,7 @@ const drawRepsPane = (
         : repData.repInfo.area;
   if (repData.repInfo.party && repData.repInfo.party.length > 0) {
     nameSubtitle += ` (${repData.repInfo.party[0]}-${
-      repData.repInfo.area === 'US House'
-        ? district
-        : repData.repInfo.state
+      repData.repInfo.area === 'US House' ? district : repData.repInfo.state
     })`;
   } else {
     nameSubtitle += ` (${repData.repInfo.state})`;
