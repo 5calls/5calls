@@ -302,7 +302,7 @@ const drawTopFiveIssues = (
       // TODO: Add a link to the archive when possible.
       return 'This call is no longer active.';
     } else {
-      return `<a target="_blank" href="/issue/${d.slug}">Make this call</a>`;
+      return `<a href="/issue/${d.slug}">Make this call</a>`;
     }
   });
 
