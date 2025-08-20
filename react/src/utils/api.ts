@@ -134,15 +134,9 @@ export interface RepsSummaryData {
   repsData: ContactSummaryData[];
 }
 
-export const getLocationSummary = (): Promise<RepsSummaryData | null> => {
-  const districtId = localStorage.getItem(LOCAL_STORAGE_KEYS.DISTRICT);
-  if (
-    districtId === null ||
-    districtId === undefined ||
-    districtId.length === 0
-  ) {
-    return Promise.resolve(null);
-  }
+export const getLocationSummary = (
+  districtId: string
+): Promise<RepsSummaryData | null> => {
   return axios
     .get(
       `https://api.5calls.org/v1/reps/districtSummary?district=${districtId}`

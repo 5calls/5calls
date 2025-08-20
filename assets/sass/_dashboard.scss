@@ -509,7 +509,7 @@
 
     .row_detail.expanded {
       transition: max-height 0.5s ease-out;
-      max-height: calc(16rem * 5 / var(--base-font-size)); /* must be larger than the tallest possible content, but shorter means a better transition */
+      max-height: calc(16rem * 6.5 / var(--base-font-size)); /* must be larger than the tallest possible content, but shorter means a better transition */
     }
   }
 

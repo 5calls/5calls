@@ -23,7 +23,9 @@ import {
 interface State {
   usaData: UsaSummaryData;
   repsData: ExpandedRepData[];
+  district: string;
   isLoading: boolean;
+  isError: boolean;
 }
 
 // Colors used by D3.
@@ -300,7 +302,7 @@ const drawTopFiveIssues = (
       // TODO: Add a link to the archive when possible.
       return 'This call is no longer active.';
     } else {
-      return `<a target="_blank" href="/issue/${d.slug}">Make this call</a>`;
+      return `<a href="/issue/${d.slug}">Make this call</a>`;
     }
   });
 
@@ -857,6 +859,7 @@ const drawUsaMap = (
 
 const drawRepsPane = (
   repData: ExpandedRepData,
+  district: string,
   beeswarmScale: d3.ScaleTime<number, number>,
   issueColor: d3.ScaleOrdinal<number, string>,
   issueIdToName: { [key: number]: string },
@@ -907,9 +910,7 @@ const drawRepsPane = (
         : repData.repInfo.area;
   if (repData.repInfo.party && repData.repInfo.party.length > 0) {
     nameSubtitle += ` (${repData.repInfo.party[0]}-${
-      repData.repInfo.area === 'US House'
-        ? localStorage.district
-        : repData.repInfo.state
+      repData.repInfo.area === 'US House' ? district : repData.repInfo.state
     })`;
   } else {
     nameSubtitle += ` (${repData.repInfo.state})`;
@@ -1585,7 +1586,9 @@ class Dashboard extends React.Component<null, State> {
   state = {
     usaData: this._defaultUsaSummary,
     repsData: [],
-    isLoading: true
+    district: '',
+    isLoading: true,
+    isError: false
   };
 
   componentDidMount() {
@@ -1600,18 +1603,50 @@ class Dashboard extends React.Component<null, State> {
   }
 
   async requestDashboardData() {
-    const [usaSummaryData, repsSummaryData] = await Promise.all([
-      getUsaSummary(),
-      getLocationSummary()
-    ]);
+    const urlParams = new URLSearchParams(window.location.search);
+    let districtId = localStorage.getItem(LOCAL_STORAGE_KEYS.DISTRICT);
+    if (urlParams.has(LOCAL_STORAGE_KEYS.DISTRICT)) {
+      // Override from URL parameter if present.
+      const urlDistrict = urlParams.get(LOCAL_STORAGE_KEYS.DISTRICT);
+      // Validate length, although not the actual code.
+      if (urlDistrict && (urlDistrict.length == 4 || urlDistrict.length == 5)) {
+        districtId = urlDistrict;
+      }
+    }
 
+    let usaSummaryData = null;
+    let repsSummaryData = null;
+
+    if (
+      districtId === null ||
+      districtId === undefined ||
+      districtId.length === 0
+    ) {
+      usaSummaryData = await getUsaSummary().catch(() => null);
+      districtId = '';
+    } else {
+      [usaSummaryData, repsSummaryData] = await Promise.all([
+        getUsaSummary().catch(() => null),
+        getLocationSummary(districtId).catch(() => null)
+      ]);
+    }
+
+    if (usaSummaryData === null) {
+      this.setState({
+        isLoading: false,
+        isError: true
+      });
+      return;
+    }
     const repsData = processRepsData(repsSummaryData);
 
     // Set the state, which will cause rendering to happen.
     this.setState({
       usaData: usaSummaryData,
       repsData: repsData,
-      isLoading: false
+      district: districtId,
+      isLoading: false,
+      isError: false
     });
   }
 
@@ -1626,11 +1661,17 @@ class Dashboard extends React.Component<null, State> {
     }
 
     const usaData = this.state.usaData;
-    if (this.state.usaData.states.length == 0) {
+    if (this.state.isError || this.state.usaData.states.length == 0) {
       // Happens if the data isn't populated properly (like after an outage).
-      return <h2>Failed to load dashboard content. Please try again later.</h2>;
+      return (
+        <div>
+          <h2>Error loading the dashboard</h2>
+          <p>Please try again later</p>
+        </div>
+      );
     }
 
+    const district = this.state.district;
     const hasRepsData = this.state.repsData.length > 0;
 
     const duration = 'last 7 days';
@@ -1711,9 +1752,8 @@ class Dashboard extends React.Component<null, State> {
           // Draw it the first time it is needed.
           // TODO: Check with PR, DC that this works as expected.
           let initialState: string | null = null;
-          const district = localStorage.getItem(LOCAL_STORAGE_KEYS.DISTRICT);
-          if (district) {
-            initialState = localStorage.district.split('-')[0];
+          if (district.length > 0) {
+            initialState = district.split('-')[0];
           }
           drawUsaPane(usaData, initialState, issueColor, duration);
           top_tabs[1].drawn = true;
@@ -1805,6 +1845,7 @@ class Dashboard extends React.Component<null, State> {
         if (!newTab.drawn) {
           drawRepsPane(
             repsData.find((r) => r.id === newTab.id)!,
+            district,
             beeswarmScale,
             issueColor,
             issueIdToName,
