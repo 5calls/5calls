@@ -1608,7 +1608,8 @@ class Dashboard extends React.Component<null, State> {
     if (urlParams.has(LOCAL_STORAGE_KEYS.DISTRICT)) {
       // Override from URL parameter if present.
       const urlDistrict = urlParams.get(LOCAL_STORAGE_KEYS.DISTRICT);
-      if (urlDistrict && urlDistrict.length >= 4 && urlDistrict.length <= 7) {
+      // Validate length, although not the actual code.
+      if (urlDistrict && (urlDistrict.length == 4 || urlDistrict.length == 5)) {
         districtId = urlDistrict;
       }
     }
