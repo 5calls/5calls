@@ -209,22 +209,7 @@ const IssueSearch: React.FC<IssueSearchProps & WithLocationProps> = ({
         </div>
         <strong>{issue.name}</strong>
         {stateName && (
-          <div
-            style={{
-              position: 'absolute',
-              bottom: '0',
-              right: '0',
-              backgroundColor: '#dc3545',
-              color: 'white',
-              fontSize: '10px',
-              fontWeight: 'bold',
-              padding: '2px 8px 2px 14px',
-              textTransform: 'uppercase',
-              clipPath: 'polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%, 8px 50%)',
-              minWidth: '40px',
-              textAlign: 'center'
-            }}
-          >
+          <div className="i-bar-state-banner">
             {stateName}
           </div>
         )}

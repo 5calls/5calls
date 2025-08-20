@@ -353,3 +353,18 @@
   color: #666;
   font-style: italic;
 }
+
+.i-bar-state-banner {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  background-color: #dc3545;
+  color: white;
+  font-size: 10px;
+  font-weight: bold;
+  padding: 2px 8px 2px 14px;
+  text-transform: uppercase;
+  clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%, 8px 50%);
+  min-width: 40px;
+  text-align: center;
+}
