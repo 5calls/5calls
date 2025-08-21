@@ -1604,7 +1604,9 @@ class Dashboard extends React.Component<null, State> {
 
   async requestDashboardData() {
     const urlParams = new URLSearchParams(window.location.search);
-    let districtId = localStorage.getItem(Constants.LOCAL_STORAGE_KEYS.DISTRICT);
+    let districtId = localStorage.getItem(
+      Constants.LOCAL_STORAGE_KEYS.DISTRICT
+    );
     if (urlParams.has(Constants.LOCAL_STORAGE_KEYS.DISTRICT)) {
       // Override from URL parameter if present.
       const urlDistrict = urlParams.get(Constants.LOCAL_STORAGE_KEYS.DISTRICT);
