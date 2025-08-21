@@ -105,13 +105,13 @@ const IssueSearch: React.FC<IssueSearchProps & WithLocationProps> = ({
   }, []);
 
   useEffect(() => {
-    // Hide static issues list when we have loaded dynamic issues or when searching
+    // Hide static issues list only when we have loaded dynamic issues or when actively searching
     const staticSection = document.querySelector('.i-bar-list-section');
     if (staticSection) {
-      const shouldHide = state.hasSearched || state.searchTerm.length >= 3;
+      const shouldHide = (state.hasSearched && !state.isLoading) || state.searchTerm.length >= 3;
       (staticSection as HTMLElement).style.display = shouldHide ? 'none' : '';
     }
-  }, [state.searchTerm, state.hasSearched]);
+  }, [state.searchTerm, state.hasSearched, state.isLoading]);
 
   // Debounced search term tracking
   useEffect(() => {
@@ -319,13 +319,6 @@ const IssueSearch: React.FC<IssueSearchProps & WithLocationProps> = ({
           </button>
         )}
       </div>
-
-      {state.isLoading && (
-        <div className="i-bar-search-loading">
-          <i className="fa fa-spinner fa-spin"></i>
-          <span>Loading issues...</span>
-        </div>
-      )}
 
       {((shouldShowSearchResults && !state.isLoading) ||
         (!shouldShowSearchResults &&
