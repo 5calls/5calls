@@ -6,6 +6,7 @@ import { getBrowserGeolocation } from '../utils/geolocation';
 import { getContacts } from '../utils/api';
 import { WithCompletedProps } from '../state/completedState';
 import { toast } from 'react-toastify';
+import * as Constants from '../common/constants';
 
 enum ComponentLocationState {
   NoLocation,
@@ -83,7 +84,7 @@ const Location: React.FC<WithLocationProps & WithCompletedProps> = (props) => {
           contactList.state
         );
         setComponentLocationState(ComponentLocationState.HasLocation);
-        document.dispatchEvent(new Event('updateReps'));
+        document.dispatchEvent(new Event(Constants.CUSTOM_EVENTS.UPDATE_REPS));
       })
       .catch((error) => {
         console.error(error);
@@ -117,7 +118,9 @@ const Location: React.FC<WithLocationProps & WithCompletedProps> = (props) => {
               contactList.state
             );
             setComponentLocationState(ComponentLocationState.HasLocation);
-            document.dispatchEvent(new Event('updateReps'));
+            document.dispatchEvent(
+              new Event(Constants.CUSTOM_EVENTS.UPDATE_REPS)
+            );
           })
           .catch((error) => {
             console.log('error getting location after geoloc:', error);

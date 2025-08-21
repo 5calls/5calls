@@ -188,7 +188,7 @@ const startComponentRenders = () => {
     { id: 'react-call-count', component: CallCount },
     { id: 'api-form', component: APIForm },
     { id: 'react-settings', component: Settings },
-    { id: 'react-search', component: IssueSearch },
+    { id: 'react-search', component: IssueSearch, hasStateProvider: true },
     {
       id: 'react-groupcounts',
       component: GroupCallCount,

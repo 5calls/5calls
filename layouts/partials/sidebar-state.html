@@ -19,6 +19,7 @@
       <a
         class="i-bar-item is-unsorted{{ if eq $passedIssueID .Params.issueId }} is-active{{ end }}"
         href="{{ .Permalink }}"
+        style="position: relative;"
       >
         <div class="i-bar-item-check">
           <div class="i-bar-check-completed" data-issue-id="{{ .Params.issueId }}">
@@ -27,6 +28,7 @@
           </div>
         </div>
         <strong>{{ .Title }}</strong>
+        <div class="i-bar-state-banner">{{ $.CurrentSection.Title }}</div>
       </a>
       {{ end }}
     </section>
@@ -36,6 +38,6 @@
   {{ if $backURL }}
     <a href="{{$backURL}}" class="i-bar-more"><i class="fa-solid fa-table-list"></i>&nbsp;&nbsp;Back to state topics</a>
   {{ else }}
-    <a href="/" class="i-bar-more"><i class="fa-solid fa-table-list"></i>&nbsp;&nbsp;Show National Topics</a>
+    <a href="/" class="i-bar-more"><i class="fa-solid fa-table-list"></i>&nbsp;&nbsp;Show All Topics</a>
   {{ end }}
 </div>

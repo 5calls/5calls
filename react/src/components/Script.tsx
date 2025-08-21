@@ -4,6 +4,7 @@ import { Contact } from '../common/models/contact';
 
 import { LocationState, WithLocationProps } from '../state/locationState';
 import { withLocation } from '../state/stateProvider';
+import * as Constants from '../common/constants';
 
 interface State {
   scriptMarkdown: string;
@@ -79,7 +80,7 @@ class Script extends React.Component<WithLocationProps, State> {
       this.setState({ scriptMarkdown, requiredState });
     }
 
-    document.addEventListener('activeContact', (e) => {
+    document.addEventListener(Constants.CUSTOM_EVENTS.ACTIVE_CONTACT, (e) => {
       const contact = (e as CustomEvent).detail as Contact;
       this.setState({ currentContact: contact });
     });

@@ -4,6 +4,7 @@ export const APP_URL = 'https://5calls.org';
 export const API_URL = 'https://api.5calls.org/v1';
 // export const API_URL = 'http://localhost:8090/v1';
 export const ISSUES_API_URL = `${API_URL}/issues`;
+export const ISSUES_FOR_PUBLISHING_API_URL = `${API_URL}/issuesForPublishing`;
 export const REPS_API_URL = `${API_URL}/reps`;
 export const COMPLETED_API_URL = `${API_URL}/issues/completed`;
 export const REPORT_API_URL = `${API_URL}/report`;
@@ -42,4 +43,12 @@ export const contact = {
   twitter: 'https://twitter.com/make5calls',
   facebook: 'https://www.facebook.com/make5calls',
   apps: 'https://crgj.app.link/7R2bEB0R4F'
+};
+
+export const CUSTOM_EVENTS = {
+  LOCATION_LOADED: 'locationLoaded',
+  UPDATE_REPS: 'updateReps',
+  ACTIVE_CONTACT: 'activeContact',
+  NEXT_CONTACT: 'nextContact',
+  LOADED_REPS: 'loadedReps'
 };

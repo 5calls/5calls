@@ -2,24 +2,36 @@ import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import * as Constants from '../common/constants';
 import { Issue } from '../common/models/issue';
+import { WithLocationProps } from '../state/locationState';
+import { withLocation } from '../state/stateProvider';
 import { postSearchTerm } from '../utils/api';
+import { stateNameFromAbbr } from '../utils/stateNames';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
 interface IssueSearchProps {}
 
 interface SearchState {
   searchTerm: string;
-  issues: Issue[];
+  nationalIssues: Issue[];
+  stateIssues: Record<string, Issue[]>;
   isLoading: boolean;
   isSearchFocused: boolean;
   hasSearched: boolean;
   hasLoggedSearch: boolean;
 }
 
-const IssueSearch: React.FC<IssueSearchProps> = () => {
+interface IssuesResponse {
+  issues: Issue[];
+  stateIssues: Record<string, Issue[]>;
+}
+
+const IssueSearch: React.FC<IssueSearchProps & WithLocationProps> = ({
+  locationState
+}) => {
   const [state, setState] = useState<SearchState>({
     searchTerm: '',
-    issues: [],
+    nationalIssues: [],
+    stateIssues: {},
     isLoading: false,
     isSearchFocused: false,
     hasSearched: false,
@@ -28,14 +40,79 @@ const IssueSearch: React.FC<IssueSearchProps> = () => {
 
   const searchInputRef = useRef<HTMLInputElement>(null);
 
+  const fetchIssues = async (): Promise<IssuesResponse> => {
+    const response = await axios.get<IssuesResponse>(
+      Constants.ISSUES_FOR_PUBLISHING_API_URL
+    );
+    return response.data;
+  };
+
+  const loadIssues = async () => {
+    setState((prev) => {
+      if (prev.hasSearched) return prev;
+      return { ...prev, isLoading: true };
+    });
+
+    try {
+      const response = await fetchIssues();
+      setState((prev) => ({
+        ...prev,
+        nationalIssues: response.issues,
+        stateIssues: response.stateIssues,
+        isLoading: false,
+        hasSearched: true
+      }));
+    } catch (error) {
+      console.error('Failed to fetch issues:', error);
+      setState((prev) => ({ ...prev, isLoading: false }));
+    }
+  };
+
+  // Load issues on mount if location is available, or when location becomes available
   useEffect(() => {
-    // Toggle visibility of static issues list based on search term
+    if (locationState) {
+      loadIssues();
+    }
+  }, [locationState]);
+
+  // Listen for location loaded event and load issues immediately
+  useEffect(() => {
+    const handleLocationLoaded = () => {
+      if (!state.hasSearched) {
+        loadIssues();
+      }
+    };
+
+    document.addEventListener(
+      Constants.CUSTOM_EVENTS.LOCATION_LOADED,
+      handleLocationLoaded
+    );
+
+    // Also load issues on mount if no location is set (fallback for users without location)
+    const timer = setTimeout(() => {
+      if (!locationState && !state.hasSearched) {
+        loadIssues();
+      }
+    }, 100); // Reduced timeout since we have the event listener
+
+    return () => {
+      document.removeEventListener(
+        Constants.CUSTOM_EVENTS.LOCATION_LOADED,
+        handleLocationLoaded
+      );
+      clearTimeout(timer);
+    };
+  }, []);
+
+  useEffect(() => {
+    // Hide static issues list only when we have loaded dynamic issues or when actively searching
     const staticSection = document.querySelector('.i-bar-list-section');
     if (staticSection) {
-      const shouldHide = state.searchTerm.length >= 3;
+      const shouldHide =
+        (state.hasSearched && !state.isLoading) || state.searchTerm.length >= 3;
       (staticSection as HTMLElement).style.display = shouldHide ? 'none' : '';
     }
-  }, [state.searchTerm]);
+  }, [state.searchTerm, state.hasSearched, state.isLoading]);
 
   // Debounced search term tracking
   useEffect(() => {
@@ -49,40 +126,20 @@ const IssueSearch: React.FC<IssueSearchProps> = () => {
     }
   }, [state.searchTerm, state.hasLoggedSearch]);
 
-  const fetchIssues = async (): Promise<Issue[]> => {
-    const response = await axios.get<Issue[]>(Constants.ISSUES_API_URL);
-    return response.data;
-  };
-
   const handleSearchFocus = async () => {
-    if (!state.isSearchFocused && !state.hasSearched) {
-      setState((prev) => ({ ...prev, isSearchFocused: true, isLoading: true }));
-
-      try {
-        const issues = await fetchIssues();
-        setState((prev) => ({
-          ...prev,
-          issues,
-          isLoading: false,
-          hasSearched: true
-        }));
-      } catch (error) {
-        console.error('Failed to fetch issues:', error);
-        setState((prev) => ({ ...prev, isLoading: false }));
-      }
-    } else {
+    if (!state.isSearchFocused) {
       setState((prev) => ({ ...prev, isSearchFocused: true }));
+
+      // Only load issues on focus if we don't have location
+      if (!locationState && !state.hasSearched) {
+        await loadIssues();
+      }
     }
   };
 
   const handleSearchBlur = () => {
-    // Don't hide search results on blur - let users click elsewhere and return
-    // Only hide if search is empty
-    if (!state.searchTerm) {
-      setTimeout(() => {
-        setState((prev) => ({ ...prev, isSearchFocused: false }));
-      }, 150);
-    }
+    // Don't hide search results on blur - keep them visible even when clicking outside
+    // Results should remain visible until explicitly cleared or user starts a new search
   };
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -102,13 +159,79 @@ const IssueSearch: React.FC<IssueSearchProps> = () => {
     }
   };
 
-  const filterIssues = (issues: Issue[], searchTerm: string): Issue[] => {
+  const getOrderedIssues = (): Issue[] => {
+    const userState = locationState?.state;
+    const userStateIssues = userState
+      ? (state.stateIssues[userState] || []).filter(
+          (issue) => !issue.hidden && issue.active
+        )
+      : [];
+    const nationalIssues = state.nationalIssues.filter(
+      (issue) => !issue.hidden && issue.active
+    );
+
+    // Return user's state issues first, then national issues (only active ones)
+    return [...userStateIssues, ...nationalIssues];
+  };
+
+  const getIssueState = (issue: Issue): string | null => {
+    // Check if this issue exists in any state's issue array
+    for (const [stateAbbr, stateIssuesArray] of Object.entries(
+      state.stateIssues
+    )) {
+      if (stateIssuesArray.some((stateIssue) => stateIssue.id === issue.id)) {
+        return stateAbbr;
+      }
+    }
+    return null; // It's a national issue
+  };
+
+  const renderIssueItem = (issue: Issue) => {
+    const stateAbbr = getIssueState(issue);
+    const stateName = stateAbbr ? stateNameFromAbbr(stateAbbr) : null;
+
+    // Generate correct URL format: state issues use /state/<state name lowercase>/<slug>/, national issues use /issue/<slug>/
+    const issueUrl = stateName
+      ? `/state/${stateName.toLowerCase()}/${issue.slug}/`
+      : `/issue/${issue.slug}/`;
+
+    return (
+      <a
+        key={issue.id}
+        className="i-bar-item is-unsorted"
+        href={issueUrl}
+        style={{ position: 'relative' }}
+      >
+        <div className="i-bar-item-check">
+          <div className="i-bar-check-completed" data-issue-id={issue.id}>
+            <i className="fa fa-phone"></i>
+            <span className="sr-only">Needs your calls</span>
+          </div>
+        </div>
+        <strong>{issue.name}</strong>
+        {stateName && <div className="i-bar-state-banner">{stateName}</div>}
+      </a>
+    );
+  };
+
+  const filterIssues = (searchTerm: string): Issue[] => {
     if (!searchTerm || searchTerm.length < 3) {
       return [];
     }
 
+    // Only search within user's state issues + national issues if location is available
+    const userState = locationState?.state;
+    const searchableIssues = userState
+      ? [
+          ...(state.stateIssues[userState] || []).filter(
+            (issue) => !issue.hidden
+          ),
+          ...state.nationalIssues.filter((issue) => !issue.hidden)
+        ]
+      : state.nationalIssues.filter((issue) => !issue.hidden);
+
     const lowercaseSearch = searchTerm.toLowerCase();
-    const filtered = issues.filter(
+    const filtered = searchableIssues.filter(
       (issue) =>
         issue.name.toLowerCase().includes(lowercaseSearch) ||
         issue.reason.toLowerCase().includes(lowercaseSearch) ||
@@ -123,47 +246,50 @@ const IssueSearch: React.FC<IssueSearchProps> = () => {
     );
 
     // Sort with enhanced prioritization
-    return filtered.sort((a, b) => {
-      // Check for whole-word matches in name
-      const aNameWholeWord = wholeWordRegex.test(a.name);
-      const bNameWholeWord = wholeWordRegex.test(b.name);
+    return filtered
+      .sort((a, b) => {
+        // Check for whole-word matches in name
+        const aNameWholeWord = wholeWordRegex.test(a.name);
+        const bNameWholeWord = wholeWordRegex.test(b.name);
 
-      // Check for any name matches (including partial)
-      const aNameMatch = a.name.toLowerCase().includes(lowercaseSearch);
-      const bNameMatch = b.name.toLowerCase().includes(lowercaseSearch);
+        // Check for any name matches (including partial)
+        const aNameMatch = a.name.toLowerCase().includes(lowercaseSearch);
+        const bNameMatch = b.name.toLowerCase().includes(lowercaseSearch);
 
-      // Check for whole-word matches in any field
-      const aAnyWholeWord =
-        wholeWordRegex.test(a.name) ||
-        wholeWordRegex.test(a.reason) ||
-        wholeWordRegex.test(a.script) ||
-        wholeWordRegex.test(a.slug);
-      const bAnyWholeWord =
-        wholeWordRegex.test(b.name) ||
-        wholeWordRegex.test(b.reason) ||
-        wholeWordRegex.test(b.script) ||
-        wholeWordRegex.test(b.slug);
+        // Check for whole-word matches in any field
+        const aAnyWholeWord =
+          wholeWordRegex.test(a.name) ||
+          wholeWordRegex.test(a.reason) ||
+          wholeWordRegex.test(a.script) ||
+          wholeWordRegex.test(a.slug);
+        const bAnyWholeWord =
+          wholeWordRegex.test(b.name) ||
+          wholeWordRegex.test(b.reason) ||
+          wholeWordRegex.test(b.script) ||
+          wholeWordRegex.test(b.slug);
 
-      // Priority order:
-      // 1. Whole-word match in name
-      // 2. Partial match in name
-      // 3. Whole-word match in any field
-      // 4. Partial match in any field
+        // Priority order:
+        // 1. Whole-word match in name
+        // 2. Partial match in name
+        // 3. Whole-word match in any field
+        // 4. Partial match in any field
 
-      if (aNameWholeWord && !bNameWholeWord) return -1;
-      if (!aNameWholeWord && bNameWholeWord) return 1;
+        if (aNameWholeWord && !bNameWholeWord) return -1;
+        if (!aNameWholeWord && bNameWholeWord) return 1;
 
-      if (aNameMatch && !bNameMatch) return -1;
-      if (!aNameMatch && bNameMatch) return 1;
+        if (aNameMatch && !bNameMatch) return -1;
+        if (!aNameMatch && bNameMatch) return 1;
 
-      if (aAnyWholeWord && !bAnyWholeWord) return -1;
-      if (!aAnyWholeWord && bAnyWholeWord) return 1;
+        if (aAnyWholeWord && !bAnyWholeWord) return -1;
+        if (!aAnyWholeWord && bAnyWholeWord) return 1;
 
-      return 0;
-    });
+        return 0;
+      })
+      .slice(0, 10); // Limit to top 10 results
   };
 
-  const filteredIssues = filterIssues(state.issues, state.searchTerm);
+  const filteredIssues = filterIssues(state.searchTerm);
+  const orderedIssues = getOrderedIssues();
   const shouldShowSearchResults = state.searchTerm.length >= 3;
 
   return (
@@ -191,38 +317,21 @@ const IssueSearch: React.FC<IssueSearchProps> = () => {
         )}
       </div>
 
-      {state.isLoading && (
-        <div className="i-bar-search-loading">
-          <i className="fa fa-spinner fa-spin"></i>
-          <span>Loading issues...</span>
-        </div>
-      )}
-
-      {shouldShowSearchResults && !state.isLoading && (
+      {((shouldShowSearchResults && !state.isLoading) ||
+        (!shouldShowSearchResults &&
+          orderedIssues.length > 0 &&
+          state.hasSearched)) && (
         <div className="i-bar-search-results">
-          {filteredIssues.length > 0 ? (
-            filteredIssues.map((issue) => (
-              <a
-                key={issue.id}
-                className="i-bar-item is-unsorted"
-                href={`/issue/${issue.slug}/`}
-              >
-                <div className="i-bar-item-check">
-                  <div
-                    className="i-bar-check-completed"
-                    data-issue-id={issue.id}
-                  >
-                    <i className="fa fa-phone"></i>
-                    <span className="sr-only">Needs your calls</span>
-                  </div>
-                </div>
-                <strong>{issue.name}</strong>
-              </a>
-            ))
+          {shouldShowSearchResults ? (
+            filteredIssues.length > 0 ? (
+              filteredIssues.map((issue) => renderIssueItem(issue))
+            ) : (
+              <div className="i-bar-search-no-results">
+                No issues found matching &ldquo;{state.searchTerm}&rdquo;
+              </div>
+            )
           ) : (
-            <div className="i-bar-search-no-results">
-              No issues found matching &ldquo;{state.searchTerm}&rdquo;
-            </div>
+            orderedIssues.map((issue) => renderIssueItem(issue))
           )}
         </div>
       )}
@@ -230,4 +339,4 @@ const IssueSearch: React.FC<IssueSearchProps> = () => {
   );
 };
 
-export default IssueSearch;
+export default withLocation(IssueSearch);
