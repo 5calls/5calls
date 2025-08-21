@@ -108,7 +108,8 @@ const IssueSearch: React.FC<IssueSearchProps & WithLocationProps> = ({
     // Hide static issues list only when we have loaded dynamic issues or when actively searching
     const staticSection = document.querySelector('.i-bar-list-section');
     if (staticSection) {
-      const shouldHide = (state.hasSearched && !state.isLoading) || state.searchTerm.length >= 3;
+      const shouldHide =
+        (state.hasSearched && !state.isLoading) || state.searchTerm.length >= 3;
       (staticSection as HTMLElement).style.display = shouldHide ? 'none' : '';
     }
   }, [state.searchTerm, state.hasSearched, state.isLoading]);
@@ -208,11 +209,7 @@ const IssueSearch: React.FC<IssueSearchProps & WithLocationProps> = ({
           </div>
         </div>
         <strong>{issue.name}</strong>
-        {stateName && (
-          <div className="i-bar-state-banner">
-            {stateName}
-          </div>
-        )}
+        {stateName && <div className="i-bar-state-banner">{stateName}</div>}
       </a>
     );
   };
