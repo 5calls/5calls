@@ -192,7 +192,7 @@ const IssueSearch: React.FC<IssueSearchProps & WithLocationProps> = ({
 
     // Generate correct URL format: state issues use /state/<state name lowercase>/<slug>/, national issues use /issue/<slug>/
     const issueUrl = stateName
-      ? `/state/${stateName.toLowerCase()}/${issue.slug}/`
+      ? `/state/${stateName.toLowerCase().replace(/\s+/g, '-')}/${issue.slug}/`
       : `/issue/${issue.slug}/`;
 
     return (

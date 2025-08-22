@@ -59,7 +59,7 @@ const buildContent = async () => {
         console.log(`${state}: ${stateIssues.length} issues`);
         
         // Create the state directory if it doesn't exist
-        const stateDirectory = `${stateContentBaseDirectory}${stateName.toLowerCase()}/`;
+        const stateDirectory = `${stateContentBaseDirectory}${stateName.toLowerCase().replace(/\s+/g, '-')}/`;
         fsExtra.ensureDirSync(stateDirectory);
         
         // Create the _index.md file for the state
