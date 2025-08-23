@@ -8,7 +8,7 @@
     "axios": "^0.21.0",
     "glob": "^10.4.5",
     "jquery": "^3.5.1",
-    "parcel": "^2.13.3",
+    "parcel": "^2.15.4",
     "querystring": "^0.2.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
@@ -21,6 +21,12 @@
     "web-vitals": "^4.2.4"
   },
   "source": "src/index.html",
+  "browserslist": [
+    "Chrome >= 61",
+    "Firefox >= 60", 
+    "Safari >= 10.1",
+    "Edge >= 79"
+  ],
   "scripts": {
     "start": "parcel",
     "build": "parcel build",
