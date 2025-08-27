@@ -219,16 +219,14 @@ const IssueSearch: React.FC<IssueSearchProps & WithLocationProps> = ({
       return [];
     }
 
-    // Only search within user's state issues + national issues if location is available
-    const userState = locationState?.state;
-    const searchableIssues = userState
-      ? [
-          ...(state.stateIssues[userState] || []).filter(
-            (issue) => !issue.hidden
-          ),
-          ...state.nationalIssues.filter((issue) => !issue.hidden)
-        ]
-      : state.nationalIssues.filter((issue) => !issue.hidden);
+    // Search across ALL issues from all states + national issues
+    const allStateIssues = Object.values(state.stateIssues)
+      .flat()
+      .filter((issue) => !issue.hidden);
+    const searchableIssues = [
+      ...allStateIssues,
+      ...state.nationalIssues.filter((issue) => !issue.hidden)
+    ];
 
     const lowercaseSearch = searchTerm.toLowerCase();
     const filtered = searchableIssues.filter(
