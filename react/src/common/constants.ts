@@ -50,5 +50,6 @@ export const CUSTOM_EVENTS = {
   UPDATE_REPS: 'updateReps',
   ACTIVE_CONTACT: 'activeContact',
   NEXT_CONTACT: 'nextContact',
-  LOADED_REPS: 'loadedReps'
+  LOADED_REPS: 'loadedReps',
+  SEARCH_RESULTS_RENDERED: 'searchResultsRendered'
 };

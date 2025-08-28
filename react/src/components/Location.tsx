@@ -43,16 +43,44 @@ const Location: React.FC<WithLocationProps & WithCompletedProps> = (props) => {
     updateIssueCompletion();
   }, [props.completedIssueMap]);
 
+  // Listen for search results rendered event to update completion status
+  useEffect(() => {
+    const handleSearchResultsRendered = () => {
+      updateIssueCompletion();
+    };
+
+    document.addEventListener(
+      Constants.CUSTOM_EVENTS.SEARCH_RESULTS_RENDERED,
+      handleSearchResultsRendered
+    );
+
+    return () => {
+      document.removeEventListener(
+        Constants.CUSTOM_EVENTS.SEARCH_RESULTS_RENDERED,
+        handleSearchResultsRendered
+      );
+    };
+  }, [props.completedIssueMap]);
+
   const updateIssueCompletion = () => {
     const completedIssueIds = Object.keys(props.completedIssueMap || {});
     if (completedIssueIds.length === 0) return;
-    $('.i-bar-list-section .i-bar-item-check>div').each((_, el) => {
-      const itemIssueID = $(el).data('issue-id') as string;
+    
+    // Process both static issue list and search results
+    const selectors = [
+      '.i-bar-list-section .i-bar-item-check>div',
+      '.i-bar-search-results .i-bar-item-check>div'
+    ];
+    
+    selectors.forEach(selector => {
+      $(selector).each((_, el) => {
+        const itemIssueID = $(el).data('issue-id') as string;
 
-      if (itemIssueID && completedIssueIds.indexOf(`${itemIssueID}`) !== -1) {
-        $(el).attr('class', 'i-bar-check-initial');
-        $(el).find('i').first().attr('class', 'fa fa-check');
-      }
+        if (itemIssueID && completedIssueIds.indexOf(`${itemIssueID}`) !== -1) {
+          $(el).attr('class', 'i-bar-check-initial');
+          $(el).find('i').first().attr('class', 'fa fa-check');
+        }
+      });
     });
   };
 

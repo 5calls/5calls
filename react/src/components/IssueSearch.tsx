@@ -290,6 +290,16 @@ const IssueSearch: React.FC<IssueSearchProps & WithLocationProps> = ({
   const orderedIssues = getOrderedIssues();
   const shouldShowSearchResults = state.searchTerm.length >= 3;
 
+  // Fire event when search results are rendered to update issue completion status
+  useEffect(() => {
+    if (shouldShowSearchResults || (orderedIssues.length > 0 && state.hasSearched)) {
+      // Use setTimeout to ensure DOM has been updated
+      setTimeout(() => {
+        document.dispatchEvent(new CustomEvent(Constants.CUSTOM_EVENTS.SEARCH_RESULTS_RENDERED));
+      }, 0);
+    }
+  }, [filteredIssues, orderedIssues, shouldShowSearchResults, state.hasSearched]);
+
   return (
     <div className="i-bar-search">
       <div className="i-bar-search-field">
