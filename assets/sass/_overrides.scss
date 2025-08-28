@@ -218,9 +218,8 @@
       display: block;
     }
 
-    .i-bar-list-section {
-      // rather than hiding the whole issue bar for mobile, hide the list
-      // so users who don't have a location can still set their location
+    .i-bar-list {
+      // hide issues list on issue pages so mobile users can see the content
       display: none;
     }
   }

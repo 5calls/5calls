@@ -5,6 +5,10 @@
     .i-hidden-bar {
       display: block;
     }
+
+    .i-bar-list {
+      display: none;
+    }
   }
 
   @media screen and (min-width: 40rem) {
