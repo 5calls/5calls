@@ -231,9 +231,13 @@ class Reps extends React.Component<
           if (contacts.length > 0) {
             // start our script component with an active contact
             this.reportUpdatedActiveContact(contacts[0]);
-            // report that reps loaded for outcomes to load
+            // report that reps loaded for outcomes to load, include contact IDs for customized scripts
+            const contactIds = contacts.map((contact) => contact.id);
             const loadedRepsEvent = new CustomEvent(
-              Constants.CUSTOM_EVENTS.LOADED_REPS
+              Constants.CUSTOM_EVENTS.LOADED_REPS,
+              {
+                detail: contactIds
+              }
             );
             document.dispatchEvent(loadedRepsEvent);
           }

@@ -19,7 +19,7 @@
           data-issue-id="{{ .Params.issueId }}"
         ></div>
       </div>
-      <div class="issue-script" id="react-script" data-script-markdown="{{ .Params.script }}">
+      <div class="issue-script" id="react-script" data-issue-id="{{ .Params.issueId }}" data-script-markdown="{{ .Params.script }}">
         {{ .Params.script | markdownify }}
       </div>
       <div

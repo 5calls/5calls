@@ -5,11 +5,14 @@ import { Contact } from '../common/models/contact';
 import { LocationState, WithLocationProps } from '../state/locationState';
 import { withLocation } from '../state/stateProvider';
 import * as Constants from '../common/constants';
+import { getCustomizedScripts, CustomizedScriptsResponse } from '../utils/api';
 
 interface State {
   scriptMarkdown: string;
   currentContact?: Contact;
   requiredState?: string;
+  customizedScripts?: CustomizedScriptsResponse;
+  issueId?: string;
 }
 
 // Replacement regexes, ideally standardize copy to avoid complex regexs
@@ -71,20 +74,49 @@ class Script extends React.Component<WithLocationProps, State> {
   componentDidMount() {
     let scriptMarkdown = '';
     let requiredState: string | undefined = undefined;
+    let issueId: string | undefined = undefined;
     if (this.scriptRef.current?.parentElement) {
       scriptMarkdown =
         this.scriptRef.current.parentElement.dataset.scriptMarkdown ?? '';
       requiredState =
         this.scriptRef.current.parentElement.dataset.requiredState;
+      issueId = this.scriptRef.current.parentElement.dataset.issueId;
 
-      this.setState({ scriptMarkdown, requiredState });
+      this.setState({ scriptMarkdown, requiredState, issueId });
     }
 
     document.addEventListener(Constants.CUSTOM_EVENTS.ACTIVE_CONTACT, (e) => {
       const contact = (e as CustomEvent).detail as Contact;
       this.setState({ currentContact: contact });
     });
+
+    document.addEventListener(Constants.CUSTOM_EVENTS.LOADED_REPS, (e) => {
+      const contactIds = (e as CustomEvent).detail as string[];
+      this.fetchCustomizedScripts(contactIds);
+    });
   }
+
+  fetchCustomizedScripts = async (contactIds: string[]) => {
+    if (!this.state.issueId && !this.props.locationState?.cachedCity) {
+      return;
+    }
+
+    if (contactIds.length === 0) {
+      return;
+    }
+
+    try {
+      const customizedScripts = await getCustomizedScripts(
+        this.state.issueId || "",
+        contactIds,
+        this.props.locationState?.cachedCity || ""
+      );
+
+      this.setState({ customizedScripts });
+    } catch (error) {
+      console.error('Error fetching customized scripts:', error);
+    }
+  };
 
   render() {
     let contact = this.state.currentContact;
@@ -97,8 +129,18 @@ class Script extends React.Component<WithLocationProps, State> {
       contact = undefined;
     }
 
+    // Use customized script if available for the current contact
+    let scriptToDisplay = this.state.scriptMarkdown;
+    if (
+      contact &&
+      this.state.customizedScripts &&
+      this.state.customizedScripts[contact.id]
+    ) {
+      scriptToDisplay = this.state.customizedScripts[contact.id];
+    }
+
     const formattedScriptMarkdown = this.scriptFormat(
-      this.state.scriptMarkdown,
+      scriptToDisplay,
       this.props.locationState,
       contact
     );
