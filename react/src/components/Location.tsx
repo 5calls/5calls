@@ -65,14 +65,14 @@ const Location: React.FC<WithLocationProps & WithCompletedProps> = (props) => {
   const updateIssueCompletion = () => {
     const completedIssueIds = Object.keys(props.completedIssueMap || {});
     if (completedIssueIds.length === 0) return;
-    
+
     // Process both static issue list and search results
     const selectors = [
       '.i-bar-list-section .i-bar-item-check>div',
       '.i-bar-search-results .i-bar-item-check>div'
     ];
-    
-    selectors.forEach(selector => {
+
+    selectors.forEach((selector) => {
       $(selector).each((_, el) => {
         const itemIssueID = $(el).data('issue-id') as string;
 

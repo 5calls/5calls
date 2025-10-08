@@ -107,9 +107,9 @@ class Script extends React.Component<WithLocationProps, State> {
 
     try {
       const customizedScripts = await getCustomizedScripts(
-        this.state.issueId || "",
+        this.state.issueId || '',
         contactIds,
-        this.props.locationState?.cachedCity || ""
+        this.props.locationState?.cachedCity || ''
       );
 
       this.setState({ customizedScripts });
