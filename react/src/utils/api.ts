@@ -238,3 +238,22 @@ export const getDonationStats = (): Promise<DonationStatsData> => {
     .then((response) => Promise.resolve(response.data))
     .catch((e) => Promise.reject(e));
 };
+
+export interface CustomizedScriptsResponse {
+  [contactId: string]: string;
+}
+
+export const getCustomizedScripts = async (
+  issueId: string,
+  contactIds: string[],
+  location: string
+): Promise<CustomizedScriptsResponse> => {
+  const params = new URLSearchParams();
+  params.append('contact_ids', contactIds.join(','));
+  params.append('location', location);
+
+  return axios
+    .get(`${Constants.API_URL}/issue/${issueId}/script?${params.toString()}`)
+    .then((response) => Promise.resolve(response.data))
+    .catch((e) => Promise.reject(e));
+};
