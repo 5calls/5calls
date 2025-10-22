@@ -22,7 +22,7 @@ interface Outcome {
 }
 
 const buildArchives = async () => {
-  const contentDirectory = `${__dirname}/../../content/archives/`;
+  const contentDirectory = `${__dirname}/../content/archives/`;
   const files = fs.readdirSync(contentDirectory);
   files.forEach((file) => {
     // _index.md makes the list page show up

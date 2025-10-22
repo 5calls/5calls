@@ -35,11 +35,11 @@ interface PublishedIssues {
 }
 
 const buildContent = async () => {
-  const contentDirectory = `${__dirname}/../../content/issue/`;
+  const contentDirectory = `${__dirname}/../content/issue/`;
   fsExtra.emptyDirSync(contentDirectory);
-  const doneDirectory = `${__dirname}/../../content/done/`;
+  const doneDirectory = `${__dirname}/../content/done/`;
   fsExtra.emptyDirSync(doneDirectory);
-  const stateContentBaseDirectory = `${__dirname}/../../content/state/`;
+  const stateContentBaseDirectory = `${__dirname}/../content/state/`;
   fsExtra.emptyDirSync(stateContentBaseDirectory);
 
   nodeFetch(`https://api.5calls.org/v1/issuesForPublishing`)
