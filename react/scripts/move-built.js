@@ -1,7 +1,7 @@
 const fsExtra = require("fs-extra");
 const path = require("path");
 
-const compiledFilesDir = path.resolve(__dirname, "../../dist");
+const compiledFilesDir = path.resolve(__dirname, "./dist");
 const newFilesDir = path.resolve(__dirname, "../../assets/js");
 
 // Since hugo doesn't seem to like files updating their names, for development only we create stable js filenames.
