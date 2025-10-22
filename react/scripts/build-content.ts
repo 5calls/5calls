@@ -1,7 +1,7 @@
-import fetch from "node-fetch";
-import fs from "fs";
-import fsExtra from "fs-extra";
-import stateNameFromAbbr from "../src/utils/stateNames";
+const nodeFetch = require("node-fetch");
+const fs = require("fs");
+const fsExtra = require("fs-extra");
+const stateNameFromAbbr = require("../src/utils/stateNames").default;
 
 // yarn run ts-node -O '{"module": "commonjs"}' scripts/build-content.ts
 
@@ -42,7 +42,7 @@ const buildContent = async () => {
   const stateContentBaseDirectory = `${__dirname}/../../content/state/`;
   fsExtra.emptyDirSync(stateContentBaseDirectory);
 
-  fetch(`https://api.5calls.org/v1/issuesForPublishing`)
+  nodeFetch(`https://api.5calls.org/v1/issuesForPublishing`)
     .then((res) => res.json())
     .then((data) => {
       const published = data as PublishedIssues;
