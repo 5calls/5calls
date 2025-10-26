@@ -1,0 +1,205 @@
+// Email subscription management styles
+
+.subscriptions {
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+
+  h1 {
+    margin-bottom: 1rem;
+  }
+}
+
+.subscriptions-intro {
+  margin-bottom: 2rem;
+  color: var(--c-base-subtle);
+}
+
+.no-subscriber-message {
+  text-align: center;
+  padding: 3rem 2rem;
+
+  h2 {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    color: var(--c-base);
+  }
+
+  p {
+    color: var(--c-base-subtle);
+    font-size: 1rem;
+    line-height: 1.6;
+    margin-bottom: 1rem;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+}
+
+.subscriptions-loading {
+  padding: 3rem 1rem;
+  text-align: center;
+  color: var(--c-base-subtle);
+}
+
+.email-subscriptions {
+  background: var(--c-surface);
+  border-radius: var(--radius);
+  padding: 2rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.subscriptions-form {
+  .form-group {
+    margin-bottom: 2rem;
+
+    label {
+      display: block;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      color: var(--c-base);
+    }
+
+    .email-input {
+      font-size: 1rem;
+      padding: 0.75rem 1rem;
+      width: 100%;
+      border: 2px solid var(--c-blue);
+      border-radius: var(--radius);
+      transition: border-color 0.2s;
+
+      &:focus {
+        outline: 0;
+        border-color: var(--c-blue-dark);
+      }
+
+      &:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+        background-color: var(--c-surface-alt);
+      }
+    }
+  }
+}
+
+.subscription-options {
+  margin-bottom: 2rem;
+
+  h2 {
+    font-size: 1.25rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .options-description {
+    color: var(--c-base-subtle);
+    margin-bottom: 1.5rem;
+  }
+}
+
+.subscription-option {
+  margin-bottom: 1.25rem;
+  padding: 1.25rem;
+  background: var(--c-surface-alt);
+  border-radius: var(--radius);
+  border: 2px solid transparent;
+  transition: all 0.2s;
+
+  &:hover {
+    border-color: var(--c-blue-light);
+  }
+
+  .checkbox-label {
+    display: flex;
+    align-items: flex-start;
+    cursor: pointer;
+    margin: 0;
+
+    input[type="checkbox"] {
+      flex-shrink: 0;
+      width: 1.25rem;
+      height: 1.25rem;
+      margin-right: 1rem;
+      margin-top: 0.125rem;
+      cursor: pointer;
+
+      &:disabled {
+        cursor: not-allowed;
+        opacity: 0.5;
+      }
+    }
+
+    .option-details {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+    }
+
+    .option-name {
+      font-weight: 600;
+      color: var(--c-base);
+      font-size: 1rem;
+    }
+
+    .option-description {
+      font-size: 0.875rem;
+      color: var(--c-base-subtle);
+      line-height: 1.5;
+    }
+  }
+}
+
+.form-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--c-border);
+
+  .button {
+    min-width: 200px;
+    padding: 0.75rem 2rem;
+    font-size: 1rem;
+    font-weight: 600;
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+  }
+
+  .unsubscribe-note {
+    font-size: 0.875rem;
+    color: var(--c-base-subtle);
+    text-align: center;
+    margin: 0;
+  }
+}
+
+// Responsive design
+@media (max-width: 768px) {
+  .email-subscriptions {
+    padding: 1.5rem;
+  }
+
+  .subscription-option {
+    padding: 1rem;
+
+    .checkbox-label {
+      input[type="checkbox"] {
+        margin-right: 0.75rem;
+      }
+    }
+  }
+
+  .form-actions {
+    .button {
+      min-width: 100%;
+    }
+  }
+}

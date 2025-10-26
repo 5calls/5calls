@@ -257,3 +257,45 @@ export const getCustomizedScripts = async (
     .then((response) => Promise.resolve(response.data))
     .catch((e) => Promise.reject(e));
 };
+
+export interface SubscriptionPreferences {
+  [key: string]: boolean | undefined;
+}
+
+export interface UpdateSubscriptionResponse {
+  subscriber_id: string;
+  message: string;
+}
+
+export const getEmailSubscriptions = async (
+  subscriberId: string
+): Promise<SubscriptionPreferences> => {
+  return axios
+    .get(`${Constants.API_URL}/subscriptions/${subscriberId}`)
+    .then((response) => Promise.resolve(response.data))
+    .catch((e) => Promise.reject(e));
+};
+
+export const updateEmailSubscriptions = async (
+  subscriberId: string,
+  preferences: SubscriptionPreferences
+): Promise<UpdateSubscriptionResponse> => {
+  // Build the post data as JSON
+  const postData: { [key: string]: boolean | string } = {
+    cid: uuid.callerID()
+  };
+
+  // Add all preference keys as boolean values
+  Object.keys(preferences).forEach((key) => {
+    postData[key] = Boolean(preferences[key]);
+  });
+
+  return axios
+    .post(`${Constants.API_URL}/subscriptions/${subscriberId}`, postData, {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+    .then((response) => Promise.resolve(response.data))
+    .catch((e) => Promise.reject(e));
+};

@@ -21,6 +21,7 @@ import GroupCallCount from './components/GroupCallCount';
 import Dashboard from './components/Dashboard';
 import IssueSearch from './components/IssueSearch';
 import FundraisingProgress from './components/FundraisingProgress';
+import EmailSubscriptions from './components/EmailSubscriptions';
 import Bugsnag from '@bugsnag/js';
 import { Slide, ToastContainer } from 'react-toastify';
 import { LOCAL_STORAGE_KEYS } from './common/constants';
@@ -201,7 +202,8 @@ const startComponentRenders = () => {
       )
     },
     { id: 'react-dashboard', component: Dashboard },
-    { id: 'react-fundraising', component: FundraisingProgress }
+    { id: 'react-fundraising', component: FundraisingProgress },
+    { id: 'react-subscriptions', component: EmailSubscriptions }
   ];
 
   islands.forEach(({ id, component, hasStateProvider, condition }) => {

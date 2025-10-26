@@ -1,8 +1,7 @@
 export const APP_NAME = '5 Calls';
 export const APP_URL = 'https://5calls.org';
-// export const APP_URL = 'http://localhost:8090';
 export const API_URL = 'https://api.5calls.org/v1';
-// export const API_URL = 'http://localhost:8090/v1';
+// export const API_URL = 'http://localhost:8080/v1';
 export const ISSUES_API_URL = `${API_URL}/issues`;
 export const ISSUES_FOR_PUBLISHING_API_URL = `${API_URL}/issuesForPublishing`;
 export const REPS_API_URL = `${API_URL}/reps`;
