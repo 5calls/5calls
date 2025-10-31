@@ -417,7 +417,7 @@ body.issue {
 
     blockquote {
       padding: 16px;
-      background-color: #eee;
+      background-color: var(--c-surface);
       border-radius: 10px;
       display: flow-root;
 
@@ -535,6 +535,7 @@ body.issue {
       border-radius: 10px;
       padding: 10px;
       cursor: pointer;
+      background-color: var(--c-surface);
 
       &.donate-best {
         background-color: var(--c-blue);
