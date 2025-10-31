@@ -49,6 +49,9 @@
   --g-gap: 2rem;
   --radius: 3px;
 
+  // Form inputs
+  --c-input-background: #ffffff;
+
   @media screen and (min-width: 60rem) {
     --g-gap: 3rem;
   }
@@ -77,6 +80,9 @@
   --c-dark: rgb(24, 117, 209);
   --c-dark-rgb: 24, 117, 209;
   --c-blue-subtle: rgb(24, 117, 209);
+
+  // Form inputs use surface color in dark mode
+  --c-input-background: var(--c-surface);
 }
 
 [data-theme="dark"] {
