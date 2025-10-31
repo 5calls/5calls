@@ -60,8 +60,8 @@
   --toastify-color-info: var(--c-blue);
 }
 
-// Dark theme
-[data-theme="dark"] {
+// Dark theme variables
+@mixin dark-theme-vars {
   --c-background: #1a1a1a;
   --c-surface: #2d2d2d;
   --c-text: #e0e0e0;
@@ -79,23 +79,14 @@
   --c-blue-subtle: rgb(24, 117, 209);
 }
 
-// Respect user's system preference
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) {
-    --c-background: #1a1a1a;
-    --c-surface: #2d2d2d;
-    --c-text: #e0e0e0;
-    --c-text-subtle: #b0b0b0;
-    --c-border: rgba(224, 224, 224, 0.2);
-    --c-hover: #3a3a3a;
+[data-theme="dark"] {
+  @include dark-theme-vars;
+}
 
-    --c-base: var(--c-text);
-    --c-base-subtle: var(--c-text-subtle);
-    --c-xlight-base: var(--c-surface);
-    --c-info-box: #3d3419;
-    --c-dark: rgb(24, 117, 209);
-    --c-dark-rgb: 24, 117, 209;
-    --c-blue-subtle: rgb(24, 117, 209);
+// Apply dark theme when system prefers dark (unless manually set to light)
+:root:not([data-theme="light"]) {
+  @media (prefers-color-scheme: dark) {
+    @include dark-theme-vars;
   }
 }
 
