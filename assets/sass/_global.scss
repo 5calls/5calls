@@ -52,6 +52,12 @@
   // Form inputs
   --c-input-background: #ffffff;
 
+  // Buttons
+  --c-button-border: #aaa;
+  --c-button-border-hover: #777;
+  --c-button-border-selected: #fff;
+  --c-button-text-selected: #fff;
+
   @media screen and (min-width: 60rem) {
     --g-gap: 3rem;
   }
@@ -83,6 +89,12 @@
 
   // Form inputs use surface color in dark mode
   --c-input-background: var(--c-surface);
+
+  // Buttons in dark mode
+  --c-button-border: #666;
+  --c-button-border-hover: #888;
+  --c-button-border-selected: var(--c-text);
+  --c-button-text-selected: var(--c-background);
 }
 
 [data-theme="dark"] {
