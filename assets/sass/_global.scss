@@ -217,14 +217,10 @@ body {
   @media (max-width: 768px) {
     grid-template-columns: 1fr;
     gap: 1rem;
-  }
-}
 
-.footer-theme-toggle {
-  align-self: flex-start;
-
-  @media (max-width: 768px) {
-    justify-self: start;
+    .footer-theme-toggle {
+      justify-self: start;
+    }
   }
 }
 
@@ -253,6 +249,6 @@ body {
   }
 
   &:hover i {
-    transform: rotate(10deg);
+    transform: rotate(15deg);
   }
 }
