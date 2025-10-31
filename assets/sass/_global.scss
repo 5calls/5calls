@@ -210,6 +210,24 @@ body {
   font-size: 1.1rem;
 }
 
+// Dark mode toast styling
+[data-theme="dark"] {
+  .Toastify__toast {
+    background: var(--c-surface);
+    color: var(--c-text);
+  }
+}
+
+// Apply dark theme when system prefers dark (unless manually set to light)
+:root:not([data-theme="light"]) {
+  @media (prefers-color-scheme: dark) {
+    .Toastify__toast {
+      background: var(--c-surface);
+      color: var(--c-text);
+    }
+  }
+}
+
 // Theme toggle button
 .footer-about {
   display: grid;
