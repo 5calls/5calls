@@ -74,6 +74,8 @@
   --c-base-subtle: var(--c-text-subtle);
   --c-xlight-base: var(--c-surface);
   --c-info-box: #3d3419;
+  --c-dark: rgb(24, 117, 209);
+  --c-dark-rgb: 24, 117, 209;
 }
 
 // Respect user's system preference
@@ -90,7 +92,8 @@
     --c-base-subtle: var(--c-text-subtle);
     --c-xlight-base: var(--c-surface);
     --c-info-box: #3d3419;
-    --c-darker: rgb(100, 149, 237);
+    --c-dark: rgb(24, 117, 209);
+    --c-dark-rgb: 24, 117, 209;
   }
 }
 
