@@ -6,10 +6,7 @@
         <p>We are a 501(c)4 non-profit that helps the public make their voices heard.</p>
       </div>
       <div class="footer-theme-toggle">
-        <button id="theme-toggle" class="theme-toggle" aria-label="Toggle theme" title="Toggle between light and dark mode">
-          <i class="fa fa-moon" id="theme-icon"></i>
-          <span>Theme</span>
-        </button>
+        <div id="react-theme-toggle"></div>
       </div>
     </div>
     <div class="g g-4up">{{ range $.Site.Data.footer }} {{ partial "footer_group.html" . }} {{ end }}</div>
