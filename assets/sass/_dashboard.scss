@@ -20,7 +20,7 @@
       background: var(--c-tab-bg);
       height: 3rem;
       padding: 0 var(--spacing-s);
-      color: #000;
+      color: var(--c-text);
       font-size: calc(18rem / var(--base-font-size));
       margin: 0 var(--spacing-xs);
       border: none;
@@ -29,7 +29,7 @@
     }
 
     button:hover {
-      background: #ccc;
+      background: var(--c-hover);
     }
 
     button.selected {
@@ -51,7 +51,7 @@
 
     button.selected {
       background: #fff;
-      border-bottom: 0.2rem solid #fff;
+      border-bottom: 0.2rem solid var(--c-background);
     }
   }
 
@@ -67,7 +67,7 @@
       background: var(--c-tab-bg);
       height: 3rem;
       padding: 0 0.6rem;
-      color: #000;
+      color: var(--c-text);
       font-size: calc(18rem / var(--base-font-size));
       margin: 0 var(--spacing-xs);
       margin-bottom: -0.15rem;
@@ -84,9 +84,9 @@
 
     button.selected {
       border: 0.1rem solid var(--c-light-border);
-      border-bottom: 0.2rem solid #efefef;
-      background: #efefef;
-      color: #000;
+      border-bottom: 0.2rem solid var(--c-surface);
+      background: var(--c-surface);
+      color: var(--c-text);
       cursor: default;
     }
 
@@ -103,7 +103,7 @@
     margin: 0.6rem 0 0.2rem;
     font-weight: normal;
     font-size: calc(20rem / var(--base-font-size));
-    color: #000;
+    color: var(--c-text);
 
     @media (min-width: 40rem) {
       font-size: calc(24rem / var(--base-font-size));
@@ -127,7 +127,7 @@
   }
 
   .subtitle {
-    background: #eee;
+    background: var(--c-surface);
     padding: 0.5rem 1rem;
     display: flex;
     align-items: center;
@@ -250,7 +250,7 @@
   .highlight {
     font-size: 2rem;
     padding-left: 1rem;
-    color: #000;
+    color: var(--c-text);
 
     @media (min-width: 40rem) {
       padding-left: 1.5rem;
@@ -321,7 +321,7 @@
           min-width: 1.5rem;
           margin-right: 0.3rem;
           line-height: 1;
-          color: #000;
+          color: var(--c-text);
 
           @media (min-width: 40rem) {
             font-size: 3rem;
@@ -339,7 +339,7 @@
     }
 
     button {
-      background: #efefef;
+      background: var(--c-surface);
     }
 
     @media (min-width: 40rem) {
@@ -364,7 +364,7 @@
     justify-content: space-between;
 
     button.stat {
-      background: #efefef;
+      background: var(--c-surface);
     }
 
     button.issue_name {
@@ -396,7 +396,7 @@
 
     a,
     button.issue_name {
-      color: black;
+      color: var(--c-text);
       text-decoration: none;
       margin-right: 0.5rem;
       text-underline-offset: 0.1rem;
@@ -558,7 +558,7 @@
     }
 
     button:hover {
-      background: #ccc;
+      background: var(--c-hover);
     }
 
     .issue_name,
@@ -590,8 +590,8 @@
   #dot_label {
     filter: drop-shadow(0.125rem 0.125rem 0.25rem #888c);
     z-index: 10;
-    background: #fff;
-    fill: #fff;
+    background: var(--c-background);
+    fill: var(--c-background);
   }
 
   .absolute {
@@ -613,7 +613,7 @@
   .leftLabel:after {
     left: 0;
     top: 24px;
-    border-right-color: #fff;
+    border-right-color: var(--c-background);
     border-left: 0;
     margin: -0.6rem 0 0 -0.6rem;
   }
@@ -621,7 +621,7 @@
   .rightLabel:after {
     right: 0;
     top: 24px;
-    border-left-color: #fff;
+    border-left-color: var(--c-background);
     border-right: 0;
     margin: -0.6rem -0.6rem 0 0;
   }
@@ -630,7 +630,7 @@
     top: 0;
     left: 20px;
     border: 0.6rem solid transparent;
-    border-bottom-color: #fff;
+    border-bottom-color: var(--c-background);
     border-top: 0;
     margin: -0.6rem 0 0 -0.6rem;
   }
@@ -640,7 +640,7 @@
     margin: 0 auto;
     align-items: center;
     width: 100%;
-    background: #efefef;
+    background: var(--c-surface);
     padding: 0.5rem 1rem 1rem;
 
     h2 {
@@ -688,8 +688,8 @@
   }
 
   .tooltipBox {
-    background: #fff;
-    fill: #fff;
+    background: var(--c-background);
+    fill: var(--c-background);
   }
 
   .results_vm {
@@ -706,13 +706,13 @@
   }
 
   .i-bar-location {
-    color: #000;
-    background: #fff;
+    color: var(--c-text);
+    background: var(--c-background);
     border-top: 0;
 
     a,
     .button-link {
-      color: rgba(0, 0, 0, 0.9);
+      color: var(--c-text);
     }
 
     form input {
