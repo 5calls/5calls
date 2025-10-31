@@ -52,8 +52,8 @@ body.archive {
   }
 }
 
-$icon-color: hsla(217, 98%, 32%, 0.3);
-$icon-color-hover: hsla(217, 98%, 32%, 0.5);
+$icon-color: rgba(var(--c-dark-rgb), 0.3);
+$icon-color-hover: rgba(var(--c-dark-rgb), 0.5);
 $breakpoint: 76rem;
 
 .archive__grid {
