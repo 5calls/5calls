@@ -20,14 +20,14 @@
   --c-base: var(--c-text);
   --c-base-subtle: var(--c-text-subtle);
   --c-xlight-base: var(--c-surface);
-  --c-red: rgb(237, 60, 29);
   --c-red-rgb: 237, 60, 29;
+  --c-red: rgb(var(--c-red-rgb));
   --c-red-darker: #c62b10;
   --c-red-dark-hover: #97210c;
-  --c-blue: rgb(24, 117, 209);
+  --c-blue-rgb: 24, 117, 209;
+  --c-blue: rgb(var(--c-blue-rgb));
   --c-transparent-blue: rgba(var(--c-blue-rgb), 0.15);
   --c-blue-subtle: #023e9fc1;
-  --c-blue-rgb: 24, 117, 209;
   --c-dark: rgb(2, 63, 159);
   --c-dark-hover: rgb(1, 44, 111);
   --c-dark-rgb: 2, 63, 159;
@@ -87,10 +87,10 @@
   --c-base-subtle: var(--c-text-subtle);
   --c-xlight-base: var(--c-surface);
   --c-info-box: #3d3419;
-  --c-dark: rgb(24, 117, 209);
   --c-dark-rgb: 24, 117, 209;
-  --c-blue-subtle: rgb(120, 160, 220);
+  --c-dark: rgb(var(--c-dark-rgb));
   --c-blue-subtle-rgb: 120, 160, 220;
+  --c-blue-subtle: rgb(var(--c-blue-subtle-rgb));
 
   // Form inputs use surface color in dark mode
   --c-input-background: var(--c-surface);
