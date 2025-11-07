@@ -52,8 +52,6 @@ body.archive {
   }
 }
 
-$icon-color: rgba(var(--c-dark-rgb), 0.3);
-$icon-color-hover: rgba(var(--c-dark-rgb), 0.5);
 $breakpoint: 76rem;
 
 .archive__grid {
@@ -66,7 +64,7 @@ $breakpoint: 76rem;
 }
 
 .archive__phone-icon {
-  color: $icon-color;
+  color: var(--c-icon-muted);
   margin-right: 0.5rem;
   vertical-align: top;
 }
@@ -95,7 +93,7 @@ $breakpoint: 76rem;
   &:hover,
   &:focus {
     .archive__phone-icon {
-      color: $icon-color-hover;
+      color: var(--c-icon-muted-hover);
     }
   }
 }

@@ -49,6 +49,10 @@
   --g-gap: 2rem;
   --radius: 3px;
 
+  // Archive icon colors
+  --c-icon-muted: rgba(var(--c-dark-rgb), 0.3);
+  --c-icon-muted-hover: rgba(var(--c-dark-rgb), 0.5);
+
   // Form inputs
   --c-input-background: #ffffff;
 
@@ -86,9 +90,14 @@
   --c-dark: rgb(24, 117, 209);
   --c-dark-rgb: 24, 117, 209;
   --c-blue-subtle: rgb(120, 160, 220);
+  --c-blue-subtle-rgb: 120, 160, 220;
 
   // Form inputs use surface color in dark mode
   --c-input-background: var(--c-surface);
+
+  // Archive icon colors for dark mode
+  --c-icon-muted: rgba(var(--c-blue-subtle-rgb), 0.5);
+  --c-icon-muted-hover: rgba(var(--c-blue-subtle-rgb), 0.7);
 
   // Buttons in dark mode
   --c-button-border: #666;
