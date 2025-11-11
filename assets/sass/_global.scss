@@ -75,7 +75,7 @@
 
 // Dark theme variables
 @mixin dark-theme-vars {
-  --c-background: #1a1a1a;
+  --c-background: #000000;
   --c-surface: #2d2d2d;
   --c-text: #e0e0e0;
   --c-text-subtle: #b0b0b0;
@@ -87,7 +87,7 @@
   --c-base-subtle: var(--c-text-subtle);
   --c-xlight-base: var(--c-surface);
   --c-info-box: #3d3419;
-  --c-dark-rgb: 24, 117, 209;
+  --c-dark-rgb: 25, 117, 210;
   --c-dark: rgb(var(--c-dark-rgb));
   --c-blue-subtle-rgb: 120, 160, 220;
   --c-blue-subtle: rgb(var(--c-blue-subtle-rgb));
