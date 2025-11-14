@@ -1,0 +1,14 @@
+[
+  {
+    "relation": [
+      "delegate_permission/common.handle_all_urls"
+    ],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "org.a5calls.android.a5calls",
+      "sha256_cert_fingerprints": [
+        "26:A2:84:F5:C3:9A:F0:03:15:F6:25:8D:40:1B:8E:1D:47:9D:E3:28:B3:1C:81:C4:98:C5:84:1F:A9:40:7B:B5"
+      ]
+    }
+  }
+]

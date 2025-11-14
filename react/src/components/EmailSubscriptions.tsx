@@ -41,7 +41,7 @@ const EmailSubscriptions: React.FC = () => {
       const urlSubId = urlParams.get('sub_id');
       const storedSubId = localStorage.getItem('subscriber');
       const subId = urlSubId || storedSubId;
-      console.log("checking for subid...",subId);
+      console.log('checking for subid...', subId);
 
       if (subId) {
         // User has subscriber ID - load preferences
@@ -138,9 +138,9 @@ const EmailSubscriptions: React.FC = () => {
             provided in one of our emails.
           </p>
           <p>
-            If you&apos;re not currently subscribed and would like to receive emails
-            from 5 Calls, you can sign up using the newsletter form on our
-            homepage.
+            If you&apos;re not currently subscribed and would like to receive
+            emails from 5 Calls, you can sign up using the newsletter form on
+            our homepage.
           </p>
         </div>
       </div>
