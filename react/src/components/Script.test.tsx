@@ -17,6 +17,11 @@ jest.mock('../state/stateProvider', () => ({
   withLocation: (component: any) => component
 }));
 
+// Mock the API module
+jest.mock('../utils/api', () => ({
+  getCustomizedScripts: jest.fn()
+}));
+
 // Create a test wrapper that allows us to access the scriptFormat method
 const ScriptTestWrapper = React.forwardRef<Script>((props: any, ref) => {
   return <Script ref={ref} {...props} />;
@@ -488,6 +493,187 @@ describe('Script Component', () => {
         );
         expect(result).toContain('[CITY,  ZIP]'); // Should remain unreplaced
       });
+    });
+  });
+
+  describe('fetchCustomizedScripts function', () => {
+    let getCustomizedScriptsMock: jest.Mock;
+
+    beforeEach(() => {
+      // Reset the mock before each test
+      getCustomizedScriptsMock = require('../utils/api')
+        .getCustomizedScripts as jest.Mock;
+      getCustomizedScriptsMock.mockClear();
+      getCustomizedScriptsMock.mockResolvedValue({
+        contact1: 'Custom script for contact 1',
+        contact2: 'Custom script for contact 2'
+      });
+    });
+
+    it('should not fetch customized scripts when issueId is missing', async () => {
+      const { container } = render(
+        <div data-issue-id="" data-script-markdown="Test script">
+          <ScriptTestWrapper
+            ref={(instance: Script) => {
+              scriptInstance = instance;
+            }}
+            locationState={mockLocationState}
+            setLocationAddress={() => {}}
+          />
+        </div>
+      );
+
+      // Wait for componentDidMount to complete
+      await new Promise((resolve) => setTimeout(resolve, 0));
+
+      // Call fetchCustomizedScripts without issueId
+      await scriptInstance!.fetchCustomizedScripts(['contact1', 'contact2']);
+
+      // Should not call the API
+      expect(getCustomizedScriptsMock).not.toHaveBeenCalled();
+    });
+
+    it('should not fetch customized scripts when cachedCity is missing', async () => {
+      const locationStateWithoutCity = {
+        ...mockLocationState,
+        cachedCity: ''
+      };
+
+      render(
+        <div data-issue-id="123" data-script-markdown="Test script">
+          <ScriptTestWrapper
+            ref={(instance: Script) => {
+              scriptInstance = instance;
+            }}
+            locationState={locationStateWithoutCity}
+            setLocationAddress={() => {}}
+          />
+        </div>
+      );
+
+      // Wait for componentDidMount to complete
+      await new Promise((resolve) => setTimeout(resolve, 0));
+
+      // Call fetchCustomizedScripts
+      await scriptInstance!.fetchCustomizedScripts(['contact1', 'contact2']);
+
+      // Should not call the API
+      expect(getCustomizedScriptsMock).not.toHaveBeenCalled();
+    });
+
+    it('should not fetch customized scripts when contactIds is empty', async () => {
+      render(
+        <div data-issue-id="123" data-script-markdown="Test script">
+          <ScriptTestWrapper
+            ref={(instance: Script) => {
+              scriptInstance = instance;
+            }}
+            locationState={mockLocationState}
+            setLocationAddress={() => {}}
+          />
+        </div>
+      );
+
+      // Wait for componentDidMount to complete
+      await new Promise((resolve) => setTimeout(resolve, 0));
+
+      // Call fetchCustomizedScripts with empty array
+      await scriptInstance!.fetchCustomizedScripts([]);
+
+      // Should not call the API
+      expect(getCustomizedScriptsMock).not.toHaveBeenCalled();
+    });
+
+    it('should fetch customized scripts when all required data is present', async () => {
+      render(
+        <div data-issue-id="123" data-script-markdown="Test script">
+          <ScriptTestWrapper
+            ref={(instance: Script) => {
+              scriptInstance = instance;
+            }}
+            locationState={mockLocationState}
+            setLocationAddress={() => {}}
+          />
+        </div>
+      );
+
+      // Wait for componentDidMount to complete
+      await new Promise((resolve) => setTimeout(resolve, 0));
+
+      // Call fetchCustomizedScripts
+      await scriptInstance!.fetchCustomizedScripts(['contact1', 'contact2']);
+
+      // Should call the API with correct parameters
+      expect(getCustomizedScriptsMock).toHaveBeenCalledWith(
+        '123',
+        ['contact1', 'contact2'],
+        'Springfield, IL'
+      );
+    });
+
+    it('should update state with customized scripts on successful fetch', async () => {
+      const customScripts = {
+        contact1: 'Custom script 1',
+        contact2: 'Custom script 2'
+      };
+      getCustomizedScriptsMock.mockResolvedValue(customScripts);
+
+      render(
+        <div data-issue-id="123" data-script-markdown="Test script">
+          <ScriptTestWrapper
+            ref={(instance: Script) => {
+              scriptInstance = instance;
+            }}
+            locationState={mockLocationState}
+            setLocationAddress={() => {}}
+          />
+        </div>
+      );
+
+      // Wait for componentDidMount to complete
+      await new Promise((resolve) => setTimeout(resolve, 0));
+
+      // Call fetchCustomizedScripts
+      await scriptInstance!.fetchCustomizedScripts(['contact1', 'contact2']);
+
+      // Wait for state update
+      await new Promise((resolve) => setTimeout(resolve, 0));
+
+      // Should update state with customized scripts
+      expect(scriptInstance!.state.customizedScripts).toEqual(customScripts);
+    });
+
+    it('should handle API errors gracefully', async () => {
+      const consoleErrorSpy = jest
+        .spyOn(console, 'error')
+        .mockImplementation(() => {});
+      getCustomizedScriptsMock.mockRejectedValue(new Error('API error'));
+
+      render(
+        <div data-issue-id="123" data-script-markdown="Test script">
+          <ScriptTestWrapper
+            ref={(instance: Script) => {
+              scriptInstance = instance;
+            }}
+            locationState={mockLocationState}
+            setLocationAddress={() => {}}
+          />
+        </div>
+      );
+
+      // Wait for componentDidMount to complete
+      await new Promise((resolve) => setTimeout(resolve, 0));
+
+      // Call fetchCustomizedScripts
+      await scriptInstance!.fetchCustomizedScripts(['contact1', 'contact2']);
+
+      // Should log error
+      expect(consoleErrorSpy).toHaveBeenCalledWith(
+        'Error fetching customized scripts:',
+        expect.any(Error)
+      );
+
+      consoleErrorSpy.mockRestore();
     });
   });
 });
