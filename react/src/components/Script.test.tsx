@@ -501,6 +501,7 @@ describe('Script Component', () => {
 
     beforeEach(() => {
       // Reset the mock before each test
+      // eslint-disable-next-line @typescript-eslint/no-require-imports
       getCustomizedScriptsMock = require('../utils/api')
         .getCustomizedScripts as jest.Mock;
       getCustomizedScriptsMock.mockClear();
@@ -511,7 +512,7 @@ describe('Script Component', () => {
     });
 
     it('should not fetch customized scripts when issueId is missing', async () => {
-      const { container } = render(
+      render(
         <div data-issue-id="" data-script-markdown="Test script">
           <ScriptTestWrapper
             ref={(instance: Script) => {
