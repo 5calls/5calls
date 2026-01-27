@@ -1602,19 +1602,21 @@ class Dashboard extends React.Component<null, State> {
     });
   }
 
-  async requestDashboardData() {
+  getDistrictId = () => {
     const urlParams = new URLSearchParams(window.location.search);
-    let districtId = localStorage.getItem(
-      Constants.LOCAL_STORAGE_KEYS.DISTRICT
-    );
     if (urlParams.has(Constants.LOCAL_STORAGE_KEYS.DISTRICT)) {
       // Override from URL parameter if present.
       const urlDistrict = urlParams.get(Constants.LOCAL_STORAGE_KEYS.DISTRICT);
       // Validate length, although not the actual code.
       if (urlDistrict && (urlDistrict.length == 4 || urlDistrict.length == 5)) {
-        districtId = urlDistrict;
+        return urlDistrict;
       }
     }
+    return localStorage.getItem(Constants.LOCAL_STORAGE_KEYS.DISTRICT);
+  }
+
+  async requestDashboardData() {
+    let districtId = this.getDistrictId();
 
     let usaSummaryData = null;
     let repsSummaryData = null;
@@ -1638,6 +1640,7 @@ class Dashboard extends React.Component<null, State> {
         isLoading: false,
         isError: true
       });
+      // USA summary data required to show dashboard.
       return;
     }
     const repsData = processRepsData(repsSummaryData);
@@ -1780,6 +1783,8 @@ class Dashboard extends React.Component<null, State> {
             'display',
             null
           );
+        } else if (district && district.length > 0) {
+          document.getElementById('location_error')!.removeAttribute('hidden');
         } else {
           document.getElementById('location_picker')!.removeAttribute('hidden');
         }
