@@ -187,6 +187,9 @@ export function getTopIssueData(usaData: UsaSummaryData): {
   topIssueIds: number[];
   issueIdToName: { [key: number]: string };
 } {
+  if (!usaData.usa.issueCounts) {
+    return { topIssueIds: [], issueIdToName: {} };
+  }
   const topIssueIds: number[] = usaData.usa.issueCounts.reduce((agg, row) => {
     agg.push(row.issue_id);
     return agg;

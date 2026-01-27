@@ -170,7 +170,9 @@ const drawUsaPane = (
   issueColor: d3.ScaleOrdinal<number, string>,
   duration: string
 ) => {
-  const topIssues = usaData.usa.issueCounts.slice(0, 5);
+  const topIssues = usaData.usa.issueCounts
+    ? usaData.usa.issueCounts.slice(0, 5)
+    : [];
   d3.selectAll('div#total_all').html(usaData.usa.total.toLocaleString());
   drawTopFiveIssues(
     'ol#top_five_all_holder',
@@ -1602,19 +1604,21 @@ class Dashboard extends React.Component<null, State> {
     });
   }
 
-  async requestDashboardData() {
+  getDistrictId = () => {
     const urlParams = new URLSearchParams(window.location.search);
-    let districtId = localStorage.getItem(
-      Constants.LOCAL_STORAGE_KEYS.DISTRICT
-    );
     if (urlParams.has(Constants.LOCAL_STORAGE_KEYS.DISTRICT)) {
       // Override from URL parameter if present.
       const urlDistrict = urlParams.get(Constants.LOCAL_STORAGE_KEYS.DISTRICT);
       // Validate length, although not the actual code.
       if (urlDistrict && (urlDistrict.length == 4 || urlDistrict.length == 5)) {
-        districtId = urlDistrict;
+        return urlDistrict;
       }
     }
+    return localStorage.getItem(Constants.LOCAL_STORAGE_KEYS.DISTRICT);
+  };
+
+  async requestDashboardData() {
+    let districtId = this.getDistrictId();
 
     let usaSummaryData = null;
     let repsSummaryData = null;
@@ -1638,6 +1642,7 @@ class Dashboard extends React.Component<null, State> {
         isLoading: false,
         isError: true
       });
+      // USA summary data required to show dashboard.
       return;
     }
     const repsData = processRepsData(repsSummaryData);
@@ -1663,7 +1668,12 @@ class Dashboard extends React.Component<null, State> {
     }
 
     const usaData = this.state.usaData;
-    if (this.state.isError || this.state.usaData.states.length == 0) {
+    if (
+      this.state.isError ||
+      usaData.states.length == 0 ||
+      usaData.usa === null ||
+      usaData.usa.total == 0
+    ) {
       // Happens if the data isn't populated properly (like after an outage).
       return (
         <div>
@@ -1780,6 +1790,8 @@ class Dashboard extends React.Component<null, State> {
             'display',
             null
           );
+        } else if (district && district.length > 0) {
+          document.getElementById('location_error')!.removeAttribute('hidden');
         } else {
           document.getElementById('location_picker')!.removeAttribute('hidden');
         }
