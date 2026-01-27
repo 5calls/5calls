@@ -1668,7 +1668,12 @@ class Dashboard extends React.Component<null, State> {
     }
 
     const usaData = this.state.usaData;
-    if (this.state.isError || this.state.usaData.states.length == 0) {
+    if (
+      this.state.isError ||
+      usaData.states.length == 0 ||
+      usaData.usa === null ||
+      usaData.usa.total == 0
+    ) {
       // Happens if the data isn't populated properly (like after an outage).
       return (
         <div>
