@@ -70,6 +70,7 @@
       width: 100%;
       border: 2px solid var(--c-blue);
       border-radius: var(--radius);
+      background: var(--c-input-background);
       transition: border-color 0.2s;
 
       &:focus {

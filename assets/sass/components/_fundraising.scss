@@ -14,7 +14,7 @@
       .current-amount {
         font-size: 1.25rem;
         font-weight: bold;
-        color: #2c5aa0;
+        color: var(--c-dark);
 
         &.clickable-amount {
           text-decoration: none;
@@ -22,7 +22,7 @@
           transition: color 0.2s ease;
 
           &:hover {
-            color: #1e3f6f;
+            color: var(--c-blue-subtle);
             text-decoration: underline;
           }
         }
@@ -48,7 +48,7 @@
     .progress-percentage {
       font-size: 1.125rem;
       font-weight: bold;
-      color: #2c5aa0;
+      color: var(--c-dark);
     }
   }
 
