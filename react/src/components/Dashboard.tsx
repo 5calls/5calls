@@ -170,7 +170,7 @@ const drawUsaPane = (
   issueColor: d3.ScaleOrdinal<number, string>,
   duration: string
 ) => {
-  const topIssues = usaData.usa.issueCounts.slice(0, 5);
+  const topIssues = usaData.usa.issueCounts ? usaData.usa.issueCounts.slice(0, 5) : [];
   d3.selectAll('div#total_all').html(usaData.usa.total.toLocaleString());
   drawTopFiveIssues(
     'ol#top_five_all_holder',
