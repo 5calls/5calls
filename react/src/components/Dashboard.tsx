@@ -39,6 +39,7 @@ const selectedStateStroke = 'rgba(255, 217, 52)';
 const USA_TOPOJSON = 'https://cdn.jsdelivr.net/npm/us-atlas@2/us/10m.json';
 const MIN_FOR_BEESWARM = 7;
 const MAX_FOR_SONIFICATION = 2000;
+const MAX_FOR_BEESWARM = 6000;
 const BEESWARM_TARGET_WIDTH = 600;
 const SONFICATION_DURATION = 7; // In seconds.
 
@@ -857,6 +858,11 @@ const drawUsaMap = (
   });
 };
 
+const inBeeswarmRange = (count: number) : boolean => {
+ return count >= MIN_FOR_BEESWARM &&
+        count <= MAX_FOR_BEESWARM
+};
+
 const drawRepsPane = (
   repData: ExpandedRepData,
   district: string,
@@ -941,7 +947,7 @@ const drawRepsPane = (
     .attr('class', 'description')
     .html(() => {
       let text = ''; //`The most-called issues for ${repData.repInfo.name} ${duration} from 5 Calls.`;
-      if (repData.total >= MIN_FOR_BEESWARM) {
+      if (inBeeswarmRange(repData.total)) {
         text += ' Select a call count to see it highlighted below.';
       }
       return text;
@@ -957,7 +963,7 @@ const drawRepsPane = (
     duration,
     issueColor,
     repData.total,
-    repData.total >= MIN_FOR_BEESWARM
+    inBeeswarmRange(repData.total)
   );
 
   const pieSize = 80;
@@ -1039,7 +1045,7 @@ const drawRepsPane = (
 
   // Draw beeswarm async so that it doesn't block rendering.
   window.setTimeout(() => {
-    if (repData.total >= MIN_FOR_BEESWARM) {
+    if (inBeeswarmRange(repData.total)) {
       repData.beeswarm = beeswarmForce()
         .y(300)
         .x((e: BeeswarmCallCount) => beeswarmScale(new Date(e.time * 1000))) // seconds since epoch --> ms
@@ -1228,7 +1234,10 @@ const drawBeeswarm = (
   const description = parentDiv
     .append('div')
     .attr('class', 'description')
-    .attr('hidden', repData.total < MIN_FOR_BEESWARM ? true : null);
+    .attr(
+      'hidden',
+      !inBeeswarmRange(repData.total) ? true : null
+    );
 
   description
     .append('h2')
@@ -1385,7 +1394,7 @@ const drawBeeswarm = (
     .style('margin-bottom', '1.5rem')
     .style('overflow', 'visible');
 
-  if (repData.total < MIN_FOR_BEESWARM) {
+  if (!inBeeswarmRange(repData.total)) {
     // Skip drawing beeswarm.
     svg.attr('width', 0).attr('height', 0).attr('hidden', true);
     return;
@@ -1640,7 +1649,7 @@ class Dashboard extends React.Component<null, State> {
       });
       return;
     }
-    const repsData = processRepsData(repsSummaryData);
+    const repsData = processRepsData(repsSummaryData, MAX_FOR_BEESWARM);
 
     // Set the state, which will cause rendering to happen.
     this.setState({
