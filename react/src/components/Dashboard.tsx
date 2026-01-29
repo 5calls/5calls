@@ -799,6 +799,9 @@ const drawUsaMap = (
         if (initialState !== null) {
           selectState(initialState);
         }
+        // Track the state over which the pointer went down. If the pointer
+        // goes up on the same state it went down on, that's a click.
+        let pointerDownState : string = '';
         d3.select(this)
           .on('pointerover', function (event: Event, d) {
             if (selectedState === d.id) {
@@ -815,10 +818,16 @@ const drawUsaMap = (
               );
             }
           })
-          .on('click', function (event: Event, d: Feature) {
-            selectState(d.id);
+          .on('pointerdown', function(event: Event, d: Feature) {
+            pointerDownState = d.id;
           })
-          .on('pointerout', function (event: Event, d: Feature) {
+          .on('pointerup', function (event: Event, d: Feature) {
+            if (pointerDownState === d.id) {
+              selectState(d.id);
+            }
+            pointerDownState = '';
+          })
+          .on('pointerout', function(event: Event, d: Feature) {
             const state = d3.select(this);
             if (selectedState !== d.id) {
               state.transition().attr('stroke', '#fff').attr('stroke-width', 1);
@@ -858,9 +867,8 @@ const drawUsaMap = (
   });
 };
 
-const inBeeswarmRange = (count: number) : boolean => {
- return count >= MIN_FOR_BEESWARM &&
-        count <= MAX_FOR_BEESWARM
+const inBeeswarmRange = (count: number): boolean => {
+  return count >= MIN_FOR_BEESWARM && count <= MAX_FOR_BEESWARM;
 };
 
 const drawRepsPane = (
@@ -1234,10 +1242,7 @@ const drawBeeswarm = (
   const description = parentDiv
     .append('div')
     .attr('class', 'description')
-    .attr(
-      'hidden',
-      !inBeeswarmRange(repData.total) ? true : null
-    );
+    .attr('hidden', !inBeeswarmRange(repData.total) ? true : null);
 
   description
     .append('h2')
