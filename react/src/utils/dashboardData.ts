@@ -64,7 +64,8 @@ export interface BeeswarmNode<T> extends d3.SimulationNodeDatum {
  * @returns An array of processed representative data.
  */
 export function processRepsData(
-  repsSummaryData: RepsSummaryData | null
+  repsSummaryData: RepsSummaryData | null,
+  maxForBeeswarm: number
 ): ExpandedRepData[] {
   if (!repsSummaryData) {
     return [];
@@ -97,7 +98,9 @@ export function processRepsData(
         contactSummaryData.aggregatedResults as unknown as BeeswarmCallCount[];
 
       // In-place expand to individual calls.
-      expandRepResults(expandedResult.callResults);
+      if (expandedResult.total <= maxForBeeswarm) {
+        expandRepResults(expandedResult.callResults);
+      }
 
       // Calculate aggregated reachability stats.
       if (contactSummaryData.outcomes) {
