@@ -9,7 +9,7 @@ import { UserContactEventType } from '../common/models/contactEvent';
 
 describe('processRepsData', () => {
   it('should return an empty array when given null', () => {
-    const result = processRepsData(null);
+    const result = processRepsData(null, /* maxForBeeswarm= */ 50);
     expect(result).toEqual([]);
   });
 
@@ -47,7 +47,7 @@ describe('processRepsData', () => {
       ]
     };
 
-    const result = processRepsData(repsSummaryData);
+    const result = processRepsData(repsSummaryData, /* maxForBeeswarm= */ 50);
 
     expect(result.length).toBe(1);
     const repData = result[0];
@@ -80,7 +80,7 @@ describe('processRepsData', () => {
       repsData: []
     };
 
-    const result = processRepsData(repsSummaryData);
+    const result = processRepsData(repsSummaryData, /* maxForBeeswarm= */ 50);
 
     expect(result.length).toBe(1);
     const repData = result[0];
@@ -115,7 +115,7 @@ describe('processRepsData', () => {
       ]
     };
 
-    const result = processRepsData(repsSummaryData);
+    const result = processRepsData(repsSummaryData, /* maxForBeeswarm= */ 50);
 
     expect(result.length).toBe(1);
     const repData = result[0];
@@ -150,7 +150,7 @@ describe('processRepsData', () => {
       ]
     };
 
-    const result = processRepsData(repsSummaryData);
+    const result = processRepsData(repsSummaryData, /* maxForBeeswarm= */ 50);
 
     expect(result.length).toBe(1);
     const repData = result[0];
@@ -167,7 +167,7 @@ describe('processRepsData', () => {
       repsData: []
     };
 
-    const result = processRepsData(repsSummaryData);
+    const result = processRepsData(repsSummaryData, /* maxForBeeswarm= */ 50);
 
     expect(result).toEqual([]);
   });

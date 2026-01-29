@@ -801,7 +801,7 @@ const drawUsaMap = (
         }
         // Track the state over which the pointer went down. If the pointer
         // goes up on the same state it went down on, that's a click.
-        let pointerDownState : string = '';
+        let pointerDownState: string = '';
         d3.select(this)
           .on('pointerover', function (event: Event, d) {
             if (selectedState === d.id) {
@@ -818,7 +818,7 @@ const drawUsaMap = (
               );
             }
           })
-          .on('pointerdown', function(event: Event, d: Feature) {
+          .on('pointerdown', function (event: Event, d: Feature) {
             pointerDownState = d.id;
           })
           .on('pointerup', function (event: Event, d: Feature) {
@@ -827,7 +827,7 @@ const drawUsaMap = (
             }
             pointerDownState = '';
           })
-          .on('pointerout', function(event: Event, d: Feature) {
+          .on('pointerout', function (event: Event, d: Feature) {
             const state = d3.select(this);
             if (selectedState !== d.id) {
               state.transition().attr('stroke', '#fff').attr('stroke-width', 1);
