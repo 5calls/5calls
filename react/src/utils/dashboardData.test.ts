@@ -66,7 +66,7 @@ describe('processRepsData', () => {
   });
 
   it('should not expand when too many calls', () => {
-const repsSummaryData: RepsSummaryData = {
+    const repsSummaryData: RepsSummaryData = {
       reps: [
         {
           id: 'rep1',
