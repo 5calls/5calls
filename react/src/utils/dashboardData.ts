@@ -64,7 +64,8 @@ export interface BeeswarmNode<T> extends d3.SimulationNodeDatum {
  * @returns An array of processed representative data.
  */
 export function processRepsData(
-  repsSummaryData: RepsSummaryData | null
+  repsSummaryData: RepsSummaryData | null,
+  maxForBeeswarm: number
 ): ExpandedRepData[] {
   if (!repsSummaryData) {
     return [];
@@ -97,7 +98,9 @@ export function processRepsData(
         contactSummaryData.aggregatedResults as unknown as BeeswarmCallCount[];
 
       // In-place expand to individual calls.
-      expandRepResults(expandedResult.callResults);
+      if (expandedResult.total <= maxForBeeswarm) {
+        expandRepResults(expandedResult.callResults);
+      }
 
       // Calculate aggregated reachability stats.
       if (contactSummaryData.outcomes) {
@@ -206,4 +209,73 @@ export function getTopIssueData(usaData: UsaSummaryData): {
       {} as { [key: number]: string }
     );
   return { topIssueIds, issueIdToName };
+}
+
+// 2025 population data from census.gov.
+const POPULATION_DATA: { [key: string]: number } = {
+  AS: 43268,
+  GU: 169691,
+  PR: 3184835,
+  VI: 103792,
+  AL: 5193088,
+  AK: 737270,
+  AZ: 7623818,
+  AR: 3114791,
+  CA: 39355309,
+  CO: 6012561,
+  CT: 3688496,
+  DE: 1059952,
+  DC: 693645,
+  FL: 23462518,
+  GA: 11302748,
+  HI: 1432820,
+  ID: 2029733,
+  IL: 12719141,
+  IN: 6973333,
+  IA: 3238387,
+  KS: 2977220,
+  KY: 4606864,
+  LA: 4618189,
+  ME: 1414874,
+  MD: 6265347,
+  MA: 7154084,
+  MI: 10127884,
+  MN: 5830405,
+  MS: 2954160,
+  MO: 6270541,
+  MT: 1144694,
+  NE: 2018006,
+  NV: 3282188,
+  NH: 1415342,
+  NJ: 9548215,
+  NM: 2125498,
+  NY: 20002427,
+  NC: 11197968,
+  ND: 799358,
+  OH: 11900510,
+  OK: 4123288,
+  OR: 4273586,
+  PA: 13059432,
+  RI: 1114521,
+  SC: 5570274,
+  SD: 935094,
+  TN: 7315076,
+  TX: 31709821,
+  UT: 3538904,
+  VT: 644663,
+  VA: 8880107,
+  WA: 8001020,
+  WV: 1766147,
+  WI: 5972787,
+  WY: 588753
+};
+
+// Safe getter for population data.
+export function getPopulation(id: string): number {
+  if (POPULATION_DATA[id]) {
+    return POPULATION_DATA[id];
+  }
+  console.warn('Could not find population data for ' + id);
+  // We will usually divide by population. Make sure to return something!
+  return 1;
 }

@@ -34,7 +34,9 @@
         <div role="tablist" class="tab_container">
           <button id="tab_top_calls" role="tab" aria-selected="true" 
               aria-controls="state_map_section" tabindex="0" class="selected">Top issues</button>
-          <button id="tab_total_calls" role="tab" aria-selected="true" 
+          <button id="tab_scaled_calls" role="tab" aria-selected="false" 
+              aria-controls="state_map_section" tabindex="-1">Call volumes</button>
+          <button id="tab_total_calls" role="tab" aria-selected="false" 
               aria-controls="state_map_section" tabindex="-1">Total calls</button>
         </div>
         <div id="state_map_section" role="tabpanel" aria-labelledby="tab_top_calls">
@@ -67,6 +69,7 @@
 
           <div id="state_footnote" class="footnote">
             * Includes other US jurisdictions such as D.C., Puerto Rico, etc.
+            <span id="state_footnote_scaled">Population data from <a href="https://www.census.gov/programs-surveys/popest/data/tables.html">census.gov</a>, 2025.</span>
           </div>
         </div>
       </div>

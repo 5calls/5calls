@@ -14,6 +14,7 @@ import {
   BeeswarmCallCount,
   BeeswarmNode,
   ExpandedRepData,
+  getPopulation,
   getTopIssueData,
   getUsaMapKeyData,
   processRepsData
@@ -39,8 +40,10 @@ const selectedStateStroke = 'rgba(255, 217, 52)';
 const USA_TOPOJSON = 'https://cdn.jsdelivr.net/npm/us-atlas@2/us/10m.json';
 const MIN_FOR_BEESWARM = 7;
 const MAX_FOR_SONIFICATION = 2000;
+const MAX_FOR_BEESWARM = 6000;
 const BEESWARM_TARGET_WIDTH = 600;
 const SONFICATION_DURATION = 7; // In seconds.
+const SCALED_POP_DENOMINATOR = 10000;
 
 const drawStateLabel = (
   parentState: SVGGraphicsElement,
@@ -367,6 +370,88 @@ const drawTopFiveIssues = (
     .attr('width', (d: IssueCountData) => `${(d.count / total) * 100}%`);
 };
 
+const prepareMapKey = (
+  maxTotal: number,
+  minColor: string,
+  maxColor: string,
+  id: string,
+  labelSuffix: string
+): any => {
+  const scaleColor = d3.scaleLinear([0, maxTotal], [minColor, maxColor]);
+  const gradientHeight = 6;
+  const keySvg = d3
+    .select('div#state_map_key')
+    .append('svg')
+    .attr('id', id)
+    .style('overflow', 'visible')
+    .style('font-size', '1rem')
+    .style('line-height', '1')
+    .attr('height', `${gradientHeight}rem`)
+    .style('float', 'left')
+    .style('margin-right', '.5rem')
+    .attr('title', `Values from 0 to ${maxTotal} calls`);
+  const gradient = keySvg
+    .append('linearGradient')
+    .attr('id', `keyLinearGradient_${id}`)
+    .attr('x1', '0%')
+    .attr('y1', '0%')
+    .attr('x2', '0%')
+    .attr('y2', '100%');
+  gradient.append('stop').attr('offset', '0%').attr('stop-color', maxColor);
+  gradient.append('stop').attr('offset', '100%').attr('stop-color', minColor);
+  keySvg
+    .append('rect')
+    .attr('width', '16px')
+    .attr('height', '5rem')
+    .attr('y', '0.5rem')
+    .style('fill', `url(#keyLinearGradient_${id})`);
+  keySvg
+    .append('line')
+    .attr('stroke', 'black')
+    .attr('x1', 0)
+    .attr('x2', 20)
+    .attr('y1', '0.5rem')
+    .attr('y2', '0.5rem');
+  keySvg
+    .append('line')
+    .attr('stroke', 'black')
+    .attr('x1', 0)
+    .attr('x2', 20)
+    .attr('y1', '3rem')
+    .attr('y2', '3rem');
+  keySvg
+    .append('line')
+    .attr('stroke', 'black')
+    .attr('x1', 0)
+    .attr('x2', 20)
+    .attr('y1', '5.5rem')
+    .attr('y2', '5.5rem');
+  const maxText = keySvg
+    .append('text')
+    .attr('x', '24')
+    .attr('y', 0)
+    .attr('dy', '1rem')
+    .attr('fill', 'black')
+    .html(`${maxTotal.toLocaleString()} ${labelSuffix}`);
+  keySvg
+    .append('text')
+    .attr('x', '24')
+    .attr('y', `${gradientHeight / 2}rem`)
+    .attr('dy', '.5rem')
+    .attr('fill', 'black')
+    .html(`${(maxTotal / 2).toLocaleString()} ${labelSuffix}`);
+  keySvg
+    .append('text')
+    .attr('x', '24')
+    .attr('y', `${gradientHeight}rem`)
+    .attr('fill', 'black')
+    .html(`0 ${labelSuffix}`);
+  keySvg
+    .attr('width', maxText.node().getBBox().width + 24)
+    .style('display', 'none');
+  return scaleColor;
+};
+
 const drawUsaMap = (
   statesResults: RegionSummaryData[],
   issueColor: d3.ScaleOrdinal<number, string>,
@@ -432,6 +517,7 @@ const drawUsaMap = (
     });
 
     const keyData = getUsaMapKeyData(statesResults, data);
+    // Set up the key for the top issue tab.
     d3.select('div#state_map_key')
       .append('ol')
       .selectAll('.key')
@@ -445,92 +531,61 @@ const drawUsaMap = (
           `<b>${d.count} state${d.count == 1 ? '' : 's'}</b>: ${d.name}`
       );
 
+    // Set up the key for the total calls tab.
     let maxTotal = statesResults.reduce((agg, row) => {
       if (row && row.total > agg) {
         agg = row.total;
       }
       return agg;
     }, 0);
-    // Use colors linearly around `purple`.
-    const minColor = '#d7d1de';
-    const maxColor = '#6319a8';
     // Round the max to a round number.
     maxTotal = Math.ceil(maxTotal / 100) * 100;
-    const scaleColor = d3.scaleLinear([0, maxTotal], [minColor, maxColor]);
+    // Use colors linearly around `green`.
+    const minColor = '#e3f6cf';
+    const maxColor = '#488503';
+    const totalColorScale = prepareMapKey(
+      maxTotal,
+      minColor,
+      maxColor,
+      'total',
+      'calls'
+    );
 
-    const gradientHeight = 6;
-    const keySvg = d3
-      .select('div#state_map_key')
-      .append('svg')
-      .style('overflow', 'visible')
-      .style('font-size', '1rem')
-      .style('line-height', '1')
-      .attr('height', `${gradientHeight}rem`)
-      .style('float', 'left')
-      .style('margin-right', '.5rem')
-      .attr('title', `Values from 0 to ${maxTotal} calls`);
-    const gradient = keySvg
-      .append('linearGradient')
-      .attr('id', 'keyLinearGradient')
-      .attr('x1', '0%')
-      .attr('y1', '0%')
-      .attr('x2', '0%')
-      .attr('y2', '100%');
-    gradient.append('stop').attr('offset', '0%').attr('stop-color', maxColor);
-    gradient.append('stop').attr('offset', '100%').attr('stop-color', minColor);
-    keySvg
-      .append('rect')
-      .attr('width', '16px')
-      .attr('height', '5rem')
-      .attr('y', '0.5rem')
-      .style('fill', 'url(#keyLinearGradient)');
-    keySvg
-      .append('line')
-      .attr('stroke', 'black')
-      .attr('x1', 0)
-      .attr('x2', 20)
-      .attr('y1', '0.5rem')
-      .attr('y2', '0.5rem');
-    keySvg
-      .append('line')
-      .attr('stroke', 'black')
-      .attr('x1', 0)
-      .attr('x2', 20)
-      .attr('y1', '3rem')
-      .attr('y2', '3rem');
-    keySvg
-      .append('line')
-      .attr('stroke', 'black')
-      .attr('x1', 0)
-      .attr('x2', 20)
-      .attr('y1', '5.5rem')
-      .attr('y2', '5.5rem');
-    const maxText = keySvg
-      .append('text')
-      .attr('x', '24')
-      .attr('y', 0)
-      .attr('dy', '1rem')
-      .attr('fill', 'black')
-      .html(`${maxTotal.toLocaleString()} calls`);
-    keySvg
-      .append('text')
-      .attr('x', '24')
-      .attr('y', `${gradientHeight / 2}rem`)
-      .attr('dy', '.5rem')
-      .attr('fill', 'black')
-      .html(`${(maxTotal / 2).toLocaleString()} calls`);
-    keySvg
-      .append('text')
-      .attr('x', '24')
-      .attr('y', `${gradientHeight}rem`)
-      .attr('fill', 'black')
-      .html(`0 calls`);
-    keySvg
-      .attr('width', maxText.node().getBBox().width + 24)
-      .style('display', 'none');
+    // Set up key data for the scaled count per population tab.
+    let maxScaledTotal =
+      statesResults.reduce((agg, row) => {
+        const population = getPopulation(row.id);
+        if (row && population && row.total / population > agg) {
+          agg = row.total / population;
+        }
+        return agg;
+      }, 0) * SCALED_POP_DENOMINATOR;
+    let scaledPopDenominator = SCALED_POP_DENOMINATOR;
+    // If call counts are too low, scale up the denominator!
+    if (maxScaledTotal != 0) {
+      while (maxScaledTotal < 10) {
+        scaledPopDenominator *= 10;
+        maxScaledTotal *= 10;
+      }
+    }
+    maxScaledTotal = Math.ceil(maxScaledTotal / 10) * 10;
+    // Use colors linearly around `purple`
+    const minScaledColor = '#d7d1de';
+    const maxScaledColor = '#6319a8';
+    const scaledColorScale = prepareMapKey(
+      maxScaledTotal,
+      minScaledColor,
+      maxScaledColor,
+      'scaled',
+      `per ${scaledPopDenominator.toLocaleString()}`
+    );
 
     const totalCallsPerStateClicked = () => {
       d3.select('button#tab_top_calls')
+        .attr('tabindex', -1)
+        .classed('selected', null)
+        .attr('aria-selected', false);
+      d3.select('button#tab_scaled_calls')
         .attr('tabindex', -1)
         .classed('selected', null)
         .attr('aria-selected', false);
@@ -538,6 +593,7 @@ const drawUsaMap = (
         .attr('tabindex', 0)
         .classed('selected', true)
         .attr('aria-selected', true);
+      d3.select('#state_footnote_scaled').attr('hidden', true);
       const mapSection = d3.select('div#state_map_section');
       mapSection
         .select('div#state_map')
@@ -546,7 +602,7 @@ const drawUsaMap = (
         .attr('fill', (d: Feature) => {
           const stateResult = statesResults.find((state) => state.id === d.id);
           const stateTotal = stateResult ? stateResult.total : 0;
-          return scaleColor(stateTotal);
+          return totalColorScale(stateTotal);
         });
       mapSection
         .select('h2.detail_title')
@@ -559,7 +615,10 @@ const drawUsaMap = (
       d3.select('div#state_map_key_box')
         .select('div.title')
         .html('Total calls per state*');
-      d3.select('div#state_map_key').select('svg').style('display', null);
+      d3.select('div#state_map_key').select('svg#total').style('display', null);
+      d3.select('div#state_map_key')
+        .select('svg#scaled')
+        .style('display', 'none');
       d3.select('div#state_map_key').select('ol').style('display', 'none');
 
       if (selectedState) {
@@ -586,16 +645,26 @@ const drawUsaMap = (
         .attr('tabindex', -1)
         .classed('selected', null)
         .attr('aria-selected', false);
+      d3.select('button#tab_scaled_calls')
+        .attr('tabindex', -1)
+        .classed('selected', null)
+        .attr('aria-selected', false);
       d3.select('button#tab_top_calls')
         .attr('tabindex', 0)
         .classed('selected', true)
         .attr('aria-selected', true);
+      d3.select('#state_footnote_scaled').attr('hidden', true);
 
       d3.select('div#state_map_key_box')
         .select('div.title')
         .html('Top Issue Per State*');
       d3.select('div#state_map_key').select('ol').style('display', null);
-      d3.select('div#state_map_key').select('svg').style('display', 'none');
+      d3.select('div#state_map_key')
+        .select('svg#total')
+        .style('display', 'none');
+      d3.select('div#state_map_key')
+        .select('svg#scaled')
+        .style('display', 'none');
 
       const mapSection = d3.select('div#state_map_section');
       mapSection
@@ -639,15 +708,100 @@ const drawUsaMap = (
       }
     };
 
-    // Toggles between the two map tabs on arrow events.
+    const scaledCallsPerStateClicked = () => {
+      d3.select('button#tab_total_calls')
+        .attr('tabindex', -1)
+        .classed('selected', null)
+        .attr('aria-selected', false);
+      d3.select('button#tab_scaled_calls')
+        .attr('tabindex', 0)
+        .classed('selected', true)
+        .attr('aria-selected', true);
+      d3.select('button#tab_top_calls')
+        .attr('tabindex', -1)
+        .classed('selected', null)
+        .attr('aria-selected', false);
+      d3.select('#state_footnote_scaled').attr('hidden', null);
+
+      const mapSection = d3.select('div#state_map_section');
+      mapSection
+        .select('div#state_map')
+        .select('svg')
+        .selectAll('path')
+        .attr('fill', (d: Feature) => {
+          const stateResult = statesResults.find((state) => state.id === d.id);
+          const stateTotal = stateResult ? stateResult.total : 0;
+          return scaledColorScale(
+            (stateTotal / getPopulation(d.id)) * scaledPopDenominator
+          );
+        });
+      mapSection
+        .select('h2.detail_title')
+        .html(
+          `Calls per ${scaledPopDenominator.toLocaleString()} people, ${duration}`
+        );
+      mapSection
+        .select('div.description')
+        .html(
+          `Calls per ${scaledPopDenominator.toLocaleString()} people by state. ` +
+            `Select a state in the dropdown for more details below.`
+        );
+      d3.select('div#state_map_key_box')
+        .select('div.title')
+        .html(
+          `Calls per ${scaledPopDenominator.toLocaleString()} people per state*`
+        );
+      d3.select('div#state_map_key')
+        .select('svg#total')
+        .style('display', 'none');
+      d3.select('div#state_map_key')
+        .select('svg#scaled')
+        .style('display', null);
+      d3.select('div#state_map_key').select('ol').style('display', 'none');
+
+      if (selectedState) {
+        const state_node = mapSection
+          .select(`path#state_${selectedState}`)
+          .node();
+        const state_feature = data.find((s) => s.id === selectedState);
+        const state_name = state_feature
+          ? state_feature.properties!.name
+          : 'Unknown';
+        const state_results = statesResults.find((s) => s.id === selectedState);
+        const total_calls = state_results ? state_results.total : 0;
+        const scaledCalls = Math.round(
+          (total_calls / getPopulation(selectedState)) * scaledPopDenominator
+        );
+        drawStateLabel(
+          state_node,
+          state_name,
+          `${scaledCalls.toLocaleString()} call${scaledCalls == 1 ? '' : 's'} per ` +
+            `${scaledPopDenominator.toLocaleString()} people`,
+          deselectState
+        );
+      }
+    };
+
+    // Toggles between the three map tabs on arrow events.
+    // TODO: Put map tabs into an array like other tabs to make this logic cleaner.
     const handleMapTabEvent = (event: KeyboardEvent) => {
       if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') {
-        if (event.target.id === 'tab_top_calls') {
-          totalCallsPerStateClicked();
-          document.getElementById('tab_total_calls')?.focus();
-        } else {
+        if (
+          (event.target.id === 'tab_top_calls' && event.key === 'ArrowRight') ||
+          (event.target.id === 'tab_total_calls' && event.key === 'ArrowLeft')
+        ) {
+          scaledCallsPerStateClicked();
+          document.getElementById('tab_scaled_calls')?.focus();
+        } else if (
+          (event.target.id === 'tab_total_calls' &&
+            event.key === 'ArrowRight') ||
+          (event.target.id === 'tab_scaled_calls' && event.key === 'ArrowLeft')
+        ) {
           topCallPerStateClicked();
           document.getElementById('tab_top_calls')?.focus();
+        } else {
+          totalCallsPerStateClicked();
+          document.getElementById('tab_total_calls')?.focus();
         }
       }
     };
@@ -657,6 +811,9 @@ const drawUsaMap = (
       .on('keydown', handleMapTabEvent);
     d3.select('button#tab_total_calls')
       .on('click', totalCallsPerStateClicked)
+      .on('keydown', handleMapTabEvent);
+    d3.select('button#tab_scaled_calls')
+      .on('click', scaledCallsPerStateClicked)
       .on('keydown', handleMapTabEvent);
 
     let selectedState: string | null = null;
@@ -755,6 +912,18 @@ const drawUsaMap = (
         );
       if (d3.select('button#tab_top_calls').attr('aria-selected') == 'true') {
         drawStateLabel(state_node, state_name, topIssue.name, deselectState);
+      } else if (
+        d3.select('button#tab_scaled_calls').attr('aria-selected') == 'true'
+      ) {
+        const scaledCalls = Math.round(
+          (total_calls / getPopulation(state)) * scaledPopDenominator
+        );
+        drawStateLabel(
+          state_node,
+          state_name,
+          `${scaledCalls.toLocaleString()} calls per ${scaledPopDenominator.toLocaleString()} people`,
+          deselectState
+        );
       } else {
         drawStateLabel(
           state_node,
@@ -800,6 +969,9 @@ const drawUsaMap = (
         if (initialState !== null) {
           selectState(initialState);
         }
+        // Track the state over which the pointer went down. If the pointer
+        // goes up on the same state it went down on, that's a click.
+        let pointerDownState: string = '';
         d3.select(this)
           .on('pointerover', function (event: Event, d) {
             if (selectedState === d.id) {
@@ -816,8 +988,14 @@ const drawUsaMap = (
               );
             }
           })
-          .on('click', function (event: Event, d: Feature) {
-            selectState(d.id);
+          .on('pointerdown', function (event: Event, d: Feature) {
+            pointerDownState = d.id;
+          })
+          .on('pointerup', function (event: Event, d: Feature) {
+            if (pointerDownState === d.id) {
+              selectState(d.id);
+            }
+            pointerDownState = '';
           })
           .on('pointerout', function (event: Event, d: Feature) {
             const state = d3.select(this);
@@ -857,6 +1035,10 @@ const drawUsaMap = (
       }
     }
   });
+};
+
+const inBeeswarmRange = (count: number): boolean => {
+  return count >= MIN_FOR_BEESWARM && count <= MAX_FOR_BEESWARM;
 };
 
 const drawRepsPane = (
@@ -943,7 +1125,7 @@ const drawRepsPane = (
     .attr('class', 'description')
     .html(() => {
       let text = ''; //`The most-called issues for ${repData.repInfo.name} ${duration} from 5 Calls.`;
-      if (repData.total >= MIN_FOR_BEESWARM) {
+      if (inBeeswarmRange(repData.total)) {
         text += ' Select a call count to see it highlighted below.';
       }
       return text;
@@ -959,7 +1141,7 @@ const drawRepsPane = (
     duration,
     issueColor,
     repData.total,
-    repData.total >= MIN_FOR_BEESWARM
+    inBeeswarmRange(repData.total)
   );
 
   const pieSize = 80;
@@ -1041,7 +1223,7 @@ const drawRepsPane = (
 
   // Draw beeswarm async so that it doesn't block rendering.
   window.setTimeout(() => {
-    if (repData.total >= MIN_FOR_BEESWARM) {
+    if (inBeeswarmRange(repData.total)) {
       repData.beeswarm = beeswarmForce()
         .y(300)
         .x((e: BeeswarmCallCount) => beeswarmScale(new Date(e.time * 1000))) // seconds since epoch --> ms
@@ -1230,7 +1412,7 @@ const drawBeeswarm = (
   const description = parentDiv
     .append('div')
     .attr('class', 'description')
-    .attr('hidden', repData.total < MIN_FOR_BEESWARM ? true : null);
+    .attr('hidden', !inBeeswarmRange(repData.total) ? true : null);
 
   description
     .append('h2')
@@ -1387,7 +1569,7 @@ const drawBeeswarm = (
     .style('margin-bottom', '1.5rem')
     .style('overflow', 'visible');
 
-  if (repData.total < MIN_FOR_BEESWARM) {
+  if (!inBeeswarmRange(repData.total)) {
     // Skip drawing beeswarm.
     svg.attr('width', 0).attr('height', 0).attr('hidden', true);
     return;
@@ -1645,7 +1827,7 @@ class Dashboard extends React.Component<null, State> {
       // USA summary data required to show dashboard.
       return;
     }
-    const repsData = processRepsData(repsSummaryData);
+    const repsData = processRepsData(repsSummaryData, MAX_FOR_BEESWARM);
 
     // Set the state, which will cause rendering to happen.
     this.setState({

@@ -1,4 +1,5 @@
 import {
+  getPopulation,
   getTopIssueData,
   getUsaMapKeyData,
   processRepsData
@@ -9,7 +10,7 @@ import { UserContactEventType } from '../common/models/contactEvent';
 
 describe('processRepsData', () => {
   it('should return an empty array when given null', () => {
-    const result = processRepsData(null);
+    const result = processRepsData(null, /* maxForBeeswarm= */ 50);
     expect(result).toEqual([]);
   });
 
@@ -47,7 +48,7 @@ describe('processRepsData', () => {
       ]
     };
 
-    const result = processRepsData(repsSummaryData);
+    const result = processRepsData(repsSummaryData, /* maxForBeeswarm= */ 50);
 
     expect(result.length).toBe(1);
     const repData = result[0];
@@ -62,6 +63,57 @@ describe('processRepsData', () => {
     expect(repData.callResults.filter((c) => c.issue_id == 1).length).toBe(3);
     expect(repData.callResults.filter((c) => c.issue_id == 2).length).toBe(5);
     expect(repData.callResults.filter((c) => c.issue_id == 3).length).toBe(2);
+  });
+
+  it('should not expand when too many calls', () => {
+    const repsSummaryData: RepsSummaryData = {
+      reps: [
+        {
+          id: 'rep1',
+          name: 'Test Rep 1',
+          party: 'independent',
+          phone: '123-456-7890',
+          photoURL: 'http://example.com/rep1.jpg',
+          area: 'US House',
+          state: 'CA'
+        }
+      ],
+      repsData: [
+        {
+          id: 'rep1',
+          total: 10,
+          outcomes: [
+            { result: UserContactEventType.VOICEMAIL, count: 5 },
+            { result: UserContactEventType.CONTACT, count: 3 },
+            { result: UserContactEventType.UNAVAILABLE, count: 2 }
+          ],
+          topIssues: [],
+          aggregatedResults: [
+            { issue_id: 1, count: 2, time: 1000 },
+            { issue_id: 2, count: 4, time: 1000 },
+            { issue_id: 1, count: 1, time: 1001 },
+            { issue_id: 2, count: 1, time: 1001 },
+            { issue_id: 3, count: 2, time: 1002 }
+          ]
+        }
+      ]
+    };
+
+    const result = processRepsData(repsSummaryData, /* maxForBeeswarm= */ 5);
+
+    expect(result.length).toBe(1);
+    const repData = result[0];
+    expect(repData.id).toBe('rep1');
+    expect(repData.total).toBe(10);
+    expect(repData.percentVM).toBe(0.5);
+    expect(repData.percentContact).toBe(0.3);
+    expect(repData.percentUnavailable).toBe(0.2);
+
+    // Check call results were not expanded.
+    expect(repData.callResults.length).toBe(5);
+    expect(repData.callResults.filter((c) => c.issue_id == 1).length).toBe(2);
+    expect(repData.callResults.filter((c) => c.issue_id == 2).length).toBe(2);
+    expect(repData.callResults.filter((c) => c.issue_id == 3).length).toBe(1);
   });
 
   it('should handle a rep with no call data', () => {
@@ -80,7 +132,7 @@ describe('processRepsData', () => {
       repsData: []
     };
 
-    const result = processRepsData(repsSummaryData);
+    const result = processRepsData(repsSummaryData, /* maxForBeeswarm= */ 50);
 
     expect(result.length).toBe(1);
     const repData = result[0];
@@ -115,7 +167,7 @@ describe('processRepsData', () => {
       ]
     };
 
-    const result = processRepsData(repsSummaryData);
+    const result = processRepsData(repsSummaryData, /* maxForBeeswarm= */ 50);
 
     expect(result.length).toBe(1);
     const repData = result[0];
@@ -150,7 +202,7 @@ describe('processRepsData', () => {
       ]
     };
 
-    const result = processRepsData(repsSummaryData);
+    const result = processRepsData(repsSummaryData, /* maxForBeeswarm= */ 50);
 
     expect(result.length).toBe(1);
     const repData = result[0];
@@ -167,7 +219,7 @@ describe('processRepsData', () => {
       repsData: []
     };
 
-    const result = processRepsData(repsSummaryData);
+    const result = processRepsData(repsSummaryData, /* maxForBeeswarm= */ 50);
 
     expect(result).toEqual([]);
   });
@@ -354,5 +406,25 @@ describe('getTopIssueData', () => {
       2: 'Issue 2',
       3: 'Issue 3'
     });
+  });
+});
+
+describe('getPopulation', () => {
+  it('should get state population by ID', () => {
+    expect(getPopulation('CA')).toEqual(39355309);
+
+    // Ensure we've got all the other jurisdictions.
+    expect(getPopulation('DC')).toBeGreaterThan(1);
+    expect(getPopulation('PR')).toBeGreaterThan(1);
+    expect(getPopulation('AS')).toBeGreaterThan(1);
+    expect(getPopulation('GU')).toBeGreaterThan(1);
+    expect(getPopulation('VI')).toBeGreaterThan(1);
+  });
+
+  it('should return 1 when ID is not matched', () => {
+    // Ignore console.warn output.
+    const warnSpy = jest.spyOn(console, 'warn').mockImplementation(() => {});
+    expect(getPopulation('CAT')).toBe(1);
+    warnSpy.mockRestore();
   });
 });
