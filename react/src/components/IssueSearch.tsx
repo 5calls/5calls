@@ -159,18 +159,20 @@ const IssueSearch: React.FC<IssueSearchProps & WithLocationProps> = ({
     }
   };
 
+  const isAllPage = window.location.pathname.startsWith('/all');
+
   const getOrderedIssues = (): Issue[] => {
     const userState = locationState?.state;
     const userStateIssues = userState
       ? (state.stateIssues[userState] || []).filter(
-          (issue) => !issue.hidden && issue.active
+          (issue) => !issue.hidden && (isAllPage || issue.active)
         )
       : [];
     const nationalIssues = state.nationalIssues.filter(
       (issue) => !issue.hidden && issue.active
     );
 
-    // Return user's state issues first, then national issues (only active ones)
+    // Return user's state issues first, then national issues
     return [...userStateIssues, ...nationalIssues];
   };
 
