@@ -455,6 +455,7 @@ describe('scaledCallsPerStateString', () => {
     const result = scaledCallsPerStateString(5, 'NOT_A_STATE', 1000);
     // (5 / 1) * 1000 = 5000.0
     expect(result).toBe('5000.0 calls per 1,000 people');
+    warnSpy.mockRestore();
   });
 
   // 4. Test formatting of the denominator (thousands separator)
