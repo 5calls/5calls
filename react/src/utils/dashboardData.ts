@@ -292,4 +292,4 @@ export function scaledCallsPerStateString(
       (totalCalls / getPopulation(state)) * scaledPopDenominator * 10
     ) / 10;
   return `${scaledCalls.toFixed(1)} calls per ${scaledPopDenominator.toLocaleString()} people`;
-};
+}

@@ -431,13 +431,12 @@ describe('getPopulation', () => {
 });
 
 describe('scaledCallsPerStateString', () => {
-  
   // 1. Test a standard, predictable calculation
-  // Population of WY is 588,753. 
+  // Population of WY is 588,753.
   // (58875.3 / 588753) * 100,000 = 10,000.0
   it('calculates and formats a standard state correctly', () => {
     const result = scaledCallsPerStateString(58875.3, 'WY', 100000);
-    expect(result).toBe("10000.0 calls per 100,000 people");
+    expect(result).toBe('10000.0 calls per 100,000 people');
   });
 
   // 2. Test rounding logic (0.05 should round up to 0.1)
@@ -455,20 +454,18 @@ describe('scaledCallsPerStateString', () => {
     const warnSpy = jest.spyOn(console, 'warn').mockImplementation(() => {});
     const result = scaledCallsPerStateString(5, 'NOT_A_STATE', 1000);
     // (5 / 1) * 1000 = 5000.0
-    expect(result).toBe("5000.0 calls per 1,000 people");
+    expect(result).toBe('5000.0 calls per 1,000 people');
   });
 
   // 4. Test formatting of the denominator (thousands separator)
   it('formats the scaled population denominator with commas', () => {
     const result = scaledCallsPerStateString(10, 'AK', 1000000);
-    expect(result).toContain("1,000,000 people");
+    expect(result).toContain('1,000,000 people');
   });
 
   // 5. Test zero calls
   it('returns 0.0 for zero calls', () => {
     const result = scaledCallsPerStateString(0, 'TX', 100000);
-    expect(result).toBe("0.0 calls per 100,000 people");
+    expect(result).toBe('0.0 calls per 100,000 people');
   });
 });
-
-
