@@ -279,3 +279,17 @@ export function getPopulation(id: string): number {
   // We will usually divide by population. Make sure to return something!
   return 1;
 }
+
+// Converts the total number of calls into a string representing the calls
+// per population for the given `state`, rounded to one decimal place.
+export function scaledCallsPerStateString(
+  totalCalls: number,
+  state: string,
+  scaledPopDenominator: number
+): string {
+  const scaledCalls =
+    Math.round(
+      (totalCalls / getPopulation(state)) * scaledPopDenominator * 10
+    ) / 10;
+  return `${scaledCalls.toFixed(1)} calls per ${scaledPopDenominator.toLocaleString()} people`;
+};
