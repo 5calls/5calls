@@ -499,6 +499,15 @@ const drawUsaMap = (
           type: 'Polygon',
           coordinates: [[]]
         }
+      },
+      {
+        type: 'Feature',
+        id: 'MP',
+        properties: { name: 'Northern Mariana Islands' },
+        geometry: {
+          type: 'Polygon',
+          coordinates: [[]]
+        }
       }
     ];
     data.push(...territories);
