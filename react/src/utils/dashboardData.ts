@@ -243,6 +243,7 @@ const POPULATION_DATA: { [key: string]: number } = {
   MN: 5830405,
   MS: 2954160,
   MO: 6270541,
+  MP: 50946,
   MT: 1144694,
   NE: 2018006,
   NV: 3282188,
