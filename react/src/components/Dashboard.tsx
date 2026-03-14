@@ -17,7 +17,8 @@ import {
   getPopulation,
   getTopIssueData,
   getUsaMapKeyData,
-  processRepsData
+  processRepsData,
+  scaledCallsPerStateString
 } from '../utils/dashboardData';
 
 // Dashboard state.
@@ -562,13 +563,15 @@ const drawUsaMap = (
       }, 0) * SCALED_POP_DENOMINATOR;
     let scaledPopDenominator = SCALED_POP_DENOMINATOR;
     // If call counts are too low, scale up the denominator!
+    // It should be a multiple of 10.
     if (maxScaledTotal != 0) {
       while (maxScaledTotal < 10) {
         scaledPopDenominator *= 10;
         maxScaledTotal *= 10;
       }
     }
-    maxScaledTotal = Math.ceil(maxScaledTotal / 10) * 10;
+    // The maximum color on the scale is a round number: multiple of 5.
+    maxScaledTotal = Math.ceil(maxScaledTotal / 5) * 5;
     // Use colors linearly around `purple`
     const minScaledColor = '#d7d1de';
     const maxScaledColor = '#6319a8';
@@ -769,14 +772,14 @@ const drawUsaMap = (
           : 'Unknown';
         const state_results = statesResults.find((s) => s.id === selectedState);
         const total_calls = state_results ? state_results.total : 0;
-        const scaledCalls = Math.round(
-          (total_calls / getPopulation(selectedState)) * scaledPopDenominator
-        );
         drawStateLabel(
           state_node,
           state_name,
-          `${scaledCalls.toLocaleString()} call${scaledCalls == 1 ? '' : 's'} per ` +
-            `${scaledPopDenominator.toLocaleString()} people`,
+          scaledCallsPerStateString(
+            total_calls,
+            selectedState,
+            scaledPopDenominator
+          ),
           deselectState
         );
       }
@@ -805,16 +808,6 @@ const drawUsaMap = (
         }
       }
     };
-
-    d3.select('button#tab_top_calls')
-      .on('click', topCallPerStateClicked)
-      .on('keydown', handleMapTabEvent);
-    d3.select('button#tab_total_calls')
-      .on('click', totalCallsPerStateClicked)
-      .on('keydown', handleMapTabEvent);
-    d3.select('button#tab_scaled_calls')
-      .on('click', scaledCallsPerStateClicked)
-      .on('keydown', handleMapTabEvent);
 
     let selectedState: string | null = null;
     const width = 630;
@@ -915,13 +908,10 @@ const drawUsaMap = (
       } else if (
         d3.select('button#tab_scaled_calls').attr('aria-selected') == 'true'
       ) {
-        const scaledCalls = Math.round(
-          (total_calls / getPopulation(state)) * scaledPopDenominator
-        );
         drawStateLabel(
           state_node,
           state_name,
-          `${scaledCalls.toLocaleString()} calls per ${scaledPopDenominator.toLocaleString()} people`,
+          scaledCallsPerStateString(total_calls, state, scaledPopDenominator),
           deselectState
         );
       } else {
@@ -966,6 +956,18 @@ const drawUsaMap = (
         return defaultColor;
       })
       .on('end', function () {
+        // After animation ends, can set interaction listeners. If they go off in the
+        // middle of the animation it won't complete.
+        d3.select('button#tab_top_calls')
+          .on('click', topCallPerStateClicked)
+          .on('keydown', handleMapTabEvent);
+        d3.select('button#tab_total_calls')
+          .on('click', totalCallsPerStateClicked)
+          .on('keydown', handleMapTabEvent);
+        d3.select('button#tab_scaled_calls')
+          .on('click', scaledCallsPerStateClicked)
+          .on('keydown', handleMapTabEvent);
+
         if (initialState !== null) {
           selectState(initialState);
         }
