@@ -1,0 +1,26 @@
+{
+  "short_name": "5 Calls",
+  "name": "5 Calls",
+  "icons": [
+    {
+      "src": "/img/fav/android-icon-192x192.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "/img/fav/android-icon-512x512.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ],
+  "start_url": "/",
+  "display": "standalone",
+  "prefer_related_applications": true,
+  "related_applications": [
+      {
+      "platform": "play",
+      "url": "https://play.google.com/store/apps/details?id=org.a5calls.android.a5calls",
+      "id": "org.a5calls.android.a5calls"
+      }
+  ]
+}
