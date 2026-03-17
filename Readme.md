@@ -1,6 +1,6 @@
 # 5 Calls
 
-## how the site works
+## How the site works
 
 Pages on the site are static files built with hugo. This makes things speedy to load and cheap to host.
 We make certain sections of the site dynamic by injecting small react components that handle ~1 task. Components are:
@@ -13,31 +13,61 @@ We make certain sections of the site dynamic by injecting small react components
 
 Our goal is to keep the pages fast, publish the info that people read first statically in html so it renders ~immediately and then load any dynamic content in small components on the page afterwards.
 
-## building
+## Building and running the app
 
-- [Install hugo](https://gohugo.io/installation/) if not already installed
- 
-  - `yarn build-js` will build the react components and move the js files into the hugo directories 1x
+### Prerequisites
 
-**For development:**
-- start hugo with `hugo server`
-- move to react folder with `cd react`
-  - make sure yarn is up-to-date with `yarn`
- 
-- Build the react components:
-  - For development, run `yarn build-js:dev` to rebuild on every change.The hugo server should automatically reload changes after a few seconds. If you are still not seeing your changes try a hard reload (shift+cmd+r).
-- Fetch the current 5 Calls content
-  - `yarn build-content` will fetch the latest topics and build hugo content files in the right place
-- Build and deploy hugo
-  - `hugo` will build the site and content, placing the final built site in `public/`
+- [Install hugo](https://gohugo.io/installation/) if not already installed.
+  - Hugo is a static site generator that builds the HTML pages from markdown content and templates
+- [Install yarn](https://yarnpkg.com/getting-started/install) if not already installed. Update it to the latest version with:
+  ```
+  yarn install
+  ```
+
+### For development
+
+First, fetch the latest content (from `/react` directory, run once initially):
+```
+cd react
+yarn build-content
+```
+This fetches the latest topics and builds hugo content files.
+
+Then, run these commands in parallel (in separate terminal windows/tabs):
+
+1. **Start Hugo server** (from root directory):
+   ```
+   hugo server
+   ```
+
+2. **Build React components** (from `/react` directory):
+   ```
+   cd react
+   yarn build-js:dev
+   ```
+   This watches for changes and rebuilds the React components automatically.
+
+3. **Run the development server** (from `/react` directory):
+   ```
+   cd react
+   yarn start
+   ```
+
+### Viewing the site
+- Open http://localhost:1313 (from hugo server)
+
+The hugo server will automatically reload changes after a few seconds. If you're not seeing your changes, try a hard reload (shift+cmd+r).
+
+### Production build
+- `hugo` will build the site and content, placing the final built site in `public/`
 
 This happens automatically for production via netlify but you will have to run manually for local installs.
 
-## deployment
+## Deployment
 
 New versions are deployed to netlify automatically from `main`
 
-## archived content
+## Archived content
 
 The content archives are not updated each build but with a separate `yarn build-archives` command. This content is then committed to the repo, unlike the active content.
 
