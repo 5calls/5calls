@@ -7,5 +7,5 @@ title = "5 Calls"
 [params]
   description = "Spend 5 minutes. Make 5 calls. Make your voice heard."
 [permalinks]
-  done = "/issue/:filename/done/"
-  issue = "/issue/:filename/"
+  done = "/issue/:contentbasename/done/"
+  issue = "/issue/:contentbasename/"
