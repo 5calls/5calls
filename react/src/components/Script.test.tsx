@@ -303,7 +303,7 @@ describe('Script Component', () => {
         expect(result).toBe('Hello Governor Bob Johnson.');
       });
 
-      it('should handle StateLower area', () => {
+      it('should handle StateLower area with default Representative title', () => {
         const stateLowerContact = { ...mockContact, area: 'StateLower' };
         const script = 'Hello [REP/SEN NAME].';
         const result = scriptInstance!.scriptFormat(
@@ -312,7 +312,33 @@ describe('Script Component', () => {
           stateLowerContact
         );
 
-        expect(result).toBe('Hello Legislator John Smith.');
+        expect(result).toBe('Hello Representative John Smith.');
+      });
+
+      it('should use Delegate for StateLower in MD, VA, WV', () => {
+        const script = 'Hello [REP/SEN NAME].';
+        for (const state of ['MD', 'VA', 'WV']) {
+          const contact = { ...mockContact, area: 'StateLower', state };
+          const result = scriptInstance!.scriptFormat(
+            script,
+            mockLocationState,
+            contact
+          );
+          expect(result).toBe('Hello Delegate John Smith.');
+        }
+      });
+
+      it('should use Assembly Member for StateLower in CA, NY, NV', () => {
+        const script = 'Hello [REP/SEN NAME].';
+        for (const state of ['CA', 'NY', 'NV']) {
+          const contact = { ...mockContact, area: 'StateLower', state };
+          const result = scriptInstance!.scriptFormat(
+            script,
+            mockLocationState,
+            contact
+          );
+          expect(result).toBe('Hello Assembly Member John Smith.');
+        }
       });
 
       it('should handle StateUpper area', () => {
@@ -324,7 +350,7 @@ describe('Script Component', () => {
           stateUpperContact
         );
 
-        expect(result).toBe('Hello Legislator John Smith.');
+        expect(result).toBe('Hello Senator John Smith.');
       });
 
       it('should handle AttorneysGeneral area', () => {
