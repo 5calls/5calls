@@ -303,7 +303,7 @@ describe('Script Component', () => {
         expect(result).toBe('Hello Governor Bob Johnson.');
       });
 
-      it('should handle StateLower area with default Representative title', () => {
+      it('should handle StateLower area with default State Representative title', () => {
         const stateLowerContact = { ...mockContact, area: 'StateLower' };
         const script = 'Hello [REP/SEN NAME].';
         const result = scriptInstance!.scriptFormat(
@@ -312,7 +312,7 @@ describe('Script Component', () => {
           stateLowerContact
         );
 
-        expect(result).toBe('Hello Representative John Smith.');
+        expect(result).toBe('Hello State Representative John Smith.');
       });
 
       it('should use Delegate for StateLower in MD, VA, WV', () => {
@@ -350,7 +350,7 @@ describe('Script Component', () => {
           stateUpperContact
         );
 
-        expect(result).toBe('Hello Senator John Smith.');
+        expect(result).toBe('Hello State Senator John Smith.');
       });
 
       it('should handle AttorneysGeneral area', () => {
