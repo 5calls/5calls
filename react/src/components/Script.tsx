@@ -54,8 +54,6 @@ class Script extends React.Component<WithLocationProps, State> {
       default:
         title = '';
     }
-    console.log('xxxcontact', contact)
-    console.log('xxxtitle', title)
     return title + contact.name;
   };
 
