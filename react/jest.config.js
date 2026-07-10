@@ -3,5 +3,6 @@ module.exports = {
   testEnvironment: 'jsdom',
   moduleNameMapper: {
     '\\.(css|less|scss|sass)$': 'identity-obj-proxy',
+    '^d3$': '<rootDir>/node_modules/d3/dist/d3.min.js',
   },
 };

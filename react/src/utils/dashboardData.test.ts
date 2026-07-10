@@ -3,7 +3,14 @@ import {
   getTopIssueData,
   getUsaMapKeyData,
   processRepsData,
-  scaledCallsPerStateString
+  scaledCallsPerStateString,
+  getDistrictId,
+  calculateToneProperties,
+  beeswarmForce,
+  TONE_SELECTED_FREQUENCY,
+  TONE_UNSELECTED_FREQUENCY,
+  TONE_SELECTED_GAIN,
+  TONE_UNSELECTED_GAIN
 } from './dashboardData';
 import { RepsSummaryData, RegionSummaryData, UsaSummaryData } from './api';
 import { Feature } from 'geojson';
@@ -468,5 +475,114 @@ describe('scaledCallsPerStateString', () => {
   it('returns 0.0 for zero calls', () => {
     const result = scaledCallsPerStateString(0, 'TX', 100000);
     expect(result).toBe('0.0 calls per 100,000 people');
+  });
+});
+
+// Simple mock storage for testing getDistrictId
+class MockStorage implements Storage {
+  private store: Record<string, string> = {};
+
+  get length() {
+    return Object.keys(this.store).length;
+  }
+
+  clear() {
+    this.store = {};
+  }
+
+  getItem(key: string): string | null {
+    return this.store[key] || null;
+  }
+
+  key(index: number): string | null {
+    return Object.keys(this.store)[index] || null;
+  }
+
+  removeItem(key: string) {
+    delete this.store[key];
+  }
+
+  setItem(key: string, value: string) {
+    this.store[key] = String(value);
+  }
+}
+
+describe('getDistrictId', () => {
+  let mockStorage: MockStorage;
+
+  beforeEach(() => {
+    mockStorage = new MockStorage();
+  });
+
+  it('should retrieve district from URL if it is valid (4 or 5 characters)', () => {
+    const urlParams = new URLSearchParams('?district=CA-12');
+    const result = getDistrictId(urlParams, mockStorage);
+    expect(result).toBe('CA-12');
+  });
+
+  it('should fallback to storage if URL district is missing', () => {
+    mockStorage.setItem('district', 'TX-21');
+    const urlParams = new URLSearchParams('?other=abc');
+    const result = getDistrictId(urlParams, mockStorage);
+    expect(result).toBe('TX-21');
+  });
+
+  it('should fallback to storage if URL district is invalid length', () => {
+    mockStorage.setItem('district', 'TX-21');
+    const urlParamsLong = new URLSearchParams('?district=INVALID_DISTRICT');
+    const resultLong = getDistrictId(urlParamsLong, mockStorage);
+    expect(resultLong).toBe('TX-21');
+
+    const urlParamsShort = new URLSearchParams('?district=CA');
+    const resultShort = getDistrictId(urlParamsShort, mockStorage);
+    expect(resultShort).toBe('TX-21');
+  });
+
+  it('should return null if both URL and storage districts are missing', () => {
+    const urlParams = new URLSearchParams('');
+    const result = getDistrictId(urlParams, mockStorage);
+    expect(result).toBeNull();
+  });
+});
+
+describe('calculateToneProperties', () => {
+  it('should return higher frequency and gain when selected', () => {
+    const result = calculateToneProperties(300, true, 600, 10);
+    expect(result.frequency).toBe(TONE_SELECTED_FREQUENCY);
+    expect(result.gain).toBe(TONE_SELECTED_GAIN);
+    // Math: (300 / 600) * 10 seconds = 5 seconds offset
+    expect(result.offsetSeconds).toBe(5);
+  });
+
+  it('should return lower frequency and gain when not selected', () => {
+    const result = calculateToneProperties(150, false, 600, 10);
+    expect(result.frequency).toBe(TONE_UNSELECTED_FREQUENCY);
+    expect(result.gain).toBe(TONE_UNSELECTED_GAIN);
+    // Math: (150 / 600) * 10 seconds = 2.5 seconds offset
+    expect(result.offsetSeconds).toBe(2.5);
+  });
+});
+
+describe('beeswarmForce', () => {
+  it('should create force simulation entries with x/y coordinate mappings', () => {
+    interface TestData {
+      val: number;
+      weight: number;
+    }
+    const data: TestData[] = [
+      { val: 10, weight: 5 },
+      { val: 20, weight: 5 }
+    ];
+
+    const swarm = beeswarmForce<TestData>()
+      .x((d) => d.val)
+      .y(() => 50)
+      .r((d) => d.weight);
+
+    const result = swarm(data);
+    expect(result.length).toBe(2);
+    expect(result[0].data).toEqual(data[0]);
+    expect(typeof result[0].x).toBe('number');
+    expect(typeof result[0].y).toBe('number');
   });
 });

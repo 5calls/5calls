@@ -18,7 +18,10 @@ import {
   getTopIssueData,
   getUsaMapKeyData,
   processRepsData,
-  scaledCallsPerStateString
+  scaledCallsPerStateString,
+  getDistrictId,
+  calculateToneProperties,
+  beeswarmForce
 } from '../utils/dashboardData';
 
 // Dashboard state.
@@ -756,7 +759,7 @@ const drawUsaMap = (
         .select('div.description')
         .html(
           `Calls per ${scaledPopDenominator.toLocaleString()} people by state. ` +
-            `Select a state in the dropdown for more details below.`
+          `Select a state in the dropdown for more details below.`
         );
       d3.select('div#state_map_key_box')
         .select('div.title')
@@ -1106,7 +1109,7 @@ const drawRepsPane = (
   if (repData.repInfo.party && repData.repInfo.party.length > 0) {
     nameSubtitle += ` (${repData.repInfo.party[0]}-${
       repData.repInfo.area === 'US House' ? district : repData.repInfo.state
-    })`;
+      })`;
   } else {
     nameSubtitle += ` (${repData.repInfo.state})`;
   }
@@ -1342,9 +1345,9 @@ const drawRepsPane = (
         if (selectedIssueId !== d.issue_id) {
           repData.beeswarm.forEach(
             (b) =>
-              (b.data.selected =
-                b.data.issue_id === selectedIssueId ||
-                b.data.issue_id === d.issue_id)
+            (b.data.selected =
+              b.data.issue_id === selectedIssueId ||
+              b.data.issue_id === d.issue_id)
           );
           d3.select(this)
             .classed('selected', true)
@@ -1415,7 +1418,7 @@ const drawBeeswarm = (
   parentDiv: d3.Selection,
   repData: ExpandedRepData,
   beeswarmScale: d3.ScaleTime<number, number>,
-  issueIdToName: { [x: string]: any; [x: number]: string },
+  issueIdToName: { [x: string]: any;[x: number]: string },
   issueColor: d3.ScaleOrdinal<number, string>,
   duration: string
 ) => {
@@ -1653,57 +1656,7 @@ const drawBeeswarm = (
         .ticks(d3.timeDay)
         .tickFormat(d3.timeFormat('%a %-d'))
     );
-};
-
-// `beeswarmForce` is from
-// https://observablehq.com/@harrystevens/force-directed-beeswarm.
-// ChatGPT helped with the typescript typing.
-function beeswarmForce<T>() {
-  let x: (d: T) => number = (d) => (d as any)[0];
-  let y: (d: T) => number = (d) => (d as any)[1];
-  let r: (d: T) => number = (d) => (d as any)[2];
-  let ticks = 300;
-
-  function beeswarm(data: T[]) {
-    const entries: BeeswarmNode<T>[] = data.map((d) => ({
-      x0: typeof x === 'function' ? x(d) : x,
-      y0: typeof y === 'function' ? y(d) : y,
-      r: typeof r === 'function' ? r(d) : r,
-      x: 0,
-      y: 0,
-      data: d
-    }));
-
-    const simulation = d3
-      .forceSimulation(entries)
-      .force(
-        'x',
-        d3.forceX<BeeswarmNode<T>>((d: BeeswarmNode<T>) => d.x0)
-      )
-      .force(
-        'y',
-        d3.forceY<BeeswarmNode<T>>((d: BeeswarmNode<T>) => d.y0)
-      )
-      .force(
-        'collide',
-        d3.forceCollide<BeeswarmNode<T>>((d: BeeswarmNode<T>) => d.r)
-      );
-
-    for (let i = 0; i < ticks; i++) simulation.tick();
-
-    return entries;
-  }
-
-  beeswarm.x = (f?: (d: T) => number) => (f ? ((x = f), beeswarm) : x);
-  beeswarm.y = (f?: (d: T) => number) => (f ? ((y = f), beeswarm) : y);
-  beeswarm.r = (f?: (d: T) => number) => (f ? ((r = f), beeswarm) : r);
-  beeswarm.ticks = (n?: number) =>
-    typeof n === 'number' ? ((ticks = n), beeswarm) : ticks;
-
-  return beeswarm;
-}
-
-/* ---- End beeswarm methods ---- */
+};/* ---- End beeswarm methods ---- */
 
 /* ---- Sonification methods ---- */
 // Thanks ChatGPT for the help with sonification.
@@ -1755,11 +1708,13 @@ const playData = (
     if (item.x < 0) {
       continue;
     }
-    const timeOffsetSeconds =
-      (item.x / BEESWARM_TARGET_WIDTH) * SONFICATION_DURATION; // x0 is the preferred offset, x is where it is rendered.
-    const freq = item.data.selected ? 523.25 : 261.63; // Middle C if not, the higher C if so.
-    const gain = item.data.selected ? 0.2 : 0.1;
-    playTone(context, freq, gain, timeOffsetSeconds);
+    const { frequency, gain, offsetSeconds } = calculateToneProperties(
+      item.x, // x0 is the preferred offset, x is where it is rendered.
+      item.data.selected,
+      BEESWARM_TARGET_WIDTH,
+      SONFICATION_DURATION
+    );
+    playTone(context, frequency, gain, offsetSeconds);
   }
   beeswarmScale.ticks().forEach((tick: number) => {
     playTone(context, 212, 0.1, beeswarmScale(tick) / 85);
@@ -1797,21 +1752,11 @@ class Dashboard extends React.Component<null, State> {
     });
   }
 
-  getDistrictId = () => {
-    const urlParams = new URLSearchParams(window.location.search);
-    if (urlParams.has(Constants.LOCAL_STORAGE_KEYS.DISTRICT)) {
-      // Override from URL parameter if present.
-      const urlDistrict = urlParams.get(Constants.LOCAL_STORAGE_KEYS.DISTRICT);
-      // Validate length, although not the actual code.
-      if (urlDistrict && (urlDistrict.length == 4 || urlDistrict.length == 5)) {
-        return urlDistrict;
-      }
-    }
-    return localStorage.getItem(Constants.LOCAL_STORAGE_KEYS.DISTRICT);
-  };
-
   async requestDashboardData() {
-    let districtId = this.getDistrictId();
+    let districtId = getDistrictId(
+      new URLSearchParams(window.location.search),
+      window.localStorage
+    );
 
     let usaSummaryData = null;
     let repsSummaryData = null;
