@@ -8,6 +8,7 @@ import {
   UsaSummaryData
 } from './api';
 import { Feature } from 'geojson';
+import * as Constants from '../common/constants';
 
 //
 // Data processing utilities for the Dashboard.
@@ -293,4 +294,97 @@ export function scaledCallsPerStateString(
       (totalCalls / getPopulation(state)) * scaledPopDenominator * 10
     ) / 10;
   return `${scaledCalls.toFixed(1)} calls per ${scaledPopDenominator.toLocaleString()} people`;
+}
+
+/**
+ * Retrieves the congressional district ID from URL parameters,
+ * falling back to storage if unavailable or invalid.
+ */
+export function getDistrictId(
+  urlParams: URLSearchParams,
+  storage: Storage | null
+): string | null {
+  const key = Constants.LOCAL_STORAGE_KEYS.DISTRICT;
+  if (urlParams.has(key)) {
+    const urlDistrict = urlParams.get(key);
+    if (urlDistrict && (urlDistrict.length === 4 || urlDistrict.length === 5)) {
+      return urlDistrict;
+    }
+  }
+  return storage ? storage.getItem(key) : null;
+}
+
+export const TONE_UNSELECTED_FREQUENCY = 261.63; // Middle C
+export const TONE_SELECTED_FREQUENCY = 523.25; // The next higher C
+export const TONE_SELECTED_GAIN = 0.2;
+export const TONE_UNSELECTED_GAIN = 0.1;
+
+/**
+ * Computes frequency, gain, and time offset (in seconds) for a sonification
+ * tone based on the node's position and selection state.
+ */
+export function calculateToneProperties(
+  x: number,
+  isSelected: boolean,
+  beeswarmTargetWidth: number,
+  sonificationDurationS: number
+): { frequency: number; gain: number; offsetSeconds: number } {
+  const offsetSeconds = (x / beeswarmTargetWidth) * sonificationDurationS;
+  const frequency = isSelected
+    ? TONE_SELECTED_FREQUENCY
+    : TONE_UNSELECTED_FREQUENCY;
+  const gain = isSelected ? TONE_SELECTED_GAIN : TONE_UNSELECTED_GAIN;
+  return { frequency, gain, offsetSeconds };
+}
+
+/**
+ * Generates a force-directed layout for a beeswarm plot,
+ * mapping dataset points to calculated nodes.
+ *
+ * `beeswarmForce` is from https://observablehq.com/@harrystevens/force-directed-beeswarm,
+ * with modifications for typescript.
+ */
+export function beeswarmForce<T>() {
+  let x: (d: T) => number = (d) => (d as any)[0];
+  let y: (d: T) => number = (d) => (d as any)[1];
+  let r: (d: T) => number = (d) => (d as any)[2];
+  let ticks = 300;
+
+  function beeswarm(data: T[]) {
+    const entries: BeeswarmNode<T>[] = data.map((d) => ({
+      x0: typeof x === 'function' ? x(d) : x,
+      y0: typeof y === 'function' ? y(d) : y,
+      r: typeof r === 'function' ? r(d) : r,
+      x: 0,
+      y: 0,
+      data: d
+    }));
+
+    const simulation = d3
+      .forceSimulation(entries)
+      .force(
+        'x',
+        d3.forceX<BeeswarmNode<T>>((d: BeeswarmNode<T>) => d.x0)
+      )
+      .force(
+        'y',
+        d3.forceY<BeeswarmNode<T>>((d: BeeswarmNode<T>) => d.y0)
+      )
+      .force(
+        'collide',
+        d3.forceCollide<BeeswarmNode<T>>((d: BeeswarmNode<T>) => d.r)
+      );
+
+    for (let i = 0; i < ticks; i++) simulation.tick();
+
+    return entries;
+  }
+
+  beeswarm.x = (f?: (d: T) => number) => (f ? ((x = f), beeswarm) : x);
+  beeswarm.y = (f?: (d: T) => number) => (f ? ((y = f), beeswarm) : y);
+  beeswarm.r = (f?: (d: T) => number) => (f ? ((r = f), beeswarm) : r);
+  beeswarm.ticks = (n?: number) =>
+    typeof n === 'number' ? ((ticks = n), beeswarm) : ticks;
+
+  return beeswarm;
 }
