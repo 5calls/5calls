@@ -4,6 +4,7 @@ import '@testing-library/jest-dom';
 import fs from 'fs';
 import path from 'path';
 import * as d3 from 'd3';
+import { Feature } from 'geojson';
 import Dashboard from './Dashboard';
 import {
   getUsaSummary,
