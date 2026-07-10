@@ -759,7 +759,7 @@ const drawUsaMap = (
         .select('div.description')
         .html(
           `Calls per ${scaledPopDenominator.toLocaleString()} people by state. ` +
-          `Select a state in the dropdown for more details below.`
+            `Select a state in the dropdown for more details below.`
         );
       d3.select('div#state_map_key_box')
         .select('div.title')
@@ -1109,7 +1109,7 @@ const drawRepsPane = (
   if (repData.repInfo.party && repData.repInfo.party.length > 0) {
     nameSubtitle += ` (${repData.repInfo.party[0]}-${
       repData.repInfo.area === 'US House' ? district : repData.repInfo.state
-      })`;
+    })`;
   } else {
     nameSubtitle += ` (${repData.repInfo.state})`;
   }
@@ -1345,9 +1345,9 @@ const drawRepsPane = (
         if (selectedIssueId !== d.issue_id) {
           repData.beeswarm.forEach(
             (b) =>
-            (b.data.selected =
-              b.data.issue_id === selectedIssueId ||
-              b.data.issue_id === d.issue_id)
+              (b.data.selected =
+                b.data.issue_id === selectedIssueId ||
+                b.data.issue_id === d.issue_id)
           );
           d3.select(this)
             .classed('selected', true)
@@ -1418,7 +1418,7 @@ const drawBeeswarm = (
   parentDiv: d3.Selection,
   repData: ExpandedRepData,
   beeswarmScale: d3.ScaleTime<number, number>,
-  issueIdToName: { [x: string]: any;[x: number]: string },
+  issueIdToName: { [x: string]: any; [x: number]: string },
   issueColor: d3.ScaleOrdinal<number, string>,
   duration: string
 ) => {
@@ -1656,7 +1656,7 @@ const drawBeeswarm = (
         .ticks(d3.timeDay)
         .tickFormat(d3.timeFormat('%a %-d'))
     );
-};/* ---- End beeswarm methods ---- */
+}; /* ---- End beeswarm methods ---- */
 
 /* ---- Sonification methods ---- */
 // Thanks ChatGPT for the help with sonification.

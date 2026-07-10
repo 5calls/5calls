@@ -314,8 +314,8 @@ export function getDistrictId(
   return storage ? storage.getItem(key) : null;
 }
 
-export const TONE_UNSELECTED_FREQUENCY = 261.63;  // Middle C
-export const TONE_SELECTED_FREQUENCY = 523.25;  // The next higher C
+export const TONE_UNSELECTED_FREQUENCY = 261.63; // Middle C
+export const TONE_SELECTED_FREQUENCY = 523.25; // The next higher C
 export const TONE_SELECTED_GAIN = 0.2;
 export const TONE_UNSELECTED_GAIN = 0.1;
 
@@ -330,7 +330,9 @@ export function calculateToneProperties(
   sonificationDurationS: number
 ): { frequency: number; gain: number; offsetSeconds: number } {
   const offsetSeconds = (x / beeswarmTargetWidth) * sonificationDurationS;
-  const frequency = isSelected ? TONE_SELECTED_FREQUENCY : TONE_UNSELECTED_FREQUENCY;
+  const frequency = isSelected
+    ? TONE_SELECTED_FREQUENCY
+    : TONE_UNSELECTED_FREQUENCY;
   const gain = isSelected ? TONE_SELECTED_GAIN : TONE_UNSELECTED_GAIN;
   return { frequency, gain, offsetSeconds };
 }
@@ -338,7 +340,7 @@ export function calculateToneProperties(
 /**
  * Generates a force-directed layout for a beeswarm plot,
  * mapping dataset points to calculated nodes.
- * 
+ *
  * `beeswarmForce` is from https://observablehq.com/@harrystevens/force-directed-beeswarm,
  * with modifications for typescript.
  */
