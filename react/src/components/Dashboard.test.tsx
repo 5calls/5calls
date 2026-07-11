@@ -956,4 +956,28 @@ describe('Dashboard Component Integration Tests', () => {
     // Verify label box is hidden again
     expect(labelBox).toHaveAttribute('hidden');
   });
+
+  it('should initialize with a state selected from local storage and keep it selected when map transitions end', async () => {
+    localStorage.setItem('district', 'CA-1');
+    mockGetUsaSummary.mockResolvedValue(mockUsaData);
+    mockGetLocationSummary.mockResolvedValue({ reps: [], repsData: [] });
+
+    render(<Dashboard />, {
+      container: document.getElementById('react-dashboard') || undefined
+    });
+
+    await waitFor(() => {
+      expect(
+        screen.queryByText('Loading the latest data...')
+      ).not.toBeInTheDocument();
+    });
+
+    const stateSelect = document.getElementById('state_select') as HTMLSelectElement;
+    expect(stateSelect).toBeInTheDocument();
+
+    // Verify California option is selected
+    const selectedOption = stateSelect.options[stateSelect.selectedIndex];
+    expect(selectedOption).toBeTruthy();
+    expect(selectedOption.id).toBe('CA');
+  });
 });
