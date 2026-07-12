@@ -887,4 +887,54 @@ describe('Dashboard Component Integration Tests', () => {
     expect(selectedOption).toBeTruthy();
     expect(selectedOption.id).toBe('CA');
   });
+
+  it('should expand/collapse issue rows only with valid activation events (Enter, Space, or Click) and ignore other keys', async () => {
+    mockGetUsaSummary.mockResolvedValue(mockUsaData);
+    await renderDashboard();
+
+    const topIssuesList = document.getElementById('top_five_all_holder')!;
+    expect(topIssuesList).toBeInTheDocument();
+
+    const firstRow = topIssuesList.children[0] as HTMLElement;
+    const issueBtn = firstRow.querySelector('button.issue_name')!;
+    const rowDetail = firstRow.querySelector('.row_detail')!;
+
+    // Initial state: collapsed
+    expect(issueBtn).toHaveAttribute('aria-expanded', 'false');
+    expect(rowDetail).toHaveAttribute('aria-hidden', 'true');
+
+    // 1. Try to trigger with an invalid key event (e.g., 'a' or ArrowRight)
+    fireEvent.keyDown(issueBtn, { key: 'a', code: 'KeyA' });
+    expect(issueBtn).toHaveAttribute('aria-expanded', 'false');
+    expect(rowDetail).toHaveAttribute('aria-hidden', 'true');
+
+    fireEvent.keyDown(issueBtn, { key: 'ArrowRight', code: 'ArrowRight' });
+    expect(issueBtn).toHaveAttribute('aria-expanded', 'false');
+    expect(rowDetail).toHaveAttribute('aria-hidden', 'true');
+
+    // 2. Trigger with 'Enter' key event
+    fireEvent.keyDown(issueBtn, { key: 'Enter', code: 'Enter' });
+    expect(issueBtn).toHaveAttribute('aria-expanded', 'true');
+    expect(rowDetail).toHaveAttribute('aria-hidden', 'false');
+
+    // 3. Try to collapse with an invalid key event (e.g. Escape)
+    fireEvent.keyDown(issueBtn, { key: 'Escape', code: 'Escape' });
+    expect(issueBtn).toHaveAttribute('aria-expanded', 'true');
+    expect(rowDetail).toHaveAttribute('aria-hidden', 'false');
+
+    // 4. Trigger collapse with ' ' (Space) key event
+    fireEvent.keyDown(issueBtn, { key: ' ', code: 'Space' });
+    expect(issueBtn).toHaveAttribute('aria-expanded', 'false');
+    expect(rowDetail).toHaveAttribute('aria-hidden', 'true');
+
+    // 5. Trigger expand with Click event
+    fireEvent.click(issueBtn);
+    expect(issueBtn).toHaveAttribute('aria-expanded', 'true');
+    expect(rowDetail).toHaveAttribute('aria-hidden', 'false');
+
+    // 6. Trigger collapse with Click event
+    fireEvent.click(issueBtn);
+    expect(issueBtn).toHaveAttribute('aria-expanded', 'false');
+    expect(rowDetail).toHaveAttribute('aria-hidden', 'true');
+  });
 });

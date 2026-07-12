@@ -231,15 +231,8 @@ const drawTopFiveIssues = (
     .attr('id', (d: IssueCountData) => `issue_row_${sectionId}_${d.issue_id}`);
 
   const collapseIssueRow = (event: Event, d: IssueCountData) => {
-    if (event instanceof KeyboardEvent) {
-      if (
-        (event.key === ' ' || event.key === 'Enter') &&
-        event.target === this
-      ) {
-        event.preventDefault();
-      } else {
-        return;
-      }
+    if (!isValidActivation(event)) {
+      return;
     }
     const row = d3.select(`li#top_five_${sectionId}_${d.issue_id}`);
     row
@@ -263,15 +256,8 @@ const drawTopFiveIssues = (
   };
 
   const expandIssueRow = (event: Event, d: IssueCountData) => {
-    if (event instanceof KeyboardEvent) {
-      if (
-        (event.key === ' ' || event.key === 'Enter') &&
-        event.target === this
-      ) {
-        event.preventDefault();
-      } else {
-        return;
-      }
+    if (!isValidActivation(event)) {
+      return;
     }
     const row = d3.select(`li#top_five_${sectionId}_${d.issue_id}`);
     row
@@ -718,7 +704,6 @@ const drawUsaMap = (
           state_issues && state_issues.length > 0
             ? state_issues[0]
             : { name: 'No recorded calls' };
-        console.error('draw state label');
         drawStateLabel(state_node, state_name, topIssue.name, deselectState);
       }
     };
@@ -798,26 +783,17 @@ const drawUsaMap = (
     };
 
     // Toggles between the three map tabs on arrow events.
-    // TODO: Put map tabs into an array like other tabs to make this logic cleaner.
+    const map_tabs = [
+      { id: 'top_calls', clickFn: topCallPerStateClicked },
+      { id: 'scaled_calls', clickFn: scaledCallsPerStateClicked },
+      { id: 'total_calls', clickFn: totalCallsPerStateClicked }
+    ];
+
     const handleMapTabEvent = (event: KeyboardEvent) => {
-      if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') {
-        if (
-          (event.target.id === 'tab_top_calls' && event.key === 'ArrowRight') ||
-          (event.target.id === 'tab_total_calls' && event.key === 'ArrowLeft')
-        ) {
-          scaledCallsPerStateClicked();
-          document.getElementById('tab_scaled_calls')?.focus();
-        } else if (
-          (event.target.id === 'tab_total_calls' &&
-            event.key === 'ArrowRight') ||
-          (event.target.id === 'tab_scaled_calls' && event.key === 'ArrowLeft')
-        ) {
-          topCallPerStateClicked();
-          document.getElementById('tab_top_calls')?.focus();
-        } else {
-          totalCallsPerStateClicked();
-          document.getElementById('tab_total_calls')?.focus();
-        }
+      const targetId = (event.currentTarget as HTMLElement).id;
+      const currentIndex = map_tabs.findIndex((t) => `tab_${t.id}` === targetId);
+      if (currentIndex !== -1) {
+        handleTabKeydown(event, map_tabs, currentIndex, (e, tab) => tab.clickFn());
       }
     };
 
@@ -1265,16 +1241,10 @@ const drawRepsPane = (
     );
 
     const onIssueSelected = function (event: Event, d: IssueCountData) {
-      if (event instanceof KeyboardEvent) {
-        if (
-          (event.key === ' ' || event.key === 'Enter') &&
-          event.target === this
-        ) {
-          event.preventDefault();
-        } else {
-          return;
-        }
-      } else if (event.target === this) {
+      if (!isValidActivation(event)) {
+        return;
+      }
+      if (!(event instanceof KeyboardEvent) && event.target === event.currentTarget) {
         event.stopPropagation();
       }
       if (selectedIssueId === d.issue_id) {
@@ -1727,6 +1697,44 @@ const playData = (
 
 /* ---- End sonification methods ---- */
 
+const isValidActivation = (event: Event): boolean => {
+  if (event instanceof KeyboardEvent) {
+    if (
+      (event.key === ' ' || event.key === 'Enter') &&
+      event.target === event.currentTarget
+    ) {
+      event.preventDefault();
+      return true;
+    }
+    return false;
+  }
+  // True for all non-keyboard events (mouse events).
+  return true;
+};
+
+interface TabItem {
+  id: string;
+}
+
+const handleTabKeydown = <T extends TabItem>(
+  event: KeyboardEvent,
+  tabs: T[],
+  currentIndex: number,
+  onSelect: (event: KeyboardEvent, tab: T) => void
+) => {
+  if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') {
+    // Find the next or previous tab
+    const increment = event.key === 'ArrowLeft' ? -1 : 1;
+    const nextIndex = (currentIndex + increment + tabs.length) % tabs.length;
+    const nextTab = tabs[nextIndex];
+    onSelect(event, nextTab);
+
+    // Focus the new tab
+    const buttonNode = d3.select(`button#tab_${nextTab.id}`).node() as HTMLElement | null;
+    buttonNode?.focus();
+  }
+};
+
 class Dashboard extends React.Component<null, State> {
   _defaultUsa: RegionSummaryData = {
     id: 'usa',
@@ -1949,15 +1957,7 @@ class Dashboard extends React.Component<null, State> {
       .attr('class', (t: TabData) => (t.selected ? 'selected' : null))
       .html((t: TabData) => t.name)
       .on('keydown', function (event: KeyboardEvent, t: TabData) {
-        if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') {
-          const increment = event.key === 'ArrowLeft' ? -1 : 1;
-          // Find the next or prev tab
-          const nextIndex =
-            (t.index + increment + top_tabs.length) % top_tabs.length;
-          const nextTab = top_tabs[nextIndex];
-          handleTopNavClick(event, nextTab);
-          d3.select(`button#tab_${nextTab.id}`).node().focus();
-        }
+        handleTabKeydown(event, top_tabs, t.index, (e, tab) => handleTopNavClick(e, tab));
       });
     topNavButtons.on('click', handleTopNavClick);
 
@@ -1980,15 +1980,7 @@ class Dashboard extends React.Component<null, State> {
           .attr('id', (t: TabData) => `tab_${t.id}`)
           .attr('class', (t: TabData) => (t.selected ? 'selected' : null))
           .on('keydown', function (event: KeyboardEvent, t: TabData) {
-            if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') {
-              const increment = event.key === 'ArrowLeft' ? -1 : 1;
-              const nextIndex =
-                (t.index + increment + tabs.length) % tabs.length;
-              // Find the next or prev tab
-              const nextTab = tabs[nextIndex];
-              handleRepTabClick(event, nextTab);
-              d3.select(`button#tab_${nextTab.id}`).node().focus();
-            }
+            handleTabKeydown(event, tabs, t.index, (e, tab) => handleRepTabClick(e, tab));
           });
         d3.selectAll('div.dashboard_card').style('display', 'none');
         d3.select(`div#card_${newTab.id}.dashboard_card`).style(
