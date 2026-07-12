@@ -4,7 +4,6 @@ import '@testing-library/jest-dom';
 import fs from 'fs';
 import path from 'path';
 import * as d3 from 'd3';
-import { Feature } from 'geojson';
 import Dashboard from './Dashboard';
 import {
   getUsaSummary,
@@ -189,19 +188,18 @@ describe('Dashboard Component Integration Tests', () => {
     jest
       .spyOn(d3.selection.prototype as any, 'transition')
       .mockImplementation(function (this: any) {
-        const transitionObj = this;
-        transitionObj.delay = () => transitionObj;
-        transitionObj.duration = () => transitionObj;
-        transitionObj.ease = () => transitionObj;
-        transitionObj.on = (event: string, callback: any) => {
+        this.delay = () => this;
+        this.duration = () => this;
+        this.ease = () => this;
+        this.on = (event: string, callback: any) => {
           if (event === 'end') {
-            transitionObj.each(function (this: any) {
+            this.each(function (this: any) {
               callback.call(this);
             });
           }
-          return transitionObj;
+          return this;
         };
-        return transitionObj;
+        return this;
       });
   });
 
@@ -315,22 +313,22 @@ describe('Dashboard Component Integration Tests', () => {
         buttons.filter((btn) => btn !== nextBtn)
       );
     }
- 
+
     // Focus on the last tab
     buttons[buttons.length - 1].focus();
     expect(document.activeElement).toBe(buttons[buttons.length - 1]);
- 
+
     // Press backward arrow key through each tab backwards
     for (let i = buttons.length - 1; i >= 0; i--) {
       const currentBtn = buttons[i];
       const prevIndex = (i - 1 + buttons.length) % buttons.length;
       const prevBtn = buttons[prevIndex];
- 
+
       fireEvent.keyDown(currentBtn, {
         key: directionBackward,
         code: directionBackward
       });
- 
+
       expect(document.activeElement).toBe(prevBtn);
       verifyActiveTabState(
         prevBtn,
@@ -879,7 +877,9 @@ describe('Dashboard Component Integration Tests', () => {
 
     await renderDashboard();
 
-    const stateSelect = document.getElementById('state_select') as HTMLSelectElement;
+    const stateSelect = document.getElementById(
+      'state_select'
+    ) as HTMLSelectElement;
     expect(stateSelect).toBeInTheDocument();
 
     // Verify California option is selected
