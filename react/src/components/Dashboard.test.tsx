@@ -310,38 +310,32 @@ describe('Dashboard Component Integration Tests', () => {
       });
 
       expect(document.activeElement).toBe(nextBtn);
-      expect(nextBtn).toHaveClass('selected');
-      expect(nextBtn).toHaveAttribute('aria-selected', 'true');
-      expect(nextBtn).toHaveAttribute('tabindex', '0');
-
-      expect(currentBtn).not.toHaveClass('selected');
-      expect(currentBtn).toHaveAttribute('aria-selected', 'false');
-      expect(currentBtn).toHaveAttribute('tabindex', '-1');
+      verifyActiveTabState(
+        nextBtn,
+        buttons.filter((btn) => btn !== nextBtn)
+      );
     }
-
+ 
     // Focus on the last tab
     buttons[buttons.length - 1].focus();
     expect(document.activeElement).toBe(buttons[buttons.length - 1]);
-
+ 
     // Press backward arrow key through each tab backwards
     for (let i = buttons.length - 1; i >= 0; i--) {
       const currentBtn = buttons[i];
       const prevIndex = (i - 1 + buttons.length) % buttons.length;
       const prevBtn = buttons[prevIndex];
-
+ 
       fireEvent.keyDown(currentBtn, {
         key: directionBackward,
         code: directionBackward
       });
-
+ 
       expect(document.activeElement).toBe(prevBtn);
-      expect(prevBtn).toHaveClass('selected');
-      expect(prevBtn).toHaveAttribute('aria-selected', 'true');
-      expect(prevBtn).toHaveAttribute('tabindex', '0');
-
-      expect(currentBtn).not.toHaveClass('selected');
-      expect(currentBtn).toHaveAttribute('aria-selected', 'false');
-      expect(currentBtn).toHaveAttribute('tabindex', '-1');
+      verifyActiveTabState(
+        prevBtn,
+        buttons.filter((btn) => btn !== prevBtn)
+      );
     }
   };
 
@@ -357,6 +351,17 @@ describe('Dashboard Component Integration Tests', () => {
       expect(el).not.toHaveClass('selected');
       expect(el).toHaveAttribute('aria-selected', 'false');
       expect(el).toHaveAttribute('tabindex', '-1');
+    });
+  };
+
+  const renderDashboard = async () => {
+    render(<Dashboard />, {
+      container: document.getElementById('react-dashboard') || undefined
+    });
+    await waitFor(() => {
+      expect(
+        screen.queryByText('Loading the latest data...')
+      ).not.toBeInTheDocument();
     });
   };
 
@@ -385,19 +390,10 @@ describe('Dashboard Component Integration Tests', () => {
 
   it('should render the Nationwide tab by default when USA summary loads and there is no reps data', async () => {
     mockGetUsaSummary.mockResolvedValue(mockUsaData);
+    await renderDashboard();
 
-    render(<Dashboard />, {
-      container: document.getElementById('react-dashboard') || undefined
-    });
-
-    // Wait for loading to finish and verify that Nationwide view is populated
-    await waitFor(() => {
-      expect(
-        screen.queryByText('Loading the latest data...')
-      ).not.toBeInTheDocument();
-      const totalAll = document.getElementById('total_all');
-      expect(totalAll).toHaveTextContent('1,500');
-    });
+    const totalAll = document.getElementById('total_all');
+    expect(totalAll).toHaveTextContent('1,500');
 
     // Verify "Nationwide" button tab is selected and has the correct state/classes
     const nationwideTabButton = document.getElementById('tab_usa')!;
@@ -423,17 +419,7 @@ describe('Dashboard Component Integration Tests', () => {
 
   it('should switch to the "Your Reps" tab and show the location picker if clicked and reps data is missing', async () => {
     mockGetUsaSummary.mockResolvedValue(mockUsaData);
-
-    render(<Dashboard />, {
-      container: document.getElementById('react-dashboard') || undefined
-    });
-
-    // Wait for the component to resolve loading state
-    await waitFor(() => {
-      expect(
-        screen.queryByText('Loading the latest data...')
-      ).not.toBeInTheDocument();
-    });
+    await renderDashboard();
 
     // Verify "Your Reps" tab button is found and click it
     const repsTabButton = document.getElementById('tab_your_reps');
@@ -459,19 +445,9 @@ describe('Dashboard Component Integration Tests', () => {
     expect(locationError).toHaveAttribute('hidden');
   });
 
-  it('should switch tabs and update aria attributes using ArrowRight and ArrowLeft keys', async () => {
+  it('should switch top tabs and update aria attributes using arrow keys', async () => {
     mockGetUsaSummary.mockResolvedValue(mockUsaData);
-
-    render(<Dashboard />, {
-      container: document.getElementById('react-dashboard') || undefined
-    });
-
-    // Wait for the component to resolve loading state
-    await waitFor(() => {
-      expect(
-        screen.queryByText('Loading the latest data...')
-      ).not.toBeInTheDocument();
-    });
+    await renderDashboard();
 
     verifyKeyboardTabNavigation(['tab_usa', 'tab_your_reps']);
   });
@@ -526,18 +502,9 @@ describe('Dashboard Component Integration Tests', () => {
     mockGetUsaSummary.mockResolvedValue(mockUsaData);
     mockGetLocationSummary.mockResolvedValue(mockRepsData);
 
-    render(<Dashboard />, {
-      container: document.getElementById('react-dashboard') || undefined
-    });
-
-    // Wait for the component to resolve loading state
-    await waitFor(() => {
-      expect(
-        screen.queryByText('Loading the latest data...')
-      ).not.toBeInTheDocument();
-      // The reps card should be in the DOM
-      expect(document.getElementById('card_rep-123')).toBeInTheDocument();
-    });
+    await renderDashboard();
+    // The reps card should be in the DOM
+    expect(document.getElementById('card_rep-123')).toBeInTheDocument();
 
     // Verify "Your Reps" button tab is selected by default in the top navigation
     const repsTabButton = document.getElementById('tab_your_reps')!;
@@ -568,16 +535,7 @@ describe('Dashboard Component Integration Tests', () => {
 
   it('should render the top issues list correctly and support expanding/collapsing details for Nationwide calls', async () => {
     mockGetUsaSummary.mockResolvedValue(mockUsaData);
-
-    render(<Dashboard />, {
-      container: document.getElementById('react-dashboard') || undefined
-    });
-
-    await waitFor(() => {
-      expect(
-        screen.queryByText('Loading the latest data...')
-      ).not.toBeInTheDocument();
-    });
+    await renderDashboard();
 
     verifyTopIssuesList(
       'top_five_all_holder',
@@ -608,16 +566,8 @@ describe('Dashboard Component Integration Tests', () => {
     mockGetUsaSummary.mockResolvedValue(mockUsaData);
     mockGetLocationSummary.mockResolvedValue(mockRepsData);
 
-    render(<Dashboard />, {
-      container: document.getElementById('react-dashboard') || undefined
-    });
-
-    await waitFor(() => {
-      expect(
-        screen.queryByText('Loading the latest data...')
-      ).not.toBeInTheDocument();
-      expect(document.getElementById('card_rep-123')).toBeInTheDocument();
-    });
+    await renderDashboard();
+    expect(document.getElementById('card_rep-123')).toBeInTheDocument();
 
     verifyTopIssuesList(
       'rep-123_top',
@@ -648,17 +598,8 @@ describe('Dashboard Component Integration Tests', () => {
     mockGetUsaSummary.mockResolvedValue(mockUsaData);
     mockGetLocationSummary.mockResolvedValue(mockRepsData);
 
-    render(<Dashboard />, {
-      container: document.getElementById('react-dashboard') || undefined
-    });
-
-    // Wait for the component to resolve loading state (which defaults to Your Reps)
-    await waitFor(() => {
-      expect(
-        screen.queryByText('Loading the latest data...')
-      ).not.toBeInTheDocument();
-      expect(document.getElementById('card_rep-123')).toBeInTheDocument();
-    });
+    await renderDashboard();
+    expect(document.getElementById('card_rep-123')).toBeInTheDocument();
 
     // Click on the Nationwide tab
     const nationwideTabButton = document.getElementById('tab_usa')!;
@@ -771,17 +712,8 @@ describe('Dashboard Component Integration Tests', () => {
     mockGetUsaSummary.mockResolvedValue(mockUsaData);
     mockGetLocationSummary.mockResolvedValue(mockThreeRepsData);
 
-    render(<Dashboard />, {
-      container: document.getElementById('react-dashboard') || undefined
-    });
-
-    // Wait for the component to resolve loading state
-    await waitFor(() => {
-      expect(
-        screen.queryByText('Loading the latest data...')
-      ).not.toBeInTheDocument();
-      expect(document.getElementById('card_rep-1')).toBeInTheDocument();
-    });
+    await renderDashboard();
+    expect(document.getElementById('card_rep-1')).toBeInTheDocument();
 
     // Verify sub-navigation buttons exist under the heading nav
     const subNav = document.getElementById('nav')!;
@@ -821,19 +753,10 @@ describe('Dashboard Component Integration Tests', () => {
 
   it('should switch map tabs and update aria attributes and DOM display using mouse clicks and keyboard arrow navigation', async () => {
     mockGetUsaSummary.mockResolvedValue(mockUsaData);
+    await renderDashboard();
 
-    render(<Dashboard />, {
-      container: document.getElementById('react-dashboard') || undefined
-    });
-
-    // Wait for Nationwide page to render by default
-    await waitFor(() => {
-      expect(
-        screen.queryByText('Loading the latest data...')
-      ).not.toBeInTheDocument();
-      const totalAll = document.getElementById('total_all');
-      expect(totalAll).toHaveTextContent('1,500');
-    });
+    const totalAll = document.getElementById('total_all');
+    expect(totalAll).toHaveTextContent('1,500');
 
     const tabTopCalls = document.getElementById('tab_top_calls')!;
     const tabScaledCalls = document.getElementById('tab_scaled_calls')!;
@@ -911,15 +834,7 @@ describe('Dashboard Component Integration Tests', () => {
     mockCreateSVGPoint.mockClear();
     mockGetScreenCTM.mockClear();
 
-    render(<Dashboard />, {
-      container: document.getElementById('react-dashboard') || undefined
-    });
-
-    await waitFor(() => {
-      expect(
-        screen.queryByText('Loading the latest data...')
-      ).not.toBeInTheDocument();
-    });
+    await renderDashboard();
 
     const pathCA = document.getElementById('state_CA')!;
     const stateTotalCard = document.getElementById('state_total_card')!;
@@ -962,15 +877,7 @@ describe('Dashboard Component Integration Tests', () => {
     mockGetUsaSummary.mockResolvedValue(mockUsaData);
     mockGetLocationSummary.mockResolvedValue({ reps: [], repsData: [] });
 
-    render(<Dashboard />, {
-      container: document.getElementById('react-dashboard') || undefined
-    });
-
-    await waitFor(() => {
-      expect(
-        screen.queryByText('Loading the latest data...')
-      ).not.toBeInTheDocument();
-    });
+    await renderDashboard();
 
     const stateSelect = document.getElementById('state_select') as HTMLSelectElement;
     expect(stateSelect).toBeInTheDocument();
