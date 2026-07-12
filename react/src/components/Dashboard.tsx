@@ -791,9 +791,13 @@ const drawUsaMap = (
 
     const handleMapTabEvent = (event: KeyboardEvent) => {
       const targetId = (event.currentTarget as HTMLElement).id;
-      const currentIndex = map_tabs.findIndex((t) => `tab_${t.id}` === targetId);
+      const currentIndex = map_tabs.findIndex(
+        (t) => `tab_${t.id}` === targetId
+      );
       if (currentIndex !== -1) {
-        handleTabKeydown(event, map_tabs, currentIndex, (e, tab) => tab.clickFn());
+        handleTabKeydown(event, map_tabs, currentIndex, (e, tab) =>
+          tab.clickFn()
+        );
       }
     };
 
@@ -1244,7 +1248,10 @@ const drawRepsPane = (
       if (!isValidActivation(event)) {
         return;
       }
-      if (!(event instanceof KeyboardEvent) && event.target === event.currentTarget) {
+      if (
+        !(event instanceof KeyboardEvent) &&
+        event.target === event.currentTarget
+      ) {
         event.stopPropagation();
       }
       if (selectedIssueId === d.issue_id) {
@@ -1730,7 +1737,9 @@ const handleTabKeydown = <T extends TabItem>(
     onSelect(event, nextTab);
 
     // Focus the new tab
-    const buttonNode = d3.select(`button#tab_${nextTab.id}`).node() as HTMLElement | null;
+    const buttonNode = d3
+      .select(`button#tab_${nextTab.id}`)
+      .node() as HTMLElement | null;
     buttonNode?.focus();
   }
 };
@@ -1957,7 +1966,9 @@ class Dashboard extends React.Component<null, State> {
       .attr('class', (t: TabData) => (t.selected ? 'selected' : null))
       .html((t: TabData) => t.name)
       .on('keydown', function (event: KeyboardEvent, t: TabData) {
-        handleTabKeydown(event, top_tabs, t.index, (e, tab) => handleTopNavClick(e, tab));
+        handleTabKeydown(event, top_tabs, t.index, (e, tab) =>
+          handleTopNavClick(e, tab)
+        );
       });
     topNavButtons.on('click', handleTopNavClick);
 
@@ -1980,7 +1991,9 @@ class Dashboard extends React.Component<null, State> {
           .attr('id', (t: TabData) => `tab_${t.id}`)
           .attr('class', (t: TabData) => (t.selected ? 'selected' : null))
           .on('keydown', function (event: KeyboardEvent, t: TabData) {
-            handleTabKeydown(event, tabs, t.index, (e, tab) => handleRepTabClick(e, tab));
+            handleTabKeydown(event, tabs, t.index, (e, tab) =>
+              handleRepTabClick(e, tab)
+            );
           });
         d3.selectAll('div.dashboard_card').style('display', 'none');
         d3.select(`div#card_${newTab.id}.dashboard_card`).style(
