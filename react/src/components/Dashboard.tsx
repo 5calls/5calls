@@ -822,6 +822,7 @@ const drawUsaMap = (
     };
 
     let selectedState: string | null = null;
+    let initialSelected = false;
     const width = 630;
     const height = 400;
     const svg = d3
@@ -980,7 +981,8 @@ const drawUsaMap = (
           .on('click', scaledCallsPerStateClicked)
           .on('keydown', handleMapTabEvent);
 
-        if (initialState !== null) {
+        if (initialState !== null && !initialSelected) {
+          initialSelected = true;
           selectState(initialState);
         }
         // Track the state over which the pointer went down. If the pointer
@@ -1902,9 +1904,6 @@ class Dashboard extends React.Component<null, State> {
           // Draw it the first time it is needed.
           // TODO: Check with PR, DC that this works as expected.
           let initialState: string | null = null;
-          const district = localStorage.getItem(
-            Constants.LOCAL_STORAGE_KEYS.DISTRICT
-          );
           if (district && district.length > 0) {
             initialState = district.split('-')[0];
           }
