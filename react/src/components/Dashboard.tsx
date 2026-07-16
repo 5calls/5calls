@@ -52,10 +52,10 @@ const SCALED_POP_DENOMINATOR = 10000;
 const MAP_TABS = {
   TOP_CALLS: 'top_calls',
   SCALED_CALLS: 'scaled_calls',
-  TOTAL_CALLS: 'total_calls',
+  TOTAL_CALLS: 'total_calls'
 } as const;
 
-type MapTabMode = typeof MAP_TABS[keyof typeof MAP_TABS];
+type MapTabMode = (typeof MAP_TABS)[keyof typeof MAP_TABS];
 
 const drawStateLabel = (
   parentState: SVGGraphicsElement,
@@ -601,7 +601,10 @@ const drawUsaMap = (
           .attr('aria-selected', id === mode);
       });
 
-      d3.select('#state_footnote_scaled').attr('hidden', mode === MAP_TABS.SCALED_CALLS ? null : true);
+      d3.select('#state_footnote_scaled').attr(
+        'hidden',
+        mode === MAP_TABS.SCALED_CALLS ? null : true
+      );
 
       const mapSection = d3.select('div#state_map_section');
       switch (mode) {
@@ -611,7 +614,9 @@ const drawUsaMap = (
             .select('svg')
             .selectAll('path')
             .attr('fill', (d: Feature) => {
-              const stateResult = statesResults.find((state) => state.id === d.id);
+              const stateResult = statesResults.find(
+                (state) => state.id === d.id
+              );
               const stateTotal = stateResult ? stateResult.total : 0;
               return totalColorScale(stateTotal);
             });
@@ -626,7 +631,9 @@ const drawUsaMap = (
           d3.select('div#state_map_key_box')
             .select('div.title')
             .html('Total calls per state*');
-          d3.select('div#state_map_key').select('svg#total').style('display', null);
+          d3.select('div#state_map_key')
+            .select('svg#total')
+            .style('display', null);
           d3.select('div#state_map_key')
             .select('svg#scaled')
             .style('display', 'none');
@@ -650,7 +657,9 @@ const drawUsaMap = (
             .select('svg')
             .selectAll('path')
             .attr('fill', (d: Feature) => {
-              const stateResult = statesResults.find((state) => state.id === d.id);
+              const stateResult = statesResults.find(
+                (state) => state.id === d.id
+              );
               const stateTopIssues = stateResult ? stateResult.issueCounts : [];
               if (stateTopIssues && stateTopIssues.length > 0) {
                 return issueColor(stateTopIssues[0].issue_id);
@@ -673,7 +682,9 @@ const drawUsaMap = (
             .select('svg')
             .selectAll('path')
             .attr('fill', (d: Feature) => {
-              const stateResult = statesResults.find((state) => state.id === d.id);
+              const stateResult = statesResults.find(
+                (state) => state.id === d.id
+              );
               const stateTotal = stateResult ? stateResult.total : 0;
               return scaledColorScale(
                 (stateTotal / getPopulation(d.id)) * scaledPopDenominator
@@ -726,13 +737,14 @@ const drawUsaMap = (
           case MAP_TABS.TOTAL_CALLS:
             labelText = `${total_calls.toLocaleString()} call${total_calls == 1 ? '' : 's'}`;
             break;
-          case MAP_TABS.TOP_CALLS:
+          case MAP_TABS.TOP_CALLS: {
             const topIssue =
               state_issues && state_issues.length > 0
                 ? state_issues[0]
                 : { name: 'No recorded calls' };
             labelText = topIssue.name;
             break;
+          }
           case MAP_TABS.SCALED_CALLS:
             labelText = scaledCallsPerStateString(
               total_calls,
@@ -744,20 +756,24 @@ const drawUsaMap = (
             console.error(`Unhandled map tab mode: ${mode}`);
             break;
         }
-        drawStateLabel(
-          state_node,
-          state_name,
-          labelText,
-          deselectState
-        );
+        drawStateLabel(state_node, state_name, labelText, deselectState);
       }
     };
 
     // Toggles between the three map tabs on arrow events.
     const map_tabs = [
-      { id: MAP_TABS.TOP_CALLS, clickFn: () => mapTabClicked(MAP_TABS.TOP_CALLS) },
-      { id: MAP_TABS.SCALED_CALLS, clickFn: () => mapTabClicked(MAP_TABS.SCALED_CALLS) },
-      { id: MAP_TABS.TOTAL_CALLS, clickFn: () => mapTabClicked(MAP_TABS.TOTAL_CALLS) }
+      {
+        id: MAP_TABS.TOP_CALLS,
+        clickFn: () => mapTabClicked(MAP_TABS.TOP_CALLS)
+      },
+      {
+        id: MAP_TABS.SCALED_CALLS,
+        clickFn: () => mapTabClicked(MAP_TABS.SCALED_CALLS)
+      },
+      {
+        id: MAP_TABS.TOTAL_CALLS,
+        clickFn: () => mapTabClicked(MAP_TABS.TOTAL_CALLS)
+      }
     ];
 
     const handleMapTabEvent = (event: KeyboardEvent) => {
@@ -873,7 +889,11 @@ const drawUsaMap = (
           labelText = topIssue.name;
           break;
         case MAP_TABS.SCALED_CALLS:
-          labelText = scaledCallsPerStateString(total_calls, state, scaledPopDenominator);
+          labelText = scaledCallsPerStateString(
+            total_calls,
+            state,
+            scaledPopDenominator
+          );
           break;
         case MAP_TABS.TOTAL_CALLS:
           labelText = `${total_calls.toLocaleString()} calls`;
