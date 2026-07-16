@@ -49,6 +49,14 @@ const BEESWARM_TARGET_WIDTH = 600;
 const SONFICATION_DURATION = 7; // In seconds.
 const SCALED_POP_DENOMINATOR = 10000;
 
+const MAP_TABS = {
+  TOP_CALLS: 'top_calls',
+  SCALED_CALLS: 'scaled_calls',
+  TOTAL_CALLS: 'total_calls',
+} as const;
+
+type MapTabMode = typeof MAP_TABS[keyof typeof MAP_TABS];
+
 const drawStateLabel = (
   parentState: SVGGraphicsElement,
   stateName: string,
@@ -581,46 +589,125 @@ const drawUsaMap = (
       `per ${scaledPopDenominator.toLocaleString()}`
     );
 
-    const totalCallsPerStateClicked = () => {
-      d3.select('button#tab_top_calls')
-        .attr('tabindex', -1)
-        .classed('selected', null)
-        .attr('aria-selected', false);
-      d3.select('button#tab_scaled_calls')
-        .attr('tabindex', -1)
-        .classed('selected', null)
-        .attr('aria-selected', false);
-      d3.select('button#tab_total_calls')
-        .attr('tabindex', 0)
-        .classed('selected', true)
-        .attr('aria-selected', true);
-      d3.select('#state_footnote_scaled').attr('hidden', true);
+    let activeMapTab: MapTabMode = MAP_TABS.TOP_CALLS;
+
+    const mapTabClicked = (mode: MapTabMode) => {
+      activeMapTab = mode;
+
+      Object.values(MAP_TABS).forEach((id) => {
+        d3.select(`button#tab_${id}`)
+          .attr('tabindex', id === mode ? 0 : -1)
+          .classed('selected', id === mode)
+          .attr('aria-selected', id === mode);
+      });
+
+      d3.select('#state_footnote_scaled').attr('hidden', mode === MAP_TABS.SCALED_CALLS ? null : true);
+
       const mapSection = d3.select('div#state_map_section');
-      mapSection
-        .select('div#state_map')
-        .select('svg')
-        .selectAll('path')
-        .attr('fill', (d: Feature) => {
-          const stateResult = statesResults.find((state) => state.id === d.id);
-          const stateTotal = stateResult ? stateResult.total : 0;
-          return totalColorScale(stateTotal);
-        });
-      mapSection
-        .select('h2.detail_title')
-        .html(`Total calls per state, ${duration}`);
-      mapSection
-        .select('div.description')
-        .html(
-          'The number of calls by state. Select a state in the dropdown for more details below.'
-        );
-      d3.select('div#state_map_key_box')
-        .select('div.title')
-        .html('Total calls per state*');
-      d3.select('div#state_map_key').select('svg#total').style('display', null);
-      d3.select('div#state_map_key')
-        .select('svg#scaled')
-        .style('display', 'none');
-      d3.select('div#state_map_key').select('ol').style('display', 'none');
+      switch (mode) {
+        case MAP_TABS.TOTAL_CALLS:
+          mapSection
+            .select('div#state_map')
+            .select('svg')
+            .selectAll('path')
+            .attr('fill', (d: Feature) => {
+              const stateResult = statesResults.find((state) => state.id === d.id);
+              const stateTotal = stateResult ? stateResult.total : 0;
+              return totalColorScale(stateTotal);
+            });
+          mapSection
+            .select('h2.detail_title')
+            .html(`Total calls per state, ${duration}`);
+          mapSection
+            .select('div.description')
+            .html(
+              'The number of calls by state. Select a state in the dropdown for more details below.'
+            );
+          d3.select('div#state_map_key_box')
+            .select('div.title')
+            .html('Total calls per state*');
+          d3.select('div#state_map_key').select('svg#total').style('display', null);
+          d3.select('div#state_map_key')
+            .select('svg#scaled')
+            .style('display', 'none');
+          d3.select('div#state_map_key').select('ol').style('display', 'none');
+          break;
+
+        case MAP_TABS.TOP_CALLS:
+          d3.select('div#state_map_key_box')
+            .select('div.title')
+            .html('Top Issue Per State*');
+          d3.select('div#state_map_key').select('ol').style('display', null);
+          d3.select('div#state_map_key')
+            .select('svg#total')
+            .style('display', 'none');
+          d3.select('div#state_map_key')
+            .select('svg#scaled')
+            .style('display', 'none');
+
+          mapSection
+            .select('div#state_map')
+            .select('svg')
+            .selectAll('path')
+            .attr('fill', (d: Feature) => {
+              const stateResult = statesResults.find((state) => state.id === d.id);
+              const stateTopIssues = stateResult ? stateResult.issueCounts : [];
+              if (stateTopIssues && stateTopIssues.length > 0) {
+                return issueColor(stateTopIssues[0].issue_id);
+              }
+              return defaultColor;
+            });
+          mapSection
+            .select('h2.detail_title')
+            .html(`Top issue per state, ${duration}`);
+          mapSection
+            .select('div.description')
+            .html(
+              'The most-called issue by state. Select a state in the dropdown for more details below.'
+            );
+          break;
+
+        case MAP_TABS.SCALED_CALLS:
+          mapSection
+            .select('div#state_map')
+            .select('svg')
+            .selectAll('path')
+            .attr('fill', (d: Feature) => {
+              const stateResult = statesResults.find((state) => state.id === d.id);
+              const stateTotal = stateResult ? stateResult.total : 0;
+              return scaledColorScale(
+                (stateTotal / getPopulation(d.id)) * scaledPopDenominator
+              );
+            });
+          mapSection
+            .select('h2.detail_title')
+            .html(
+              `Calls per ${scaledPopDenominator.toLocaleString()} people, ${duration}`
+            );
+          mapSection
+            .select('div.description')
+            .html(
+              `Calls per ${scaledPopDenominator.toLocaleString()} people by state. ` +
+                `Select a state in the dropdown for more details below.`
+            );
+          d3.select('div#state_map_key_box')
+            .select('div.title')
+            .html(
+              `Calls per ${scaledPopDenominator.toLocaleString()} people per state*`
+            );
+          d3.select('div#state_map_key')
+            .select('svg#total')
+            .style('display', 'none');
+          d3.select('div#state_map_key')
+            .select('svg#scaled')
+            .style('display', null);
+          d3.select('div#state_map_key').select('ol').style('display', 'none');
+          break;
+
+        default:
+          console.error(`Unhandled map tab mode: ${mode}`);
+          break;
+      }
 
       if (selectedState) {
         const state_node = mapSection
@@ -632,151 +719,35 @@ const drawUsaMap = (
           : 'Unknown';
         const state_results = statesResults.find((s) => s.id === selectedState);
         const total_calls = state_results ? state_results.total : 0;
-        drawStateLabel(
-          state_node,
-          state_name,
-          `${total_calls.toLocaleString()} call${total_calls == 1 ? '' : 's'}`,
-          deselectState
-        );
-      }
-    };
-
-    const topCallPerStateClicked = () => {
-      d3.select('button#tab_total_calls')
-        .attr('tabindex', -1)
-        .classed('selected', null)
-        .attr('aria-selected', false);
-      d3.select('button#tab_scaled_calls')
-        .attr('tabindex', -1)
-        .classed('selected', null)
-        .attr('aria-selected', false);
-      d3.select('button#tab_top_calls')
-        .attr('tabindex', 0)
-        .classed('selected', true)
-        .attr('aria-selected', true);
-      d3.select('#state_footnote_scaled').attr('hidden', true);
-
-      d3.select('div#state_map_key_box')
-        .select('div.title')
-        .html('Top Issue Per State*');
-      d3.select('div#state_map_key').select('ol').style('display', null);
-      d3.select('div#state_map_key')
-        .select('svg#total')
-        .style('display', 'none');
-      d3.select('div#state_map_key')
-        .select('svg#scaled')
-        .style('display', 'none');
-
-      const mapSection = d3.select('div#state_map_section');
-      mapSection
-        .select('div#state_map')
-        .select('svg')
-        .selectAll('path')
-        .attr('fill', (d: Feature) => {
-          const stateResult = statesResults.find((state) => state.id === d.id);
-          const stateTopIssues = stateResult ? stateResult.issueCounts : [];
-          if (stateTopIssues && stateTopIssues.length > 0) {
-            return issueColor(stateTopIssues[0].issue_id);
-          }
-          // Default grey for no calls at all.
-          return defaultColor;
-        });
-      mapSection
-        .select('h2.detail_title')
-        .html(`Top issue per state, ${duration}`);
-      mapSection
-        .select('div.description')
-        .html(
-          'The most-called issue by state. Select a state in the dropdown for more details below.'
-        );
-
-      if (selectedState) {
-        const state_node = mapSection
-          .select(`path#state_${selectedState}`)
-          .node();
-        const state_feature = data.find((s) => s.id === selectedState);
-        const state_name = state_feature
-          ? state_feature.properties!.name
-          : 'Unknown';
-        const state_results = statesResults.find((s) => s.id === selectedState);
         const state_issues = state_results ? state_results.issueCounts : [];
-        const topIssue =
-          state_issues && state_issues.length > 0
-            ? state_issues[0]
-            : { name: 'No recorded calls' };
-        drawStateLabel(state_node, state_name, topIssue.name, deselectState);
-      }
-    };
 
-    const scaledCallsPerStateClicked = () => {
-      d3.select('button#tab_total_calls')
-        .attr('tabindex', -1)
-        .classed('selected', null)
-        .attr('aria-selected', false);
-      d3.select('button#tab_scaled_calls')
-        .attr('tabindex', 0)
-        .classed('selected', true)
-        .attr('aria-selected', true);
-      d3.select('button#tab_top_calls')
-        .attr('tabindex', -1)
-        .classed('selected', null)
-        .attr('aria-selected', false);
-      d3.select('#state_footnote_scaled').attr('hidden', null);
-
-      const mapSection = d3.select('div#state_map_section');
-      mapSection
-        .select('div#state_map')
-        .select('svg')
-        .selectAll('path')
-        .attr('fill', (d: Feature) => {
-          const stateResult = statesResults.find((state) => state.id === d.id);
-          const stateTotal = stateResult ? stateResult.total : 0;
-          return scaledColorScale(
-            (stateTotal / getPopulation(d.id)) * scaledPopDenominator
-          );
-        });
-      mapSection
-        .select('h2.detail_title')
-        .html(
-          `Calls per ${scaledPopDenominator.toLocaleString()} people, ${duration}`
-        );
-      mapSection
-        .select('div.description')
-        .html(
-          `Calls per ${scaledPopDenominator.toLocaleString()} people by state. ` +
-            `Select a state in the dropdown for more details below.`
-        );
-      d3.select('div#state_map_key_box')
-        .select('div.title')
-        .html(
-          `Calls per ${scaledPopDenominator.toLocaleString()} people per state*`
-        );
-      d3.select('div#state_map_key')
-        .select('svg#total')
-        .style('display', 'none');
-      d3.select('div#state_map_key')
-        .select('svg#scaled')
-        .style('display', null);
-      d3.select('div#state_map_key').select('ol').style('display', 'none');
-
-      if (selectedState) {
-        const state_node = mapSection
-          .select(`path#state_${selectedState}`)
-          .node();
-        const state_feature = data.find((s) => s.id === selectedState);
-        const state_name = state_feature
-          ? state_feature.properties!.name
-          : 'Unknown';
-        const state_results = statesResults.find((s) => s.id === selectedState);
-        const total_calls = state_results ? state_results.total : 0;
+        let labelText = '';
+        switch (mode) {
+          case MAP_TABS.TOTAL_CALLS:
+            labelText = `${total_calls.toLocaleString()} call${total_calls == 1 ? '' : 's'}`;
+            break;
+          case MAP_TABS.TOP_CALLS:
+            const topIssue =
+              state_issues && state_issues.length > 0
+                ? state_issues[0]
+                : { name: 'No recorded calls' };
+            labelText = topIssue.name;
+            break;
+          case MAP_TABS.SCALED_CALLS:
+            labelText = scaledCallsPerStateString(
+              total_calls,
+              selectedState,
+              scaledPopDenominator
+            );
+            break;
+          default:
+            console.error(`Unhandled map tab mode: ${mode}`);
+            break;
+        }
         drawStateLabel(
           state_node,
           state_name,
-          scaledCallsPerStateString(
-            total_calls,
-            selectedState,
-            scaledPopDenominator
-          ),
+          labelText,
           deselectState
         );
       }
@@ -784,9 +755,9 @@ const drawUsaMap = (
 
     // Toggles between the three map tabs on arrow events.
     const map_tabs = [
-      { id: 'top_calls', clickFn: topCallPerStateClicked },
-      { id: 'scaled_calls', clickFn: scaledCallsPerStateClicked },
-      { id: 'total_calls', clickFn: totalCallsPerStateClicked }
+      { id: MAP_TABS.TOP_CALLS, clickFn: () => mapTabClicked(MAP_TABS.TOP_CALLS) },
+      { id: MAP_TABS.SCALED_CALLS, clickFn: () => mapTabClicked(MAP_TABS.SCALED_CALLS) },
+      { id: MAP_TABS.TOTAL_CALLS, clickFn: () => mapTabClicked(MAP_TABS.TOTAL_CALLS) }
     ];
 
     const handleMapTabEvent = (event: KeyboardEvent) => {
@@ -896,25 +867,22 @@ const drawUsaMap = (
           'title',
           `${state}'s top: ${topIssue.name}. Map showing states colored by top issue. Select a state above.`
         );
-      if (d3.select('button#tab_top_calls').attr('aria-selected') == 'true') {
-        drawStateLabel(state_node, state_name, topIssue.name, deselectState);
-      } else if (
-        d3.select('button#tab_scaled_calls').attr('aria-selected') == 'true'
-      ) {
-        drawStateLabel(
-          state_node,
-          state_name,
-          scaledCallsPerStateString(total_calls, state, scaledPopDenominator),
-          deselectState
-        );
-      } else {
-        drawStateLabel(
-          state_node,
-          state_name,
-          `${total_calls.toLocaleString()} calls`,
-          deselectState
-        );
+      let labelText = '';
+      switch (activeMapTab) {
+        case MAP_TABS.TOP_CALLS:
+          labelText = topIssue.name;
+          break;
+        case MAP_TABS.SCALED_CALLS:
+          labelText = scaledCallsPerStateString(total_calls, state, scaledPopDenominator);
+          break;
+        case MAP_TABS.TOTAL_CALLS:
+          labelText = `${total_calls.toLocaleString()} calls`;
+          break;
+        default:
+          console.error(`Unhandled map tab: ${activeMapTab}`);
+          break;
       }
+      drawStateLabel(state_node, state_name, labelText, deselectState);
       state_path
         .transition()
         .attr('stroke', selectedStateStroke)
@@ -952,13 +920,13 @@ const drawUsaMap = (
         // After animation ends, can set interaction listeners. If they go off in the
         // middle of the animation it won't complete.
         d3.select('button#tab_top_calls')
-          .on('click', topCallPerStateClicked)
+          .on('click', () => mapTabClicked(MAP_TABS.TOP_CALLS))
           .on('keydown', handleMapTabEvent);
         d3.select('button#tab_total_calls')
-          .on('click', totalCallsPerStateClicked)
+          .on('click', () => mapTabClicked(MAP_TABS.TOTAL_CALLS))
           .on('keydown', handleMapTabEvent);
         d3.select('button#tab_scaled_calls')
-          .on('click', scaledCallsPerStateClicked)
+          .on('click', () => mapTabClicked(MAP_TABS.SCALED_CALLS))
           .on('keydown', handleMapTabEvent);
 
         if (initialState !== null && !initialSelected) {
