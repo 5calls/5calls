@@ -8,18 +8,26 @@
   --leading-rem: calc(var(--leading) * 1rem);
   --paragraph-break: calc(var(--leading) * 0.75rem);
 
+  // Light theme colors (default)
+  --c-background: #ffffff;
+  --c-surface: #f5f5f5;
+  --c-text: #545555;
+  --c-text-subtle: #323232a4;
+  --c-border: rgba(84, 85, 85, 0.2);
+  --c-hover: #eeeeee;
+
   // Theme Colors
-  --c-base: #545555;
-  --c-base-subtle: #323232a4;
-  --c-xlight-base: #f5f5f5;
-  --c-red: rgb(237, 60, 29);
+  --c-base: var(--c-text);
+  --c-base-subtle: var(--c-text-subtle);
+  --c-xlight-base: var(--c-surface);
   --c-red-rgb: 237, 60, 29;
+  --c-red: rgb(var(--c-red-rgb));
   --c-red-darker: #c62b10;
   --c-red-dark-hover: #97210c;
-  --c-blue: rgb(24, 117, 209);
+  --c-blue-rgb: 24, 117, 209;
+  --c-blue: rgb(var(--c-blue-rgb));
   --c-transparent-blue: rgba(var(--c-blue-rgb), 0.15);
   --c-blue-subtle: #023e9fc1;
-  --c-blue-rgb: 24, 117, 209;
   --c-dark: rgb(2, 63, 159);
   --c-dark-hover: rgb(1, 44, 111);
   --c-dark-rgb: 2, 63, 159;
@@ -41,6 +49,19 @@
   --g-gap: 2rem;
   --radius: 3px;
 
+  // Archive icon colors
+  --c-icon-muted: rgba(var(--c-dark-rgb), 0.3);
+  --c-icon-muted-hover: rgba(var(--c-dark-rgb), 0.5);
+
+  // Form inputs
+  --c-input-background: #ffffff;
+
+  // Buttons
+  --c-button-border: #aaa;
+  --c-button-border-hover: #777;
+  --c-button-border-selected: #fff;
+  --c-button-text-selected: #fff;
+
   @media screen and (min-width: 60rem) {
     --g-gap: 3rem;
   }
@@ -50,6 +71,50 @@
   --toastify-color-error: var(--c-red);
   --toastify-color-dark: var(--c-base);
   --toastify-color-info: var(--c-blue);
+}
+
+// Dark theme variables
+@mixin dark-theme-vars {
+  --c-background: #000000;
+  --c-surface: #2d2d2d;
+  --c-text: #e0e0e0;
+  --c-text-subtle: #b0b0b0;
+  --c-border: rgba(224, 224, 224, 0.2);
+  --c-hover: #3a3a3a;
+
+  // Override specific theme colors for dark mode
+  --c-base: var(--c-text);
+  --c-base-subtle: var(--c-text-subtle);
+  --c-xlight-base: var(--c-surface);
+  --c-info-box: #3d3419;
+  --c-dark-rgb: 25, 117, 210;
+  --c-dark: rgb(var(--c-dark-rgb));
+  --c-blue-subtle-rgb: 120, 160, 220;
+  --c-blue-subtle: rgb(var(--c-blue-subtle-rgb));
+
+  // Form inputs use surface color in dark mode
+  --c-input-background: var(--c-surface);
+
+  // Archive icon colors for dark mode
+  --c-icon-muted: rgba(var(--c-blue-subtle-rgb), 0.5);
+  --c-icon-muted-hover: rgba(var(--c-blue-subtle-rgb), 0.7);
+
+  // Buttons in dark mode
+  --c-button-border: #666;
+  --c-button-border-hover: #888;
+  --c-button-border-selected: var(--c-text);
+  --c-button-text-selected: var(--c-background);
+}
+
+[data-theme="dark"] {
+  @include dark-theme-vars;
+}
+
+// Apply dark theme when system prefers dark (unless manually set to light)
+:root:not([data-theme="light"]) {
+  @media (prefers-color-scheme: dark) {
+    @include dark-theme-vars;
+  }
 }
 
 
@@ -64,7 +129,7 @@ button {
 }
 
 body {
-  background: white;
+  background: var(--c-background);
   font-weight: 400;
   line-height: var(--leading);
   -webkit-font-smoothing: antialiased;
@@ -152,5 +217,83 @@ body {
 
 .Toastify__toast {
   font-size: 1.1rem;
+}
 
+// Dark mode toast styling
+[data-theme="dark"] {
+  .Toastify__toast {
+    background: var(--c-surface);
+    color: var(--c-text);
+  }
+}
+
+// Apply dark theme when system prefers dark (unless manually set to light)
+:root:not([data-theme="light"]) {
+  @media (prefers-color-scheme: dark) {
+    .Toastify__toast {
+      background: var(--c-surface);
+      color: var(--c-text);
+    }
+  }
+}
+
+// Theme toggle button
+.footer-about {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 2rem;
+  align-items: flex-start;
+
+  // Match the grid structure below for alignment
+  @media screen and (min-width: 60rem) {
+    grid-template-columns: repeat(12, minmax(2%, 10%));
+    grid-gap: var(--g-gap);
+
+    .footer-about-content {
+      grid-column: 1 / span 9;
+    }
+
+    .footer-theme-toggle {
+      grid-column: 10 / span 3; // Align with Apps column (columns 10-12)
+      justify-self: start;
+    }
+  }
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+
+    .footer-theme-toggle {
+      justify-self: start;
+    }
+  }
+}
+
+.theme-toggle {
+  background: none;
+  border: 0.125rem solid rgba(255, 255, 255, 0.3);
+  border-radius: 1.5rem;
+  padding: 0.5rem 0.75rem;
+  color: rgba(255, 255, 255, 0.8);
+  cursor: pointer;
+  font-size: 0.875rem;
+  transition: all 0.3s ease;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: rgba(255, 255, 255, 1);
+    border-color: rgba(255, 255, 255, 0.5);
+  }
+
+  &:active {
+    transform: scale(0.95);
+  }
+
+  i {
+    transition: transform 0.3s ease;
+  }
+
+  &:hover i {
+    transform: rotate(15deg);
+  }
 }
