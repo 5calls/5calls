@@ -1,20 +1,14 @@
 - title: "Editorial and Social"
   volunteers:
     - name: Rati Gupta
+      title: Director, Content and Social
       avatar: /images/vols/rati.png
       socialUsername: ratigupta
       socialLink: https://www.threads.net/@ratigupta
       socialService: threads
 
-    - name: Jess Irvine
-      avatar: /images/vols/jess.png
-      socialUsername: IrvJess
-      socialLink: https://twitter.com/IrvJess
-
-    - name: Amanda Nottke
-      avatar: /images/vols/amanda.png
-      socialUsername: amandanottke
-      socialLink: https://twitter.com/amandanottke
+    - name: Jeanne G
+      title: Research and Writing Associate
 
     - name: Rachel Perkins
       avatar: /images/vols/pie.png
@@ -22,11 +16,12 @@
       socialLink: https://metasocial.com/@piebob
       socialService: mastodon
 
+    - name: Amanda Nottke
+      avatar: /images/vols/amanda.png
+      socialUsername: amandanottke
+
     - name: Eleanor
       avatar: /images/vols/eleanor.png
-
-    - name: Rhiannon W
-      avatar: /images/vols/rhi.png
 
     - name: Flynn B
       avatar: /images/vols/flynn.png

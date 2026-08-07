@@ -5,10 +5,14 @@
 <div class="content">
   <div class="g">
     <div class="measure">
-      <p>5 Calls makes it easy for you to reach your members of Congress and make your voice heard.</p>
       <p>
-        We research issues, write clearly articulated scripts, figure out the most
-        influential decision-makers, and collect phone numbers for their offices.
+        5 Calls makes it easy for you to reach your members of Congress and make
+        your voice heard.
+      </p>
+      <p>
+        We research issues, write clearly articulated scripts, figure out the
+        most influential decision-makers, and collect phone numbers for their
+        offices.
       </p>
       <p>All you have to do is call.</p>
     </div>
@@ -21,19 +25,26 @@
 
     <div class="g founders">
       <div class="founders-photo">
-        <img src="/images/vols/nick-rebecca.png" alt="Nick O'Neill and Rebecca Kaufman" />
+        <img
+          src="/images/vols/nick-rebecca.png"
+          alt="Nick O'Neill and Rebecca Kaufman"
+        />
       </div>
 
       <div class="founders-body">
         <p>
-          This husband and wife team launched 5 Calls in early 2017 with the help of friends and volunteers. Executive
-          director Rebecca runs legislation tracking and editorial content, while Nick directs the technical details for
-          the site and apps.
+          This husband and wife team co-founded 5 Calls in late 2016. Executive
+          director Rebecca runs legislation tracking and editorial content,
+          while Nick directs the technical details for the site and apps.
         </p>
 
         <p class="founders-social">
-          <a href="mailto:nick@5calls.org"><i class="fa fa-envelope-open-text"></i> nick@5calls.org</a>
-          <a href="mailto:rebecca@5calls.org"><i class="fa fa-envelope-open-text"></i> rebecca@5calls.org</a>
+          <a href="mailto:nick@5calls.org"
+            ><i class="fa fa-envelope-open-text"></i> nick@5calls.org</a
+          >
+          <a href="mailto:rebecca@5calls.org"
+            ><i class="fa fa-envelope-open-text"></i> rebecca@5calls.org</a
+          >
         </p>
       </div>
     </div>
@@ -54,10 +65,17 @@
 
         <p><strong>{{ .name }}</strong></p>
 
+        {{ with .title }}
+        <p class="volunteer-title">{{ . }}</p>
+        {{ end }}
+
         <p>
           {{ if .socialLink }}
           <a href="{{ .socialLink }}"
-            ><i class="fa fa-brands fa-{{ default `twitter` .socialService }}"></i> @{{ .socialUsername }}</a
+            ><i
+              class="fa fa-brands fa-{{ default `twitter` .socialService }}"
+            ></i>
+            @{{ .socialUsername }}</a
           >
           {{ end }}
         </p>
@@ -67,7 +85,8 @@
       <p class="small full-list-link">
         {{ if .fullListUrl }}
         <a href="{{ .fullListUrl }}">See all our contributors</a>
-        {{ else }} Our thanks to all our contributors, including those not mentioned here! {{ end }}
+        {{ else }} Our thanks to all our contributors, including those not
+        mentioned here! {{ end }}
       </p>
     </div>
     <!-- /.volunteer-wrapper -->
@@ -81,7 +100,12 @@
     <div class="card">
       <i class="fa fa-envelope-open-text"></i>
       <strong>Tell us how you'd like to help</strong>
-      <p>Email <a href="mailto:hello@5calls.org?subject=Volunteering">hello@5calls.org</a></p>
+      <p>
+        Email
+        <a href="mailto:hello@5calls.org?subject=Volunteering"
+          >hello@5calls.org</a
+        >
+      </p>
     </div>
 
     <div class="card">
@@ -90,8 +114,11 @@
       <p>
         Browse our starter issues for
         <a href="https://github.com/5calls/static/issues">Web</a>,
-        <a href="https://github.com/5calls/ios/issues?q=is%3Aissue+is%3Aopen+label%3A%22starter+issue%22">iOS</a>,
-        or&nbsp;<a href="https://github.com/5calls/android/issues?q=is%3Aissue+is%3Aopen+label%3A%22starter+issue%22"
+        <a
+          href="https://github.com/5calls/ios/issues?q=is%3Aissue+is%3Aopen+label%3A%22starter+issue%22"
+          >iOS</a
+        >, or&nbsp;<a
+          href="https://github.com/5calls/android/issues?q=is%3Aissue+is%3Aopen+label%3A%22starter+issue%22"
           >Android</a
         >
       </p>
@@ -99,7 +126,12 @@
   </div>
 
   <h2>Data</h2>
-  <p>5 Calls utilizes data from and contributes to sources such as <a href="https://github.com/unitedstates">theunitedstates.io</a>, <a href="https://congress.gov">Congress.gov</a>, <a href="https://pluralpolicy.com/open/">OpenStates / Plural</a> and <a href="https://www.propublica.org">ProPublica</a>.</p>
-
+  <p>
+    5 Calls utilizes data from and contributes to sources such as
+    <a href="https://github.com/unitedstates">theunitedstates.io</a>,
+    <a href="https://congress.gov">Congress.gov</a>,
+    <a href="https://pluralpolicy.com/open/">OpenStates / Plural</a> and
+    <a href="https://www.propublica.org">ProPublica</a>.
+  </p>
 </div>
 {{ end }}

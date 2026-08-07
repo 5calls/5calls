@@ -38,12 +38,18 @@
   p {
     margin: 0;
   }
+
+  .volunteer-title {
+    font-size: 0.85rem;
+    line-height: 1.3;
+    opacity: 0.75;
+  }
 }
 
 @media screen and (min-width: 60rem) {
   .volunteer {
     padding: 0 calc(var(--g-gap) / 2) var(--g-gap);
-    width: 25%;
+    width: calc(100% / 3);
   }
 }
 
