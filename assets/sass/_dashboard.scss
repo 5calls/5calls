@@ -1,14 +1,33 @@
 :root {
   --c-light-border: rgba(var(--c-dark-rgb), 0.4);
   --c-hover-border: rgba(var(--c-dark-rgb), 0.2);
-  --c-tab-bg: rgba(2, 63, 159, 0.05);
+  --c-tab-bg: rgba(var(--c-dark-rgb), 0.05);
   --spacing-xs: 0.2rem;
   --spacing-s: 0.5rem;
   --spacing-m: 1rem;
   --radius: 0.3rem;
 }
 
+@function rem-calc($px) {
+  @return calc(#{$px}rem / var(--base-font-size));
+}
+
+@mixin desktop {
+  @media (min-width: 40rem) {
+    @content;
+  }
+}
+
 #dashboard-content {
+  %tab-button-base {
+    background: var(--c-tab-bg);
+    height: 3rem;
+    color: #000;
+    font-size: rem-calc(18);
+    margin: 0 var(--spacing-xs);
+    cursor: pointer;
+  }
+
   .heading {
     text-align: center;
   }
@@ -17,15 +36,10 @@
     margin-bottom: 16px;
 
     button {
-      background: var(--c-tab-bg);
-      height: 3rem;
+      @extend %tab-button-base;
       padding: 0 var(--spacing-s);
-      color: #000;
-      font-size: calc(18rem / var(--base-font-size));
-      margin: 0 var(--spacing-xs);
       border: none;
       border-radius: var(--radius);
-      cursor: pointer;
     }
 
     button:hover {
@@ -37,9 +51,9 @@
       color: #fff;
     }
 
-    @media (min-width: 40rem) {
+    @include desktop {
       button {
-        font-size: calc(24rem / var(--base-font-size));
+        font-size: rem-calc(24);
         margin: 0 var(--spacing-s);
       }
     }
@@ -64,17 +78,12 @@
     padding: 0 1rem;
 
     button {
-      background: var(--c-tab-bg);
-      height: 3rem;
+      @extend %tab-button-base;
       padding: 0 0.6rem;
-      color: #000;
-      font-size: calc(18rem / var(--base-font-size));
-      margin: 0 var(--spacing-xs);
       margin-bottom: -0.15rem;
       border: 0.1rem solid transparent;
       border-radius: var(--radius) var(--radius) 0 0;
       border-bottom: none;
-      cursor: pointer;
     }
 
     button:hover {
@@ -90,7 +99,7 @@
       cursor: default;
     }
 
-    @media (min-width: 40rem) {
+    @include desktop {
       display: block;
       overflow-x: initial;
       overflow-y: initial;
@@ -102,11 +111,11 @@
     text-align: start;
     margin: 0.6rem 0 0.2rem;
     font-weight: normal;
-    font-size: calc(20rem / var(--base-font-size));
+    font-size: rem-calc(20);
     color: #000;
 
-    @media (min-width: 40rem) {
-      font-size: calc(24rem / var(--base-font-size));
+    @include desktop {
+      font-size: rem-calc(24);
       display: inline-block;
     }
   }
@@ -118,7 +127,7 @@
     max-width: 72rem;
     gap: var(--spacing-m);
 
-    @media (min-width: 40rem) {
+    @include desktop {
       flex-wrap: wrap;
       flex-direction: row;
       align-items: flex-start;
@@ -133,20 +142,20 @@
     align-items: center;
 
     .subtitle_main {
-      font-size: calc(24rem / var(--base-font-size));
+      font-size: rem-calc(24);
       line-height: 1.1;
       white-space: nowrap;
 
-      @media (min-width: 40rem) {
-        font-size: calc(33rem / var(--base-font-size));
+      @include desktop {
+        font-size: rem-calc(33);
       }
     }
 
     .subtitle_secondary {
-      font-size: calc(18rem / var(--base-font-size));
+      font-size: rem-calc(18);
     }
 
-    @media (min-width: 40rem) {
+    @include desktop {
       padding: 1.125rem 1.5rem 1.25rem;
     }
   }
@@ -155,13 +164,13 @@
     padding: 0 1rem 0;
     margin: 0.6rem 0 0;
 
-    @media (min-width: 40rem) {
+    @include desktop {
       padding: 0.5rem 1.5rem 0;
     }
   }
 
   .description {
-    font-size: calc(16rem / var(--base-font-size));
+    font-size: rem-calc(16);
   }
 
   .graphic_section {
@@ -194,10 +203,10 @@
   }
 
   .picker {
-    font-size: calc(20rem / var(--base-font-size));
+    font-size: rem-calc(20);
 
-    @media (min-width: 40rem) {
-      font-size: calc(24rem / var(--base-font-size));
+    @include desktop {
+      font-size: rem-calc(24);
     }
   }
 
@@ -225,7 +234,7 @@
     width: 100%;
     min-width: 20rem;
 
-    @media (min-width: 40rem) {
+    @include desktop {
       width: 25rem;
     }
   }
@@ -233,7 +242,7 @@
   .reachability {
     margin: 1rem auto;
     display: inline-block;
-    font-size: calc(16rem / var(--base-font-size));
+    font-size: rem-calc(16);
 
     .reachability_stats {
       float: left;
@@ -241,7 +250,7 @@
       font-size: 1.2rem;
     }
 
-    @media (min-width: 40rem) {
+    @include desktop {
       margin-top: 1rem;
       width: 25rem;
     }
@@ -252,7 +261,7 @@
     padding-left: 1rem;
     color: #000;
 
-    @media (min-width: 40rem) {
+    @include desktop {
       padding-left: 1.5rem;
       font-size: 3rem;
     }
@@ -323,7 +332,7 @@
           line-height: 1;
           color: #000;
 
-          @media (min-width: 40rem) {
+          @include desktop {
             font-size: 3rem;
             min-width: 2rem;
           }
@@ -342,7 +351,7 @@
       background: #efefef;
     }
 
-    @media (min-width: 40rem) {
+    @include desktop {
       max-width: 600px;
     }
   }
@@ -353,9 +362,9 @@
   }
 
   .top_five_issue_row {
-    --row-font-size: calc(16rem / var(--base-font-size));
-    @media (min-width: 40rem) {
-      --row-font-size: calc(18rem / var(--base-font-size));
+    --row-font-size: #{rem-calc(16)};
+    @include desktop {
+      --row-font-size: #{rem-calc(18)};
     }
     --row-line-height: 1.1;
     font-size: var(--row-font-size);
@@ -423,7 +432,7 @@
         max-height: calc(2 * var(--row-line-height) * var(--row-font-size));
       }
 
-      @media (min-width: 40rem) {
+      @include desktop {
         max-height: calc(var(--row-line-height) * var(--row-font-size));
       }
 
@@ -447,7 +456,7 @@
         max-height: calc(2 * var(--row-line-height) * var(--row-font-size));
       }
 
-      @media (min-width: 40rem) {
+      @include desktop {
         line-height: var(--row-line-height);
         white-space: nowrap;
         display: block;
@@ -464,7 +473,7 @@
     padding: 0.1rem 0;
     margin-bottom: 0.2rem;
 
-    @media (min-width: 40rem) {
+    @include desktop {
       padding: 0.5rem 0;
       margin-bottom: 0.5rem;
     }
@@ -475,7 +484,7 @@
     max-width: 100%;
     padding: 0.25rem;
 
-    @media (min-width: 40rem) {
+    @include desktop {
       max-width: 552px;
       width: 552px;
     }
@@ -484,9 +493,9 @@
       overflow: hidden;
       max-height: 0;
       transition: max-height 0.5s ease-out;
-      font-size: calc(16rem / var(--base-font-size));
-      @media (min-width: 40rem) {
-        font-size: calc(18rem / var(--base-font-size));
+      font-size: rem-calc(16);
+      @include desktop {
+        font-size: rem-calc(18);
       }
 
       div {
@@ -509,7 +518,7 @@
 
     .row_detail.expanded {
       transition: max-height 0.5s ease-out;
-      max-height: calc(16rem * 6.5 / var(--base-font-size)); /* must be larger than the tallest possible content, but shorter means a better transition */
+      max-height: rem-calc(16 * 6.5); /* must be larger than the tallest possible content, but shorter means a better transition */
     }
   }
 
@@ -587,11 +596,16 @@
   }
 
   #state_map_label,
+  #dot_label,
+  .tooltipBox {
+    background: #fff;
+    fill: #fff;
+  }
+
+  #state_map_label,
   #dot_label {
     filter: drop-shadow(0.125rem 0.125rem 0.25rem #888c);
     z-index: 10;
-    background: #fff;
-    fill: #fff;
   }
 
   .absolute {
@@ -661,7 +675,7 @@
 
     .footnote {
       padding: .5rem 1rem 1rem;
-      font-size: calc(16rem / var(--base-font-size));
+      font-size: rem-calc(16);
     }
   }
 
@@ -681,28 +695,27 @@
     #state_map_key_box {
       width: 100%;
 
-      @media (min-width: 40rem) {
+      @include desktop {
         width: 14rem;
       }
     }
   }
 
-  .tooltipBox {
-    background: #fff;
-    fill: #fff;
+
+  .results_vm,
+  .results_contact,
+  .results_unavailable {
+    font-weight: bold;
   }
 
   .results_vm {
     color: #6a51a3;
-    font-weight: bold;
   }
   .results_contact {
     color: #807dba;
-    font-weight: bold;
   }
   .results_unavailable {
     color: #4a1486;
-    font-weight: bold;
   }
 
   .i-bar-location {
@@ -761,15 +774,15 @@
   margin-bottom: 0.5rem;
   line-height: 1;
 
-  @media (min-width: 40rem) {
+  @include desktop {
     margin-bottom: calc(var(--leading) * 1rem);
-    font-size: calc(48rem / var(--base-font-size));
+    font-size: rem-calc(48);
   }
 }
 
 footer {
   margin: 1rem auto 0;
   p {
-    font-size: calc(16rem / var(--base-font-size));
+    font-size: rem-calc(16);
   }
 }
