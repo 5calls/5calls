@@ -30,7 +30,7 @@ const selectedStateStroke = 'rgba(255, 217, 52)';
 const USA_TOPOJSON = 'https://cdn.jsdelivr.net/npm/us-atlas@2/us/10m.json';
 const MIN_FOR_BEESWARM = 7;
 const MAX_FOR_SONIFICATION = 2000;
-export const MAX_FOR_BEESWARM = 6000;
+export const MAX_FOR_BEESWARM = 1000; // DO NOT SUBMIT
 const SCALED_POP_DENOMINATOR = 10000;
 
 const MAP_TABS = {
@@ -1039,10 +1039,14 @@ const inBeeswarmRange = (count: number): boolean => {
   return count >= MIN_FOR_BEESWARM && count <= MAX_FOR_BEESWARM;
 };
 
+const inBarRange = (count: number): boolean => {
+  return count > MAX_FOR_BEESWARM;
+};
+
 export const drawRepsPane = (
   repData: ExpandedRepData,
+  finalDate: number,
   district: string,
-  beeswarmScale: d3.ScaleTime<number, number>,
   issueColor: d3.ScaleOrdinal<number, string>,
   issueIdToName: { [key: number]: string },
   duration: string
@@ -1123,7 +1127,7 @@ export const drawRepsPane = (
     .attr('class', 'description')
     .html(() => {
       let text = ''; //`The most-called issues for ${repData.repInfo.name} ${duration} from 5 Calls.`;
-      if (inBeeswarmRange(repData.total)) {
+      if (inBeeswarmRange(repData.total) || inBarRange(repData.total)) {
         text += ' Select a call count to see it highlighted below.';
       }
       return text;
@@ -1139,7 +1143,7 @@ export const drawRepsPane = (
     duration,
     issueColor,
     repData.total,
-    inBeeswarmRange(repData.total)
+    inBeeswarmRange(repData.total) || inBarRange(repData.total)
   );
 
   const pieSize = 80;
@@ -1222,6 +1226,12 @@ export const drawRepsPane = (
   // Draw beeswarm async so that it doesn't block rendering.
   window.setTimeout(() => {
     if (inBeeswarmRange(repData.total)) {
+      const beeswarmScale = d3
+        .scaleTime()
+        .domain([finalDate - 7 * 24 * 60 * 60 * 1000, finalDate])
+        .range([25, BEESWARM_TARGET_WIDTH - 25])
+        .nice();
+
       repData.beeswarm = beeswarmForce()
         .y(300)
         .x((e: BeeswarmCallCount) => beeswarmScale(new Date(e.time * 1000))) // seconds since epoch --> ms
@@ -1236,15 +1246,34 @@ export const drawRepsPane = (
                   ? 6
                   : 10
         )(repData.callResults);
+      drawBeeswarm(
+        repCard.append('div'),
+        repData,
+        beeswarmScale,
+        issueIdToName,
+        issueColor,
+        duration
+      );
+    } else if (inBarRange(repData.total)) {
+      const finalDateAsDate = new Date(finalDate);
+      finalDateAsDate.setHours(0, 0, 0, 0);
+      const barChartScale = d3
+        .scaleTime()
+        .domain([
+          finalDateAsDate.getTime() - 6 * 24 * 60 * 60 * 1000,
+          finalDateAsDate.getTime()
+        ])
+        .range([25, BEESWARM_TARGET_WIDTH - 25])
+        .nice();
+      drawBarChart(
+        repCard.append('div'),
+        repData,
+        barChartScale,
+        issueIdToName,
+        issueColor,
+        duration
+      );
     }
-    drawBeeswarm(
-      repCard.append('div'),
-      repData,
-      beeswarmScale,
-      issueIdToName,
-      issueColor,
-      duration
-    );
 
     const onIssueSelected = function (
       this: HTMLButtonElement,
@@ -1407,6 +1436,122 @@ export const drawRepsPane = (
   }, 0);
 };
 
+const appendGraphicsSection = (
+  parentDiv: d3.Selection<HTMLDivElement, unknown, null, undefined>,
+  repData: ExpandedRepData,
+  duration: string
+): d3.Selection<HTMLDivElement, unknown, null, undefined> => {
+  parentDiv.attr('class', 'graphic_section');
+  const description = parentDiv.append('div').attr('class', 'description');
+
+  description
+    .append('h2')
+    .html(`Calls to ${repData.repInfo.name}, ${duration}`);
+  return description;
+};
+
+const drawBarChart = (
+  parentDiv: d3.Selection<HTMLDivElement, unknown, null, undefined>,
+  repData: ExpandedRepData,
+  barChartScale: d3.ScaleTime<number, number>,
+  issueIdToName: { [key: number]: string },
+  issueColor: d3.ScaleOrdinal<number, string>,
+  duration: string
+) => {
+  const description = appendGraphicsSection(parentDiv, repData, duration);
+
+  const paragraph = description.append('div');
+  paragraph.append('span').html('Select call count above to highlight');
+
+  const svgBox = parentDiv.append('div').style('position', 'relative');
+  svgBox
+    .append('div')
+    .attr('id', 'dot_label')
+    .attr('class', 'overlayBox topLabel absolute')
+    .attr('hidden', true)
+    .append('div')
+    .attr('class', 'issue_long_name');
+
+  const svg = svgBox
+    .append('svg')
+    .style('width', '100%')
+    .style('height', 'auto')
+    .attr('id', 'bar_svg_' + repData.id)
+    .style('margin-bottom', '1.5rem')
+    .style('overflow', 'hidden');
+
+  svg.attr(
+    'title',
+    `Bars representing ${repData.total} calls, colored by issue, ordered by time on the x axis.`
+  );
+
+  const initialIssueId = repData.topIssues[0].issue_id;
+  repData.callResults.forEach(
+    (b) => (b.selected = b.issue_id === initialIssueId)
+  );
+
+  const series = d3
+    .stack()
+    .keys(d3.union(repData.callResults.map((d) => d.issue_id)))
+    .value(([, group], key) => {
+      const value = group.get(key);
+      return value ? value.count : 0;
+    })
+    .order(d3.stackOrderDescending)(
+    d3.index(
+      repData.callResults,
+      (d) => d.time,
+      (d) => d.issue_id
+    )
+  ); // group by stack then series key
+
+  const y = d3
+    .scaleLinear()
+    .domain([0, d3.max(series, (d) => d3.max(d, (d) => d[1]))])
+    .rangeRound([BEESWARM_TARGET_WIDTH / 3, 0]);
+
+  const group = svg.append('g');
+  group
+    .selectAll()
+    .data(series)
+    .enter()
+    .append('g')
+    .selectAll('rect')
+    .data((D) => D.map((d) => ((d.key = D.key), d)))
+    .enter()
+    .append('rect')
+    .attr('fill', (d) => {
+      let datum = d.data[1].get(d.key);
+      if (datum && datum.selected) {
+        return issueColor(d.key);
+      }
+      return defaultColor;
+    })
+    .attr(
+      'x',
+      (d) => barChartScale(d.data[0] * 1000) - BEESWARM_TARGET_WIDTH / 20
+    )
+    .attr('y', (d) => y(d[1]))
+    .attr('height', (d) => y(d[0]) - y(d[1]))
+    .attr('width', BEESWARM_TARGET_WIDTH / 10); // TODO
+
+  const height = group.node().getBBox().height;
+  const axisHeight = 20;
+  svg.attr('viewBox', `0 0 ${BEESWARM_TARGET_WIDTH} ${height + axisHeight}`);
+
+  // Add the axis.
+  svg
+    .append('g')
+    .attr('transform', `translate(0,${height})`)
+    .call(
+      d3
+        .axisBottom(barChartScale)
+        .tickSizeOuter(0)
+        .ticks(d3.timeDay)
+        .tickFormat(d3.timeFormat('%a %-d'))
+    );
+};
+
 const drawBeeswarm = (
   parentDiv: d3.Selection<HTMLDivElement, unknown, null, undefined>,
   repData: ExpandedRepData,
@@ -1415,15 +1560,7 @@ const drawBeeswarm = (
   issueColor: d3.ScaleOrdinal<number, string>,
   duration: string
 ) => {
-  parentDiv.attr('class', 'graphic_section');
-  const description = parentDiv
-    .append('div')
-    .attr('class', 'description')
-    .attr('hidden', !inBeeswarmRange(repData.total) ? true : null);
-
-  description
-    .append('h2')
-    .html(`Calls to ${repData.repInfo.name}, ${duration}`);
+  const description = appendGraphicsSection(parentDiv, repData, duration);
 
   let renderFrameId: number | null = null;
   let audioContext: AudioContext | null = null;

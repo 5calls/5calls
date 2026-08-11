@@ -262,12 +262,6 @@ const Dashboard: React.FC = () => {
 
     if (repsData.length) {
       const finalDate = Date.now();
-      const beeswarmScale = d3
-        .scaleTime()
-        .domain([finalDate - 7 * 24 * 60 * 60 * 1000, finalDate])
-        .range([25, BEESWARM_TARGET_WIDTH - 25])
-        .nice();
-
       const handleRepTabClick = function (_: Event | null, newTab: TabData) {
         tabs.forEach((t) => (t.selected = false));
         newTab.selected = true;
@@ -291,8 +285,8 @@ const Dashboard: React.FC = () => {
         if (!newTab.drawn) {
           drawRepsPane(
             repsData.find((r) => r.id === newTab.id)!,
+            finalDate,
             district,
-            beeswarmScale,
             issueColor,
             issueIdToName,
             duration

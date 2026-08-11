@@ -98,9 +98,14 @@ export function processRepsData(
       expandedResult.callResults =
         contactSummaryData.aggregatedResults as unknown as BeeswarmCallCount[];
 
-      // In-place expand to individual calls.
       if (expandedResult.total <= maxForBeeswarm) {
+        // In-place expand to individual calls.
         expandRepResults(expandedResult.callResults);
+      } else {
+        // Calculate calls per issue per day, in the user's time zone.
+        expandedResult.callResults = aggregateCallResults(
+          expandedResult.callResults
+        );
       }
 
       // Calculate aggregated reachability stats.
@@ -153,6 +158,32 @@ const expandRepResults = (results: BeeswarmCallCount[]) => {
     }
   });
   results.push(...addedPoints);
+};
+
+const aggregateCallResults = (
+  results: BeeswarmCallCount[]
+): BeeswarmCallCount[] => {
+  return results.reduce((agg: BeeswarmCallCount[], r: BeeswarmCallCount) => {
+    const existing = agg.find(
+      // Can this be more efficient?
+      (a) =>
+        new Date(a.time * 1000).getDate() ===
+          new Date(r.time * 1000).getDate() && a.issue_id === r.issue_id
+    );
+    if (existing) {
+      existing.count += r.count;
+    } else {
+      const time = new Date(r.time * 1000).setHours(0, 0, 0, 0) / 1000;
+      agg.push({
+        time: time,
+        issue_id: r.issue_id,
+        count: r.count,
+        selected: r.selected,
+        id: r.id
+      });
+    }
+    return agg;
+  }, [] as BeeswarmCallCount[]);
 };
 
 export function getUsaMapKeyData(
