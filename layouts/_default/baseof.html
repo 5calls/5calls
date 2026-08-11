@@ -104,9 +104,15 @@
     <link href="/fontawesome/css/fontawesome.css" rel="stylesheet">
     <link href="/fontawesome/css/brands.css" rel="stylesheet">
     <link href="/fontawesome/css/solid.css" rel="stylesheet">
+
+    {{ block "head" . }}{{ end }}
   </head>
   <body class="{{ block `bodyclass` . }}{{ end }}">
-    <div class="site">{{ partial "header.html" . }} {{ block "main" . }}{{ end }} {{ partial "footer.html" . }}</div>
+    <div class="site">
+      {{ block "header" . }}{{ partial "header.html" . }}{{ end }}
+      {{ block "main" . }}{{ end }}
+      {{ block "footer" . }}{{ partial "footer.html" . }}{{ end }}
+    </div>
     <script>
       window.FontAwesomeConfig = {
         searchPseudoElements: true,

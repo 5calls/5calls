@@ -1,0 +1,25 @@
+{{ define "bodyclass" }}vote{{ end }}
+
+{{ define "header" }}{{ partial "vote-header.html" . }}{{ end }}
+
+{{ define "main" }}
+  <main class="content vote-content">
+    <h1>{{ .Title }}</h1>
+    {{ with .Params.subhead }}<p class="vote-subhead">{{ . }}</p>{{ end }}
+
+    {{ with .Content }}<div class="vote-intro">{{ . }}</div>{{ end }}
+
+    <ul class="vote-tools">
+      {{ range .Pages }}
+        <li>
+          <a href="{{ .RelPermalink }}">
+            <h2 class="vote-tool-title">{{ .Title }}</h2>
+            {{ with .Params.subhead }}<p class="vote-tool-desc">{{ . }}</p>{{ end }}
+          </a>
+        </li>
+      {{ end }}
+    </ul>
+  </main>
+{{ end }}
+
+{{ define "footer" }}{{ partial "vote-footer.html" . }}{{ end }}

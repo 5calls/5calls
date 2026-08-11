@@ -1,0 +1,23 @@
+{{ define "bodyclass" }}vote{{ end }}
+
+{{ define "head" }}
+  <script src="https://cdn.voteamerica.org/embed/tools.js" async></script>
+{{ end }}
+
+{{ define "header" }}{{ partial "vote-header.html" . }}{{ end }}
+
+{{ define "main" }}
+  <main class="vote-main">
+    {{ with .Content }}<div class="content vote-intro">{{ . }}</div>{{ end }}
+
+    <div class="vote-embed">
+      <div
+        class="voteamerica-embed"
+        data-subscriber="{{ .Site.Params.voteamericaSubscriber }}"
+        data-tool="{{ .Params.tool }}"
+      ></div>
+    </div>
+  </main>
+{{ end }}
+
+{{ define "footer" }}{{ partial "vote-footer.html" . }}{{ end }}

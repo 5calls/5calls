@@ -1,0 +1,200 @@
+// Minimal chrome for the /vote/ pages: keep the brand cues (blue rule, logo,
+// type scale) but stay out of the way of the embedded forms.
+
+.vote-header {
+  padding: 1.25rem 0;
+  border-top: 0.5rem solid var(--c-blue);
+  margin-bottom: 2rem;
+
+  .content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 1rem;
+  }
+
+  .logo {
+    margin: 0 !important;
+    font-size: inherit;
+    text-decoration: none;
+  }
+
+  img {
+    height: 1.75rem;
+    display: block;
+  }
+}
+
+.vote-header-back {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--c-base);
+  text-decoration: none;
+
+  &:hover,
+  &:focus,
+  &:active,
+  &:visited {
+    color: var(--c-base);
+  }
+
+  &:hover,
+  &:focus {
+    text-decoration: underline;
+  }
+}
+
+.vote-main {
+  padding-bottom: 3rem;
+}
+
+// Tool pages let the embed supply its own heading, so any optional intro copy
+// stays in a readable column and the form runs the full width of the page.
+.vote-embed {
+  padding: 0 1.25rem;
+
+  @media screen and (min-width: 40rem) {
+    padding: 0 2rem;
+  }
+}
+
+.vote-content {
+  max-width: 46rem;
+  padding-bottom: 3rem;
+
+  h1 {
+    font-size: calc(33rem / var(--base-font-size));
+    margin-bottom: 0.5rem;
+
+    @media screen and (min-width: 40rem) {
+      font-size: calc(44rem / var(--base-font-size));
+    }
+  }
+}
+
+.vote-subhead {
+  text-align: center;
+  font-size: 1.1rem;
+  color: var(--c-base-subtle);
+  margin-bottom: 2rem;
+
+  @media screen and (min-width: 40rem) {
+    font-size: 1.25rem;
+  }
+}
+
+.vote-intro {
+  max-width: 46rem;
+  margin-bottom: 2rem;
+
+  p {
+    margin-bottom: var(--paragraph-break);
+  }
+}
+
+// The VoteAmerica embed injects a 100%-width iframe and sizes its own height,
+// so it just needs room -- no card or padding of our own around it.
+.voteamerica-embed {
+  font-size: 1rem;
+
+  iframe {
+    width: 100%;
+    border: 0;
+    display: block;
+  }
+}
+
+// Tool index
+
+.vote-tools {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 1rem;
+
+  li {
+    list-style: none;
+    margin: 0;
+  }
+
+  a {
+    display: block;
+    padding: 1.25rem 1.5rem;
+    border: 1px solid rgba(var(--c-dark-rgb), 0.15);
+    border-radius: var(--radius);
+    text-decoration: none;
+
+    &:hover,
+    &:focus {
+      border-color: rgba(var(--c-dark-rgb), 0.5);
+      background: rgba(var(--c-blue-rgb), 0.04);
+    }
+  }
+}
+
+.vote-tool-title {
+  text-align: left;
+  font-size: 1.25rem;
+  margin: 0 0 0.25rem;
+  color: var(--c-dark);
+
+  @media screen and (min-width: 40rem) {
+    font-size: 1.5rem;
+  }
+}
+
+.vote-tool-desc {
+  color: var(--c-base);
+  font-size: 1rem;
+  margin: 0;
+}
+
+// Quiet footer -- no bold background, just a rule and small links.
+
+.vote-footer {
+  margin-top: 3rem;
+  padding: 1.5rem 0 2.5rem;
+  border-top: 1px solid rgba(var(--c-dark-rgb), 0.12);
+  font-size: 0.9rem;
+  color: var(--c-base-subtle);
+
+  .content {
+    font-size: inherit;
+    text-align: center;
+  }
+
+  p {
+    margin-bottom: 0.75rem;
+  }
+
+  a {
+    color: var(--c-base);
+    font-weight: 700;
+    text-decoration: none;
+
+    &:hover,
+    &:focus,
+    &:active,
+    &:visited {
+      color: var(--c-base);
+    }
+
+    &:hover,
+    &:focus {
+      text-decoration: underline;
+    }
+  }
+}
+
+.vote-footer-links {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.5rem 1.25rem;
+  margin-bottom: 0.75rem;
+}
+
+.vote-footer-copyright {
+  margin-bottom: 0;
+}
