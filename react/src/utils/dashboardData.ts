@@ -103,7 +103,7 @@ export function processRepsData(
         expandRepResults(expandedResult.callResults);
       } else {
         // Calculate calls per issue per day, in the user's time zone.
-        expandedResult.callResults = aggregateCallResults(
+        expandedResult.barSeries = aggregateCallResults(
           expandedResult.callResults
         );
       }
@@ -163,27 +163,44 @@ const expandRepResults = (results: BeeswarmCallCount[]) => {
 const aggregateCallResults = (
   results: BeeswarmCallCount[]
 ): BeeswarmCallCount[] => {
-  return results.reduce((agg: BeeswarmCallCount[], r: BeeswarmCallCount) => {
-    const existing = agg.find(
-      // Can this be more efficient?
-      (a) =>
-        new Date(a.time * 1000).getDate() ===
-          new Date(r.time * 1000).getDate() && a.issue_id === r.issue_id
-    );
-    if (existing) {
-      existing.count += r.count;
-    } else {
-      const time = new Date(r.time * 1000).setHours(0, 0, 0, 0) / 1000;
-      agg.push({
-        time: time,
-        issue_id: r.issue_id,
-        count: r.count,
-        selected: r.selected,
-        id: r.id
-      });
-    }
-    return agg;
-  }, [] as BeeswarmCallCount[]);
+  const aggregated = results.reduce(
+    (agg: BeeswarmCallCount[], r: BeeswarmCallCount) => {
+      const existing = agg.find(
+        // Can this be more efficient?
+        (a) =>
+          new Date(a.time * 1000).getDate() ===
+            new Date(r.time * 1000).getDate() && a.issue_id === r.issue_id
+      );
+      if (existing) {
+        existing.count += r.count;
+      } else {
+        const time = new Date(r.time * 1000).setHours(0, 0, 0, 0) / 1000;
+        agg.push({
+          time: time,
+          issue_id: r.issue_id,
+          count: r.count,
+          selected: r.selected,
+          id: r.id
+        });
+      }
+      return agg;
+    },
+    [] as BeeswarmCallCount[]
+  );
+  return d3
+    .stack()
+    .keys(d3.union(aggregated.map((d) => d.issue_id)))
+    .value(([, group], key) => {
+      const value = group.get(key);
+      return value ? value.count : 0;
+    })
+    .order(d3.stackOrderDescending)(
+    d3.index(
+      aggregated,
+      (d) => d.time,
+      (d) => d.issue_id
+    )
+  ); // group by stack then series key
 };
 
 export function getUsaMapKeyData(

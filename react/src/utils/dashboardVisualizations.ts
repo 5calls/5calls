@@ -1309,6 +1309,13 @@ export const drawRepsPane = (
           .style('fill', (d: BeeswarmNode<BeeswarmCallCount>) =>
             d.data.selected ? issueColor(d.data.issue_id) : defaultColor
           );
+        d3.select(`svg#bar_svg_${repData.id}`)
+          .selectAll('rect')
+          .transition()
+          .delay(0)
+          .style('fill', (d) =>
+            d.key === selectedIssueId ? issueColor(d.key) : defaultColor
+          );
         d3.select(`div#dot_key_${repData.id}`).style('display', 'none');
       } else {
         // select
@@ -1339,6 +1346,13 @@ export const drawRepsPane = (
           .delay(0)
           .style('fill', (d: BeeswarmNode<BeeswarmCallCount>) =>
             d.data.selected ? issueColor(d.data.issue_id) : defaultColor
+          );
+        d3.select(`svg#bar_svg_${repData.id}`)
+          .selectAll('rect')
+          .transition()
+          .delay(0)
+          .style('fill', (d) =>
+            d.key === selectedIssueId ? issueColor(d.key) : defaultColor
           );
         d3.select(`div#dot_key_${repData.id}`)
           .style('display', null)
@@ -1383,6 +1397,15 @@ export const drawRepsPane = (
               .style('fill', (d) =>
                 d.data.selected ? issueColor(d.data.issue_id) : defaultColor
               );
+            d3.select(`svg#bar_svg_${repData.id}`)
+              .selectAll('rect')
+              .transition()
+              .delay(0)
+              .style('fill', (b) =>
+                b.key === selectedIssueId || b.key === d.issue_id
+                  ? issueColor(b.key)
+                  : defaultColor
+              );
           }
         }
       )
@@ -1412,6 +1435,13 @@ export const drawRepsPane = (
               .delay(0)
               .style('fill', (d) =>
                 d.data.selected ? issueColor(d.data.issue_id) : defaultColor
+              );
+            d3.select(`svg#bar_svg_${repData.id}`)
+              .selectAll('rect')
+              .transition()
+              .delay(0)
+              .style('fill', (b) =>
+                b.key === selectedIssueId ? issueColor(b.key) : defaultColor
               );
           }
         }
@@ -1486,54 +1516,39 @@ const drawBarChart = (
   );
 
   const initialIssueId = repData.topIssues[0].issue_id;
-  repData.callResults.forEach(
-    (b) => (b.selected = b.issue_id === initialIssueId)
-  );
-
-  const series = d3
-    .stack()
-    .keys(d3.union(repData.callResults.map((d) => d.issue_id)))
-    .value(([, group], key) => {
-      const value = group.get(key);
-      return value ? value.count : 0;
-    })
-    .order(d3.stackOrderDescending)(
-    d3.index(
-      repData.callResults,
-      (d) => d.time,
-      (d) => d.issue_id
-    )
-  ); // group by stack then series key
 
   const y = d3
     .scaleLinear()
-    .domain([0, d3.max(series, (d) => d3.max(d, (d) => d[1]))])
+    .domain([0, d3.max(repData.barSeries, (d) => d3.max(d, (d) => d[1]))])
     .rangeRound([BEESWARM_TARGET_WIDTH / 3, 0]);
 
   const group = svg.append('g');
   group
     .selectAll()
-    .data(series)
+    .data(repData.barSeries)
     .enter()
     .append('g')
     .selectAll('rect')
-    .data((D) => D.map((d) => ((d.key = D.key), d)))
+    .data(
+      (D) => D.map((d) => ((d.key = D.key), d)),
+      (d) => d.key + d.time
+    )
     .enter()
     .append('rect')
-    .attr('fill', (d) => {
-      let datum = d.data[1].get(d.key);
-      if (datum && datum.selected) {
-        return issueColor(d.key);
-      }
-      return defaultColor;
-    })
+    .attr('fill', defaultColor)
     .attr(
       'x',
       (d) => barChartScale(d.data[0] * 1000) - BEESWARM_TARGET_WIDTH / 20
     )
     .attr('y', (d) => y(d[1]))
     .attr('height', (d) => y(d[0]) - y(d[1]))
-    .attr('width', BEESWARM_TARGET_WIDTH / 10); // TODO
+    .attr('width', BEESWARM_TARGET_WIDTH / 10) // TODO these hard-coded numbers.
+    // TODO: Add pointerover/click/pointerout
+    .transition()
+    .delay(0)
+    .attr('fill', (d) => {
+      return d.key === initialIssueId ? issueColor(d.key) : defaultColor;
+    });
 
   const height = group.node().getBBox().height;
   const axisHeight = 20;
