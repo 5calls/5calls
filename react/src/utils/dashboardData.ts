@@ -163,13 +163,23 @@ const expandRepResults = (results: BeeswarmCallCount[]) => {
 const aggregateCallResults = (
   results: BeeswarmCallCount[]
 ): BeeswarmCallCount[] => {
+  const finalDate = new Date();
+  finalDate.setHours(0, 0, 0, 0);
+  // Clip to avoid partial days.
+  const earliestDate = finalDate.getTime() - 6 * 24 * 60 * 60 * 1000;
   const aggregated = results.reduce(
     (agg: BeeswarmCallCount[], r: BeeswarmCallCount) => {
+      const rDate = new Date(r.time * 1000);
+      if (rDate.getTime() < earliestDate) {
+        // Filter dates too early.
+        return agg;
+      }
       const existing = agg.find(
         // Can this be more efficient?
+        // Comparing the day-of-month is enough since we only do 7 days at a time.
         (a) =>
-          new Date(a.time * 1000).getDate() ===
-            new Date(r.time * 1000).getDate() && a.issue_id === r.issue_id
+          new Date(a.time * 1000).getDate() === rDate.getDate() &&
+          a.issue_id === r.issue_id
       );
       if (existing) {
         existing.count += r.count;
