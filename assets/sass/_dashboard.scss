@@ -608,6 +608,10 @@
     z-index: 10;
   }
 
+  #dot_label {
+    pointer-events: none;
+  }
+
   .absolute {
     position: absolute;
   }

@@ -30,7 +30,7 @@ const selectedStateStroke = 'rgba(255, 217, 52)';
 const USA_TOPOJSON = 'https://cdn.jsdelivr.net/npm/us-atlas@2/us/10m.json';
 const MIN_FOR_BEESWARM = 7;
 const MAX_FOR_SONIFICATION = 2000;
-export const MAX_FOR_BEESWARM = 1000; // DO NOT SUBMIT
+export const MAX_FOR_BEESWARM = 700; // DO NOT SUBMIT
 const SCALED_POP_DENOMINATOR = 10000;
 
 const MAP_TABS = {
@@ -786,7 +786,10 @@ const drawUsaMap = (
       .attr(
         'title',
         'Map showing states colored by top issue. Select a state above.'
-      );
+      )
+      .on('pointerleave', () => {
+        group.selectAll('.state-highlight-clone').remove();
+      });
 
     const path = d3.geoPath();
     // Use the path to plot the US map based on the geometry data.
@@ -847,6 +850,7 @@ const drawUsaMap = (
         .selectAll(`option#${state}`)
         .attr('selected', true);
       selectedState = state;
+      group.selectAll('.state-highlight-clone').remove();
       const state_path = group.select(`path#state_${selectedState}`);
       const state_node = state_path.node() as SVGGraphicsElement;
       if (state_node) {
@@ -952,19 +956,29 @@ const drawUsaMap = (
               if (selectedState === d.id) {
                 return;
               }
-              // Bring to front
               if (this.parentNode) {
-                this.parentNode.appendChild(this);
-              }
-              const state = d3.select(this);
-              state.transition().attr('stroke', '#fff').attr('stroke-width', 2);
-              if (selectedState !== null) {
-                const selectedStateNode = group
-                  .select(`path#state_${selectedState}`)
-                  .node() as SVGGraphicsElement | null;
-                if (selectedStateNode && this.parentNode) {
-                  // Redraw on top.
-                  this.parentNode.appendChild(selectedStateNode);
+                const parent = d3.select(this.parentNode);
+                parent.selectAll(`.clone-${d.id}`).remove();
+
+                const clone = d3
+                  .select(this)
+                  .clone(false)
+                  .attr('class', `state-highlight-clone clone-${d.id}`)
+                  .style('pointer-events', 'none')
+                  .attr('stroke', '#fff')
+                  .attr('stroke-width', 1);
+
+                this.parentNode.appendChild(clone.node()!);
+
+                clone.transition().attr('stroke-width', 2);
+
+                if (selectedState !== null) {
+                  const selectedStateNode = group
+                    .select(`path#state_${selectedState}`)
+                    .node() as SVGGraphicsElement | null;
+                  if (selectedStateNode) {
+                    this.parentNode.appendChild(selectedStateNode);
+                  }
                 }
               }
             }
@@ -987,21 +1001,12 @@ const drawUsaMap = (
           .on(
             'pointerout',
             function (this: SVGPathElement, event: Event, d: Feature) {
-              const state = d3.select(this);
-              if (selectedState !== d.id) {
-                state
+              if (this.parentNode) {
+                d3.select(this.parentNode)
+                  .selectAll(`.clone-${d.id}`)
                   .transition()
-                  .attr('stroke', '#fff')
-                  .attr('stroke-width', 1);
-              }
-              if (selectedState !== null) {
-                const selectedStateNode = group
-                  .select(`path#state_${selectedState}`)
-                  .node() as SVGGraphicsElement | null;
-                if (selectedStateNode && this.parentNode) {
-                  // Redraw on top.
-                  this.parentNode.appendChild(selectedStateNode);
-                }
+                  .attr('stroke-width', 1)
+                  .remove();
               }
             }
           );
@@ -1262,7 +1267,7 @@ export const drawRepsPane = (
       const barChartScale = d3
         .scaleTime()
         .domain([earliestDate, finalDateAsDate.getTime()])
-        .range([50, BEESWARM_TARGET_WIDTH - 100])
+        .range([60, BEESWARM_TARGET_WIDTH - 55])
         .nice();
       drawBarChart(
         repCard.append('div'),
@@ -1290,6 +1295,9 @@ export const drawRepsPane = (
       }
       if (selectedIssueId === d.issue_id) {
         // deselect
+        const repTopIssues: Set<number> = new Set(
+          repData.topIssues.map((issue) => issue.issue_id)
+        );
         selectedIssueId = null;
         d3.select(this)
           .classed('selected', false)
@@ -1301,11 +1309,17 @@ export const drawRepsPane = (
           .transition()
           .delay(0)
           .style('fill', defaultColor);
-        d3.select(`svg#bar_svg_${repData.id}`)
+        d3.select('svg#bar_svg_' + repData.id)
+          .select('g#bar_group')
           .selectAll('rect')
           .transition()
           .delay(0)
-          .style('fill', defaultColor);
+          .attr('stroke', (b) =>
+            repTopIssues.has(b.key) ? issueColor(b.key) : defaultColor
+          )
+          .attr('fill', (b) =>
+            repTopIssues.has(b.key) ? issueColor(b.key) : defaultColor
+          );
         d3.select(`div#dot_key_${repData.id}`).style('display', 'none');
       } else {
         // select
@@ -1333,23 +1347,29 @@ export const drawRepsPane = (
               : defaultColor
           );
         d3.select(`svg#bar_svg_${repData.id}`)
+          .select('g#bar_group')
           .selectAll('rect')
           .transition()
           .delay(0)
           .style('fill', (d) =>
+            d.key === selectedIssueId ? issueColor(d.key) : defaultColor
+          )
+          .style('stroke', (d) =>
             d.key === selectedIssueId ? issueColor(d.key) : defaultColor
           );
         d3.select(`div#dot_key_${repData.id}`)
           .style('display', null)
           .style('--dot-color', issueColor(d.issue_id))
           .html(
-            `A call for <i>${repData.topIssues.find((i) => i.issue_id === d.issue_id)?.name}</i>`
+            `${!inBarRange(repData.total) ? 'A call for' : 'Calls about'} <i>${repData.topIssues.find((i) => i.issue_id === d.issue_id)?.name}</i>`
           );
       }
     };
 
-    // Only show beeswarm if there's enough calls.
-    let selectedIssueId: number | null = repData.topIssues[0].issue_id;
+    // Only show beeswarm if there's enough calls, but not if there's so many we will show the bar chart.
+    let selectedIssueId: number | null = !inBarRange(repData.total)
+      ? repData.topIssues[0].issue_id
+      : null;
     const showCallsBtns = d3
       .select(topFiveHolderSelector)
       .selectAll<HTMLButtonElement, IssueCountData>('button.stat');
@@ -1376,10 +1396,16 @@ export const drawRepsPane = (
                   : defaultColor
               );
             d3.select(`svg#bar_svg_${repData.id}`)
+          .select('g#bar_group')
               .selectAll('rect')
               .transition()
               .delay(0)
               .style('fill', (b) =>
+                b.key === selectedIssueId || b.key === d.issue_id
+                  ? issueColor(b.key)
+                  : defaultColor
+              )
+              .style('stroke', (b) =>
                 b.key === selectedIssueId || b.key === d.issue_id
                   ? issueColor(b.key)
                   : defaultColor
@@ -1409,13 +1435,35 @@ export const drawRepsPane = (
                   ? issueColor(d.data.issue_id)
                   : defaultColor
               );
-            d3.select(`svg#bar_svg_${repData.id}`)
-              .selectAll('rect')
-              .transition()
-              .delay(0)
-              .style('fill', (b) =>
-                b.key === selectedIssueId ? issueColor(b.key) : defaultColor
+            if (selectedIssueId === null) {
+              // Nothing is selected, reset to all colors on pointerout.
+              const repTopIssues: Set<number> = new Set(
+                repData.topIssues.map((issue) => issue.issue_id)
               );
+              d3.select(`svg#bar_svg_${repData.id}`)
+              .select('g#bar_group')
+                .selectAll('rect')
+                .transition()
+                .delay(0)
+                .style('fill', (b) =>
+                  repTopIssues.has(b.key) ? issueColor(b.key) : defaultColor
+                )
+                .style('stroke', (b) =>
+                  repTopIssues.has(b.key) ? issueColor(b.key) : defaultColor
+                );
+            } else {
+              d3.select(`svg#bar_svg_${repData.id}`)
+              .select('g#bar_group')
+                .selectAll('rect')
+                .transition()
+                .delay(0)
+                .style('fill', (b) =>
+                  b.key === selectedIssueId ? issueColor(b.key) : defaultColor
+                )
+                .style('stroke', (b) =>
+                  b.key === selectedIssueId ? issueColor(b.key) : defaultColor
+                );
+            }
           }
         }
       );
@@ -1464,10 +1512,19 @@ const drawBarChart = (
   const description = appendGraphicsSection(parentDiv, repData, duration);
 
   const paragraph = description.append('div');
-  paragraph.append('span').html('Select call count above to highlight');
+  paragraph.append('span').html('Select call count above to highlight. Today\'s calls are still coming in!'); // TODO: Add sonification of bars.
+
+  const dotsKey = description.append('div').attr('class', 'dot_key');
+  dotsKey.append('div').attr('class', 'dot').html('Calls about other issues');
+  dotsKey
+    .append('div')
+    .attr('class', 'dot')
+    .attr('id', `dot_key_${repData.id}`)
+    .style('--dot-color', issueColor(repData.topIssues[0].issue_id))
+    .style('display', 'none'); // No issue selected at first.
 
   const svgBox = parentDiv.append('div').style('position', 'relative');
-  svgBox
+  const dotLabel = svgBox
     .append('div')
     .attr('id', 'dot_label')
     .attr('class', 'overlayBox topLabel absolute')
@@ -1481,7 +1538,11 @@ const drawBarChart = (
     .style('height', 'auto')
     .attr('id', 'bar_svg_' + repData.id)
     .style('margin-bottom', '1.5rem')
-    .style('overflow', 'hidden');
+    .style('overflow', 'hidden')
+    .on('pointerleave', () => {
+      group.selectAll('.bar-highlight-clone').remove();
+      parentDiv.select('div#dot_label').attr('hidden', true);
+    });
 
   svg.attr(
     'title',
@@ -1492,6 +1553,16 @@ const drawBarChart = (
     month: 'short',
     day: 'numeric'
   });
+
+  const strokeColor = '#fff0';
+  const fillColor = defaultColor;
+  const repTopIssues: Set<number> = new Set(
+    repData.topIssues.map((issue) => issue.issue_id)
+  );
+  const dayTotals = (repData.barSeries.length > 0 ? repData.barSeries[0] : []).map((d) => ({
+    time: d.data[0],
+    total: Array.from(d.data[1].values()).reduce((sum: number, item: any) => sum + item.count, 0)
+  }));
 
   const selectBar = function (this: SVGRectElement, _: Event, bar) {
     // Bounding box of the rect.
@@ -1508,36 +1579,53 @@ const drawBarChart = (
     const yCoord = screenCoords.y - svgBb.y;
     const xCoord = screenCoords.x - svgBb.x;
 
-    // Deselect everything else.
-    d3.select(this.parentElement!.parentElement!)
-      .selectAll('rect')
-      .attr('stroke', null);
+    const parentGroup = d3.select(this.parentElement!.parentElement!);
+    parentGroup.selectAll('.bar-highlight-clone').remove();
 
-    this.parentElement!.appendChild(this);
-    d3.select(this).attr('stroke', '#333');
+    const clone = d3
+      .select(this)
+      .clone(false)
+      .attr('class', 'bar-highlight-clone')
+      .style('pointer-events', 'none')
+      .style('stroke', '#333');
+    parentGroup.node()!.appendChild(clone.node()!);
 
     const count = bar.data[1].get(bar.key).count;
+    const total = dayTotals.find((d) => d.time === bar.data[0])?.total;
 
-    d3.select(this.parentElement!.parentElement!.parentElement!.parentElement!)
+    parentDiv
       .select('div#dot_label')
       .attr('hidden', null)
       .style('top', `${yCoord}px`)
       .style('left', `${xCoord}px`)
       .select('div.issue_long_name')
       .html(
-        `${dateFormatter.format(new Date(bar.data[0] * 1000))}: ${count} call${count > 1 ? 's' : ''} for ${issueIdToName[bar.key]}`
+        `${dateFormatter.format(new Date(bar.data[0] * 1000))}: ${total} calls<br/>${count} for ${issueIdToName[bar.key]}`
       );
   };
 
-  const initialIssueId = repData.topIssues[0].issue_id;
   const width = BEESWARM_TARGET_WIDTH;
 
   const y = d3
     .scaleLinear()
     .domain([0, d3.max(repData.barSeries, (d) => d3.max(d, (d) => d[1]))])
-    .rangeRound([BEESWARM_TARGET_WIDTH / 3, 0]); // Target height
+    .rangeRound([BEESWARM_TARGET_WIDTH / 2, 0]); // Target height
 
-  const group = svg.append('g');
+  // Add outlines on the background.
+  svg.append('g')
+    .selectAll('rect')
+    .data(dayTotals)
+    .enter()
+    .append('rect')
+    .attr('x', (d) => barChartScale(d.time * 1000) - width / 20)
+    .attr('width', width / 10)
+    .attr('y', (d) => y(d.total))
+    .attr('height', (d) => y(0) - y(d.total) - 1)
+    .attr('fill', 'none')
+    .attr('stroke', '#555')
+    .attr('stroke-width', 2);
+
+  const group = svg.append('g').attr('id', 'bar_group');
   group
     .selectAll()
     .data(repData.barSeries)
@@ -1550,31 +1638,32 @@ const drawBarChart = (
     )
     .enter()
     .append('rect')
-    .attr('fill', defaultColor)
     .attr('x', (d) => barChartScale(d.data[0] * 1000) - width / 20)
     .attr('y', (d) => y(d[1]))
-    // .attr('stroke', `#fff4`)
     .attr('height', (d) => y(d[0]) - y(d[1]))
     .attr('width', width / 10) // TODO these hard-coded numbers.
     .on('pointerover', selectBar)
     .on('click', selectBar)
     .on('pointerout', function (this: SVGRectElement) {
-      d3.select(this).attr('stroke', null);
-      d3.select(
-        this.parentElement!.parentElement!.parentElement!.parentElement!
-      )
-        .select('div#dot_label')
-        .attr('hidden', true);
+      if (this.parentElement && this.parentElement.parentElement) {
+        d3.select(this.parentElement.parentElement)
+          .selectAll('.bar-highlight-clone')
+          .remove();
+      }
+      parentDiv.select('div#dot_label').attr('hidden', true);
     })
     .transition()
     .delay(0)
-    .attr('fill', (d) => {
-      return d.key === initialIssueId ? issueColor(d.key) : defaultColor;
-    });
+    .attr('stroke', (d) =>
+      repTopIssues.has(d.key) ? issueColor(d.key) : fillColor
+    )
+    .attr('fill', (d) =>
+      repTopIssues.has(d.key) ? issueColor(d.key) : fillColor
+    );
 
   const height = group.node().getBBox().height;
   const axisHeight = 20;
-  svg.attr('viewBox', `0 0 ${width} ${height + axisHeight}`);
+  svg.attr('viewBox', `0 -1 ${width} ${height + axisHeight}`);
 
   // Add the axis.
   svg
@@ -1725,12 +1814,16 @@ const drawBeeswarm = (
     _: Event,
     dot: BeeswarmNode<BeeswarmCallCount>
   ) {
-    // Deselect everything else.
-    d3.select(this.parentElement!).selectAll('circle').attr('stroke', `#fff4`);
+    const parent = d3.select(this.parentElement!);
+    parent.selectAll('.dot-highlight-clone').remove();
 
-    // Bring selected dot to front
-    this.parentElement!.appendChild(this);
-    d3.select(this).attr('stroke', '#333');
+    const clone = d3
+      .select(this)
+      .clone(false)
+      .attr('class', 'dot-highlight-clone')
+      .style('pointer-events', 'none')
+      .attr('stroke', '#333');
+    parent.node()!.appendChild(clone.node()!);
 
     // Bounding box of the dot.
     const boundingBox = this.getBBox();
@@ -1747,7 +1840,7 @@ const drawBeeswarm = (
     const yCoord = screenCoords.y - svgBb.y;
     const xCoord = screenCoords.x - svgBb.x;
 
-    d3.select(this.parentElement!.parentElement!.parentElement!)
+    parentDiv
       .select('div#dot_label')
       .attr('hidden', null)
       .style('top', `${yCoord}px`)
@@ -1765,7 +1858,11 @@ const drawBeeswarm = (
     .style('height', 'auto')
     .attr('id', 'beeswarm_svg_' + repData.id)
     .style('margin-bottom', '1.5rem')
-    .style('overflow', 'visible');
+    .style('overflow', 'visible')
+    .on('pointerleave', () => {
+      group.selectAll('.dot-highlight-clone').remove();
+      parentDiv.select('div#dot_label').attr('hidden', true);
+    });
 
   if (!inBeeswarmRange(repData.total)) {
     // Skip drawing beeswarm.
@@ -1800,10 +1897,12 @@ const drawBeeswarm = (
     .on('pointerover', selectDot)
     .on('click', selectDot)
     .on('pointerout', function (this: SVGCircleElement) {
-      d3.select(this).attr('stroke', `#fff4`);
-      d3.select(this.parentElement!.parentElement!.parentElement!)
-        .select('div#dot_label')
-        .attr('hidden', true);
+      if (this.parentElement) {
+        d3.select(this.parentElement)
+          .selectAll('.dot-highlight-clone')
+          .remove();
+      }
+      parentDiv.select('div#dot_label').attr('hidden', true);
     })
     .transition()
     .delay(0)
