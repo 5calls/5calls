@@ -23,7 +23,8 @@ export const BEESWARM_TARGET_WIDTH = 600;
 export const themeColor = 'rgb(24, 117, 209)';
 export const purple = '#9467bd';
 export const themeAccentColor = '#ed3c1d';
-const defaultColor = '#ccc';
+const defaultColor = '#eee';
+const beeswarmDefaultColor = '#ccc';
 export const defaultDarkColor = '#666';
 const selectedStateStroke = 'rgba(255, 217, 52)';
 
@@ -649,7 +650,7 @@ const drawUsaMap = (
               if (stateTopIssues && stateTopIssues.length > 0) {
                 return issueColor(stateTopIssues[0].issue_id);
               }
-              return defaultColor;
+              return beeswarmDefaultColor;
             });
           mapSection
             .select('h2.detail_title')
@@ -915,7 +916,7 @@ const drawUsaMap = (
       .attr('stroke-linecap', 'round')
       .style('cursor', 'pointer')
       .attr('id', (d: Feature) => 'state_' + d.id)
-      .attr('fill', defaultColor)
+      .attr('fill', beeswarmDefaultColor)
       .attr('d', path)
       .transition()
       .delay(500)
@@ -927,7 +928,7 @@ const drawUsaMap = (
           return issueColor(stateTopIssues[0].issue_id);
         }
         // Default grey for no calls at all.
-        return defaultColor;
+        return beeswarmDefaultColor;
       })
       .on('end', function (this: any) {
         // After animation ends, can set interaction listeners. If they go off in the
@@ -1267,7 +1268,7 @@ export const drawRepsPane = (
       const barChartScale = d3
         .scaleTime()
         .domain([earliestDate, finalDateAsDate.getTime()])
-        .range([60, BEESWARM_TARGET_WIDTH - 55])
+        .range([40, BEESWARM_TARGET_WIDTH - 45])
         .nice();
       drawBarChart(
         repCard.append('div'),
@@ -1308,16 +1309,16 @@ export const drawRepsPane = (
           .selectAll('circle')
           .transition()
           .delay(0)
-          .style('fill', defaultColor);
-        d3.select('svg#bar_svg_' + repData.id)
+          .style('fill', beeswarmDefaultColor);
+        d3.select(`svg#bar_svg_${repData.id}`)
           .select('g#bar_group')
           .selectAll('rect')
           .transition()
           .delay(0)
-          .attr('stroke', (b) =>
+          .style('fill', (b) =>
             repTopIssues.has(b.key) ? issueColor(b.key) : defaultColor
           )
-          .attr('fill', (b) =>
+          .style('stroke', (b) =>
             repTopIssues.has(b.key) ? issueColor(b.key) : defaultColor
           );
         d3.select(`div#dot_key_${repData.id}`).style('display', 'none');
@@ -1344,7 +1345,7 @@ export const drawRepsPane = (
           .style('fill', (d: BeeswarmNode<BeeswarmCallCount>) =>
             d.data.issue_id === selectedIssueId
               ? issueColor(d.data.issue_id)
-              : defaultColor
+              : beeswarmDefaultColor
           );
         d3.select(`svg#bar_svg_${repData.id}`)
           .select('g#bar_group')
@@ -1393,10 +1394,10 @@ export const drawRepsPane = (
                 b.data.issue_id === selectedIssueId ||
                 b.data.issue_id === d.issue_id
                   ? issueColor(b.data.issue_id)
-                  : defaultColor
+                  : beeswarmDefaultColor
               );
             d3.select(`svg#bar_svg_${repData.id}`)
-          .select('g#bar_group')
+              .select('g#bar_group')
               .selectAll('rect')
               .transition()
               .delay(0)
@@ -1433,7 +1434,7 @@ export const drawRepsPane = (
               .style('fill', (d) =>
                 d.data.issue_id === selectedIssueId
                   ? issueColor(d.data.issue_id)
-                  : defaultColor
+                  : beeswarmDefaultColor
               );
             if (selectedIssueId === null) {
               // Nothing is selected, reset to all colors on pointerout.
@@ -1441,7 +1442,7 @@ export const drawRepsPane = (
                 repData.topIssues.map((issue) => issue.issue_id)
               );
               d3.select(`svg#bar_svg_${repData.id}`)
-              .select('g#bar_group')
+                .select('g#bar_group')
                 .selectAll('rect')
                 .transition()
                 .delay(0)
@@ -1453,7 +1454,7 @@ export const drawRepsPane = (
                 );
             } else {
               d3.select(`svg#bar_svg_${repData.id}`)
-              .select('g#bar_group')
+                .select('g#bar_group')
                 .selectAll('rect')
                 .transition()
                 .delay(0)
@@ -1512,7 +1513,11 @@ const drawBarChart = (
   const description = appendGraphicsSection(parentDiv, repData, duration);
 
   const paragraph = description.append('div');
-  paragraph.append('span').html('Select call count above to highlight. Today\'s calls are still coming in!'); // TODO: Add sonification of bars.
+  paragraph
+    .append('span')
+    .html(
+      "Select call count above to highlight. Today's calls are still coming in!"
+    ); // TODO: Add sonification of bars.
 
   const dotsKey = description.append('div').attr('class', 'dot_key');
   dotsKey.append('div').attr('class', 'dot').html('Calls about other issues');
@@ -1524,7 +1529,7 @@ const drawBarChart = (
     .style('display', 'none'); // No issue selected at first.
 
   const svgBox = parentDiv.append('div').style('position', 'relative');
-  const dotLabel = svgBox
+  svgBox
     .append('div')
     .attr('id', 'dot_label')
     .attr('class', 'overlayBox topLabel absolute')
@@ -1559,9 +1564,14 @@ const drawBarChart = (
   const repTopIssues: Set<number> = new Set(
     repData.topIssues.map((issue) => issue.issue_id)
   );
-  const dayTotals = (repData.barSeries.length > 0 ? repData.barSeries[0] : []).map((d) => ({
+  const dayTotals = (
+    repData.barSeries.length > 0 ? repData.barSeries[0] : []
+  ).map((d) => ({
     time: d.data[0],
-    total: Array.from(d.data[1].values()).reduce((sum: number, item: any) => sum + item.count, 0)
+    total: Array.from(d.data[1].values()).reduce(
+      (sum: number, item: any) => sum + item.count,
+      0
+    )
   }));
 
   const selectBar = function (this: SVGRectElement, _: Event, bar) {
@@ -1569,7 +1579,7 @@ const drawBarChart = (
     const boundingBox = this.getBBox();
     const matrix = this.getScreenCTM()!;
     const point = this.ownerSVGElement!.createSVGPoint();
-    point.x = boundingBox.x + boundingBox.width / 2;
+    point.x = boundingBox.x + (boundingBox.width * 2) / 3;
     point.y = boundingBox.y + boundingBox.height / 2;
     const screenCoords = point.matrixTransform(matrix);
     screenCoords.y += 4; // Slightly below
@@ -1600,30 +1610,51 @@ const drawBarChart = (
       .style('left', `${xCoord}px`)
       .select('div.issue_long_name')
       .html(
-        `${dateFormatter.format(new Date(bar.data[0] * 1000))}: ${total} calls<br/>${count} for ${issueIdToName[bar.key]}`
+        `${dateFormatter.format(new Date(bar.data[0] * 1000))}: ${total} calls.<br/>${count} for ${issueIdToName[bar.key]}`
       );
   };
 
   const width = BEESWARM_TARGET_WIDTH;
+  const barWidth = width / 20;
 
   const y = d3
     .scaleLinear()
     .domain([0, d3.max(repData.barSeries, (d) => d3.max(d, (d) => d[1]))])
     .rangeRound([BEESWARM_TARGET_WIDTH / 2, 0]); // Target height
 
+  svg
+    .append('g')
+    .attr('transform', `translate(${20}, 0)`)
+    .call(
+      d3
+        .axisLeft(y)
+        .ticks(6, 's')
+        .tickSize(-BEESWARM_TARGET_WIDTH + 25)
+    )
+    .call((g) => {
+      g.selectAll('.domain').remove();
+      g.selectAll('.tick line').attr('stroke', '#e6e6e6');
+    });
+
   // Add outlines on the background.
-  svg.append('g')
+  svg
+    .append('g')
     .selectAll('rect')
     .data(dayTotals)
     .enter()
     .append('rect')
-    .attr('x', (d) => barChartScale(d.time * 1000) - width / 20)
-    .attr('width', width / 10)
+    .attr('x', (d) => barChartScale(d.time * 1000) - barWidth / 2)
+    .attr('width', barWidth)
     .attr('y', (d) => y(d.total))
     .attr('height', (d) => y(0) - y(d.total) - 1)
     .attr('fill', 'none')
     .attr('stroke', '#555')
-    .attr('stroke-width', 2);
+    .attr('stroke-width', 2)
+    .attr('stroke-dasharray', (d) =>
+      new Date(d.time * 1000).getDate() === new Date().getDate()
+        ? '2 2'
+        : 'none'
+    );
 
   const group = svg.append('g').attr('id', 'bar_group');
   group
@@ -1638,10 +1669,10 @@ const drawBarChart = (
     )
     .enter()
     .append('rect')
-    .attr('x', (d) => barChartScale(d.data[0] * 1000) - width / 20)
+    .attr('x', (d) => barChartScale(d.data[0] * 1000) - barWidth / 2)
     .attr('y', (d) => y(d[1]))
     .attr('height', (d) => y(d[0]) - y(d[1]))
-    .attr('width', width / 10) // TODO these hard-coded numbers.
+    .attr('width', barWidth)
     .on('pointerover', selectBar)
     .on('click', selectBar)
     .on('pointerout', function (this: SVGRectElement) {
@@ -1676,12 +1707,6 @@ const drawBarChart = (
         .ticks(d3.timeDay)
         .tickFormat(d3.timeFormat('%a %-d'))
     );
-
-  svg
-    .append('g')
-    .attr('transform', `translate(${25}, 0)`)
-    .call(d3.axisLeft(y).ticks(null, 's'))
-    .call((g) => g.selectAll('.domain').remove());
 };
 
 const drawBeeswarm = (
@@ -1893,7 +1918,7 @@ const drawBeeswarm = (
     .attr('cx', (d: BeeswarmNode<BeeswarmCallCount>) => d.x)
     .attr('cy', (d: BeeswarmNode<BeeswarmCallCount>) => d.y)
     .attr('r', (d: BeeswarmNode<BeeswarmCallCount>) => d.r)
-    .style('fill', defaultColor)
+    .style('fill', beeswarmDefaultColor)
     .on('pointerover', selectDot)
     .on('click', selectDot)
     .on('pointerout', function (this: SVGCircleElement) {
@@ -1909,7 +1934,7 @@ const drawBeeswarm = (
     .style('fill', (d: BeeswarmNode<BeeswarmCallCount>) =>
       initialIssueId === d.data.issue_id
         ? issueColor(d.data.issue_id)
-        : defaultColor
+        : beeswarmDefaultColor
     );
 
   const height = group.node().getBBox().height;
