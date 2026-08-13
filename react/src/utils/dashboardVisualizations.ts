@@ -31,7 +31,7 @@ const selectedStateStroke = 'rgba(255, 217, 52)';
 const USA_TOPOJSON = 'https://cdn.jsdelivr.net/npm/us-atlas@2/us/10m.json';
 const MIN_FOR_BEESWARM = 7;
 const MAX_FOR_SONIFICATION = 2000;
-export const MAX_FOR_BEESWARM = 700; // DO NOT SUBMIT
+export const MAX_FOR_BEESWARM = 600; // DO NOT SUBMIT
 const SCALED_POP_DENOMINATOR = 10000;
 
 const MAP_TABS = {
@@ -1231,6 +1231,17 @@ export const drawRepsPane = (
 
   // Draw beeswarm async so that it doesn't block rendering.
   window.setTimeout(() => {
+    const dayTotals = (repData.barSeries.length > 0 ? repData.barSeries[0] : [])
+      .map((d) => ({
+        time: d.data[0],
+        total: Array.from(d.data[1].values()).reduce(
+          (sum: number, item: any) => sum + item.count,
+          0
+        ),
+        dayMap: d.data[1]
+      }))
+      .sort((a, b) => a.time - b.time);
+
     if (inBeeswarmRange(repData.total)) {
       const beeswarmScale = d3
         .scaleTime()
@@ -1255,6 +1266,7 @@ export const drawRepsPane = (
       drawBeeswarm(
         repCard.append('div'),
         repData,
+        dayTotals,
         beeswarmScale,
         issueIdToName,
         issueColor,
@@ -1273,6 +1285,7 @@ export const drawRepsPane = (
       drawBarChart(
         repCard.append('div'),
         repData,
+        dayTotals,
         barChartScale,
         issueIdToName,
         issueColor,
@@ -1322,6 +1335,20 @@ export const drawRepsPane = (
             repTopIssues.has(b.key) ? issueColor(b.key) : defaultColor
           );
         d3.select(`div#dot_key_${repData.id}`).style('display', 'none');
+
+        // Update the dynamic table data for deselect
+        const table = repCard.select(`.chart-data-table`);
+        if (!table.empty()) {
+          table
+            .select('.selected-issue-header')
+            .style('display', 'none')
+            .text('');
+
+          table
+            .selectAll('.selected-issue-value')
+            .style('display', 'none')
+            .text('');
+        }
       } else {
         // select
         selectedIssueId = d.issue_id;
@@ -1362,8 +1389,27 @@ export const drawRepsPane = (
           .style('display', null)
           .style('--dot-color', issueColor(d.issue_id))
           .html(
-            `${!inBarRange(repData.total) ? 'A call for' : 'Calls about'} <i>${repData.topIssues.find((i) => i.issue_id === d.issue_id)?.name}</i>`
+            `${!inBarRange(repData.total) ? 'A call for ' : ''}<i>${repData.topIssues.find((i) => i.issue_id === d.issue_id)?.name}</i>`
           );
+
+        // Update the dynamic table data for select
+        const table = repCard.select(`.chart-data-table`);
+        if (!table.empty()) {
+          const issueName =
+            repData.topIssues.find((i) => i.issue_id === d.issue_id)?.name ||
+            'Selected Issue';
+          table
+            .select('.selected-issue-header')
+            .style('display', null)
+            .text(issueName);
+
+          table
+            .selectAll('.selected-issue-value')
+            .style('display', null)
+            .text((b: any) => {
+              return b.dayMap?.get(selectedIssueId)?.count || 0;
+            });
+        }
       }
     };
 
@@ -1505,6 +1551,7 @@ const appendGraphicsSection = (
 const drawBarChart = (
   parentDiv: d3.Selection<HTMLDivElement, unknown, null, undefined>,
   repData: ExpandedRepData,
+  dayTotals,
   barChartScale: d3.ScaleTime<number, number>,
   issueIdToName: { [key: number]: string },
   issueColor: d3.ScaleOrdinal<number, string>,
@@ -1520,7 +1567,7 @@ const drawBarChart = (
     ); // TODO: Add sonification of bars.
 
   const dotsKey = description.append('div').attr('class', 'dot_key');
-  dotsKey.append('div').attr('class', 'dot').html('Calls about other issues');
+  dotsKey.append('div').attr('class', 'dot').html('Other issues');
   dotsKey
     .append('div')
     .attr('class', 'dot')
@@ -1559,20 +1606,10 @@ const drawBarChart = (
     day: 'numeric'
   });
 
-  const strokeColor = '#fff0';
   const fillColor = defaultColor;
   const repTopIssues: Set<number> = new Set(
     repData.topIssues.map((issue) => issue.issue_id)
   );
-  const dayTotals = (
-    repData.barSeries.length > 0 ? repData.barSeries[0] : []
-  ).map((d) => ({
-    time: d.data[0],
-    total: Array.from(d.data[1].values()).reduce(
-      (sum: number, item: any) => sum + item.count,
-      0
-    )
-  }));
 
   const selectBar = function (this: SVGRectElement, _: Event, bar) {
     // Bounding box of the rect.
@@ -1620,10 +1657,11 @@ const drawBarChart = (
   const y = d3
     .scaleLinear()
     .domain([0, d3.max(repData.barSeries, (d) => d3.max(d, (d) => d[1]))])
-    .rangeRound([BEESWARM_TARGET_WIDTH / 2, 0]); // Target height
+    .rangeRound([BEESWARM_TARGET_WIDTH / 3, 0]); // Target height
 
   svg
     .append('g')
+    .attr('aria-hidden', true)
     .attr('transform', `translate(${20}, 0)`)
     .call(
       d3
@@ -1639,6 +1677,7 @@ const drawBarChart = (
   // Add outlines on the background.
   svg
     .append('g')
+    .attr('aria-hidden', true)
     .selectAll('rect')
     .data(dayTotals)
     .enter()
@@ -1699,6 +1738,7 @@ const drawBarChart = (
   // Add the axis.
   svg
     .append('g')
+    .attr('aria-hidden', true)
     .attr('transform', `translate(0,${height})`)
     .call(
       d3
@@ -1707,11 +1747,70 @@ const drawBarChart = (
         .ticks(d3.timeDay)
         .tickFormat(d3.timeFormat('%a %-d'))
     );
+
+  appendCallDetailsTable(parentDiv, repData, dayTotals, dateFormatter);
+};
+
+const appendCallDetailsTable = (
+  parentDiv: d3.Selection<any, any, any, any>,
+  repData: ExpandedRepData,
+  dayTotals,
+  dateFormatter: d3.TimeFormat
+) => {
+  const details = parentDiv
+    .append('details')
+    .attr('class', 'chart-data-details')
+    .attr('id', `table_details_${repData.id}`);
+
+  details.append('summary').text('Show call data table');
+
+  const table = details
+    .append('table')
+    .attr('class', 'chart-data-table')
+    .attr('id', `data_table_${repData.id}`);
+
+  table
+    .append('caption')
+    .text(
+      `Daily call counts to ${repData.repInfo.name}. Select a call count above for details.`
+    );
+
+  const theadRow = table.append('thead').append('tr');
+  theadRow
+    .append('th')
+    .attr('scope', 'col')
+    .style('width', '100px')
+    .text('Date');
+  theadRow
+    .append('th')
+    .attr('scope', 'col')
+    .style('width', '120px')
+    .text('Total Calls');
+  theadRow
+    .append('th')
+    .attr('scope', 'col')
+    .attr('class', 'selected-issue-header')
+    .style('display', 'none');
+
+  const tbody = table.append('tbody');
+
+  const rows = tbody.selectAll('tr').data(dayTotals).enter().append('tr');
+
+  rows.append('td').text((d) => dateFormatter.format(new Date(d.time * 1000)));
+
+  rows.append('td').text((d) => d.total);
+
+  rows
+    .append('td')
+    .attr('class', 'selected-issue-value')
+    .style('display', 'none')
+    .text('');
 };
 
 const drawBeeswarm = (
   parentDiv: d3.Selection<HTMLDivElement, unknown, null, undefined>,
   repData: ExpandedRepData,
+  dayTotals,
   beeswarmScale: d3.ScaleTime<number, number>,
   issueIdToName: { [key: number]: string },
   issueColor: d3.ScaleOrdinal<number, string>,
@@ -1963,6 +2062,8 @@ const drawBeeswarm = (
         .ticks(d3.timeDay)
         .tickFormat(d3.timeFormat('%a %-d'))
     );
+
+  appendCallDetailsTable(parentDiv, repData, dayTotals, dateFormatter);
 };
 
 const isValidActivation = (event: Event): boolean => {

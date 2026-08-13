@@ -178,6 +178,68 @@
     width: 100%;
   }
 
+  .chart-data-details {
+    margin-top: 1rem;
+    font-size: rem-calc(16);
+
+    summary {
+      cursor: pointer;
+      user-select: none;
+      outline: none;
+      transition: color 0.2s ease;
+      color: #000;
+
+      &:hover, &:focus {
+        color: var(--c-dark);
+        text-decoration: underline;
+      }
+    }
+
+    &[open] summary {
+      margin-bottom: 0.5rem;
+    }
+  }
+
+  .chart-data-table {
+    width: 100%;
+    @include desktop {
+      max-width: 35rem;
+    }
+    border-collapse: collapse;
+    margin-top: 0.5rem;
+    overflow: hidden;
+    font-size: rem-calc(16);
+    table-layout: fixed;
+
+    caption {
+      text-align: left;
+      color: var(--c-base);
+      margin-bottom: 0.25rem;
+    }
+
+    th, td {
+      padding: 0.5rem 0.75rem;
+      text-align: left;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    th {
+      color: #000;
+      border-bottom: 1px solid var(--c-light-border);
+      overflow: hidden;
+    }
+
+    tbody {
+      color: var(--c-base);
+      tr {
+        &:hover {
+          background: #eee;
+        }
+      }
+    }
+  }
+
   .dot_key {
     white-space: nowrap;
     overflow: hidden;

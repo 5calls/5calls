@@ -21,8 +21,7 @@ import {
   purple,
   themeAccentColor,
   defaultDarkColor,
-  MAX_FOR_BEESWARM,
-  BEESWARM_TARGET_WIDTH
+  MAX_FOR_BEESWARM
 } from '../utils/dashboardVisualizations';
 
 const defaultUsa: RegionSummaryData = {

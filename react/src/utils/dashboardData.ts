@@ -28,6 +28,7 @@ export interface ExpandedRepData {
   percentVM: number;
   percentContact: number;
   percentUnavailable: number;
+  barSeries: d3.Series<BeeswarmCallCount, number>;
 }
 
 // Represents a single call to a representative, about a particular issue and at a given time.
@@ -98,14 +99,14 @@ export function processRepsData(
       expandedResult.callResults =
         contactSummaryData.aggregatedResults as unknown as BeeswarmCallCount[];
 
+      // Calculate calls per issue per day, in the user's time zone.
+      expandedResult.barSeries = aggregateCallResults(
+        expandedResult.callResults
+      );
+
       if (expandedResult.total <= maxForBeeswarm) {
         // In-place expand to individual calls.
         expandRepResults(expandedResult.callResults);
-      } else {
-        // Calculate calls per issue per day, in the user's time zone.
-        expandedResult.barSeries = aggregateCallResults(
-          expandedResult.callResults
-        );
       }
 
       // Calculate aggregated reachability stats.
@@ -162,7 +163,7 @@ const expandRepResults = (results: BeeswarmCallCount[]) => {
 
 const aggregateCallResults = (
   results: BeeswarmCallCount[]
-): BeeswarmCallCount[] => {
+): d3.Series<BeeswarmCallCount, number>[] => {
   const finalDate = new Date();
   finalDate.setHours(0, 0, 0, 0);
   // Clip to avoid partial days.
