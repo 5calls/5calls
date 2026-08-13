@@ -40,6 +40,13 @@ export interface BeeswarmCallCount {
   selected: boolean;
 }
 
+// Represents aggregated call counts and details per day.
+export interface DayTotal {
+  time: number;
+  total: number;
+  dayMap: Map<number, BeeswarmCallCount>;
+}
+
 // Describes call outcomes (e.g. 73 calls to voicemail).
 export interface OutcomeSummaryData {
   result: string;

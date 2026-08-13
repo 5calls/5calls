@@ -6,6 +6,7 @@ import {
   BeeswarmCallCount,
   BeeswarmNode,
   ExpandedRepData,
+  DayTotal,
   getPopulation,
   getUsaMapKeyData,
   scaledCallsPerStateString,
@@ -31,7 +32,7 @@ const selectedStateStroke = 'rgba(255, 217, 52)';
 const USA_TOPOJSON = 'https://cdn.jsdelivr.net/npm/us-atlas@2/us/10m.json';
 const MIN_FOR_BEESWARM = 7;
 const MAX_FOR_SONIFICATION = 2000;
-export const MAX_FOR_BEESWARM = 600; // DO NOT SUBMIT
+export const MAX_FOR_BEESWARM = 2000; // Show beeswarm up until this many calls, then switch to bars.
 const SCALED_POP_DENOMINATOR = 10000;
 
 const MAP_TABS = {
@@ -1240,7 +1241,7 @@ export const drawRepsPane = (
         ),
         dayMap: d.data[1]
       }))
-      .sort((a, b) => a.time - b.time);
+      .sort((a: DayTotal, b: DayTotal) => a.time - b.time);
 
     if (inBeeswarmRange(repData.total)) {
       const beeswarmScale = d3
@@ -1551,7 +1552,7 @@ const appendGraphicsSection = (
 const drawBarChart = (
   parentDiv: d3.Selection<HTMLDivElement, unknown, null, undefined>,
   repData: ExpandedRepData,
-  dayTotals,
+  dayTotals: DayTotal[],
   barChartScale: d3.ScaleTime<number, number>,
   issueIdToName: { [key: number]: string },
   issueColor: d3.ScaleOrdinal<number, string>,
@@ -1754,7 +1755,7 @@ const drawBarChart = (
 const appendCallDetailsTable = (
   parentDiv: d3.Selection<any, any, any, any>,
   repData: ExpandedRepData,
-  dayTotals,
+  dayTotals: DayTotal[],
   dateFormatter: d3.TimeFormat
 ) => {
   const details = parentDiv
@@ -1810,7 +1811,7 @@ const appendCallDetailsTable = (
 const drawBeeswarm = (
   parentDiv: d3.Selection<HTMLDivElement, unknown, null, undefined>,
   repData: ExpandedRepData,
-  dayTotals,
+  dayTotals: DayTotal[],
   beeswarmScale: d3.ScaleTime<number, number>,
   issueIdToName: { [key: number]: string },
   issueColor: d3.ScaleOrdinal<number, string>,
