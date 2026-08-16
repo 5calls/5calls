@@ -962,6 +962,7 @@ const drawUsaMap = (
                 const parent = d3.select(this.parentNode);
                 parent.selectAll(`.clone-${d.id}`).remove();
 
+                // Add a clone with no pointer interaction to visually bring this to the front.
                 const clone = d3
                   .select(this)
                   .clone(false)
@@ -1230,7 +1231,7 @@ export const drawRepsPane = (
       `<span class="results_unavailable">${(repData.percentUnavailable * 100).toFixed(0)}%</span> unavailable`
     );
 
-  // Draw beeswarm async so that it doesn't block rendering.
+  // Draw beeswarm or bars async so that they don't block rendering.
   window.setTimeout(() => {
     const dayTotals = (repData.barSeries.length > 0 ? repData.barSeries[0] : [])
       .map((d) => ({
@@ -1403,13 +1404,10 @@ export const drawRepsPane = (
             .select('.selected-issue-header')
             .style('display', null)
             .text(issueName);
-
           table
             .selectAll('.selected-issue-value')
             .style('display', null)
-            .text((b: any) => {
-              return b.dayMap?.get(selectedIssueId)?.count || 0;
-            });
+            .text((b: any) => b.dayMap?.get(selectedIssueId)?.count || 0);
         }
       }
     };
@@ -1630,6 +1628,7 @@ const drawBarChart = (
     const parentGroup = d3.select(this.parentElement!.parentElement!);
     parentGroup.selectAll('.bar-highlight-clone').remove();
 
+    // Bring a copy to the front visually.
     const clone = d3
       .select(this)
       .clone(false)
@@ -1686,7 +1685,7 @@ const drawBarChart = (
     .attr('x', (d) => barChartScale(d.time * 1000) - barWidth / 2)
     .attr('width', barWidth)
     .attr('y', (d) => y(d.total))
-    .attr('height', (d) => y(0) - y(d.total) - 1)
+    .attr('height', (d) => y(0) - y(d.total))
     .attr('fill', 'none')
     .attr('stroke', '#555')
     .attr('stroke-width', 2)
@@ -1747,16 +1746,26 @@ const drawBarChart = (
         .tickSizeOuter(0)
         .ticks(d3.timeDay)
         .tickFormat(d3.timeFormat('%a %-d'))
-    );
+    )
+    .call((g) => {
+      g.selectAll('.domain').remove();
+    });
 
-  appendCallDetailsTable(parentDiv, repData, dayTotals, dateFormatter);
+  appendCallDetailsTable(
+    parentDiv,
+    repData,
+    dayTotals,
+    dateFormatter,
+    /* initialIssueId=*/ null
+  );
 };
 
 const appendCallDetailsTable = (
   parentDiv: d3.Selection<any, any, any, any>,
   repData: ExpandedRepData,
   dayTotals: DayTotal[],
-  dateFormatter: d3.TimeFormat
+  dateFormatter: d3.TimeFormat,
+  initialIssueId?: number
 ) => {
   const details = parentDiv
     .append('details')
@@ -1791,7 +1800,13 @@ const appendCallDetailsTable = (
     .append('th')
     .attr('scope', 'col')
     .attr('class', 'selected-issue-header')
-    .style('display', 'none');
+    .style('display', initialIssueId !== null ? null : 'none')
+    .text(
+      initialIssueId !== null
+        ? repData.topIssues.find((i) => i.issue_id === initialIssueId)?.name ||
+            'Selected Issue'
+        : null
+    );
 
   const tbody = table.append('tbody');
 
@@ -1801,11 +1816,13 @@ const appendCallDetailsTable = (
 
   rows.append('td').text((d) => d.total);
 
-  rows
+  const td = rows
     .append('td')
     .attr('class', 'selected-issue-value')
-    .style('display', 'none')
-    .text('');
+    .style('display', initialIssueId !== null ? null : 'none')
+    .text((d) =>
+      initialIssueId !== null ? d.dayMap?.get(initialIssueId)?.count || 0 : ''
+    );
 };
 
 const drawBeeswarm = (
@@ -1942,6 +1959,7 @@ const drawBeeswarm = (
     const parent = d3.select(this.parentElement!);
     parent.selectAll('.dot-highlight-clone').remove();
 
+    // Bring a copy to the front visually.
     const clone = d3
       .select(this)
       .clone(false)
@@ -2064,7 +2082,13 @@ const drawBeeswarm = (
         .tickFormat(d3.timeFormat('%a %-d'))
     );
 
-  appendCallDetailsTable(parentDiv, repData, dayTotals, dateFormatter);
+  appendCallDetailsTable(
+    parentDiv,
+    repData,
+    dayTotals,
+    dateFormatter,
+    initialIssueId
+  );
 };
 
 const isValidActivation = (event: Event): boolean => {
