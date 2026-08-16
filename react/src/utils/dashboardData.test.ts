@@ -586,3 +586,130 @@ describe('beeswarmForce', () => {
     expect(typeof result[0].y).toBe('number');
   });
 });
+
+describe('aggregateCallResults via processRepsData', () => {
+  beforeAll(() => {
+    jest.useFakeTimers();
+  });
+
+  afterAll(() => {
+    jest.useRealTimers();
+  });
+
+  beforeEach(() => {
+    jest.setSystemTime(new Date('2026-08-12T12:00:00Z'));
+  });
+
+  function getBarSeriesForCalls(results: any[], mockTotal: number = 100): any {
+    const repsSummaryData: RepsSummaryData = {
+      reps: [
+        {
+          id: 'rep1',
+          name: 'Test Rep 1',
+          party: 'independent',
+          phone: '123-456-7890',
+          photoURL: 'http://example.com/rep1.jpg',
+          area: 'US House',
+          state: 'CA'
+        }
+      ],
+      repsData: [
+        {
+          id: 'rep1',
+          total: mockTotal,
+          outcomes: [],
+          topIssues: [],
+          aggregatedResults: results
+        }
+      ]
+    };
+
+    const processed = processRepsData(repsSummaryData, /* maxForBeeswarm= */ 5);
+    return processed[0]?.barSeries || [];
+  }
+
+  it('should return empty stack structure when given empty results', () => {
+    const result = getBarSeriesForCalls([]);
+    expect(result).toEqual([]);
+  });
+
+  it('should filter out call results older than 6 days ago', () => {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const todaySec = today.getTime() / 1000;
+    const sixDaysAgoSec = todaySec - 6 * 24 * 60 * 60;
+    const sevenDaysAgoSec = todaySec - 7 * 24 * 60 * 60;
+
+    const results = [
+      { issue_id: 1, count: 5, time: todaySec, id: 1, selected: false },
+      { issue_id: 2, count: 3, time: sixDaysAgoSec, id: 2, selected: false },
+      { issue_id: 3, count: 4, time: sevenDaysAgoSec, id: 3, selected: false }
+    ];
+
+    const result = getBarSeriesForCalls(results);
+
+    expect(result.length).toBe(2);
+
+    const keys = result.map((series: any) => series.key);
+    expect(keys).toContain(1);
+    expect(keys).toContain(2);
+    expect(keys).not.toContain(3);
+  });
+
+  it('should aggregate counts for the same issue on the same day', () => {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const todaySec = today.getTime() / 1000;
+
+    const results = [
+      { issue_id: 1, count: 3, time: todaySec, id: 1, selected: false },
+      { issue_id: 1, count: 5, time: todaySec + 3600, id: 2, selected: false }
+    ];
+
+    const result = getBarSeriesForCalls(results);
+
+    expect(result.length).toBe(1);
+    const series = result[0];
+    expect(series.key).toBe(1);
+
+    expect(series.length).toBe(1);
+    const point = series[0];
+    expect(point[0]).toBe(0);
+    expect(point[1]).toBe(8);
+
+    const dataEntry = point.data;
+    expect(dataEntry[0]).toBe(todaySec);
+    const groupMap = dataEntry[1];
+    expect(groupMap.get(1).count).toBe(8);
+  });
+
+  it('should stack multiple issues correctly on the same day', () => {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const todaySec = today.getTime() / 1000;
+
+    const results = [
+      { issue_id: 10, count: 4, time: todaySec, id: 1, selected: false },
+      { issue_id: 20, count: 6, time: todaySec, id: 2, selected: false }
+    ];
+
+    const result = getBarSeriesForCalls(results);
+
+    expect(result.length).toBe(2);
+
+    const series10 = result.find((s: any) => s.key === 10);
+    const series20 = result.find((s: any) => s.key === 20);
+
+    expect(series10).toBeDefined();
+    expect(series20).toBeDefined();
+
+    expect(series10.length).toBe(1);
+    expect(series20.length).toBe(1);
+
+    const p10 = series10[0];
+    const p20 = series20[0];
+    expect(Math.abs(p10[1] - p10[0])).toBe(4);
+    expect(Math.abs(p20[1] - p20[0])).toBe(6);
+    expect(Math.max(p10[1], p20[1])).toBe(10);
+  });
+});

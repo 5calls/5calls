@@ -6,6 +6,7 @@ import {
   BeeswarmCallCount,
   BeeswarmNode,
   ExpandedRepData,
+  DayTotal,
   getPopulation,
   getUsaMapKeyData,
   scaledCallsPerStateString,
@@ -23,14 +24,15 @@ export const BEESWARM_TARGET_WIDTH = 600;
 export const themeColor = 'rgb(24, 117, 209)';
 export const purple = '#9467bd';
 export const themeAccentColor = '#ed3c1d';
-const defaultColor = '#ccc';
+const defaultColor = '#eee';
+const beeswarmDefaultColor = '#ccc';
 export const defaultDarkColor = '#666';
 const selectedStateStroke = 'rgba(255, 217, 52)';
 
 const USA_TOPOJSON = 'https://cdn.jsdelivr.net/npm/us-atlas@2/us/10m.json';
 const MIN_FOR_BEESWARM = 7;
 const MAX_FOR_SONIFICATION = 2000;
-export const MAX_FOR_BEESWARM = 6000;
+export const MAX_FOR_BEESWARM = 2000; // Show beeswarm up until this many calls, then switch to bars.
 const SCALED_POP_DENOMINATOR = 10000;
 
 const MAP_TABS = {
@@ -649,7 +651,7 @@ const drawUsaMap = (
               if (stateTopIssues && stateTopIssues.length > 0) {
                 return issueColor(stateTopIssues[0].issue_id);
               }
-              return defaultColor;
+              return beeswarmDefaultColor;
             });
           mapSection
             .select('h2.detail_title')
@@ -786,7 +788,10 @@ const drawUsaMap = (
       .attr(
         'title',
         'Map showing states colored by top issue. Select a state above.'
-      );
+      )
+      .on('pointerleave', () => {
+        group.selectAll('.state-highlight-clone').remove();
+      });
 
     const path = d3.geoPath();
     // Use the path to plot the US map based on the geometry data.
@@ -847,6 +852,7 @@ const drawUsaMap = (
         .selectAll(`option#${state}`)
         .attr('selected', true);
       selectedState = state;
+      group.selectAll('.state-highlight-clone').remove();
       const state_path = group.select(`path#state_${selectedState}`);
       const state_node = state_path.node() as SVGGraphicsElement;
       if (state_node) {
@@ -911,7 +917,7 @@ const drawUsaMap = (
       .attr('stroke-linecap', 'round')
       .style('cursor', 'pointer')
       .attr('id', (d: Feature) => 'state_' + d.id)
-      .attr('fill', defaultColor)
+      .attr('fill', beeswarmDefaultColor)
       .attr('d', path)
       .transition()
       .delay(500)
@@ -923,7 +929,7 @@ const drawUsaMap = (
           return issueColor(stateTopIssues[0].issue_id);
         }
         // Default grey for no calls at all.
-        return defaultColor;
+        return beeswarmDefaultColor;
       })
       .on('end', function (this: any) {
         // After animation ends, can set interaction listeners. If they go off in the
@@ -952,19 +958,30 @@ const drawUsaMap = (
               if (selectedState === d.id) {
                 return;
               }
-              // Bring to front
               if (this.parentNode) {
-                this.parentNode.appendChild(this);
-              }
-              const state = d3.select(this);
-              state.transition().attr('stroke', '#fff').attr('stroke-width', 2);
-              if (selectedState !== null) {
-                const selectedStateNode = group
-                  .select(`path#state_${selectedState}`)
-                  .node() as SVGGraphicsElement | null;
-                if (selectedStateNode && this.parentNode) {
-                  // Redraw on top.
-                  this.parentNode.appendChild(selectedStateNode);
+                const parent = d3.select(this.parentNode);
+                parent.selectAll(`.clone-${d.id}`).remove();
+
+                // Add a clone with no pointer interaction to visually bring this to the front.
+                const clone = d3
+                  .select(this)
+                  .clone(false)
+                  .attr('class', `state-highlight-clone clone-${d.id}`)
+                  .style('pointer-events', 'none')
+                  .attr('stroke', '#fff')
+                  .attr('stroke-width', 1);
+
+                this.parentNode.appendChild(clone.node()!);
+
+                clone.transition().attr('stroke-width', 2);
+
+                if (selectedState !== null) {
+                  const selectedStateNode = group
+                    .select(`path#state_${selectedState}`)
+                    .node() as SVGGraphicsElement | null;
+                  if (selectedStateNode) {
+                    this.parentNode.appendChild(selectedStateNode);
+                  }
                 }
               }
             }
@@ -987,21 +1004,12 @@ const drawUsaMap = (
           .on(
             'pointerout',
             function (this: SVGPathElement, event: Event, d: Feature) {
-              const state = d3.select(this);
-              if (selectedState !== d.id) {
-                state
+              if (this.parentNode) {
+                d3.select(this.parentNode)
+                  .selectAll(`.clone-${d.id}`)
                   .transition()
-                  .attr('stroke', '#fff')
-                  .attr('stroke-width', 1);
-              }
-              if (selectedState !== null) {
-                const selectedStateNode = group
-                  .select(`path#state_${selectedState}`)
-                  .node() as SVGGraphicsElement | null;
-                if (selectedStateNode && this.parentNode) {
-                  // Redraw on top.
-                  this.parentNode.appendChild(selectedStateNode);
-                }
+                  .attr('stroke-width', 1)
+                  .remove();
               }
             }
           );
@@ -1039,10 +1047,14 @@ const inBeeswarmRange = (count: number): boolean => {
   return count >= MIN_FOR_BEESWARM && count <= MAX_FOR_BEESWARM;
 };
 
+const inBarRange = (count: number): boolean => {
+  return count > MAX_FOR_BEESWARM;
+};
+
 export const drawRepsPane = (
   repData: ExpandedRepData,
+  finalDate: number,
   district: string,
-  beeswarmScale: d3.ScaleTime<number, number>,
   issueColor: d3.ScaleOrdinal<number, string>,
   issueIdToName: { [key: number]: string },
   duration: string
@@ -1123,7 +1135,7 @@ export const drawRepsPane = (
     .attr('class', 'description')
     .html(() => {
       let text = ''; //`The most-called issues for ${repData.repInfo.name} ${duration} from 5 Calls.`;
-      if (inBeeswarmRange(repData.total)) {
+      if (inBeeswarmRange(repData.total) || inBarRange(repData.total)) {
         text += ' Select a call count to see it highlighted below.';
       }
       return text;
@@ -1139,7 +1151,7 @@ export const drawRepsPane = (
     duration,
     issueColor,
     repData.total,
-    inBeeswarmRange(repData.total)
+    inBeeswarmRange(repData.total) || inBarRange(repData.total)
   );
 
   const pieSize = 80;
@@ -1219,9 +1231,26 @@ export const drawRepsPane = (
       `<span class="results_unavailable">${(repData.percentUnavailable * 100).toFixed(0)}%</span> unavailable`
     );
 
-  // Draw beeswarm async so that it doesn't block rendering.
+  // Draw beeswarm or bars async so that they don't block rendering.
   window.setTimeout(() => {
+    const dayTotals = (repData.barSeries.length > 0 ? repData.barSeries[0] : [])
+      .map((d) => ({
+        time: d.data[0],
+        total: Array.from(d.data[1].values()).reduce(
+          (sum: number, item: any) => sum + item.count,
+          0
+        ),
+        dayMap: d.data[1]
+      }))
+      .sort((a: DayTotal, b: DayTotal) => a.time - b.time);
+
     if (inBeeswarmRange(repData.total)) {
+      const beeswarmScale = d3
+        .scaleTime()
+        .domain([finalDate - 7 * 24 * 60 * 60 * 1000, finalDate])
+        .range([25, BEESWARM_TARGET_WIDTH - 25])
+        .nice();
+
       repData.beeswarm = beeswarmForce()
         .y(300)
         .x((e: BeeswarmCallCount) => beeswarmScale(new Date(e.time * 1000))) // seconds since epoch --> ms
@@ -1236,15 +1265,35 @@ export const drawRepsPane = (
                   ? 6
                   : 10
         )(repData.callResults);
+      drawBeeswarm(
+        repCard.append('div'),
+        repData,
+        dayTotals,
+        beeswarmScale,
+        issueIdToName,
+        issueColor,
+        duration
+      );
+    } else if (inBarRange(repData.total)) {
+      // Today
+      const finalDateAsDate = new Date(finalDate);
+      finalDateAsDate.setHours(0, 0, 0, 0);
+      const earliestDate = finalDateAsDate.getTime() - 6 * 24 * 60 * 60 * 1000;
+      const barChartScale = d3
+        .scaleTime()
+        .domain([earliestDate, finalDateAsDate.getTime()])
+        .range([40, BEESWARM_TARGET_WIDTH - 45])
+        .nice();
+      drawBarChart(
+        repCard.append('div'),
+        repData,
+        dayTotals,
+        barChartScale,
+        issueIdToName,
+        issueColor,
+        duration
+      );
     }
-    drawBeeswarm(
-      repCard.append('div'),
-      repData,
-      beeswarmScale,
-      issueIdToName,
-      issueColor,
-      duration
-    );
 
     const onIssueSelected = function (
       this: HTMLButtonElement,
@@ -1261,8 +1310,10 @@ export const drawRepsPane = (
         event.stopPropagation();
       }
       if (selectedIssueId === d.issue_id) {
-        repData.beeswarm.forEach((b) => (b.data.selected = false));
         // deselect
+        const repTopIssues: Set<number> = new Set(
+          repData.topIssues.map((issue) => issue.issue_id)
+        );
         selectedIssueId = null;
         d3.select(this)
           .classed('selected', false)
@@ -1271,22 +1322,38 @@ export const drawRepsPane = (
           .attr('aria-pressed', false);
         d3.select(`svg#beeswarm_svg_${repData.id}`)
           .selectAll('circle')
-          .data(
-            repData.beeswarm,
-            (b: BeeswarmNode<BeeswarmCallCount>) => b.data.id
-          )
           .transition()
           .delay(0)
-          .style('fill', (d: BeeswarmNode<BeeswarmCallCount>) =>
-            d.data.selected ? issueColor(d.data.issue_id) : defaultColor
+          .style('fill', beeswarmDefaultColor);
+        d3.select(`svg#bar_svg_${repData.id}`)
+          .select('g#bar_group')
+          .selectAll('rect')
+          .transition()
+          .delay(0)
+          .style('fill', (b) =>
+            repTopIssues.has(b.key) ? issueColor(b.key) : defaultColor
+          )
+          .style('stroke', (b) =>
+            repTopIssues.has(b.key) ? issueColor(b.key) : defaultColor
           );
         d3.select(`div#dot_key_${repData.id}`).style('display', 'none');
+
+        // Update the dynamic table data for deselect
+        const table = repCard.select(`.chart-data-table`);
+        if (!table.empty()) {
+          table
+            .select('.selected-issue-header')
+            .style('display', 'none')
+            .text('');
+
+          table
+            .selectAll('.selected-issue-value')
+            .style('display', 'none')
+            .text('');
+        }
       } else {
         // select
         selectedIssueId = d.issue_id;
-        repData.beeswarm.forEach(
-          (b) => (b.data.selected = b.data.issue_id === selectedIssueId)
-        );
         // Ensure everything else is deselected visually.
         d3.select(topFiveHolderSelector)
           .selectAll<HTMLButtonElement, IssueCountData>('button.stat')
@@ -1302,26 +1369,53 @@ export const drawRepsPane = (
           .attr('aria-pressed', true);
         d3.select(`svg#beeswarm_svg_${repData.id}`)
           .selectAll('circle')
-          .data(
-            repData.beeswarm,
-            (b: BeeswarmNode<BeeswarmCallCount>) => b.data.id
-          )
           .transition()
           .delay(0)
           .style('fill', (d: BeeswarmNode<BeeswarmCallCount>) =>
-            d.data.selected ? issueColor(d.data.issue_id) : defaultColor
+            d.data.issue_id === selectedIssueId
+              ? issueColor(d.data.issue_id)
+              : beeswarmDefaultColor
+          );
+        d3.select(`svg#bar_svg_${repData.id}`)
+          .select('g#bar_group')
+          .selectAll('rect')
+          .transition()
+          .delay(0)
+          .style('fill', (d) =>
+            d.key === selectedIssueId ? issueColor(d.key) : defaultColor
+          )
+          .style('stroke', (d) =>
+            d.key === selectedIssueId ? issueColor(d.key) : defaultColor
           );
         d3.select(`div#dot_key_${repData.id}`)
           .style('display', null)
           .style('--dot-color', issueColor(d.issue_id))
           .html(
-            `A call for <i>${repData.topIssues.find((i) => i.issue_id === d.issue_id)?.name}</i>`
+            `${!inBarRange(repData.total) ? 'A call for ' : ''}<i>${repData.topIssues.find((i) => i.issue_id === d.issue_id)?.name}</i>`
           );
+
+        // Update the dynamic table data for select
+        const table = repCard.select(`.chart-data-table`);
+        if (!table.empty()) {
+          const issueName =
+            repData.topIssues.find((i) => i.issue_id === d.issue_id)?.name ||
+            'Selected Issue';
+          table
+            .select('.selected-issue-header')
+            .style('display', null)
+            .text(issueName);
+          table
+            .selectAll('.selected-issue-value')
+            .style('display', null)
+            .text((b: any) => b.dayMap?.get(selectedIssueId)?.count || 0);
+        }
       }
     };
 
-    // Only show beeswarm if there's enough calls.
-    let selectedIssueId: number | null = repData.topIssues[0].issue_id;
+    // Only show beeswarm if there's enough calls, but not if there's so many we will show the bar chart.
+    let selectedIssueId: number | null = !inBarRange(repData.total)
+      ? repData.topIssues[0].issue_id
+      : null;
     const showCallsBtns = d3
       .select(topFiveHolderSelector)
       .selectAll<HTMLButtonElement, IssueCountData>('button.stat');
@@ -1330,12 +1424,6 @@ export const drawRepsPane = (
         'pointerover',
         function (this: HTMLButtonElement, _: Event, d: IssueCountData) {
           if (selectedIssueId !== d.issue_id) {
-            repData.beeswarm.forEach(
-              (b) =>
-                (b.data.selected =
-                  b.data.issue_id === selectedIssueId ||
-                  b.data.issue_id === d.issue_id)
-            );
             d3.select(this)
               .classed('selected', true)
               .style('background-color', issueColor(d.issue_id))
@@ -1345,14 +1433,28 @@ export const drawRepsPane = (
               .selectAll<SVGCircleElement, BeeswarmNode<BeeswarmCallCount>>(
                 'circle'
               )
-              .data(
-                repData.beeswarm,
-                (b: BeeswarmNode<BeeswarmCallCount>) => b.data.id
-              )
               .transition()
               .delay(0)
-              .style('fill', (d) =>
-                d.data.selected ? issueColor(d.data.issue_id) : defaultColor
+              .style('fill', (b) =>
+                b.data.issue_id === selectedIssueId ||
+                b.data.issue_id === d.issue_id
+                  ? issueColor(b.data.issue_id)
+                  : beeswarmDefaultColor
+              );
+            d3.select(`svg#bar_svg_${repData.id}`)
+              .select('g#bar_group')
+              .selectAll('rect')
+              .transition()
+              .delay(0)
+              .style('fill', (b) =>
+                b.key === selectedIssueId || b.key === d.issue_id
+                  ? issueColor(b.key)
+                  : defaultColor
+              )
+              .style('stroke', (b) =>
+                b.key === selectedIssueId || b.key === d.issue_id
+                  ? issueColor(b.key)
+                  : defaultColor
               );
           }
         }
@@ -1363,9 +1465,6 @@ export const drawRepsPane = (
         'pointerout',
         function (this: HTMLButtonElement, _, d: IssueCountData) {
           if (selectedIssueId !== d.issue_id) {
-            repData.beeswarm.forEach(
-              (b) => (b.data.selected = b.data.issue_id === selectedIssueId)
-            );
             d3.select(this)
               .classed('selected', false)
               .style('background-color', null)
@@ -1375,15 +1474,42 @@ export const drawRepsPane = (
               .selectAll<SVGCircleElement, BeeswarmNode<BeeswarmCallCount>>(
                 'circle'
               )
-              .data(
-                repData.beeswarm,
-                (b: BeeswarmNode<BeeswarmCallCount>) => b.data.id
-              )
               .transition()
               .delay(0)
               .style('fill', (d) =>
-                d.data.selected ? issueColor(d.data.issue_id) : defaultColor
+                d.data.issue_id === selectedIssueId
+                  ? issueColor(d.data.issue_id)
+                  : beeswarmDefaultColor
               );
+            if (selectedIssueId === null) {
+              // Nothing is selected, reset to all colors on pointerout.
+              const repTopIssues: Set<number> = new Set(
+                repData.topIssues.map((issue) => issue.issue_id)
+              );
+              d3.select(`svg#bar_svg_${repData.id}`)
+                .select('g#bar_group')
+                .selectAll('rect')
+                .transition()
+                .delay(0)
+                .style('fill', (b) =>
+                  repTopIssues.has(b.key) ? issueColor(b.key) : defaultColor
+                )
+                .style('stroke', (b) =>
+                  repTopIssues.has(b.key) ? issueColor(b.key) : defaultColor
+                );
+            } else {
+              d3.select(`svg#bar_svg_${repData.id}`)
+                .select('g#bar_group')
+                .selectAll('rect')
+                .transition()
+                .delay(0)
+                .style('fill', (b) =>
+                  b.key === selectedIssueId ? issueColor(b.key) : defaultColor
+                )
+                .style('stroke', (b) =>
+                  b.key === selectedIssueId ? issueColor(b.key) : defaultColor
+                );
+            }
           }
         }
       );
@@ -1407,23 +1533,302 @@ export const drawRepsPane = (
   }, 0);
 };
 
+const appendGraphicsSection = (
+  parentDiv: d3.Selection<HTMLDivElement, unknown, null, undefined>,
+  repData: ExpandedRepData,
+  duration: string
+): d3.Selection<HTMLDivElement, unknown, null, undefined> => {
+  parentDiv.attr('class', 'graphic_section');
+  const description = parentDiv.append('div').attr('class', 'description');
+
+  description
+    .append('h2')
+    .html(`Calls to ${repData.repInfo.name}, ${duration}`);
+  return description;
+};
+
+const drawBarChart = (
+  parentDiv: d3.Selection<HTMLDivElement, unknown, null, undefined>,
+  repData: ExpandedRepData,
+  dayTotals: DayTotal[],
+  barChartScale: d3.ScaleTime<number, number>,
+  issueIdToName: { [key: number]: string },
+  issueColor: d3.ScaleOrdinal<number, string>,
+  duration: string
+) => {
+  const description = appendGraphicsSection(parentDiv, repData, duration);
+
+  const paragraph = description.append('div');
+  paragraph
+    .append('span')
+    .html(
+      "Select call count above to highlight. Today's calls are still coming in!"
+    ); // TODO: Add sonification of bars.
+
+  const dotsKey = description.append('div').attr('class', 'dot_key');
+  dotsKey.append('div').attr('class', 'dot').html('Other issues');
+  dotsKey
+    .append('div')
+    .attr('class', 'dot')
+    .attr('id', `dot_key_${repData.id}`)
+    .style('--dot-color', issueColor(repData.topIssues[0].issue_id))
+    .style('display', 'none'); // No issue selected at first.
+
+  const svgBox = parentDiv.append('div').style('position', 'relative');
+  svgBox
+    .append('div')
+    .attr('id', 'dot_label')
+    .attr('class', 'overlayBox topLabel absolute')
+    .attr('hidden', true)
+    .append('div')
+    .attr('class', 'issue_long_name');
+
+  const svg = svgBox
+    .append('svg')
+    .style('width', '100%')
+    .style('height', 'auto')
+    .attr('id', 'bar_svg_' + repData.id)
+    .style('margin-bottom', '1.5rem')
+    .style('overflow', 'hidden')
+    .on('pointerleave', () => {
+      group.selectAll('.bar-highlight-clone').remove();
+      parentDiv.select('div#dot_label').attr('hidden', true);
+    });
+
+  svg.attr(
+    'title',
+    `Bars representing ${repData.total} calls, colored by issue, ordered by time on the x axis.`
+  );
+
+  const dateFormatter = new Intl.DateTimeFormat('en-US', {
+    month: 'short',
+    day: 'numeric'
+  });
+
+  const fillColor = defaultColor;
+  const repTopIssues: Set<number> = new Set(
+    repData.topIssues.map((issue) => issue.issue_id)
+  );
+
+  const selectBar = function (this: SVGRectElement, _: Event, bar) {
+    // Bounding box of the rect.
+    const boundingBox = this.getBBox();
+    const matrix = this.getScreenCTM()!;
+    const point = this.ownerSVGElement!.createSVGPoint();
+    point.x = boundingBox.x + (boundingBox.width * 2) / 3;
+    point.y = boundingBox.y + boundingBox.height / 2;
+    const screenCoords = point.matrixTransform(matrix);
+    screenCoords.y += 4; // Slightly below
+
+    // Bounding box of the SVG.
+    const svgBb = this.parentElement!.parentElement!.getBoundingClientRect();
+    const yCoord = screenCoords.y - svgBb.y;
+    const xCoord = screenCoords.x - svgBb.x;
+
+    const parentGroup = d3.select(this.parentElement!.parentElement!);
+    parentGroup.selectAll('.bar-highlight-clone').remove();
+
+    // Bring a copy to the front visually.
+    const clone = d3
+      .select(this)
+      .clone(false)
+      .attr('class', 'bar-highlight-clone')
+      .style('pointer-events', 'none')
+      .style('stroke', '#333');
+    parentGroup.node()!.appendChild(clone.node()!);
+
+    const count = bar.data[1].get(bar.key).count;
+    const total = dayTotals.find((d) => d.time === bar.data[0])?.total;
+
+    parentDiv
+      .select('div#dot_label')
+      .attr('hidden', null)
+      .style('top', `${yCoord}px`)
+      .style('left', `${xCoord}px`)
+      .select('div.issue_long_name')
+      .html(
+        `${dateFormatter.format(new Date(bar.data[0] * 1000))}: ${total} calls.<br/>${count} for ${issueIdToName[bar.key]}`
+      );
+  };
+
+  const width = BEESWARM_TARGET_WIDTH;
+  const barWidth = width / 20;
+
+  const y = d3
+    .scaleLinear()
+    .domain([0, d3.max(repData.barSeries, (d) => d3.max(d, (d) => d[1]))])
+    .rangeRound([BEESWARM_TARGET_WIDTH / 3, 0]); // Target height
+
+  svg
+    .append('g')
+    .attr('aria-hidden', true)
+    .attr('transform', `translate(${20}, 0)`)
+    .call(
+      d3
+        .axisLeft(y)
+        .ticks(6, 's')
+        .tickSize(-BEESWARM_TARGET_WIDTH + 25)
+    )
+    .call((g) => {
+      g.selectAll('.domain').remove();
+      g.selectAll('.tick line').attr('stroke', '#e6e6e6');
+    });
+
+  // Add outlines on the background.
+  svg
+    .append('g')
+    .attr('aria-hidden', true)
+    .selectAll('rect')
+    .data(dayTotals)
+    .enter()
+    .append('rect')
+    .attr('x', (d) => barChartScale(d.time * 1000) - barWidth / 2)
+    .attr('width', barWidth)
+    .attr('y', (d) => y(d.total))
+    .attr('height', (d) => y(0) - y(d.total))
+    .attr('fill', 'none')
+    .attr('stroke', '#555')
+    .attr('stroke-width', 2)
+    .attr('stroke-dasharray', (d) =>
+      new Date(d.time * 1000).getDate() === new Date().getDate()
+        ? '2 2'
+        : 'none'
+    );
+
+  const group = svg.append('g').attr('id', 'bar_group');
+  group
+    .selectAll()
+    .data(repData.barSeries)
+    .enter()
+    .append('g')
+    .selectAll('rect')
+    .data(
+      (D) => D.map((d) => ((d.key = D.key), d)),
+      (d) => d.key + d.time
+    )
+    .enter()
+    .append('rect')
+    .attr('x', (d) => barChartScale(d.data[0] * 1000) - barWidth / 2)
+    .attr('y', (d) => y(d[1]))
+    .attr('height', (d) => y(d[0]) - y(d[1]))
+    .attr('width', barWidth)
+    .on('pointerover', selectBar)
+    .on('click', selectBar)
+    .on('pointerout', function (this: SVGRectElement) {
+      if (this.parentElement && this.parentElement.parentElement) {
+        d3.select(this.parentElement.parentElement)
+          .selectAll('.bar-highlight-clone')
+          .remove();
+      }
+      parentDiv.select('div#dot_label').attr('hidden', true);
+    })
+    .transition()
+    .delay(0)
+    .attr('stroke', (d) =>
+      repTopIssues.has(d.key) ? issueColor(d.key) : fillColor
+    )
+    .attr('fill', (d) =>
+      repTopIssues.has(d.key) ? issueColor(d.key) : fillColor
+    );
+
+  const height = group.node().getBBox().height;
+  const axisHeight = 20;
+  svg.attr('viewBox', `0 -1 ${width} ${height + axisHeight}`);
+
+  // Add the axis.
+  svg
+    .append('g')
+    .attr('aria-hidden', true)
+    .attr('transform', `translate(0,${height})`)
+    .call(
+      d3
+        .axisBottom(barChartScale)
+        .tickSizeOuter(0)
+        .ticks(d3.timeDay)
+        .tickFormat(d3.timeFormat('%a %-d'))
+    )
+    .call((g) => {
+      g.selectAll('.domain').remove();
+    });
+
+  appendCallDetailsTable(
+    parentDiv,
+    repData,
+    dayTotals,
+    dateFormatter,
+    /* initialIssueId=*/ null
+  );
+};
+
+const appendCallDetailsTable = (
+  parentDiv: d3.Selection<any, any, any, any>,
+  repData: ExpandedRepData,
+  dayTotals: DayTotal[],
+  dateFormatter: d3.TimeFormat,
+  initialIssueId?: number
+) => {
+  const details = parentDiv
+    .append('details')
+    .attr('class', 'chart-data-details')
+    .attr('id', `table_details_${repData.id}`);
+  details.append('summary').text('Show call data table');
+
+  const table = details
+    .append('table')
+    .attr('class', 'chart-data-table')
+    .attr('id', `data_table_${repData.id}`);
+  table
+    .append('caption')
+    .text(
+      `Daily call counts to ${repData.repInfo.name}. Select a call count above for details.`
+    );
+
+  const theadRow = table.append('thead').append('tr');
+  theadRow
+    .append('th')
+    .attr('scope', 'col')
+    .style('width', '100px')
+    .text('Date');
+  theadRow
+    .append('th')
+    .attr('scope', 'col')
+    .style('width', '120px')
+    .text('Total Calls');
+  theadRow
+    .append('th')
+    .attr('scope', 'col')
+    .attr('class', 'selected-issue-header')
+    .style('display', initialIssueId !== null ? null : 'none')
+    .text(
+      initialIssueId !== null
+        ? repData.topIssues.find((i) => i.issue_id === initialIssueId)?.name ||
+            'Selected Issue'
+        : null
+    );
+
+  const tbody = table.append('tbody');
+  const rows = tbody.selectAll('tr').data(dayTotals).enter().append('tr');
+  rows.append('td').text((d) => dateFormatter.format(new Date(d.time * 1000)));
+  rows.append('td').text((d) => d.total);
+  rows
+    .append('td')
+    .attr('class', 'selected-issue-value')
+    .style('display', initialIssueId !== null ? null : 'none')
+    .text((d) =>
+      initialIssueId !== null ? d.dayMap?.get(initialIssueId)?.count || 0 : ''
+    );
+};
+
 const drawBeeswarm = (
   parentDiv: d3.Selection<HTMLDivElement, unknown, null, undefined>,
   repData: ExpandedRepData,
+  dayTotals: DayTotal[],
   beeswarmScale: d3.ScaleTime<number, number>,
   issueIdToName: { [key: number]: string },
   issueColor: d3.ScaleOrdinal<number, string>,
   duration: string
 ) => {
-  parentDiv.attr('class', 'graphic_section');
-  const description = parentDiv
-    .append('div')
-    .attr('class', 'description')
-    .attr('hidden', !inBeeswarmRange(repData.total) ? true : null);
-
-  description
-    .append('h2')
-    .html(`Calls to ${repData.repInfo.name}, ${duration}`);
+  const description = appendGraphicsSection(parentDiv, repData, duration);
 
   let renderFrameId: number | null = null;
   let audioContext: AudioContext | null = null;
@@ -1530,6 +1935,11 @@ const drawBeeswarm = (
     .attr('class', 'issue_long_name');
   // TODO maybe append close button if clicking makes it stay up.
 
+  const dateFormatter = new Intl.DateTimeFormat('en-US', {
+    month: 'short',
+    day: 'numeric'
+  });
+
   /**
    * Called when a dot on the beeswarm chart is selected by hover or click.
    * @param _ The event that caused the dot to be selected
@@ -1540,17 +1950,17 @@ const drawBeeswarm = (
     _: Event,
     dot: BeeswarmNode<BeeswarmCallCount>
   ) {
-    const dateFormatter = new Intl.DateTimeFormat('en-US', {
-      month: 'short',
-      day: 'numeric'
-    });
+    const parent = d3.select(this.parentElement!);
+    parent.selectAll('.dot-highlight-clone').remove();
 
-    // Deselect everything else.
-    d3.select(this.parentElement!).selectAll('circle').attr('stroke', `#fff4`);
-
-    // Bring selected dot to front
-    this.parentElement!.appendChild(this);
-    d3.select(this).attr('stroke', '#333');
+    // Bring a copy to the front visually.
+    const clone = d3
+      .select(this)
+      .clone(false)
+      .attr('class', 'dot-highlight-clone')
+      .style('pointer-events', 'none')
+      .attr('stroke', '#333');
+    parent.node()!.appendChild(clone.node()!);
 
     // Bounding box of the dot.
     const boundingBox = this.getBBox();
@@ -1567,7 +1977,7 @@ const drawBeeswarm = (
     const yCoord = screenCoords.y - svgBb.y;
     const xCoord = screenCoords.x - svgBb.x;
 
-    d3.select(this.parentElement!.parentElement!.parentElement!)
+    parentDiv
       .select('div#dot_label')
       .attr('hidden', null)
       .style('top', `${yCoord}px`)
@@ -1585,7 +1995,11 @@ const drawBeeswarm = (
     .style('height', 'auto')
     .attr('id', 'beeswarm_svg_' + repData.id)
     .style('margin-bottom', '1.5rem')
-    .style('overflow', 'visible');
+    .style('overflow', 'visible')
+    .on('pointerleave', () => {
+      group.selectAll('.dot-highlight-clone').remove();
+      parentDiv.select('div#dot_label').attr('hidden', true);
+    });
 
   if (!inBeeswarmRange(repData.total)) {
     // Skip drawing beeswarm.
@@ -1598,9 +2012,6 @@ const drawBeeswarm = (
     `${repData.total} dots representing calls, ordered by time on the x axis.`
   );
   const initialIssueId = repData.topIssues[0].issue_id;
-  repData.beeswarm.forEach(
-    (b) => (b.data.selected = b.data.issue_id === initialIssueId)
-  );
   const group = svg
     .append('g')
     .attr('aria-hidden', true) // Not useful for screen readers
@@ -1619,19 +2030,23 @@ const drawBeeswarm = (
     .attr('cx', (d: BeeswarmNode<BeeswarmCallCount>) => d.x)
     .attr('cy', (d: BeeswarmNode<BeeswarmCallCount>) => d.y)
     .attr('r', (d: BeeswarmNode<BeeswarmCallCount>) => d.r)
-    .style('fill', defaultColor)
+    .style('fill', beeswarmDefaultColor)
     .on('pointerover', selectDot)
     .on('click', selectDot)
     .on('pointerout', function (this: SVGCircleElement) {
-      d3.select(this).attr('stroke', `#fff4`);
-      d3.select(this.parentElement!.parentElement!.parentElement!)
-        .select('div#dot_label')
-        .attr('hidden', true);
+      if (this.parentElement) {
+        d3.select(this.parentElement)
+          .selectAll('.dot-highlight-clone')
+          .remove();
+      }
+      parentDiv.select('div#dot_label').attr('hidden', true);
     })
     .transition()
     .delay(0)
     .style('fill', (d: BeeswarmNode<BeeswarmCallCount>) =>
-      d.data.selected ? issueColor(d.data.issue_id) : defaultColor
+      initialIssueId === d.data.issue_id
+        ? issueColor(d.data.issue_id)
+        : beeswarmDefaultColor
     );
 
   const height = group.node().getBBox().height;
@@ -1660,6 +2075,14 @@ const drawBeeswarm = (
         .ticks(d3.timeDay)
         .tickFormat(d3.timeFormat('%a %-d'))
     );
+
+  appendCallDetailsTable(
+    parentDiv,
+    repData,
+    dayTotals,
+    dateFormatter,
+    initialIssueId
+  );
 };
 
 const isValidActivation = (event: Event): boolean => {

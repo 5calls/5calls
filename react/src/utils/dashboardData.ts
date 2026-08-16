@@ -28,6 +28,7 @@ export interface ExpandedRepData {
   percentVM: number;
   percentContact: number;
   percentUnavailable: number;
+  barSeries: d3.Series<BeeswarmCallCount, number>;
 }
 
 // Represents a single call to a representative, about a particular issue and at a given time.
@@ -37,6 +38,13 @@ export interface BeeswarmCallCount {
   time: number;
   id: number;
   selected: boolean;
+}
+
+// Represents aggregated call counts and details per day, created by d3.stack.
+export interface DayTotal {
+  time: number;
+  total: number;
+  dayMap: Map<number, BeeswarmCallCount>;
 }
 
 // Describes call outcomes (e.g. 73 calls to voicemail).
@@ -98,8 +106,13 @@ export function processRepsData(
       expandedResult.callResults =
         contactSummaryData.aggregatedResults as unknown as BeeswarmCallCount[];
 
-      // In-place expand to individual calls.
+      // Calculate calls per issue per day, in the user's time zone.
+      expandedResult.barSeries = aggregateCallResults(
+        expandedResult.callResults
+      );
+
       if (expandedResult.total <= maxForBeeswarm) {
+        // In-place expand to individual calls.
         expandRepResults(expandedResult.callResults);
       }
 
@@ -153,6 +166,54 @@ const expandRepResults = (results: BeeswarmCallCount[]) => {
     }
   });
   results.push(...addedPoints);
+};
+
+const aggregateCallResults = (
+  results: BeeswarmCallCount[]
+): d3.Series<BeeswarmCallCount, number>[] => {
+  const finalDate = new Date();
+  finalDate.setHours(0, 0, 0, 0);
+  // Clip to avoid partial days, which would be confusing to explain.
+  const earliestDate = finalDate.getTime() - 6 * 24 * 60 * 60 * 1000;
+  // Construct a map with time/issue_id keys -> count.
+  const aggregatedMap = new Map<string, BeeswarmCallCount>();
+  const issueIds = new Set<number>();
+  for (const r of results) {
+    const rDate = new Date(r.time * 1000);
+    if (rDate.getTime() < earliestDate) {
+      // Filter dates too early.
+      continue;
+    }
+    const dayTimestamp = rDate.setHours(0, 0, 0, 0) / 1000;
+    const key = `${dayTimestamp}_${r.issue_id}`;
+    const existing = aggregatedMap.get(key);
+    if (existing) {
+      existing.count += r.count;
+    } else {
+      aggregatedMap.set(key, {
+        time: dayTimestamp,
+        issue_id: r.issue_id,
+        count: r.count,
+        selected: r.selected,
+        id: r.id
+      });
+    }
+    issueIds.add(r.issue_id);
+  }
+  return d3
+    .stack<BeeswarmCallCount>()
+    .keys(issueIds)
+    .value(([, group], key) => {
+      const value = group.get(key);
+      return value ? value.count : 0;
+    })
+    .order(d3.stackOrderDescending)(
+    d3.index(
+      aggregatedMap.values(),
+      (d) => d.time,
+      (d) => d.issue_id
+    )
+  ) as unknown as d3.Series<BeeswarmCallCount, number>[];
 };
 
 export function getUsaMapKeyData(
