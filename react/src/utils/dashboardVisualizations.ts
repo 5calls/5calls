@@ -1771,14 +1771,12 @@ const appendCallDetailsTable = (
     .append('details')
     .attr('class', 'chart-data-details')
     .attr('id', `table_details_${repData.id}`);
-
   details.append('summary').text('Show call data table');
 
   const table = details
     .append('table')
     .attr('class', 'chart-data-table')
     .attr('id', `data_table_${repData.id}`);
-
   table
     .append('caption')
     .text(
@@ -1809,14 +1807,10 @@ const appendCallDetailsTable = (
     );
 
   const tbody = table.append('tbody');
-
   const rows = tbody.selectAll('tr').data(dayTotals).enter().append('tr');
-
   rows.append('td').text((d) => dateFormatter.format(new Date(d.time * 1000)));
-
   rows.append('td').text((d) => d.total);
-
-  const td = rows
+  rows
     .append('td')
     .attr('class', 'selected-issue-value')
     .style('display', initialIssueId !== null ? null : 'none')
