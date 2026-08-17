@@ -31,7 +31,7 @@ const selectedStateStroke = 'rgba(255, 217, 52)';
 
 const USA_TOPOJSON = 'https://cdn.jsdelivr.net/npm/us-atlas@2/us/10m.json';
 const MIN_FOR_BEESWARM = 7;
-const MAX_FOR_SONIFICATION = 2000;
+const MAX_FOR_SONIFICATION = 1000;
 export const MAX_FOR_BEESWARM = 3000;
 const MIN_FOR_BARS = 100;
 const SCALED_POP_DENOMINATOR = 10000;
@@ -1579,7 +1579,8 @@ const drawBarChart = (
     .append('div')
     .attr('class', 'dot')
     .attr('id', `dot_key_${repData.id}`)
-    .style('--dot-color', issueColor(repData.topIssues[0].issue_id))
+    .style('--dot-color', issueColor(initialIssueId))
+    .html(initialIssueId ? issueIdToName[initialIssueId] : '')
     .style('display', initialIssueId ? null : 'none');
 
   const svgBox = parentDiv.append('div').style('position', 'relative');
