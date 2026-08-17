@@ -1386,7 +1386,6 @@ export const drawRepsPane = (
           .style('display', null)
           .style('--dot-color', issueColor(d.issue_id))
           .html(
-            // TODO: This needs to be like "is showing beeswarm" or "is showing bar"
             `<i>${repData.topIssues.find((i) => i.issue_id === d.issue_id)?.name}</i>`
           );
 
