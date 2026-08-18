@@ -82,50 +82,11 @@ export interface CountData {
   hourlyCalls: HourlyCallCount[];
 }
 
-export const getMockCountData = (): CountData => {
-  const now = Math.floor(Date.now() / 1000);
-  const hourlyCalls: HourlyCallCount[] = [];
-
-  const currentHourStart = Math.floor(now / 3600) * 3600;
-  for (let i = 23; i >= 0; i--) {
-    const hourStart = currentHourStart - i * 3600;
-    const date = new Date(hourStart * 1000);
-    const hour = date.getHours();
-
-    // Diurnal rate pattern: peak calls during standard business hours
-    let baseCount = 0;
-    if (hour >= 9 && hour < 17) {
-      baseCount = Math.floor(800 + (hourStart % 10) * 50); // Peak hours: ~400-800 calls/hr
-    } else if (hour >= 17 && hour < 21) {
-      baseCount = Math.floor(300 + (hourStart % 10) * 20); // Evening winding down
-    } else if (hour >= 6 && hour < 9) {
-      baseCount = Math.floor(100 + (hourStart % 10) * 10); // Morning ramping up
-    } else {
-      baseCount = Math.floor(50 + (hourStart % 5)); // Late night: very low
-    }
-
-    // For the current hour, scale linearly by seconds elapsed in the hour
-    if (i === 0) {
-      const elapsedSeconds = now % 3600;
-      baseCount = Math.floor(baseCount * (elapsedSeconds / 3600));
-    }
-
-    hourlyCalls.push({
-      time: hourStart,
-      count: baseCount
-    });
-  }
-
-  return {
-    count: 9123456,
-    serverTime: now,
-    hourlyCalls
-  };
-};
-
-// DO NOT SUBMIT
 export const getCountData = (): Promise<CountData> => {
-  return Promise.resolve(getMockCountData());
+  return axios
+    .get(`${Constants.REPORT_API_URL}`)
+    .then((response) => Promise.resolve(response.data))
+    .catch((e) => Promise.reject(e));
 };
 
 export interface IssueCountData {
