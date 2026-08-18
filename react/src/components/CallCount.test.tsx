@@ -181,7 +181,7 @@ describe('CallCount Component', () => {
     getMockCountDataMock.mockResolvedValueOnce(mockData2);
 
     await act(async () => {
-      jest.advanceTimersByTime(120000); // Trigger poll
+      jest.advanceTimersByTime(300000); // Trigger poll (5 minutes)
     });
 
     // Verify it transitioned to the live ticker text and displays within the starting range
@@ -227,18 +227,18 @@ describe('CallCount Component', () => {
       screen.getByText(/We[’']ve made 9,000,000 calls so far and/i)
     ).toBeInTheDocument();
 
-    // Expect visualCount to start at todayCountSum - (rate * 120s)
+    // Expect visualCount to start at todayCountSum - (rate * 300s)
     // ratePerMs = 460 / 3900 / 1000 = 0.00011795 calls/ms (with 5 min offset)
-    // startingCount = 910 - (0.00011795 * 120000) = 910 - 14 = 896
-    expect(getDisplayedCount()).toBe(896);
+    // startingCount = 910 - (0.00011795 * 300000) = 910 - 35 = 875
+    expect(getDisplayedCount()).toBe(875);
 
     // Advance 60 seconds (60000ms)
     await act(async () => {
       jest.advanceTimersByTime(60000);
     });
 
-    // Verify it increased by approx 7 calls (0.00011795 * 59000 = 6.96 calls) -> 902
-    expect(getDisplayedCount()).toBe(902);
+    // Verify it increased by approx 6 calls (0.00011795 * 59000 = 6.96 calls) -> 881
+    expect(getDisplayedCount()).toBe(881);
   });
 
   it('updates rate and target correctly on subsequent polling', async () => {
@@ -284,7 +284,7 @@ describe('CallCount Component', () => {
     getMockCountDataMock.mockResolvedValueOnce(mockData2);
 
     await act(async () => {
-      jest.advanceTimersByTime(120000); // Trigger poll interval (120s)
+      jest.advanceTimersByTime(300000); // Trigger poll interval (300s)
     });
     // Advance 60 seconds (halfway through the catch-up polling window)
     // It should count up to roughly half of the 120 extra calls (60 calls)

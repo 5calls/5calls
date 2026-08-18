@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { getCountData, CountData } from '../utils/api';
 
-const POLLING_INTERVAL_MS = 2 * 60 * 1000; // 2 minutes
+const POLLING_INTERVAL_MS = 5 * 60 * 1000; // 5 minutes
 const TICK_INTERVAL_MS = 1000; // Update visual count every 1 second
 const MIN_LIVE_CALL_COUNT = 250;
 
