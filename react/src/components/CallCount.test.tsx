@@ -20,6 +20,8 @@ const getMockCountDataMock = api.getCountData as jest.MockedFunction<
 describe('CallCount Component', () => {
   beforeEach(() => {
     jest.useFakeTimers();
+    // Freeze system time at 8:00 PM UTC to ensure consistent midnight elapsed hours
+    jest.setSystemTime(new Date('2026-08-17T20:00:00Z'));
     jest.clearAllMocks();
   });
 
@@ -34,9 +36,7 @@ describe('CallCount Component', () => {
         content.includes('calls today')
       );
     });
-    const matches = span.textContent?.match(
-      /We[’']ve made ([\d,]+) calls today/
-    );
+    const matches = span.textContent?.match(/([\d,]+)\s+calls today/);
     return matches ? parseInt(matches[1].replace(/,/g, ''), 10) : 0;
   };
 
@@ -58,12 +58,12 @@ describe('CallCount Component', () => {
     const now = Math.floor(Date.now() / 1000);
     const todayStartTime = new Date().setHours(0, 0, 0, 0) / 1000;
 
-    // 24 hour blocks (with high counts to exceed 250)
+    // 24 hour blocks (using 300 calls per hour to guarantee exceeding 250)
     const hourlyCalls = Array.from({ length: 24 }, (_, i) => {
       const time = Math.floor(now / 3600) * 3600 - (23 - i) * 3600;
       return {
         time,
-        count: time >= todayStartTime ? 20 : 5 // 20 calls per hour today (20 * 24 > 250)
+        count: time >= todayStartTime ? 300 : 5
       };
     });
 
@@ -82,7 +82,14 @@ describe('CallCount Component', () => {
       .filter((h) => h.time >= todayStartTime)
       .reduce((sum, h) => sum + h.count, 0);
 
-    expect(getDisplayedCount()).toBe(expectedTodayCount);
+    // Verify output displays both total calls and a live count within a reasonable starting range
+    expect(
+      screen.getByText(/We[’']ve made 9,000,000 calls so far and/i)
+    ).toBeInTheDocument();
+
+    const displayed = getDisplayedCount();
+    expect(displayed).toBeLessThanOrEqual(expectedTodayCount);
+    expect(displayed).toBeGreaterThanOrEqual(expectedTodayCount - 150);
   });
 
   it('shows total count so far if todayCount < 250', async () => {
@@ -128,9 +135,8 @@ describe('CallCount Component', () => {
       return { time, count: time >= todayStartTime ? 5 : 0 };
     });
 
-    // total count count is null (or technically 0/absent in data.count)
     const mockData: any = {
-      count: null, // totalCount is null
+      count: null,
       todayStartTime,
       serverTime: now,
       hourlyCalls
@@ -182,7 +188,7 @@ describe('CallCount Component', () => {
     // Second poll returns high count (> 250)
     const hourlyCalls2 = hourlyCalls1.map((h) =>
       h.time >= todayStartTime
-        ? { ...h, count: 25 } // 25 * hours > 250
+        ? { ...h, count: 300 } // high baseline
         : h
     );
 
@@ -203,8 +209,14 @@ describe('CallCount Component', () => {
       jest.advanceTimersByTime(120000); // Trigger poll
     });
 
-    // Verify it transitioned to the live ticker text and displays the count
-    expect(getDisplayedCount()).toBe(todayCount2);
+    // Verify it transitioned to the live ticker text and displays within the starting range
+    expect(
+      screen.getByText(/We[’']ve made 9,152,500 calls so far and/i)
+    ).toBeInTheDocument();
+
+    const displayed = getDisplayedCount();
+    expect(displayed).toBeLessThanOrEqual(todayCount2);
+    expect(displayed).toBeGreaterThanOrEqual(todayCount2 - 150);
   });
 
   it('increments the count over time based on estimated rate on initial load', async () => {
@@ -223,15 +235,11 @@ describe('CallCount Component', () => {
         } else if (time === prevHourTime) {
           count = 360;
         } else {
-          count = 30; // higher baseline to exceed 250
+          count = 30;
         }
       }
       return { time, count };
     });
-
-    const todayCountSum = hourlyCalls
-      .filter((h) => h.time >= todayStartTime)
-      .reduce((sum, h) => sum + h.count, 0);
 
     const mockData: api.CountData = {
       count: 9000000,
@@ -248,15 +256,22 @@ describe('CallCount Component', () => {
       await Promise.resolve();
     });
 
-    expect(getDisplayedCount()).toBe(todayCountSum);
+    expect(
+      screen.getByText(/We[’']ve made 9,000,000 calls so far and/i)
+    ).toBeInTheDocument();
+
+    // Expect visualCount to start at todayCountSum - (rate * 120s)
+    // ratePerMs = 460 / 3600 / 1000 = 0.00012777 calls/ms
+    // startingCount = 910 - (0.00012777 * 120000) = 910 - 15 = 895
+    expect(getDisplayedCount()).toBe(895);
 
     // Advance 60 seconds (60000ms)
     await act(async () => {
       jest.advanceTimersByTime(60000);
     });
 
-    // Verify it increased
-    expect(getDisplayedCount()).toBeGreaterThanOrEqual(todayCountSum);
+    // Verify it increased by approx 7 calls (0.00012777 * 60000 = 7.66 calls) -> 902
+    expect(getDisplayedCount()).toBe(902);
   });
 
   it('updates rate and target correctly on subsequent polling', async () => {
@@ -265,7 +280,7 @@ describe('CallCount Component', () => {
 
     const hourlyCalls1 = Array.from({ length: 24 }, (_, i) => {
       const time = Math.floor(now / 3600) * 3600 - (23 - i) * 3600;
-      return { time, count: time >= todayStartTime ? 20 : 0 }; // 20 per hour to exceed 250
+      return { time, count: time >= todayStartTime ? 300 : 0 }; // 300 per hour to exceed 250
     });
 
     const todayCount1 = hourlyCalls1
@@ -287,7 +302,14 @@ describe('CallCount Component', () => {
       await Promise.resolve();
     });
 
-    expect(getDisplayedCount()).toBe(todayCount1);
+    expect(
+      screen.getByText(/We[’']ve made 9,000,000 calls so far and/i)
+    ).toBeInTheDocument();
+
+    // Check range for the startingCount
+    const displayed = getDisplayedCount();
+    expect(displayed).toBeLessThanOrEqual(todayCount1);
+    expect(displayed).toBeGreaterThanOrEqual(todayCount1 - 50);
 
     const hourlyCalls2 = hourlyCalls1.map((h) =>
       h.time === hourlyCalls1[hourlyCalls1.length - 1].time

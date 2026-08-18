@@ -13,66 +13,79 @@ const CallCount: React.FC = () => {
 
   // Use refs to avoid closure issues in setInterval loop
   const targetCountRef = useRef<number>(0);
-  const incrementRateRef = useRef<number>(0); // calls per millisecond
+  const incrementRateMsRef = useRef<number>(0); // calls per millisecond
   const accumulatorRef = useRef<number>(0);
-  const isLiveInitializedRef = useRef<boolean>(false);
+  const lastTickTimeMsRef = useRef<number>(-1);
 
   const fetchCount = () => {
     getCountData()
       .then((data: CountData) => {
-        const localMidnight = new Date().setHours(0, 0, 0, 0) / 1000;
+        setTotalCount(data.count);
 
         // Sum counts for hours >= local midnight
+        const localMidnight = new Date().setHours(0, 0, 0, 0) / 1000;
         const todayCount = data.hourlyCalls
           .filter((h) => h.time >= localMidnight)
           .reduce((sum, h) => sum + h.count, 0);
 
-        setTotalCount(data.count);
-
-        if (todayCount < MIN_LIVE_CALL_COUNT) {
-          setShowTotalCount(true);
+        const showTotalCount =
+          todayCount < MIN_LIVE_CALL_COUNT ||
+          !data.hourlyCalls ||
+          data.hourlyCalls.length < 24;
+        setShowTotalCount(showTotalCount);
+        if (showTotalCount) {
           setLoading(false);
           // If we were previously live, reset live state
-          isLiveInitializedRef.current = false;
+          lastTickTimeMsRef.current = -1;
           return;
         }
 
-        setShowTotalCount(false);
+        const isLiveInitialized = lastTickTimeMsRef.current !== -1;
 
-        if (!isLiveInitializedRef.current) {
-          isLiveInitializedRef.current = true;
+        if (!isLiveInitialized) {
+          // First page load or first time the calls are above the minimum threshold.
+          // Set to 0 to mark as initialized but not yet ticked (prevents deltaMs errors).
+          lastTickTimeMsRef.current = 0;
 
-          // Calculate average diurnal rate from current and previous hour
+          // Calculate approximate current call rate from current and previous hour
           const currentHour = data.hourlyCalls[data.hourlyCalls.length - 1];
           const prevHour = data.hourlyCalls[data.hourlyCalls.length - 2];
 
-          const elapsedInCurrentHour = Math.max(
-            1,
+          const elapsedSecInCurrentHour = Math.max(
+            0,
             data.serverTime - currentHour.time
           );
           const totalCallsInPeriod = (prevHour?.count || 0) + currentHour.count;
-          const totalTimeInPeriod = 3600 + elapsedInCurrentHour;
+          const totalTimeSecInPeriod = 3600 + elapsedSecInCurrentHour;
 
           // Rate in calls per millisecond
-          const ratePerMs = totalCallsInPeriod / totalTimeInPeriod / 1000;
+          const ratePerMs = totalCallsInPeriod / totalTimeSecInPeriod / 1000;
 
-          targetCountRef.current = Infinity; // No limit during the first period estimation
-          incrementRateRef.current = ratePerMs;
-          accumulatorRef.current = todayCount;
+          // Start the visual count at the estimated value from one polling interval ago,
+          // then count up to the target count over the first polling interval.
+          const startingCount = Math.max(
+            0,
+            todayCount - Math.floor(ratePerMs * POLLING_INTERVAL_MS)
+          );
 
-          setVisualCount(todayCount);
+          targetCountRef.current = todayCount;
+          incrementRateMsRef.current = ratePerMs;
+          accumulatorRef.current = startingCount;
+
+          setVisualCount(startingCount);
           setLoading(false);
         } else {
+          // Count up based on how many calls have come in since the previous data load.
           const currentVisual = accumulatorRef.current;
           targetCountRef.current = todayCount;
 
           if (todayCount > currentVisual) {
             // Distribute increments evenly over the polling window
-            incrementRateRef.current =
+            incrementRateMsRef.current =
               (todayCount - currentVisual) / POLLING_INTERVAL_MS;
           } else {
             // Pause if we have already reached or exceeded the target
-            incrementRateRef.current = 0;
+            incrementRateMsRef.current = 0;
           }
         }
       })
@@ -81,33 +94,41 @@ const CallCount: React.FC = () => {
       });
   };
 
+  const tickCounter = () => {
+    if (lastTickTimeMsRef.current === -1) {
+      // Not ticking live right now.
+      return;
+    }
+
+    if (lastTickTimeMsRef.current === 0) {
+      // First tick.
+      lastTickTimeMsRef.current = Date.now();
+      return;
+    }
+
+    const nowMs = Date.now();
+    const deltaMs = nowMs - lastTickTimeMsRef.current;
+    lastTickTimeMsRef.current = nowMs;
+
+    if (incrementRateMsRef.current > 0) {
+      const nextVal =
+        accumulatorRef.current + incrementRateMsRef.current * deltaMs;
+
+      // Cap the accumulator to targetCountRef.current
+      accumulatorRef.current = Math.min(targetCountRef.current, nextVal);
+
+      setVisualCount(Math.floor(accumulatorRef.current));
+    }
+  };
+
   useEffect(() => {
     fetchCount();
 
-    // Poll for new data every 2 minutes
+    // Poll for new data.
     const pollInterval = setInterval(fetchCount, POLLING_INTERVAL_MS);
 
-    // Ticker animation interval: updates the display at high frequency
-    let lastTickTime = Date.now();
-    const tickInterval = setInterval(() => {
-      if (!isLiveInitializedRef.current) {
-        return;
-      }
-
-      const now = Date.now();
-      const delta = now - lastTickTime;
-      lastTickTime = now;
-
-      if (incrementRateRef.current > 0) {
-        const nextVal =
-          accumulatorRef.current + incrementRateRef.current * delta;
-
-        // Cap the accumulator to targetCountRef.current
-        accumulatorRef.current = Math.min(targetCountRef.current, nextVal);
-
-        setVisualCount(Math.floor(accumulatorRef.current));
-      }
-    }, TICK_INTERVAL_MS);
+    // Update the display.
+    const tickInterval = setInterval(tickCounter, TICK_INTERVAL_MS);
 
     return () => {
       clearInterval(pollInterval);
@@ -135,7 +156,7 @@ const CallCount: React.FC = () => {
   return (
     <span className="live-count-wrapper">
       <span>
-        We&rsquo;ve made{' '}
+        We&rsquo;ve made {totalCount?.toLocaleString()} calls so far and{' '}
         <span key={visualCount} className="live-count-number">
           {visualCount.toLocaleString()}
         </span>{' '}
