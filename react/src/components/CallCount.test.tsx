@@ -72,7 +72,6 @@ describe('CallCount Component', () => {
 
     const mockData: api.CountData = {
       count: 9000000,
-      todayStartTime: MOCK_TODAY_START_SEC,
       serverTime: MOCK_NOW_SEC,
       hourlyCalls
     };
@@ -106,7 +105,6 @@ describe('CallCount Component', () => {
     });
     const mockData: api.CountData = {
       count: 9152342,
-      todayStartTime: MOCK_TODAY_START_SEC,
       serverTime: MOCK_NOW_SEC,
       hourlyCalls
     };
@@ -129,7 +127,6 @@ describe('CallCount Component', () => {
     });
     const mockData: any = {
       count: null,
-      todayStartTime: MOCK_TODAY_START_SEC,
       serverTime: MOCK_NOW_SEC,
       hourlyCalls
     };
@@ -153,7 +150,6 @@ describe('CallCount Component', () => {
     });
     const mockData1: api.CountData = {
       count: 9152342,
-      todayStartTime: MOCK_TODAY_START_SEC,
       serverTime: MOCK_NOW_SEC,
       hourlyCalls: hourlyCalls1
     };
@@ -179,7 +175,6 @@ describe('CallCount Component', () => {
       .reduce((sum, h) => sum + h.count, 0);
     const mockData2: api.CountData = {
       count: 9152500,
-      todayStartTime: MOCK_TODAY_START_SEC,
       serverTime: MOCK_NOW_SEC + 120,
       hourlyCalls: hourlyCalls2
     };
@@ -218,7 +213,6 @@ describe('CallCount Component', () => {
     });
     const mockData: api.CountData = {
       count: 9000000,
-      todayStartTime: MOCK_TODAY_START_SEC,
       serverTime: MOCK_NOW_SEC,
       hourlyCalls
     };
@@ -257,7 +251,6 @@ describe('CallCount Component', () => {
       .reduce((sum, h) => sum + h.count, 0);
     const mockData1: api.CountData = {
       count: 9000000,
-      todayStartTime: MOCK_TODAY_START_SEC,
       serverTime: MOCK_NOW_SEC,
       hourlyCalls: hourlyCalls1
     };
@@ -285,7 +278,6 @@ describe('CallCount Component', () => {
     const todayCount2 = todayCount1 + 120;
     const mockData2: api.CountData = {
       count: 9000000,
-      todayStartTime: MOCK_TODAY_START_SEC,
       serverTime: MOCK_NOW_SEC + 120,
       hourlyCalls: hourlyCalls2
     };

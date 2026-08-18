@@ -78,7 +78,6 @@ export interface HourlyCallCount {
 
 export interface CountData {
   count: number; // total call count
-  todayStartTime: number;
   serverTime: number;
   hourlyCalls: HourlyCallCount[];
 }
@@ -86,9 +85,6 @@ export interface CountData {
 export const getMockCountData = (): CountData => {
   const now = Math.floor(Date.now() / 1000);
   const hourlyCalls: HourlyCallCount[] = [];
-
-  // Start of today in local midnight (mocking server behavior)
-  const todayStartTime = new Date().setHours(0, 0, 0, 0) / 1000;
 
   const currentHourStart = Math.floor(now / 3600) * 3600;
   for (let i = 23; i >= 0; i--) {
@@ -122,7 +118,6 @@ export const getMockCountData = (): CountData => {
 
   return {
     count: 9123456,
-    todayStartTime,
     serverTime: now,
     hourlyCalls
   };
