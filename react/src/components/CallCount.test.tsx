@@ -17,11 +17,17 @@ const getMockCountDataMock = api.getCountData as jest.MockedFunction<
   typeof api.getCountData
 >;
 
+const MOCK_SYSTEM_TIME = new Date('2026-08-17T20:05:00Z');
+const MOCK_NOW_SEC = Math.floor(MOCK_SYSTEM_TIME.getTime() / 1000);
+// Midnight.
+const MOCK_TODAY_START_SEC =
+  new Date(MOCK_SYSTEM_TIME).setHours(0, 0, 0, 0) / 1000;
+
 describe('CallCount Component', () => {
   beforeEach(() => {
     jest.useFakeTimers();
-    // Freeze system time at 8:00 PM UTC to ensure consistent midnight elapsed hours
-    jest.setSystemTime(new Date('2026-08-17T20:00:00Z'));
+    // Freeze system time to ensure consistent midnight elapsed hours
+    jest.setSystemTime(MOCK_SYSTEM_TIME);
     jest.clearAllMocks();
   });
 
@@ -55,22 +61,19 @@ describe('CallCount Component', () => {
     ).toBeInTheDocument();
 
     // Resolve API call
-    const now = Math.floor(Date.now() / 1000);
-    const todayStartTime = new Date().setHours(0, 0, 0, 0) / 1000;
-
     // 24 hour blocks (using 300 calls per hour to guarantee exceeding 250)
     const hourlyCalls = Array.from({ length: 24 }, (_, i) => {
-      const time = Math.floor(now / 3600) * 3600 - (23 - i) * 3600;
+      const time = Math.floor(MOCK_NOW_SEC / 3600) * 3600 - (23 - i) * 3600;
       return {
         time,
-        count: time >= todayStartTime ? 300 : 5
+        count: time >= MOCK_TODAY_START_SEC ? 300 : 5 // 5 calls in the partial hour.
       };
     });
 
     const mockData: api.CountData = {
       count: 9000000,
-      todayStartTime,
-      serverTime: now,
+      todayStartTime: MOCK_TODAY_START_SEC,
+      serverTime: MOCK_NOW_SEC,
       hourlyCalls
     };
 
@@ -79,7 +82,7 @@ describe('CallCount Component', () => {
     });
 
     const expectedTodayCount = hourlyCalls
-      .filter((h) => h.time >= todayStartTime)
+      .filter((h) => h.time >= MOCK_TODAY_START_SEC)
       .reduce((sum, h) => sum + h.count, 0);
 
     // Verify output displays both total calls and a live count within a reasonable starting range
@@ -93,90 +96,70 @@ describe('CallCount Component', () => {
   });
 
   it('shows total count so far if todayCount < 250', async () => {
-    const now = Math.floor(Date.now() / 1000);
-    const todayStartTime = new Date().setHours(0, 0, 0, 0) / 1000;
-
     // Low call count today (e.g. 5 calls per hour)
     const hourlyCalls = Array.from({ length: 24 }, (_, i) => {
-      const time = Math.floor(now / 3600) * 3600 - (23 - i) * 3600;
+      const time = Math.floor(MOCK_NOW_SEC / 3600) * 3600 - (23 - i) * 3600;
       return {
         time,
-        count: time >= todayStartTime ? 5 : 0
+        count: time >= MOCK_TODAY_START_SEC ? 5 : 0
       };
     });
-
     const mockData: api.CountData = {
       count: 9152342,
-      todayStartTime,
-      serverTime: now,
+      todayStartTime: MOCK_TODAY_START_SEC,
+      serverTime: MOCK_NOW_SEC,
       hourlyCalls
     };
-
     getMockCountDataMock.mockResolvedValue(mockData);
 
     render(<CallCount />);
-
     await act(async () => {
       await Promise.resolve();
     });
 
-    // Should render the total count "so far"
     expect(
       screen.getByText(/We[’']ve made 9,152,342 calls so far/i)
     ).toBeInTheDocument();
   });
 
   it('shows fallback state if showTotalCount is true but totalCount is null', async () => {
-    const now = Math.floor(Date.now() / 1000);
-    const todayStartTime = new Date().setHours(0, 0, 0, 0) / 1000;
-
     const hourlyCalls = Array.from({ length: 24 }, (_, i) => {
-      const time = Math.floor(now / 3600) * 3600 - (23 - i) * 3600;
-      return { time, count: time >= todayStartTime ? 5 : 0 };
+      const time = Math.floor(MOCK_NOW_SEC / 3600) * 3600 - (23 - i) * 3600;
+      return { time, count: time >= MOCK_TODAY_START_SEC ? 5 : 0 };
     });
-
     const mockData: any = {
       count: null,
-      todayStartTime,
-      serverTime: now,
+      todayStartTime: MOCK_TODAY_START_SEC,
+      serverTime: MOCK_NOW_SEC,
       hourlyCalls
     };
-
     getMockCountDataMock.mockResolvedValue(mockData);
 
     render(<CallCount />);
-
     await act(async () => {
       await Promise.resolve();
     });
 
-    // Should render the fallback state since totalCount is null
     expect(
       screen.getByText(/more than 13 million calls so far/i)
     ).toBeInTheDocument();
   });
 
   it('transitions from total count to live ticker when todayCount exceeds 250 on a subsequent poll', async () => {
-    const now = Math.floor(Date.now() / 1000);
-    const todayStartTime = new Date().setHours(0, 0, 0, 0) / 1000;
-
     // First poll returns low count
     const hourlyCalls1 = Array.from({ length: 24 }, (_, i) => {
-      const time = Math.floor(now / 3600) * 3600 - (23 - i) * 3600;
-      return { time, count: time >= todayStartTime ? 5 : 0 };
+      const time = Math.floor(MOCK_NOW_SEC / 3600) * 3600 - (23 - i) * 3600;
+      return { time, count: time >= MOCK_TODAY_START_SEC ? 5 : 0 };
     });
-
     const mockData1: api.CountData = {
       count: 9152342,
-      todayStartTime,
-      serverTime: now,
+      todayStartTime: MOCK_TODAY_START_SEC,
+      serverTime: MOCK_NOW_SEC,
       hourlyCalls: hourlyCalls1
     };
-
     getMockCountDataMock.mockResolvedValueOnce(mockData1);
 
     render(<CallCount />);
-
     await act(async () => {
       await Promise.resolve();
     });
@@ -187,22 +170,19 @@ describe('CallCount Component', () => {
 
     // Second poll returns high count (> 250)
     const hourlyCalls2 = hourlyCalls1.map((h) =>
-      h.time >= todayStartTime
+      h.time >= MOCK_TODAY_START_SEC
         ? { ...h, count: 300 } // high baseline
         : h
     );
-
     const todayCount2 = hourlyCalls2
-      .filter((h) => h.time >= todayStartTime)
+      .filter((h) => h.time >= MOCK_TODAY_START_SEC)
       .reduce((sum, h) => sum + h.count, 0);
-
     const mockData2: api.CountData = {
       count: 9152500,
-      todayStartTime,
-      serverTime: now + 120,
+      todayStartTime: MOCK_TODAY_START_SEC,
+      serverTime: MOCK_NOW_SEC + 120,
       hourlyCalls: hourlyCalls2
     };
-
     getMockCountDataMock.mockResolvedValueOnce(mockData2);
 
     await act(async () => {
@@ -220,16 +200,12 @@ describe('CallCount Component', () => {
   });
 
   it('increments the count over time based on estimated rate on initial load', async () => {
-    const now = Math.floor(Date.now() / 1000);
-    const todayStartTime = new Date().setHours(0, 0, 0, 0) / 1000;
-
-    const currentHourTime = Math.floor(now / 3600) * 3600;
+    const currentHourTime = Math.floor(MOCK_NOW_SEC / 3600) * 3600;
     const prevHourTime = currentHourTime - 3600;
-
     const hourlyCalls = Array.from({ length: 24 }, (_, i) => {
-      const time = Math.floor(now / 3600) * 3600 - (23 - i) * 3600;
+      const time = Math.floor(MOCK_NOW_SEC / 3600) * 3600 - (23 - i) * 3600;
       let count = 0;
-      if (time >= todayStartTime) {
+      if (time >= MOCK_TODAY_START_SEC) {
         if (time === currentHourTime) {
           count = 100;
         } else if (time === prevHourTime) {
@@ -240,18 +216,15 @@ describe('CallCount Component', () => {
       }
       return { time, count };
     });
-
     const mockData: api.CountData = {
       count: 9000000,
-      todayStartTime,
-      serverTime: now,
+      todayStartTime: MOCK_TODAY_START_SEC,
+      serverTime: MOCK_NOW_SEC,
       hourlyCalls
     };
-
     getMockCountDataMock.mockResolvedValue(mockData);
 
     render(<CallCount />);
-
     await act(async () => {
       await Promise.resolve();
     });
@@ -261,43 +234,36 @@ describe('CallCount Component', () => {
     ).toBeInTheDocument();
 
     // Expect visualCount to start at todayCountSum - (rate * 120s)
-    // ratePerMs = 460 / 3600 / 1000 = 0.00012777 calls/ms
-    // startingCount = 910 - (0.00012777 * 120000) = 910 - 15 = 895
-    expect(getDisplayedCount()).toBe(895);
+    // ratePerMs = 460 / 3900 / 1000 = 0.00011795 calls/ms (with 5 min offset)
+    // startingCount = 910 - (0.00011795 * 120000) = 910 - 14 = 896
+    expect(getDisplayedCount()).toBe(896);
 
     // Advance 60 seconds (60000ms)
     await act(async () => {
       jest.advanceTimersByTime(60000);
     });
 
-    // Verify it increased by approx 7 calls (0.00012777 * 60000 = 7.66 calls) -> 902
+    // Verify it increased by approx 7 calls (0.00011795 * 59000 = 6.96 calls) -> 902
     expect(getDisplayedCount()).toBe(902);
   });
 
   it('updates rate and target correctly on subsequent polling', async () => {
-    const now = Math.floor(Date.now() / 1000);
-    const todayStartTime = new Date().setHours(0, 0, 0, 0) / 1000;
-
     const hourlyCalls1 = Array.from({ length: 24 }, (_, i) => {
-      const time = Math.floor(now / 3600) * 3600 - (23 - i) * 3600;
-      return { time, count: time >= todayStartTime ? 300 : 0 }; // 300 per hour to exceed 250
+      const time = Math.floor(MOCK_NOW_SEC / 3600) * 3600 - (23 - i) * 3600;
+      return { time, count: time >= MOCK_TODAY_START_SEC ? 300 : 0 }; // 300 per hour to exceed 250
     });
-
     const todayCount1 = hourlyCalls1
-      .filter((h) => h.time >= todayStartTime)
+      .filter((h) => h.time >= MOCK_TODAY_START_SEC)
       .reduce((sum, h) => sum + h.count, 0);
-
     const mockData1: api.CountData = {
       count: 9000000,
-      todayStartTime,
-      serverTime: now,
+      todayStartTime: MOCK_TODAY_START_SEC,
+      serverTime: MOCK_NOW_SEC,
       hourlyCalls: hourlyCalls1
     };
-
     getMockCountDataMock.mockResolvedValueOnce(mockData1);
 
     render(<CallCount />);
-
     await act(async () => {
       await Promise.resolve();
     });
@@ -317,20 +283,17 @@ describe('CallCount Component', () => {
         : h
     );
     const todayCount2 = todayCount1 + 120;
-
     const mockData2: api.CountData = {
       count: 9000000,
-      todayStartTime,
-      serverTime: now + 120,
+      todayStartTime: MOCK_TODAY_START_SEC,
+      serverTime: MOCK_NOW_SEC + 120,
       hourlyCalls: hourlyCalls2
     };
-
     getMockCountDataMock.mockResolvedValueOnce(mockData2);
 
     await act(async () => {
       jest.advanceTimersByTime(120000); // Trigger poll interval (120s)
     });
-
     // Advance 60 seconds (halfway through the catch-up polling window)
     // It should count up to roughly half of the 120 extra calls (60 calls)
     await act(async () => {

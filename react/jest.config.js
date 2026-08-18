@@ -1,3 +1,5 @@
+process.env.TZ = 'America/New_York';
+
 module.exports = {
   preset: 'ts-jest',
   testEnvironment: 'jsdom',
