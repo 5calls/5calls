@@ -2894,6 +2894,12 @@ readers do not read off random characters that represent icons */
 .fa-line-chart {
   --fa: "\f201"; }
 
+.fa-users {
+  --fa: "\f0c0"; }
+
+.fa-bullhorn {
+  --fa: "\f0a1"; }
+
 .fa-mask-ventilator {
   --fa: "\e524"; }
 
