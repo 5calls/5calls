@@ -108,6 +108,56 @@ body {
     margin-left: auto;
   }
 
+  // Completion switches. Sit next to the nav, visibly a dev control.
+  .mt-preview__done {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-items: center;
+    margin: 0;
+    margin-left: auto;
+    padding: 2px 10px 3px;
+    border: 1px dashed rgba($cream, 0.3);
+    border-radius: 6px;
+
+    legend {
+      padding: 0 4px;
+      color: rgba($cream, 0.6);
+      font-size: 11px;
+    }
+
+    label {
+      display: flex;
+      gap: 3px;
+      align-items: center;
+      color: rgba($cream, 0.8);
+      cursor: pointer;
+    }
+
+    input {
+      width: 13px;
+      height: 13px;
+      margin: 0;
+      accent-color: $orange;
+      cursor: pointer;
+    }
+
+    button {
+      padding: 0;
+      border: 0;
+      background: none;
+      font: inherit;
+      color: rgba($cream, 0.55);
+      text-decoration: underline;
+      cursor: pointer;
+    }
+  }
+
+  // With the switches taking the auto margin, the nav follows in flow.
+  .mt-preview__done + nav {
+    margin-left: 0;
+  }
+
   a {
     padding: 3px 9px;
     border: 1px solid rgba($cream, 0.35);
@@ -354,6 +404,12 @@ body {
   padding: 12px 10px;
   border: 1px dashed rgba($ink, 0.32);
   border-radius: 8px;
+  color: inherit;
+  text-decoration: none;
+
+  &:hover {
+    border-color: $blue;
+  }
 
   .mt-strip__num {
     font: 500 15px $mono;
@@ -373,15 +429,26 @@ body {
     color: rgba($ink, 0.8);
   }
 
-  &--done {
+  // Done state is painted by script from localStorage, so both readings ship
+  // in the markup and only one is ever shown.
+  .mt-strip__done {
+    display: none;
+  }
+
+  &.is-done {
     border: 1px solid rgba($blue, 0.25);
     background: rgba($blue, 0.09);
 
-    .mt-strip__meta {
+    .mt-strip__done {
+      display: block;
       font-weight: 500;
       font-size: 13px;
       letter-spacing: 0.08em;
       color: $blue;
+    }
+
+    .mt-strip__when {
+      display: none;
     }
   }
 
@@ -407,71 +474,17 @@ body {
       letter-spacing: 0.005em;
       color: $ink-solid;
     }
+
+    // The live week keeps its orange card when done; only the marker changes.
+    &.is-done {
+      border: 0;
+      background: $orange;
+
+      .mt-strip__done {
+        color: $ink-solid;
+      }
+    }
   }
-}
-
-// Recap of finished weeks
-.mt-recap {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 16px;
-  align-items: center;
-  margin-top: 18px;
-  @include shell(margin);
-  padding: 16px 22px;
-  border-radius: 8px;
-  background: rgba($ink, 0.06);
-
-  > b {
-    font-family: $display;
-    font-size: 19px;
-    font-weight: 400;
-    letter-spacing: 0.005em;
-    color: $ink;
-  }
-
-  > span {
-    flex: 1;
-    min-width: 240px;
-    font-size: 16px;
-    color: rgba($ink, 0.88);
-  }
-
-  > button {
-    padding: 0;
-    border: 0;
-    background: none;
-    font: 500 14px $mono;
-    letter-spacing: 0.08em;
-    color: $blue;
-  }
-}
-
-.mt-recap__list {
-  display: none;
-  width: 100%;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-
-  li {
-    display: flex;
-    gap: 12px;
-    padding: 8px 0;
-    border-top: 1px solid rgba($ink, 0.12);
-    font-size: 16px;
-    color: rgba($ink, 0.88);
-  }
-
-  b {
-    font: 500 14px $mono;
-    letter-spacing: 0.08em;
-    color: $blue;
-  }
-}
-
-.mt-recap.is-open .mt-recap__list {
-  display: block;
 }
 
 // This week's action
@@ -927,86 +940,6 @@ body {
   }
 }
 
-// What's ahead
-.mt-ahead {
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
-  padding-top: clamp(40px, 6vw, 68px);
-  padding-bottom: clamp(40px, 6vw, 68px);
-  @include shell;
-}
-
-.mt-ahead__head {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 16px;
-  align-items: baseline;
-  justify-content: space-between;
-
-  h2 {
-    margin: 0;
-    font-family: $display;
-    font-size: clamp(29px, 3.6vw, 41px);
-    font-weight: 400;
-    letter-spacing: 0.005em;
-    color: $ink;
-  }
-}
-
-.mt-ahead__note {
-  font: 500 14px $mono;
-  letter-spacing: 0.1em;
-  color: rgba($ink, 0.85);
-}
-
-.mt-ahead__grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
-  gap: 16px;
-}
-
-.mt-ahead__card {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  min-height: 130px;
-  padding: 20px;
-  border: 1px dashed rgba($ink, 0.32);
-  border-radius: 10px;
-
-  h3 {
-    margin: 0;
-    font-family: $display;
-    font-size: 23px;
-    font-weight: 400;
-    line-height: 1.1;
-    letter-spacing: 0.005em;
-    color: rgba($ink, 0.8);
-  }
-}
-
-.mt-ahead__week {
-  font: 500 14px $mono;
-  letter-spacing: 0.1em;
-  color: rgba($ink, 0.82);
-}
-
-.mt-ahead__meta {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  align-items: center;
-  margin-top: auto;
-  font: 400 15px $mono;
-  color: rgba($ink, 0.8);
-
-  &--next {
-    font-weight: 500;
-    color: $blue;
-  }
-}
-
 // Weekly reminder signup
 .mt-remind {
   display: flex;
@@ -1014,6 +947,10 @@ body {
   gap: 28px;
   align-items: center;
   justify-content: space-between;
+  // The card used to inherit its top gap from the section above it. Now that it
+  // follows the dark why band directly, it carries its own, matched to the
+  // bottom so the card sits evenly between the band and the footer.
+  margin-top: clamp(36px, 5vw, 60px);
   margin-bottom: clamp(36px, 5vw, 60px);
   @include shell(margin);
   padding: clamp(28px, 4vw, 44px);
