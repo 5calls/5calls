@@ -240,10 +240,7 @@ remind:
   placeholder: you@email.com
   cta: Remind me
 
+# The about page comes back later; until then Privacy is the only link.
 footer_links:
-  - title: Who's behind this
-    url: /about-us/
-  - title: Archive
-    url: "#weeks"
   - title: Privacy
     url: /privacy/
