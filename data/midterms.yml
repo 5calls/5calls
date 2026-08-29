@@ -1,0 +1,181 @@
+# Content for the temporary /midterms "5 Minute Midterms" page.
+# This page is a one-off campaign page; nothing else on the site reads this file.
+
+# Which week is live right now. Weeks before this are "done", weeks after are
+# "upcoming". Set this to 0 before the program starts: the page then renders
+# the week_zero block below instead of a weekly action, and nothing unlocks.
+current_week: 0
+
+# Headline numbers shown in the top bar.
+total_actions: 24190
+
+nav:
+  state_label: STATE
+  nudge: Get the weekly nudge
+
+intro:
+  title: Five minutes. No voting fuckery.
+
+# The reader's state. Only one state is configured for now; the header selector
+# is FPO until per-state data lands.
+#
+# name and abbr are rendered (header selector, "CALIFORNIA LINKS" tag, the CA
+# pills on upcoming weeks). The deadline fields are not rendered anywhere since
+# the state bar was removed — they are kept here to fold into an action's copy.
+state:
+  name: California
+  abbr: CA
+  register_by: Mon, Oct 20 — 15 days left
+  register_note: Online, by mail, or in person. Same-day registration allowed at polling places.
+
+# Copy for the recap strip that summarizes finished weeks.
+recap:
+  cta: EXPAND
+
+# Pre-launch state, rendered when current_week is 0. The program has been
+# announced but no action has gone out yet, so the only thing to do is sign up
+# and there is nothing to unlock. Once week 1 ships, set current_week to 1 and
+# none of this is used again.
+week_zero:
+  kicker: SIGN-UPS OPEN
+  eyebrow: THE PROGRAM
+  title: Eight weeks. Eight small things.
+  lede: >-
+    Between now and election day we send one action every Monday morning. Each
+    one takes about five minutes and each one is picked because it actually
+    moves someone closer to voting.
+  body:
+    - >-
+      No phone bank shifts, no weekend commitment, no account to create. You
+      get an email, you spend five minutes, you're done until next Monday.
+    - >-
+      Every action is specific to your state, so the deadlines and links you
+      get are the ones that apply to you.
+  signup:
+    label: START HERE
+    cta: Sign me up
+    placeholder: you@email.com
+  aside:
+    title: WHAT A WEEK LOOKS LIKE
+    items:
+      - label: MONDAY, 9AM
+        text: One action lands in your inbox and goes live on this page.
+      - label: FIVE MINUTES
+        text: Check something, save a date, send one message. That's the whole ask.
+      - label: THE REST OF THE WEEK
+        text: Nothing. Miss one and the next Monday still works.
+  why:
+    kicker: WHY EIGHT WEEKS
+    heading: Small things, done on a schedule, beat one big push at the end.
+    stats:
+      - value: 1 in 8
+        text: registrations on file are invalid or out of date.
+      - value: 8 weeks
+        text: is enough time to fix that before the deadlines close.
+      - value: 5 min
+        text: is all any week asks of you. That is the whole design.
+
+# One entry per week. The entry matching current_week is rendered in full;
+# earlier weeks collapse into the recap strip, later weeks into "What's ahead".
+weeks:
+  - number: 1
+    short: Checked
+    title: Check your own registration
+    recap: Registration checked
+    state_specific: true
+    release: 2026-09-14T09:00:00-07:00
+
+  - number: 2
+    short: Deadline
+    title: Put the deadline in your calendar
+    recap: deadline saved
+    state_specific: true
+    release: 2026-09-21T09:00:00-07:00
+
+  - number: 3
+    short: One call
+    title: Call one friend
+    recap: one friend called
+    state_specific: false
+    release: 2026-09-28T09:00:00-07:00
+
+  - number: 4
+    short: Group chat
+    title: Drop it in one group chat
+    recap: message sent
+    state_specific: true
+    release: 2026-10-05T09:00:00-07:00
+    minutes: 5
+    intro: >-
+      People check their registration when someone they know asks them to, not
+      when a stranger does. Pick a chat you're already in and paste this.
+    message: >-
+      Quick one: registrations get cancelled more often than people think. Takes
+      about a minute to check yours — here's the California lookup — deadline is
+      Oct 20.
+    message_label: THE MESSAGE
+    copy_cta: Copy the message
+    rewrite_cta: Rewrite it for me
+    confirm: I sent it — unlock my images
+    confirm_count: 1,204 sent
+    why:
+      heading: A message from a friend outperforms every ad we could buy.
+      stats:
+        - value: 1 in 8
+          text: registrations on file are invalid or out of date.
+        - value: Moves
+          text: and clerical errors quietly drop people from the rolls.
+        - value: 5 min
+          text: is all any week asks of you. That is the whole design.
+
+  - number: 5
+    short: Myths
+    title: Myths, busted
+    recap: myths busted
+    state_specific: true
+    release: 2026-10-12T09:00:00-07:00
+
+  - number: 6
+    short: Mail-in
+    title: Mail-in rules
+    recap: mail-in rules read
+    state_specific: true
+    release: 2026-10-19T09:00:00-07:00
+
+  - number: 7
+    short: First-timers
+    title: First-time voters
+    recap: first-time voters helped
+    state_specific: true
+    release: 2026-10-26T09:00:00-07:00
+
+  - number: 8
+    short: Bring three
+    title: Bring three people
+    recap: three people brought
+    state_specific: false
+    release: 2026-11-02T09:00:00-08:00
+
+ahead:
+  title: What's ahead
+  note: MONDAYS, 9AM · CA = STATE-SPECIFIC
+
+images:
+  locked_note: Tick the box and both sizes unlock, with the site link baked into the art.
+  library_label: "YOURS: WEEKS 1–3"
+  library_note: Re-post any time
+  library_cta: Open library
+
+remind:
+  title: Week 5 lands Monday.
+  subtitle: One email a week, nothing else. No account needed.
+  placeholder: you@email.com
+  cta: Remind me
+
+footer_links:
+  - title: Who's behind this
+    url: /about-us/
+  - title: Archive
+    url: "#ahead"
+  - title: Privacy
+    url: /privacy/

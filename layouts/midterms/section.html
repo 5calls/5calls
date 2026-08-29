@@ -1,0 +1,2 @@
+{{- /* The live /midterms page: whichever week data/midterms.yml says is current. */ -}}
+{{- partial "midterms-page.html" (dict "page" . "week" site.Data.midterms.current_week "preview" false) -}}

@@ -1,0 +1,462 @@
+{{- /*
+  The whole /midterms page body. Called by two thin layouts:
+
+    layouts/midterms/section.html  the live page, week = data current_week
+    layouts/midterms/single.html   a preview page, week = that page's week
+
+  Context: (dict "page" PAGE "week" INT "preview" BOOL)
+
+  This partial renders a complete HTML document rather than a baseof block, so
+  the page shares no header, footer or stylesheet with the rest of the site and
+  can be deleted in one piece after the midterms.
+
+  Weekly actions come from data/midterms.yml.
+*/ -}}
+{{- $page := .page -}}
+{{- $preview := .preview -}}
+{{- $d := site.Data.midterms -}}
+{{- $cur := .week -}}
+{{- $total := len $d.weeks -}}
+{{- /* Week 0 is the pre-launch state: no weekly action, nothing to unlock. */ -}}
+{{- $prelaunch := lt $cur 1 -}}
+{{- $zero := $d.week_zero -}}
+{{- $week := $zero -}}
+{{- if not $prelaunch }}{{ $week = index (where $d.weeks "number" $cur) 0 }}{{ end -}}
+{{- /* On previews, flag detail fields the week has not been written with yet. */ -}}
+{{- $missing := slice -}}
+{{- if and $preview (not $prelaunch) -}}
+  {{- range slice "minutes" "intro" "message" "message_label" "copy_cta" "rewrite_cta" "confirm" "confirm_count" "why" -}}
+    {{- if not (index $week .) }}{{ $missing = $missing | append . }}{{ end -}}
+  {{- end -}}
+{{- end -}}
+{{- $done := where $d.weeks "number" "lt" $cur -}}
+{{- $upcoming := where $d.weeks "number" "gt" $cur -}}
+{{- $next := "" -}}
+{{- with $upcoming }}{{ $next = index . 0 }}{{ end -}}
+{{- $style := resources.Get "sass/midterms.scss" | css.Sass | resources.Minify | resources.Fingerprint -}}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{{ $page.Title }} ⭑ {{ site.Title }}</title>
+    <meta name="description" content="{{ $page.Params.description }}" />
+
+    <meta property="og:title" content="{{ $page.Title }} ⭑ {{ site.Title }}" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="{{ $page.Permalink }}" />
+    <meta property="og:description" content="{{ $page.Params.description }}" />
+    <meta property="og:site_name" content="{{ site.Title }}" />
+    <!-- FPO: swap in the midterms share art once it exists. -->
+    <meta property="og:image" content="{{ site.BaseURL }}img/5calls-twitter.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="@make5calls" />
+    <meta name="twitter:title" content="{{ $page.Title }} ⭑ {{ site.Title }}" />
+    <meta name="twitter:description" content="{{ $page.Params.description }}" />
+    <meta name="twitter:image:src" content="{{ site.BaseURL }}img/5calls-twitter.png" />
+
+    <!-- FPO: placeholder mark in the page palette, swap for the real midterms art.
+         Declared here only, so the rest of the site keeps the 5 Calls favicon. -->
+    <link rel="icon" type="image/svg+xml" href="{{ site.BaseURL }}images/midterms/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ site.BaseURL }}images/midterms/favicon-32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ site.BaseURL }}images/midterms/favicon-16.png" />
+    <link rel="apple-touch-icon" href="{{ site.BaseURL }}images/midterms/apple-touch-icon.png" />
+    <meta name="theme-color" content="#F98033" />
+    {{- if $preview }}
+      <meta name="robots" content="noindex, nofollow" />
+    {{- else }}
+      <script>
+        // /midterms?week=2 is a shortcut to the build-time preview page for
+        // that week. Runs before paint so the live page is never shown first.
+        (function () {
+          var w = new URLSearchParams(location.search).get("week");
+          if (w !== null && /^[0-9]+$/.test(w)) {
+            location.replace({{ printf "%spreview/" $page.RelPermalink }} + Number(w) + "/");
+          }
+        })();
+      </script>
+    {{- end }}
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600&family=Bebas+Neue&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="{{ $style.RelPermalink }}" />
+
+    <script defer data-domain="5calls.org" src="https://plausible.io/js/script.tagged-events.js"></script>
+  </head>
+  <body>
+    {{- if $preview }}
+      <div class="mt-preview">
+        <b>PREVIEW</b>
+        <span>
+          {{ if $prelaunch }}Week 0 — the pre-launch page{{ else }}Week {{ $cur }} of {{ $total }}{{ end }}.
+          Not the live page.
+        </span>
+        {{- with $missing }}
+          <em>Not written yet: {{ delimit . ", " }}</em>
+        {{- end }}
+        <nav>
+          {{- range seq 0 $total }}
+            {{- $n := . }}
+            <a href="{{ $page.Parent.RelPermalink }}preview/{{ $n }}/"{{ if eq $n $cur }} class="is-current"{{ end }}>{{ $n }}</a>
+          {{- end }}
+          <a href="{{ $page.Parent.RelPermalink }}">live</a>
+        </nav>
+      </div>
+    {{- end }}
+    <div class="mt">
+      <div class="mt-rule"></div>
+
+      <header class="mt-header">
+        <!-- FPO: replace with the midterms lockup. -->
+        <div class="mt-fpo">LOGO FPO</div>
+        <nav class="mt-nav">
+          <a href="#why">Why this works</a>
+          <a href="#ahead">All {{ $total }} weeks</a>
+          <!-- FPO: state switching needs per-state data before it can work. -->
+          <span class="mt-pill mt-pill--blue mt-state-toggle">
+            <span class="mt-mono">{{ $d.nav.state_label }}</span>
+            <span>{{ $d.state.name }}</span>
+            <span>▾</span>
+          </span>
+          <a href="#remind" class="mt-pill">{{ $d.nav.nudge }}</a>
+        </nav>
+      </header>
+
+      <section class="mt-top">
+        <div>
+          <h1 class="mt-display mt-top__title">{{ $d.intro.title }}</h1>
+        </div>
+        <div class="mt-counts">
+          <div class="mt-count">
+            <b>{{ lang.FormatNumberCustom 0 $d.total_actions }}</b>
+            <span>ACTIONS</span>
+          </div>
+          {{- if not $prelaunch }}
+            <div class="mt-count mt-count--blue">
+              <b><span data-yours>0</span> / {{ $total }}</b>
+              <span>YOURS</span>
+            </div>
+          {{- end }}
+        </div>
+      </section>
+
+      <section class="mt-strip" aria-label="Your {{ $total }} weeks">
+        {{- range $d.weeks }}
+          {{- if lt .number $cur }}
+            <div class="mt-strip__item mt-strip__item--done">
+              <span class="mt-strip__num">{{ printf "%02d" .number }}</span>
+              <span class="mt-strip__label">{{ .short }}</span>
+              <span class="mt-strip__meta">DONE</span>
+            </div>
+          {{- else if eq .number $cur }}
+            <div class="mt-strip__item mt-strip__item--now">
+              <span class="mt-strip__num">{{ printf "%02d" .number }} · NOW</span>
+              <span class="mt-strip__label">{{ .title }}</span>
+            </div>
+          {{- else }}
+            <div class="mt-strip__item">
+              <span class="mt-strip__num">{{ printf "%02d" .number }}</span>
+              <span class="mt-strip__meta">
+                {{- if and $next (eq .number $next.number) -}}
+                  {{- $release := time.AsTime .release -}}
+                  <time datetime="{{ $release.Format "2006-01-02T15:04:05Z07:00" }}"
+                        data-countdown data-countdown-short>{{ $release.Format "Jan 2" }}</time>
+                {{- else -}}
+                  —
+                {{- end -}}
+              </span>
+            </div>
+          {{- end }}
+        {{- end }}
+      </section>
+
+      {{- with $done }}
+        <section class="mt-recap" data-recap>
+          <b>
+            {{- if eq (len .) 1 }}Week 1, done.{{ else }}Weeks 1–{{ sub $cur 1 }}, done.{{ end -}}
+          </b>
+          <span>
+            {{- $parts := slice -}}
+            {{- range . }}{{ $parts = $parts | append .recap }}{{ end -}}
+            {{ delimit $parts " · " }}
+          </span>
+          <button type="button" data-recap-toggle aria-expanded="false">{{ $d.recap.cta }} ▾</button>
+          <ul class="mt-recap__list">
+            {{- range . }}
+              <li><b>WEEK {{ printf "%02d" .number }}</b> {{ .title }}</li>
+            {{- end }}
+          </ul>
+        </section>
+      {{- end }}
+
+      <main class="mt-action">
+        {{- if $prelaunch }}
+          {{- /* Week 0: the action is signing up, so the form stands in for the
+                 weekly message card and carries the #remind anchor. Nothing is
+                 completable yet, so there is no confirm row and no image panel. */ -}}
+          <div class="mt-action__main">
+            <div class="mt-action__kicker">{{ $zero.eyebrow }}</div>
+            <h2 class="mt-action__title">{{ $zero.title }}</h2>
+            <p class="mt-action__intro">{{ $zero.lede }}</p>
+
+            <div id="remind" class="mt-message">
+              <div class="mt-message__head">
+                <div class="mt-mono">{{ $zero.signup.label }}</div>
+              </div>
+              <!-- FPO: not wired to a list provider yet. -->
+              <form class="mt-signup__form" onsubmit="return false">
+                <label class="visually-hidden" for="mt-email">Email address</label>
+                <input id="mt-email" type="email" placeholder="{{ $zero.signup.placeholder }}" />
+                <button type="submit" class="mt-pill mt-pill--solid">{{ $zero.signup.cta }}</button>
+              </form>
+              {{- with $next }}
+                <p class="mt-signup__note">
+                  Week {{ .number }} goes out {{ (time.AsTime .release).Format "Monday, January 2" }}.
+                </p>
+              {{- end }}
+            </div>
+
+            {{- range $zero.body }}
+              <p class="mt-action__body">{{ . }}</p>
+            {{- end }}
+          </div>
+
+          <aside class="mt-expect">
+            <span class="mt-mono">{{ $zero.aside.title }}</span>
+            <ul>
+              {{- range $zero.aside.items }}
+                <li>
+                  <b>{{ .label }}</b>
+                  <span>{{ .text }}</span>
+                </li>
+              {{- end }}
+            </ul>
+          </aside>
+        {{- else }}
+          <div class="mt-action__main">
+            <h2 class="mt-action__title">{{ $week.title }}</h2>
+            <p class="mt-action__intro">{{ $week.intro }}</p>
+
+            <div class="mt-message">
+              <div class="mt-message__head">
+                <div class="mt-mono">{{ $week.message_label }}</div>
+                {{- if $week.state_specific }}
+                  <div class="mt-pill mt-pill--tag">{{ upper $d.state.name }} LINKS</div>
+                {{- end }}
+              </div>
+              <p class="mt-message__text" data-message>{{ $week.message }}</p>
+              <div class="mt-message__actions">
+                <button type="button" class="mt-pill mt-pill--solid" data-copy>{{ $week.copy_cta }}</button>
+                <!-- FPO: rewrite tool is not built yet. -->
+                <span class="mt-pill mt-pill--blue">{{ $week.rewrite_cta }}</span>
+              </div>
+            </div>
+
+            <label class="mt-confirm">
+              <input type="checkbox" data-confirm value="{{ $cur }}" />
+              <span>{{ $week.confirm }}</span>
+              <em>{{ $week.confirm_count }}</em>
+            </label>
+          </div>
+
+          <aside class="mt-images" data-images>
+            <div class="mt-images__head">
+              <span class="mt-mono">WEEK {{ $cur }} IMAGES</span>
+              <span class="mt-images__status" data-images-status>LOCKED</span>
+            </div>
+            <!-- FPO: placeholder crops stand in for the weekly share art. -->
+            <div class="mt-images__set">
+              <div class="mt-shot mt-shot--portrait">9:16</div>
+              <div class="mt-shot-col">
+                <div class="mt-shot mt-shot--landscape">16:9</div>
+              </div>
+            </div>
+            <p class="mt-images__note">{{ $d.images.locked_note }}</p>
+            <div class="mt-library">
+              <span class="mt-library__label">{{ $d.images.library_label }}</span>
+              <div class="mt-library__row">
+                {{- range $done }}
+                  <div class="mt-library__thumb"></div>
+                {{- end }}
+                <div class="mt-library__meta">
+                  <span>{{ $d.images.library_note }}</span>
+                  <!-- FPO: the library page does not exist yet. -->
+                  <a href="#ahead">{{ $d.images.library_cta }}</a>
+                </div>
+              </div>
+            </div>
+          </aside>
+        {{- end }}
+      </main>
+
+      {{- with $week.why }}
+        <section id="why" class="mt-why">
+          <div class="mt-why__lede">
+            <h2>{{ .heading }}</h2>
+          </div>
+          <div class="mt-why__stats">
+            {{- range .stats }}
+              <div class="mt-stat">
+                <b>{{ .value }}</b>
+                <span>{{ .text }}</span>
+              </div>
+            {{- end }}
+          </div>
+        </section>
+      {{- end }}
+
+      <section id="ahead" class="mt-ahead">
+        <div class="mt-ahead__head">
+          <h2>{{ $d.ahead.title }}</h2>
+          <div class="mt-ahead__note">{{ $d.ahead.note }}</div>
+        </div>
+        <div class="mt-ahead__grid">
+          {{- range $upcoming }}
+            {{- $release := time.AsTime .release }}
+            <div class="mt-ahead__card">
+              <span class="mt-ahead__week">WEEK {{ printf "%02d" .number }}</span>
+              <h3>{{ .title }}</h3>
+              <span class="mt-ahead__meta{{ if and $next (eq .number $next.number) }} mt-ahead__meta--next{{ end }}">
+                {{- if and $next (eq .number $next.number) -}}
+                  <time datetime="{{ $release.Format "2006-01-02T15:04:05Z07:00" }}"
+                        data-countdown>{{ $release.Format "Mon, Jan 2" }}</time>
+                {{- else -}}
+                  <span>Locked</span>
+                {{- end -}}
+                {{- if .state_specific }}
+                  <span class="mt-pill mt-pill--tag">{{ $d.state.abbr }}</span>
+                {{- end }}
+              </span>
+            </div>
+          {{- end }}
+        </div>
+      </section>
+
+      {{- if not $prelaunch }}
+      <section id="remind" class="mt-remind">
+        <div>
+          <h2>{{ $d.remind.title }}</h2>
+          <p>{{ $d.remind.subtitle }}</p>
+        </div>
+        <!-- FPO: not wired to a list provider yet. -->
+        <form class="mt-remind__form" onsubmit="return false">
+          <label class="visually-hidden" for="mt-email">Email address</label>
+          <input id="mt-email" type="email" placeholder="{{ $d.remind.placeholder }}" />
+          <button type="submit">{{ $d.remind.cta }}</button>
+        </form>
+      </section>
+      {{- end }}
+
+      <footer class="mt-footer">
+        <!-- FPO: replace with the midterms lockup. -->
+        <div class="mt-fpo mt-fpo--small">LOGO</div>
+        <div class="mt-footer__links">
+          {{- range $d.footer_links }}
+            <a href="{{ .url }}">{{ .title }}</a>
+          {{- end }}
+        </div>
+      </footer>
+    </div>
+
+    <script>
+      // Everything the page tracks lives in this browser only — there is no
+      // account behind /midterms.
+      (function () {
+        var KEY = "5calls-midterms-done";
+        var TOTAL = {{ $total }};
+        var CURRENT = {{ $cur }};
+
+        function read() {
+          try {
+            return JSON.parse(localStorage.getItem(KEY)) || [];
+          } catch (e) {
+            return [];
+          }
+        }
+
+        function write(weeks) {
+          try {
+            localStorage.setItem(KEY, JSON.stringify(weeks));
+          } catch (e) {
+            /* private mode, nothing to do */
+          }
+        }
+
+        var done = read();
+
+        var yours = document.querySelector("[data-yours]");
+        function renderCount() {
+          if (yours) yours.textContent = String(done.length);
+        }
+
+        // Countdown to the next week's release, replacing the rendered date.
+        document.querySelectorAll("[data-countdown]").forEach(function (el) {
+          var diff = new Date(el.getAttribute("datetime")).getTime() - Date.now();
+          if (isNaN(diff) || diff <= 0) return;
+          var days = Math.floor(diff / 86400000);
+          var hours = Math.floor(diff / 3600000) % 24;
+          if (el.hasAttribute("data-countdown-short")) {
+            el.textContent = days > 0 ? days + "d" : hours + "h";
+          } else {
+            el.textContent = "In " + (days > 0 ? days + "d " : "") + hours + "h";
+          }
+        });
+
+        var copy = document.querySelector("[data-copy]");
+        var message = document.querySelector("[data-message]");
+        if (copy && message && navigator.clipboard) {
+          var label = copy.textContent;
+          copy.addEventListener("click", function () {
+            navigator.clipboard.writeText(message.textContent.trim()).then(function () {
+              copy.textContent = "Copied";
+              setTimeout(function () {
+                copy.textContent = label;
+              }, 2000);
+            });
+          });
+        }
+
+        var confirmBox = document.querySelector("[data-confirm]");
+        var images = document.querySelector("[data-images]");
+        var status = document.querySelector("[data-images-status]");
+        function renderUnlock() {
+          var unlocked = done.indexOf(CURRENT) > -1;
+          if (confirmBox) confirmBox.checked = unlocked;
+          if (images) images.classList.toggle("is-unlocked", unlocked);
+          if (status) status.textContent = unlocked ? "UNLOCKED" : "LOCKED";
+        }
+        if (confirmBox) {
+          confirmBox.addEventListener("change", function () {
+            var at = done.indexOf(CURRENT);
+            if (confirmBox.checked && at === -1) done.push(CURRENT);
+            if (!confirmBox.checked && at > -1) done.splice(at, 1);
+            write(done);
+            renderUnlock();
+            renderCount();
+          });
+        }
+
+        var recap = document.querySelector("[data-recap]");
+        var recapToggle = document.querySelector("[data-recap-toggle]");
+        if (recap && recapToggle) {
+          recapToggle.addEventListener("click", function () {
+            var open = recap.classList.toggle("is-open");
+            recapToggle.setAttribute("aria-expanded", String(open));
+            recapToggle.textContent = open ? "COLLAPSE ▴" : "EXPAND ▾";
+          });
+        }
+
+        // Drop anything stored for weeks that no longer exist.
+        done = done.filter(function (n) {
+          return n >= 1 && n <= TOTAL;
+        });
+        renderUnlock();
+        renderCount();
+      })();
+    </script>
+  </body>
+</html>

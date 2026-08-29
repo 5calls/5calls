@@ -1,0 +1,1004 @@
+// Styles for the temporary /midterms "5 Minute Midterms" page.
+// Standalone entry point: this file is NOT imported by main.scss, and the
+// midterms layout does not load main.scss, so nothing here can affect the
+// rest of the site.
+
+$cream: #fdf1e3;
+$orange: #f98033;
+$orange-dark: #b04a08;
+$blue: #2f6690;
+$ink: #4a4a4a;
+$ink-solid: #2a2a2a;
+$mono: ui-monospace, Menlo, Monaco, "Courier New", monospace;
+// Bebas Neue is caps-only and much narrower than Archivo Black, so every
+// display size below is set ~18% larger with slightly open tracking.
+$display: "Bebas Neue", Impact, "Arial Narrow", sans-serif;
+$gutter: clamp(20px, 5vw, 64px);
+// Content never grows past this; the gutter takes over on narrower screens.
+// Written as a literal so libsass does not try to evaluate max() itself.
+$shell: 1200px;
+$inset: unquote("max(#{$gutter}, calc((100% - #{$shell}) / 2))");
+
+// Full-bleed backgrounds stay full-bleed; only the content inside is capped.
+@mixin shell($prop: padding) {
+  #{$prop}-right: $inset;
+  #{$prop}-left: $inset;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: $cream;
+  color: $ink;
+  font-family: Archivo, system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+.mt {
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
+
+  a {
+    color: $orange;
+    text-decoration: none;
+
+    &:hover {
+      color: $ink;
+    }
+  }
+
+  button {
+    font: inherit;
+    color: inherit;
+    cursor: pointer;
+  }
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+// Build-time preview banner (preview pages only, never the live page)
+.mt-preview {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 16px;
+  align-items: center;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  @include shell;
+  background: $ink;
+  color: $cream;
+  font: 500 13px $mono;
+  letter-spacing: 0.06em;
+
+  b {
+    padding: 3px 8px;
+    border-radius: 4px;
+    background: $orange;
+    color: $ink-solid;
+  }
+
+  span {
+    color: rgba($cream, 0.8);
+    letter-spacing: 0;
+  }
+
+  em {
+    font-style: normal;
+    letter-spacing: 0;
+    color: $orange;
+  }
+
+  nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-left: auto;
+  }
+
+  a {
+    padding: 3px 9px;
+    border: 1px solid rgba($cream, 0.35);
+    border-radius: 999px;
+    color: rgba($cream, 0.85);
+
+    &:hover {
+      border-color: $orange;
+      color: $orange;
+    }
+
+    &.is-current {
+      border-color: $orange;
+      background: $orange;
+      color: $ink-solid;
+    }
+  }
+}
+
+.mt-rule {
+  height: 6px;
+  background: $orange;
+}
+
+// Small shared type treatments
+.mt-mono {
+  font: 500 14px $mono;
+  letter-spacing: 0.12em;
+  color: rgba($ink, 0.85);
+}
+
+.mt-display {
+  font-family: $display;
+  font-weight: 400;
+  letter-spacing: 0.005em;
+  line-height: 1;
+}
+
+.mt-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 18px;
+  border: 1.5px solid $ink;
+  border-radius: 999px;
+  color: $ink;
+
+  &--blue {
+    border-color: rgba($blue, 0.5);
+    color: $blue;
+    background: rgba($blue, 0.08);
+  }
+
+  &--solid {
+    padding: 14px 26px;
+    border: 0;
+    background: $orange;
+    color: $ink-solid;
+    font-size: 16px;
+    font-weight: 600;
+    box-shadow: 0 6px 16px rgba($orange, 0.3);
+  }
+
+  &--tag {
+    padding: 6px 12px;
+    border: 0;
+    background: rgba($blue, 0.12);
+    color: $blue;
+    font: 500 13px $mono;
+    letter-spacing: 0.08em;
+  }
+}
+
+// Header
+.mt-header {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 22px;
+  padding-bottom: 22px;
+  @include shell;
+  border-bottom: 1px solid rgba($ink, 0.15);
+}
+
+.mt-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 28px;
+  align-items: center;
+  font-size: 15px;
+
+  a {
+    color: $ink;
+  }
+}
+
+.mt-fpo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 210px;
+  height: 52px;
+  border: 1.5px dashed rgba($ink, 0.45);
+  border-radius: 4px;
+  font: 400 13px $mono;
+  letter-spacing: 0.1em;
+  color: rgba($ink, 0.85);
+
+  &--small {
+    width: 150px;
+    height: 38px;
+    font-size: 12px;
+  }
+}
+
+.mt-state-toggle {
+  span:nth-child(2) {
+    font-weight: 600;
+  }
+}
+
+// Top bar: week number, headline, counters
+.mt-top {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+  align-items: flex-end;
+  justify-content: space-between;
+  padding-top: clamp(28px, 5vw, 52px);
+  @include shell;
+}
+
+.mt-top__kicker {
+  font: 500 14px $mono;
+  letter-spacing: 0.14em;
+  color: $orange-dark;
+}
+
+.mt-top__title {
+  max-width: 16ch;
+  margin: 10px 0 0;
+  font-size: clamp(30px, 4vw, 46px);
+  line-height: 1.02;
+  color: $ink;
+}
+
+.mt-counts {
+  display: flex;
+  gap: 34px;
+  align-items: flex-end;
+  padding-bottom: 6px;
+}
+
+.mt-count {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+
+  > b {
+    font-family: $display;
+    font-size: 36px;
+    font-weight: 400;
+    letter-spacing: 0.005em;
+  }
+
+  > span {
+    font: 400 13px $mono;
+    letter-spacing: 0.1em;
+    color: rgba($ink, 0.85);
+  }
+
+  &--blue > b {
+    color: $blue;
+  }
+}
+
+// Eight-week progress strip
+.mt-strip {
+  display: flex;
+  gap: 6px;
+  align-items: stretch;
+  padding-top: clamp(24px, 4vw, 38px);
+  @include shell;
+}
+
+.mt-strip__item {
+  display: flex;
+  min-width: 0;
+  flex: 1;
+  flex-direction: column;
+  gap: 6px;
+  min-height: 78px;
+  padding: 12px 10px;
+  border: 1px dashed rgba($ink, 0.32);
+  border-radius: 8px;
+
+  .mt-strip__num {
+    font: 500 15px $mono;
+    color: rgba($ink, 0.8);
+  }
+
+  .mt-strip__label {
+    font-size: 15px;
+    line-height: 1.2;
+    color: rgba($ink, 0.9);
+    overflow-wrap: anywhere;
+  }
+
+  .mt-strip__meta {
+    margin-top: auto;
+    font: 400 14px $mono;
+    color: rgba($ink, 0.8);
+  }
+
+  &--done {
+    border: 1px solid rgba($blue, 0.25);
+    background: rgba($blue, 0.09);
+
+    .mt-strip__meta {
+      font-weight: 500;
+      font-size: 13px;
+      letter-spacing: 0.08em;
+      color: $blue;
+    }
+  }
+
+  &--now {
+    flex: 2.4;
+    padding: 12px 16px;
+    border: 0;
+    background: $orange;
+    box-shadow: 0 6px 18px rgba($orange, 0.28);
+
+    .mt-strip__num {
+      font-weight: 600;
+      font-size: 14px;
+      letter-spacing: 0.1em;
+      color: $ink-solid;
+    }
+
+    .mt-strip__label {
+      font-family: $display;
+      font-weight: 400;
+      font-size: 21px;
+      line-height: 1.05;
+      letter-spacing: 0.005em;
+      color: $ink-solid;
+    }
+  }
+}
+
+// Recap of finished weeks
+.mt-recap {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  align-items: center;
+  margin-top: 18px;
+  @include shell(margin);
+  padding: 16px 22px;
+  border-radius: 8px;
+  background: rgba($ink, 0.06);
+
+  > b {
+    font-family: $display;
+    font-size: 19px;
+    font-weight: 400;
+    letter-spacing: 0.005em;
+    color: $ink;
+  }
+
+  > span {
+    flex: 1;
+    min-width: 240px;
+    font-size: 16px;
+    color: rgba($ink, 0.88);
+  }
+
+  > button {
+    padding: 0;
+    border: 0;
+    background: none;
+    font: 500 14px $mono;
+    letter-spacing: 0.08em;
+    color: $blue;
+  }
+}
+
+.mt-recap__list {
+  display: none;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+
+  li {
+    display: flex;
+    gap: 12px;
+    padding: 8px 0;
+    border-top: 1px solid rgba($ink, 0.12);
+    font-size: 16px;
+    color: rgba($ink, 0.88);
+  }
+
+  b {
+    font: 500 14px $mono;
+    letter-spacing: 0.08em;
+    color: $blue;
+  }
+}
+
+.mt-recap.is-open .mt-recap__list {
+  display: block;
+}
+
+// This week's action
+.mt-action {
+  display: flex;
+  flex-wrap: wrap;
+  gap: clamp(24px, 4vw, 48px);
+  align-items: flex-start;
+  padding-top: clamp(30px, 5vw, 54px);
+  padding-bottom: clamp(30px, 5vw, 54px);
+  @include shell;
+}
+
+.mt-action__main {
+  display: flex;
+  flex: 1.3;
+  min-width: 340px;
+  flex-direction: column;
+  gap: 22px;
+}
+
+.mt-action__kicker {
+  font: 500 14px $mono;
+  letter-spacing: 0.14em;
+  color: rgba($ink, 0.85);
+}
+
+.mt-action__title {
+  margin: 0;
+  font-family: $display;
+  font-size: clamp(46px, 6.4vw, 76px);
+  font-weight: 400;
+  line-height: 0.95;
+  letter-spacing: 0.005em;
+  color: $ink;
+  text-wrap: pretty;
+}
+
+.mt-action__intro {
+  max-width: 52ch;
+  margin: 0;
+  font-size: 18px;
+  line-height: 1.55;
+  color: rgba($ink, 0.85);
+  text-wrap: pretty;
+}
+
+.mt-message {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 22px 24px;
+  border: 1px solid rgba($ink, 0.2);
+  border-radius: 10px;
+  background: #fff;
+}
+
+.mt-message__head {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.mt-message__text {
+  margin: 0;
+  font-size: 16px;
+  line-height: 1.55;
+  color: $ink;
+}
+
+.mt-message__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+  padding-top: 4px;
+}
+
+.mt-confirm {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  align-items: center;
+  padding: 18px 22px;
+  border: 1.5px solid $ink;
+  border-radius: 10px;
+  cursor: pointer;
+
+  input {
+    width: 26px;
+    height: 26px;
+    margin: 0;
+    accent-color: $orange;
+  }
+
+  span {
+    flex: 1;
+    min-width: 200px;
+    font-size: 17px;
+    font-weight: 600;
+    color: $ink;
+  }
+
+  em {
+    font: 400 15px $mono;
+    font-style: normal;
+    color: rgba($ink, 0.85);
+  }
+}
+
+// Week 0: signup card and "what a week looks like" panel
+.mt-signup__form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+
+  input {
+    flex: 1;
+    min-width: 200px;
+    height: 52px;
+    padding: 0 18px;
+    border: 1px solid rgba($ink, 0.3);
+    border-radius: 999px;
+    background: #fff;
+    font-size: 16px;
+    color: $ink;
+  }
+
+  button {
+    border: 0;
+  }
+}
+
+.mt-signup__note {
+  margin: 0;
+  font: 400 15px $mono;
+  color: rgba($ink, 0.8);
+}
+
+.mt-action__body {
+  max-width: 60ch;
+  margin: 0;
+  font-size: 17px;
+  line-height: 1.55;
+  color: rgba($ink, 0.85);
+}
+
+.mt-expect {
+  display: flex;
+  flex: 1;
+  min-width: 300px;
+  flex-direction: column;
+  gap: 16px;
+  padding: 24px;
+  border-radius: 12px;
+  background: rgba($ink, 0.06);
+
+  ul {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  li {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding-top: 16px;
+    border-top: 1px solid rgba($ink, 0.18);
+
+    &:first-child {
+      padding-top: 0;
+      border-top: 0;
+    }
+  }
+
+  b {
+    font: 500 13px $mono;
+    letter-spacing: 0.1em;
+    color: $blue;
+  }
+
+  span {
+    font-size: 16px;
+    line-height: 1.5;
+    color: rgba($ink, 0.88);
+  }
+}
+
+// Share images sidebar
+.mt-images {
+  display: flex;
+  flex: 1;
+  min-width: 300px;
+  flex-direction: column;
+  gap: 16px;
+  padding: 24px;
+  border-radius: 12px;
+  background: rgba($ink, 0.06);
+}
+
+.mt-images__head {
+  display: flex;
+  gap: 12px;
+  align-items: baseline;
+  justify-content: space-between;
+}
+
+.mt-images__status {
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: rgba($ink, 0.15);
+  font: 500 13px $mono;
+  letter-spacing: 0.08em;
+  color: rgba($ink, 0.9);
+}
+
+.mt-images__set {
+  display: flex;
+  gap: 14px;
+  opacity: 0.42;
+}
+
+.mt-images__note {
+  margin: 0;
+  font-size: 16px;
+  line-height: 1.5;
+  color: rgba($ink, 0.9);
+}
+
+.mt-shot {
+  display: flex;
+  align-items: flex-end;
+  padding: 8px;
+  border-radius: 6px;
+  background: repeating-linear-gradient(
+    135deg,
+    rgba($ink, 0.14) 0 9px,
+    rgba($ink, 0.06) 9px 18px
+  );
+  font: 500 14px $mono;
+  color: rgba($ink, 0.8);
+
+  &--portrait {
+    width: 126px;
+    height: 224px;
+  }
+
+  &--landscape {
+    height: 118px;
+  }
+}
+
+.mt-shot-col {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.mt-library {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding-top: 16px;
+  border-top: 1px solid rgba($ink, 0.18);
+}
+
+.mt-library__label {
+  font: 500 14px $mono;
+  letter-spacing: 0.12em;
+  color: $blue;
+}
+
+.mt-library__row {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.mt-library__thumb {
+  width: 52px;
+  height: 92px;
+  border-radius: 4px;
+  background: repeating-linear-gradient(
+    135deg,
+    rgba($ink, 0.2) 0 7px,
+    rgba($ink, 0.08) 7px 14px
+  );
+}
+
+.mt-library__meta {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 8px;
+  padding-left: 4px;
+  font-size: 15px;
+  line-height: 1.4;
+  color: rgba($ink, 0.88);
+
+  a {
+    align-self: flex-start;
+    padding: 9px 16px;
+    border: 1.5px solid rgba($blue, 0.5);
+    border-radius: 999px;
+    color: $blue;
+  }
+}
+
+// Images unlock after the reader confirms they sent the message
+.mt-images.is-unlocked {
+  .mt-images__set {
+    opacity: 1;
+  }
+
+  .mt-images__status {
+    background: rgba($blue, 0.15);
+    color: $blue;
+  }
+}
+
+// Why this works
+.mt-why {
+  display: flex;
+  flex-wrap: wrap;
+  gap: clamp(24px, 4vw, 56px);
+  padding-top: clamp(40px, 6vw, 72px);
+  padding-bottom: clamp(40px, 6vw, 72px);
+  @include shell;
+  background: $ink;
+  color: $cream;
+}
+
+.mt-why__lede {
+  display: flex;
+  flex: 1;
+  min-width: 260px;
+  flex-direction: column;
+  gap: 14px;
+
+  h2 {
+    margin: 0;
+    font-family: $display;
+    font-size: clamp(31px, 3.8vw, 45px);
+    font-weight: 400;
+    line-height: 1;
+    letter-spacing: 0.005em;
+    text-wrap: pretty;
+  }
+}
+
+.mt-why__kicker {
+  font: 500 14px $mono;
+  letter-spacing: 0.14em;
+  color: rgba($cream, 0.9);
+}
+
+.mt-why__stats {
+  display: grid;
+  flex: 1.4;
+  min-width: 300px;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 28px;
+}
+
+.mt-stat {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+
+  b {
+    font-family: $display;
+    font-size: 40px;
+    font-weight: 400;
+    letter-spacing: 0.005em;
+    color: $orange;
+  }
+
+  span {
+    font-size: 17px;
+    line-height: 1.5;
+    color: rgba($cream, 0.85);
+  }
+}
+
+// What's ahead
+.mt-ahead {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  padding-top: clamp(40px, 6vw, 68px);
+  padding-bottom: clamp(40px, 6vw, 68px);
+  @include shell;
+}
+
+.mt-ahead__head {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  align-items: baseline;
+  justify-content: space-between;
+
+  h2 {
+    margin: 0;
+    font-family: $display;
+    font-size: clamp(29px, 3.6vw, 41px);
+    font-weight: 400;
+    letter-spacing: 0.005em;
+    color: $ink;
+  }
+}
+
+.mt-ahead__note {
+  font: 500 14px $mono;
+  letter-spacing: 0.1em;
+  color: rgba($ink, 0.85);
+}
+
+.mt-ahead__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  gap: 16px;
+}
+
+.mt-ahead__card {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-height: 130px;
+  padding: 20px;
+  border: 1px dashed rgba($ink, 0.32);
+  border-radius: 10px;
+
+  h3 {
+    margin: 0;
+    font-family: $display;
+    font-size: 23px;
+    font-weight: 400;
+    line-height: 1.1;
+    letter-spacing: 0.005em;
+    color: rgba($ink, 0.8);
+  }
+}
+
+.mt-ahead__week {
+  font: 500 14px $mono;
+  letter-spacing: 0.1em;
+  color: rgba($ink, 0.82);
+}
+
+.mt-ahead__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+  margin-top: auto;
+  font: 400 15px $mono;
+  color: rgba($ink, 0.8);
+
+  &--next {
+    font-weight: 500;
+    color: $blue;
+  }
+}
+
+// Weekly reminder signup
+.mt-remind {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 28px;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: clamp(36px, 5vw, 60px);
+  @include shell(margin);
+  padding: clamp(28px, 4vw, 44px);
+  border-radius: 12px;
+  background: $orange;
+  color: $ink-solid;
+
+  h2 {
+    margin: 0 0 8px;
+    font-family: $display;
+    font-size: clamp(29px, 3.6vw, 38px);
+    font-weight: 400;
+    line-height: 1;
+    letter-spacing: 0.005em;
+  }
+
+  p {
+    margin: 0;
+    font-size: 16px;
+  }
+}
+
+.mt-remind__form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+
+  input {
+    width: unquote("min(320px, 70vw)");
+    height: 52px;
+    padding: 0 22px;
+    border: 0;
+    border-radius: 999px;
+    background: #fff;
+    font-size: 16px;
+    color: $ink;
+  }
+
+  button {
+    padding: 16px 28px;
+    border: 0;
+    border-radius: 999px;
+    background: $ink;
+    font-size: 16px;
+    font-weight: 600;
+    color: #fff;
+  }
+}
+
+// Footer
+.mt-footer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 18px;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: auto;
+  padding-top: 26px;
+  padding-bottom: 26px;
+  @include shell;
+  border-top: 1px solid rgba($ink, 0.15);
+}
+
+.mt-footer__links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+  font-size: 16px;
+
+  a {
+    color: rgba($ink, 0.88);
+  }
+}
+
+// The eight-across strip needs to wrap well before phone widths.
+@media (max-width: 860px) {
+  .mt-strip {
+    flex-wrap: wrap;
+  }
+
+  .mt-strip__item {
+    flex: 1 1 calc(25% - 6px);
+
+    &--now {
+      flex: 1 1 100%;
+    }
+  }
+}
+
+@media (max-width: 520px) {
+  .mt-strip__item {
+    flex: 1 1 calc(50% - 6px);
+  }
+
+  .mt-counts {
+    gap: 24px;
+  }
+}
