@@ -83,6 +83,8 @@ weeks:
     # Pulls the deadline card from data/midterms_states.yml (VoteAmerica deck)
     # for the reader's state, in place of the copy-and-paste message card.
     state_deck: true
+    # Links the CTA at /vote/verify/ instead of the state's own site.
+    tool: verify
     deck_cta: Check my registration
     deck_note: >-
       Deadlines and rules come from your state's election office. Checking takes

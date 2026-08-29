@@ -37,6 +37,14 @@
     {{- if not (index $week .) }}{{ $missing = $missing | append . }}{{ end -}}
   {{- end -}}
 {{- end -}}
+{{- /* Weeks that send the reader to a voting tool name it, and we link our own
+       /vote/ page rather than the state's site: same VoteAmerica tool, but the
+       reader stays on 5calls. Falls back to the state deck's URL if the page
+       named is not there. */ -}}
+{{- $tool := "" -}}
+{{- if and (not $prelaunch) $week.tool -}}
+  {{- with site.GetPage (printf "/vote/%s" $week.tool) }}{{ $tool = .RelPermalink }}{{ end -}}
+{{- end -}}
 {{- /* The /midterms/ root, whichever layout called us: the live page is the
        section itself, a preview page is a child of it. */ -}}
 {{- $base := $page.RelPermalink -}}
@@ -277,7 +285,12 @@
                   <li data-deck="mail"{{ if not $deck.mail }} hidden{{ end }}>{{ $deck.mail }}</li>
                 </ul>
                 <div class="mt-message__actions">
-                  <a class="mt-pill mt-pill--solid" href="{{ $deck.url }}" rel="noopener" data-deck="url">{{ $week.deck_cta }}</a>
+                  {{- if $tool }}
+                    <a class="mt-pill mt-pill--solid" href="{{ $tool }}">{{ $week.deck_cta }}</a>
+                  {{- else }}
+                    {{- /* data-deck marks it for the state switcher to rewrite. */ -}}
+                    <a class="mt-pill mt-pill--solid" href="{{ $deck.url }}" rel="noopener" data-deck="url">{{ $week.deck_cta }}</a>
+                  {{- end }}
                 </div>
                 {{- with $week.deck_note }}
                   <p class="mt-deck__foot">{{ . }}</p>
