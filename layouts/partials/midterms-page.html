@@ -22,10 +22,18 @@
 {{- $zero := $d.week_zero -}}
 {{- $week := $zero -}}
 {{- if not $prelaunch }}{{ $week = index (where $d.weeks "number" $cur) 0 }}{{ end -}}
+{{- /* Weeks flagged state_deck render the VoteAmerica registration copy for the
+       reader's state instead of a copy-and-paste message. */ -}}
+{{- $deck := false -}}
+{{- if and (not $prelaunch) $week.state_deck -}}
+  {{- $deck = index site.Data.midterms_states.states $d.state.abbr -}}
+{{- end -}}
 {{- /* On previews, flag detail fields the week has not been written with yet. */ -}}
 {{- $missing := slice -}}
+{{- $required := slice "minutes" "intro" "message" "message_label" "copy_cta" "rewrite_cta" "confirm" "confirm_count" "why" -}}
+{{- if $deck }}{{ $required = slice "minutes" "intro" "deck_cta" "confirm" "confirm_count" "why" }}{{ end -}}
 {{- if and $preview (not $prelaunch) -}}
-  {{- range slice "minutes" "intro" "message" "message_label" "copy_cta" "rewrite_cta" "confirm" "confirm_count" "why" -}}
+  {{- range $required -}}
     {{- if not (index $week .) }}{{ $missing = $missing | append . }}{{ end -}}
   {{- end -}}
 {{- end -}}
@@ -98,6 +106,11 @@
         {{- with $missing }}
           <em>Not written yet: {{ delimit . ", " }}</em>
         {{- end }}
+        {{- if $deck }}
+          <em data-state-review{{ if not $deck.needs_review }} hidden{{ end }}>
+            {{- if $deck.needs_review }}{{ $d.state.abbr }} deck flagged upstream: {{ $deck.review_reason }}{{ end -}}
+          </em>
+        {{- end }}
         <nav>
           {{- range seq 0 $total }}
             {{- $n := . }}
@@ -116,11 +129,19 @@
         <nav class="mt-nav">
           <a href="#why">Why this works</a>
           <a href="#ahead">All {{ $total }} weeks</a>
-          <!-- FPO: state switching needs per-state data before it can work. -->
+          {{- /* A native select sizes itself to its widest option, which left a gap
+                 next to shorter state names. So the visible label is our own
+                 element and the select sits transparent on top of the whole
+                 pill: native picker and keyboard, our typography. */ -}}
           <span class="mt-pill mt-pill--blue mt-state-toggle">
-            <span class="mt-mono">{{ $d.nav.state_label }}</span>
-            <span>{{ $d.state.name }}</span>
-            <span>▾</span>
+            <label class="visually-hidden" for="mt-state">Your state</label>
+            <span class="mt-state-toggle__value" data-state-label>{{ $d.state.name }}</span>
+            <span class="mt-state-toggle__caret" aria-hidden="true"></span>
+            <select id="mt-state" data-state-select>
+              {{- range sort site.Data.midterms_states.states "name" }}
+                <option value="{{ .code }}"{{ if eq .code $d.state.abbr }} selected{{ end }}>{{ .name }}</option>
+              {{- end }}
+            </select>
           </span>
           <a href="#remind" class="mt-pill">{{ $d.nav.nudge }}</a>
         </nav>
@@ -241,20 +262,44 @@
             <h2 class="mt-action__title">{{ $week.title }}</h2>
             <p class="mt-action__intro">{{ $week.intro }}</p>
 
-            <div class="mt-message">
-              <div class="mt-message__head">
-                <div class="mt-mono">{{ $week.message_label }}</div>
-                {{- if $week.state_specific }}
-                  <div class="mt-pill mt-pill--tag">{{ upper $d.state.name }} LINKS</div>
+            {{- if $deck }}
+              <div class="mt-message mt-deck">
+                <div class="mt-message__head">
+                  <div class="mt-mono" data-deck="headline">{{ $deck.headline }}</div>
+                  <div class="mt-pill mt-pill--tag" data-deck="tag">{{ upper $deck.name }}</div>
+                </div>
+                {{- /* Every slot is always in the DOM so the switcher can refill it.
+                       States without a deadline (North Dakota) promote their
+                       channels line into the date slot and hide the channels row. */ -}}
+                <div class="mt-deck__date" data-deck="hero">{{ or $deck.hero_date $deck.channels }}</div>
+                <div class="mt-deck__channels" data-deck="channels"{{ if not $deck.hero_date }} hidden{{ end }}>{{ $deck.channels }}</div>
+                <ul class="mt-deck__notes">
+                  <li data-deck="secondary"{{ if not $deck.secondary }} hidden{{ end }}>{{ $deck.secondary }}</li>
+                  <li data-deck="mail"{{ if not $deck.mail }} hidden{{ end }}>{{ $deck.mail }}</li>
+                </ul>
+                <div class="mt-message__actions">
+                  <a class="mt-pill mt-pill--solid" href="{{ $deck.url }}" rel="noopener" data-deck="url">{{ $week.deck_cta }}</a>
+                </div>
+                {{- with $week.deck_note }}
+                  <p class="mt-deck__foot">{{ . }}</p>
                 {{- end }}
               </div>
-              <p class="mt-message__text" data-message>{{ $week.message }}</p>
-              <div class="mt-message__actions">
-                <button type="button" class="mt-pill mt-pill--solid" data-copy>{{ $week.copy_cta }}</button>
-                <!-- FPO: rewrite tool is not built yet. -->
-                <span class="mt-pill mt-pill--blue">{{ $week.rewrite_cta }}</span>
+            {{- else }}
+              <div class="mt-message">
+                <div class="mt-message__head">
+                  <div class="mt-mono">{{ $week.message_label }}</div>
+                  {{- if $week.state_specific }}
+                    <div class="mt-pill mt-pill--tag"><span data-state-name-upper>{{ upper $d.state.name }}</span> LINKS</div>
+                  {{- end }}
+                </div>
+                <p class="mt-message__text" data-message>{{ $week.message }}</p>
+                <div class="mt-message__actions">
+                  <button type="button" class="mt-pill mt-pill--solid" data-copy>{{ $week.copy_cta }}</button>
+                  <!-- FPO: rewrite tool is not built yet. -->
+                  <span class="mt-pill mt-pill--blue">{{ $week.rewrite_cta }}</span>
+                </div>
               </div>
-            </div>
+            {{- end }}
 
             <label class="mt-confirm">
               <input type="checkbox" data-confirm value="{{ $cur }}" />
@@ -328,7 +373,7 @@
                   <span>Locked</span>
                 {{- end -}}
                 {{- if .state_specific }}
-                  <span class="mt-pill mt-pill--tag">{{ $d.state.abbr }}</span>
+                  <span class="mt-pill mt-pill--tag" data-state-abbr>{{ $d.state.abbr }}</span>
                 {{- end }}
               </span>
             </div>
@@ -362,11 +407,23 @@
       </footer>
     </div>
 
+    {{- /* The whole deck, so switching states never needs a round trip. Trimmed
+           to what the page renders; review notes ride along on previews only. */ -}}
+    {{- $payload := dict -}}
+    {{- range $code, $s := site.Data.midterms_states.states -}}
+      {{- $entry := dict "name" $s.name "headline" $s.headline "hero" $s.hero_date
+          "channels" $s.channels "secondary" $s.secondary "mail" $s.mail "url" $s.url -}}
+      {{- if $preview }}{{ $entry = merge $entry (dict "review" $s.review_reason) }}{{ end -}}
+      {{- $payload = merge $payload (dict $code $entry) -}}
+    {{- end }}
+    <script type="application/json" id="mt-states">{{ $payload | jsonify | safeJS }}</script>
+
     <script>
       // Everything the page tracks lives in this browser only — there is no
       // account behind /midterms.
       (function () {
         var KEY = "5calls-midterms-done";
+        var STATE_KEY = "5calls-midterms-state";
         var TOTAL = {{ $total }};
         var CURRENT = {{ $cur }};
 
@@ -447,6 +504,96 @@
             var open = recap.classList.toggle("is-open");
             recapToggle.setAttribute("aria-expanded", String(open));
             recapToggle.textContent = open ? "COLLAPSE ▴" : "EXPAND ▾";
+          });
+        }
+
+        // ── State switcher ───────────────────────────────────────────────
+        // The selected state re-fills the deck card and every place a state
+        // name appears. Server-rendered markup already holds one state, so
+        // this only runs when the reader picks a different one.
+        var states = {};
+        try {
+          states = JSON.parse(document.getElementById("mt-states").textContent);
+        } catch (e) {
+          /* leave the server-rendered state in place */
+        }
+        var select = document.querySelector("[data-state-select]");
+
+        function fill(sel, value) {
+          var el = document.querySelector("[data-deck='" + sel + "']");
+          if (!el) return;
+          el.textContent = value || "";
+          el.hidden = !value;
+        }
+
+        function applyState(code) {
+          var s = states[code];
+          if (!s) return;
+
+          // The deadline card. States with no deadline (North Dakota) show
+          // their channels line in the date slot instead.
+          var hero = document.querySelector("[data-deck='hero']");
+          if (hero) hero.textContent = s.hero || s.channels || "";
+          var channels = document.querySelector("[data-deck='channels']");
+          if (channels) {
+            channels.textContent = s.channels || "";
+            channels.hidden = !s.hero || !s.channels;
+          }
+          fill("headline", s.headline);
+          fill("secondary", s.secondary);
+          fill("mail", s.mail);
+          var tag = document.querySelector("[data-deck='tag']");
+          if (tag) tag.textContent = (s.name || "").toUpperCase();
+          var cta = document.querySelector("[data-deck='url']");
+          if (cta && s.url) cta.href = s.url;
+
+          // Everywhere else the state is named.
+          document.querySelectorAll("[data-state-name-upper]").forEach(function (el) {
+            el.textContent = (s.name || "").toUpperCase();
+          });
+          document.querySelectorAll("[data-state-abbr]").forEach(function (el) {
+            el.textContent = code;
+          });
+          document.querySelectorAll("[data-state-label]").forEach(function (el) {
+            el.textContent = s.name || "";
+          });
+
+          var review = document.querySelector("[data-state-review]");
+          if (review) {
+            review.textContent = s.review ? code + " deck flagged upstream: " + s.review : "";
+            review.hidden = !s.review;
+          }
+
+          if (select && select.value !== code) select.value = code;
+        }
+
+        function remember(code) {
+          try {
+            localStorage.setItem(STATE_KEY, code);
+          } catch (e) {
+            /* private mode */
+          }
+        }
+
+        if (select) {
+          // ?state=TX overrides the stored choice, for sharing and previews.
+          var param = new URLSearchParams(location.search).get("state");
+          var stored = null;
+          try {
+            stored = localStorage.getItem(STATE_KEY);
+          } catch (e) {
+            /* private mode */
+          }
+          var initial = (param || stored || "").toUpperCase();
+          if (states[initial]) {
+            if (initial !== select.value) applyState(initial);
+            // A shared ?state= link becomes the reader's choice from here on.
+            if (param) remember(initial);
+          }
+
+          select.addEventListener("change", function () {
+            applyState(select.value);
+            remember(select.value);
           });
         }
 

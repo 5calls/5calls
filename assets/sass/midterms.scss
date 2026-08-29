@@ -181,6 +181,12 @@ body {
   }
 }
 
+// Anchors inside .mt take the link color, which would swallow a solid pill's
+// label; restate it with enough specificity to win.
+.mt a.mt-pill--solid {
+  color: $ink-solid;
+}
+
 // Header
 .mt-header {
   display: flex;
@@ -226,8 +232,51 @@ body {
 }
 
 .mt-state-toggle {
-  span:nth-child(2) {
+  position: relative;
+  gap: 14px;
+  padding: 10px 22px;
+  border-width: 2px;
+  min-height: 52px;
+  cursor: pointer;
+
+  &:hover {
+    background: rgba($blue, 0.16);
+  }
+
+  // The select is transparent and covers the pill, so focus lands here.
+  &:focus-within {
+    outline: 3px solid $blue;
+    outline-offset: 3px;
+  }
+
+  &__value {
+    font-size: 20px;
     font-weight: 600;
+    line-height: 1.2;
+    color: $blue;
+  }
+
+  &__caret {
+    width: 0;
+    height: 0;
+    border-top: 9px solid $blue;
+    border-right: 7px solid transparent;
+    border-left: 7px solid transparent;
+  }
+
+  select {
+    position: absolute;
+    // -2px so the overlay covers the pill's 2px border too, leaving no dead
+    // strip around the edge of the target.
+    inset: -2px;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    opacity: 0;
+    font: inherit;
+    cursor: pointer;
+    appearance: none;
+    -webkit-appearance: none;
   }
 }
 
@@ -501,6 +550,42 @@ body {
   gap: 12px;
   align-items: center;
   padding-top: 4px;
+}
+
+// Week-one registration card, built from the VoteAmerica copy deck. Shares the
+// white card chrome with .mt-message.
+.mt-deck__date {
+  font-family: $display;
+  font-weight: 400;
+  font-size: clamp(30px, 4vw, 44px);
+  line-height: 1;
+  letter-spacing: 0.005em;
+  color: $ink;
+}
+
+.mt-deck__channels {
+  font: 400 15px $mono;
+  letter-spacing: 0.04em;
+  color: $blue;
+}
+
+.mt-deck__notes {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: 16px;
+  line-height: 1.5;
+  color: rgba($ink, 0.88);
+}
+
+.mt-deck__foot {
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.5;
+  color: rgba($ink, 0.72);
 }
 
 .mt-confirm {

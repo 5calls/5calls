@@ -10,7 +10,6 @@ current_week: 0
 total_actions: 24190
 
 nav:
-  state_label: STATE
   nudge: Get the weekly nudge
 
 intro:
@@ -84,6 +83,30 @@ weeks:
     recap: Registration checked
     state_specific: true
     release: 2026-09-14T09:00:00-07:00
+    minutes: 5
+    # Pulls the deadline card from data/midterms_states.yml (VoteAmerica deck)
+    # for the reader's state, in place of the copy-and-paste message card.
+    state_deck: true
+    deck_cta: Check my registration
+    deck_note: >-
+      Deadlines and rules come from your state's election office. Checking takes
+      about a minute, even if you're sure you're registered.
+    intro: >-
+      Registrations get cancelled more often than people expect — a move, a
+      typo, a routine purge. Start here, because every week after this one
+      assumes you're on the rolls.
+    confirm: I checked — unlock my images
+    confirm_count: 3,908 checked
+    why:
+      kicker: WHY THIS ONE
+      heading: The rolls change constantly, and nobody tells you when yours does.
+      stats:
+        - value: 1 in 8
+          text: registrations on file are invalid or out of date.
+        - value: Moves
+          text: and clerical errors quietly drop people from the rolls.
+        - value: 1 min
+          text: to confirm you're still registered where you think you are.
 
   - number: 2
     short: Deadline
