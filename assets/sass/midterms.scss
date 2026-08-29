@@ -493,12 +493,6 @@ body {
   gap: 22px;
 }
 
-.mt-action__kicker {
-  font: 500 14px $mono;
-  letter-spacing: 0.14em;
-  color: rgba($ink, 0.85);
-}
-
 .mt-action__title {
   margin: 0;
   font-family: $display;
@@ -535,6 +529,11 @@ body {
   gap: 12px;
   align-items: center;
   justify-content: space-between;
+
+  // Keeps the state tag on the right whether or not anything sits beside it.
+  > :last-child {
+    margin-left: auto;
+  }
 }
 
 .mt-message__text {
@@ -554,19 +553,46 @@ body {
 
 // Week-one registration card, built from the VoteAmerica copy deck. Shares the
 // white card chrome with .mt-message.
-.mt-deck__date {
+// Headline, date and methods are one statement: a single display face sized
+// down and up for hierarchy, then the methods line in body type.
+// The state tag sits on the same top line as the registration copy.
+.mt-deck__top {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.mt-deck__lede {
+  display: flex;
+  flex-direction: column;
+}
+
+// The lines above and below the date are the supporting detail and share one
+// treatment, so the date is the only thing that carries weight.
+.mt-deck__detail {
   font-family: $display;
   font-weight: 400;
-  font-size: clamp(30px, 4vw, 44px);
+  font-size: 24px;
+  line-height: 1.05;
+  letter-spacing: 0.005em;
+  color: rgba($ink, 0.7);
+}
+
+.mt-deck__date {
+  // Bebas leaves more room above its caps than below, so the raw gaps around
+  // the date come out lopsided. These trims even them up, in em so they hold
+  // as the date scales. Both are measured baseline-to-cap-top: the comma in
+  // "Tue, Nov 3" dips below the baseline, but the eye balances on the
+  // baseline, not on the comma's tail.
+  margin-top: -0.02em;
+  margin-bottom: -0.045em;
+  font-family: $display;
+  font-weight: 400;
+  font-size: clamp(34px, 4.4vw, 48px);
   line-height: 1;
   letter-spacing: 0.005em;
   color: $ink;
-}
-
-.mt-deck__channels {
-  font: 400 15px $mono;
-  letter-spacing: 0.04em;
-  color: $blue;
 }
 
 .mt-deck__notes {

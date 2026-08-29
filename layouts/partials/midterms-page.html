@@ -30,7 +30,7 @@
 {{- end -}}
 {{- /* On previews, flag detail fields the week has not been written with yet. */ -}}
 {{- $missing := slice -}}
-{{- $required := slice "minutes" "intro" "message" "message_label" "copy_cta" "rewrite_cta" "confirm" "confirm_count" "why" -}}
+{{- $required := slice "minutes" "intro" "message" "copy_cta" "rewrite_cta" "confirm" "confirm_count" "why" -}}
 {{- if $deck }}{{ $required = slice "minutes" "intro" "deck_cta" "confirm" "confirm_count" "why" }}{{ end -}}
 {{- if and $preview (not $prelaunch) -}}
   {{- range $required -}}
@@ -220,14 +220,10 @@
                  weekly message card and carries the #remind anchor. Nothing is
                  completable yet, so there is no confirm row and no image panel. */ -}}
           <div class="mt-action__main">
-            <div class="mt-action__kicker">{{ $zero.eyebrow }}</div>
             <h2 class="mt-action__title">{{ $zero.title }}</h2>
             <p class="mt-action__intro">{{ $zero.lede }}</p>
 
             <div id="remind" class="mt-message">
-              <div class="mt-message__head">
-                <div class="mt-mono">{{ $zero.signup.label }}</div>
-              </div>
               <!-- FPO: not wired to a list provider yet. -->
               <form class="mt-signup__form" onsubmit="return false">
                 <label class="visually-hidden" for="mt-email">Email address</label>
@@ -247,7 +243,6 @@
           </div>
 
           <aside class="mt-expect">
-            <span class="mt-mono">{{ $zero.aside.title }}</span>
             <ul>
               {{- range $zero.aside.items }}
                 <li>
@@ -264,15 +259,19 @@
 
             {{- if $deck }}
               <div class="mt-message mt-deck">
-                <div class="mt-message__head">
-                  <div class="mt-mono" data-deck="headline">{{ $deck.headline }}</div>
+                {{- /* Headline, date and methods read as one statement, so they share
+                       a block and a typeface, with the state tag riding on the same
+                       top line. Every slot is always in the DOM so the switcher can
+                       refill it; states without a deadline (North Dakota) promote
+                       their methods line into the date slot. */ -}}
+                <div class="mt-deck__top">
+                  <div class="mt-deck__lede">
+                    <div class="mt-deck__detail" data-deck="headline">{{ $deck.headline }}</div>
+                    <div class="mt-deck__date" data-deck="hero">{{ or $deck.hero_date $deck.channels }}</div>
+                    <div class="mt-deck__detail" data-deck="channels"{{ if not $deck.hero_date }} hidden{{ end }}>{{ $deck.channels }}</div>
+                  </div>
                   <div class="mt-pill mt-pill--tag" data-deck="tag">{{ upper $deck.name }}</div>
                 </div>
-                {{- /* Every slot is always in the DOM so the switcher can refill it.
-                       States without a deadline (North Dakota) promote their
-                       channels line into the date slot and hide the channels row. */ -}}
-                <div class="mt-deck__date" data-deck="hero">{{ or $deck.hero_date $deck.channels }}</div>
-                <div class="mt-deck__channels" data-deck="channels"{{ if not $deck.hero_date }} hidden{{ end }}>{{ $deck.channels }}</div>
                 <ul class="mt-deck__notes">
                   <li data-deck="secondary"{{ if not $deck.secondary }} hidden{{ end }}>{{ $deck.secondary }}</li>
                   <li data-deck="mail"{{ if not $deck.mail }} hidden{{ end }}>{{ $deck.mail }}</li>
@@ -286,12 +285,11 @@
               </div>
             {{- else }}
               <div class="mt-message">
-                <div class="mt-message__head">
-                  <div class="mt-mono">{{ $week.message_label }}</div>
-                  {{- if $week.state_specific }}
+                {{- if $week.state_specific }}
+                  <div class="mt-message__head">
                     <div class="mt-pill mt-pill--tag"><span data-state-name-upper>{{ upper $d.state.name }}</span> LINKS</div>
-                  {{- end }}
-                </div>
+                  </div>
+                {{- end }}
                 <p class="mt-message__text" data-message>{{ $week.message }}</p>
                 <div class="mt-message__actions">
                   <button type="button" class="mt-pill mt-pill--solid" data-copy>{{ $week.copy_cta }}</button>
@@ -357,7 +355,6 @@
       <section id="ahead" class="mt-ahead">
         <div class="mt-ahead__head">
           <h2>{{ $d.ahead.title }}</h2>
-          <div class="mt-ahead__note">{{ $d.ahead.note }}</div>
         </div>
         <div class="mt-ahead__grid">
           {{- range $upcoming }}
