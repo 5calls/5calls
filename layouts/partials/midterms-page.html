@@ -19,6 +19,18 @@
 {{- $total := len $d.weeks -}}
 {{- /* Week 0 is the pre-launch state: no weekly action, nothing to unlock. */ -}}
 {{- $prelaunch := lt $cur 1 -}}
+{{- /* Release dates read as dates, not countdowns. No points, and September is
+       "Sept" rather than Go's "Sep"; the short months stay whole. */ -}}
+{{- $months := dict
+  "January" "Jan" "February" "Feb" "March" "March" "April" "April"
+  "May" "May" "June" "June" "July" "July" "August" "Aug"
+  "September" "Sept" "October" "Oct" "November" "Nov" "December" "Dec" -}}
+{{- /* Which week the program is on, as against which week this page shows. They
+       differ only on an archive page: /midterms/week/3/ rendered while week 5
+       is live. A preview deliberately pretends its week is the live one, which
+       is the whole point of previewing. */ -}}
+{{- $live := $d.current_week -}}
+{{- if $preview }}{{ $live = $cur }}{{ end -}}
 {{- $zero := $d.week_zero -}}
 {{- $week := $zero -}}
 {{- if not $prelaunch }}{{ $week = index (where $d.weeks "number" $cur) 0 }}{{ end -}}
@@ -47,13 +59,13 @@
 {{- end -}}
 {{- /* The /midterms/ root, whichever layout called us: the live page is the
        section itself, a preview page is a child of it. */ -}}
-{{- $base := $page.RelPermalink -}}
-{{- if $preview }}{{ $base = $page.Parent.RelPermalink }}{{ end -}}
+{{- $base := "/midterms/" -}}
+{{- with site.GetPage "/midterms" }}{{ $base = .RelPermalink }}{{ end -}}
 {{- /* The closing band's copy names the next week, so pre-launch overrides it. */ -}}
 {{- $rem := $d.remind -}}
 {{- if $prelaunch }}{{ with $zero.remind }}{{ $rem = merge $d.remind . }}{{ end }}{{ end -}}
-{{- $done := where $d.weeks "number" "lt" $cur -}}
-{{- $upcoming := where $d.weeks "number" "gt" $cur -}}
+{{- $done := where $d.weeks "number" "lt" $live -}}
+{{- $upcoming := where $d.weeks "number" "gt" $live -}}
 {{- $next := "" -}}
 {{- with $upcoming }}{{ $next = index . 0 }}{{ end -}}
 {{- $style := resources.Get "sass/midterms.scss" | css.Sass | resources.Minify | resources.Fingerprint -}}
@@ -152,8 +164,11 @@
       <div class="mt-rule"></div>
 
       <header class="mt-header">
-        <!-- FPO: replace with the midterms lockup. -->
-        <div class="mt-fpo">LOGO FPO</div>
+        <div class="mt-brand">
+          <!-- FPO: replace with the midterms lockup. -->
+          <div class="mt-fpo">LOGO FPO</div>
+          {{- partial "midterms-by.html" . }}
+        </div>
         <nav class="mt-nav">
           {{- /* A native select sizes itself to its widest option, which left a gap
                  next to shorter state names. So the visible label is our own
@@ -197,24 +212,48 @@
              markup below is the not-yet-done baseline. */ -}}
       <section id="weeks" class="mt-strip" aria-label="Your {{ $total }} weeks">
         {{- range $d.weeks }}
-          {{- $now := eq .number $cur }}
-          <a class="mt-strip__item{{ if $now }} mt-strip__item--now{{ end }}"
-             href="{{ $base }}preview/{{ .number }}/"
+          {{- /* The card is the week you are reading; NOW is a label on whichever
+                 week the program is actually on. On the live page they are the
+                 same cell, on an archive page they are not. */ -}}
+          {{- $sel := eq .number $cur }}
+          {{- $now := eq .number $live }}
+          {{- /* Where a cell goes, if anywhere. Previews link to previews so the
+                 team can walk every week. Otherwise a week that has run has its
+                 own page, the live week is /midterms/ itself, and a week that
+                 has not run has no page to link to — that is what stops a reader
+                 walking forward, rather than a hidden link. */ -}}
+          {{- $href := "" -}}
+          {{- if $preview -}}
+            {{- $href = printf "%spreview/%d/" $base .number -}}
+          {{- else if $now -}}
+            {{- $href = $base -}}
+          {{- else if lt .number $live -}}
+            {{- $href = printf "%sweek/%d/" $base .number -}}
+          {{- end -}}
+          {{- /* No href when there is nowhere to go: an anchor without one is
+                 inert and unfocusable, so a future week reads as a cell, not a
+                 dead link. */ -}}
+          <a class="mt-strip__item{{ if $sel }} mt-strip__item--selected{{ end }}"
+             {{ with $href }}href="{{ . }}"{{ end }}
+             {{ if $sel }}aria-current="page"{{ end }}
              data-strip-week="{{ .number }}">
-            <span class="mt-strip__num">{{ printf "%02d" .number }}{{ if $now }} · NOW{{ end }}</span>
-            <span class="mt-strip__label">{{ if $now }}{{ .title }}{{ else }}{{ .short }}{{ end }}</span>
+            {{- /* Only the selected cell needs naming; the rest are read as a
+                   row, where the action and its date are the whole point. */ -}}
+            {{- if $sel }}<span class="mt-strip__num">Week {{ .number }}</span>{{ end }}
+            <span class="mt-strip__label">{{ if $sel }}{{ .title }}{{ else }}{{ .short }}{{ end }}</span>
             <span class="mt-strip__meta">
               <span class="mt-strip__done">DONE</span>
               <span class="mt-strip__when">
-                {{- if and $next (eq .number $next.number) -}}
+                {{- if gt .number $live -}}
                   {{- $release := time.AsTime .release -}}
-                  <time datetime="{{ $release.Format "2006-01-02T15:04:05Z07:00" }}"
-                        data-countdown data-countdown-short>{{ $release.Format "Jan 2" }}</time>
-                {{- else if lt .number $cur -}}
+                  <time datetime="{{ $release.Format "2006-01-02T15:04:05Z07:00" }}">
+                    {{- index $months ($release.Format "January") }} {{ $release.Format "2" -}}
+                  </time>
+                {{- else if lt .number $live -}}
                   {{- /* Released, not done: still open, and worth going back for. */ -}}
                   CATCH UP
                 {{- else -}}
-                  —
+                  <span class="mt-strip__now">NOW</span>
                 {{- end -}}
               </span>
             </span>
@@ -298,9 +337,18 @@
               </div>
             {{- else }}
               <div class="mt-message">
-                {{- if $week.state_specific }}
-                  <div class="mt-message__head">
-                    <div class="mt-pill mt-pill--tag"><span data-state-name-upper>{{ upper $d.state.name }}</span> LINKS</div>
+                {{- /* Same top line as the registration deck: a label over a date on
+                       the left, the state tag on the right. Either half can be
+                       absent — a week with neither drops the row entirely. */ -}}
+                {{- if or $week.headline $week.headline_date $week.state_specific }}
+                  <div class="mt-deck__top">
+                    <div class="mt-deck__lede">
+                      {{- with $week.headline }}<div class="mt-deck__detail">{{ . }}</div>{{ end }}
+                      {{- with $week.headline_date }}<div class="mt-deck__date">{{ . }}</div>{{ end }}
+                    </div>
+                    {{- if $week.state_specific }}
+                      <div class="mt-pill mt-pill--tag" data-state-name-upper>{{ upper $d.state.name }}</div>
+                    {{- end }}
                   </div>
                 {{- end }}
                 <p class="mt-message__text" data-message>{{ $week.message }}</p>
@@ -381,8 +429,11 @@
       </section>
 
       <footer class="mt-footer">
-        <!-- FPO: replace with the midterms lockup. -->
-        <div class="mt-fpo mt-fpo--small">LOGO</div>
+        <div class="mt-brand mt-brand--small">
+          <!-- FPO: replace with the midterms lockup. -->
+          <div class="mt-fpo mt-fpo--small">LOGO</div>
+          {{- partial "midterms-by.html" . }}
+        </div>
         <div class="mt-footer__links">
           {{- range $d.footer_links }}
             <a href="{{ .url }}">{{ .title }}</a>
@@ -444,19 +495,6 @@
             el.classList.toggle("is-done", done.indexOf(week) > -1);
           });
         }
-
-        // Countdown to the next week's release, replacing the rendered date.
-        document.querySelectorAll("[data-countdown]").forEach(function (el) {
-          var diff = new Date(el.getAttribute("datetime")).getTime() - Date.now();
-          if (isNaN(diff) || diff <= 0) return;
-          var days = Math.floor(diff / 86400000);
-          var hours = Math.floor(diff / 3600000) % 24;
-          if (el.hasAttribute("data-countdown-short")) {
-            el.textContent = days > 0 ? days + "d" : hours + "h";
-          } else {
-            el.textContent = "In " + (days > 0 ? days + "d " : "") + hours + "h";
-          }
-        });
 
         var copy = document.querySelector("[data-copy]");
         var message = document.querySelector("[data-message]");

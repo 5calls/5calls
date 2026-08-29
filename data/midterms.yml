@@ -4,7 +4,7 @@
 # Which week is live right now. Weeks before this are "done", weeks after are
 # "upcoming". Set this to 0 before the program starts: the page then renders
 # the week_zero block below instead of a weekly action, and nothing unlocks.
-current_week: 0
+current_week: 5
 
 # Headline numbers shown in the top bar.
 total_actions: 24190
@@ -13,12 +13,12 @@ nav:
   nudge: Get the weekly nudge
 
 intro:
-  title: Five minutes. No voting fuckery.
+  title: Five minutes. Prepare your vote.
 
 # The reader's state. Only one state is configured for now; the header selector
 # is FPO until per-state data lands.
 #
-# name and abbr are rendered (header selector, "CALIFORNIA LINKS" tag, the CA
+# name and abbr are rendered (header selector, the state tag on an action card,
 # pills on upcoming weeks). The deadline fields are not rendered anywhere since
 # the state bar was removed — they are kept here to fold into an action's copy.
 state:
@@ -35,13 +35,13 @@ week_zero:
   kicker: SIGN-UPS OPEN
   title: Eight weeks. Eight small things.
   lede: >-
-    Between now and election day we send one action every Monday morning. Each
+    Between now and election day we send one action every Tuesday morning. Each
     one takes about five minutes and each one is picked because it actually
     moves someone closer to voting.
   body:
     - >-
       No phone bank shifts, no weekend commitment, no account to create. You
-      get an email, you spend five minutes, you're done until next Monday.
+      get an email, you spend five minutes, you're done until next Tuesday.
     - >-
       Every action is specific to your state, so the deadlines and links you
       get are the ones that apply to you.
@@ -50,16 +50,16 @@ week_zero:
     placeholder: you@email.com
   aside:
     items:
-      - label: MONDAY, 9AM
+      - label: TUESDAY, 9AM
         text: One action lands in your inbox and goes live on this page.
       - label: FIVE MINUTES
         text: Check something, save a date, send one message. That's the whole ask.
       - label: THE REST OF THE WEEK
-        text: Nothing. Miss one and the next Monday still works.
+        text: Nothing. Miss one and the next Tuesday still works.
   # Overrides the live wording in the closing signup band, which names the
   # week that lands next.
   remind:
-    title: Week 1 lands Monday.
+    title: Week 1 lands Tuesday.
   why:
     kicker: WHY EIGHT WEEKS
     heading: Small things, done on a schedule, beat one big push at the end.
@@ -78,7 +78,7 @@ weeks:
     short: Checked
     title: Check your own registration
     state_specific: true
-    release: 2026-09-14T09:00:00-07:00
+    release: 2026-09-15T09:00:00-07:00
     minutes: 5
     # Pulls the deadline card from data/midterms_states.yml (VoteAmerica deck)
     # for the reader's state, in place of the copy-and-paste message card.
@@ -110,7 +110,21 @@ weeks:
     short: Deadlines
     title: Save every deadline that applies to you
     state_specific: true
-    release: 2026-09-21T09:00:00-07:00
+    release: 2026-09-22T09:00:00-07:00
+    minutes: 5
+    intro: >-
+      SAMPLE COPY — the deadlines week. Real text goes here: two sentences on
+      why the dates matter now, ending on the one thing to do. About this long.
+    headline: SAMPLE HEADER LINE FOR THIS WEEK
+    headline_date: Tue, Nov 3
+    message: >-
+      SAMPLE MESSAGE — placeholder standing in for this week's wording. It runs
+      about three short sentences and roughly this many words, so the card can
+      be judged at the size it will really be.
+    copy_cta: button1
+    rewrite_cta: button2
+    confirm: I did it — unlock my images
+    confirm_count: 0 so far (sample)
     # FPO: placeholder copy, replace before this week ships.
     why:
       heading: Every deadline is a different date, and none of them move.
@@ -126,7 +140,21 @@ weeks:
     short: ID check
     title: Check your ID rules, recheck your registration
     state_specific: true
-    release: 2026-09-28T09:00:00-07:00
+    release: 2026-09-29T09:00:00-07:00
+    minutes: 5
+    intro: >-
+      SAMPLE COPY — the ID and re-check week. Real text goes here: two sentences
+      on what changed and who it catches out, ending on the one thing to do.
+    headline: SAMPLE HEADER LINE FOR THIS WEEK
+    headline_date: Tue, Nov 3
+    message: >-
+      SAMPLE MESSAGE — placeholder standing in for this week's wording. It runs
+      about three short sentences and roughly this many words, so the card can
+      be judged at the size it will really be.
+    copy_cta: button1
+    rewrite_cta: button2
+    confirm: I did it — unlock my images
+    confirm_count: 0 so far (sample)
     # FPO: placeholder copy, replace before this week ships.
     why:
       heading: ID rules changed in a lot of places, and nobody sends a notice.
@@ -142,18 +170,20 @@ weeks:
     short: Ballot
     title: Find out what's actually on your ballot
     state_specific: true
-    release: 2026-10-05T09:00:00-07:00
+    release: 2026-10-06T09:00:00-07:00
     minutes: 5
     intro: >-
       Most people meet their ballot for the first time in the booth, then guess
       on the down-ballot races. A sample ballot is published weeks ahead — read
       yours now, while there's time to look anything up.
+    headline: SAMPLE HEADER LINE FOR THIS WEEK
+    headline_date: Tue, Nov 3
     message: >-
       Heads up: your sample ballot is already out. Ours has races and measures
       most people have never heard of — here's the California lookup. Worth five
       minutes now instead of guessing in the booth.
-    copy_cta: Copy the message
-    rewrite_cta: Rewrite it for me
+    copy_cta: button1
+    rewrite_cta: button2
     confirm: I read my ballot — unlock my images
     confirm_count: 1,204 read
     why:
@@ -170,7 +200,21 @@ weeks:
     short: Plan
     title: Make your voting plan
     state_specific: true
-    release: 2026-10-12T09:00:00-07:00
+    release: 2026-10-13T09:00:00-07:00
+    minutes: 5
+    intro: >-
+      SAMPLE COPY — the plan week. Real text goes here: two sentences on why a
+      named day and time beats good intentions, ending on the one thing to do.
+    headline: SAMPLE HEADER LINE FOR THIS WEEK
+    headline_date: Tue, Nov 3
+    message: >-
+      SAMPLE MESSAGE — placeholder standing in for this week's wording. It runs
+      about three short sentences and roughly this many words, so the card can
+      be judged at the size it will really be.
+    copy_cta: button1
+    rewrite_cta: button2
+    confirm: I did it — unlock my images
+    confirm_count: 0 so far (sample)
     # FPO: placeholder copy, replace before this week ships.
     why:
       heading: People who pick a day and a time are the ones who show up.
@@ -186,7 +230,21 @@ weeks:
     short: Vote early
     title: Vote early, or get your ballot in the mail
     state_specific: true
-    release: 2026-10-19T09:00:00-07:00
+    release: 2026-10-20T09:00:00-07:00
+    minutes: 5
+    intro: >-
+      SAMPLE COPY — the early and mail voting week. Real text goes here: two
+      sentences on getting it done ahead of the day, ending on what to do.
+    headline: SAMPLE HEADER LINE FOR THIS WEEK
+    headline_date: Tue, Nov 3
+    message: >-
+      SAMPLE MESSAGE — placeholder standing in for this week's wording. It runs
+      about three short sentences and roughly this many words, so the card can
+      be judged at the size it will really be.
+    copy_cta: button1
+    rewrite_cta: button2
+    confirm: I did it — unlock my images
+    confirm_count: 0 so far (sample)
     # FPO: placeholder copy, replace before this week ships.
     why:
       heading: Voting early takes one problem off election day.
@@ -202,7 +260,21 @@ weeks:
     short: Recheck
     title: Recheck your work
     state_specific: false
-    release: 2026-10-26T09:00:00-07:00
+    release: 2026-10-27T09:00:00-07:00
+    minutes: 5
+    intro: >-
+      SAMPLE COPY — the re-check week. Real text goes here: two sentences on the
+      things that get ballots rejected and how little time curing takes.
+    headline: SAMPLE HEADER LINE FOR THIS WEEK
+    headline_date: Tue, Nov 3
+    message: >-
+      SAMPLE MESSAGE — placeholder standing in for this week's wording. It runs
+      about three short sentences and roughly this many words, so the card can
+      be judged at the size it will really be.
+    copy_cta: button1
+    rewrite_cta: button2
+    confirm: I did it — unlock my images
+    confirm_count: 0 so far (sample)
     # FPO: placeholder copy, replace before this week ships.
     why:
       heading: Ballots get rejected for fixable things, if you catch them in time.
@@ -218,7 +290,21 @@ weeks:
     short: Vote
     title: Vote
     state_specific: false
-    release: 2026-11-02T09:00:00-08:00
+    release: 2026-11-03T09:00:00-08:00
+    minutes: 5
+    intro: >-
+      SAMPLE COPY — election day. Real text goes here: two sentences that carry
+      eight weeks of small things over the line, ending on the one thing to do.
+    headline: SAMPLE HEADER LINE FOR THIS WEEK
+    headline_date: Tue, Nov 3
+    message: >-
+      SAMPLE MESSAGE — placeholder standing in for this week's wording. It runs
+      about three short sentences and roughly this many words, so the card can
+      be judged at the size it will really be.
+    copy_cta: button1
+    rewrite_cta: button2
+    confirm: I did it — unlock my images
+    confirm_count: 0 so far (sample)
     # FPO: placeholder copy, replace before this week ships.
     why:
       heading: Eight weeks of small things end with the one that counts.
@@ -237,7 +323,7 @@ images:
   library_cta: Open library
 
 remind:
-  title: Week 5 lands Monday.
+  title: Week 5 lands Tuesday.
   subtitle: One email a week, nothing else. No account needed.
   placeholder: you@email.com
   cta: Remind me

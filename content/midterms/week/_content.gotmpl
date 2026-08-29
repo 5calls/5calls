@@ -1,0 +1,29 @@
+{{- /*
+  One page per week that has already gone live: /midterms/week/3/. These let a
+  reader go back to an action they skipped or want to repeat, and are the only
+  per-week URLs the public strip links to.
+
+  Weeks are emitted up to, but not including, current_week — the live week is
+  /midterms/ itself, and a week that has not gone out yet has no page at all.
+  Publishing a new week is therefore just bumping current_week and rebuilding:
+  last week's page appears, and nothing links forward because nothing is there.
+
+  Previews (content/midterms/preview/) still cover every week, including ones
+  with no page here.
+*/ -}}
+{{- $d := site.Data.midterms -}}
+{{- range $d.weeks }}
+  {{- if lt .number $d.current_week }}
+    {{- $.AddPage (dict
+      "kind" "page"
+      "path" (printf "%d" .number)
+      "title" (printf "Week %d: %s" .number .title)
+      "params" (dict
+        "week" .number
+        "preview" false
+        "description" (printf "Week %d of 5 Minute Midterms: %s" .number .title)
+      )
+      "build" (dict "list" "always" "render" "always")
+    ) }}
+  {{- end }}
+{{- end }}
