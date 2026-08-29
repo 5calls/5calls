@@ -60,6 +60,26 @@ describe('Script Component', () => {
     area: 'Governor'
   };
 
+  const mockStateDelegateContact: Contact = {
+    id: '4',
+    name: 'John Smith',
+    phone: '202-555-0100',
+    party: 'democrat',
+    state: 'MD',
+    reason: 'Test reason',
+    area: 'US House'
+  };
+
+  const mockStateAssemblymemberContact: Contact = {
+    id: '5',
+    name: 'John Smith',
+    phone: '202-555-0100',
+    party: 'democrat',
+    state: 'VA',
+    reason: 'Test reason',
+    area: 'US House'
+  };
+
   let scriptInstance: Script | null = null;
 
   const renderScriptComponent = (locationState?: LocationState) => {
@@ -312,7 +332,31 @@ describe('Script Component', () => {
           stateLowerContact
         );
 
-        expect(result).toBe('Hello Legislator John Smith.');
+        expect(result).toBe('Hello Rep. John Smith.');
+      });
+
+      it('should handle StateLower for State with Delegates', () => {
+        const stateLowerContact = { ...mockStateDelegateContact, area: 'StateLower' };
+        const script = 'Hello [REP/SEN NAME].';
+        const result = scriptInstance!.scriptFormat(
+          script,
+          mockLocationState,
+          stateLowerContact
+        );
+
+        expect(result).toBe('Hello Delegate John Smith.');
+      });
+
+      it('should handle StateLower for State with Assemblymembers', () => {
+        const stateLowerContact = { ...mockStateAssemblymemberContact, area: 'StateLower' };
+        const script = 'Hello [REP/SEN NAME].';
+        const result = scriptInstance!.scriptFormat(
+          script,
+          mockLocationState,
+          stateLowerContact
+        );
+
+        expect(result).toBe('Hello Assemblymember John Smith.');
       });
 
       it('should handle StateUpper area', () => {
@@ -324,7 +368,7 @@ describe('Script Component', () => {
           stateUpperContact
         );
 
-        expect(result).toBe('Hello Legislator John Smith.');
+        expect(result).toBe('Hello Senator John Smith.');
       });
 
       it('should handle AttorneysGeneral area', () => {
