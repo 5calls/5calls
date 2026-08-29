@@ -37,7 +37,6 @@ recap:
 # none of this is used again.
 week_zero:
   kicker: SIGN-UPS OPEN
-  eyebrow: THE PROGRAM
   title: Eight weeks. Eight small things.
   lede: >-
     Between now and election day we send one action every Monday morning. Each
@@ -51,11 +50,9 @@ week_zero:
       Every action is specific to your state, so the deadlines and links you
       get are the ones that apply to you.
   signup:
-    label: START HERE
     cta: Sign me up
     placeholder: you@email.com
   aside:
-    title: WHAT A WEEK LOOKS LIKE
     items:
       - label: MONDAY, 9AM
         text: One action lands in your inbox and goes live on this page.
@@ -109,79 +106,138 @@ weeks:
           text: to confirm you're still registered where you think you are.
 
   - number: 2
-    short: Deadline
-    title: Put the deadline in your calendar
-    recap: deadline saved
+    short: Deadlines
+    title: Save every deadline that applies to you
+    recap: deadlines saved
     state_specific: true
     release: 2026-09-21T09:00:00-07:00
+    # FPO: placeholder copy, replace before this week ships.
+    why:
+      heading: Every deadline is a different date, and none of them move.
+      stats:
+        - value: 3 dates
+          text: register, request a ballot, return it — all different days.
+        - value: No grace
+          text: period once a deadline passes in most states.
+        - value: 2 min
+          text: to put all three in the calendar you actually check.
 
   - number: 3
-    short: One call
-    title: Call one friend
-    recap: one friend called
-    state_specific: false
+    short: ID check
+    title: Check your ID rules, recheck your registration
+    recap: ID rules checked
+    state_specific: true
     release: 2026-09-28T09:00:00-07:00
+    # FPO: placeholder copy, replace before this week ships.
+    why:
+      heading: ID rules changed in a lot of places, and nobody sends a notice.
+      stats:
+        - value: Varies
+          text: by state — some ask for photo ID, some ask for nothing.
+        - value: Free
+          text: voter ID is available in every state that requires one.
+        - value: 2 min
+          text: to confirm what you'll be asked for at the table.
 
   - number: 4
-    short: Group chat
-    title: Drop it in one group chat
-    recap: message sent
+    short: Ballot
+    title: Find out what's actually on your ballot
+    recap: ballot read
     state_specific: true
     release: 2026-10-05T09:00:00-07:00
     minutes: 5
     intro: >-
-      People check their registration when someone they know asks them to, not
-      when a stranger does. Pick a chat you're already in and paste this.
+      Most people meet their ballot for the first time in the booth, then guess
+      on the down-ballot races. A sample ballot is published weeks ahead — read
+      yours now, while there's time to look anything up.
     message: >-
-      Quick one: registrations get cancelled more often than people think. Takes
-      about a minute to check yours — here's the California lookup — deadline is
-      Oct 20.
-    message_label: THE MESSAGE
+      Heads up: your sample ballot is already out. Ours has races and measures
+      most people have never heard of — here's the California lookup. Worth five
+      minutes now instead of guessing in the booth.
     copy_cta: Copy the message
     rewrite_cta: Rewrite it for me
-    confirm: I sent it — unlock my images
-    confirm_count: 1,204 sent
+    confirm: I read my ballot — unlock my images
+    confirm_count: 1,204 read
     why:
-      heading: A message from a friend outperforms every ad we could buy.
+      heading: The races people skip are the ones closest to their daily life.
       stats:
-        - value: 1 in 8
-          text: registrations on file are invalid or out of date.
-        - value: Moves
-          text: and clerical errors quietly drop people from the rolls.
+        - value: 1 in 5
+          text: voters leave down-ballot races blank on their ballot.
+        - value: Weeks
+          text: ahead of the election your sample ballot is already public.
         - value: 5 min
           text: is all any week asks of you. That is the whole design.
 
   - number: 5
-    short: Myths
-    title: Myths, busted
-    recap: myths busted
+    short: Plan
+    title: Make your voting plan
+    recap: plan made
     state_specific: true
     release: 2026-10-12T09:00:00-07:00
+    # FPO: placeholder copy, replace before this week ships.
+    why:
+      heading: People who pick a day and a time are the ones who show up.
+      stats:
+        - value: Day + time
+          text: written down somewhere is the entire plan.
+        - value: Moved
+          text: polling places are common — last cycle's may be gone.
+        - value: 3 min
+          text: to pick your slot and check where you're going.
 
   - number: 6
-    short: Mail-in
-    title: Mail-in rules
-    recap: mail-in rules read
+    short: Vote early
+    title: Vote early, or get your ballot in the mail
+    recap: ballot in
     state_specific: true
     release: 2026-10-19T09:00:00-07:00
+    # FPO: placeholder copy, replace before this week ships.
+    why:
+      heading: Voting early takes one problem off election day.
+      stats:
+        - value: Days
+          text: of early voting in most states, weekends included.
+        - value: Postmarks
+          text: aren't enough everywhere — some states must receive it.
+        - value: 1 trip
+          text: and the rest of the week is yours.
 
   - number: 7
-    short: First-timers
-    title: First-time voters
-    recap: first-time voters helped
-    state_specific: true
+    short: Recheck
+    title: Recheck your work
+    recap: work rechecked
+    state_specific: false
     release: 2026-10-26T09:00:00-07:00
+    # FPO: placeholder copy, replace before this week ships.
+    why:
+      heading: Ballots get rejected for fixable things, if you catch them in time.
+      stats:
+        - value: Signature
+          text: mismatches are the most common reason a ballot is tossed.
+        - value: Cure
+          text: windows exist in most states, but they close fast.
+        - value: 2 min
+          text: to track your ballot and confirm it was accepted.
 
   - number: 8
-    short: Bring three
-    title: Bring three people
-    recap: three people brought
+    short: Vote
+    title: Vote
+    recap: voted
     state_specific: false
     release: 2026-11-02T09:00:00-08:00
+    # FPO: placeholder copy, replace before this week ships.
+    why:
+      heading: Eight weeks of small things end with the one that counts.
+      stats:
+        - value: Poll hours
+          text: vary by state — check yours before you head out.
+        - value: In line
+          text: when polls close still means you get to vote.
+        - value: Done
+          text: that's the whole program. Thanks for doing it.
 
 ahead:
   title: What's ahead
-  note: MONDAYS, 9AM · CA = STATE-SPECIFIC
 
 images:
   locked_note: Tick the box and both sizes unlock, with the site link baked into the art.
