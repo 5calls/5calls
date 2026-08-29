@@ -277,16 +277,19 @@ body {
 .mt-by {
   display: flex;
   gap: 7px;
+  // Sits against the top of the lockup rather than its middle.
+  align-self: flex-start;
   align-items: center;
   font-size: 14px;
   color: rgba($ink, 0.6);
   text-decoration: none;
 
   img {
-    // Desaturated so it credits rather than competes, and sized off its own
-    // 260x72 so the height alone drives it.
+    // Desaturated so it credits rather than competes. The 5 Calls mark is
+    // glyphs edge to edge, so it reads larger than a same-height line of type:
+    // this sits between the MIDTERMS line and the full two-line block.
     width: auto;
-    height: 22px;
+    height: 24px;
     filter: grayscale(1);
     opacity: 0.7;
   }
@@ -297,30 +300,25 @@ body {
   }
 
   .mt-brand--small & {
+    // The footer credit centres against its mark; only the header one sits high.
+    align-self: center;
     font-size: 13px;
 
     img {
-      height: 18px;
+      height: 17px;
     }
   }
 }
 
-.mt-fpo {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 210px;
-  height: 52px;
-  border: 1.5px dashed rgba($ink, 0.45);
-  border-radius: 4px;
-  font: 400 13px $mono;
-  letter-spacing: 0.1em;
-  color: rgba($ink, 0.85);
+// The lockup is sized off its height. With the tick marks trimmed out of the
+// art, MIDTERMS is 30% of that height rather than 22%, so it reads at the same
+// size in a shorter box.
+.mt-logo {
+  width: auto;
+  height: 88px;
 
   &--small {
-    width: 150px;
-    height: 38px;
-    font-size: 12px;
+    height: 60px;
   }
 }
 
