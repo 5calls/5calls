@@ -378,7 +378,7 @@ body {
   gap: 24px;
   align-items: flex-end;
   justify-content: space-between;
-  padding-top: clamp(28px, 5vw, 52px);
+  padding-top: clamp(18px, 3vw, 32px);
   @include shell;
 }
 
@@ -389,8 +389,11 @@ body {
 }
 
 .mt-top__title {
-  max-width: 16ch;
-  margin: 10px 0 0;
+  // Wide enough to hold the longest sentence of the tagline on one line, but
+  // not wide enough to pull the next sentence's first word up with it — so it
+  // breaks at the full stop, in two lines.
+  max-width: 22ch;
+  margin: 0;
   font-size: clamp(30px, 4vw, 46px);
   line-height: 1.02;
   color: $ink;
@@ -431,7 +434,7 @@ body {
   display: flex;
   gap: 6px;
   align-items: stretch;
-  padding-top: clamp(24px, 4vw, 38px);
+  padding-top: clamp(16px, 2.4vw, 24px);
   @include shell;
 }
 
@@ -463,6 +466,11 @@ body {
     line-height: 1.2;
     color: $ink-solid;
     overflow-wrap: anywhere;
+
+    // A locked week keeps the weight of the named weeks, just muted.
+    &--locked {
+      color: rgba($ink, 0.6);
+    }
   }
 
   .mt-strip__meta {
@@ -579,6 +587,15 @@ body {
   line-height: 1.55;
   color: rgba($ink, 0.85);
   text-wrap: pretty;
+}
+
+// Week zero: nothing sits beside the column, so the measures set for a
+// half-width one would leave the right of the page empty.
+.mt-action--solo {
+  .mt-action__intro,
+  .mt-action__body {
+    max-width: none;
+  }
 }
 
 .mt-message {
@@ -750,51 +767,6 @@ body {
   font-size: 17px;
   line-height: 1.55;
   color: rgba($ink, 0.85);
-}
-
-.mt-expect {
-  display: flex;
-  flex: 1;
-  min-width: 300px;
-  flex-direction: column;
-  gap: 16px;
-  padding: 24px;
-  border-radius: 12px;
-  background: rgba($ink, 0.06);
-
-  ul {
-    display: flex;
-    flex-direction: column;
-    gap: 18px;
-    margin: 0;
-    padding: 0;
-    list-style: none;
-  }
-
-  li {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-    padding-top: 16px;
-    border-top: 1px solid rgba($ink, 0.18);
-
-    &:first-child {
-      padding-top: 0;
-      border-top: 0;
-    }
-  }
-
-  b {
-    font: 500 13px $mono;
-    letter-spacing: 0.1em;
-    color: $blue;
-  }
-
-  span {
-    font-size: 16px;
-    line-height: 1.5;
-    color: rgba($ink, 0.88);
-  }
 }
 
 // Share images sidebar

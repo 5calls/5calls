@@ -192,18 +192,20 @@
         <div>
           <h1 class="mt-display mt-top__title">{{ $d.intro.title }}</h1>
         </div>
-        <div class="mt-counts">
-          <div class="mt-count">
-            <b>{{ lang.FormatNumberCustom 0 $d.total_actions }}</b>
-            <span>ACTIONS</span>
-          </div>
-          {{- if not $prelaunch }}
+        {{- /* Nothing has been completed before the program starts, so week zero
+               shows no tallies at all — not the reader's, and not the total. */ -}}
+        {{- if not $prelaunch }}
+          <div class="mt-counts">
+            <div class="mt-count">
+              <b>{{ lang.FormatNumberCustom 0 $d.total_actions }}</b>
+              <span>TOTAL COMPLETED</span>
+            </div>
             <div class="mt-count mt-count--blue">
               <b><span data-yours>0</span> / {{ $total }}</b>
-              <span>YOURS</span>
+              <span>YOUR PROGRESS</span>
             </div>
-          {{- end }}
-        </div>
+          </div>
+        {{- end }}
       </section>
 
       {{- /* The timeline, and the only place upcoming weeks are listed now that
@@ -240,7 +242,11 @@
             {{- /* Only the selected cell needs naming; the rest are read as a
                    row, where the action and its date are the whole point. */ -}}
             {{- if $sel }}<span class="mt-strip__num">Week {{ .number }}</span>{{ end }}
-            <span class="mt-strip__label">{{ if $sel }}{{ .title }}{{ else }}{{ .short }}{{ end }}</span>
+            {{- /* A week that has not run yet keeps its subject to itself. */ -}}
+            {{- $locked := gt .number $live }}
+            <span class="mt-strip__label{{ if $locked }} mt-strip__label--locked{{ end }}">
+              {{- if $sel }}{{ .title }}{{ else if $locked }}Upcoming{{ else }}{{ .short }}{{ end -}}
+            </span>
             <span class="mt-strip__meta">
               <span class="mt-strip__done">DONE</span>
               <span class="mt-strip__when">
@@ -261,7 +267,9 @@
         {{- end }}
       </section>
 
-      <main class="mt-action">
+      {{- /* Week zero has no sidebar beside the action, so its column runs the
+             full shell and the text measures come off with it. */ -}}
+      <main class="mt-action{{ if $prelaunch }} mt-action--solo{{ end }}">
         {{- if $prelaunch }}
           {{- /* Week 0: the action is signing up, so the form stands in for the
                  weekly message card and carries the #remind anchor. Nothing is
@@ -271,10 +279,16 @@
             <p class="mt-action__intro">{{ $zero.lede }}</p>
 
             <div id="signup" class="mt-message">
-              <!-- FPO: not wired to a list provider yet. -->
-              <form class="mt-signup__form" onsubmit="return false">
+              {{- /* The same Buttondown list the rest of the site subscribes to,
+                     tagged so midterms sign-ups can be told apart. */ -}}
+              <form class="mt-signup__form"
+                    action="https://buttondown.com/api/emails/embed-subscribe/5calls"
+                    method="post"
+                    target="popupwindow"
+                    onsubmit="window.open('https://buttondown.com/5calls?tag=midterms', 'popupwindow')">
                 <label class="visually-hidden" for="mt-signup-email">Email address</label>
-                <input id="mt-signup-email" type="email" placeholder="{{ $zero.signup.placeholder }}" />
+                <input id="mt-signup-email" name="email" type="email" placeholder="{{ $zero.signup.placeholder }}" />
+                <input type="hidden" name="tag" value="midterms" />
                 <button type="submit" class="mt-pill mt-pill--solid">{{ $zero.signup.cta }}</button>
               </form>
               {{- with $next }}
@@ -289,16 +303,6 @@
             {{- end }}
           </div>
 
-          <aside class="mt-expect">
-            <ul>
-              {{- range $zero.aside.items }}
-                <li>
-                  <b>{{ .label }}</b>
-                  <span>{{ .text }}</span>
-                </li>
-              {{- end }}
-            </ul>
-          </aside>
         {{- else }}
           <div class="mt-action__main">
             <h2 class="mt-action__title">{{ $week.title }}</h2>
@@ -420,10 +424,14 @@
           <h2>{{ $rem.title }}</h2>
           <p>{{ $rem.subtitle }}</p>
         </div>
-        <!-- FPO: not wired to a list provider yet. -->
-        <form class="mt-remind__form" onsubmit="return false">
+        <form class="mt-remind__form"
+              action="https://buttondown.com/api/emails/embed-subscribe/5calls"
+              method="post"
+              target="popupwindow"
+              onsubmit="window.open('https://buttondown.com/5calls?tag=midterms', 'popupwindow')">
           <label class="visually-hidden" for="mt-email">Email address</label>
-          <input id="mt-email" type="email" placeholder="{{ $rem.placeholder }}" />
+          <input id="mt-email" name="email" type="email" placeholder="{{ $rem.placeholder }}" />
+          <input type="hidden" name="tag" value="midterms" />
           <button type="submit">{{ $rem.cta }}</button>
         </form>
       </section>

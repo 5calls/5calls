@@ -4,16 +4,16 @@
 # Which week is live right now. Weeks before this are "done", weeks after are
 # "upcoming". Set this to 0 before the program starts: the page then renders
 # the week_zero block below instead of a weekly action, and nothing unlocks.
-current_week: 5
+current_week: 0
 
 # Headline numbers shown in the top bar.
 total_actions: 24190
 
 nav:
-  nudge: Get the weekly nudge
+  nudge: Get reminders
 
 intro:
-  title: Five minutes. Prepare your vote.
+  title: Five minutes a week. Protect your vote.
 
 # The reader's state. Only one state is configured for now; the header selector
 # is FPO until per-state data lands.
@@ -48,18 +48,6 @@ week_zero:
   signup:
     cta: Sign me up
     placeholder: you@email.com
-  aside:
-    items:
-      - label: TUESDAY, 9AM
-        text: One action lands in your inbox and goes live on this page.
-      - label: FIVE MINUTES
-        text: Check something, save a date, send one message. That's the whole ask.
-      - label: THE REST OF THE WEEK
-        text: Nothing. Miss one and the next Tuesday still works.
-  # Overrides the live wording in the closing signup band, which names the
-  # week that lands next.
-  remind:
-    title: Week 1 lands Tuesday.
   why:
     kicker: WHY EIGHT WEEKS
     heading: Small things, done on a schedule, beat one big push at the end.
@@ -76,7 +64,7 @@ week_zero:
 weeks:
   - number: 1
     short: Checked
-    title: Check your own registration
+    title: Check your voter registration
     state_specific: true
     release: 2026-09-15T09:00:00-07:00
     minutes: 5
@@ -90,10 +78,11 @@ weeks:
       Deadlines and rules come from your state's election office. Checking takes
       about a minute, even if you're sure you're registered.
     intro: >-
-      Registrations get cancelled more often than people expect — a move, a
-      typo, a routine purge. Start here, because every week after this one
-      assumes you're on the rolls.
-    confirm: I checked — unlock my images
+      You can’t vote if you’re not registered! Checking your registration status
+      now gives you enough time to register—or re-register if needed—before your
+      state’s deadline. So if you’re not sure, check! And if you are sure? Check
+      anyway! There are shenanigans afoot.
+    confirm: I confirmed my registration
     confirm_count: 3,908 checked
     why:
       kicker: WHY THIS ONE
@@ -323,10 +312,10 @@ images:
   library_cta: Open library
 
 remind:
-  title: Week 5 lands Tuesday.
-  subtitle: One email a week, nothing else. No account needed.
+  title: Get the newsletter
+  subtitle: One email a week. Additional info and updates. That’s it.
   placeholder: you@email.com
-  cta: Remind me
+  cta: Sign me up
 
 # The about page comes back later; until then Privacy is the only link.
 footer_links:
