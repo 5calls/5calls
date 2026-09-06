@@ -82,13 +82,16 @@
     <meta property="og:url" content="{{ $page.Permalink }}" />
     <meta property="og:description" content="{{ $page.Params.description }}" />
     <meta property="og:site_name" content="{{ site.Title }}" />
-    <!-- FPO: swap in the midterms share art once it exists. -->
-    <meta property="og:image" content="{{ site.BaseURL }}img/5calls-twitter.png" />
+    <meta property="og:image" content="{{ site.BaseURL }}images/midterms/share.png" />
+    <meta property="og:image:width" content="1280" />
+    <meta property="og:image:height" content="720" />
+    <meta property="og:image:alt" content="5 Minute Midterms — five minutes a week, protect your vote." />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:site" content="@make5calls" />
     <meta name="twitter:title" content="{{ $page.Title }} ⭑ {{ site.Title }}" />
     <meta name="twitter:description" content="{{ $page.Params.description }}" />
-    <meta name="twitter:image:src" content="{{ site.BaseURL }}img/5calls-twitter.png" />
+    <meta name="twitter:image" content="{{ site.BaseURL }}images/midterms/share.png" />
+    <meta name="twitter:image:alt" content="5 Minute Midterms — five minutes a week, protect your vote." />
 
     <!-- FPO: placeholder mark in the page palette, swap for the real midterms art.
          Declared here only, so the rest of the site keeps the 5 Calls favicon. -->
