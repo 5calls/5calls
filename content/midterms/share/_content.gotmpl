@@ -1,0 +1,31 @@
+{{- /*
+  One page per released week per state: /midterms/share/3/ca/.
+
+  These exist so a link posted to X, Bluesky, Threads or Facebook can carry a
+  card showing that state's own rules — which is the interesting thing about
+  the post — while the person who clicks lands on the week itself and picks
+  their own state there.
+
+  Only weeks that have gone out get share URLs, so a link cannot leak a week
+  whose subject the strip is still hiding behind "Upcoming".
+*/ -}}
+{{- $d := site.Data.midterms -}}
+{{- range $d.weeks }}
+  {{- if le .number $d.current_week }}
+    {{- $week := . }}
+    {{- range site.Data.midterms_states.states }}
+      {{- $.AddPage (dict
+        "kind" "page"
+        "path" (printf "%d/%s" $week.number (lower .code))
+        "title" (printf "%s: week %d" .name $week.number)
+        "params" (dict
+          "share" true
+          "week" $week.number
+          "state" .code
+          "description" $week.title
+        )
+        "build" (dict "list" "never" "render" "always")
+      ) }}
+    {{- end }}
+  {{- end }}
+{{- end }}

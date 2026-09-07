@@ -4,7 +4,7 @@
 # Which week is live right now. Weeks before this are "done", weeks after are
 # "upcoming". Set this to 0 before the program starts: the page then renders
 # the week_zero block below instead of a weekly action, and nothing unlocks.
-current_week: 0
+current_week: 1
 
 # Headline numbers shown in the top bar.
 total_actions: 24190
@@ -307,9 +307,21 @@ weeks:
 
 images:
   locked_note: Tick the box and both sizes unlock, with the site link baked into the art.
-  library_label: "YOURS: WEEKS 1–3"
-  library_note: Re-post any time
-  library_cta: Open library
+
+# The share row under the images. `caption` is the text carried into a post;
+# the link posted alongside it is the reader's own state's share URL, so the
+# card shows their rules.
+share:
+  # Not rendered as words any more — the crops carry a share mark. This is the
+  # label a screen reader reads and the tooltip on hover.
+  hint: Share this image
+  cta: Post this
+  # The vertical crop is the one that goes to Instagram, where a link is no
+  # use, so it copies the image itself. The horizontal one copies the link.
+  copy_image: Copy image
+  copy_link: Copy link
+  download: Download
+  caption: Five minutes a week to protect your vote.
 
 remind:
   title: Get the newsletter

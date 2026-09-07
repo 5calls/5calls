@@ -800,6 +800,8 @@ body {
 .mt-images__set {
   display: flex;
   gap: 14px;
+  // The two crops are different heights, so they hang from a common baseline.
+  align-items: flex-end;
   opacity: 0.42;
 }
 
@@ -810,27 +812,63 @@ body {
   color: rgba($ink, 0.9);
 }
 
+// The two crops of the week's share art. Each keeps its own ratio, so the
+// height follows the width rather than being set.
 .mt-shot {
-  display: flex;
-  align-items: flex-end;
-  padding: 8px;
+  display: block;
+  height: auto;
   border-radius: 6px;
-  background: repeating-linear-gradient(
-    135deg,
-    rgba($ink, 0.14) 0 9px,
-    rgba($ink, 0.06) 9px 18px
-  );
-  font: 500 14px $mono;
-  color: rgba($ink, 0.8);
 
   &--portrait {
     width: 126px;
-    height: 224px;
+    flex: none;
   }
 
   &--landscape {
-    height: 118px;
+    width: 100%;
   }
+}
+
+.mt-shot-btn {
+  position: relative;
+  display: block;
+  padding: 0;
+  border: 0;
+  border-radius: 6px;
+  background: none;
+  cursor: pointer;
+
+  &:hover:not([disabled]) .mt-shot,
+  &:focus-visible .mt-shot {
+    outline: 2px solid $blue;
+    outline-offset: 2px;
+  }
+
+  // Locked: the week has not been confirmed, so there is nothing to share.
+  &[disabled] {
+    cursor: default;
+
+    .mt-shot__hint {
+      display: none;
+    }
+  }
+}
+
+// A share mark in the corner, standing in for the words. Always visible, since
+// the phones this is aimed at have no hover to reveal it.
+.mt-shot__hint {
+  position: absolute;
+  right: 8px;
+  bottom: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 999px;
+  background: rgba($cream, 0.94);
+  box-shadow: 0 1px 4px rgba($ink, 0.25);
+  color: $ink-solid;
 }
 
 .mt-shot-col {
@@ -841,53 +879,81 @@ body {
   gap: 10px;
 }
 
-.mt-library {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  padding-top: 16px;
-  border-top: 1px solid rgba($ink, 0.18);
+// The share modal, opened from either crop.
+.mt-modal {
+  max-width: unquote("min(560px, 92vw)");
+  padding: 22px;
+  border: 0;
+  border-radius: 14px;
+  background: $cream;
+  color: $ink;
+
+  &::backdrop {
+    background: rgba(#000, 0.55);
+  }
 }
 
-.mt-library__label {
-  font: 500 14px $mono;
-  letter-spacing: 0.12em;
-  color: $blue;
+.mt-modal__close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  // A comfortable target rather than a small glyph.
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 0;
+  border-radius: 999px;
+  background: rgba($ink, 0.07);
+  color: $ink-solid;
+  cursor: pointer;
+
+  &:hover {
+    background: rgba($ink, 0.14);
+  }
 }
 
-.mt-library__row {
+.mt-modal__img {
+  display: block;
+  width: auto;
+  max-width: 100%;
+  max-height: 58vh;
+  margin: 6px auto 18px;
+  border-radius: 8px;
+}
+
+.mt-modal__actions {
   display: flex;
+  flex-wrap: wrap;
   gap: 10px;
   align-items: center;
 }
 
-.mt-library__thumb {
-  width: 52px;
-  height: 92px;
-  border-radius: 4px;
-  background: repeating-linear-gradient(
-    135deg,
-    rgba($ink, 0.2) 0 7px,
-    rgba($ink, 0.08) 7px 14px
-  );
-}
-
-.mt-library__meta {
+.mt-modal__links {
   display: flex;
-  flex: 1;
-  flex-direction: column;
-  gap: 8px;
-  padding-left: 4px;
-  font-size: 15px;
-  line-height: 1.4;
-  color: rgba($ink, 0.88);
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+  margin-top: 16px;
+  padding-top: 14px;
+  border-top: 1px solid rgba($ink, 0.18);
 
   a {
-    align-self: flex-start;
-    padding: 9px 16px;
-    border: 1.5px solid rgba($blue, 0.5);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border: 1.5px solid rgba($blue, 0.4);
     border-radius: 999px;
     color: $blue;
+
+    &:hover {
+      border-color: $blue;
+      background: rgba($blue, 0.08);
+    }
   }
 }
 

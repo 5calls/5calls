@@ -64,7 +64,6 @@
 {{- /* The closing band's copy names the next week, so pre-launch overrides it. */ -}}
 {{- $rem := $d.remind -}}
 {{- if $prelaunch }}{{ with $zero.remind }}{{ $rem = merge $d.remind . }}{{ end }}{{ end -}}
-{{- $done := where $d.weeks "number" "lt" $live -}}
 {{- $upcoming := where $d.weeks "number" "gt" $live -}}
 {{- $next := "" -}}
 {{- with $upcoming }}{{ $next = index . 0 }}{{ end -}}
@@ -379,27 +378,38 @@
               <span class="mt-mono">WEEK {{ $cur }} IMAGES</span>
               <span class="mt-images__status" data-images-status>LOCKED</span>
             </div>
-            <!-- FPO: placeholder crops stand in for the weekly share art. -->
+            {{- /* The reader's own share art, drawn at build time for the state the
+                   page rendered with. FPO plates for now. The state switcher does
+                   not swap these yet — it would need each state's URLs in the deck
+                   it already ships to the page. */ -}}
+            {{- $cardState := index site.Data.midterms_states.states $d.state.abbr }}
+            {{- $vert := partial "midterms-card.html" (dict "crop" "vertical" "week" $week "state" $cardState) }}
+            {{- $horiz := partial "midterms-card.html" (dict "crop" "horizontal" "week" $week "state" $cardState) }}
+            {{- /* Each crop opens the share modal. Buttons rather than images
+                   alone, so they are reachable by keyboard and can be disabled
+                   while the week is still locked. */ -}}
             <div class="mt-images__set">
-              <div class="mt-shot mt-shot--portrait">9:16</div>
+              <button type="button" class="mt-shot-btn" data-shot-open="vert"
+                      title="{{ $d.share.hint }}" disabled>
+                <img class="mt-shot mt-shot--portrait" src="{{ $vert.RelPermalink }}"
+                     alt="Week {{ $cur }} share image, vertical crop" data-shot="vert"
+                     width="{{ $vert.Width }}" height="{{ $vert.Height }}" />
+                <span class="mt-shot__hint">{{ partial "midterms-icon.html" (dict "name" "expand" "size" 15) }}</span>
+                <span class="visually-hidden">{{ $d.share.hint }}</span>
+              </button>
               <div class="mt-shot-col">
-                <div class="mt-shot mt-shot--landscape">16:9</div>
+                <button type="button" class="mt-shot-btn" data-shot-open="horiz"
+                        title="{{ $d.share.hint }}" disabled>
+                  <img class="mt-shot mt-shot--landscape" src="{{ $horiz.RelPermalink }}"
+                       alt="Week {{ $cur }} share image, horizontal crop" data-shot="horiz"
+                       width="{{ $horiz.Width }}" height="{{ $horiz.Height }}" />
+                  <span class="mt-shot__hint">{{ partial "midterms-icon.html" (dict "name" "expand" "size" 15) }}</span>
+                  <span class="visually-hidden">{{ $d.share.hint }}</span>
+                </button>
               </div>
             </div>
             <p class="mt-images__note">{{ $d.images.locked_note }}</p>
-            <div class="mt-library">
-              <span class="mt-library__label">{{ $d.images.library_label }}</span>
-              <div class="mt-library__row">
-                {{- range $done }}
-                  <div class="mt-library__thumb"></div>
-                {{- end }}
-                <div class="mt-library__meta">
-                  <span>{{ $d.images.library_note }}</span>
-                  <!-- FPO: the library page does not exist yet. -->
-                  <a href="#">{{ $d.images.library_cta }}</a>
-                </div>
-              </div>
-            </div>
+
           </aside>
         {{- end }}
       </main>
@@ -439,6 +449,41 @@
         </form>
       </section>
 
+      {{- if not $prelaunch }}
+        {{- /* One modal, refilled with whichever crop was tapped. A native
+               <dialog> brings Esc, the backdrop and focus handling with it. */ -}}
+        {{- $shareBase := printf "%sshare/%d/" $base $cur }}
+        <dialog class="mt-modal" data-modal data-share-base="{{ $shareBase }}">
+          <button type="button" class="mt-modal__close" data-modal-close aria-label="Close">
+            {{- partial "midterms-icon.html" (dict "name" "close" "size" 22) -}}
+          </button>
+          <img class="mt-modal__img" data-modal-img src="" alt="" />
+          <div class="mt-modal__actions">
+            <button type="button" class="mt-pill mt-pill--solid" data-share hidden>{{ $d.share.cta }}</button>
+            {{- /* Label and behaviour depend on which crop was opened. */ -}}
+            <button type="button" class="mt-pill" data-copy-action
+                    data-copy-image="{{ $d.share.copy_image }}"
+                    data-copy-link="{{ $d.share.copy_link }}">{{ $d.share.copy_image }}</button>
+            <a class="mt-pill" data-share-download href="" download>{{ $d.share.download }}</a>
+          </div>
+          {{- /* The mark carries the platform; the name is there for screen
+                 readers, since four unlabelled glyphs say nothing aloud. */ -}}
+          <div class="mt-modal__links">
+            {{- range slice
+                (dict "key" "x" "name" "X")
+                (dict "key" "bsky" "name" "Bluesky")
+                (dict "key" "threads" "name" "Threads")
+                (dict "key" "facebook" "name" "Facebook") }}
+              <a data-share-link="{{ .key }}" rel="noopener" target="_blank" href=""
+                 title="Share on {{ .name }}">
+                {{- partial "midterms-icon.html" (dict "name" .key) -}}
+                <span class="visually-hidden">Share on {{ .name }}</span>
+              </a>
+            {{- end }}
+          </div>
+        </dialog>
+      {{- end }}
+
       <footer class="mt-footer">
         <div class="mt-brand mt-brand--small">
           <img class="mt-logo mt-logo--small" src="{{ site.BaseURL }}images/midterms/lockup.png"
@@ -460,6 +505,14 @@
       {{- $entry := dict "name" $s.name "headline" $s.headline "hero" $s.hero_date
           "channels" $s.channels "secondary" $s.secondary "mail" $s.mail "url" $s.url -}}
       {{- if $preview }}{{ $entry = merge $entry (dict "review" $s.review_reason) }}{{ end -}}
+      {{- /* The share art for this week in this state. Drawing all 51 up front is
+             what lets the switcher swap them with no round trip; the same
+             resources back the /midterms/share/ cards, so they are drawn once. */ -}}
+      {{- if not $prelaunch -}}
+        {{- $entry = merge $entry (dict
+            "vert" (partial "midterms-card.html" (dict "crop" "vertical" "week" $week "state" $s)).RelPermalink
+            "horiz" (partial "midterms-card.html" (dict "crop" "horizontal" "week" $week "state" $s)).RelPermalink) -}}
+      {{- end -}}
       {{- $payload = merge $payload (dict $code $entry) -}}
     {{- end }}
     <script type="application/json" id="mt-states">{{ $payload | jsonify | safeJS }}</script>
@@ -528,6 +581,9 @@
           var unlocked = done.indexOf(CURRENT) > -1;
           if (confirmBox) confirmBox.checked = unlocked;
           if (images) images.classList.toggle("is-unlocked", unlocked);
+          shotButtons.forEach(function (btn) {
+            btn.disabled = !unlocked;
+          });
           if (status) status.textContent = unlocked ? "UNLOCKED" : "LOCKED";
         }
         if (confirmBox) {
@@ -576,6 +632,163 @@
             renderCount();
             renderUnlock();
             renderPreviewDone();
+          });
+        }
+
+        // ── Sharing ──────────────────────────────────────────────────────
+        // Tapping a crop opens the modal for that crop. From there a phone can
+        // hand the file to the native sheet, which is the only route into
+        // Instagram; everything else posts the reader's own state share URL,
+        // whose card carries that state's rules.
+        var modal = document.querySelector("[data-modal]");
+        var modalImg = document.querySelector("[data-modal-img]");
+        var shareBtn = document.querySelector("[data-share]");
+        var copyBtn = document.querySelector("[data-copy-action]");
+        var shareDownload = document.querySelector("[data-share-download]");
+        var shotButtons = document.querySelectorAll("[data-shot-open]");
+        var CAPTION = {{ $d.share.caption }};
+        var SHARE_BASE = modal ? modal.getAttribute("data-share-base") : "";
+        var shareFile = null;
+        var shareBlob = null;
+        var openCrop = "vert";
+
+        function currentState() {
+          return select ? select.value : "";
+        }
+
+        function shareUrlFor(code) {
+          return new URL(SHARE_BASE + String(code).toLowerCase() + "/", location.href).href;
+        }
+
+        function cardUrl(crop) {
+          var s = states[currentState()];
+          return s ? s[crop === "vert" ? "vert" : "horiz"] : null;
+        }
+
+        // Fetched before the click that shares it: on iOS, reaching share()
+        // after an await loses the user gesture and the sheet never opens.
+        function primeShareFile(url) {
+          shareFile = null;
+          shareBlob = null;
+          if (shareBtn) shareBtn.hidden = true;
+          if (!url) return;
+          fetch(url)
+            .then(function (r) {
+              return r.ok ? r.blob() : null;
+            })
+            .then(function (blob) {
+              if (!blob) return;
+              shareBlob = blob;
+              if (!navigator.canShare) return;
+              var file = new File([blob], "5-minute-midterms.png", { type: blob.type || "image/png" });
+              if (!navigator.canShare({ files: [file] })) return;
+              shareFile = file;
+              if (shareBtn) shareBtn.hidden = false;
+            })
+            .catch(function () {
+              /* the links below stay the way to share */
+            });
+        }
+
+        // The vertical crop is bound for Instagram, where a link does nothing,
+        // so it copies the image. The horizontal one copies the link.
+        function copiesImage() {
+          return openCrop === "vert" && !!window.ClipboardItem;
+        }
+
+        function renderCopyButton() {
+          if (!copyBtn) return;
+          copyBtn.textContent = copyBtn.getAttribute(
+            copiesImage() ? "data-copy-image" : "data-copy-link"
+          );
+        }
+
+        function applyShareState(code) {
+          var url = shareUrlFor(code);
+          var withUrl = CAPTION + " " + url;
+          var set = function (name, href) {
+            var el = document.querySelector("[data-share-link='" + name + "']");
+            if (el) el.href = href;
+          };
+          set("x", "https://x.com/intent/post?text=" + encodeURIComponent(CAPTION) +
+                   "&url=" + encodeURIComponent(url));
+          set("bsky", "https://bsky.app/intent/compose?text=" + encodeURIComponent(withUrl));
+          set("threads", "https://www.threads.net/intent/post?text=" + encodeURIComponent(withUrl));
+          set("facebook", "https://www.facebook.com/sharer/sharer.php?u=" + encodeURIComponent(url));
+          var card = cardUrl(openCrop);
+          if (shareDownload && card) shareDownload.href = card;
+          if (modalImg && card && modal && modal.open) modalImg.src = card;
+        }
+
+        shotButtons.forEach(function (btn) {
+          btn.addEventListener("click", function () {
+            if (!modal) return;
+            openCrop = btn.getAttribute("data-shot-open");
+            var card = cardUrl(openCrop);
+            var img = btn.querySelector("[data-shot]");
+            if (modalImg && card) {
+              modalImg.src = card;
+              modalImg.alt = img ? img.alt : "";
+            }
+            applyShareState(currentState());
+            primeShareFile(card);
+            renderCopyButton();
+            modal.showModal();
+          });
+        });
+
+        var modalClose = document.querySelector("[data-modal-close]");
+        if (modalClose) {
+          modalClose.addEventListener("click", function () {
+            modal.close();
+          });
+        }
+        if (modal) {
+          // Clicking the backdrop lands on the dialog itself, not its contents.
+          modal.addEventListener("click", function (e) {
+            if (e.target === modal) modal.close();
+          });
+        }
+
+        if (shareBtn) {
+          shareBtn.addEventListener("click", function () {
+            if (!shareFile) return;
+            navigator
+              .share({ files: [shareFile], text: CAPTION, url: shareUrlFor(currentState()) })
+              .catch(function () {
+                /* dismissed, or the target refused the file */
+              });
+          });
+        }
+
+        if (copyBtn && navigator.clipboard) {
+          copyBtn.addEventListener("click", function () {
+            var done = function (ok) {
+              copyBtn.textContent = ok ? "Copied" : "Couldn't copy";
+              setTimeout(renderCopyButton, 2000);
+            };
+            if (copiesImage()) {
+              if (!shareBlob) return done(false);
+              // Written straight from the blob fetched when the modal opened,
+              // so the write stays inside the click.
+              navigator.clipboard
+                .write([new ClipboardItem({ "image/png": shareBlob })])
+                .then(function () {
+                  done(true);
+                })
+                .catch(function () {
+                  done(false);
+                });
+              return;
+            }
+            navigator.clipboard
+              .writeText(shareUrlFor(currentState()))
+              .then(function () {
+                done(true);
+              })
+              .catch(function () {
+                done(false);
+              });
           });
         }
 
@@ -629,6 +842,13 @@
           document.querySelectorAll("[data-state-label]").forEach(function (el) {
             el.textContent = s.name || "";
           });
+
+          // The week's share art is state-specific too.
+          document.querySelectorAll("[data-shot]").forEach(function (img) {
+            var next = s[img.getAttribute("data-shot") === "vert" ? "vert" : "horiz"];
+            if (next) img.src = next;
+          });
+          applyShareState(code);
 
           var review = document.querySelector("[data-state-review]");
           if (review) {
@@ -697,6 +917,7 @@
         renderCount();
         renderStrip();
         renderPreviewDone();
+        if (modal && select) applyShareState(select.value);
       })();
     </script>
   </body>

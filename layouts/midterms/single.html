@@ -1,4 +1,9 @@
-{{- /* One week, from either content adapter under content/midterms/: a public
-       page for a week that has already run (week/), or a build-time preview of
-       any week at all (preview/). The param says which. */ -}}
-{{- partial "midterms-page.html" (dict "page" . "week" .Params.week "preview" .Params.preview) -}}
+{{- /* One week, from one of three content adapters under content/midterms/: a
+       public page for a week that has already run (week/), a build-time preview
+       of any week (preview/), or a share card for one week and state that
+       bounces the reader on to the week (share/). Params say which. */ -}}
+{{- if .Params.share -}}
+  {{- partial "midterms-share.html" . -}}
+{{- else -}}
+  {{- partial "midterms-page.html" (dict "page" . "week" .Params.week "preview" .Params.preview) -}}
+{{- end -}}
