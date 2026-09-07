@@ -42,8 +42,8 @@
 {{- end -}}
 {{- /* On previews, flag detail fields the week has not been written with yet. */ -}}
 {{- $missing := slice -}}
-{{- $required := slice "minutes" "intro" "message" "copy_cta" "rewrite_cta" "confirm" "confirm_count" "why" -}}
-{{- if $deck }}{{ $required = slice "minutes" "intro" "deck_cta" "confirm" "confirm_count" "why" }}{{ end -}}
+{{- $required := slice "intro" "message" "copy_cta" "rewrite_cta" "confirm" "confirm_count" "why" -}}
+{{- if $deck }}{{ $required = slice "intro" "deck_cta" "confirm" "confirm_count" "why" }}{{ end -}}
 {{- if and $preview (not $prelaunch) -}}
   {{- range $required -}}
     {{- if not (index $week .) }}{{ $missing = $missing | append . }}{{ end -}}
@@ -172,20 +172,24 @@
           {{- partial "midterms-by.html" . }}
         </div>
         <nav class="mt-nav">
-          {{- /* A native select sizes itself to its widest option, which left a gap
-                 next to shorter state names. So the visible label is our own
-                 element and the select sits transparent on top of the whole
-                 pill: native picker and keyboard, our typography. */ -}}
-          <span class="mt-pill mt-pill--blue mt-state-toggle">
-            <label class="visually-hidden" for="mt-state">Your state</label>
-            <span class="mt-state-toggle__value" data-state-label>{{ $d.state.name }}</span>
-            <span class="mt-state-toggle__caret" aria-hidden="true"></span>
-            <select id="mt-state" data-state-select>
-              {{- range sort site.Data.midterms_states.states "name" }}
-                <option value="{{ .code }}"{{ if eq .code $d.state.abbr }} selected{{ end }}>{{ .name }}</option>
-              {{- end }}
-            </select>
-          </span>
+          {{- /* Week zero has nothing that varies by state, so there is nothing
+                 to pick yet. */ -}}
+          {{- if not $prelaunch }}
+            {{- /* A native select sizes itself to its widest option, which left a gap
+                   next to shorter state names. So the visible label is our own
+                   element and the select sits transparent on top of the whole
+                   pill: native picker and keyboard, our typography. */ -}}
+            <span class="mt-pill mt-pill--blue mt-state-toggle">
+              <label class="visually-hidden" for="mt-state">Your state</label>
+              <span class="mt-state-toggle__value" data-state-label>{{ $d.state.name }}</span>
+              <span class="mt-state-toggle__caret" aria-hidden="true"></span>
+              <select id="mt-state" data-state-select>
+                {{- range sort site.Data.midterms_states.states "name" }}
+                  <option value="{{ .code }}"{{ if eq .code $d.state.abbr }} selected{{ end }}>{{ .name }}</option>
+                {{- end }}
+              </select>
+            </span>
+          {{- end }}
           <a href="#remind" class="mt-pill">{{ $d.nav.nudge }}</a>
         </nav>
       </header>
@@ -278,7 +282,13 @@
                  completable yet, so there is no confirm row and no image panel. */ -}}
           <div class="mt-action__main">
             <h2 class="mt-action__title">{{ $zero.title }}</h2>
-            <p class="mt-action__intro">{{ $zero.lede }}</p>
+            {{- /* One string or a list of them; a list becomes a paragraph each,
+                   spaced by the column's own gap. */ -}}
+            {{- $lede := $zero.lede }}
+            {{- if not (reflect.IsSlice $lede) }}{{ $lede = slice $lede }}{{ end }}
+            {{- range $lede }}
+              <p class="mt-action__intro">{{ . | markdownify }}</p>
+            {{- end }}
 
             <div id="signup" class="mt-message">
               {{- /* The same Buttondown list the rest of the site subscribes to,
@@ -301,14 +311,18 @@
             </div>
 
             {{- range $zero.body }}
-              <p class="mt-action__body">{{ . }}</p>
+              <p class="mt-action__body">{{ . | markdownify }}</p>
             {{- end }}
           </div>
 
         {{- else }}
           <div class="mt-action__main">
             <h2 class="mt-action__title">{{ $week.title }}</h2>
-            <p class="mt-action__intro">{{ $week.intro }}</p>
+            {{- $intro := $week.intro }}
+            {{- if not (reflect.IsSlice $intro) }}{{ $intro = slice $intro }}{{ end }}
+            {{- range $intro }}
+              <p class="mt-action__intro">{{ . | markdownify }}</p>
+            {{- end }}
 
             {{- if $deck }}
               <div class="mt-message mt-deck">
@@ -338,7 +352,7 @@
                   {{- end }}
                 </div>
                 {{- with $week.deck_note }}
-                  <p class="mt-deck__foot">{{ . }}</p>
+                  <p class="mt-deck__foot">{{ . | markdownify }}</p>
                 {{- end }}
               </div>
             {{- else }}
@@ -417,13 +431,13 @@
       {{- with $week.why }}
         <section id="why" class="mt-why">
           <div class="mt-why__lede">
-            <h2>{{ .heading }}</h2>
+            <h2>{{ .heading | markdownify }}</h2>
           </div>
           <div class="mt-why__stats">
             {{- range .stats }}
               <div class="mt-stat">
-                <b>{{ .value }}</b>
-                <span>{{ .text }}</span>
+                <b>{{ .value | markdownify }}</b>
+                <span>{{ .text | markdownify }}</span>
               </div>
             {{- end }}
           </div>
@@ -500,6 +514,7 @@
 
     {{- /* The whole deck, so switching states never needs a round trip. Trimmed
            to what the page renders; review notes ride along on previews only. */ -}}
+    {{- if not $prelaunch }}
     {{- $payload := dict -}}
     {{- range $code, $s := site.Data.midterms_states.states -}}
       {{- $entry := dict "name" $s.name "headline" $s.headline "hero" $s.hero_date
@@ -516,6 +531,7 @@
       {{- $payload = merge $payload (dict $code $entry) -}}
     {{- end }}
     <script type="application/json" id="mt-states">{{ $payload | jsonify | safeJS }}</script>
+    {{- end }}
 
     <script>
       // Everything the page tracks lives in this browser only — there is no

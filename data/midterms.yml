@@ -4,7 +4,7 @@
 # Which week is live right now. Weeks before this are "done", weeks after are
 # "upcoming". Set this to 0 before the program starts: the page then renders
 # the week_zero block below instead of a weekly action, and nothing unlocks.
-current_week: 1
+current_week: 0
 
 # Headline numbers shown in the top bar.
 total_actions: 24190
@@ -18,46 +18,45 @@ intro:
 # The reader's state. Only one state is configured for now; the header selector
 # is FPO until per-state data lands.
 #
-# name and abbr are rendered (header selector, the state tag on an action card,
-# pills on upcoming weeks). The deadline fields are not rendered anywhere since
-# the state bar was removed — they are kept here to fold into an action's copy.
+# name and abbr are rendered: the header selector, the state tag on an action
+# card, and the pills on upcoming weeks. Per-state deadline copy comes from
+# data/midterms_states.yml, not from here.
 state:
   name: California
   abbr: CA
-  register_by: Mon, Oct 20 — 15 days left
-  register_note: Online, by mail, or in person. Same-day registration allowed at polling places.
 
 # Pre-launch state, rendered when current_week is 0. The program has been
 # announced but no action has gone out yet, so the only thing to do is sign up
 # and there is nothing to unlock. Once week 1 ships, set current_week to 1 and
 # none of this is used again.
+# Prose fields are rendered as markdown, so [links](/vote/verify/) work in them:
+# week_zero.lede, week_zero.body, a week's intro and deck_note, and the why
+# band's heading and stats. The copy-and-paste `message` is not, since it is
+# pasted into a chat as plain text.
 week_zero:
-  kicker: SIGN-UPS OPEN
-  title: Eight weeks. Eight small things.
-  lede: >-
-    Between now and election day we send one action every Tuesday morning. Each
-    one takes about five minutes and each one is picked because it actually
-    moves someone closer to voting.
+  title: A simple plan to ensure your vote is counted
+  lede:
+    - >-
+      With recent unprecedented attempts to block eligible Americans from voting, the most important thing you can do leading up to November 3rd is **take 5 minutes a week to protect your vote**. That means making sure your ballot won't get rejected due to small preventable errors or larger systemic attempts at election sabotage.
+
+    - >-
+      Every week, we’ll share a new 5-minute action that will protect you and your ballot. Once you’ve completed your weekly task, you'll **unlock sharable achievement graphics** with **state-specific voting information** that can be shared on social media to inspire and encourage your friends to protect their votes, too.
   body:
     - >-
-      No phone bank shifts, no weekend commitment, no account to create. You
-      get an email, you spend five minutes, you're done until next Tuesday.
-    - >-
-      Every action is specific to your state, so the deadlines and links you
-      get are the ones that apply to you.
+      We know you might not have time to phone bank or knock doors or even
+      unload the dishwasher… But you DO have time to protect your vote.
   signup:
     cta: Sign me up
     placeholder: you@email.com
   why:
-    kicker: WHY EIGHT WEEKS
-    heading: Small things, done on a schedule, beat one big push at the end.
+    heading: Don’t let fixable hurdles stop your vote from being counted
     stats:
-      - value: 1 in 8
-        text: registrations on file are invalid or out of date.
-      - value: 8 weeks
-        text: is enough time to fix that before the deadlines close.
-      - value: 5 min
-        text: is all any week asks of you. That is the whole design.
+      - value: 21 million
+        text: voter registration records [removed from the rolls](https://www.eac.gov/sites/default/files/2025-07/2024_EAVS_Report_508.pdf#page=33.10) between the 2022 midterms and the 2024 presidential election
+      - value: 93,497
+        text: mail ballots were [rejected in the 2026 California primary election](https://calvoter.org/content/making-sense-150000-rejected-california-mail-ballots) for not being received on time
+      - value: 100,000
+        text: Election Day [polling locations](https://www.route-fifty.com/management/2024/03/there-are-100000-fewer-election-day-polling-places-2024/394959/) have closed since 2018
 
 # One entry per week. The entry matching current_week is rendered in full; the
 # rest appear in the top strip, which marks the ones the reader has finished.
@@ -67,7 +66,6 @@ weeks:
     title: Check your voter registration
     state_specific: true
     release: 2026-09-15T09:00:00-07:00
-    minutes: 5
     # Pulls the deadline card from data/midterms_states.yml (VoteAmerica deck)
     # for the reader's state, in place of the copy-and-paste message card.
     state_deck: true
@@ -85,7 +83,6 @@ weeks:
     confirm: I confirmed my registration
     confirm_count: 3,908 checked
     why:
-      kicker: WHY THIS ONE
       heading: The rolls change constantly, and nobody tells you when yours does.
       stats:
         - value: 1 in 8
@@ -100,7 +97,6 @@ weeks:
     title: Save every deadline that applies to you
     state_specific: true
     release: 2026-09-22T09:00:00-07:00
-    minutes: 5
     intro: >-
       SAMPLE COPY — the deadlines week. Real text goes here: two sentences on
       why the dates matter now, ending on the one thing to do. About this long.
@@ -130,7 +126,6 @@ weeks:
     title: Check your ID rules, recheck your registration
     state_specific: true
     release: 2026-09-29T09:00:00-07:00
-    minutes: 5
     intro: >-
       SAMPLE COPY — the ID and re-check week. Real text goes here: two sentences
       on what changed and who it catches out, ending on the one thing to do.
@@ -160,7 +155,6 @@ weeks:
     title: Find out what's actually on your ballot
     state_specific: true
     release: 2026-10-06T09:00:00-07:00
-    minutes: 5
     intro: >-
       Most people meet their ballot for the first time in the booth, then guess
       on the down-ballot races. A sample ballot is published weeks ahead — read
@@ -190,7 +184,6 @@ weeks:
     title: Make your voting plan
     state_specific: true
     release: 2026-10-13T09:00:00-07:00
-    minutes: 5
     intro: >-
       SAMPLE COPY — the plan week. Real text goes here: two sentences on why a
       named day and time beats good intentions, ending on the one thing to do.
@@ -220,7 +213,6 @@ weeks:
     title: Vote early, or get your ballot in the mail
     state_specific: true
     release: 2026-10-20T09:00:00-07:00
-    minutes: 5
     intro: >-
       SAMPLE COPY — the early and mail voting week. Real text goes here: two
       sentences on getting it done ahead of the day, ending on what to do.
@@ -250,7 +242,6 @@ weeks:
     title: Recheck your work
     state_specific: false
     release: 2026-10-27T09:00:00-07:00
-    minutes: 5
     intro: >-
       SAMPLE COPY — the re-check week. Real text goes here: two sentences on the
       things that get ballots rejected and how little time curing takes.
@@ -280,7 +271,6 @@ weeks:
     title: Vote
     state_specific: false
     release: 2026-11-03T09:00:00-08:00
-    minutes: 5
     intro: >-
       SAMPLE COPY — election day. Real text goes here: two sentences that carry
       eight weeks of small things over the line, ending on the one thing to do.

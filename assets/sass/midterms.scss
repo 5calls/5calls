@@ -979,6 +979,16 @@ body {
   @include shell;
   background: $ink;
   color: $cream;
+
+  // The page-wide hover colour is $ink, which is this band's own background.
+  a {
+    text-decoration: underline;
+    text-underline-offset: 2px;
+
+    &:hover {
+      color: $cream;
+    }
+  }
 }
 
 .mt-why__lede {
@@ -997,12 +1007,6 @@ body {
     letter-spacing: 0.005em;
     text-wrap: pretty;
   }
-}
-
-.mt-why__kicker {
-  font: 500 14px $mono;
-  letter-spacing: 0.14em;
-  color: rgba($cream, 0.9);
 }
 
 .mt-why__stats {
