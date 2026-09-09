@@ -1,8 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
-  <!-- Placeholder mark for /midterms: the page's week strip, two done + one now.
-       Colors are the page palette (ink ground, cream bars, orange current week). -->
-  <rect width="32" height="32" rx="7" fill="#4A4A4A"/>
-  <rect x="5.5" y="11" width="5" height="12" rx="2.5" fill="#FDF1E3" opacity=".45"/>
-  <rect x="13.5" y="11" width="5" height="12" rx="2.5" fill="#FDF1E3" opacity=".45"/>
-  <rect x="21.5" y="7" width="5" height="18" rx="2.5" fill="#F98033"/>
-</svg>

@@ -75,6 +75,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{{ $page.Title }} ⭑ {{ site.Title }}</title>
     <meta name="description" content="{{ $page.Params.description }}" />
+    {{- /* Self-referencing, to collapse the query-string variants this page will
+           collect: utm tags from the newsletter and social, and the ?state= and
+           ?week= parameters, all of which render the same page. Previews get
+           none — they are noindex, and a canonical pointing elsewhere would
+           contradict that. */ -}}
+    {{- if not $preview }}
+      <link rel="canonical" href="{{ $page.Permalink }}" />
+    {{- end }}
 
     <meta property="og:title" content="{{ $page.Title }} ⭑ {{ site.Title }}" />
     <meta property="og:type" content="website" />
@@ -92,9 +100,10 @@
     <meta name="twitter:image" content="{{ site.BaseURL }}images/midterms/share.png" />
     <meta name="twitter:image:alt" content="5 Minute Midterms — five minutes a week, protect your vote." />
 
-    <!-- FPO: placeholder mark in the page palette, swap for the real midterms art.
-         Declared here only, so the rest of the site keeps the 5 Calls favicon. -->
-    <link rel="icon" type="image/svg+xml" href="{{ site.BaseURL }}images/midterms/favicon.svg" />
+    {{- /* The numeral out of the lockup, on the page's cream. The clock hand and
+           its grey flag are dropped: they turn to mush at 16px, where the whole
+           mark has to survive. Declared here only, so the rest of the site keeps
+           the 5 Calls favicon. */ -}}
     <link rel="icon" type="image/png" sizes="32x32" href="{{ site.BaseURL }}images/midterms/favicon-32.png" />
     <link rel="icon" type="image/png" sizes="16x16" href="{{ site.BaseURL }}images/midterms/favicon-16.png" />
     <link rel="apple-touch-icon" href="{{ site.BaseURL }}images/midterms/apple-touch-icon.png" />
