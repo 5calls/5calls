@@ -44,7 +44,7 @@ week_zero:
   body:
     - >-
       We know you might not have time to phone bank or knock doors or even
-      unload the dishwasher… But you DO have time to protect your vote.
+      unload the dishwasher…But you DO have time to protect your vote.
   signup:
     cta: Sign me up
     placeholder: you@email.com
@@ -52,11 +52,11 @@ week_zero:
     heading: Don’t let fixable hurdles stop your vote from being counted
     stats:
       - value: 21 million
-        text: voter registration records [removed from the rolls](https://www.eac.gov/sites/default/files/2025-07/2024_EAVS_Report_508.pdf#page=33.10) between the 2022 midterms and the 2024 presidential election
+        text: voter registration records were [removed from the rolls](https://www.eac.gov/sites/default/files/2025-07/2024_EAVS_Report_508.pdf#page=33.10) between the 2022 midterms and the 2024 presidential election.
       - value: 93,497
-        text: mail ballots were [rejected in the 2026 California primary election](https://calvoter.org/content/making-sense-150000-rejected-california-mail-ballots) for not being received on time
+        text: mail ballots were [rejected in the 2026 California primary election](https://calvoter.org/content/making-sense-150000-rejected-california-mail-ballots) for not being received on time.
       - value: 100,000
-        text: Election Day [polling locations](https://www.route-fifty.com/management/2024/03/there-are-100000-fewer-election-day-polling-places-2024/394959/) have closed since 2018
+        text: Election Day [polling locations](https://www.route-fifty.com/management/2024/03/there-are-100000-fewer-election-day-polling-places-2024/394959/) have closed since 2018.
 
 # One entry per week. The entry matching current_week is rendered in full; the
 # rest appear in the top strip, which marks the ones the reader has finished.
