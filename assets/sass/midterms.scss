@@ -262,14 +262,24 @@ body {
   }
 }
 
-// The page's own mark, with the 5 Calls credit beside it.
+// The page's own mark, with the 5 Calls credit beside it. The lockup's height
+// is a variable because the credit is placed off it: the 5 Calls mark sits on
+// the bottom of MIDTERMS, which is 62.9% of the way down the art, measured off
+// the far right column where only the wordmark reaches.
 .mt-brand {
+  --logo-h: 120px;
+  --credit-h: 24px;
+  --midterms-bottom: 0.629;
+
   display: flex;
   flex-wrap: wrap;
   gap: 16px;
   align-items: center;
 
   &--small {
+    --logo-h: 80px;
+    --credit-h: 17px;
+
     gap: 12px;
   }
 }
@@ -277,8 +287,9 @@ body {
 .mt-by {
   display: flex;
   gap: 7px;
-  // Sits against the top of the lockup rather than its middle.
+  // Its foot lands on the foot of MIDTERMS, in the header and the footer alike.
   align-self: flex-start;
+  margin-top: calc(var(--logo-h) * var(--midterms-bottom) - var(--credit-h));
   align-items: center;
   font-size: 14px;
   color: rgba($ink, 0.6);
@@ -289,7 +300,7 @@ body {
     // glyphs edge to edge, so it reads larger than a same-height line of type:
     // this sits between the MIDTERMS line and the full two-line block.
     width: auto;
-    height: 24px;
+    height: var(--credit-h);
     filter: grayscale(1);
     opacity: 0.7;
   }
@@ -300,13 +311,7 @@ body {
   }
 
   .mt-brand--small & {
-    // The footer credit centres against its mark; only the header one sits high.
-    align-self: center;
     font-size: 13px;
-
-    img {
-      height: 17px;
-    }
   }
 }
 
@@ -315,11 +320,7 @@ body {
 // size in a shorter box.
 .mt-logo {
   width: auto;
-  height: 88px;
-
-  &--small {
-    height: 60px;
-  }
+  height: var(--logo-h);
 }
 
 .mt-state-toggle {
@@ -1138,9 +1139,42 @@ body {
   }
 }
 
-@media (max-width: 520px) {
+// Wrapped two-up, eight weeks push the page's own opening line below the fold.
+// So on a phone the strip becomes one row that scrolls, fading out at the right
+// to say there is more of it.
+@media (max-width: 640px) {
+  .mt-strip {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    scroll-snap-type: x proximity;
+    // Without this the snapport starts at the padding edge, so the first cell
+    // snaps flush to the screen and the page's own inset disappears.
+    scroll-padding-left: $inset;
+    scrollbar-width: none;
+    -webkit-mask-image: linear-gradient(to right, #000 calc(100% - 44px), transparent);
+    mask-image: linear-gradient(to right, #000 calc(100% - 44px), transparent);
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  }
+
   .mt-strip__item {
-    flex: 1 1 calc(50% - 6px);
+    flex: 0 0 auto;
+    width: 33vw;
+    max-width: 148px;
+    scroll-snap-align: start;
+
+    &--selected {
+      width: 62vw;
+      max-width: 260px;
+    }
+  }
+
+  // The nudge is a second ask for the signup band further down the page, and
+  // it crowds the header at this width.
+  .mt-nav__nudge {
+    display: none;
   }
 
   .mt-counts {

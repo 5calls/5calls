@@ -168,7 +168,7 @@
       <header class="mt-header">
         <div class="mt-brand">
           <img class="mt-logo" src="{{ site.BaseURL }}images/midterms/lockup.png"
-               alt="5 Minute Midterms" width="441" height="256" />
+               alt="5 Minute Midterms" width="416" height="256" />
           {{- partial "midterms-by.html" . }}
         </div>
         <nav class="mt-nav">
@@ -190,7 +190,7 @@
               </select>
             </span>
           {{- end }}
-          <a href="#remind" class="mt-pill">{{ $d.nav.nudge }}</a>
+          <a href="#remind" class="mt-pill mt-nav__nudge">{{ $d.nav.nudge }}</a>
         </nav>
       </header>
 
@@ -299,7 +299,8 @@
                     target="popupwindow"
                     onsubmit="window.open('https://buttondown.com/5calls?tag=midterms', 'popupwindow')">
                 <label class="visually-hidden" for="mt-signup-email">Email address</label>
-                <input id="mt-signup-email" name="email" type="email" placeholder="{{ $zero.signup.placeholder }}" />
+                <input id="mt-signup-email" name="email" type="email" autocomplete="email" inputmode="email" autocapitalize="off" spellcheck="false"
+                       placeholder="{{ $zero.signup.placeholder }}" />
                 <input type="hidden" name="tag" value="midterms" />
                 <button type="submit" class="mt-pill mt-pill--solid">{{ $zero.signup.cta }}</button>
               </form>
@@ -457,7 +458,8 @@
               target="popupwindow"
               onsubmit="window.open('https://buttondown.com/5calls?tag=midterms', 'popupwindow')">
           <label class="visually-hidden" for="mt-email">Email address</label>
-          <input id="mt-email" name="email" type="email" placeholder="{{ $rem.placeholder }}" />
+          <input id="mt-email" name="email" type="email" autocomplete="email" inputmode="email" autocapitalize="off" spellcheck="false"
+                 placeholder="{{ $rem.placeholder }}" />
           <input type="hidden" name="tag" value="midterms" />
           <button type="submit">{{ $rem.cta }}</button>
         </form>
@@ -500,8 +502,8 @@
 
       <footer class="mt-footer">
         <div class="mt-brand mt-brand--small">
-          <img class="mt-logo mt-logo--small" src="{{ site.BaseURL }}images/midterms/lockup.png"
-               alt="5 Minute Midterms" width="441" height="256" />
+          <img class="mt-logo" src="{{ site.BaseURL }}images/midterms/lockup.png"
+               alt="5 Minute Midterms" width="416" height="256" />
           {{- partial "midterms-by.html" . }}
         </div>
         <div class="mt-footer__links">
@@ -934,6 +936,15 @@
         renderStrip();
         renderPreviewDone();
         if (modal && select) applyShareState(select.value);
+
+        // On a narrow screen the strip scrolls sideways; start it on the week
+        // being read rather than at week one.
+        var strip = document.querySelector(".mt-strip");
+        var selected = document.querySelector(".mt-strip__item--selected");
+        if (strip && selected && strip.scrollWidth > strip.clientWidth) {
+          // block:"nearest" so bringing it into view cannot scroll the page.
+          selected.scrollIntoView({ inline: "center", block: "nearest" });
+        }
       })();
     </script>
   </body>
