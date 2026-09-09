@@ -1,0 +1,325 @@
+# Content for the temporary /midterms "5 Minute Midterms" page.
+# This page is a one-off campaign page; nothing else on the site reads this file.
+
+# Which week is live right now. Weeks before this are "done", weeks after are
+# "upcoming". Set this to 0 before the program starts: the page then renders
+# the week_zero block below instead of a weekly action, and nothing unlocks.
+current_week: 0
+
+# Headline numbers shown in the top bar.
+total_actions: 24190
+
+nav:
+  nudge: Get reminders
+
+intro:
+  title: Five minutes a week. Protect your vote.
+
+# The reader's state. Only one state is configured for now; the header selector
+# is FPO until per-state data lands.
+#
+# name and abbr are rendered: the header selector, the state tag on an action
+# card, and the pills on upcoming weeks. Per-state deadline copy comes from
+# data/midterms_states.yml, not from here.
+state:
+  name: California
+  abbr: CA
+
+# Pre-launch state, rendered when current_week is 0. The program has been
+# announced but no action has gone out yet, so the only thing to do is sign up
+# and there is nothing to unlock. Once week 1 ships, set current_week to 1 and
+# none of this is used again.
+# Prose fields are rendered as markdown, so [links](/vote/verify/) work in them:
+# week_zero.lede, week_zero.body, a week's intro and deck_note, and the why
+# band's heading and stats. The copy-and-paste `message` is not, since it is
+# pasted into a chat as plain text.
+week_zero:
+  title: A simple plan to ensure your vote is counted
+  lede:
+    - >-
+      With recent unprecedented attempts to block eligible Americans from voting, the most important thing you can do leading up to November 3rd is **take 5 minutes a week to protect your vote**. That means making sure your ballot won't get rejected due to small preventable errors or larger systemic attempts at election sabotage.
+
+    - >-
+      Every week, we’ll share a new 5-minute action that will protect you and your ballot. Once you’ve completed your weekly task, you'll **unlock sharable achievement graphics** with **state-specific voting information** that can be shared on social media to inspire and encourage your friends to protect their votes, too.
+  body:
+    - >-
+      We know you might not have time to phone bank or knock doors or even
+      unload the dishwasher…But you DO have time to protect your vote.
+  signup:
+    cta: Sign me up
+    placeholder: you@email.com
+  why:
+    heading: Don’t let fixable hurdles stop your vote from being counted
+    stats:
+      - value: 21 million
+        text: voter registration records were [removed from the rolls](https://www.eac.gov/sites/default/files/2025-07/2024_EAVS_Report_508.pdf#page=33.10) between the 2022 midterms and the 2024 presidential election.
+      - value: 93,497
+        text: mail ballots were [rejected in the 2026 California primary election](https://calvoter.org/content/making-sense-150000-rejected-california-mail-ballots) for not being received on time.
+      - value: 100,000
+        text: Election Day [polling locations](https://www.route-fifty.com/management/2024/03/there-are-100000-fewer-election-day-polling-places-2024/394959/) have closed since 2018.
+
+# One entry per week. The entry matching current_week is rendered in full; the
+# rest appear in the top strip, which marks the ones the reader has finished.
+weeks:
+  - number: 1
+    short: Checked
+    title: Check your voter registration
+    state_specific: true
+    release: 2026-09-15T09:00:00-07:00
+    # Pulls the deadline card from data/midterms_states.yml (VoteAmerica deck)
+    # for the reader's state, in place of the copy-and-paste message card.
+    state_deck: true
+    # Links the CTA at /vote/verify/ instead of the state's own site.
+    tool: verify
+    deck_cta: Check my registration
+    deck_note: >-
+      Deadlines and rules come from your state's election office. Checking takes
+      about a minute, even if you're sure you're registered.
+    intro: >-
+      You can’t vote if you’re not registered! Checking your registration status
+      now gives you enough time to register—or re-register if needed—before your
+      state’s deadline. So if you’re not sure, check! And if you are sure? Check
+      anyway! There are shenanigans afoot.
+    confirm: I confirmed my registration
+    confirm_count: 3,908 checked
+    why:
+      heading: The rolls change constantly, and nobody tells you when yours does.
+      stats:
+        - value: 1 in 8
+          text: registrations on file are invalid or out of date.
+        - value: Moves
+          text: and clerical errors quietly drop people from the rolls.
+        - value: 1 min
+          text: to confirm you're still registered where you think you are.
+
+  - number: 2
+    short: Deadlines
+    title: Save every deadline that applies to you
+    state_specific: true
+    release: 2026-09-22T09:00:00-07:00
+    intro: >-
+      SAMPLE COPY — the deadlines week. Real text goes here: two sentences on
+      why the dates matter now, ending on the one thing to do. About this long.
+    headline: SAMPLE HEADER LINE FOR THIS WEEK
+    headline_date: Tue, Nov 3
+    message: >-
+      SAMPLE MESSAGE — placeholder standing in for this week's wording. It runs
+      about three short sentences and roughly this many words, so the card can
+      be judged at the size it will really be.
+    copy_cta: button1
+    rewrite_cta: button2
+    confirm: I did it — unlock my images
+    confirm_count: 0 so far (sample)
+    # FPO: placeholder copy, replace before this week ships.
+    why:
+      heading: Every deadline is a different date, and none of them move.
+      stats:
+        - value: 3 dates
+          text: register, request a ballot, return it — all different days.
+        - value: No grace
+          text: period once a deadline passes in most states.
+        - value: 2 min
+          text: to put all three in the calendar you actually check.
+
+  - number: 3
+    short: ID check
+    title: Check your ID rules, recheck your registration
+    state_specific: true
+    release: 2026-09-29T09:00:00-07:00
+    intro: >-
+      SAMPLE COPY — the ID and re-check week. Real text goes here: two sentences
+      on what changed and who it catches out, ending on the one thing to do.
+    headline: SAMPLE HEADER LINE FOR THIS WEEK
+    headline_date: Tue, Nov 3
+    message: >-
+      SAMPLE MESSAGE — placeholder standing in for this week's wording. It runs
+      about three short sentences and roughly this many words, so the card can
+      be judged at the size it will really be.
+    copy_cta: button1
+    rewrite_cta: button2
+    confirm: I did it — unlock my images
+    confirm_count: 0 so far (sample)
+    # FPO: placeholder copy, replace before this week ships.
+    why:
+      heading: ID rules changed in a lot of places, and nobody sends a notice.
+      stats:
+        - value: Varies
+          text: by state — some ask for photo ID, some ask for nothing.
+        - value: Free
+          text: voter ID is available in every state that requires one.
+        - value: 2 min
+          text: to confirm what you'll be asked for at the table.
+
+  - number: 4
+    short: Ballot
+    title: Find out what's actually on your ballot
+    state_specific: true
+    release: 2026-10-06T09:00:00-07:00
+    intro: >-
+      Most people meet their ballot for the first time in the booth, then guess
+      on the down-ballot races. A sample ballot is published weeks ahead — read
+      yours now, while there's time to look anything up.
+    headline: SAMPLE HEADER LINE FOR THIS WEEK
+    headline_date: Tue, Nov 3
+    message: >-
+      Heads up: your sample ballot is already out. Ours has races and measures
+      most people have never heard of — here's the California lookup. Worth five
+      minutes now instead of guessing in the booth.
+    copy_cta: button1
+    rewrite_cta: button2
+    confirm: I read my ballot — unlock my images
+    confirm_count: 1,204 read
+    why:
+      heading: The races people skip are the ones closest to their daily life.
+      stats:
+        - value: 1 in 5
+          text: voters leave down-ballot races blank on their ballot.
+        - value: Weeks
+          text: ahead of the election your sample ballot is already public.
+        - value: 5 min
+          text: is all any week asks of you. That is the whole design.
+
+  - number: 5
+    short: Plan
+    title: Make your voting plan
+    state_specific: true
+    release: 2026-10-13T09:00:00-07:00
+    intro: >-
+      SAMPLE COPY — the plan week. Real text goes here: two sentences on why a
+      named day and time beats good intentions, ending on the one thing to do.
+    headline: SAMPLE HEADER LINE FOR THIS WEEK
+    headline_date: Tue, Nov 3
+    message: >-
+      SAMPLE MESSAGE — placeholder standing in for this week's wording. It runs
+      about three short sentences and roughly this many words, so the card can
+      be judged at the size it will really be.
+    copy_cta: button1
+    rewrite_cta: button2
+    confirm: I did it — unlock my images
+    confirm_count: 0 so far (sample)
+    # FPO: placeholder copy, replace before this week ships.
+    why:
+      heading: People who pick a day and a time are the ones who show up.
+      stats:
+        - value: Day + time
+          text: written down somewhere is the entire plan.
+        - value: Moved
+          text: polling places are common — last cycle's may be gone.
+        - value: 3 min
+          text: to pick your slot and check where you're going.
+
+  - number: 6
+    short: Vote early
+    title: Vote early, or get your ballot in the mail
+    state_specific: true
+    release: 2026-10-20T09:00:00-07:00
+    intro: >-
+      SAMPLE COPY — the early and mail voting week. Real text goes here: two
+      sentences on getting it done ahead of the day, ending on what to do.
+    headline: SAMPLE HEADER LINE FOR THIS WEEK
+    headline_date: Tue, Nov 3
+    message: >-
+      SAMPLE MESSAGE — placeholder standing in for this week's wording. It runs
+      about three short sentences and roughly this many words, so the card can
+      be judged at the size it will really be.
+    copy_cta: button1
+    rewrite_cta: button2
+    confirm: I did it — unlock my images
+    confirm_count: 0 so far (sample)
+    # FPO: placeholder copy, replace before this week ships.
+    why:
+      heading: Voting early takes one problem off election day.
+      stats:
+        - value: Days
+          text: of early voting in most states, weekends included.
+        - value: Postmarks
+          text: aren't enough everywhere — some states must receive it.
+        - value: 1 trip
+          text: and the rest of the week is yours.
+
+  - number: 7
+    short: Recheck
+    title: Recheck your work
+    state_specific: false
+    release: 2026-10-27T09:00:00-07:00
+    intro: >-
+      SAMPLE COPY — the re-check week. Real text goes here: two sentences on the
+      things that get ballots rejected and how little time curing takes.
+    headline: SAMPLE HEADER LINE FOR THIS WEEK
+    headline_date: Tue, Nov 3
+    message: >-
+      SAMPLE MESSAGE — placeholder standing in for this week's wording. It runs
+      about three short sentences and roughly this many words, so the card can
+      be judged at the size it will really be.
+    copy_cta: button1
+    rewrite_cta: button2
+    confirm: I did it — unlock my images
+    confirm_count: 0 so far (sample)
+    # FPO: placeholder copy, replace before this week ships.
+    why:
+      heading: Ballots get rejected for fixable things, if you catch them in time.
+      stats:
+        - value: Signature
+          text: mismatches are the most common reason a ballot is tossed.
+        - value: Cure
+          text: windows exist in most states, but they close fast.
+        - value: 2 min
+          text: to track your ballot and confirm it was accepted.
+
+  - number: 8
+    short: Vote
+    title: Vote
+    state_specific: false
+    release: 2026-11-03T09:00:00-08:00
+    intro: >-
+      SAMPLE COPY — election day. Real text goes here: two sentences that carry
+      eight weeks of small things over the line, ending on the one thing to do.
+    headline: SAMPLE HEADER LINE FOR THIS WEEK
+    headline_date: Tue, Nov 3
+    message: >-
+      SAMPLE MESSAGE — placeholder standing in for this week's wording. It runs
+      about three short sentences and roughly this many words, so the card can
+      be judged at the size it will really be.
+    copy_cta: button1
+    rewrite_cta: button2
+    confirm: I did it — unlock my images
+    confirm_count: 0 so far (sample)
+    # FPO: placeholder copy, replace before this week ships.
+    why:
+      heading: Eight weeks of small things end with the one that counts.
+      stats:
+        - value: Poll hours
+          text: vary by state — check yours before you head out.
+        - value: In line
+          text: when polls close still means you get to vote.
+        - value: Done
+          text: that's the whole program. Thanks for doing it.
+
+images:
+  locked_note: Tick the box and both sizes unlock, with the site link baked into the art.
+
+# The share row under the images. `caption` is the text carried into a post;
+# the link posted alongside it is the reader's own state's share URL, so the
+# card shows their rules.
+share:
+  # Not rendered as words any more — the crops carry a share mark. This is the
+  # label a screen reader reads and the tooltip on hover.
+  hint: Share this image
+  cta: Post this
+  # The vertical crop is the one that goes to Instagram, where a link is no
+  # use, so it copies the image itself. The horizontal one copies the link.
+  copy_image: Copy image
+  copy_link: Copy link
+  download: Download
+  caption: Five minutes a week to protect your vote.
+
+remind:
+  title: Get the newsletter
+  subtitle: One email a week. Additional info and updates. That’s it.
+  placeholder: you@email.com
+  cta: Sign me up
+
+# The about page comes back later; until then Privacy is the only link.
+footer_links:
+  - title: Privacy
+    url: /privacy/

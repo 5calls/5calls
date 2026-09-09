@@ -1,0 +1,18 @@
+{{- /*
+  Builds one preview page per week from data/midterms.yml, so the team can see
+  an upcoming week before it goes live: /midterms/preview/2/, or the shortcut
+  /midterms?week=2. Week 0 is the pre-launch page.
+
+  These pages are noindex and are kept out of .Pages collections (and so out of
+  the sitemap) by _build below.
+*/ -}}
+{{- $d := site.Data.midterms -}}
+{{- range seq 0 (len $d.weeks) }}
+  {{- $.AddPage (dict
+    "kind" "page"
+    "path" (printf "%d" .)
+    "title" (printf "Preview: week %d" .)
+    "params" (dict "week" . "preview" true "description" "Preview of an upcoming 5 Minute Midterms week.")
+    "build" (dict "list" "never" "render" "always")
+  ) }}
+{{- end }}

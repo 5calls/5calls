@@ -1,0 +1,1183 @@
+// Styles for the temporary /midterms "5 Minute Midterms" page.
+// Standalone entry point: this file is NOT imported by main.scss, and the
+// midterms layout does not load main.scss, so nothing here can affect the
+// rest of the site.
+
+$cream: #fdf1e3;
+$orange: #f98033;
+$orange-dark: #b04a08;
+$blue: #2f6690;
+$ink: #4a4a4a;
+$ink-solid: #2a2a2a;
+$mono: ui-monospace, Menlo, Monaco, "Courier New", monospace;
+// Bebas Neue is caps-only and much narrower than Archivo Black, so every
+// display size below is set ~18% larger with slightly open tracking.
+$display: "Bebas Neue", Impact, "Arial Narrow", sans-serif;
+$gutter: clamp(20px, 5vw, 64px);
+// Content never grows past this; the gutter takes over on narrower screens.
+// Written as a literal so libsass does not try to evaluate max() itself.
+$shell: 1200px;
+$inset: unquote("max(#{$gutter}, calc((100% - #{$shell}) / 2))");
+
+// Full-bleed backgrounds stay full-bleed; only the content inside is capped.
+@mixin shell($prop: padding) {
+  #{$prop}-right: $inset;
+  #{$prop}-left: $inset;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: $cream;
+  color: $ink;
+  font-family: Archivo, system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+.mt {
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
+
+  a {
+    color: $orange;
+    text-decoration: none;
+
+    &:hover {
+      color: $ink;
+    }
+  }
+
+  button {
+    font: inherit;
+    color: inherit;
+    cursor: pointer;
+  }
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+// Build-time preview banner (preview pages only, never the live page)
+.mt-preview {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 16px;
+  align-items: center;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  @include shell;
+  background: $ink;
+  color: $cream;
+  font: 500 13px $mono;
+  letter-spacing: 0.06em;
+
+  b {
+    padding: 3px 8px;
+    border-radius: 4px;
+    background: $orange;
+    color: $ink-solid;
+  }
+
+  span {
+    color: rgba($cream, 0.8);
+    letter-spacing: 0;
+  }
+
+  em {
+    font-style: normal;
+    letter-spacing: 0;
+    color: $orange;
+  }
+
+  nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-left: auto;
+  }
+
+  // Completion switches. Sit next to the nav, visibly a dev control.
+  .mt-preview__done {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-items: center;
+    margin: 0;
+    margin-left: auto;
+    padding: 2px 10px 3px;
+    border: 1px dashed rgba($cream, 0.3);
+    border-radius: 6px;
+
+    legend {
+      padding: 0 4px;
+      color: rgba($cream, 0.6);
+      font-size: 11px;
+    }
+
+    label {
+      display: flex;
+      gap: 3px;
+      align-items: center;
+      color: rgba($cream, 0.8);
+      cursor: pointer;
+    }
+
+    input {
+      width: 13px;
+      height: 13px;
+      margin: 0;
+      accent-color: $orange;
+      cursor: pointer;
+    }
+
+    button {
+      padding: 0;
+      border: 0;
+      background: none;
+      font: inherit;
+      color: rgba($cream, 0.55);
+      text-decoration: underline;
+      cursor: pointer;
+    }
+  }
+
+  // With the switches taking the auto margin, the nav follows in flow.
+  .mt-preview__done + nav {
+    margin-left: 0;
+  }
+
+  a {
+    padding: 3px 9px;
+    border: 1px solid rgba($cream, 0.35);
+    border-radius: 999px;
+    color: rgba($cream, 0.85);
+
+    &:hover {
+      border-color: $orange;
+      color: $orange;
+    }
+
+    &.is-current {
+      border-color: $orange;
+      background: $orange;
+      color: $ink-solid;
+    }
+  }
+}
+
+.mt-rule {
+  height: 6px;
+  background: $orange;
+}
+
+// Small shared type treatments
+.mt-mono {
+  font: 500 14px $mono;
+  letter-spacing: 0.12em;
+  color: rgba($ink, 0.85);
+}
+
+.mt-display {
+  font-family: $display;
+  font-weight: 400;
+  letter-spacing: 0.005em;
+  line-height: 1;
+}
+
+.mt-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 18px;
+  border: 1.5px solid $ink;
+  border-radius: 999px;
+  color: $ink;
+
+  &--blue {
+    border-color: rgba($blue, 0.5);
+    color: $blue;
+    background: rgba($blue, 0.08);
+  }
+
+  &--solid {
+    padding: 14px 26px;
+    border: 0;
+    background: $orange;
+    color: $ink-solid;
+    font-size: 16px;
+    font-weight: 600;
+    box-shadow: 0 6px 16px rgba($orange, 0.3);
+  }
+
+  &--tag {
+    padding: 6px 12px;
+    border: 0;
+    background: rgba($blue, 0.12);
+    color: $blue;
+    font: 500 13px $mono;
+    letter-spacing: 0.08em;
+  }
+}
+
+// Anchors inside .mt take the link color, which would swallow a solid pill's
+// label; restate it with enough specificity to win.
+.mt a.mt-pill--solid {
+  color: $ink-solid;
+}
+
+// Header
+.mt-header {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 22px;
+  padding-bottom: 22px;
+  @include shell;
+  border-bottom: 1px solid rgba($ink, 0.15);
+}
+
+.mt-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 28px;
+  align-items: center;
+  font-size: 15px;
+
+  a {
+    color: $ink;
+  }
+}
+
+// The page's own mark, with the 5 Calls credit beside it. The lockup's height
+// is a variable because the credit is placed off it: the 5 Calls mark sits on
+// the bottom of MIDTERMS, which is 62.9% of the way down the art, measured off
+// the far right column where only the wordmark reaches.
+.mt-brand {
+  --logo-h: 120px;
+  --credit-h: 24px;
+  --midterms-bottom: 0.629;
+
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  align-items: center;
+
+  &--small {
+    --logo-h: 80px;
+    --credit-h: 17px;
+
+    gap: 12px;
+  }
+}
+
+.mt-by {
+  display: flex;
+  gap: 7px;
+  // Its foot lands on the foot of MIDTERMS, in the header and the footer alike.
+  align-self: flex-start;
+  margin-top: calc(var(--logo-h) * var(--midterms-bottom) - var(--credit-h));
+  align-items: center;
+  font-size: 14px;
+  color: rgba($ink, 0.6);
+  text-decoration: none;
+
+  img {
+    // Desaturated so it credits rather than competes. The 5 Calls mark is
+    // glyphs edge to edge, so it reads larger than a same-height line of type:
+    // this sits between the MIDTERMS line and the full two-line block.
+    width: auto;
+    height: var(--credit-h);
+    filter: grayscale(1);
+    opacity: 0.7;
+  }
+
+  &:hover img {
+    filter: none;
+    opacity: 1;
+  }
+
+  .mt-brand--small & {
+    font-size: 13px;
+  }
+}
+
+// The lockup is sized off its height. With the tick marks trimmed out of the
+// art, MIDTERMS is 30% of that height rather than 22%, so it reads at the same
+// size in a shorter box.
+.mt-logo {
+  width: auto;
+  height: var(--logo-h);
+}
+
+.mt-state-toggle {
+  position: relative;
+  gap: 14px;
+  padding: 10px 22px;
+  border-width: 2px;
+  min-height: 52px;
+  cursor: pointer;
+
+  &:hover {
+    background: rgba($blue, 0.16);
+  }
+
+  // The select is transparent and covers the pill, so focus lands here.
+  &:focus-within {
+    outline: 3px solid $blue;
+    outline-offset: 3px;
+  }
+
+  &__value {
+    font-size: 20px;
+    font-weight: 600;
+    line-height: 1.2;
+    color: $blue;
+  }
+
+  &__caret {
+    width: 0;
+    height: 0;
+    border-top: 9px solid $blue;
+    border-right: 7px solid transparent;
+    border-left: 7px solid transparent;
+  }
+
+  select {
+    position: absolute;
+    // -2px so the overlay covers the pill's 2px border too, leaving no dead
+    // strip around the edge of the target.
+    inset: -2px;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    opacity: 0;
+    font: inherit;
+    cursor: pointer;
+    appearance: none;
+    -webkit-appearance: none;
+  }
+}
+
+// Top bar: week number, headline, counters
+.mt-top {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+  align-items: flex-end;
+  justify-content: space-between;
+  padding-top: clamp(18px, 3vw, 32px);
+  @include shell;
+}
+
+.mt-top__kicker {
+  font: 500 14px $mono;
+  letter-spacing: 0.14em;
+  color: $orange-dark;
+}
+
+.mt-top__title {
+  // Wide enough to hold the longest sentence of the tagline on one line, but
+  // not wide enough to pull the next sentence's first word up with it — so it
+  // breaks at the full stop, in two lines.
+  max-width: 22ch;
+  margin: 0;
+  font-size: clamp(30px, 4vw, 46px);
+  line-height: 1.02;
+  color: $ink;
+}
+
+.mt-counts {
+  display: flex;
+  gap: 34px;
+  align-items: flex-end;
+  padding-bottom: 6px;
+}
+
+.mt-count {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+
+  > b {
+    font-family: $display;
+    font-size: 36px;
+    font-weight: 400;
+    letter-spacing: 0.005em;
+  }
+
+  > span {
+    font: 400 13px $mono;
+    letter-spacing: 0.1em;
+    color: rgba($ink, 0.85);
+  }
+
+  &--blue > b {
+    color: $blue;
+  }
+}
+
+// Eight-week progress strip
+.mt-strip {
+  display: flex;
+  gap: 6px;
+  align-items: stretch;
+  padding-top: clamp(16px, 2.4vw, 24px);
+  @include shell;
+}
+
+.mt-strip__item {
+  display: flex;
+  min-width: 0;
+  flex: 1;
+  flex-direction: column;
+  gap: 6px;
+  min-height: 78px;
+  padding: 12px 10px;
+  border: 1px dashed rgba($ink, 0.32);
+  border-radius: 8px;
+  color: inherit;
+  text-decoration: none;
+
+  &[href]:hover {
+    border-color: $blue;
+  }
+
+  // A week that has not run yet has no page to link to.
+  &:not([href]) {
+    cursor: default;
+  }
+
+  .mt-strip__label {
+    font-size: 15px;
+    font-weight: 600;
+    line-height: 1.2;
+    color: $ink-solid;
+    overflow-wrap: anywhere;
+
+    // A locked week keeps the weight of the named weeks, just muted.
+    &--locked {
+      color: rgba($ink, 0.6);
+    }
+  }
+
+  .mt-strip__meta {
+    margin-top: auto;
+    font: 400 14px $mono;
+    color: rgba($ink, 0.8);
+  }
+
+  // The live week, marked where a future week carries its date.
+  .mt-strip__now {
+    font-weight: 500;
+    font-size: 13px;
+    letter-spacing: 0.08em;
+    color: rgba($ink, 0.9);
+  }
+
+  // Done state is painted by script from localStorage, so both readings ship
+  // in the markup and only one is ever shown.
+  .mt-strip__done {
+    display: none;
+  }
+
+  &.is-done {
+    border: 1px solid rgba($blue, 0.25);
+    background: rgba($blue, 0.09);
+
+    .mt-strip__done {
+      display: block;
+      font-weight: 500;
+      font-size: 13px;
+      letter-spacing: 0.08em;
+      color: $blue;
+    }
+
+    .mt-strip__when {
+      display: none;
+    }
+  }
+
+  // The week this page is showing, live or not.
+  &--selected {
+    flex: 2.4;
+    padding: 12px 16px;
+    border: 0;
+    background: $orange;
+    box-shadow: 0 6px 18px rgba($orange, 0.28);
+
+    .mt-strip__num {
+      font-size: 15px;
+      font-weight: 600;
+      color: $ink-solid;
+    }
+
+    .mt-strip__label {
+      font-family: $display;
+      font-weight: 400;
+      font-size: 21px;
+      line-height: 1.05;
+      letter-spacing: 0.005em;
+      color: $ink-solid;
+    }
+
+    .mt-strip__meta,
+    .mt-strip__now {
+      color: $ink-solid;
+    }
+
+    // The selected week keeps its orange card when done; the marker changes.
+    &.is-done {
+      border: 0;
+      background: $orange;
+
+      .mt-strip__done {
+        color: $ink-solid;
+      }
+    }
+  }
+}
+
+// This week's action
+.mt-action {
+  display: flex;
+  flex-wrap: wrap;
+  gap: clamp(24px, 4vw, 48px);
+  align-items: flex-start;
+  padding-top: clamp(30px, 5vw, 54px);
+  padding-bottom: clamp(30px, 5vw, 54px);
+  @include shell;
+}
+
+.mt-action__main {
+  display: flex;
+  flex: 1.3;
+  min-width: 340px;
+  flex-direction: column;
+  gap: 22px;
+}
+
+.mt-action__title {
+  margin: 0;
+  font-family: $display;
+  font-size: clamp(46px, 6.4vw, 76px);
+  font-weight: 400;
+  line-height: 0.95;
+  letter-spacing: 0.005em;
+  color: $ink;
+  text-wrap: pretty;
+}
+
+.mt-action__intro {
+  max-width: 52ch;
+  margin: 0;
+  font-size: 18px;
+  line-height: 1.55;
+  color: rgba($ink, 0.85);
+  text-wrap: pretty;
+}
+
+// Week zero: nothing sits beside the column, so the measures set for a
+// half-width one would leave the right of the page empty.
+.mt-action--solo {
+  .mt-action__intro,
+  .mt-action__body {
+    max-width: none;
+  }
+}
+
+.mt-message {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 22px 24px;
+  border: 1px solid rgba($ink, 0.2);
+  border-radius: 10px;
+  background: #fff;
+}
+
+.mt-message__head {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+  justify-content: space-between;
+
+  // Keeps the state tag on the right whether or not anything sits beside it.
+  > :last-child {
+    margin-left: auto;
+  }
+}
+
+.mt-message__text {
+  margin: 0;
+  font-size: 16px;
+  line-height: 1.55;
+  color: $ink;
+}
+
+.mt-message__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+  padding-top: 4px;
+}
+
+// Week-one registration card, built from the VoteAmerica copy deck. Shares the
+// white card chrome with .mt-message.
+// Headline, date and methods are one statement: a single display face sized
+// down and up for hierarchy, then the methods line in body type.
+// The state tag sits on the same top line as the registration copy.
+.mt-deck__top {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.mt-deck__lede {
+  display: flex;
+  flex-direction: column;
+}
+
+// The lines above and below the date are the supporting detail and share one
+// treatment, so the date is the only thing that carries weight.
+.mt-deck__detail {
+  font-family: $display;
+  font-weight: 400;
+  font-size: 24px;
+  line-height: 1.05;
+  letter-spacing: 0.005em;
+  color: rgba($ink, 0.7);
+}
+
+.mt-deck__date {
+  // Bebas leaves more room above its caps than below, so the raw gaps around
+  // the date come out lopsided. These trims even them up, in em so they hold
+  // as the date scales. Both are measured baseline-to-cap-top: the comma in
+  // "Tue, Nov 3" dips below the baseline, but the eye balances on the
+  // baseline, not on the comma's tail.
+  margin-top: -0.02em;
+  margin-bottom: -0.045em;
+  font-family: $display;
+  font-weight: 400;
+  font-size: clamp(34px, 4.4vw, 48px);
+  line-height: 1;
+  letter-spacing: 0.005em;
+  color: $ink;
+}
+
+.mt-deck__notes {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: 16px;
+  line-height: 1.5;
+  color: rgba($ink, 0.88);
+}
+
+.mt-deck__foot {
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.5;
+  color: rgba($ink, 0.72);
+}
+
+.mt-confirm {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  align-items: center;
+  padding: 18px 22px;
+  border: 1.5px solid $ink;
+  border-radius: 10px;
+  cursor: pointer;
+
+  input {
+    width: 26px;
+    height: 26px;
+    margin: 0;
+    accent-color: $orange;
+  }
+
+  span {
+    flex: 1;
+    min-width: 200px;
+    font-size: 17px;
+    font-weight: 600;
+    color: $ink;
+  }
+
+  em {
+    font: 400 15px $mono;
+    font-style: normal;
+    color: rgba($ink, 0.85);
+  }
+}
+
+// Week 0: signup card and "what a week looks like" panel
+.mt-signup__form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+
+  input {
+    flex: 1;
+    min-width: 200px;
+    height: 52px;
+    padding: 0 18px;
+    border: 1px solid rgba($ink, 0.3);
+    border-radius: 999px;
+    background: #fff;
+    font-size: 16px;
+    color: $ink;
+  }
+
+  button {
+    border: 0;
+  }
+}
+
+.mt-signup__note {
+  margin: 0;
+  font: 400 15px $mono;
+  color: rgba($ink, 0.8);
+}
+
+.mt-action__body {
+  max-width: 60ch;
+  margin: 0;
+  font-size: 17px;
+  line-height: 1.55;
+  color: rgba($ink, 0.85);
+}
+
+// Share images sidebar
+.mt-images {
+  display: flex;
+  flex: 1;
+  min-width: 300px;
+  flex-direction: column;
+  gap: 16px;
+  padding: 24px;
+  border-radius: 12px;
+  background: rgba($ink, 0.06);
+}
+
+.mt-images__head {
+  display: flex;
+  gap: 12px;
+  align-items: baseline;
+  justify-content: space-between;
+}
+
+.mt-images__status {
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: rgba($ink, 0.15);
+  font: 500 13px $mono;
+  letter-spacing: 0.08em;
+  color: rgba($ink, 0.9);
+}
+
+.mt-images__set {
+  display: flex;
+  gap: 14px;
+  // The two crops are different heights, so they hang from a common baseline.
+  align-items: flex-end;
+  opacity: 0.42;
+}
+
+.mt-images__note {
+  margin: 0;
+  font-size: 16px;
+  line-height: 1.5;
+  color: rgba($ink, 0.9);
+}
+
+// The two crops of the week's share art. Each keeps its own ratio, so the
+// height follows the width rather than being set.
+.mt-shot {
+  display: block;
+  height: auto;
+  border-radius: 6px;
+
+  &--portrait {
+    width: 126px;
+    flex: none;
+  }
+
+  &--landscape {
+    width: 100%;
+  }
+}
+
+.mt-shot-btn {
+  position: relative;
+  display: block;
+  padding: 0;
+  border: 0;
+  border-radius: 6px;
+  background: none;
+  cursor: pointer;
+
+  &:hover:not([disabled]) .mt-shot,
+  &:focus-visible .mt-shot {
+    outline: 2px solid $blue;
+    outline-offset: 2px;
+  }
+
+  // Locked: the week has not been confirmed, so there is nothing to share.
+  &[disabled] {
+    cursor: default;
+
+    .mt-shot__hint {
+      display: none;
+    }
+  }
+}
+
+// A share mark in the corner, standing in for the words. Always visible, since
+// the phones this is aimed at have no hover to reveal it.
+.mt-shot__hint {
+  position: absolute;
+  right: 8px;
+  bottom: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 999px;
+  background: rgba($cream, 0.94);
+  box-shadow: 0 1px 4px rgba($ink, 0.25);
+  color: $ink-solid;
+}
+
+.mt-shot-col {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+// The share modal, opened from either crop.
+.mt-modal {
+  max-width: unquote("min(560px, 92vw)");
+  padding: 22px;
+  border: 0;
+  border-radius: 14px;
+  background: $cream;
+  color: $ink;
+
+  &::backdrop {
+    background: rgba(#000, 0.55);
+  }
+}
+
+.mt-modal__close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  // A comfortable target rather than a small glyph.
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 0;
+  border-radius: 999px;
+  background: rgba($ink, 0.07);
+  color: $ink-solid;
+  cursor: pointer;
+
+  &:hover {
+    background: rgba($ink, 0.14);
+  }
+}
+
+.mt-modal__img {
+  display: block;
+  width: auto;
+  max-width: 100%;
+  max-height: 58vh;
+  margin: 6px auto 18px;
+  border-radius: 8px;
+}
+
+.mt-modal__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+}
+
+.mt-modal__links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+  margin-top: 16px;
+  padding-top: 14px;
+  border-top: 1px solid rgba($ink, 0.18);
+
+  a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border: 1.5px solid rgba($blue, 0.4);
+    border-radius: 999px;
+    color: $blue;
+
+    &:hover {
+      border-color: $blue;
+      background: rgba($blue, 0.08);
+    }
+  }
+}
+
+// Images unlock after the reader confirms they sent the message
+.mt-images.is-unlocked {
+  .mt-images__set {
+    opacity: 1;
+  }
+
+  .mt-images__status {
+    background: rgba($blue, 0.15);
+    color: $blue;
+  }
+}
+
+// Why this works
+.mt-why {
+  display: flex;
+  flex-wrap: wrap;
+  gap: clamp(24px, 4vw, 56px);
+  padding-top: clamp(40px, 6vw, 72px);
+  padding-bottom: clamp(40px, 6vw, 72px);
+  @include shell;
+  background: $ink;
+  color: $cream;
+
+  // The page-wide hover colour is $ink, which is this band's own background.
+  a {
+    text-decoration: underline;
+    text-underline-offset: 2px;
+
+    &:hover {
+      color: $cream;
+    }
+  }
+}
+
+.mt-why__lede {
+  display: flex;
+  flex: 1;
+  min-width: 260px;
+  flex-direction: column;
+  gap: 14px;
+
+  h2 {
+    margin: 0;
+    font-family: $display;
+    font-size: clamp(31px, 3.8vw, 45px);
+    font-weight: 400;
+    line-height: 1;
+    letter-spacing: 0.005em;
+    text-wrap: pretty;
+  }
+}
+
+.mt-why__stats {
+  display: grid;
+  flex: 1.4;
+  min-width: 300px;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 28px;
+}
+
+.mt-stat {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+
+  b {
+    font-family: $display;
+    font-size: 40px;
+    font-weight: 400;
+    letter-spacing: 0.005em;
+    color: $orange;
+  }
+
+  span {
+    font-size: 17px;
+    line-height: 1.5;
+    color: rgba($cream, 0.85);
+  }
+}
+
+// Weekly reminder signup
+.mt-remind {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 28px;
+  align-items: center;
+  justify-content: space-between;
+  // The card used to inherit its top gap from the section above it. Now that it
+  // follows the dark why band directly, it carries its own, matched to the
+  // bottom so the card sits evenly between the band and the footer.
+  margin-top: clamp(36px, 5vw, 60px);
+  margin-bottom: clamp(36px, 5vw, 60px);
+  @include shell(margin);
+  padding: clamp(28px, 4vw, 44px);
+  border-radius: 12px;
+  background: $orange;
+  color: $ink-solid;
+
+  h2 {
+    margin: 0 0 8px;
+    font-family: $display;
+    font-size: clamp(29px, 3.6vw, 38px);
+    font-weight: 400;
+    line-height: 1;
+    letter-spacing: 0.005em;
+  }
+
+  p {
+    margin: 0;
+    font-size: 16px;
+  }
+}
+
+.mt-remind__form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+
+  input {
+    width: unquote("min(320px, 70vw)");
+    height: 52px;
+    padding: 0 22px;
+    border: 0;
+    border-radius: 999px;
+    background: #fff;
+    font-size: 16px;
+    color: $ink;
+  }
+
+  button {
+    padding: 16px 28px;
+    border: 0;
+    border-radius: 999px;
+    background: $ink;
+    font-size: 16px;
+    font-weight: 600;
+    color: #fff;
+  }
+}
+
+// Footer
+.mt-footer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 18px;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: auto;
+  padding-top: 26px;
+  padding-bottom: 26px;
+  @include shell;
+  border-top: 1px solid rgba($ink, 0.15);
+}
+
+.mt-footer__links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+  font-size: 16px;
+
+  a {
+    color: rgba($ink, 0.88);
+  }
+}
+
+// The eight-across strip needs to wrap well before phone widths.
+@media (max-width: 860px) {
+  .mt-strip {
+    flex-wrap: wrap;
+  }
+
+  .mt-strip__item {
+    flex: 1 1 calc(25% - 6px);
+
+    &--selected {
+      flex: 1 1 100%;
+    }
+  }
+}
+
+// Wrapped two-up, eight weeks push the page's own opening line below the fold.
+// So on a phone the strip becomes one row that scrolls, fading out at the right
+// to say there is more of it.
+@media (max-width: 640px) {
+  .mt-strip {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    scroll-snap-type: x proximity;
+    // Without this the snapport starts at the padding edge, so the first cell
+    // snaps flush to the screen and the page's own inset disappears.
+    scroll-padding-left: $inset;
+    scrollbar-width: none;
+    -webkit-mask-image: linear-gradient(to right, #000 calc(100% - 44px), transparent);
+    mask-image: linear-gradient(to right, #000 calc(100% - 44px), transparent);
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  }
+
+  .mt-strip__item {
+    flex: 0 0 auto;
+    width: 33vw;
+    max-width: 148px;
+    scroll-snap-align: start;
+
+    &--selected {
+      width: 62vw;
+      max-width: 260px;
+    }
+  }
+
+  // The nudge is a second ask for the signup band further down the page, and
+  // it crowds the header at this width.
+  .mt-nav__nudge {
+    display: none;
+  }
+
+  .mt-counts {
+    gap: 24px;
+  }
+}

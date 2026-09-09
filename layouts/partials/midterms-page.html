@@ -1,0 +1,960 @@
+{{- /*
+  The whole /midterms page body. Called by two thin layouts:
+
+    layouts/midterms/section.html  the live page, week = data current_week
+    layouts/midterms/single.html   a preview page, week = that page's week
+
+  Context: (dict "page" PAGE "week" INT "preview" BOOL)
+
+  This partial renders a complete HTML document rather than a baseof block, so
+  the page shares no header, footer or stylesheet with the rest of the site and
+  can be deleted in one piece after the midterms.
+
+  Weekly actions come from data/midterms.yml.
+*/ -}}
+{{- $page := .page -}}
+{{- $preview := .preview -}}
+{{- $d := site.Data.midterms -}}
+{{- $cur := .week -}}
+{{- $total := len $d.weeks -}}
+{{- /* Week 0 is the pre-launch state: no weekly action, nothing to unlock. */ -}}
+{{- $prelaunch := lt $cur 1 -}}
+{{- /* Release dates read as dates, not countdowns. No points, and September is
+       "Sept" rather than Go's "Sep"; the short months stay whole. */ -}}
+{{- $months := dict
+  "January" "Jan" "February" "Feb" "March" "March" "April" "April"
+  "May" "May" "June" "June" "July" "July" "August" "Aug"
+  "September" "Sept" "October" "Oct" "November" "Nov" "December" "Dec" -}}
+{{- /* Which week the program is on, as against which week this page shows. They
+       differ only on an archive page: /midterms/week/3/ rendered while week 5
+       is live. A preview deliberately pretends its week is the live one, which
+       is the whole point of previewing. */ -}}
+{{- $live := $d.current_week -}}
+{{- if $preview }}{{ $live = $cur }}{{ end -}}
+{{- $zero := $d.week_zero -}}
+{{- $week := $zero -}}
+{{- if not $prelaunch }}{{ $week = index (where $d.weeks "number" $cur) 0 }}{{ end -}}
+{{- /* Weeks flagged state_deck render the VoteAmerica registration copy for the
+       reader's state instead of a copy-and-paste message. */ -}}
+{{- $deck := false -}}
+{{- if and (not $prelaunch) $week.state_deck -}}
+  {{- $deck = index site.Data.midterms_states.states $d.state.abbr -}}
+{{- end -}}
+{{- /* On previews, flag detail fields the week has not been written with yet. */ -}}
+{{- $missing := slice -}}
+{{- $required := slice "intro" "message" "copy_cta" "rewrite_cta" "confirm" "confirm_count" "why" -}}
+{{- if $deck }}{{ $required = slice "intro" "deck_cta" "confirm" "confirm_count" "why" }}{{ end -}}
+{{- if and $preview (not $prelaunch) -}}
+  {{- range $required -}}
+    {{- if not (index $week .) }}{{ $missing = $missing | append . }}{{ end -}}
+  {{- end -}}
+{{- end -}}
+{{- /* Weeks that send the reader to a voting tool name it, and we link our own
+       /vote/ page rather than the state's site: same VoteAmerica tool, but the
+       reader stays on 5calls. Falls back to the state deck's URL if the page
+       named is not there. */ -}}
+{{- $tool := "" -}}
+{{- if and (not $prelaunch) $week.tool -}}
+  {{- with site.GetPage (printf "/vote/%s" $week.tool) }}{{ $tool = .RelPermalink }}{{ end -}}
+{{- end -}}
+{{- /* The /midterms/ root, whichever layout called us: the live page is the
+       section itself, a preview page is a child of it. */ -}}
+{{- $base := "/midterms/" -}}
+{{- with site.GetPage "/midterms" }}{{ $base = .RelPermalink }}{{ end -}}
+{{- /* The closing band's copy names the next week, so pre-launch overrides it. */ -}}
+{{- $rem := $d.remind -}}
+{{- if $prelaunch }}{{ with $zero.remind }}{{ $rem = merge $d.remind . }}{{ end }}{{ end -}}
+{{- $upcoming := where $d.weeks "number" "gt" $live -}}
+{{- $next := "" -}}
+{{- with $upcoming }}{{ $next = index . 0 }}{{ end -}}
+{{- $style := resources.Get "sass/midterms.scss" | css.Sass | resources.Minify | resources.Fingerprint -}}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{{ $page.Title }} ⭑ {{ site.Title }}</title>
+    <meta name="description" content="{{ $page.Params.description }}" />
+    {{- /* Self-referencing, to collapse the query-string variants this page will
+           collect: utm tags from the newsletter and social, and the ?state= and
+           ?week= parameters, all of which render the same page. Previews get
+           none — they are noindex, and a canonical pointing elsewhere would
+           contradict that. */ -}}
+    {{- if not $preview }}
+      <link rel="canonical" href="{{ $page.Permalink }}" />
+    {{- end }}
+
+    <meta property="og:title" content="{{ $page.Title }} ⭑ {{ site.Title }}" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="{{ $page.Permalink }}" />
+    <meta property="og:description" content="{{ $page.Params.description }}" />
+    <meta property="og:site_name" content="{{ site.Title }}" />
+    <meta property="og:image" content="{{ site.BaseURL }}images/midterms/share.png" />
+    <meta property="og:image:width" content="1280" />
+    <meta property="og:image:height" content="720" />
+    <meta property="og:image:alt" content="5 Minute Midterms — five minutes a week, protect your vote." />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="@make5calls" />
+    <meta name="twitter:title" content="{{ $page.Title }} ⭑ {{ site.Title }}" />
+    <meta name="twitter:description" content="{{ $page.Params.description }}" />
+    <meta name="twitter:image" content="{{ site.BaseURL }}images/midterms/share.png" />
+    <meta name="twitter:image:alt" content="5 Minute Midterms — five minutes a week, protect your vote." />
+
+    {{- /* The numeral out of the lockup, on the page's cream. The clock hand and
+           its grey flag are dropped: they turn to mush at 16px, where the whole
+           mark has to survive. Declared here only, so the rest of the site keeps
+           the 5 Calls favicon. */ -}}
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ site.BaseURL }}images/midterms/favicon-32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ site.BaseURL }}images/midterms/favicon-16.png" />
+    <link rel="apple-touch-icon" href="{{ site.BaseURL }}images/midterms/apple-touch-icon.png" />
+    <meta name="theme-color" content="#F98033" />
+    {{- if $preview }}
+      <meta name="robots" content="noindex, nofollow" />
+    {{- else }}
+      <script>
+        // /midterms?week=2 is a shortcut to the build-time preview page for
+        // that week. Runs before paint so the live page is never shown first.
+        (function () {
+          var w = new URLSearchParams(location.search).get("week");
+          if (w !== null && /^[0-9]+$/.test(w)) {
+            location.replace({{ printf "%spreview/" $page.RelPermalink }} + Number(w) + "/");
+          }
+        })();
+      </script>
+    {{- end }}
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600&family=Bebas+Neue&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="{{ $style.RelPermalink }}" />
+
+    <script defer data-domain="5calls.org" src="https://plausible.io/js/script.tagged-events.js"></script>
+  </head>
+  <body>
+    {{- if $preview }}
+      <div class="mt-preview">
+        <b>PREVIEW</b>
+        <span>
+          {{ if $prelaunch }}Week 0 — the pre-launch page{{ else }}Week {{ $cur }} of {{ $total }}{{ end }}.
+          Not the live page.
+        </span>
+        {{- with $missing }}
+          <em>Not written yet: {{ delimit . ", " }}</em>
+        {{- end }}
+        {{- if $deck }}
+          <em data-state-review{{ if not $deck.needs_review }} hidden{{ end }}>
+            {{- if $deck.needs_review }}{{ $d.state.abbr }} deck flagged upstream: {{ $deck.review_reason }}{{ end -}}
+          </em>
+        {{- end }}
+        {{- /* Completion normally accrues a week at a time from the confirm
+               box, which makes the strip's done state tedious to eyeball. These
+               write the same localStorage list directly. Preview pages only. */ -}}
+        <fieldset class="mt-preview__done" data-preview-done>
+          <legend>DONE</legend>
+          {{- range seq 1 $total }}
+            <label>
+              <input type="checkbox" value="{{ . }}" />
+              <span>{{ . }}</span>
+            </label>
+          {{- end }}
+          <button type="button" data-preview-clear>clear</button>
+        </fieldset>
+        <nav>
+          {{- range seq 0 $total }}
+            {{- $n := . }}
+            <a href="{{ $base }}preview/{{ $n }}/"{{ if eq $n $cur }} class="is-current"{{ end }}>{{ $n }}</a>
+          {{- end }}
+          <a href="{{ $base }}">live</a>
+        </nav>
+      </div>
+    {{- end }}
+    <div class="mt">
+      <div class="mt-rule"></div>
+
+      <header class="mt-header">
+        <div class="mt-brand">
+          <img class="mt-logo" src="{{ site.BaseURL }}images/midterms/lockup.png"
+               alt="5 Minute Midterms" width="416" height="256" />
+          {{- partial "midterms-by.html" . }}
+        </div>
+        <nav class="mt-nav">
+          {{- /* Week zero has nothing that varies by state, so there is nothing
+                 to pick yet. */ -}}
+          {{- if not $prelaunch }}
+            {{- /* A native select sizes itself to its widest option, which left a gap
+                   next to shorter state names. So the visible label is our own
+                   element and the select sits transparent on top of the whole
+                   pill: native picker and keyboard, our typography. */ -}}
+            <span class="mt-pill mt-pill--blue mt-state-toggle">
+              <label class="visually-hidden" for="mt-state">Your state</label>
+              <span class="mt-state-toggle__value" data-state-label>{{ $d.state.name }}</span>
+              <span class="mt-state-toggle__caret" aria-hidden="true"></span>
+              <select id="mt-state" data-state-select>
+                {{- range sort site.Data.midterms_states.states "name" }}
+                  <option value="{{ .code }}"{{ if eq .code $d.state.abbr }} selected{{ end }}>{{ .name }}</option>
+                {{- end }}
+              </select>
+            </span>
+          {{- end }}
+          <a href="#remind" class="mt-pill mt-nav__nudge">{{ $d.nav.nudge }}</a>
+        </nav>
+      </header>
+
+      <section class="mt-top">
+        <div>
+          <h1 class="mt-display mt-top__title">{{ $d.intro.title }}</h1>
+        </div>
+        {{- /* Nothing has been completed before the program starts, so week zero
+               shows no tallies at all — not the reader's, and not the total. */ -}}
+        {{- if not $prelaunch }}
+          <div class="mt-counts">
+            <div class="mt-count">
+              <b>{{ lang.FormatNumberCustom 0 $d.total_actions }}</b>
+              <span>TOTAL COMPLETED</span>
+            </div>
+            <div class="mt-count mt-count--blue">
+              <b><span data-yours>0</span> / {{ $total }}</b>
+              <span>YOUR PROGRESS</span>
+            </div>
+          </div>
+        {{- end }}
+      </section>
+
+      {{- /* The timeline, and the only place upcoming weeks are listed now that
+             the "what's ahead" grid is gone. Done state is per reader, so it
+             lives in localStorage and the strip is re-rendered on load: the
+             markup below is the not-yet-done baseline. */ -}}
+      <section id="weeks" class="mt-strip" aria-label="Your {{ $total }} weeks">
+        {{- range $d.weeks }}
+          {{- /* The card is the week you are reading; NOW is a label on whichever
+                 week the program is actually on. On the live page they are the
+                 same cell, on an archive page they are not. */ -}}
+          {{- $sel := eq .number $cur }}
+          {{- $now := eq .number $live }}
+          {{- /* Where a cell goes, if anywhere. Previews link to previews so the
+                 team can walk every week. Otherwise a week that has run has its
+                 own page, the live week is /midterms/ itself, and a week that
+                 has not run has no page to link to — that is what stops a reader
+                 walking forward, rather than a hidden link. */ -}}
+          {{- $href := "" -}}
+          {{- if $preview -}}
+            {{- $href = printf "%spreview/%d/" $base .number -}}
+          {{- else if $now -}}
+            {{- $href = $base -}}
+          {{- else if lt .number $live -}}
+            {{- $href = printf "%sweek/%d/" $base .number -}}
+          {{- end -}}
+          {{- /* No href when there is nowhere to go: an anchor without one is
+                 inert and unfocusable, so a future week reads as a cell, not a
+                 dead link. */ -}}
+          <a class="mt-strip__item{{ if $sel }} mt-strip__item--selected{{ end }}"
+             {{ with $href }}href="{{ . }}"{{ end }}
+             {{ if $sel }}aria-current="page"{{ end }}
+             data-strip-week="{{ .number }}">
+            {{- /* Only the selected cell needs naming; the rest are read as a
+                   row, where the action and its date are the whole point. */ -}}
+            {{- if $sel }}<span class="mt-strip__num">Week {{ .number }}</span>{{ end }}
+            {{- /* A week that has not run yet keeps its subject to itself. */ -}}
+            {{- $locked := gt .number $live }}
+            <span class="mt-strip__label{{ if $locked }} mt-strip__label--locked{{ end }}">
+              {{- if $sel }}{{ .title }}{{ else if $locked }}Upcoming{{ else }}{{ .short }}{{ end -}}
+            </span>
+            <span class="mt-strip__meta">
+              <span class="mt-strip__done">DONE</span>
+              <span class="mt-strip__when">
+                {{- if gt .number $live -}}
+                  {{- $release := time.AsTime .release -}}
+                  <time datetime="{{ $release.Format "2006-01-02T15:04:05Z07:00" }}">
+                    {{- index $months ($release.Format "January") }} {{ $release.Format "2" -}}
+                  </time>
+                {{- else if lt .number $live -}}
+                  {{- /* Released, not done: still open, and worth going back for. */ -}}
+                  CATCH UP
+                {{- else -}}
+                  <span class="mt-strip__now">NOW</span>
+                {{- end -}}
+              </span>
+            </span>
+          </a>
+        {{- end }}
+      </section>
+
+      {{- /* Week zero has no sidebar beside the action, so its column runs the
+             full shell and the text measures come off with it. */ -}}
+      <main class="mt-action{{ if $prelaunch }} mt-action--solo{{ end }}">
+        {{- if $prelaunch }}
+          {{- /* Week 0: the action is signing up, so the form stands in for the
+                 weekly message card and carries the #remind anchor. Nothing is
+                 completable yet, so there is no confirm row and no image panel. */ -}}
+          <div class="mt-action__main">
+            <h2 class="mt-action__title">{{ $zero.title }}</h2>
+            {{- /* One string or a list of them; a list becomes a paragraph each,
+                   spaced by the column's own gap. */ -}}
+            {{- $lede := $zero.lede }}
+            {{- if not (reflect.IsSlice $lede) }}{{ $lede = slice $lede }}{{ end }}
+            {{- range $lede }}
+              <p class="mt-action__intro">{{ . | markdownify }}</p>
+            {{- end }}
+
+            <div id="signup" class="mt-message">
+              {{- /* The same Buttondown list the rest of the site subscribes to,
+                     tagged so midterms sign-ups can be told apart. */ -}}
+              <form class="mt-signup__form"
+                    action="https://buttondown.com/api/emails/embed-subscribe/5calls"
+                    method="post"
+                    target="popupwindow"
+                    onsubmit="window.open('https://buttondown.com/5calls?tag=midterms', 'popupwindow')">
+                <label class="visually-hidden" for="mt-signup-email">Email address</label>
+                <input id="mt-signup-email" name="email" type="email" autocomplete="email" inputmode="email" autocapitalize="off" spellcheck="false"
+                       placeholder="{{ $zero.signup.placeholder }}" />
+                <input type="hidden" name="tag" value="midterms" />
+                <button type="submit" class="mt-pill mt-pill--solid">{{ $zero.signup.cta }}</button>
+              </form>
+              {{- with $next }}
+                <p class="mt-signup__note">
+                  Week {{ .number }} goes out {{ (time.AsTime .release).Format "Monday, January 2" }}.
+                </p>
+              {{- end }}
+            </div>
+
+            {{- range $zero.body }}
+              <p class="mt-action__body">{{ . | markdownify }}</p>
+            {{- end }}
+          </div>
+
+        {{- else }}
+          <div class="mt-action__main">
+            <h2 class="mt-action__title">{{ $week.title }}</h2>
+            {{- $intro := $week.intro }}
+            {{- if not (reflect.IsSlice $intro) }}{{ $intro = slice $intro }}{{ end }}
+            {{- range $intro }}
+              <p class="mt-action__intro">{{ . | markdownify }}</p>
+            {{- end }}
+
+            {{- if $deck }}
+              <div class="mt-message mt-deck">
+                {{- /* Headline, date and methods read as one statement, so they share
+                       a block and a typeface, with the state tag riding on the same
+                       top line. Every slot is always in the DOM so the switcher can
+                       refill it; states without a deadline (North Dakota) promote
+                       their methods line into the date slot. */ -}}
+                <div class="mt-deck__top">
+                  <div class="mt-deck__lede">
+                    <div class="mt-deck__detail" data-deck="headline">{{ $deck.headline }}</div>
+                    <div class="mt-deck__date" data-deck="hero">{{ or $deck.hero_date $deck.channels }}</div>
+                    <div class="mt-deck__detail" data-deck="channels"{{ if not $deck.hero_date }} hidden{{ end }}>{{ $deck.channels }}</div>
+                  </div>
+                  <div class="mt-pill mt-pill--tag" data-deck="tag">{{ upper $deck.name }}</div>
+                </div>
+                <ul class="mt-deck__notes">
+                  <li data-deck="secondary"{{ if not $deck.secondary }} hidden{{ end }}>{{ $deck.secondary }}</li>
+                  <li data-deck="mail"{{ if not $deck.mail }} hidden{{ end }}>{{ $deck.mail }}</li>
+                </ul>
+                <div class="mt-message__actions">
+                  {{- if $tool }}
+                    <a class="mt-pill mt-pill--solid" href="{{ $tool }}">{{ $week.deck_cta }}</a>
+                  {{- else }}
+                    {{- /* data-deck marks it for the state switcher to rewrite. */ -}}
+                    <a class="mt-pill mt-pill--solid" href="{{ $deck.url }}" rel="noopener" data-deck="url">{{ $week.deck_cta }}</a>
+                  {{- end }}
+                </div>
+                {{- with $week.deck_note }}
+                  <p class="mt-deck__foot">{{ . | markdownify }}</p>
+                {{- end }}
+              </div>
+            {{- else }}
+              <div class="mt-message">
+                {{- /* Same top line as the registration deck: a label over a date on
+                       the left, the state tag on the right. Either half can be
+                       absent — a week with neither drops the row entirely. */ -}}
+                {{- if or $week.headline $week.headline_date $week.state_specific }}
+                  <div class="mt-deck__top">
+                    <div class="mt-deck__lede">
+                      {{- with $week.headline }}<div class="mt-deck__detail">{{ . }}</div>{{ end }}
+                      {{- with $week.headline_date }}<div class="mt-deck__date">{{ . }}</div>{{ end }}
+                    </div>
+                    {{- if $week.state_specific }}
+                      <div class="mt-pill mt-pill--tag" data-state-name-upper>{{ upper $d.state.name }}</div>
+                    {{- end }}
+                  </div>
+                {{- end }}
+                <p class="mt-message__text" data-message>{{ $week.message }}</p>
+                <div class="mt-message__actions">
+                  <button type="button" class="mt-pill mt-pill--solid" data-copy>{{ $week.copy_cta }}</button>
+                  <!-- FPO: rewrite tool is not built yet. -->
+                  <span class="mt-pill mt-pill--blue">{{ $week.rewrite_cta }}</span>
+                </div>
+              </div>
+            {{- end }}
+
+            <label class="mt-confirm">
+              <input type="checkbox" data-confirm value="{{ $cur }}" />
+              <span>{{ $week.confirm }}</span>
+              <em>{{ $week.confirm_count }}</em>
+            </label>
+          </div>
+
+          <aside class="mt-images" data-images>
+            <div class="mt-images__head">
+              <span class="mt-mono">WEEK {{ $cur }} IMAGES</span>
+              <span class="mt-images__status" data-images-status>LOCKED</span>
+            </div>
+            {{- /* The reader's own share art, drawn at build time for the state the
+                   page rendered with. FPO plates for now. The state switcher does
+                   not swap these yet — it would need each state's URLs in the deck
+                   it already ships to the page. */ -}}
+            {{- $cardState := index site.Data.midterms_states.states $d.state.abbr }}
+            {{- $vert := partial "midterms-card.html" (dict "crop" "vertical" "week" $week "state" $cardState) }}
+            {{- $horiz := partial "midterms-card.html" (dict "crop" "horizontal" "week" $week "state" $cardState) }}
+            {{- /* Each crop opens the share modal. Buttons rather than images
+                   alone, so they are reachable by keyboard and can be disabled
+                   while the week is still locked. */ -}}
+            <div class="mt-images__set">
+              <button type="button" class="mt-shot-btn" data-shot-open="vert"
+                      title="{{ $d.share.hint }}" disabled>
+                <img class="mt-shot mt-shot--portrait" src="{{ $vert.RelPermalink }}"
+                     alt="Week {{ $cur }} share image, vertical crop" data-shot="vert"
+                     width="{{ $vert.Width }}" height="{{ $vert.Height }}" />
+                <span class="mt-shot__hint">{{ partial "midterms-icon.html" (dict "name" "expand" "size" 15) }}</span>
+                <span class="visually-hidden">{{ $d.share.hint }}</span>
+              </button>
+              <div class="mt-shot-col">
+                <button type="button" class="mt-shot-btn" data-shot-open="horiz"
+                        title="{{ $d.share.hint }}" disabled>
+                  <img class="mt-shot mt-shot--landscape" src="{{ $horiz.RelPermalink }}"
+                       alt="Week {{ $cur }} share image, horizontal crop" data-shot="horiz"
+                       width="{{ $horiz.Width }}" height="{{ $horiz.Height }}" />
+                  <span class="mt-shot__hint">{{ partial "midterms-icon.html" (dict "name" "expand" "size" 15) }}</span>
+                  <span class="visually-hidden">{{ $d.share.hint }}</span>
+                </button>
+              </div>
+            </div>
+            <p class="mt-images__note">{{ $d.images.locked_note }}</p>
+
+          </aside>
+        {{- end }}
+      </main>
+
+      {{- with $week.why }}
+        <section id="why" class="mt-why">
+          <div class="mt-why__lede">
+            <h2>{{ .heading | markdownify }}</h2>
+          </div>
+          <div class="mt-why__stats">
+            {{- range .stats }}
+              <div class="mt-stat">
+                <b>{{ .value | markdownify }}</b>
+                <span>{{ .text | markdownify }}</span>
+              </div>
+            {{- end }}
+          </div>
+        </section>
+      {{- end }}
+
+      {{- /* The closing signup band runs in every state, including pre-launch,
+             where it is the second ask after the week-zero card's own form. */ -}}
+      <section id="remind" class="mt-remind">
+        <div>
+          <h2>{{ $rem.title }}</h2>
+          <p>{{ $rem.subtitle }}</p>
+        </div>
+        <form class="mt-remind__form"
+              action="https://buttondown.com/api/emails/embed-subscribe/5calls"
+              method="post"
+              target="popupwindow"
+              onsubmit="window.open('https://buttondown.com/5calls?tag=midterms', 'popupwindow')">
+          <label class="visually-hidden" for="mt-email">Email address</label>
+          <input id="mt-email" name="email" type="email" autocomplete="email" inputmode="email" autocapitalize="off" spellcheck="false"
+                 placeholder="{{ $rem.placeholder }}" />
+          <input type="hidden" name="tag" value="midterms" />
+          <button type="submit">{{ $rem.cta }}</button>
+        </form>
+      </section>
+
+      {{- if not $prelaunch }}
+        {{- /* One modal, refilled with whichever crop was tapped. A native
+               <dialog> brings Esc, the backdrop and focus handling with it. */ -}}
+        {{- $shareBase := printf "%sshare/%d/" $base $cur }}
+        <dialog class="mt-modal" data-modal data-share-base="{{ $shareBase }}">
+          <button type="button" class="mt-modal__close" data-modal-close aria-label="Close">
+            {{- partial "midterms-icon.html" (dict "name" "close" "size" 22) -}}
+          </button>
+          <img class="mt-modal__img" data-modal-img src="" alt="" />
+          <div class="mt-modal__actions">
+            <button type="button" class="mt-pill mt-pill--solid" data-share hidden>{{ $d.share.cta }}</button>
+            {{- /* Label and behaviour depend on which crop was opened. */ -}}
+            <button type="button" class="mt-pill" data-copy-action
+                    data-copy-image="{{ $d.share.copy_image }}"
+                    data-copy-link="{{ $d.share.copy_link }}">{{ $d.share.copy_image }}</button>
+            <a class="mt-pill" data-share-download href="" download>{{ $d.share.download }}</a>
+          </div>
+          {{- /* The mark carries the platform; the name is there for screen
+                 readers, since four unlabelled glyphs say nothing aloud. */ -}}
+          <div class="mt-modal__links">
+            {{- range slice
+                (dict "key" "x" "name" "X")
+                (dict "key" "bsky" "name" "Bluesky")
+                (dict "key" "threads" "name" "Threads")
+                (dict "key" "facebook" "name" "Facebook") }}
+              <a data-share-link="{{ .key }}" rel="noopener" target="_blank" href=""
+                 title="Share on {{ .name }}">
+                {{- partial "midterms-icon.html" (dict "name" .key) -}}
+                <span class="visually-hidden">Share on {{ .name }}</span>
+              </a>
+            {{- end }}
+          </div>
+        </dialog>
+      {{- end }}
+
+      <footer class="mt-footer">
+        <div class="mt-brand mt-brand--small">
+          <img class="mt-logo" src="{{ site.BaseURL }}images/midterms/lockup.png"
+               alt="5 Minute Midterms" width="416" height="256" />
+          {{- partial "midterms-by.html" . }}
+        </div>
+        <div class="mt-footer__links">
+          {{- range $d.footer_links }}
+            <a href="{{ .url }}">{{ .title }}</a>
+          {{- end }}
+        </div>
+      </footer>
+    </div>
+
+    {{- /* The whole deck, so switching states never needs a round trip. Trimmed
+           to what the page renders; review notes ride along on previews only. */ -}}
+    {{- if not $prelaunch }}
+    {{- $payload := dict -}}
+    {{- range $code, $s := site.Data.midterms_states.states -}}
+      {{- $entry := dict "name" $s.name "headline" $s.headline "hero" $s.hero_date
+          "channels" $s.channels "secondary" $s.secondary "mail" $s.mail "url" $s.url -}}
+      {{- if $preview }}{{ $entry = merge $entry (dict "review" $s.review_reason) }}{{ end -}}
+      {{- /* The share art for this week in this state. Drawing all 51 up front is
+             what lets the switcher swap them with no round trip; the same
+             resources back the /midterms/share/ cards, so they are drawn once. */ -}}
+      {{- if not $prelaunch -}}
+        {{- $entry = merge $entry (dict
+            "vert" (partial "midterms-card.html" (dict "crop" "vertical" "week" $week "state" $s)).RelPermalink
+            "horiz" (partial "midterms-card.html" (dict "crop" "horizontal" "week" $week "state" $s)).RelPermalink) -}}
+      {{- end -}}
+      {{- $payload = merge $payload (dict $code $entry) -}}
+    {{- end }}
+    <script type="application/json" id="mt-states">{{ $payload | jsonify | safeJS }}</script>
+    {{- end }}
+
+    <script>
+      // Everything the page tracks lives in this browser only — there is no
+      // account behind /midterms.
+      (function () {
+        var KEY = "5calls-midterms-done";
+        var STATE_KEY = "5calls-midterms-state";
+        // The main 5calls.org store, read for a location the reader already set.
+        var SITE_KEY = "persist:fivecalls";
+        var TOTAL = {{ $total }};
+        var CURRENT = {{ $cur }};
+
+        function read() {
+          try {
+            return JSON.parse(localStorage.getItem(KEY)) || [];
+          } catch (e) {
+            return [];
+          }
+        }
+
+        function write(weeks) {
+          try {
+            localStorage.setItem(KEY, JSON.stringify(weeks));
+          } catch (e) {
+            /* private mode, nothing to do */
+          }
+        }
+
+        var done = read();
+
+        var yours = document.querySelector("[data-yours]");
+        function renderCount() {
+          if (yours) yours.textContent = String(done.length);
+        }
+
+        // The strip ships in its not-done baseline, so paint the stored weeks.
+        var stripItems = document.querySelectorAll("[data-strip-week]");
+        function renderStrip() {
+          stripItems.forEach(function (el) {
+            var week = Number(el.getAttribute("data-strip-week"));
+            el.classList.toggle("is-done", done.indexOf(week) > -1);
+          });
+        }
+
+        var copy = document.querySelector("[data-copy]");
+        var message = document.querySelector("[data-message]");
+        if (copy && message && navigator.clipboard) {
+          var label = copy.textContent;
+          copy.addEventListener("click", function () {
+            navigator.clipboard.writeText(message.textContent.trim()).then(function () {
+              copy.textContent = "Copied";
+              setTimeout(function () {
+                copy.textContent = label;
+              }, 2000);
+            });
+          });
+        }
+
+        var confirmBox = document.querySelector("[data-confirm]");
+        var images = document.querySelector("[data-images]");
+        var status = document.querySelector("[data-images-status]");
+        function renderUnlock() {
+          var unlocked = done.indexOf(CURRENT) > -1;
+          if (confirmBox) confirmBox.checked = unlocked;
+          if (images) images.classList.toggle("is-unlocked", unlocked);
+          shotButtons.forEach(function (btn) {
+            btn.disabled = !unlocked;
+          });
+          if (status) status.textContent = unlocked ? "UNLOCKED" : "LOCKED";
+        }
+        if (confirmBox) {
+          confirmBox.addEventListener("change", function () {
+            var at = done.indexOf(CURRENT);
+            if (confirmBox.checked && at === -1) done.push(CURRENT);
+            if (!confirmBox.checked && at > -1) done.splice(at, 1);
+            write(done);
+            renderUnlock();
+            renderCount();
+            renderStrip();
+            renderPreviewDone();
+          });
+        }
+
+        // ── Preview-bar completion switches ──────────────────────────────
+        // Only rendered on preview pages. They edit the same stored list the
+        // confirm box writes, so the strip and the counter follow along.
+        var previewDone = document.querySelectorAll("[data-preview-done] input");
+        function renderPreviewDone() {
+          previewDone.forEach(function (box) {
+            box.checked = done.indexOf(Number(box.value)) > -1;
+          });
+        }
+        previewDone.forEach(function (box) {
+          box.addEventListener("change", function () {
+            var week = Number(box.value);
+            var at = done.indexOf(week);
+            if (box.checked && at === -1) done.push(week);
+            if (!box.checked && at > -1) done.splice(at, 1);
+            done.sort(function (a, b) {
+              return a - b;
+            });
+            write(done);
+            renderStrip();
+            renderCount();
+            renderUnlock();
+          });
+        });
+        var previewClear = document.querySelector("[data-preview-clear]");
+        if (previewClear) {
+          previewClear.addEventListener("click", function () {
+            done.length = 0;
+            write(done);
+            renderStrip();
+            renderCount();
+            renderUnlock();
+            renderPreviewDone();
+          });
+        }
+
+        // ── Sharing ──────────────────────────────────────────────────────
+        // Tapping a crop opens the modal for that crop. From there a phone can
+        // hand the file to the native sheet, which is the only route into
+        // Instagram; everything else posts the reader's own state share URL,
+        // whose card carries that state's rules.
+        var modal = document.querySelector("[data-modal]");
+        var modalImg = document.querySelector("[data-modal-img]");
+        var shareBtn = document.querySelector("[data-share]");
+        var copyBtn = document.querySelector("[data-copy-action]");
+        var shareDownload = document.querySelector("[data-share-download]");
+        var shotButtons = document.querySelectorAll("[data-shot-open]");
+        var CAPTION = {{ $d.share.caption }};
+        var SHARE_BASE = modal ? modal.getAttribute("data-share-base") : "";
+        var shareFile = null;
+        var shareBlob = null;
+        var openCrop = "vert";
+
+        function currentState() {
+          return select ? select.value : "";
+        }
+
+        function shareUrlFor(code) {
+          return new URL(SHARE_BASE + String(code).toLowerCase() + "/", location.href).href;
+        }
+
+        function cardUrl(crop) {
+          var s = states[currentState()];
+          return s ? s[crop === "vert" ? "vert" : "horiz"] : null;
+        }
+
+        // Fetched before the click that shares it: on iOS, reaching share()
+        // after an await loses the user gesture and the sheet never opens.
+        function primeShareFile(url) {
+          shareFile = null;
+          shareBlob = null;
+          if (shareBtn) shareBtn.hidden = true;
+          if (!url) return;
+          fetch(url)
+            .then(function (r) {
+              return r.ok ? r.blob() : null;
+            })
+            .then(function (blob) {
+              if (!blob) return;
+              shareBlob = blob;
+              if (!navigator.canShare) return;
+              var file = new File([blob], "5-minute-midterms.png", { type: blob.type || "image/png" });
+              if (!navigator.canShare({ files: [file] })) return;
+              shareFile = file;
+              if (shareBtn) shareBtn.hidden = false;
+            })
+            .catch(function () {
+              /* the links below stay the way to share */
+            });
+        }
+
+        // The vertical crop is bound for Instagram, where a link does nothing,
+        // so it copies the image. The horizontal one copies the link.
+        function copiesImage() {
+          return openCrop === "vert" && !!window.ClipboardItem;
+        }
+
+        function renderCopyButton() {
+          if (!copyBtn) return;
+          copyBtn.textContent = copyBtn.getAttribute(
+            copiesImage() ? "data-copy-image" : "data-copy-link"
+          );
+        }
+
+        function applyShareState(code) {
+          var url = shareUrlFor(code);
+          var withUrl = CAPTION + " " + url;
+          var set = function (name, href) {
+            var el = document.querySelector("[data-share-link='" + name + "']");
+            if (el) el.href = href;
+          };
+          set("x", "https://x.com/intent/post?text=" + encodeURIComponent(CAPTION) +
+                   "&url=" + encodeURIComponent(url));
+          set("bsky", "https://bsky.app/intent/compose?text=" + encodeURIComponent(withUrl));
+          set("threads", "https://www.threads.net/intent/post?text=" + encodeURIComponent(withUrl));
+          set("facebook", "https://www.facebook.com/sharer/sharer.php?u=" + encodeURIComponent(url));
+          var card = cardUrl(openCrop);
+          if (shareDownload && card) shareDownload.href = card;
+          if (modalImg && card && modal && modal.open) modalImg.src = card;
+        }
+
+        shotButtons.forEach(function (btn) {
+          btn.addEventListener("click", function () {
+            if (!modal) return;
+            openCrop = btn.getAttribute("data-shot-open");
+            var card = cardUrl(openCrop);
+            var img = btn.querySelector("[data-shot]");
+            if (modalImg && card) {
+              modalImg.src = card;
+              modalImg.alt = img ? img.alt : "";
+            }
+            applyShareState(currentState());
+            primeShareFile(card);
+            renderCopyButton();
+            modal.showModal();
+          });
+        });
+
+        var modalClose = document.querySelector("[data-modal-close]");
+        if (modalClose) {
+          modalClose.addEventListener("click", function () {
+            modal.close();
+          });
+        }
+        if (modal) {
+          // Clicking the backdrop lands on the dialog itself, not its contents.
+          modal.addEventListener("click", function (e) {
+            if (e.target === modal) modal.close();
+          });
+        }
+
+        if (shareBtn) {
+          shareBtn.addEventListener("click", function () {
+            if (!shareFile) return;
+            navigator
+              .share({ files: [shareFile], text: CAPTION, url: shareUrlFor(currentState()) })
+              .catch(function () {
+                /* dismissed, or the target refused the file */
+              });
+          });
+        }
+
+        if (copyBtn && navigator.clipboard) {
+          copyBtn.addEventListener("click", function () {
+            var done = function (ok) {
+              copyBtn.textContent = ok ? "Copied" : "Couldn't copy";
+              setTimeout(renderCopyButton, 2000);
+            };
+            if (copiesImage()) {
+              if (!shareBlob) return done(false);
+              // Written straight from the blob fetched when the modal opened,
+              // so the write stays inside the click.
+              navigator.clipboard
+                .write([new ClipboardItem({ "image/png": shareBlob })])
+                .then(function () {
+                  done(true);
+                })
+                .catch(function () {
+                  done(false);
+                });
+              return;
+            }
+            navigator.clipboard
+              .writeText(shareUrlFor(currentState()))
+              .then(function () {
+                done(true);
+              })
+              .catch(function () {
+                done(false);
+              });
+          });
+        }
+
+        // ── State switcher ───────────────────────────────────────────────
+        // The selected state re-fills the deck card and every place a state
+        // name appears. Server-rendered markup already holds one state, so
+        // this only runs when the reader picks a different one.
+        var states = {};
+        try {
+          states = JSON.parse(document.getElementById("mt-states").textContent);
+        } catch (e) {
+          /* leave the server-rendered state in place */
+        }
+        var select = document.querySelector("[data-state-select]");
+
+        function fill(sel, value) {
+          var el = document.querySelector("[data-deck='" + sel + "']");
+          if (!el) return;
+          el.textContent = value || "";
+          el.hidden = !value;
+        }
+
+        function applyState(code) {
+          var s = states[code];
+          if (!s) return;
+
+          // The deadline card. States with no deadline (North Dakota) show
+          // their channels line in the date slot instead.
+          var hero = document.querySelector("[data-deck='hero']");
+          if (hero) hero.textContent = s.hero || s.channels || "";
+          var channels = document.querySelector("[data-deck='channels']");
+          if (channels) {
+            channels.textContent = s.channels || "";
+            channels.hidden = !s.hero || !s.channels;
+          }
+          fill("headline", s.headline);
+          fill("secondary", s.secondary);
+          fill("mail", s.mail);
+          var tag = document.querySelector("[data-deck='tag']");
+          if (tag) tag.textContent = (s.name || "").toUpperCase();
+          var cta = document.querySelector("[data-deck='url']");
+          if (cta && s.url) cta.href = s.url;
+
+          // Everywhere else the state is named.
+          document.querySelectorAll("[data-state-name-upper]").forEach(function (el) {
+            el.textContent = (s.name || "").toUpperCase();
+          });
+          document.querySelectorAll("[data-state-abbr]").forEach(function (el) {
+            el.textContent = code;
+          });
+          document.querySelectorAll("[data-state-label]").forEach(function (el) {
+            el.textContent = s.name || "";
+          });
+
+          // The week's share art is state-specific too.
+          document.querySelectorAll("[data-shot]").forEach(function (img) {
+            var next = s[img.getAttribute("data-shot") === "vert" ? "vert" : "horiz"];
+            if (next) img.src = next;
+          });
+          applyShareState(code);
+
+          var review = document.querySelector("[data-state-review]");
+          if (review) {
+            review.textContent = s.review ? code + " deck flagged upstream: " + s.review : "";
+            review.hidden = !s.review;
+          }
+
+          if (select && select.value !== code) select.value = code;
+        }
+
+        function remember(code) {
+          try {
+            localStorage.setItem(STATE_KEY, code);
+          } catch (e) {
+            /* private mode */
+          }
+        }
+
+        // Anyone who has used 5calls.org already told us where they are. That
+        // store holds one JSON object whose slices are themselves JSON strings:
+        // {"locationState":"{\"address\":\"Boston,ma\",\"state\":\"MA\"}"}.
+        // Read-only, and never written back — the main site owns that key.
+        function siteState() {
+          try {
+            var raw = localStorage.getItem(SITE_KEY);
+            if (!raw) return null;
+            var slice = JSON.parse(raw).locationState;
+            if (!slice) return null;
+            var loc = typeof slice === "string" ? JSON.parse(slice) : slice;
+            return (loc.state || "").toUpperCase() || null;
+          } catch (e) {
+            /* malformed or unreadable, fall through to the rendered state */
+            return null;
+          }
+        }
+
+        if (select) {
+          // ?state=TX overrides the stored choice, for sharing and previews.
+          var param = new URLSearchParams(location.search).get("state");
+          var stored = null;
+          try {
+            stored = localStorage.getItem(STATE_KEY);
+          } catch (e) {
+            /* private mode */
+          }
+          // A choice made on this page wins; otherwise borrow the main site's,
+          // which is left unremembered so it keeps tracking that site.
+          var initial = (param || stored || siteState() || "").toUpperCase();
+          if (states[initial]) {
+            if (initial !== select.value) applyState(initial);
+            // A shared ?state= link becomes the reader's choice from here on.
+            if (param) remember(initial);
+          }
+
+          select.addEventListener("change", function () {
+            applyState(select.value);
+            remember(select.value);
+          });
+        }
+
+        // Drop anything stored for weeks that no longer exist.
+        done = done.filter(function (n) {
+          return n >= 1 && n <= TOTAL;
+        });
+        renderUnlock();
+        renderCount();
+        renderStrip();
+        renderPreviewDone();
+        if (modal && select) applyShareState(select.value);
+
+        // On a narrow screen the strip scrolls sideways; start it on the week
+        // being read rather than at week one.
+        var strip = document.querySelector(".mt-strip");
+        var selected = document.querySelector(".mt-strip__item--selected");
+        if (strip && selected && strip.scrollWidth > strip.clientWidth) {
+          // block:"nearest" so bringing it into view cannot scroll the page.
+          selected.scrollIntoView({ inline: "center", block: "nearest" });
+        }
+      })();
+    </script>
+  </body>
+</html>

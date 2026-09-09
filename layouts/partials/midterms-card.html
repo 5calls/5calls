@@ -1,0 +1,34 @@
+{{- /*
+  One week's share art for one state, drawn at build time.
+
+  Takes (dict "crop" "horizontal"|"vertical" "week" WEEK "state" STATE) and
+  returns the image resource, so the same copy lands on both crops from one
+  piece of art rather than 51 exports per week.
+
+  FPO: the plates carry their own placeholder wordmark and the type sits in a
+  fixed block. The real art will want its own layout; what is worth keeping is
+  the shrink-to-fit, since the copy varies from "Tue, Nov 3" to North Dakota's
+  "Just bring your ID on Election Day".
+*/ -}}
+{{- $plate := resources.Get (printf "images/midterms/share-%s-fpo.png" .crop) -}}
+{{- $font := resources.Get "fonts/BebasNeue-Regular.ttf" -}}
+{{- $ink := "#4a4a4a" -}}
+
+{{- /* Placed off each plate's own size: 1600x900 and 1080x1350. */ -}}
+{{- $m := dict "x" 90 "max" 1420 "week" 540 "weekSize" 54 "name" 606 "nameSize" 132 "date" 754 "dateSize" 88 -}}
+{{- if eq .crop "vertical" -}}
+  {{- $m = dict "x" 80 "max" 920 "week" 918 "weekSize" 54 "name" 984 "nameSize" 132 "date" 1132 "dateSize" 88 -}}
+{{- end -}}
+
+{{- $nameText := upper .state.name -}}
+{{- $dateText := upper (or .state.hero_date .state.channels) -}}
+{{- $nameSize := partial "midterms-fit.html" (dict "text" $nameText "size" $m.nameSize "max" $m.max) -}}
+{{- $dateSize := partial "midterms-fit.html" (dict "text" $dateText "size" $m.dateSize "max" $m.max) -}}
+
+{{- $week := images.Text (printf "WEEK %02d" .week.number) (dict
+      "x" $m.x "y" $m.week "size" $m.weekSize "color" $ink "font" $font) -}}
+{{- $name := images.Text $nameText (dict
+      "x" $m.x "y" $m.name "size" $nameSize "color" $ink "font" $font) -}}
+{{- $date := images.Text $dateText (dict
+      "x" $m.x "y" $m.date "size" $dateSize "color" $ink "font" $font) -}}
+{{- return $plate.Filter $week $name $date -}}

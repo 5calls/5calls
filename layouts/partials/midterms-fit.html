@@ -1,0 +1,19 @@
+{{- /*
+  The largest type size at which `text` still fits `max` pixels, never above
+  `size`. Takes (dict "text" STR "size" INT "max" INT).
+
+  Bebas advances about 0.34 of its size per character, measured off the drawn
+  cards. It is an estimate, so leave a little room rather than filling the
+  plate edge to edge: the point is that "District of Columbia" and North
+  Dakota's "Just bring your ID on Election Day" stay inside the art.
+*/ -}}
+{{- $adv := 0.34 -}}
+{{- $out := .size -}}
+{{- $chars := len .text -}}
+{{- if gt $chars 0 -}}
+  {{- $need := mul (mul $adv .size) $chars -}}
+  {{- if gt $need (float .max) -}}
+    {{- $out = int (div .max (mul $adv $chars)) -}}
+  {{- end -}}
+{{- end -}}
+{{- return $out -}}
