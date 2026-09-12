@@ -9,6 +9,13 @@ current_week: 1
 nav:
   nudge: Get reminders
 
+# The header and footer donate buttons. The main site's donate form, with this
+# page's own refcode so what the midterms program raises can be told apart from
+# everything else in ActBlue.
+donate:
+  label: Donate
+  url: https://secure.actblue.com/donate/5calls-donate?refcode=midterms&amount=25
+
 intro:
   title: Five minutes a week. Protect your vote.
 

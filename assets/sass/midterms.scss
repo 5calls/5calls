@@ -221,6 +221,17 @@ body {
     box-shadow: 0 6px 16px rgba($orange, 0.3);
   }
 
+  // Donate, in the header and footer. The same filled orange as the page's
+  // solid CTA, but kept at nav-pill size so it sits level with the state
+  // selector beside it. The border stays and takes the fill colour, so the
+  // pill matches its neighbours' dimensions exactly.
+  &--donate {
+    border-color: $orange;
+    background: $orange;
+    color: $ink-solid;
+    font-weight: 600;
+  }
+
   &--tag {
     padding: 6px 12px;
     border: 0;
@@ -234,6 +245,11 @@ body {
 // Anchors inside .mt take the link color, which would swallow a solid pill's
 // label; restate it with enough specificity to win.
 .mt a.mt-pill--solid {
+  color: $ink-solid;
+}
+
+// Same for donate, which also has .mt-footer__links a to beat in the footer.
+.mt a.mt-pill--donate {
   color: $ink-solid;
 }
 
@@ -339,6 +355,13 @@ body {
   &:focus-within {
     outline: 3px solid $blue;
     outline-offset: 3px;
+  }
+
+  // The abbreviation stands in for the name on narrow screens. "District of
+  // Columbia" is nearly four times the width of "DC", and at phone widths that
+  // difference is the whole donate button.
+  &__value--abbr {
+    display: none;
   }
 
   &__value {
@@ -1122,10 +1145,47 @@ body {
   display: flex;
   flex-wrap: wrap;
   gap: 24px;
+  align-items: center;
   font-size: 16px;
 
   a {
     color: rgba($ink, 0.88);
+  }
+}
+
+// The header runs out of room long before phone widths. Measured with the
+// longest state name, the brand and the buttons need about 880px on one row
+// and do not get it until roughly 985px, so everything between here and the
+// phone rules below was wrapping into a second line of pills.
+//
+// Three things give way, in the order they cost least. The credit moves under
+// the mark, which is width the nav can use. The mark scales with the viewport
+// rather than sitting at 120px tall. And the nudge goes: it is a second ask
+// for the signup band further down the page, so it is the only thing here that
+// is already said elsewhere.
+@media (max-width: 1000px) {
+  .mt-nav__nudge {
+    display: none;
+  }
+
+  .mt-header .mt-brand {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+    --logo-h: clamp(58px, 12vw, 110px);
+    // Once the credit is on its own line it sets the brand's width, not the
+    // mark above it, so it has to come down too or it holds the column open.
+    --credit-h: 18px;
+  }
+
+  // Its whole point is landing on the foot of MIDTERMS, which only means
+  // anything while it is alongside.
+  .mt-header .mt-by {
+    margin-top: 0;
+  }
+
+  .mt-nav {
+    gap: 12px;
   }
 }
 
@@ -1176,13 +1236,37 @@ body {
     }
   }
 
-  // The nudge is a second ask for the signup band further down the page, and
-  // it crowds the header at this width.
-  .mt-nav__nudge {
-    display: none;
-  }
-
   .mt-counts {
     gap: 24px;
   }
+
+  // The brand and the links sit side by side until the donate pill makes that
+  // row wider than the screen, and a pill cannot half-wrap the way text does.
+  .mt-footer {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+// Compact header. Below this the brand, the state name and the buttons stop
+// fitting on one row for the longer state names, and the header wraps into a
+// second line of pills. The same breakpoint already drops the reminders nudge,
+// so everything that gives way on a phone gives way together.
+@media (max-width: 640px) {
+  .mt-state-toggle {
+    gap: 10px;
+    padding: 10px 18px;
+  }
+
+  .mt-state-toggle__value--full {
+    display: none;
+  }
+
+  .mt-state-toggle__value--abbr {
+    display: inline;
+  }
+
+  // Stacking the credit is not enough on its own: at 120px tall the mark is
+  // still about 195px wide, which is most of a phone. Scale it with the
+  // viewport so the mark gives up width at the same rate the screen does.
 }

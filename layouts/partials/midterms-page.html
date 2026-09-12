@@ -190,7 +190,11 @@
                    pill: native picker and keyboard, our typography. */ -}}
             <span class="mt-pill mt-pill--blue mt-state-toggle">
               <label class="visually-hidden" for="mt-state">Your state</label>
-              <span class="mt-state-toggle__value" data-state-label>{{ $d.state.name }}</span>
+              {{- /* Both are always in the DOM and both are kept current by the
+                     switcher; which one shows is a media query, so a long state
+                     name cannot push the donate button off a phone. */ -}}
+              <span class="mt-state-toggle__value mt-state-toggle__value--full" data-state-label>{{ $d.state.name }}</span>
+              <span class="mt-state-toggle__value mt-state-toggle__value--abbr" data-state-abbr>{{ $d.state.abbr }}</span>
               <span class="mt-state-toggle__caret" aria-hidden="true"></span>
               <select id="mt-state" data-state-select>
                 {{- range sort site.Data.midterms_states.states "name" }}
@@ -200,6 +204,12 @@
             </span>
           {{- end }}
           <a href="#remind" class="mt-pill mt-nav__nudge">{{ $d.nav.nudge }}</a>
+          {{- with $d.donate }}
+            {{- /* Tagged separately from the main site's donate-header so
+                   midterms giving can be told apart rather than folded into it. */ -}}
+            <a href="{{ .url }}" rel="noopener"
+               class="mt-pill mt-pill--donate plausible-event-name=donate-midterms-header">{{ .label }}</a>
+          {{- end }}
         </nav>
       </header>
 
@@ -520,6 +530,10 @@
         <div class="mt-footer__links">
           {{- range $d.footer_links }}
             <a href="{{ .url }}">{{ .title }}</a>
+          {{- end }}
+          {{- with $d.donate }}
+            <a href="{{ .url }}" rel="noopener"
+               class="mt-pill mt-pill--donate plausible-event-name=donate-midterms-footer">{{ .label }}</a>
           {{- end }}
         </div>
       </footer>
