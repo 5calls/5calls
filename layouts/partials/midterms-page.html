@@ -404,10 +404,10 @@
               <span class="mt-mono">WEEK {{ $cur }} IMAGES</span>
               <span class="mt-images__status" data-images-status>LOCKED</span>
             </div>
-            {{- /* The reader's own share art, drawn at build time for the state the
-                   page rendered with. FPO plates for now. The state switcher does
-                   not swap these yet — it would need each state's URLs in the deck
-                   it already ships to the page. */ -}}
+            {{- /* The reader's own share art. What is rendered here is the state the
+                   page was built for; the switcher swaps the src from the same
+                   payload that carries the deck, so changing state costs no round
+                   trip. FPO plates for now. */ -}}
             {{- $cardState := index site.Data.midterms_states.states $d.state.abbr }}
             {{- $vert := partial "midterms-card.html" (dict "crop" "vertical" "week" $week "state" $cardState) }}
             {{- $horiz := partial "midterms-card.html" (dict "crop" "horizontal" "week" $week "state" $cardState) }}
