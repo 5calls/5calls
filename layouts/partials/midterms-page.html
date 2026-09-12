@@ -342,8 +342,17 @@
             <h2 class="mt-action__title">{{ $week.title }}</h2>
             {{- $intro := $week.intro }}
             {{- if not (reflect.IsSlice $intro) }}{{ $intro = slice $intro }}{{ end }}
+            {{- /* Each entry is a paragraph, or a nested list for bullets. */ -}}
             {{- range $intro }}
+              {{- if reflect.IsSlice . }}
+              <ul class="mt-action__intro mt-action__list">
+                {{- range . }}
+                <li>{{ . | markdownify }}</li>
+                {{- end }}
+              </ul>
+              {{- else }}
               <p class="mt-action__intro">{{ . | markdownify }}</p>
+              {{- end }}
             {{- end }}
 
             {{- if $deck }}
@@ -449,6 +458,41 @@
           </aside>
         {{- end }}
       </main>
+
+      {{- /* Extra credit: more for the week, below the action. The heading and
+             each part's title tease it; the parts themselves stay hidden until
+             the confirm box is ticked, like the share images. */ -}}
+      {{- if not $prelaunch }}
+      {{- with $week.extra_credit }}
+        <section id="extra-credit" class="mt-extra" data-extra>
+          <div class="mt-extra__head">
+            <h2 class="mt-extra__title">{{ .title }}</h2>
+            <p class="mt-extra__note">{{ .locked_note }}</p>
+          </div>
+          <div class="mt-extra__parts">
+            {{- range .parts }}
+              <div class="mt-extra__part">
+                <h3>{{ .title }}</h3>
+                <div class="mt-extra__body" data-extra-body hidden>
+                  {{- range .body }}
+                    <p>{{ . | markdownify }}</p>
+                  {{- end }}
+                  {{- with .message }}
+                    <div class="mt-message">
+                      <div class="mt-deck__detail">{{ .label }}</div>
+                      <p class="mt-message__text" data-message>{{ .text }}</p>
+                      <div class="mt-message__actions">
+                        <button type="button" class="mt-pill mt-pill--solid" data-copy>{{ .copy_cta }}</button>
+                      </div>
+                    </div>
+                  {{- end }}
+                </div>
+              </div>
+            {{- end }}
+          </div>
+        </section>
+      {{- end }}
+      {{- end }}
 
       {{- with $week.why }}
         <section id="why" class="mt-why">
@@ -776,26 +820,37 @@
           });
         }
 
-        var copy = document.querySelector("[data-copy]");
-        var message = document.querySelector("[data-message]");
-        if (copy && message && navigator.clipboard) {
-          var label = copy.textContent;
-          copy.addEventListener("click", function () {
-            navigator.clipboard.writeText(message.textContent.trim()).then(function () {
-              copy.textContent = "Copied";
-              setTimeout(function () {
-                copy.textContent = label;
-              }, 2000);
+        // Each copy button copies the message in its own card: the week's, and
+        // extra credit's sample message.
+        if (navigator.clipboard) {
+          document.querySelectorAll("[data-copy]").forEach(function (copy) {
+            var card = copy.closest(".mt-message");
+            var message = card && card.querySelector("[data-message]");
+            if (!message) return;
+            var label = copy.textContent;
+            copy.addEventListener("click", function () {
+              navigator.clipboard.writeText(message.textContent.trim()).then(function () {
+                copy.textContent = "Copied";
+                setTimeout(function () {
+                  copy.textContent = label;
+                }, 2000);
+              });
             });
           });
         }
 
         var confirmBox = document.querySelector("[data-confirm]");
         var images = document.querySelector("[data-images]");
+        var extra = document.querySelector("[data-extra]");
+        var extraBodies = document.querySelectorAll("[data-extra-body]");
         function renderUnlock() {
           var unlocked = done.indexOf(CURRENT) > -1;
           if (confirmBox) confirmBox.checked = unlocked;
           if (images) images.classList.toggle("is-unlocked", unlocked);
+          if (extra) extra.classList.toggle("is-unlocked", unlocked);
+          extraBodies.forEach(function (body) {
+            body.hidden = !unlocked;
+          });
           shotButtons.forEach(function (btn) {
             btn.disabled = !unlocked;
           });

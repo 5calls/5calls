@@ -79,22 +79,69 @@ weeks:
     deck_note: >-
       Deadlines and rules come from your state's election office. Checking takes
       about a minute, even if you're sure you're registered.
-    intro: >-
-      You can’t vote if you’re not registered! Checking your registration status
-      now gives you enough time to register—or re-register if needed—before your
-      state’s deadline. So if you’re not sure, check! And if you are sure? Check
-      anyway! There are shenanigans afoot.
+    # Paragraphs in order; a nested list renders as bullets.
+    intro:
+      - >-
+        You can’t vote if you’re not registered! Checking your registration
+        status now gives you enough time to register—or re-register if
+        needed—before your state’s deadline. So if you’re not sure, check! And
+        if you are sure? Check anyway!
+      - >-
+        If you input your information and are not found in the system, you must
+        re-register NOW. It does not hurt if you repeat yourself.
+      - "Other reasons why your registration may not show up:"
+      - - Your name is spelled incorrectly
+        - Your address is outdated or incorrect
+      - To fix these issues… re-register NOW.
     confirm: I confirmed my registration
     confirm_noun: checked
+    # More for the week, in a section below the action. Until the confirm box is
+    # ticked only the title, locked_note and each part's title show, as a tease.
+    # Body paragraphs are markdown; the sample message is copied as plain text.
+    extra_credit:
+      title: Extra credit
+      locked_note: Check your registration above to unlock extra credit.
+      parts:
+        - title: "Part 1: Call or text 5 friends"
+          body:
+            - >-
+              September 15th is [National Voter Registration Day](https://nationalvoterregistrationday.org/)!
+              Reach out to 5 people in your life and remind them to check their
+              registration status and protect their vote too. Anyone you feel
+              comfortable lightly pestering: your roommate, your forgetful grownup
+              kid, your cousin who just moved. You might just save someone from
+              being rejected at the polls this election. Low risk, high reward!
+          message:
+            label: Sample message
+            text: "Hey [NAME], I just made sure I was registered to vote. If you want to join me, it’s really easy to do at 5calls.org/midterms!"
+            copy_cta: Copy message
+        - title: "Part 2: Check your signature"
+          body:
+            - >-
+              The most common reason why mail-in ballots were rejected in 2024 was
+              due to a non-matching signature, accounting for
+              [40.7% of rejected ballots](https://ballotpedia.org/Election_results,_2024:_Analysis_of_rejected_ballots).
+            - >-
+              If your state
+              [has a history of rejecting ballots due to signature match](https://ballotpedia.org/Election_results,_2024:_Analysis_of_rejected_ballots),
+              and you plan to vote by mail, an outdated or inconsistent signature
+              on file can get your ballot flagged or even rejected.
+            - >-
+              If your signature has changed since you last registered, or you’re
+              simply not sure, you can update your signature on record by
+              re-registering to vote using a paper application. This application
+              can be mailed or dropped off at your local county elections office.
+              If you have any additional questions, contact your county’s Election
+              Office.
     why:
       heading: The rolls change constantly, and nobody tells you when yours does.
       stats:
-        - value: 1 in 8
-          text: registrations on file are invalid or out of date.
-        - value: Moves
-          text: and clerical errors quietly drop people from the rolls.
-        - value: 1 min
-          text: to confirm you're still registered where you think you are.
+        - value: 21 million
+          text: voter registration records were [removed from voter rolls](https://www.eac.gov/sites/default/files/2025-07/2024_EAVS_Report_508.pdf#page=33.10) between the 2022 midterms and the 2024 presidential election.
+        - value: Fewer than 30%
+          text: of 18 year olds [are registered to vote](https://www.theguardian.com/commentisfree/2026/jun/21/young-people-voter-registration).
+        - value: Two-thirds
+          text: of states had [lower active voter registration rates](https://www.eac.gov/sites/default/files/2025-07/2024_EAVS_Report_508.pdf#page=33.10) in 2024 than in 2020 nationally.
 
   - number: 2
     short: Deadlines

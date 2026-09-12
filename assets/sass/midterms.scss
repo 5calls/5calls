@@ -618,6 +618,16 @@ body {
   text-wrap: pretty;
 }
 
+// Bullets inside the intro, set off like the paragraphs around them.
+.mt-action__list {
+  padding-left: 1.2em;
+  list-style: disc;
+
+  li + li {
+    margin-top: 4px;
+  }
+}
+
 // Week zero: nothing sits beside the column, so the measures set for a
 // half-width one would leave the right of the page empty.
 .mt-action--solo {
@@ -796,6 +806,83 @@ body {
   font-size: 17px;
   line-height: 1.55;
   color: rgba($ink, 0.85);
+}
+
+// Extra credit, below the action. Until the week is done only the heading, the
+// note and each part's title show, as a tease.
+.mt-extra {
+  padding-top: clamp(30px, 5vw, 54px);
+  padding-bottom: clamp(30px, 5vw, 54px);
+  @include shell;
+  border-top: 1px solid rgba($ink, 0.15);
+}
+
+.mt-extra__head {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 20px;
+  align-items: baseline;
+}
+
+.mt-extra__title {
+  margin: 0;
+  font-family: $display;
+  font-size: clamp(40px, 5vw, 60px);
+  font-weight: 400;
+  line-height: 0.95;
+  letter-spacing: 0.005em;
+}
+
+.mt-extra__note {
+  margin: 0;
+  font-size: 16px;
+  line-height: 1.5;
+  color: rgba($ink, 0.9);
+}
+
+.mt-extra__parts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: clamp(24px, 4vw, 48px);
+  margin-top: 28px;
+}
+
+.mt-extra__part {
+  display: flex;
+  flex: 1;
+  min-width: unquote("min(340px, 100%)");
+  flex-direction: column;
+  gap: 16px;
+
+  h3 {
+    margin: 0;
+    font-size: 22px;
+    font-weight: 700;
+    color: $ink-solid;
+  }
+}
+
+.mt-extra__body {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+
+  // Its display would otherwise win over the hidden attribute.
+  &[hidden] {
+    display: none;
+  }
+
+  > p {
+    max-width: 60ch;
+    margin: 0;
+    font-size: 17px;
+    line-height: 1.55;
+    color: rgba($ink, 0.85);
+  }
+}
+
+.mt-extra.is-unlocked .mt-extra__note {
+  display: none;
 }
 
 // Share images sidebar
