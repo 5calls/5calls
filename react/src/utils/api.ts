@@ -71,8 +71,15 @@ export const getContacts = async (
     });
 };
 
+export interface HourlyCallCount {
+  time: number; // Unix timestamp in seconds
+  count: number;
+}
+
 export interface CountData {
   count: number; // total call count
+  serverTime: number;
+  hourlyCalls: HourlyCallCount[];
 }
 
 export const getCountData = (): Promise<CountData> => {

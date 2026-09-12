@@ -108,3 +108,35 @@
     }
   }
 }
+
+// Live Call Ticker Styles
+.live-count-wrapper {
+  display: inline-flex;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.live-count-number {
+  display: inline-block;
+  font-weight: 700;
+  color: var(--c-blue);
+  animation: pulse-digit 0.25s ease-out;
+  transform-origin: center;
+}
+
+@keyframes pulse-digit {
+  0% {
+    transform: scale(1.05);
+    color: #33b2ff;
+  }
+  100% {
+    transform: scale(1);
+    color: var(--c-blue);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .live-count-number {
+    animation: none;
+  }
+}
