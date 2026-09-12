@@ -9,7 +9,13 @@
   fixed block. The real art will want its own layout; what is worth keeping is
   the shrink-to-fit, since the copy varies from "Tue, Nov 3" to North Dakota's
   "Just bring your ID on Election Day".
+
+  Week one has its real art, drawn by midterms-card-week1.html.
 */ -}}
+{{- $card := false -}}
+{{- if eq .week.number 1 -}}
+  {{- $card = partial "midterms-card-week1.html" (dict "crop" .crop "state" .state) -}}
+{{- else -}}
 {{- $plate := resources.Get (printf "images/midterms/share-%s-fpo.png" .crop) -}}
 {{- $font := resources.Get "fonts/BebasNeue-Regular.ttf" -}}
 {{- $ink := "#4a4a4a" -}}
@@ -31,4 +37,6 @@
       "x" $m.x "y" $m.name "size" $nameSize "color" $ink "font" $font) -}}
 {{- $date := images.Text $dateText (dict
       "x" $m.x "y" $m.date "size" $dateSize "color" $ink "font" $font) -}}
-{{- return $plate.Filter $week $name $date -}}
+{{- $card = $plate.Filter $week $name $date -}}
+{{- end -}}
+{{- return $card -}}

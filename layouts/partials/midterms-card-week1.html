@@ -1,0 +1,179 @@
+{{- /*
+  Week one's share card for one state: the vertical Instagram crop (1080x1350)
+  or the horizontal link-preview one (1200x630). Takes
+  (dict "crop" "vertical"|"horizontal" "state" STATE) and returns the image
+  resource.
+
+  The plate carries everything that doesn't change by state. Laid over it:
+
+  - The state name, standing on the diagonal with its letters tapering up
+    along it. Hugo can draw text but can't distort it, so the names are drawn
+    ahead of time by scripts/build-midterms-names.py, each as a transparent
+    layer the size of the card.
+  - The state's deadline copy as bullets in DM Sans, each led by a bold label
+    the way the design's "Online:" is. A bullet too long for the panel wraps,
+    and the list steps down in size until every row fits above the card's foot.
+*/ -}}
+{{- /* Each crop's bullet layout, measured off its designed California card: the
+       dot's and text's x, the widest a row may run, where the first row's
+       ascenders sit, the line nothing may hang below, and the sizes to try,
+       the design's first, whose row pitch the others scale from. */ -}}
+{{- $m := dict "dotX" 67 "textX" 109.0 "maxWidth" 931.0 "inkTop" 1057.0 "floor" 1325.0
+      "sizes" (slice 50 48 46 44 42 40 38 36 34 32 30 28) "pitch" 72.0 -}}
+{{- if eq .crop "horizontal" -}}
+  {{- $m = dict "dotX" 817 "textX" 844.0 "maxWidth" 341.0 "inkTop" 349.0 "floor" 610.0
+        "sizes" (slice 29 28 27 26 25 24 23 22 21 20 19 18) "pitch" 42.0 -}}
+{{- end -}}
+{{- $plate := resources.Get (printf "images/midterms/share-%s-week1.png" .crop) -}}
+{{- /* Hugo needs static fonts, and Google ships DM Sans as a variable one. These
+       are cut from it with fontTools' instancer at opsz 40, which is what the
+       Canva design's spacing matches, and wght 400 and 700. */ -}}
+{{- $regular := resources.Get "fonts/DMSans-Regular.ttf" -}}
+{{- $bold := resources.Get "fonts/DMSans-Bold.ttf" -}}
+{{- $ink := "#000000" -}}
+{{- $filters := slice -}}
+
+{{- /* State name: a card-sized layer, so it lands at 0, 0. A missing one fails
+       the build rather than shipping a card without a name. */ -}}
+{{- $namePath := printf "images/midterms/week1-names/%s/%s.png" .crop (lower .state.code) -}}
+{{- with resources.Get $namePath -}}
+  {{- $filters = $filters | append (images.Overlay . 0 0) -}}
+{{- else -}}
+  {{- errorf "midterms week 1 card: no name layer at assets/%s; run scripts/build-midterms-names.py" $namePath -}}
+{{- end -}}
+
+{{- /* Bullets, from the same fields the deck card on the page shows, each split
+       into a bold label and the rest. */ -}}
+{{- $s := .state -}}
+{{- $bullets := slice -}}
+
+{{- /* The all-caps headline becomes the label for its date: "Register to vote
+       by: Sun, Oct 4". North Dakota's has no date and stands alone. */ -}}
+{{- $head := lower $s.headline -}}
+{{- $head = printf "%s%s" (upper (substr $head 0 1)) (substr $head 1) -}}
+{{- $head = replace $head "election day" "Election Day" -}}
+{{- with $s.hero_date -}}
+  {{- $bullets = $bullets | append (dict "label" (printf "%s:" $head) "text" .) -}}
+{{- else -}}
+  {{- $bullets = $bullets | append (dict "label" $head "text" "") -}}
+{{- end -}}
+
+{{- /* Where registration has a deadline, channels lists the ways to do it. In
+       same-day states and North Dakota it's already a sentence. */ -}}
+{{- with $s.channels -}}
+  {{- $label := cond (in (slice "A" "C") $s.archetype) "Ways to register:" "" -}}
+  {{- $bullets = $bullets | append (dict "label" $label "text" .) -}}
+{{- end -}}
+
+{{- /* "Election Day — Tue, Nov 3" and "Save time — register online by …" carry
+       their own label ahead of the dash; the rest are sentences. */ -}}
+{{- with $s.secondary -}}
+  {{- $parts := split . " — " -}}
+  {{- if gt (len $parts) 1 -}}
+    {{- $bullets = $bullets | append (dict
+          "label" (printf "%s:" (index $parts 0))
+          "text" (delimit (after 1 $parts) " — ")) -}}
+  {{- else -}}
+    {{- $bullets = $bullets | append (dict "label" "" "text" .) -}}
+  {{- end -}}
+{{- end -}}
+
+{{- with $s.mail -}}
+  {{- $bullets = $bullets | append (dict "label" "By mail:" "text" .) -}}
+{{- end -}}
+
+{{- $textX := $m.textX -}}
+{{- /* images.Text wraps any text that runs within 20px of the image's right
+       edge, drawing the overflow over the next row, so rows stop short of that
+       with a couple of pixels to spare. */ -}}
+{{- $maxWidth := math.Min $m.maxWidth (sub (sub $plate.Width 22) $textX) -}}
+{{- $inkTop := $m.inkTop -}}
+{{- $floor := $m.floor -}}
+{{- /* DM Sans, in ems: ascender and descender ink, and the line-box ascent
+       images.Text measures its y from. */ -}}
+{{- $ascInk := 0.71 -}}
+{{- $descInk := 0.20 -}}
+{{- $lineAscent := 0.992 -}}
+
+{{- /* Lay the bullets out word by word at the design size, and if the rows
+       won't fit, at each smaller size until they do. Rows may close up to 1.3
+       times the type size before the type itself has to shrink. A row is a
+       list of runs, each one weight, placed at its own x. */ -}}
+{{- $layout := dict -}}
+{{- range $size := $m.sizes -}}
+  {{- $rows := slice -}}
+  {{- range $bullets -}}
+    {{- $words := slice -}}
+    {{- range split .label " " }}{{ with . }}{{ $words = $words | append (dict "w" . "bold" true) }}{{ end }}{{ end -}}
+    {{- /* A date is one word, so a wrap never leaves "Sat," and "Oct 31" apart:
+           its spaces are held as no-break spaces through the split, then put
+           back. */ -}}
+    {{- $text := replaceRE `(Sun|Mon|Tue|Wed|Thu|Fri|Sat), (\S+) (\d+)` "$1,\u00a0$2\u00a0$3" .text -}}
+    {{- range split $text " " }}{{ with . }}{{ $words = $words | append (dict "w" (replace . "\u00a0" " ") "bold" false) }}{{ end }}{{ end -}}
+    {{- $runs := slice -}}
+    {{- $cur := "" -}}
+    {{- $curBold := false -}}
+    {{- $curX := 0.0 -}}
+    {{- $x := 0.0 -}}
+    {{- $used := false -}}
+    {{- $dot := true -}}
+    {{- range $words -}}
+      {{- $font := cond .bold "bold" "regular" -}}
+      {{- $width := partial "midterms-text-width.html" (dict "text" .w "font" $font "size" $size) -}}
+      {{- $start := 0.0 -}}
+      {{- if $used -}}
+        {{- $start = add $x (partial "midterms-text-width.html" (dict "text" " " "font" $font "size" $size)) -}}
+      {{- end -}}
+      {{- if and $used (gt (add $start $width) $maxWidth) -}}
+        {{- $runs = $runs | append (dict "text" $cur "bold" $curBold "x" $curX) -}}
+        {{- $rows = $rows | append (dict "runs" $runs "dot" $dot) -}}
+        {{- $runs = slice -}}
+        {{- $cur = "" -}}
+        {{- $dot = false -}}
+        {{- $start = 0.0 -}}
+      {{- end -}}
+      {{- if and (ne $cur "") (ne .bold $curBold) -}}
+        {{- $runs = $runs | append (dict "text" $cur "bold" $curBold "x" $curX) -}}
+        {{- $cur = "" -}}
+      {{- end -}}
+      {{- if eq $cur "" -}}
+        {{- $cur = .w -}}
+        {{- $curBold = .bold -}}
+        {{- $curX = $start -}}
+      {{- else -}}
+        {{- $cur = printf "%s %s" $cur .w -}}
+      {{- end -}}
+      {{- $x = add $start $width -}}
+      {{- $used = true -}}
+    {{- end -}}
+    {{- $runs = $runs | append (dict "text" $cur "bold" $curBold "x" $curX) -}}
+    {{- $rows = $rows | append (dict "runs" $runs "dot" $dot) -}}
+  {{- end -}}
+
+  {{- $firstBase := add $inkTop (mul $ascInk $size) -}}
+  {{- $pitch := mul $size (div $m.pitch (index $m.sizes 0)) -}}
+  {{- if gt (len $rows) 1 -}}
+    {{- $room := div (sub (sub $floor (mul $descInk $size)) $firstBase) (sub (len $rows) 1) -}}
+    {{- $pitch = math.Min $pitch $room -}}
+  {{- end -}}
+  {{- if or (ge $pitch (mul $size 1.3)) (eq $size (index $m.sizes (sub (len $m.sizes) 1))) -}}
+    {{- $layout = dict "rows" $rows "size" $size "pitch" $pitch "firstBase" $firstBase -}}
+    {{- break -}}
+  {{- end -}}
+{{- end -}}
+
+{{- range $i, $row := $layout.rows -}}
+  {{- $baseline := add $layout.firstBase (mul $i $layout.pitch) -}}
+  {{- $y := int (math.Round (sub $baseline (mul $lineAscent $layout.size))) -}}
+  {{- if $row.dot -}}
+    {{- $filters = $filters | append (images.Text "•" (dict
+          "x" $m.dotX "y" $y "size" $layout.size "color" $ink "font" $bold)) -}}
+  {{- end -}}
+  {{- range $row.runs -}}
+    {{- $filters = $filters | append (images.Text .text (dict
+          "x" (int (math.Round (add $textX .x))) "y" $y "size" $layout.size
+          "color" $ink "font" (cond .bold $bold $regular))) -}}
+  {{- end -}}
+{{- end -}}
+
+{{- return $plate.Filter $filters -}}

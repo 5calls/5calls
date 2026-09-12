@@ -300,7 +300,10 @@ weeks:
           text: that's the whole program. Thanks for doing it.
 
 images:
-  locked_note: Tick the box and both sizes unlock, with the site link baked into the art.
+  # The panel sits beside the action on wide screens and below it once they
+  # stack, so the note says which.
+  locked_note: Check your registration on the left to unlock the share images.
+  locked_note_stacked: Check your registration above to unlock the share images.
 
 # The share row under the images. `caption` is the text carried into a post;
 # the link posted alongside it is the reader's own state's share URL, so the
@@ -309,13 +312,13 @@ share:
   # Not rendered as words any more — the crops carry a share mark. This is the
   # label a screen reader reads and the tooltip on hover.
   hint: Share this image
-  cta: Post this
-  # The vertical crop is the one that goes to Instagram, where a link is no
-  # use, so it copies the image itself. The horizontal one copies the link.
-  copy_image: Copy image
-  copy_link: Copy link
-  download: Download
   caption: Five minutes a week to protect your vote.
+  # Shown under the share row when the Instagram button can't hand the image
+  # straight to the share sheet: one tip for phones, one for desktop.
+  instagram:
+    touch_tip: Press and hold the image to save it, then post it from Instagram.
+    desktop_tip: Download the image, then upload it on Instagram.
+    download: Download image
 
 remind:
   title: Get the newsletter

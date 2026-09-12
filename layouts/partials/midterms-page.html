@@ -410,10 +410,7 @@
           </div>
 
           <aside class="mt-images" data-images>
-            <div class="mt-images__head">
-              <span class="mt-mono">WEEK {{ $cur }} IMAGES</span>
-              <span class="mt-images__status" data-images-status>LOCKED</span>
-            </div>
+            <div class="mt-images__title">Week {{ $cur }} shares</div>
             {{- /* The reader's own share art. What is rendered here is the state the
                    page was built for; the switcher swaps the src from the same
                    payload that carries the deck, so changing state costs no round
@@ -444,7 +441,10 @@
                 </button>
               </div>
             </div>
-            <p class="mt-images__note">{{ $d.images.locked_note }}</p>
+            <p class="mt-images__note">
+              <span class="mt-images__note--beside">{{ $d.images.locked_note }}</span>
+              <span class="mt-images__note--stacked">{{ $d.images.locked_note_stacked }}</span>
+            </p>
 
           </aside>
         {{- end }}
@@ -491,33 +491,43 @@
                <dialog> brings Esc, the backdrop and focus handling with it. */ -}}
         {{- $shareBase := printf "%sshare/%d/" $base $cur }}
         <dialog class="mt-modal" data-modal data-share-base="{{ $shareBase }}">
-          <button type="button" class="mt-modal__close" data-modal-close aria-label="Close">
-            {{- partial "midterms-icon.html" (dict "name" "close" "size" 22) -}}
-          </button>
           <img class="mt-modal__img" data-modal-img src="" alt="" />
-          <div class="mt-modal__actions">
-            <button type="button" class="mt-pill mt-pill--solid" data-share hidden>{{ $d.share.cta }}</button>
-            {{- /* Label and behaviour depend on which crop was opened. */ -}}
-            <button type="button" class="mt-pill" data-copy-action
-                    data-copy-image="{{ $d.share.copy_image }}"
-                    data-copy-link="{{ $d.share.copy_link }}">{{ $d.share.copy_image }}</button>
-            <a class="mt-pill" data-share-download href="" download>{{ $d.share.download }}</a>
-          </div>
           {{- /* The mark carries the platform; the name is there for screen
                  readers, since four unlabelled glyphs say nothing aloud. */ -}}
           <div class="mt-modal__links">
+            {{- /* Instagram takes an image rather than a link, so this hands over
+                   the file alone, or falls back to a tip below the row. */ -}}
+            <button type="button" class="mt-modal__link" data-share-instagram title="Share on Instagram">
+              {{- partial "midterms-icon.html" (dict "name" "instagram") -}}
+              <span class="visually-hidden">Share on Instagram</span>
+            </button>
             {{- range slice
                 (dict "key" "x" "name" "X")
                 (dict "key" "bsky" "name" "Bluesky")
                 (dict "key" "threads" "name" "Threads")
                 (dict "key" "facebook" "name" "Facebook") }}
-              <a data-share-link="{{ .key }}" rel="noopener" target="_blank" href=""
+              <a class="mt-modal__link" data-share-link="{{ .key }}" rel="noopener" target="_blank" href=""
                  title="Share on {{ .name }}">
                 {{- partial "midterms-icon.html" (dict "name" .key) -}}
                 <span class="visually-hidden">Share on {{ .name }}</span>
               </a>
             {{- end }}
+            {{- /* Hands the image to the native sheet; shown only where the
+                   browser can share files. */ -}}
+            <button type="button" class="mt-modal__link" data-share title="{{ $d.share.hint }}" hidden>
+              {{- partial "midterms-icon.html" (dict "name" "share") -}}
+              <span class="visually-hidden">{{ $d.share.hint }}</span>
+            </button>
+            <button type="button" class="mt-modal__close" data-modal-close aria-label="Close">
+              {{- partial "midterms-icon.html" (dict "name" "close" "size" 22) -}}
+            </button>
           </div>
+          {{- with $d.share.instagram }}
+            <p class="mt-modal__tip" data-instagram-tip="touch" hidden>{{ .touch_tip }}</p>
+            <p class="mt-modal__tip" data-instagram-tip="desktop" hidden>
+              {{ .desktop_tip }} <a data-instagram-download href="" download>{{ .download }}</a>
+            </p>
+          {{- end }}
         </dialog>
       {{- end }}
 
@@ -782,7 +792,6 @@
 
         var confirmBox = document.querySelector("[data-confirm]");
         var images = document.querySelector("[data-images]");
-        var status = document.querySelector("[data-images-status]");
         function renderUnlock() {
           var unlocked = done.indexOf(CURRENT) > -1;
           if (confirmBox) confirmBox.checked = unlocked;
@@ -790,7 +799,6 @@
           shotButtons.forEach(function (btn) {
             btn.disabled = !unlocked;
           });
-          if (status) status.textContent = unlocked ? "UNLOCKED" : "LOCKED";
         }
         if (confirmBox) {
           confirmBox.addEventListener("change", function () {
@@ -852,13 +860,13 @@
         var modal = document.querySelector("[data-modal]");
         var modalImg = document.querySelector("[data-modal-img]");
         var shareBtn = document.querySelector("[data-share]");
-        var copyBtn = document.querySelector("[data-copy-action]");
-        var shareDownload = document.querySelector("[data-share-download]");
+        var instagramBtn = document.querySelector("[data-share-instagram]");
+        var instagramTips = document.querySelectorAll("[data-instagram-tip]");
+        var instagramDownload = document.querySelector("[data-instagram-download]");
         var shotButtons = document.querySelectorAll("[data-shot-open]");
         var CAPTION = {{ $d.share.caption }};
         var SHARE_BASE = modal ? modal.getAttribute("data-share-base") : "";
         var shareFile = null;
-        var shareBlob = null;
         var openCrop = "vert";
 
         function currentState() {
@@ -878,17 +886,14 @@
         // after an await loses the user gesture and the sheet never opens.
         function primeShareFile(url) {
           shareFile = null;
-          shareBlob = null;
           if (shareBtn) shareBtn.hidden = true;
-          if (!url) return;
+          if (!url || !navigator.canShare) return;
           fetch(url)
             .then(function (r) {
               return r.ok ? r.blob() : null;
             })
             .then(function (blob) {
               if (!blob) return;
-              shareBlob = blob;
-              if (!navigator.canShare) return;
               var file = new File([blob], "5-minute-midterms.png", { type: blob.type || "image/png" });
               if (!navigator.canShare({ files: [file] })) return;
               shareFile = file;
@@ -897,19 +902,6 @@
             .catch(function () {
               /* the links below stay the way to share */
             });
-        }
-
-        // The vertical crop is bound for Instagram, where a link does nothing,
-        // so it copies the image. The horizontal one copies the link.
-        function copiesImage() {
-          return openCrop === "vert" && !!window.ClipboardItem;
-        }
-
-        function renderCopyButton() {
-          if (!copyBtn) return;
-          copyBtn.textContent = copyBtn.getAttribute(
-            copiesImage() ? "data-copy-image" : "data-copy-link"
-          );
         }
 
         function applyShareState(code) {
@@ -925,8 +917,15 @@
           set("threads", "https://www.threads.net/intent/post?text=" + encodeURIComponent(withUrl));
           set("facebook", "https://www.facebook.com/sharer/sharer.php?u=" + encodeURIComponent(url));
           var card = cardUrl(openCrop);
-          if (shareDownload && card) shareDownload.href = card;
+          if (instagramDownload && card) instagramDownload.href = card;
           if (modalImg && card && modal && modal.open) modalImg.src = card;
+        }
+
+        // Which tip to show, or none.
+        function showInstagramTip(kind) {
+          instagramTips.forEach(function (tip) {
+            tip.hidden = tip.getAttribute("data-instagram-tip") !== kind;
+          });
         }
 
         shotButtons.forEach(function (btn) {
@@ -941,7 +940,7 @@
             }
             applyShareState(currentState());
             primeShareFile(card);
-            renderCopyButton();
+            showInstagramTip(null);
             modal.showModal();
           });
         });
@@ -970,34 +969,17 @@
           });
         }
 
-        if (copyBtn && navigator.clipboard) {
-          copyBtn.addEventListener("click", function () {
-            var done = function (ok) {
-              copyBtn.textContent = ok ? "Copied" : "Couldn't copy";
-              setTimeout(renderCopyButton, 2000);
-            };
-            if (copiesImage()) {
-              if (!shareBlob) return done(false);
-              // Written straight from the blob fetched when the modal opened,
-              // so the write stays inside the click.
-              navigator.clipboard
-                .write([new ClipboardItem({ "image/png": shareBlob })])
-                .then(function () {
-                  done(true);
-                })
-                .catch(function () {
-                  done(false);
-                });
+        // The file goes alone: a link is no use on Instagram, and text riding
+        // along with a file can put some share targets off.
+        if (instagramBtn) {
+          instagramBtn.addEventListener("click", function () {
+            if (shareFile) {
+              navigator.share({ files: [shareFile] }).catch(function () {
+                /* dismissed, or the target refused the file */
+              });
               return;
             }
-            navigator.clipboard
-              .writeText(shareUrlFor(currentState()))
-              .then(function () {
-                done(true);
-              })
-              .catch(function () {
-                done(false);
-              });
+            showInstagramTip(window.matchMedia("(pointer: coarse)").matches ? "touch" : "desktop");
           });
         }
 

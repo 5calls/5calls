@@ -810,20 +810,10 @@ body {
   background: rgba($ink, 0.06);
 }
 
-.mt-images__head {
-  display: flex;
-  gap: 12px;
-  align-items: baseline;
-  justify-content: space-between;
-}
-
-.mt-images__status {
-  padding: 6px 12px;
-  border-radius: 999px;
-  background: rgba($ink, 0.15);
-  font: 500 13px $mono;
-  letter-spacing: 0.08em;
-  color: rgba($ink, 0.9);
+.mt-images__title {
+  font-size: 18px;
+  font-weight: 700;
+  color: $ink-solid;
 }
 
 .mt-images__set {
@@ -839,6 +829,29 @@ body {
   font-size: 16px;
   line-height: 1.5;
   color: rgba($ink, 0.9);
+}
+
+.mt-images__note--stacked {
+  display: none;
+}
+
+// The action and the panel would wrap on their own a little narrower than this
+// (their min-widths plus the gap, a scrollbar's width later on desktop), so
+// stacking is pinned here instead, where the note can say "above" at exactly
+// the width the panel moves below.
+@media (max-width: 780px) {
+  .mt-action__main,
+  .mt-images {
+    flex-basis: 100%;
+  }
+
+  .mt-images__note--beside {
+    display: none;
+  }
+
+  .mt-images__note--stacked {
+    display: inline;
+  }
 }
 
 // The two crops of the week's share art. Each keeps its own ratio, so the
@@ -922,16 +935,15 @@ body {
   }
 }
 
+// Ends the row of share links, pushed to the far side.
 .mt-modal__close {
-  position: absolute;
-  top: 12px;
-  right: 12px;
   display: flex;
   align-items: center;
   justify-content: center;
   // A comfortable target rather than a small glyph.
   width: 44px;
   height: 44px;
+  margin-left: auto;
   padding: 0;
   border: 0;
   border-radius: 999px;
@@ -949,40 +961,58 @@ body {
   width: auto;
   max-width: 100%;
   max-height: 58vh;
-  margin: 6px auto 18px;
+  margin: 0 auto 16px;
   border-radius: 8px;
 }
 
-.mt-modal__actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  align-items: center;
-}
-
+// One row, never wrapped: on a narrow phone the circles shrink to fit.
 .mt-modal__links {
   display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
+  gap: 8px;
   align-items: center;
-  margin-top: 16px;
-  padding-top: 14px;
-  border-top: 1px solid rgba($ink, 0.18);
+
+  .mt-modal__close {
+    flex: 0 1 44px;
+    min-width: 0;
+    height: auto;
+    aspect-ratio: 1;
+  }
+}
+
+// Instagram's fallback, when the image can't go to the share sheet.
+.mt-modal__tip {
+  margin: 14px 0 0;
+  font-size: 15px;
+  line-height: 1.5;
+  color: rgba($ink, 0.85);
 
   a {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 40px;
-    height: 40px;
-    border: 1.5px solid rgba($blue, 0.4);
-    border-radius: 999px;
     color: $blue;
+    font-weight: 600;
+  }
+}
 
-    &:hover {
-      border-color: $blue;
-      background: rgba($blue, 0.08);
-    }
+.mt-modal__link {
+  display: inline-flex;
+  flex: 0 1 40px;
+  align-items: center;
+  justify-content: center;
+  min-width: 0;
+  aspect-ratio: 1;
+  padding: 0;
+  border: 1.5px solid rgba($blue, 0.4);
+  border-radius: 999px;
+  background: none;
+  color: $blue;
+  cursor: pointer;
+
+  &:hover {
+    border-color: $blue;
+    background: rgba($blue, 0.08);
+  }
+
+  &[hidden] {
+    display: none;
   }
 }
 
@@ -990,11 +1020,6 @@ body {
 .mt-images.is-unlocked {
   .mt-images__set {
     opacity: 1;
-  }
-
-  .mt-images__status {
-    background: rgba($blue, 0.15);
-    color: $blue;
   }
 }
 
