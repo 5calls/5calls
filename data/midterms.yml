@@ -4,10 +4,7 @@
 # Which week is live right now. Weeks before this are "done", weeks after are
 # "upcoming". Set this to 0 before the program starts: the page then renders
 # the week_zero block below instead of a weekly action, and nothing unlocks.
-current_week: 0
-
-# Headline numbers shown in the top bar.
-total_actions: 24190
+current_week: 1
 
 nav:
   nudge: Get reminders
@@ -81,7 +78,7 @@ weeks:
       state’s deadline. So if you’re not sure, check! And if you are sure? Check
       anyway! There are shenanigans afoot.
     confirm: I confirmed my registration
-    confirm_count: 3,908 checked
+    confirm_noun: checked
     why:
       heading: The rolls change constantly, and nobody tells you when yours does.
       stats:
@@ -109,7 +106,7 @@ weeks:
     copy_cta: button1
     rewrite_cta: button2
     confirm: I did it — unlock my images
-    confirm_count: 0 so far (sample)
+    confirm_noun: saved
     # FPO: placeholder copy, replace before this week ships.
     why:
       heading: Every deadline is a different date, and none of them move.
@@ -138,7 +135,7 @@ weeks:
     copy_cta: button1
     rewrite_cta: button2
     confirm: I did it — unlock my images
-    confirm_count: 0 so far (sample)
+    confirm_noun: checked
     # FPO: placeholder copy, replace before this week ships.
     why:
       heading: ID rules changed in a lot of places, and nobody sends a notice.
@@ -168,7 +165,7 @@ weeks:
     copy_cta: button1
     rewrite_cta: button2
     confirm: I read my ballot — unlock my images
-    confirm_count: 1,204 read
+    confirm_noun: read
     why:
       heading: The races people skip are the ones closest to their daily life.
       stats:
@@ -196,7 +193,7 @@ weeks:
     copy_cta: button1
     rewrite_cta: button2
     confirm: I did it — unlock my images
-    confirm_count: 0 so far (sample)
+    confirm_noun: planned
     # FPO: placeholder copy, replace before this week ships.
     why:
       heading: People who pick a day and a time are the ones who show up.
@@ -225,7 +222,7 @@ weeks:
     copy_cta: button1
     rewrite_cta: button2
     confirm: I did it — unlock my images
-    confirm_count: 0 so far (sample)
+    confirm_noun: voted
     # FPO: placeholder copy, replace before this week ships.
     why:
       heading: Voting early takes one problem off election day.
@@ -254,7 +251,7 @@ weeks:
     copy_cta: button1
     rewrite_cta: button2
     confirm: I did it — unlock my images
-    confirm_count: 0 so far (sample)
+    confirm_noun: rechecked
     # FPO: placeholder copy, replace before this week ships.
     why:
       heading: Ballots get rejected for fixable things, if you catch them in time.
@@ -283,7 +280,7 @@ weeks:
     copy_cta: button1
     rewrite_cta: button2
     confirm: I did it — unlock my images
-    confirm_count: 0 so far (sample)
+    confirm_noun: voted
     # FPO: placeholder copy, replace before this week ships.
     why:
       heading: Eight weeks of small things end with the one that counts.

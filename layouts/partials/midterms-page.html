@@ -42,8 +42,8 @@
 {{- end -}}
 {{- /* On previews, flag detail fields the week has not been written with yet. */ -}}
 {{- $missing := slice -}}
-{{- $required := slice "intro" "message" "copy_cta" "rewrite_cta" "confirm" "confirm_count" "why" -}}
-{{- if $deck }}{{ $required = slice "intro" "deck_cta" "confirm" "confirm_count" "why" }}{{ end -}}
+{{- $required := slice "intro" "message" "copy_cta" "rewrite_cta" "confirm" "confirm_noun" "why" -}}
+{{- if $deck }}{{ $required = slice "intro" "deck_cta" "confirm" "confirm_noun" "why" }}{{ end -}}
 {{- if and $preview (not $prelaunch) -}}
   {{- range $required -}}
     {{- if not (index $week .) }}{{ $missing = $missing | append . }}{{ end -}}
@@ -212,7 +212,9 @@
         {{- if not $prelaunch }}
           <div class="mt-counts">
             <div class="mt-count">
-              <b>{{ lang.FormatNumberCustom 0 $d.total_actions }}</b>
+              {{- /* Empty until the count loads: a rendered placeholder would tick
+                     from 0 up to the real figure on every page load. */ -}}
+              <b data-total></b>
               <span>TOTAL COMPLETED</span>
             </div>
             <div class="mt-count mt-count--blue">
@@ -393,7 +395,7 @@
             <label class="mt-confirm">
               <input type="checkbox" data-confirm value="{{ $cur }}" />
               <span>{{ $week.confirm }}</span>
-              <em>{{ $week.confirm_count }}</em>
+              <em data-week-count>0 {{ $week.confirm_noun }}</em>
             </label>
           </div>
 
@@ -549,11 +551,22 @@
       // account behind /midterms.
       (function () {
         var KEY = "5calls-midterms-done";
+        // Weeks already reported to the server. Kept apart from KEY on purpose:
+        // KEY is what the reader has ticked and can untick, this is what we have
+        // already counted and must never count twice.
+        var SENT_KEY = "5calls-midterms-sent";
+        // The same anonymous id call reports use, so a reader who has called
+        // before is one person here too rather than a second identity.
+        var CALLER_KEY = "callerID";
+        var COUNTS_API = "https://api.5calls.org/v1/midterms";
         var STATE_KEY = "5calls-midterms-state";
         // The main 5calls.org store, read for a location the reader already set.
         var SITE_KEY = "persist:fivecalls";
         var TOTAL = {{ $total }};
         var CURRENT = {{ $cur }};
+        // Previews are for reading the copy, not for taking part: they show the
+        // live counts but never add to them.
+        var PREVIEW = {{ $preview }};
 
         function read() {
           try {
@@ -572,6 +585,158 @@
         }
 
         var done = read();
+
+        // ── Counts ───────────────────────────────────────────────────────
+        // The two tallies are reads of the API. Everything here fails quiet:
+        // the page ships with a rendered fallback and works without the
+        // network, so a counter that cannot load is a missing number, not a
+        // broken page.
+        function callerID() {
+          try {
+            var id = localStorage.getItem(CALLER_KEY);
+            if (!id) {
+              id =
+                window.crypto && window.crypto.randomUUID
+                  ? window.crypto.randomUUID()
+                  : // pre-2021 browsers. Not a good uuid, but it only has to be
+                    // unique enough to dedupe one person's own re-ticks.
+                    "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function (ch) {
+                      var rand = (Math.random() * 16) | 0;
+                      return (ch === "x" ? rand : (rand & 0x3) | 0x8).toString(16);
+                    });
+              localStorage.setItem(CALLER_KEY, id);
+            }
+            return id;
+          } catch (e) {
+            // private mode: no stable id, so nothing is posted rather than
+            // posting a fresh id on every tick and inflating the count
+            return "";
+          }
+        }
+
+        function readSent() {
+          try {
+            return JSON.parse(localStorage.getItem(SENT_KEY)) || [];
+          } catch (e) {
+            return [];
+          }
+        }
+
+        function writeSent(weeks) {
+          try {
+            localStorage.setItem(SENT_KEY, JSON.stringify(weeks));
+          } catch (e) {
+            /* private mode, nothing to do */
+          }
+        }
+
+        var sent = readSent();
+        var totalEl = document.querySelector("[data-total]");
+        var weekCountEl = document.querySelector("[data-week-count]");
+        var WEEK_NOUN = weekCountEl ? weekCountEl.textContent.replace(/^\s*\S+\s*/, "") : "";
+
+        // Two halves, kept apart on purpose. The server figure is whatever the
+        // API last told us; the local one is what this page has counted itself
+        // since it loaded. Displaying the sum is what stops a slow GET landing
+        // after a completion and wiping it: a late server figure replaces its
+        // own half and leaves ours alone.
+        //
+        // The local half is deliberately not persisted. A reload starts it at
+        // zero and takes the server's word for everything, which is the only
+        // way it can stay correct once the count includes other people.
+        var serverTotal = null;
+        var serverWeek = null;
+        var localTotal = 0;
+        var localWeek = 0;
+
+        // What the week tally was built with, used until the first read
+        // arrives so a completion still moves it on a slow connection.
+        function renderedNumber(el) {
+          if (!el) return 0;
+          var digits = parseInt(el.textContent.replace(/[^0-9]/g, ""), 10);
+          return isNaN(digits) ? 0 : digits;
+        }
+        var baseWeek = renderedNumber(weekCountEl);
+
+        function renderTotals() {
+          // left blank until the server figure lands, so the number appears
+          // once rather than counting up from a placeholder. A completion
+          // ticked before then is held in localTotal and included when it does.
+          if (totalEl && serverTotal !== null) {
+            totalEl.textContent = (serverTotal + localTotal).toLocaleString();
+          }
+          if (weekCountEl) {
+            var week = (serverWeek === null ? baseWeek : serverWeek) + localWeek;
+            weekCountEl.textContent = week.toLocaleString() + " " + WEEK_NOUN;
+          }
+        }
+
+        function loadCounts() {
+          fetch(COUNTS_API + "/counts")
+            .then(function (r) {
+              return r.ok ? r.json() : null;
+            })
+            .then(function (data) {
+              if (!data) return;
+              serverTotal = data.total || 0;
+              serverWeek = (data.weeks && data.weeks[CURRENT]) || 0;
+              renderTotals();
+            })
+            .catch(function () {
+              /* the rendered fallback stands */
+            });
+        }
+
+        // Posted the first time a week's box is ticked, and only then. The
+        // server dedupes on (caller, week) as well, so a retry or a second
+        // device is safe; this just keeps us from making the request at all.
+        function reportCompletion(week) {
+          if (PREVIEW) return;
+          // the one guard against counting a week twice on this page: sent is
+          // written before anything else happens, so every path below runs at
+          // most once per week, and a re-tick returns here
+          if (sent.indexOf(week) > -1) return;
+          var id = callerID();
+          if (!id) return;
+
+          // recorded before the response so a dropped reply cannot produce a
+          // second post on the next tick
+          sent.push(week);
+          writeSent(sent);
+
+          // Counted here rather than when the reply arrives, so the total moves
+          // with YOUR PROGRESS instead of a round trip later. The server is
+          // still the authority: if it says this week was already on file, or
+          // we never hear back, the increment comes off again.
+          localTotal += 1;
+          localWeek += 1;
+          renderTotals();
+
+          function uncount() {
+            localTotal -= 1;
+            localWeek -= 1;
+            renderTotals();
+          }
+
+          fetch(COUNTS_API + "/complete", {
+            method: "POST",
+            headers: { "Content-Type": "application/json", "X-Caller-ID": id },
+            body: JSON.stringify({ week: week })
+          })
+            .then(function (r) {
+              return r.ok ? r.json() : null;
+            })
+            .then(function (data) {
+              // counted is false when the server already had this week for this
+              // caller, so our +1 was double counting its figure
+              if (!data || !data.counted) uncount();
+            })
+            .catch(function () {
+              // left in sent: a failed post is worth less than a double count,
+              // and the next visitor's load will show the real figure anyway
+              uncount();
+            });
+        }
 
         var yours = document.querySelector("[data-yours]");
         function renderCount() {
@@ -619,6 +784,9 @@
             if (confirmBox.checked && at === -1) done.push(CURRENT);
             if (!confirmBox.checked && at > -1) done.splice(at, 1);
             write(done);
+            // Unticking is a correction to what this browser shows, not a
+            // retraction of the action, so nothing is sent to undo a count.
+            if (confirmBox.checked) reportCompletion(CURRENT);
             renderUnlock();
             renderCount();
             renderStrip();
@@ -944,6 +1112,7 @@
         renderCount();
         renderStrip();
         renderPreviewDone();
+        loadCounts();
         if (modal && select) applyShareState(select.value);
 
         // On a narrow screen the strip scrolls sideways; start it on the week

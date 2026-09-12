@@ -417,6 +417,11 @@ body {
     font-size: 36px;
     font-weight: 400;
     letter-spacing: 0.005em;
+    // The total ships empty and is filled in when the count loads. An empty
+    // block collapses its line box, which would drop the label under it and
+    // jump the whole row when the number arrives, so hold the line.
+    line-height: 1.1;
+    min-height: 1.1em;
   }
 
   > span {
