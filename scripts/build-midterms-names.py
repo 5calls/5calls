@@ -32,9 +32,12 @@ ORANGE = (251, 134, 64, 255)
 # right and stands on base; its top edge runs along the line through top_a and
 # top_b. Every name centers where California does. Longer names narrow to fit,
 # but never reach past right or left of left, where the megaphone is.
+#
+# The vertical plate's diagonal came down 11px when the "JOIN ME!" art went in,
+# so its top edge follows it down; the base stays put on the orange panel.
 LAYOUTS = {
     "vertical": dict(card=(1080, 1350), ca_left=383, right=999, left=340,
-                     base=887, top_a=(420, 752), top_b=(980, 621)),
+                     base=887, top_a=(420, 763), top_b=(980, 632)),
     "horizontal": dict(card=(1200, 630), ca_left=832, right=1185, left=800,
                        base=190, top_a=(856, 113), top_b=(1168, 40)),
 }
