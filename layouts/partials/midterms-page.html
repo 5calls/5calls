@@ -431,7 +431,7 @@
                    alone, so they are reachable by keyboard and can be disabled
                    while the week is still locked. */ -}}
             <div class="mt-images__set">
-              <button type="button" class="mt-shot-btn" data-shot-open="vert"
+              <button type="button" class="mt-shot-btn mt-shot-btn--portrait" data-shot-open="vert"
                       title="{{ $d.share.hint }}" disabled>
                 <img class="mt-shot mt-shot--portrait" src="{{ $vert.RelPermalink }}"
                      alt="Week {{ $cur }} share image, vertical crop" data-shot="vert"
@@ -439,16 +439,14 @@
                 <span class="mt-shot__hint">{{ partial "midterms-icon.html" (dict "name" "expand" "size" 15) }}</span>
                 <span class="visually-hidden">{{ $d.share.hint }}</span>
               </button>
-              <div class="mt-shot-col">
-                <button type="button" class="mt-shot-btn" data-shot-open="horiz"
-                        title="{{ $d.share.hint }}" disabled>
-                  <img class="mt-shot mt-shot--landscape" src="{{ $horiz.RelPermalink }}"
-                       alt="Week {{ $cur }} share image, horizontal crop" data-shot="horiz"
-                       width="{{ $horiz.Width }}" height="{{ $horiz.Height }}" />
-                  <span class="mt-shot__hint">{{ partial "midterms-icon.html" (dict "name" "expand" "size" 15) }}</span>
-                  <span class="visually-hidden">{{ $d.share.hint }}</span>
-                </button>
-              </div>
+              <button type="button" class="mt-shot-btn" data-shot-open="horiz"
+                      title="{{ $d.share.hint }}" disabled>
+                <img class="mt-shot mt-shot--landscape" src="{{ $horiz.RelPermalink }}"
+                     alt="Week {{ $cur }} share image, horizontal crop" data-shot="horiz"
+                     width="{{ $horiz.Width }}" height="{{ $horiz.Height }}" />
+                <span class="mt-shot__hint">{{ partial "midterms-icon.html" (dict "name" "expand" "size" 15) }}</span>
+                <span class="visually-hidden">{{ $d.share.hint }}</span>
+              </button>
             </div>
             <p class="mt-images__note">
               <span class="mt-images__note--beside">{{ $d.images.locked_note }}</span>
@@ -541,7 +539,7 @@
           <div class="mt-modal__links">
             {{- /* Instagram takes an image rather than a link, so this hands over
                    the file alone, or falls back to a tip below the row. */ -}}
-            <button type="button" class="mt-modal__link" data-share-instagram title="Share on Instagram">
+            <button type="button" class="mt-modal__link" data-share-instagram data-crop="vert" title="Share on Instagram">
               {{- partial "midterms-icon.html" (dict "name" "instagram") -}}
               <span class="visually-hidden">Share on Instagram</span>
             </button>
@@ -550,18 +548,22 @@
                 (dict "key" "bsky" "name" "Bluesky")
                 (dict "key" "threads" "name" "Threads")
                 (dict "key" "facebook" "name" "Facebook") }}
-              <a class="mt-modal__link" data-share-link="{{ .key }}" rel="noopener" target="_blank" href=""
+              <a class="mt-modal__link" data-share-link="{{ .key }}" data-crop="horiz" rel="noopener" target="_blank" href=""
                  title="Share on {{ .name }}">
                 {{- partial "midterms-icon.html" (dict "name" .key) -}}
                 <span class="visually-hidden">Share on {{ .name }}</span>
               </a>
             {{- end }}
-            {{- /* Hands the image to the native sheet; shown only where the
-                   browser can share files. */ -}}
+            {{- /* Hands the image to the native sheet, from either crop; shown
+                   only where the browser can share files. */ -}}
             <button type="button" class="mt-modal__link" data-share title="{{ $d.share.hint }}" hidden>
               {{- partial "midterms-icon.html" (dict "name" "share") -}}
               <span class="visually-hidden">{{ $d.share.hint }}</span>
             </button>
+            {{- /* Each crop has its own places to go: the vertical one is sized for
+                   Instagram, the horizontal one for link previews. This flips the
+                   preview, and the targets beside it with it. */ -}}
+            <button type="button" class="mt-modal__switch" data-modal-switch>{{ $d.share.switch }}</button>
             <button type="button" class="mt-modal__close" data-modal-close aria-label="Close">
               {{- partial "midterms-icon.html" (dict "name" "close" "size" 22) -}}
             </button>
@@ -919,6 +921,8 @@
         var instagramTips = document.querySelectorAll("[data-instagram-tip]");
         var instagramDownload = document.querySelector("[data-instagram-download]");
         var shotButtons = document.querySelectorAll("[data-shot-open]");
+        var cropTargets = document.querySelectorAll("[data-modal] [data-crop]");
+        var switchBtn = document.querySelector("[data-modal-switch]");
         var CAPTION = {{ $d.share.caption }};
         var SHARE_BASE = modal ? modal.getAttribute("data-share-base") : "";
         var shareFile = null;
@@ -939,7 +943,11 @@
 
         // Fetched before the click that shares it: on iOS, reaching share()
         // after an await loses the user gesture and the sheet never opens.
+        // Switching crops re-primes, so a slow fetch for the crop just left must
+        // not land after the one for the crop now showing.
+        var primed = 0;
         function primeShareFile(url) {
+          var token = ++primed;
           shareFile = null;
           if (shareBtn) shareBtn.hidden = true;
           if (!url || !navigator.canShare) return;
@@ -948,7 +956,7 @@
               return r.ok ? r.blob() : null;
             })
             .then(function (blob) {
-              if (!blob) return;
+              if (!blob || token !== primed) return;
               var file = new File([blob], "5-minute-midterms.png", { type: blob.type || "image/png" });
               if (!navigator.canShare({ files: [file] })) return;
               shareFile = file;
@@ -983,22 +991,36 @@
           });
         }
 
+        // Shows one crop in the modal, with only the share targets that suit it.
+        function setCrop(crop) {
+          openCrop = crop;
+          var card = cardUrl(crop);
+          var img = document.querySelector("[data-shot='" + crop + "']");
+          if (modalImg && card) {
+            modalImg.src = card;
+            modalImg.alt = img ? img.alt : "";
+          }
+          cropTargets.forEach(function (el) {
+            el.hidden = el.getAttribute("data-crop") !== crop;
+          });
+          applyShareState(currentState());
+          primeShareFile(card);
+          showInstagramTip(null);
+        }
+
         shotButtons.forEach(function (btn) {
           btn.addEventListener("click", function () {
             if (!modal) return;
-            openCrop = btn.getAttribute("data-shot-open");
-            var card = cardUrl(openCrop);
-            var img = btn.querySelector("[data-shot]");
-            if (modalImg && card) {
-              modalImg.src = card;
-              modalImg.alt = img ? img.alt : "";
-            }
-            applyShareState(currentState());
-            primeShareFile(card);
-            showInstagramTip(null);
+            setCrop(btn.getAttribute("data-shot-open"));
             modal.showModal();
           });
         });
+
+        if (switchBtn) {
+          switchBtn.addEventListener("click", function () {
+            setCrop(openCrop === "vert" ? "horiz" : "vert");
+          });
+        }
 
         var modalClose = document.querySelector("[data-modal-close]");
         if (modalClose) {

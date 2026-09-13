@@ -903,11 +903,12 @@ body {
   color: $ink-solid;
 }
 
+// The crops stack: the vertical one first, the horizontal one across the full
+// width of the panel below it.
 .mt-images__set {
   display: flex;
+  flex-direction: column;
   gap: 14px;
-  // The two crops are different heights, so they hang from a common baseline.
-  align-items: flex-end;
   opacity: 0.42;
 }
 
@@ -949,8 +950,7 @@ body {
   border-radius: 6px;
 
   &--portrait {
-    width: 126px;
-    flex: none;
+    width: 100%;
   }
 
   &--landscape {
@@ -971,6 +971,13 @@ body {
   &:focus-visible .mt-shot {
     outline: 2px solid $blue;
     outline-offset: 2px;
+  }
+
+  // The vertical crop is narrower than the panel: a 4:5 at full width would
+  // stand taller than the whole action beside it.
+  &--portrait {
+    width: 240px;
+    max-width: 100%;
   }
 
   // Locked: the week has not been confirmed, so there is nothing to share.
@@ -1000,13 +1007,6 @@ body {
   color: $ink-solid;
 }
 
-.mt-shot-col {
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-  justify-content: flex-end;
-  gap: 10px;
-}
 
 // The share modal, opened from either crop.
 .mt-modal {
@@ -1052,6 +1052,25 @@ body {
   border-radius: 8px;
 }
 
+// Flips the preview between crops, at the end of the share targets. It keeps
+// its size; on a narrow phone the circles beside it give way instead.
+.mt .mt-modal__switch {
+  flex: none;
+  height: 40px;
+  padding: 0 14px;
+  border: 1.5px solid rgba($blue, 0.4);
+  border-radius: 999px;
+  background: none;
+  color: $blue;
+  font-size: 15px;
+  font-weight: 600;
+
+  &:hover {
+    border-color: $blue;
+    background: rgba($blue, 0.08);
+  }
+}
+
 // One row, never wrapped: on a narrow phone the circles shrink to fit.
 .mt-modal__links {
   display: flex;
@@ -1090,7 +1109,6 @@ body {
   border: 1.5px solid rgba($blue, 0.4);
   border-radius: 999px;
   background: none;
-  color: $blue;
   cursor: pointer;
 
   &:hover {
@@ -1103,10 +1121,25 @@ body {
   }
 }
 
+// The row mixes links and buttons, and inside .mt those take different colours
+// (the link orange, and an inherited ink), so restate it for both to match.
+.mt .mt-modal__link {
+  color: $orange;
+
+  &:hover {
+    color: $ink;
+  }
+}
+
 // Images unlock after the reader confirms they sent the message
 .mt-images.is-unlocked {
   .mt-images__set {
     opacity: 1;
+  }
+
+  // Nothing left to unlock, so nothing to explain.
+  .mt-images__note {
+    display: none;
   }
 }
 

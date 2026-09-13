@@ -360,6 +360,9 @@ share:
   # label a screen reader reads and the tooltip on hover.
   hint: Share this image
   caption: Five minutes a week to protect your vote.
+  # The button in the share modal's row that flips the preview between the
+  # vertical and horizontal crops. Reads the same on both.
+  switch: Switch size
   # Shown under the share row when the Instagram button can't hand the image
   # straight to the share sheet: one tip for phones, one for desktop.
   instagram:
