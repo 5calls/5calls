@@ -1,4 +1,13 @@
-{{ define "bodyclass" }}home{{ end }} {{ define "main" }}
+{{ define "bodyclass" }}home{{ end }}
+{{ define "head" }}
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link
+  href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600&family=Bebas+Neue&display=swap"
+  rel="stylesheet"
+/>
+{{ end }}
+{{ define "main" }}
 <div class="content">
   <h1>Make your voice heard.</h1>
   <div class="g">
@@ -12,6 +21,8 @@
     {{ partial "sidebar.html" . }}
 
     <div class="card-home-wrapper">
+      {{ partial "midterms-home.html" . }}
+
       <div class="card card-home">
         <i class="fa fa-users"></i>
         <div class="card-home-body">

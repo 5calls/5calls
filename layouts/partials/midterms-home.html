@@ -1,0 +1,26 @@
+{{- /*
+  The 5 Minute Midterms card on the homepage, above the call count. Shaped like
+  the other homepage cards, but dressed in the midterms page's colours, type and
+  lockup so it reads as a door into that page. Delete with the midterms page.
+
+  The fonts are loaded by the homepage's head block, not site-wide.
+*/ -}}
+{{- $d := site.Data.midterms -}}
+{{- $cur := $d.current_week -}}
+{{- $week := "" -}}
+{{- with where $d.weeks "number" $cur }}{{ $week = index . 0 }}{{ end -}}
+<a class="card card-home card-midterms plausible-event-name=midterms-home-card" href="/midterms/">
+  <img class="card-midterms__logo" src="{{ site.BaseURL }}images/midterms/lockup.png"
+       alt="5 Minute Midterms" width="416" height="256" />
+  <div class="card-home-body">
+    {{- /* Break at the full stop, as the midterms page does, rather than wherever
+         the second sentence runs out of room. */}}
+    <h2 class="card-midterms__title">{{ replace $d.intro.title ". " ".<br />" | safeHTML }}</h2>
+    <p>
+      {{- with $week }}This week: {{ .title }}.{{ else }}A simple plan to make sure your vote counts in November.{{ end -}}
+    </p>
+    <span class="card-midterms__cta">
+      {{- if $week }}Start week {{ $cur }}{{ else }}Get started{{ end }} &rarr;
+    </span>
+  </div>
+</a>

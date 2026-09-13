@@ -1,0 +1,102 @@
+// The 5 Minute Midterms card on the homepage. Sits in the homepage card stack,
+// so it inherits .card-home's layout, but takes its palette and type from
+// midterms.scss (which is a separate entry point, hence the copied values).
+// Delete with the midterms page.
+
+$mt-cream: #fdf1e3;
+$mt-orange: #f98033;
+$mt-orange-dark: #b04a08;
+$mt-ink: #4a4a4a;
+$mt-ink-solid: #2a2a2a;
+$mt-display: "Bebas Neue", Impact, "Arial Narrow", sans-serif;
+
+.card.card-midterms {
+  display: block;
+  border-top: 6px solid $mt-orange;
+  background: $mt-cream;
+  box-shadow: 0 1px 1px rgba($mt-ink, 0.08);
+  color: $mt-ink;
+  font-family: Archivo, system-ui, sans-serif;
+  text-decoration: none;
+
+  // The whole card is the link; the CTA is only its label.
+  &:hover .card-midterms__cta,
+  &:focus-visible .card-midterms__cta {
+    background: $mt-ink-solid;
+    color: $mt-cream;
+  }
+
+  &:focus-visible {
+    outline: 3px solid $mt-orange;
+    outline-offset: 3px;
+  }
+
+  p {
+    margin: 0 0 1rem;
+    color: $mt-ink;
+  }
+}
+
+// Wider than the other cards' icons, so it sits above the copy until the card
+// is wide enough to put it beside.
+.card-midterms__logo {
+  display: block;
+  width: auto;
+  height: 96px;
+  margin: 0 auto 1rem;
+}
+
+.card-midterms__title {
+  .card-midterms & {
+    margin: 0 0 0.5rem;
+    font-family: $mt-display;
+    font-size: 2rem;
+    font-weight: 400;
+    letter-spacing: 0.005em;
+    line-height: 1;
+    color: $mt-ink;
+  }
+}
+
+.card-midterms__cta {
+  display: inline-flex;
+  padding: 10px 20px;
+  border-radius: 999px;
+  background: $mt-orange;
+  color: $mt-ink-solid;
+  font-weight: 600;
+  box-shadow: 0 6px 16px rgba($mt-orange, 0.3);
+  transition:
+    background 0.15s,
+    color 0.15s;
+}
+
+@media screen and (min-width: 40rem) {
+  .card.card-midterms {
+    text-align: left;
+  }
+
+  .card-midterms__logo {
+    margin-left: 0;
+  }
+}
+
+@media screen and (min-width: 76rem) {
+  .card.card-midterms {
+    display: flex;
+    gap: var(--g-gap);
+    align-items: center;
+  }
+
+  .card-midterms__logo {
+    flex: none;
+    height: 120px;
+    margin: 0;
+  }
+
+  .card-midterms__title {
+    .card-midterms & {
+      font-size: 2.5rem;
+    }
+  }
+}
