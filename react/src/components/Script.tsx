@@ -19,6 +19,23 @@ interface State {
 const titleReg = /\[REP\/SEN NAME\]|\[SENATOR\/REP NAME\]/gi;
 const locationReg = /\[CITY,\s?ZIP\]|\[CITY,\s?STATE\]/gi;
 
+// MD/VA/WV use Delegate; CA/NY/NV use Assembly Member. Nebraska is unicameral
+// so its members all come through as StateUpper and pick up "State Senator".
+const stateLowerTitle = (state: string): string => {
+  switch (state?.toUpperCase()) {
+    case 'CA':
+    case 'NY':
+    case 'NV':
+      return 'Assembly Member ';
+    case 'MD':
+    case 'VA':
+    case 'WV':
+      return 'Delegate ';
+    default:
+      return 'State Representative ';
+  }
+};
+
 class Script extends React.Component<WithLocationProps, State> {
   state: State = { scriptMarkdown: '' };
   scriptRef = createRef<HTMLSpanElement>();
@@ -35,8 +52,10 @@ class Script extends React.Component<WithLocationProps, State> {
         title = 'Senator ';
         break;
       case 'StateLower':
+        title = stateLowerTitle(contact.state);
+        break;
       case 'StateUpper':
-        title = 'Legislator ';
+        title = 'State Senator ';
         break;
       case 'Governor':
         title = 'Governor ';
