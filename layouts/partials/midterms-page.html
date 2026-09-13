@@ -342,9 +342,12 @@
             <h2 class="mt-action__title">{{ $week.title }}</h2>
             {{- $intro := $week.intro }}
             {{- if not (reflect.IsSlice $intro) }}{{ $intro = slice $intro }}{{ end }}
-            {{- /* Each entry is a paragraph, or a nested list for bullets. */ -}}
+            {{- /* Each entry is a paragraph, a nested list for bullets, or an
+                   {h3: …} entry for a subheading. */ -}}
             {{- range $intro }}
-              {{- if reflect.IsSlice . }}
+              {{- if reflect.IsMap . }}
+              <h3 class="mt-action__subhead">{{ .h3 | markdownify }}</h3>
+              {{- else if reflect.IsSlice . }}
               <ul class="mt-action__intro mt-action__list">
                 {{- range . }}
                 <li>{{ . | markdownify }}</li>
@@ -419,7 +422,7 @@
           </div>
 
           <aside class="mt-images" data-images>
-            <div class="mt-images__title">Week {{ $cur }} shares</div>
+            <div class="mt-images__title">{{ $d.images.title }}</div>
             {{- /* The reader's own share art. What is rendered here is the state the
                    page was built for; the switcher swaps the src from the same
                    payload that carries the deck, so changing state costs no round
@@ -457,21 +460,30 @@
         {{- end }}
       </main>
 
-      {{- /* Extra credit: more for the week, below the action. The heading and
-             each part's title tease it; the parts themselves stay hidden until
-             the confirm box is ticked, like the share images. */ -}}
+      {{- /* Extra credit: one more thing for the week, below the action. It sits
+             in a box that starts closed, and can't be opened until the confirm
+             box is ticked, so the week's action stays the thing to do first; the
+             script does the locking, so without it the box simply opens. Inside,
+             it is laid out like the action: the ask on the left, share images on
+             the right (FPO plates until its own art lands). */ -}}
       {{- if not $prelaunch }}
       {{- with $week.extra_credit }}
-        <section id="extra-credit" class="mt-extra" data-extra>
-          <div class="mt-extra__head">
-            <h2 class="mt-extra__title">{{ .title }}</h2>
-            <p class="mt-extra__note">{{ .locked_note }}</p>
-          </div>
-          <div class="mt-extra__parts">
-            {{- range .parts }}
-              <div class="mt-extra__part">
-                <h3>{{ .title }}</h3>
-                <div class="mt-extra__body" data-extra-body hidden>
+        {{- $ec := . }}
+        <section id="extra-credit" class="mt-extra">
+          <h2 class="mt-extra__title">{{ .title }}</h2>
+          <details class="mt-extra__box" data-extra>
+            <summary class="mt-extra__toggle">
+              <span class="mt-extra__toggle-text">
+                <span class="mt-extra__toggle-label">{{ .toggle }}</span>
+                {{- with .locked_note }}
+                  <span class="mt-extra__toggle-note">{{ . }}</span>
+                {{- end }}
+              </span>
+            </summary>
+            <div class="mt-extra__grid">
+              {{- with .part }}
+                <div class="mt-extra__main">
+                  <h3>{{ .title }}</h3>
                   {{- range .body }}
                     <p>{{ . | markdownify }}</p>
                   {{- end }}
@@ -485,9 +497,22 @@
                     </div>
                   {{- end }}
                 </div>
-              </div>
-            {{- end }}
-          </div>
+              {{- end }}
+              {{- $fpoVert := resources.Get "images/midterms/share-vertical-fpo.png" }}
+              {{- $fpoHoriz := resources.Get "images/midterms/share-horizontal-fpo.png" }}
+              <aside class="mt-images mt-images--extra">
+                <div class="mt-images__title">{{ $ec.title }} shares</div>
+                <div class="mt-images__set">
+                  <img class="mt-shot mt-shot--portrait" src="{{ $fpoVert.RelPermalink }}"
+                       alt="Extra credit share image, vertical crop (placeholder)"
+                       width="{{ $fpoVert.Width }}" height="{{ $fpoVert.Height }}" />
+                  <img class="mt-shot mt-shot--landscape" src="{{ $fpoHoriz.RelPermalink }}"
+                       alt="Extra credit share image, horizontal crop (placeholder)"
+                       width="{{ $fpoHoriz.Width }}" height="{{ $fpoHoriz.Height }}" />
+                </div>
+              </aside>
+            </div>
+          </details>
         </section>
       {{- end }}
       {{- end }}
@@ -844,19 +869,30 @@
         var confirmBox = document.querySelector("[data-confirm]");
         var images = document.querySelector("[data-images]");
         var extra = document.querySelector("[data-extra]");
-        var extraBodies = document.querySelectorAll("[data-extra-body]");
+        var extraToggle = extra && extra.querySelector("summary");
         function renderUnlock() {
           var unlocked = done.indexOf(CURRENT) > -1;
           if (confirmBox) confirmBox.checked = unlocked;
           if (images) images.classList.toggle("is-unlocked", unlocked);
-          if (extra) extra.classList.toggle("is-unlocked", unlocked);
-          extraBodies.forEach(function (body) {
-            body.hidden = !unlocked;
-          });
+          // Extra credit stays shut until the week is done. Unticking the
+          // confirm box shuts it again.
+          if (extra) {
+            extra.classList.toggle("is-locked", !unlocked);
+            extraToggle.setAttribute("aria-disabled", String(!unlocked));
+            if (!unlocked) extra.open = false;
+          }
           shotButtons.forEach(function (btn) {
             btn.disabled = !unlocked;
           });
         }
+        // A summary opens its box on click, and on Enter and Space by way of a
+        // click, so stopping the click is enough to hold it shut.
+        if (extraToggle) {
+          extraToggle.addEventListener("click", function (e) {
+            if (extra.classList.contains("is-locked")) e.preventDefault();
+          });
+        }
+
         if (confirmBox) {
           confirmBox.addEventListener("change", function () {
             var at = done.indexOf(CURRENT);

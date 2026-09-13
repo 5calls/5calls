@@ -232,13 +232,17 @@ body {
     font-weight: 600;
   }
 
+  // The state tag on the action card: the reader's state, so it is set to be
+  // read at a glance rather than as a label.
   &--tag {
-    padding: 6px 12px;
+    flex: none;
+    padding: 8px 16px;
     border: 0;
     background: rgba($blue, 0.12);
     color: $blue;
-    font: 500 13px $mono;
-    letter-spacing: 0.08em;
+    font-size: 17px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
   }
 }
 
@@ -618,6 +622,17 @@ body {
   text-wrap: pretty;
 }
 
+// A subheading inside the intro, set like extra credit's so the two read as
+// the same kind of heading.
+.mt-action__subhead {
+  max-width: 52ch;
+  margin: 0;
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 1.3;
+  color: $ink-solid;
+}
+
 // Bullets inside the intro, set off like the paragraphs around them.
 .mt-action__list {
   padding-left: 1.2em;
@@ -682,13 +697,23 @@ body {
 // The state tag sits on the same top line as the registration copy.
 .mt-deck__top {
   display: flex;
-  gap: 16px;
-  align-items: flex-start;
+  // When the state tag doesn't fit beside the date, it goes on its own line
+  // above it rather than crushing it. wrap-reverse stacks the lines bottom-up,
+  // which also flips the cross axis: flex-end is the top.
+  flex-wrap: wrap-reverse;
+  gap: 12px 16px;
+  align-items: flex-end;
   justify-content: space-between;
 }
 
+// Starts narrow and grows into the row, so a long line (North Dakota's "Just
+// bring your ID on Election Day") wraps inside it rather than pushing the
+// state tag onto a line of its own. The tag only goes on top when even this
+// much won't fit beside it, which is a phone.
 .mt-deck__lede {
   display: flex;
+  flex: 1 1 220px;
+  min-width: 0;
   flex-direction: column;
 }
 
@@ -738,19 +763,20 @@ body {
   color: rgba($ink, 0.72);
 }
 
+// The week's one big action, so it is sized like one.
 .mt-confirm {
   display: flex;
   flex-wrap: wrap;
-  gap: 14px;
+  gap: 12px 18px;
   align-items: center;
-  padding: 18px 22px;
-  border: 1.5px solid $ink;
-  border-radius: 10px;
+  padding: 24px 28px;
+  border: 2px solid $ink;
+  border-radius: 12px;
   cursor: pointer;
 
   input {
-    width: 26px;
-    height: 26px;
+    width: 34px;
+    height: 34px;
     margin: 0;
     accent-color: $orange;
   }
@@ -758,13 +784,14 @@ body {
   span {
     flex: 1;
     min-width: 200px;
-    font-size: 17px;
+    font-size: 22px;
     font-weight: 600;
+    line-height: 1.25;
     color: $ink;
   }
 
   em {
-    font: 400 15px $mono;
+    font: 400 16px $mono;
     font-style: normal;
     color: rgba($ink, 0.85);
   }
@@ -808,20 +835,15 @@ body {
   color: rgba($ink, 0.85);
 }
 
-// Extra credit, below the action. Until the week is done only the heading, the
-// note and each part's title show, as a tease.
+// Extra credit, below the action: a heading over a box that starts closed.
 .mt-extra {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
   padding-top: clamp(30px, 5vw, 54px);
   padding-bottom: clamp(30px, 5vw, 54px);
   @include shell;
   border-top: 1px solid rgba($ink, 0.15);
-}
-
-.mt-extra__head {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px 20px;
-  align-items: baseline;
 }
 
 .mt-extra__title {
@@ -833,23 +855,107 @@ body {
   letter-spacing: 0.005em;
 }
 
-.mt-extra__note {
-  margin: 0;
-  font-size: 16px;
-  line-height: 1.5;
-  color: rgba($ink, 0.9);
+// Drawn like the confirm box above, since it is the next thing to do.
+.mt-extra__box {
+  border: 2px solid $ink;
+  border-radius: 12px;
 }
 
-.mt-extra__parts {
+.mt-extra__toggle {
+  display: flex;
+  gap: 18px;
+  align-items: center;
+  justify-content: space-between;
+  padding: 24px 28px;
+  font-size: 22px;
+  font-weight: 600;
+  line-height: 1.25;
+  color: $ink;
+  cursor: pointer;
+  list-style: none;
+
+  &::-webkit-details-marker {
+    display: none;
+  }
+
+  // A chevron that turns to point up once the box is open.
+  &::after {
+    content: "";
+    flex: none;
+    width: 12px;
+    height: 12px;
+    margin-top: -6px;
+    border-right: 3px solid $orange;
+    border-bottom: 3px solid $orange;
+    transform: rotate(45deg);
+    transition: transform 0.15s;
+  }
+
+  .mt-extra__box[open] > &::after {
+    margin-top: 6px;
+    transform: rotate(-135deg);
+  }
+
+  &:hover {
+    background: rgba($ink, 0.04);
+  }
+
+  &:focus-visible {
+    outline: 3px solid $blue;
+    outline-offset: 3px;
+  }
+}
+
+// The label, and beside it the note saying what unlocks the box. The note
+// drops under the label when the row is too narrow for both.
+.mt-extra__toggle-text {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 14px;
+  align-items: baseline;
+}
+
+.mt-extra__toggle-note {
+  font-size: 16px;
+  font-weight: 400;
+  color: rgba($ink, 0.7);
+}
+
+// Locked until the week's action is done: the label mutes, the chevron greys
+// out, and nothing about it invites a click. The note only shows while locked.
+.mt-extra__box:not(.is-locked) .mt-extra__toggle-note {
+  display: none;
+}
+
+.mt-extra__box.is-locked > .mt-extra__toggle {
+  cursor: default;
+
+  &:hover {
+    background: none;
+  }
+
+  &::after {
+    border-color: rgba($ink, 0.3);
+  }
+
+  .mt-extra__toggle-label {
+    color: rgba($ink, 0.6);
+  }
+}
+
+// Laid out like the action: the ask on the left, share images on the right,
+// stacking at the same width the action does.
+.mt-extra__grid {
   display: flex;
   flex-wrap: wrap;
   gap: clamp(24px, 4vw, 48px);
-  margin-top: 28px;
+  align-items: flex-start;
+  padding: 4px 28px 28px;
 }
 
-.mt-extra__part {
+.mt-extra__main {
   display: flex;
-  flex: 1;
+  flex: 1.3;
   min-width: unquote("min(340px, 100%)");
   flex-direction: column;
   gap: 16px;
@@ -859,17 +965,6 @@ body {
     font-size: 22px;
     font-weight: 700;
     color: $ink-solid;
-  }
-}
-
-.mt-extra__body {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-
-  // Its display would otherwise win over the hidden attribute.
-  &[hidden] {
-    display: none;
   }
 
   > p {
@@ -881,8 +976,21 @@ body {
   }
 }
 
-.mt-extra.is-unlocked .mt-extra__note {
-  display: none;
+@media (max-width: 780px) {
+  .mt-extra__main,
+  .mt-images--extra {
+    flex-basis: 100%;
+  }
+
+  .mt-extra__grid {
+    padding-right: 20px;
+    padding-left: 20px;
+  }
+
+  .mt-extra__toggle {
+    padding-right: 20px;
+    padding-left: 20px;
+  }
 }
 
 // Share images sidebar
@@ -1128,6 +1236,20 @@ body {
 
   &:hover {
     color: $ink;
+  }
+}
+
+// Extra credit's images are placeholders with nothing to unlock or share yet,
+// so they show at full strength and aren't buttons. The vertical crop keeps the
+// same narrower width as the week's.
+.mt-images--extra {
+  .mt-images__set {
+    opacity: 1;
+  }
+
+  .mt-shot--portrait {
+    width: 240px;
+    max-width: 100%;
   }
 }
 
