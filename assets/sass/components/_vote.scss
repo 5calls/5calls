@@ -105,8 +105,8 @@
 }
 
 // Shown to readers sent here from 5 Minute Midterms once the form finishes,
-// while the page waits to take them back. Pinned to the bottom of the screen,
-// since the finish can land anywhere down a long embed.
+// with a way back there that they choose to take. Pinned to the bottom of the
+// screen, since the finish can land anywhere down a long embed.
 .vote-return {
   position: fixed;
   right: 1rem;
@@ -151,6 +151,32 @@
     &:active,
     &:visited {
       color: #fff;
+    }
+  }
+
+  // The way back is the thing to do, so it's a solid pill; Close stays a link.
+  // It leads to 5 Minute Midterms, so it wears that page's solid pill rather
+  // than 5 Calls' colours: the orange and ink of $orange and $ink-solid in
+  // midterms.scss, which this stylesheet can't import.
+  a.vote-return__back {
+    padding: 0.55rem 1.1rem;
+    border-radius: 999px;
+    background: #f98033;
+    box-shadow: 0 6px 16px rgba(249, 128, 51, 0.3);
+    color: #2a2a2a;
+    font-weight: 600;
+    text-decoration: none;
+
+    &:hover,
+    &:focus,
+    &:active,
+    &:visited {
+      color: #2a2a2a;
+    }
+
+    &:hover,
+    &:focus {
+      background: #e8711f;
     }
   }
 }

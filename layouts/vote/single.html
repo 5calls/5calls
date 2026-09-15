@@ -2,27 +2,25 @@
 
 {{ define "head" }}
   <script src="https://cdn.voteamerica.org/embed/tools.js" async></script>
-  {{- /* Readers sent from 5 Minute Midterms (?from=midterms) go back there once
-         the form finishes. Not straight away: VoteAmerica's docs don't say what
-         is on screen when action-finish fires, and the verify tool's result may
-         be, so the notice holds the page long enough to read it and lets the
-         reader stay instead. Everyone else never sees the notice. */}}
+  {{- /* Readers sent from 5 Minute Midterms (?from=midterms) are offered a way
+         back there once the form finishes, but never sent automatically.
+         VoteAmerica's action-finish fires the same whether or not the verify
+         tool found the reader, and a reader who wasn't found needs to keep the
+         page and its next steps, so going back is theirs to choose. The notice
+         shows once and can be closed, since it sits over the bottom of the
+         form. Everyone else never sees it. */}}
   <script>
     (function () {
       if (new URLSearchParams(window.location.search).get("from") !== "midterms") return;
-      var DELAY = 8000;
-      var timer = null;
+      var shown = false;
       window.addEventListener("VoteAmericaEvent", function (evt) {
         var data = evt.detail && evt.detail.data;
-        if (!data || data.event !== "action-finish" || timer) return;
-        timer = setTimeout(function () {
-          window.location.href = "/midterms/";
-        }, DELAY);
+        if (!data || data.event !== "action-finish" || shown) return;
         var notice = document.querySelector("[data-midterms-return]");
         if (!notice) return;
+        shown = true;
         notice.hidden = false;
-        notice.querySelector("[data-midterms-stay]").addEventListener("click", function () {
-          clearTimeout(timer);
+        notice.querySelector("[data-midterms-close]").addEventListener("click", function () {
           notice.hidden = true;
         });
       });
@@ -45,9 +43,9 @@
     </div>
 
     <div class="vote-return" data-midterms-return role="status" hidden>
-      <p>Taking you back to 5 Minute Midterms in a few seconds.</p>
-      <a href="/midterms/">Go now</a>
-      <button type="button" data-midterms-stay>Stay here</button>
+      <p>Done here?</p>
+      <a class="vote-return__back" href="/midterms/">Back to 5 Minute Midterms</a>
+      <button type="button" data-midterms-close>Close</button>
     </div>
   </main>
 {{ end }}
