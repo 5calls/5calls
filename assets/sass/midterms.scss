@@ -434,10 +434,13 @@ body {
   padding-bottom: 6px;
 }
 
+// Each number sits flush right over its label.
 .mt-count {
   display: flex;
   flex-direction: column;
   gap: 2px;
+  align-items: flex-end;
+  text-align: right;
 
   > b {
     font-family: $display;
@@ -504,6 +507,13 @@ body {
     &--locked {
       color: rgba($ink, 0.6);
     }
+  }
+
+  // Under a locked week's number, before its date at the foot of the cell.
+  .mt-strip__upcoming {
+    font-size: 14px;
+    line-height: 1.2;
+    color: rgba($ink, 0.6);
   }
 
   .mt-strip__meta {
@@ -583,12 +593,13 @@ body {
   }
 }
 
-// This week's action
+// This week's action. Side by side, the share panel and the column end level,
+// so the panel's bottom lines up with the confirm box.
 .mt-action {
   display: flex;
   flex-wrap: wrap;
   gap: clamp(24px, 4vw, 48px);
-  align-items: flex-start;
+  align-items: flex-end;
   padding-top: clamp(30px, 5vw, 54px);
   padding-bottom: clamp(30px, 5vw, 54px);
   @include shell;
@@ -717,6 +728,22 @@ body {
   flex-direction: column;
 }
 
+// The deck's state tag is a link up to the header's picker. Written against
+// .mt a, which would otherwise paint it orange and grey it on hover.
+.mt a.mt-pill--tag {
+  color: $blue;
+
+  &:hover {
+    background: rgba($blue, 0.2);
+    color: $blue;
+  }
+
+  &:focus-visible {
+    outline: 3px solid $blue;
+    outline-offset: 3px;
+  }
+}
+
 // The lines above and below the date are the supporting detail and share one
 // treatment, so the date is the only thing that carries weight.
 .mt-deck__detail {
@@ -742,6 +769,38 @@ body {
   line-height: 1;
   letter-spacing: 0.005em;
   color: $ink;
+}
+
+// The deadline copy's first line: what the date, or the list under it, is.
+.mt-deck__intro {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 1.35;
+  color: $ink-solid;
+  text-wrap: pretty;
+}
+
+// Tier A's one date, under that line.
+.mt-deck__intro + .mt-deck__date {
+  margin-top: 8px;
+}
+
+// Under the top row: tier A's mail line, North Dakota's ID line, or the list of
+// ways to register.
+.mt-deck__body {
+  font-size: 16px;
+  line-height: 1.5;
+  color: rgba($ink, 0.88);
+
+  p {
+    margin: 0;
+  }
+
+  strong {
+    font-weight: 700;
+    color: $ink-solid;
+  }
 }
 
 .mt-deck__notes {
@@ -788,12 +847,6 @@ body {
     font-weight: 600;
     line-height: 1.25;
     color: $ink;
-  }
-
-  em {
-    font: 400 16px $mono;
-    font-style: normal;
-    color: rgba($ink, 0.85);
   }
 }
 
@@ -944,7 +997,8 @@ body {
 }
 
 // Laid out like the action: the ask on the left, share images on the right,
-// stacking at the same width the action does.
+// stacking at the same width the action does. Its ask is short, so unlike the
+// action's the two line up at the top.
 .mt-extra__grid {
   display: flex;
   flex-wrap: wrap;
@@ -962,8 +1016,9 @@ body {
 
   h3 {
     margin: 0;
-    font-size: 22px;
+    font-size: 28px;
     font-weight: 700;
+    line-height: 1.2;
     color: $ink-solid;
   }
 
@@ -1239,9 +1294,10 @@ body {
   }
 }
 
-// Extra credit's images are placeholders with nothing to unlock or share yet,
-// so they show at full strength and aren't buttons. The vertical crop keeps the
-// same narrower width as the week's.
+// Extra credit's images sit in a box that only opens once the week is done, so
+// they show at full strength rather than dimmed like the week's locked crops.
+// The vertical crop keeps the same narrower width as the week's, placeholder
+// plates included.
 .mt-images--extra {
   .mt-images__set {
     opacity: 1;

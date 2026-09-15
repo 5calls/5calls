@@ -1,0 +1,47 @@
+{{- /*
+  One state's registration deadline copy for the deck card, as HTML. Takes
+  (dict "state" STATE "copy" WEEK.deck_copy "part" "lede"|"body") and returns a
+  string: the lede sits beside the state tag, the body under it. Returning a
+  string lets the page print the reader's state and the state switcher carry
+  every other state's, drawn by the same code.
+
+  The words are in data/midterms.yml; which lines a state gets, and the dates
+  filled into them, come from its tier in data/midterms_states.yml.
+*/ -}}
+{{- $s := .state -}}
+{{- $c := .copy -}}
+{{- $out := "" -}}
+{{- if eq $s.tier "ND" -}}
+  {{- $lines := $c.no_registration -}}
+  {{- if eq .part "lede" -}}
+    {{- $out = printf `<p class="mt-deck__intro">%s</p>` (markdownify (index $lines 0)) -}}
+  {{- else -}}
+    {{- $out = printf `<p>%s</p>` (markdownify (index $lines 1)) -}}
+  {{- end -}}
+{{- else if eq $s.tier "A" -}}
+  {{- /* One date for every way to register, set large under the lede. */ -}}
+  {{- if eq .part "lede" -}}
+    {{- $out = printf `<p class="mt-deck__intro">%s</p><div class="mt-deck__date">%s</div>`
+          (markdownify $c.same_day.lede) (or $s.online $s.in_person) -}}
+  {{- else -}}
+    {{- $mail := cond $s.mail_received $c.same_day.mail_received $c.same_day.mail_postmarked -}}
+    {{- $out = printf `<p>%s</p>` (markdownify (replace $mail "{mail_by}" $s.mail_by)) -}}
+  {{- end -}}
+{{- else -}}
+  {{- /* B, C1 and C2: a line per way to register. Only B has same-day
+         registration, and a state with no online registration has no line. */ -}}
+  {{- if eq .part "lede" -}}
+    {{- $out = printf `<p class="mt-deck__intro">%s</p>` (markdownify (replace $c.various "{state}" $s.name)) -}}
+  {{- else -}}
+    {{- $rows := slice -}}
+    {{- with $s.online }}{{ $rows = $rows | append (replace $c.online "{date}" .) }}{{ end -}}
+    {{- $inPerson := cond (eq $s.tier "B") $c.in_person_same_day $c.in_person -}}
+    {{- $rows = $rows | append (replace $inPerson "{date}" $s.in_person) -}}
+    {{- $mail := cond $s.mail_received $c.mail_received $c.mail_postmarked -}}
+    {{- $rows = $rows | append (replace (replace $mail "{date}" $s.mail_date) "{mail_by}" $s.mail_by) -}}
+    {{- $items := "" -}}
+    {{- range $rows }}{{ $items = printf "%s<li>%s</li>" $items (markdownify .) }}{{ end -}}
+    {{- $out = printf `<ul class="mt-deck__notes">%s</ul>` $items -}}
+  {{- end -}}
+{{- end -}}
+{{- return $out -}}

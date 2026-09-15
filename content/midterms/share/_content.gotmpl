@@ -8,6 +8,10 @@
 
   Only weeks that have gone out get share URLs, so a link cannot leak a week
   whose subject the strip is still hiding behind "Upcoming".
+
+  A week whose extra credit has its own share art also gets one page for it,
+  /midterms/share/1/extra/. That art is the same in every state, so there is
+  one page rather than 51.
 */ -}}
 {{- $d := site.Data.midterms -}}
 {{- range $d.weeks }}
@@ -26,6 +30,22 @@
         )
         "build" (dict "list" "never" "render" "always")
       ) }}
+    {{- end }}
+    {{- with $week.extra_credit }}
+      {{- if .share }}
+        {{- $.AddPage (dict
+          "kind" "page"
+          "path" (printf "%d/extra" $week.number)
+          "title" (printf "Extra credit: week %d" $week.number)
+          "params" (dict
+            "share" true
+            "extra" true
+            "week" $week.number
+            "description" .part.title
+          )
+          "build" (dict "list" "never" "render" "always")
+        ) }}
+      {{- end }}
     {{- end }}
   {{- end }}
 {{- end }}

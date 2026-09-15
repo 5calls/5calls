@@ -79,26 +79,74 @@ weeks:
     deck_note: >-
       Deadlines and rules come from your state's election office. Checking takes
       about a minute, even if you're sure you're registered.
+    # The deadline copy in the deck card, picked by the reader's state's tier in
+    # data/midterms_states.yml: A one deadline for every way to register, B
+    # same-day registration, C1/C2 deadlines that differ by channel (C2 has no
+    # online line), ND no registration. {state}, {date} and {mail_by} are
+    # filled in per state from that file. Lines are markdown.
+    deck_copy:
+      # Tier A: the lede sits over the date, the mail line under it.
+      same_day:
+        lede: "The deadline to register online, in-person, or by mail is"
+        mail_postmarked: "If you choose to register by mail, mail your form by {mail_by} to ensure a valid postmark."
+        mail_received: "If you choose to register by mail, mail your form by {mail_by} so it arrives in time."
+      # Tiers B, C1 and C2: the lede over one line per way to register.
+      various: "{state} has various voter registration deadlines:"
+      online: "**Online:** Register by {date}"
+      in_person: "**In person:** Register by {date}"
+      in_person_same_day: "**In person:** Register by {date} (same-day registration)"
+      mail_postmarked: "**By-mail:** Postmark by {date} (mail it by {mail_by}!)"
+      mail_received: "**By-mail:** Must arrive by {date} (mail it by {mail_by}!)"
+      # North Dakota: the lede, then the line under it.
+      no_registration:
+        - "North Dakota does not require voter registration, but you must bring a valid form of ID when you go to the polls."
+        - "Valid ID includes: ND State ID, ND Drivers License, ND Non-Driver ID, Tribal ID, or Tribal Letter. Learn more at the [ND Secretary of State website](https://www.sos.nd.gov/elections/voter/voting-north-dakota/forms-voter-id)."
+    # The same deadlines for the share cards, under the card's own "Voter
+    # registration deadlines" heading: the vertical Instagram crop and the
+    # horizontal link preview. Same tiers, placeholders and received-by variants
+    # as deck_copy, but no links, and a **bold** lead is set bold on the card.
+    card_copy:
+      # Tier A: the lede, the date on its own line, then the mail line.
+      same_day:
+        lede: "Register to vote online, in-person, or by-mail by"
+        mail_postmarked: "If you choose to register by mail, mail your form by {mail_by} to ensure a valid postmark."
+        mail_received: "If you choose to register by mail, mail your form by {mail_by} so it arrives in time."
+      # Tiers B, C1 and C2: a bullet per way to register.
+      online: "**Online:** Register by {date}"
+      in_person: "**In person:** Register by {date}"
+      mail_postmarked: "**By-mail:** Postmark by {date} (mail it by {mail_by}!)"
+      mail_received: "**By-mail:** Must arrive by {date} (mail it by {mail_by}!)"
+      # North Dakota: two lines.
+      no_registration:
+        - "North Dakota does not require voter registration, but you must bring a valid form of ID when you go to the polls."
+        - "ID options include: ND State ID, ND Drivers License, ND Non-Driver ID, Tribal ID, or Tribal Letter."
     # Paragraphs in order; a nested list renders as bullets, and an h3: entry
     # as a subheading.
     intro:
       - h3: "You can’t vote if you’re not registered!"
       - >-
-        Checking your registration status now gives you enough time to
-        register—or re-register—before your state’s deadline. So if you’re not
+        Over 21 million voter registration records were [removed from voter rolls](https://www.eac.gov/sites/default/files/2025-07/2024_EAVS_Report_508.pdf)
+        between the 2022 midterms and the 2024 presidential election. Checking
+        your registration status now gives you enough time to register — or re-register — before your state’s deadline. So if you’re not
         sure, check! And if you are sure? Check anyway!
       - >-
-        If you enter your information and don’t see a match, you may not be
-        currently registered — please register now to make sure you can vote.
+        If you enter your information and don’t see a match or are listed as inactive, please [register now](https://5calls.org/vote/register/?from=midterms) to make sure you can vote.
       - "Common reasons people aren’t found in the voter file:"
       - - Your name is spelled differently than on file
-        - Your address is new or has changed since you last registered
+        - Your address has changed since you last registered
       - >-
-        If any of this sounds like you, go ahead and re-register with your
-        current information. It’s a quick way to ensure you can vote in the
+        If any of this sounds like you, go ahead and [re-register with your
+        current information](https://5calls.org/vote/register/?from=midterms). It’s a quick way to ensure you can vote in the
         coming election.
     confirm: I confirmed my registration
-    confirm_noun: checked
+    # The words the share modal's text platforms prefill, so each can tag 5 Calls
+    # by its own handle there; the reader's state share link follows. Facebook's
+    # sharer takes a link only, so it has none. Weeks without share_text post
+    # the site caption instead.
+    share_text:
+      threads: "I just confirmed my voter registration with @5calls and 5 Minute Midterms — you should too"
+      bsky: "I just confirmed my voter registration with @5calls.org and 5 Minute Midterms — you should too"
+      x: "I just confirmed my voter registration with @make5calls and 5 Minute Midterms — you should too"
     # More for the week, in a section below the action: a box that starts
     # closed, labelled with toggle, holding one action laid out like the main
     # one with share images beside it. It can't be opened until the confirm box
@@ -124,15 +172,27 @@ weeks:
           label: Sample message
           text: "Hey, I just made sure I was registered to vote. If you want to join me, it’s really easy to do at 5calls.org/midterms!"
           copy_cta: Copy message
+      # Extra credit's share art is the same for every state, so it is used as
+      # is rather than drawn per state. The horizontal crop is posted as a link
+      # to /midterms/share/1/extra/, whose card is that image; text is the
+      # prefilled words per platform, with that link after them, as for the
+      # week's own share_text.
+      share:
+        vertical: images/midterms/share-vertical-week1-extra.jpg
+        horizontal: images/midterms/share-horizontal-week1-extra.jpg
+        text:
+          threads: "I got 5 friends to confirm their voter registration with @5calls and 5 Minute Midterms — you should too"
+          bsky: "I got 5 friends to confirm their voter registration with @5calls.org and 5 Minute Midterms — you should too"
+          x: "I got 5 friends to confirm their voter registration with @make5calls and 5 Minute Midterms — you should too"
     why:
-      heading: Millions get dropped from the rolls without knowing — checking takes less than a minute
+      heading: Millions have been dropped from the voter rolls without knowing — checking takes less than a minute
       stats:
-        - value: 21 million
-          text: voter registration records were [removed from voter rolls](https://www.eac.gov/sites/default/files/2025-07/2024_EAVS_Report_508.pdf#page=33.10) between the 2022 midterms and the 2024 presidential election.
+        - value: Over 19 million
+          text: voters were [removed from the rolls](https://www.brennancenter.org/topics/voting-elections/vote-suppression/voter-purges) between 2020 and 2022.
         - value: Fewer than 30%
           text: of 18 year olds [are registered to vote](https://www.theguardian.com/commentisfree/2026/jun/21/young-people-voter-registration).
         - value: Two-thirds
-          text: of states had [lower active voter registration rates](https://www.eac.gov/sites/default/files/2025-07/2024_EAVS_Report_508.pdf#page=33.10) in 2024 than in 2020 nationally.
+          text: of states had [lower active voter registration rates](https://www.eac.gov/sites/default/files/2025-07/2024_EAVS_Report_508.pdf) in 2024 than in 2020.
 
   - number: 2
     short: Deadlines
@@ -151,7 +211,6 @@ weeks:
     copy_cta: button1
     rewrite_cta: button2
     confirm: I did it — unlock my images
-    confirm_noun: saved
     # FPO: placeholder copy, replace before this week ships.
     why:
       heading: Every deadline is a different date, and none of them move.
@@ -180,7 +239,6 @@ weeks:
     copy_cta: button1
     rewrite_cta: button2
     confirm: I did it — unlock my images
-    confirm_noun: checked
     # FPO: placeholder copy, replace before this week ships.
     why:
       heading: ID rules changed in a lot of places, and nobody sends a notice.
@@ -210,7 +268,6 @@ weeks:
     copy_cta: button1
     rewrite_cta: button2
     confirm: I read my ballot — unlock my images
-    confirm_noun: read
     why:
       heading: The races people skip are the ones closest to their daily life.
       stats:
@@ -238,7 +295,6 @@ weeks:
     copy_cta: button1
     rewrite_cta: button2
     confirm: I did it — unlock my images
-    confirm_noun: planned
     # FPO: placeholder copy, replace before this week ships.
     why:
       heading: People who pick a day and a time are the ones who show up.
@@ -267,7 +323,6 @@ weeks:
     copy_cta: button1
     rewrite_cta: button2
     confirm: I did it — unlock my images
-    confirm_noun: voted
     # FPO: placeholder copy, replace before this week ships.
     why:
       heading: Voting early takes one problem off election day.
@@ -296,7 +351,6 @@ weeks:
     copy_cta: button1
     rewrite_cta: button2
     confirm: I did it — unlock my images
-    confirm_noun: rechecked
     # FPO: placeholder copy, replace before this week ships.
     why:
       heading: Ballots get rejected for fixable things, if you catch them in time.
@@ -325,7 +379,6 @@ weeks:
     copy_cta: button1
     rewrite_cta: button2
     confirm: I did it — unlock my images
-    confirm_noun: voted
     # FPO: placeholder copy, replace before this week ships.
     why:
       heading: Eight weeks of small things end with the one that counts.
@@ -342,8 +395,8 @@ images:
   title: Show you did it
   # The panel sits beside the action on wide screens and below it once they
   # stack, so the note says which.
-  locked_note: Check your registration on the left to unlock the share images.
-  locked_note_stacked: Check your registration above to unlock the share images.
+  locked_note: Confirm your registration on the left to unlock the share images.
+  locked_note_stacked: Confirm your registration above to unlock the share images.
 
 # The share row under the images. `caption` is the text carried into a post;
 # the link posted alongside it is the reader's own state's share URL, so the

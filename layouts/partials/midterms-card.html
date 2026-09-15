@@ -14,7 +14,7 @@
 */ -}}
 {{- $card := false -}}
 {{- if eq .week.number 1 -}}
-  {{- $card = partial "midterms-card-week1.html" (dict "crop" .crop "state" .state) -}}
+  {{- $card = partial "midterms-card-week1.html" (dict "crop" .crop "state" .state "copy" .week.card_copy) -}}
 {{- else -}}
 {{- $plate := resources.Get (printf "images/midterms/share-%s-fpo.png" .crop) -}}
 {{- $font := resources.Get "fonts/BebasNeue-Regular.ttf" -}}

@@ -42,8 +42,8 @@
 {{- end -}}
 {{- /* On previews, flag detail fields the week has not been written with yet. */ -}}
 {{- $missing := slice -}}
-{{- $required := slice "intro" "message" "copy_cta" "rewrite_cta" "confirm" "confirm_noun" "why" -}}
-{{- if $deck }}{{ $required = slice "intro" "deck_cta" "confirm" "confirm_noun" "why" }}{{ end -}}
+{{- $required := slice "intro" "message" "copy_cta" "rewrite_cta" "confirm" "why" -}}
+{{- if $deck }}{{ $required = slice "intro" "deck_cta" "confirm" "why" }}{{ end -}}
 {{- if and $preview (not $prelaunch) -}}
   {{- range $required -}}
     {{- if not (index $week .) }}{{ $missing = $missing | append . }}{{ end -}}
@@ -51,11 +51,12 @@
 {{- end -}}
 {{- /* Weeks that send the reader to a voting tool name it, and we link our own
        /vote/ page rather than the state's site: same VoteAmerica tool, but the
-       reader stays on 5calls. Falls back to the state deck's URL if the page
-       named is not there. */ -}}
+       reader stays on 5calls. The from=midterms marker has that page send the
+       reader back here once the form is done. Falls back to the state deck's
+       URL if the page named is not there. */ -}}
 {{- $tool := "" -}}
 {{- if and (not $prelaunch) $week.tool -}}
-  {{- with site.GetPage (printf "/vote/%s" $week.tool) }}{{ $tool = .RelPermalink }}{{ end -}}
+  {{- with site.GetPage (printf "/vote/%s" $week.tool) }}{{ $tool = printf "%s?from=midterms" .RelPermalink }}{{ end -}}
 {{- end -}}
 {{- /* The /midterms/ root, whichever layout called us: the live page is the
        section itself, a preview page is a child of it. */ -}}
@@ -221,15 +222,15 @@
                shows no tallies at all — not the reader's, and not the total. */ -}}
         {{- if not $prelaunch }}
           <div class="mt-counts">
+            <div class="mt-count mt-count--blue">
+              <b><span data-yours>0</span> / {{ $total }}</b>
+              <span>YOUR PROGRESS</span>
+            </div>
             <div class="mt-count">
               {{- /* Empty until the count loads: a rendered placeholder would tick
                      from 0 up to the real figure on every page load. */ -}}
               <b data-total></b>
-              <span>TOTAL COMPLETED</span>
-            </div>
-            <div class="mt-count mt-count--blue">
-              <b><span data-yours>0</span> / {{ $total }}</b>
-              <span>YOUR PROGRESS</span>
+              <span>TOTAL ACTIONS COMPLETED</span>
             </div>
           </div>
         {{- end }}
@@ -269,11 +270,15 @@
             {{- /* Only the selected cell needs naming; the rest are read as a
                    row, where the action and its date are the whole point. */ -}}
             {{- if $sel }}<span class="mt-strip__num">Week {{ .number }}</span>{{ end }}
-            {{- /* A week that has not run yet keeps its subject to itself. */ -}}
+            {{- /* A week that has not run yet keeps its subject to itself: its
+                   number, and a line saying it is still to come. */ -}}
             {{- $locked := gt .number $live }}
             <span class="mt-strip__label{{ if $locked }} mt-strip__label--locked{{ end }}">
-              {{- if $sel }}{{ .title }}{{ else if $locked }}Upcoming{{ else }}{{ .short }}{{ end -}}
+              {{- if $sel }}{{ .title }}{{ else if $locked }}Week {{ .number }}{{ else }}{{ .short }}{{ end -}}
             </span>
+            {{- if and $locked (not $sel) }}
+              <span class="mt-strip__upcoming">Upcoming</span>
+            {{- end }}
             <span class="mt-strip__meta">
               <span class="mt-strip__done">DONE</span>
               <span class="mt-strip__when">
@@ -360,23 +365,22 @@
 
             {{- if $deck }}
               <div class="mt-message mt-deck">
-                {{- /* Headline, date and methods read as one statement, so they share
-                       a block and a typeface, with the state tag riding on the same
-                       top line. Every slot is always in the DOM so the switcher can
-                       refill it; states without a deadline (North Dakota) promote
-                       their methods line into the date slot. */ -}}
+                {{- /* The deadline copy for the reader's state, by its tier, with the
+                       state tag riding on the same top line. Drawn by
+                       midterms-deck.html, which also draws every other state's
+                       copy for the switcher to swap in whole. */ -}}
                 <div class="mt-deck__top">
-                  <div class="mt-deck__lede">
-                    <div class="mt-deck__detail" data-deck="headline">{{ $deck.headline }}</div>
-                    <div class="mt-deck__date" data-deck="hero">{{ or $deck.hero_date $deck.channels }}</div>
-                    <div class="mt-deck__detail" data-deck="channels"{{ if not $deck.hero_date }} hidden{{ end }}>{{ $deck.channels }}</div>
+                  <div class="mt-deck__lede" data-deck="lede">
+                    {{- partial "midterms-deck.html" (dict "state" $deck "copy" $week.deck_copy "part" "lede") | safeHTML -}}
                   </div>
-                  <div class="mt-pill mt-pill--tag" data-deck="tag">{{ upper $deck.name }}</div>
+                  {{- /* The state is picked in the header, so tapping the tag goes
+                         back up there rather than opening a picker of its own. */ -}}
+                  <a class="mt-pill mt-pill--tag" href="#mt-state" title="Change your state"
+                     data-deck="tag" data-state-change>{{ upper $deck.name }}</a>
                 </div>
-                <ul class="mt-deck__notes">
-                  <li data-deck="secondary"{{ if not $deck.secondary }} hidden{{ end }}>{{ $deck.secondary }}</li>
-                  <li data-deck="mail"{{ if not $deck.mail }} hidden{{ end }}>{{ $deck.mail }}</li>
-                </ul>
+                <div class="mt-deck__body" data-deck="body">
+                  {{- partial "midterms-deck.html" (dict "state" $deck "copy" $week.deck_copy "part" "body") | safeHTML -}}
+                </div>
                 <div class="mt-message__actions">
                   {{- if $tool }}
                     <a class="mt-pill mt-pill--solid" href="{{ $tool }}">{{ $week.deck_cta }}</a>
@@ -417,7 +421,6 @@
             <label class="mt-confirm">
               <input type="checkbox" data-confirm value="{{ $cur }}" />
               <span>{{ $week.confirm }}</span>
-              <em data-week-count>0 {{ $week.confirm_noun }}</em>
             </label>
           </div>
 
@@ -465,7 +468,8 @@
              box is ticked, so the week's action stays the thing to do first; the
              script does the locking, so without it the box simply opens. Inside,
              it is laid out like the action: the ask on the left, share images on
-             the right (FPO plates until its own art lands). */ -}}
+             the right, which open the same share modal (FPO plates for a week
+             whose extra credit has no art yet). */ -}}
       {{- if not $prelaunch }}
       {{- with $week.extra_credit }}
         {{- $ec := . }}
@@ -498,18 +502,45 @@
                   {{- end }}
                 </div>
               {{- end }}
-              {{- $fpoVert := resources.Get "images/midterms/share-vertical-fpo.png" }}
-              {{- $fpoHoriz := resources.Get "images/midterms/share-horizontal-fpo.png" }}
               <aside class="mt-images mt-images--extra">
                 <div class="mt-images__title">{{ $ec.title }} shares</div>
-                <div class="mt-images__set">
-                  <img class="mt-shot mt-shot--portrait" src="{{ $fpoVert.RelPermalink }}"
-                       alt="Extra credit share image, vertical crop (placeholder)"
-                       width="{{ $fpoVert.Width }}" height="{{ $fpoVert.Height }}" />
-                  <img class="mt-shot mt-shot--landscape" src="{{ $fpoHoriz.RelPermalink }}"
-                       alt="Extra credit share image, horizontal crop (placeholder)"
-                       width="{{ $fpoHoriz.Width }}" height="{{ $fpoHoriz.Height }}" />
-                </div>
+                {{- with $ec.share }}
+                  {{- /* The same art for everyone, so no state swaps these; the
+                         data-shot-extra hook keeps them out of the state
+                         switcher's reach. Locked with the week's own crops,
+                         though the box around them already is. */ -}}
+                  {{- $vert := resources.Get .vertical }}
+                  {{- $horiz := resources.Get .horizontal }}
+                  <div class="mt-images__set">
+                    <button type="button" class="mt-shot-btn mt-shot-btn--portrait" data-shot-open="vert" data-shot-set="extra"
+                            title="{{ $d.share.hint }}" disabled>
+                      <img class="mt-shot mt-shot--portrait" src="{{ $vert.RelPermalink }}"
+                           alt="Extra credit share image, vertical crop" data-shot-extra="vert"
+                           width="{{ $vert.Width }}" height="{{ $vert.Height }}" />
+                      <span class="mt-shot__hint">{{ partial "midterms-icon.html" (dict "name" "expand" "size" 15) }}</span>
+                      <span class="visually-hidden">{{ $d.share.hint }}</span>
+                    </button>
+                    <button type="button" class="mt-shot-btn" data-shot-open="horiz" data-shot-set="extra"
+                            title="{{ $d.share.hint }}" disabled>
+                      <img class="mt-shot mt-shot--landscape" src="{{ $horiz.RelPermalink }}"
+                           alt="Extra credit share image, horizontal crop" data-shot-extra="horiz"
+                           width="{{ $horiz.Width }}" height="{{ $horiz.Height }}" />
+                      <span class="mt-shot__hint">{{ partial "midterms-icon.html" (dict "name" "expand" "size" 15) }}</span>
+                      <span class="visually-hidden">{{ $d.share.hint }}</span>
+                    </button>
+                  </div>
+                {{- else }}
+                  {{- $fpoVert := resources.Get "images/midterms/share-vertical-fpo.png" }}
+                  {{- $fpoHoriz := resources.Get "images/midterms/share-horizontal-fpo.png" }}
+                  <div class="mt-images__set">
+                    <img class="mt-shot mt-shot--portrait" src="{{ $fpoVert.RelPermalink }}"
+                         alt="Extra credit share image, vertical crop (placeholder)"
+                         width="{{ $fpoVert.Width }}" height="{{ $fpoVert.Height }}" />
+                    <img class="mt-shot mt-shot--landscape" src="{{ $fpoHoriz.RelPermalink }}"
+                         alt="Extra credit share image, horizontal crop (placeholder)"
+                         width="{{ $fpoHoriz.Width }}" height="{{ $fpoHoriz.Height }}" />
+                  </div>
+                {{- end }}
               </aside>
             </div>
           </details>
@@ -625,8 +656,13 @@
     {{- if not $prelaunch }}
     {{- $payload := dict -}}
     {{- range $code, $s := site.Data.midterms_states.states -}}
-      {{- $entry := dict "name" $s.name "headline" $s.headline "hero" $s.hero_date
-          "channels" $s.channels "secondary" $s.secondary "mail" $s.mail "url" $s.url -}}
+      {{- $entry := dict "name" $s.name "url" $s.url -}}
+      {{- /* Deadline copy, drawn by the same partial as the card itself. */ -}}
+      {{- if $week.state_deck -}}
+        {{- $entry = merge $entry (dict
+            "lede" (partial "midterms-deck.html" (dict "state" $s "copy" $week.deck_copy "part" "lede"))
+            "body" (partial "midterms-deck.html" (dict "state" $s "copy" $week.deck_copy "part" "body"))) -}}
+      {{- end -}}
       {{- if $preview }}{{ $entry = merge $entry (dict "review" $s.review_reason) }}{{ end -}}
       {{- /* The share art for this week in this state. Drawing all 51 up front is
              what lets the switcher swap them with no round trip; the same
@@ -727,8 +763,6 @@
 
         var sent = readSent();
         var totalEl = document.querySelector("[data-total]");
-        var weekCountEl = document.querySelector("[data-week-count]");
-        var WEEK_NOUN = weekCountEl ? weekCountEl.textContent.replace(/^\s*\S+\s*/, "") : "";
 
         // Two halves, kept apart on purpose. The server figure is whatever the
         // API last told us; the local one is what this page has counted itself
@@ -740,18 +774,7 @@
         // zero and takes the server's word for everything, which is the only
         // way it can stay correct once the count includes other people.
         var serverTotal = null;
-        var serverWeek = null;
         var localTotal = 0;
-        var localWeek = 0;
-
-        // What the week tally was built with, used until the first read
-        // arrives so a completion still moves it on a slow connection.
-        function renderedNumber(el) {
-          if (!el) return 0;
-          var digits = parseInt(el.textContent.replace(/[^0-9]/g, ""), 10);
-          return isNaN(digits) ? 0 : digits;
-        }
-        var baseWeek = renderedNumber(weekCountEl);
 
         function renderTotals() {
           // left blank until the server figure lands, so the number appears
@@ -759,10 +782,6 @@
           // ticked before then is held in localTotal and included when it does.
           if (totalEl && serverTotal !== null) {
             totalEl.textContent = (serverTotal + localTotal).toLocaleString();
-          }
-          if (weekCountEl) {
-            var week = (serverWeek === null ? baseWeek : serverWeek) + localWeek;
-            weekCountEl.textContent = week.toLocaleString() + " " + WEEK_NOUN;
           }
         }
 
@@ -774,11 +793,10 @@
             .then(function (data) {
               if (!data) return;
               serverTotal = data.total || 0;
-              serverWeek = (data.weeks && data.weeks[CURRENT]) || 0;
               renderTotals();
             })
             .catch(function () {
-              /* the rendered fallback stands */
+              /* the total stays blank rather than show a guess */
             });
         }
 
@@ -804,12 +822,10 @@
           // still the authority: if it says this week was already on file, or
           // we never hear back, the increment comes off again.
           localTotal += 1;
-          localWeek += 1;
           renderTotals();
 
           function uncount() {
             localTotal -= 1;
-            localWeek -= 1;
             renderTotals();
           }
 
@@ -960,6 +976,21 @@
         var cropTargets = document.querySelectorAll("[data-modal] [data-crop]");
         var switchBtn = document.querySelector("[data-modal-switch]");
         var CAPTION = {{ $d.share.caption }};
+        // A week can write its own words per text platform, in place of the
+        // caption; the reader's state share link follows either way.
+        var SHARE_TEXT = {{ or $week.share_text dict }};
+        {{- $extraShare := dict }}
+        {{- with $week.extra_credit }}{{ with .share }}
+          {{- $extraShare = dict
+              "vert" (resources.Get .vertical).RelPermalink
+              "horiz" (resources.Get .horizontal).RelPermalink
+              "text" (or .text dict) }}
+        {{- end }}{{ end }}
+        // Extra credit's art, when the week has any: one image per crop for
+        // everyone, linked through its own share page rather than a state's.
+        var EXTRA = {{ $extraShare }};
+        // Which set of crops the modal is showing: the week's or extra credit's.
+        var openSet = "week";
         var SHARE_BASE = modal ? modal.getAttribute("data-share-base") : "";
         var shareFile = null;
         var openCrop = "vert";
@@ -969,10 +1000,12 @@
         }
 
         function shareUrlFor(code) {
-          return new URL(SHARE_BASE + String(code).toLowerCase() + "/", location.href).href;
+          var page = openSet === "extra" ? "extra" : String(code).toLowerCase();
+          return new URL(SHARE_BASE + page + "/", location.href).href;
         }
 
         function cardUrl(crop) {
+          if (openSet === "extra") return EXTRA[crop === "vert" ? "vert" : "horiz"] || null;
           var s = states[currentState()];
           return s ? s[crop === "vert" ? "vert" : "horiz"] : null;
         }
@@ -993,7 +1026,9 @@
             })
             .then(function (blob) {
               if (!blob || token !== primed) return;
-              var file = new File([blob], "5-minute-midterms.png", { type: blob.type || "image/png" });
+              // Named for what the art is, since some crops are JPEGs.
+              var type = blob.type || "image/png";
+              var file = new File([blob], "5-minute-midterms." + (type === "image/jpeg" ? "jpg" : "png"), { type: type });
               if (!navigator.canShare({ files: [file] })) return;
               shareFile = file;
               if (shareBtn) shareBtn.hidden = false;
@@ -1005,15 +1040,19 @@
 
         function applyShareState(code) {
           var url = shareUrlFor(code);
-          var withUrl = CAPTION + " " + url;
+          var textFor = function (name) {
+            var words = openSet === "extra" ? EXTRA.text || {} : SHARE_TEXT;
+            return words[name] || CAPTION;
+          };
           var set = function (name, href) {
             var el = document.querySelector("[data-share-link='" + name + "']");
             if (el) el.href = href;
           };
-          set("x", "https://x.com/intent/post?text=" + encodeURIComponent(CAPTION) +
+          set("x", "https://x.com/intent/post?text=" + encodeURIComponent(textFor("x")) +
                    "&url=" + encodeURIComponent(url));
-          set("bsky", "https://bsky.app/intent/compose?text=" + encodeURIComponent(withUrl));
-          set("threads", "https://www.threads.net/intent/post?text=" + encodeURIComponent(withUrl));
+          set("bsky", "https://bsky.app/intent/compose?text=" + encodeURIComponent(textFor("bsky") + " " + url));
+          set("threads", "https://www.threads.net/intent/post?text=" + encodeURIComponent(textFor("threads") + " " + url));
+          // Facebook's sharer takes a link and nothing else; any text is ignored.
           set("facebook", "https://www.facebook.com/sharer/sharer.php?u=" + encodeURIComponent(url));
           var card = cardUrl(openCrop);
           if (instagramDownload && card) instagramDownload.href = card;
@@ -1031,7 +1070,9 @@
         function setCrop(crop) {
           openCrop = crop;
           var card = cardUrl(crop);
-          var img = document.querySelector("[data-shot='" + crop + "']");
+          var img = document.querySelector(
+            (openSet === "extra" ? "[data-shot-extra='" : "[data-shot='") + crop + "']"
+          );
           if (modalImg && card) {
             modalImg.src = card;
             modalImg.alt = img ? img.alt : "";
@@ -1047,6 +1088,7 @@
         shotButtons.forEach(function (btn) {
           btn.addEventListener("click", function () {
             if (!modal) return;
+            openSet = btn.getAttribute("data-shot-set") || "week";
             setCrop(btn.getAttribute("data-shot-open"));
             modal.showModal();
           });
@@ -1108,29 +1150,29 @@
         }
         var select = document.querySelector("[data-state-select]");
 
-        function fill(sel, value) {
-          var el = document.querySelector("[data-deck='" + sel + "']");
-          if (!el) return;
-          el.textContent = value || "";
-          el.hidden = !value;
+        // Tapping the deck's state tag goes up to the header's picker and puts
+        // focus on it, so the next tap or arrow key changes the state. Without
+        // script it is a plain jump to the same place.
+        var changeLink = document.querySelector("[data-state-change]");
+        if (changeLink && select) {
+          changeLink.addEventListener("click", function (e) {
+            e.preventDefault();
+            var still = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+            window.scrollTo({ top: 0, behavior: still ? "auto" : "smooth" });
+            select.focus({ preventScroll: true });
+          });
         }
 
         function applyState(code) {
           var s = states[code];
           if (!s) return;
 
-          // The deadline card. States with no deadline (North Dakota) show
-          // their channels line in the date slot instead.
-          var hero = document.querySelector("[data-deck='hero']");
-          if (hero) hero.textContent = s.hero || s.channels || "";
-          var channels = document.querySelector("[data-deck='channels']");
-          if (channels) {
-            channels.textContent = s.channels || "";
-            channels.hidden = !s.hero || !s.channels;
-          }
-          fill("headline", s.headline);
-          fill("secondary", s.secondary);
-          fill("mail", s.mail);
+          // The deadline card. Each state's copy is drawn at build time, so it
+          // is swapped in whole.
+          var lede = document.querySelector("[data-deck='lede']");
+          if (lede && s.lede) lede.innerHTML = s.lede;
+          var body = document.querySelector("[data-deck='body']");
+          if (body && s.body) body.innerHTML = s.body;
           var tag = document.querySelector("[data-deck='tag']");
           if (tag) tag.textContent = (s.name || "").toUpperCase();
           var cta = document.querySelector("[data-deck='url']");

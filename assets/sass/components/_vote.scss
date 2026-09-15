@@ -104,6 +104,57 @@
   }
 }
 
+// Shown to readers sent here from 5 Minute Midterms once the form finishes,
+// while the page waits to take them back. Pinned to the bottom of the screen,
+// since the finish can land anywhere down a long embed.
+.vote-return {
+  position: fixed;
+  right: 1rem;
+  bottom: calc(1rem + env(safe-area-inset-bottom, 0px));
+  left: 1rem;
+  z-index: 10;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.25rem;
+  align-items: center;
+  justify-content: center;
+  max-width: 40rem;
+  margin: 0 auto;
+  padding: 1rem 1.25rem;
+  border-radius: var(--radius);
+  background: var(--c-dark);
+  color: #fff;
+  font-size: 1rem;
+  box-shadow: 0 6px 20px rgba(var(--c-dark-rgb), 0.25);
+
+  &[hidden] {
+    display: none;
+  }
+
+  p {
+    margin: 0;
+  }
+
+  a,
+  button {
+    padding: 0;
+    border: 0;
+    background: none;
+    color: #fff;
+    font: inherit;
+    font-weight: 700;
+    text-decoration: underline;
+    cursor: pointer;
+
+    &:hover,
+    &:focus,
+    &:active,
+    &:visited {
+      color: #fff;
+    }
+  }
+}
+
 // Tool index
 
 .vote-tools {

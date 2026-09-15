@@ -9,10 +9,12 @@
 
   The bounce is deliberately client-side. Scrapers follow HTTP redirects, so a
   301 here would hand them the destination's card and lose the per-state one.
+
+  An extra credit page (params.extra) works the same way, but its card is the
+  extra credit art as it is, with no state in it.
 */ -}}
 {{- $d := site.Data.midterms -}}
 {{- $week := index (where $d.weeks "number" .Params.week) 0 -}}
-{{- $state := index site.Data.midterms_states.states .Params.state -}}
 
 {{- /* Where the reader lands: the live week is /midterms/, any earlier week
        has its own page. */ -}}
@@ -26,29 +28,44 @@
 {{- /* The card: the week's plate with this state's own copy set into it, so the
        51 variants come out of one piece of art at build time rather than 51
        exports. FPO placement — the real plates will want their own layout. */ -}}
-{{- $card := partial "midterms-card.html" (dict "crop" "horizontal" "week" $week "state" $state) -}}
+{{- $title := $week.title -}}
+{{- $card := false -}}
+{{- $description := "" -}}
+{{- $alt := "" -}}
+{{- if .Params.extra -}}
+  {{- $ec := $week.extra_credit -}}
+  {{- $card = resources.Get $ec.share.horizontal -}}
+  {{- $title = printf "%s: %s" $ec.title $ec.part.title -}}
+  {{- $description = printf "%s for week %d of 5 Minute Midterms: %s." $ec.title $week.number $ec.part.title -}}
+  {{- $alt = $title -}}
+{{- else -}}
+  {{- $state := index site.Data.midterms_states.states .Params.state -}}
+  {{- $card = partial "midterms-card.html" (dict "crop" "horizontal" "week" $week "state" $state) -}}
+  {{- $description = printf "%s: %s %s." $state.name ($state.headline | lower) (or $state.hero_date $state.channels) -}}
+  {{- $alt = printf "%s: %s" $state.name $week.title -}}
+{{- end -}}
 <!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>{{ $week.title }} ⭑ {{ site.Title }}</title>
+    <title>{{ $title }} ⭑ {{ site.Title }}</title>
     <meta name="robots" content="noindex, follow" />
     <link rel="canonical" href="{{ $dest }}" />
 
-    <meta property="og:title" content="{{ $week.title }} ⭑ {{ site.Title }}" />
+    <meta property="og:title" content="{{ $title }} ⭑ {{ site.Title }}" />
     <meta property="og:type" content="article" />
     <meta property="og:url" content="{{ .Permalink }}" />
-    <meta property="og:description" content="{{ $state.name }}: {{ $state.headline | lower }} {{ or $state.hero_date $state.channels }}." />
+    <meta property="og:description" content="{{ $description }}" />
     <meta property="og:site_name" content="{{ site.Title }}" />
     <meta property="og:image" content="{{ $card.Permalink }}" />
     <meta property="og:image:width" content="{{ $card.Width }}" />
     <meta property="og:image:height" content="{{ $card.Height }}" />
-    <meta property="og:image:alt" content="{{ $state.name }}: {{ $week.title }}" />
+    <meta property="og:image:alt" content="{{ $alt }}" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:site" content="@make5calls" />
-    <meta name="twitter:title" content="{{ $week.title }} ⭑ {{ site.Title }}" />
-    <meta name="twitter:description" content="{{ $state.name }}: {{ $state.headline | lower }} {{ or $state.hero_date $state.channels }}." />
+    <meta name="twitter:title" content="{{ $title }} ⭑ {{ site.Title }}" />
+    <meta name="twitter:description" content="{{ $description }}" />
     <meta name="twitter:image" content="{{ $card.Permalink }}" />
 
     <script>
