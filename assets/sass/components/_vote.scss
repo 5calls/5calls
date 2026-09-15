@@ -104,9 +104,12 @@
   }
 }
 
-// Shown to readers sent here from 5 Minute Midterms once the form finishes,
-// with a way back there that they choose to take. Pinned to the bottom of the
-// screen, since the finish can land anywhere down a long embed.
+// Shown to readers sent here from 5 Minute Midterms once the form finishes: a
+// card in that page's own colours, led by a strip of week one's share art, that
+// springs up from the bottom of the screen so it gets noticed. Pinned there,
+// since the finish can land anywhere down a long embed. The colours are the
+// cream, ink and orange of midterms.scss, which this stylesheet can't import.
+// /vote/verify/?preview-return shows it two seconds after load.
 .vote-return {
   position: fixed;
   right: 1rem;
@@ -114,70 +117,196 @@
   left: 1rem;
   z-index: 10;
   display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem 1.25rem;
-  align-items: center;
-  justify-content: center;
-  max-width: 40rem;
+  max-width: 38rem;
   margin: 0 auto;
-  padding: 1rem 1.25rem;
-  border-radius: var(--radius);
-  background: var(--c-dark);
-  color: #fff;
-  font-size: 1rem;
-  box-shadow: 0 6px 20px rgba(var(--c-dark-rgb), 0.25);
+  overflow: hidden;
+  border-radius: 16px;
+  background: #fdf1e3;
+  color: #2a2a2a;
+  box-shadow: 0 18px 50px rgba(0, 0, 0, 0.3);
+  animation: vote-return-in 0.75s cubic-bezier(0.2, 0.9, 0.25, 1.15) both;
 
   &[hidden] {
     display: none;
   }
 
-  p {
-    margin: 0;
+  @media (prefers-reduced-motion: reduce) {
+    animation: vote-return-fade 0.3s ease-out both;
   }
+}
 
-  a,
-  button {
-    padding: 0;
-    border: 0;
-    background: none;
-    color: #fff;
-    font: inherit;
-    font-weight: 700;
-    text-decoration: underline;
-    cursor: pointer;
+// The share rises from the card's bottom edge beside the words, as if it's
+// coming up out of it: inset from the top by the same amount as from the left,
+// with no space below and its bottom corners square where the card clips them.
+// It's laid over its column rather than sizing it, so the words set the card's
+// height and the share is cropped from its top to fill whatever that leaves.
+.vote-return__art {
+  position: relative;
+  flex: 0 0 40%;
+}
 
-    &:hover,
-    &:focus,
-    &:active,
-    &:visited {
-      color: #fff;
-    }
-  }
+.vote-return__shot {
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  display: block;
+  width: calc(100% - 1rem);
+  max-width: none;
+  height: calc(100% - 1rem);
+  object-fit: cover;
+  object-position: top;
+  border-radius: 10px 10px 0 0;
+  box-shadow: 0 -2px 14px rgba(0, 0, 0, 0.18);
+}
 
-  // The way back is the thing to do, so it's a solid pill; Close stays a link.
-  // It leads to 5 Minute Midterms, so it wears that page's solid pill rather
-  // than 5 Calls' colours: the orange and ink of $orange and $ink-solid in
-  // midterms.scss, which this stylesheet can't import.
-  a.vote-return__back {
-    padding: 0.55rem 1.1rem;
-    border-radius: 999px;
-    background: #f98033;
-    box-shadow: 0 6px 16px rgba(249, 128, 51, 0.3);
+.vote-return__body {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 0.5rem;
+  align-items: flex-start;
+  padding: 1.1rem 3rem 1.25rem 1.25rem;
+}
+
+.vote-return__title {
+  margin: 0;
+  font-size: 1.4rem;
+  font-weight: 800;
+  line-height: 1.15;
+  color: #2a2a2a;
+}
+
+.vote-return__text {
+  margin: 0;
+  font-size: 0.95rem;
+  line-height: 1.4;
+  color: rgba(42, 42, 42, 0.8);
+}
+
+// The way back is the thing to do, in the midterms page's solid pill.
+.vote-return a.vote-return__back {
+  margin-top: 0.25rem;
+  padding: 0.6rem 1.2rem;
+  border-radius: 999px;
+  background: #f98033;
+  box-shadow: 0 6px 16px rgba(249, 128, 51, 0.3);
+  color: #2a2a2a;
+  font-size: 1rem;
+  font-weight: 700;
+  text-decoration: none;
+
+  &:hover,
+  &:focus,
+  &:active,
+  &:visited {
     color: #2a2a2a;
-    font-weight: 600;
-    text-decoration: none;
+  }
 
-    &:hover,
-    &:focus,
-    &:active,
-    &:visited {
-      color: #2a2a2a;
-    }
+  &:hover,
+  &:focus {
+    background: #e8711f;
+  }
+}
 
-    &:hover,
-    &:focus {
-      background: #e8711f;
-    }
+.vote-return__close {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  width: 2rem;
+  height: 2rem;
+  padding: 0;
+  border: 0;
+  border-radius: 999px;
+  background: rgba(253, 241, 227, 0.92);
+  color: #2a2a2a;
+  font: inherit;
+  font-size: 1.3rem;
+  line-height: 1;
+  cursor: pointer;
+
+  &:hover,
+  &:focus {
+    background: #fff;
+  }
+}
+
+// On a phone the words take the card's full width, which a column beside the
+// share would squeeze, and the share rises in the bottom-right corner beside the
+// button instead. The body steps aside so its title, text and button can be
+// placed in the card's grid directly.
+@media screen and (max-width: 40rem) {
+  .vote-return {
+    display: grid;
+    grid-template-columns: 1fr 42%;
+    column-gap: 1rem;
+    align-items: center;
+    padding: 1.1rem 0 0 1.25rem;
+  }
+
+  .vote-return__body {
+    display: contents;
+  }
+
+  .vote-return__title,
+  .vote-return__text {
+    grid-column: 1 / -1;
+    padding-right: 1.25rem;
+  }
+
+  .vote-return__title {
+    margin-bottom: 0.4rem;
+    padding-right: 3rem;
+  }
+
+  .vote-return__text {
+    margin-bottom: 0.75rem;
+  }
+
+  .vote-return a.vote-return__back {
+    grid-row: 3;
+    grid-column: 1;
+    justify-self: start;
+    margin: 0 0 1rem;
+  }
+
+  .vote-return__art {
+    grid-row: 3;
+    grid-column: 2;
+    align-self: end;
+    padding-right: 1rem;
+  }
+
+  .vote-return__shot {
+    position: static;
+    width: 100%;
+    height: 6.5rem;
+  }
+}
+
+// Rises from below the screen's edge and settles with a slight overshoot.
+@keyframes vote-return-in {
+  from {
+    opacity: 0;
+    transform: translateY(calc(100% + 2rem));
+  }
+
+  60% {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes vote-return-fade {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
   }
 }
 

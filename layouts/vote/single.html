@@ -8,21 +8,29 @@
          tool found the reader, and a reader who wasn't found needs to keep the
          page and its next steps, so going back is theirs to choose. The notice
          shows once and can be closed, since it sits over the bottom of the
-         form. Everyone else never sees it. */}}
+         form. Everyone else never sees it.
+
+         ?preview-return shows it two seconds after load, with no form to fill
+         in, for working on how it looks. */}}
   <script>
     (function () {
-      if (new URLSearchParams(window.location.search).get("from") !== "midterms") return;
+      var params = new URLSearchParams(window.location.search);
+      var preview = params.has("preview-return");
+      if (!preview && params.get("from") !== "midterms") return;
       var shown = false;
-      window.addEventListener("VoteAmericaEvent", function (evt) {
-        var data = evt.detail && evt.detail.data;
-        if (!data || data.event !== "action-finish" || shown) return;
+      function show() {
         var notice = document.querySelector("[data-midterms-return]");
-        if (!notice) return;
+        if (!notice || shown) return;
         shown = true;
         notice.hidden = false;
         notice.querySelector("[data-midterms-close]").addEventListener("click", function () {
           notice.hidden = true;
         });
+      }
+      if (preview) setTimeout(show, 2000);
+      window.addEventListener("VoteAmericaEvent", function (evt) {
+        var data = evt.detail && evt.detail.data;
+        if (data && data.event === "action-finish") show();
       });
     })();
   </script>
@@ -42,10 +50,25 @@
       ></div>
     </div>
 
+    {{- /* Week one's Instagram share leads the notice, so it looks like the
+           thing it offers, rising from the card's bottom edge as a share
+           rather than laid in as a backdrop. The crop runs well past what
+           shows, since the card crops it again from the top to fit, but stops
+           just above the plate's orange state panel so no sliver of it shows
+           along the bottom. */ -}}
+    {{- $plate := resources.Get "images/midterms/share-vertical-week1.png" -}}
+    {{- $art := ($plate.Crop "1080x915 TopLeft").Resize "640x webp q82" -}}
     <div class="vote-return" data-midterms-return role="status" hidden>
-      <p>Done here?</p>
-      <a class="vote-return__back" href="/midterms/">Back to 5 Minute Midterms</a>
-      <button type="button" data-midterms-close>Close</button>
+      <div class="vote-return__art">
+        <img class="vote-return__shot" src="{{ $art.RelPermalink }}" alt=""
+             width="{{ $art.Width }}" height="{{ $art.Height }}" />
+      </div>
+      <div class="vote-return__body">
+        <p class="vote-return__title">Come back to get your shares</p>
+        <p class="vote-return__text">Tick “I confirmed my registration” on 5 Minute Midterms to unlock your share images.</p>
+        <a class="vote-return__back" href="/midterms/">Get my shares</a>
+      </div>
+      <button type="button" class="vote-return__close" data-midterms-close aria-label="Close">×</button>
     </div>
   </main>
 {{ end }}
