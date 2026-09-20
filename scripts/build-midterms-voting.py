@@ -105,6 +105,62 @@ OFFICIAL_OVERRIDES = {
     # elections.alaska.gov/calendar/
     "AK": {"request_online": (date(2026, 11, 2), "5PM"),
            "request_in_person": None},
+    # California mails a ballot to every ACTIVE registered voter — EC 3001 and
+    # the SOS's own wording; inactive registrations are excluded by statute.
+    # Returns close with the polls. sos.ca.gov/elections/voter-registration/vote-mail
+    "CA": {"absentee_type": "Automatic mail ballot to every active registered voter",
+           "return_in_person": (date(2026, 11, 3), "8PM")},
+    # Florida's request deadlines close at 5 p.m. (§101.62(3)(c), "5 p.m. local
+    # time on the 12th day before"). In person is NOT that day: office pickup
+    # runs freely through Oct 23 (§101.62(3)(d)3), then only on an emergency
+    # affidavit — a window this data cannot express, so the free date is what
+    # we publish. files.floridados.gov 2026 Election Dates and Activities
+    "FL": {"request_online": (date(2026, 10, 22), "5PM"),
+           "request_mail": (date(2026, 10, 22), "5PM"),
+           "request_in_person": date(2026, 10, 23)},
+    # Georgia's drop boxes live inside early voting sites and close when
+    # advance voting ends, so on Election Day the registrar's office is the
+    # only in-person return. O.C.G.A. § 21-2-382(c): "All drop boxes shall be
+    # closed when the advance voting period ends."
+    "GA": {"return_methods": "drop box (inside early voting sites, through Oct 30), "
+                             "local election office"},
+    # Michigan's early voting is a statewide constitutional minimum, not a
+    # county choice: Const. Art. II §4(1)(m), nine consecutive days from the
+    # second Saturday before the election. Communities may add days, which
+    # this data cannot express. michigan.gov/sos/elections/voting
+    "MI": {"ev_start": date(2026, 10, 24), "ev_end": date(2026, 11, 1),
+           "request_online": (date(2026, 10, 30), "5PM"),
+           "request_mail": (date(2026, 10, 30), "5PM"),
+           "request_in_person": (date(2026, 11, 2), "4PM"),
+           "return_mail": (date(2026, 11, 3), "8PM"),
+           "return_in_person": (date(2026, 11, 3), "8PM")},
+    # Ohio has no early voting site return — ballots may not go to a polling
+    # place — but it does have a drop box at each board office, which upstream
+    # missed entirely. ORC 3509.05. Applications close at 8:30 p.m. and the
+    # polls at 7:30 p.m. codes.ohio.gov/ohio-revised-code/section-3509.05
+    "OH": {"return_methods": "drop box, local election office",
+           "request_mail": (date(2026, 10, 27), "8:30PM"),
+           "request_in_person": (date(2026, 10, 27), "8:30PM"),
+           "return_mail": (date(2026, 11, 3), "7:30PM"),
+           "return_in_person": (date(2026, 11, 3), "7:30PM")},
+    # Pennsylvania has no early voting at all: "there are no polling places
+    # open for in-person voting before Election Day". What it offers is
+    # on-demand mail voting at a county office, which is not the same thing
+    # and is not this field. Applications close at 5 p.m. (25 P.S.
+    # § 3146.2a(a)), returns at 8 p.m. with no postmark grace.
+    # pa.gov/agencies/vote/elections/fact-checking-pa-related-election-claims
+    "PA": {"early_voting": False,
+           "absentee_type": "No-excuse mail-in ballot",
+           "request_online": (date(2026, 10, 27), "5PM"),
+           "request_mail": (date(2026, 10, 27), "5PM"),
+           "request_in_person": (date(2026, 10, 27), "5PM"),
+           "return_mail": (date(2026, 11, 3), "8PM"),
+           "return_in_person": (date(2026, 11, 3), "8PM")},
+    # Texas counts the POSTMARK, not receipt: a ballot postmarked by 7 p.m. on
+    # Election Day is valid if it arrives by 5 p.m. the next day. Publishing
+    # "received by Nov 3" was wrong in the direction that loses ballots. The
+    # Nov 4 receipt backstop cannot be expressed here. SOS form 6-26.
+    "TX": {"return_mail": {"date": date(2026, 11, 3), "time": "7PM", "received": False}},
 }
 # Checked against official sources and left exactly as the snapshot counted:
 #
@@ -173,15 +229,39 @@ def override(code, prefix, cell):
     fix = fixes[prefix]
     if fix is None:
         return None
-    day, when = fix if isinstance(fix, tuple) else (fix, None)
+    # A date, a (date, time) pair, or a dict for the rest — {"date", "time",
+    # "received"} — since correcting Texas means changing the receipt basis,
+    # not just the day.
+    if isinstance(fix, dict):
+        day, when, basis = fix.get("date"), fix.get("time"), fix.get("received")
+    elif isinstance(fix, tuple):
+        day, when, basis = fix[0], fix[1], None
+    else:
+        day, when, basis = fix, None, None
     out = {"date": fmt(day), "iso": day.isoformat()}
     if when:
         out["time"] = when
     elif cell and "time" in cell:
         out["time"] = cell["time"]
-    if cell and "received" in cell:
+    if basis is not None:
+        out["received"] = basis
+    elif cell and "received" in cell:
         out["received"] = cell["received"]
     return out
+
+
+def scalar(code, key, value):
+    """A checked flag, type or method list, else what the snapshot carried.
+
+    The companion to override() for the fields that are not deadlines: whether
+    a state has early voting at all, what kind of mail voting it offers, and
+    where a ballot may be returned.
+    """
+    fixes = OFFICIAL_OVERRIDES.get(code, {})
+    if key not in fixes:
+        return value
+    USED_OVERRIDES.add((code, key))
+    return fixes[key]
 
 
 def parse_cell(value, warnings, code, column):
@@ -454,11 +534,15 @@ def main():
         # In-person early voting. Six states leave the dates to the county, so
         # the period exists but has no statewide window; the template says so
         # rather than dropping the line, since the reader still has the option.
-        if row["Early_voting"].strip().lower() == "yes":
+        if scalar(code, "early_voting", row["Early_voting"].strip().lower() == "yes"):
             counts["early_voting"] += 1
             emit(out, "early_voting", True)
-            start = parse_cell(row["EV_start"], warnings, code, "EV_start")
-            end = parse_cell(row["EV_end"], warnings, code, "EV_end")
+            # Overriding a start or end date with a checked one also clears the
+            # county-set flag, since the override replaces the whole cell.
+            start = override(code, "ev_start",
+                             parse_cell(row["EV_start"], warnings, code, "EV_start"))
+            end = override(code, "ev_end",
+                           parse_cell(row["EV_end"], warnings, code, "EV_end"))
             # Upstream qualifies Hawaii's start date with "business days;
             # holidays not applied", which describes how it counted the date
             # rather than anything the reader acts on. The date is the point.
@@ -489,7 +573,8 @@ def main():
         # Asking for a mail ballot. Colorado and the other automatic-ballot
         # states have no request deadlines at all, so this block collapses to
         # nothing and the template shows only how to send it back.
-        cells["absentee_type"] = row["Absentee_type"].strip() or None
+        cells["absentee_type"] = scalar(code, "absentee_type",
+                                        row["Absentee_type"].strip() or None)
         emit(out, "absentee_type", cells["absentee_type"])
         if not absent(row["Request_deadline_online"]):
             counts["request_online"] += 1
@@ -501,9 +586,13 @@ def main():
             emit_cell(out, prefix, cells[prefix])
 
         # Sending it back.
-        if not absent(row["Return_methods"]):
-            emit(out, "return_methods", row["Return_methods"].strip())
-        mail_back = parse_cell(row["Return_deadline_mail"], warnings, code, "Return_deadline_mail")
+        methods = scalar(code, "return_methods",
+                         None if absent(row["Return_methods"]) else row["Return_methods"].strip())
+        if methods:
+            emit(out, "return_methods", methods)
+        mail_back = override(code, "return_mail",
+                             parse_cell(row["Return_deadline_mail"], warnings, code,
+                                        "Return_deadline_mail"))
         cells["return_mail"] = mail_back
         emit_cell(out, "return_mail", mail_back)
         if mail_back and mail_back.get("date"):
@@ -511,8 +600,10 @@ def main():
             by = datetime.strptime(raw, "%a, %b %d, %Y").date() - timedelta(days=MAIL_BY_DAYS)
             cells["return_mail_by"] = {"date": fmt(by), "iso": by.isoformat()}
             emit(out, "return_mail_by", fmt(by))
-        cells["return_in_person"] = parse_cell(row["Return_deadline_in_person"], warnings,
-                                               code, "Return_deadline_in_person")
+        cells["return_in_person"] = override(
+            code, "return_in_person",
+            parse_cell(row["Return_deadline_in_person"], warnings, code,
+                       "Return_deadline_in_person"))
         emit_cell(out, "return_in_person", cells["return_in_person"])
 
         calendars.append((code, row["State"], cells))

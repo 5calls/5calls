@@ -49,12 +49,13 @@ UID:wk2-tx-return@5calls.org
 DTSTAMP:20260828T000000Z
 DTSTART;VALUE=DATE:20261103
 DTEND;VALUE=DATE:20261104
-SUMMARY:Ballot must be received today (Texas)
+SUMMARY:Ballot must be postmarked today (Texas)
 URL:https://5calls.org/midterms/
 TRANSP:TRANSPARENT
+DESCRIPTION:Deadline is 7PM.
 BEGIN:VALARM
 ACTION:DISPLAY
-DESCRIPTION:Ballot must be received today (Texas)
+DESCRIPTION:Ballot must be postmarked today (Texas)
 TRIGGER:-P1D
 END:VALARM
 END:VEVENT

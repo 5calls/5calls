@@ -91,7 +91,7 @@ states:
     sdr_election_day: true
     sdr_early_voting: true
     sdr_locations: "Go to your [early voting location](https://caearlyvoting.sos.ca.gov/) or your [polling place on Election Day.](https://www.sos.ca.gov/elections/polling-place/)"
-    absentee_type: "Automatic mail ballot to every voter"
+    absentee_type: "Automatic mail ballot to every active registered voter"
     request_mail: "Tue, Oct 27"
     request_mail_received: true
     request_in_person: "Tue, Nov 3"
@@ -100,6 +100,7 @@ states:
     return_mail_received: false
     return_mail_by: "Tue, Oct 27"
     return_in_person: "Tue, Nov 3"
+    return_in_person_time: "8PM"
     return_in_person_received: true
   CO:
     code: "CO"
@@ -186,9 +187,11 @@ states:
     ev_end: "Sat, Oct 31"
     absentee_type: "No-excuse absentee"
     request_online: "Thu, Oct 22"
+    request_online_time: "5PM"
     request_mail: "Thu, Oct 22"
+    request_mail_time: "5PM"
     request_mail_received: true
-    request_in_person: "Thu, Oct 22"
+    request_in_person: "Fri, Oct 23"
     return_methods: "drop box, early voting site, local election office"
     return_mail: "Tue, Nov 3"
     return_mail_received: true
@@ -206,7 +209,7 @@ states:
     request_mail: "Fri, Oct 23"
     request_mail_received: true
     request_in_person: "Fri, Oct 23"
-    return_methods: "drop box, local election office"
+    return_methods: "drop box (inside early voting sites, through Oct 30), local election office"
     return_mail: "Tue, Nov 3"
     return_mail_received: true
     return_mail_by: "Tue, Oct 27"
@@ -424,7 +427,7 @@ states:
     code: "MI"
     name: "Michigan"
     early_voting: true
-    ev_varies: true
+    ev_start: "Sat, Oct 24"
     ev_end: "Sun, Nov 1"
     same_day_reg: true
     sdr_election_day: true
@@ -432,14 +435,19 @@ states:
     sdr_locations: "Go to your [local clerk's office.](https://www.voteamerica.com/local-election-offices/MI/)"
     absentee_type: "No-excuse absentee"
     request_online: "Fri, Oct 30"
+    request_online_time: "5PM"
     request_mail: "Fri, Oct 30"
+    request_mail_time: "5PM"
     request_mail_received: true
     request_in_person: "Mon, Nov 2"
+    request_in_person_time: "4PM"
     return_methods: "drop box, early voting site, local election office, polling place"
     return_mail: "Tue, Nov 3"
+    return_mail_time: "8PM"
     return_mail_received: true
     return_mail_by: "Tue, Oct 27"
     return_in_person: "Tue, Nov 3"
+    return_in_person_time: "8PM"
     return_in_person_received: true
   MN:
     code: "MN"
@@ -669,13 +677,17 @@ states:
     ev_end: "Sun, Nov 1"
     absentee_type: "No-excuse absentee"
     request_mail: "Tue, Oct 27"
+    request_mail_time: "8:30PM"
     request_mail_received: true
     request_in_person: "Tue, Oct 27"
-    return_methods: "early voting site, local election office"
+    request_in_person_time: "8:30PM"
+    return_methods: "drop box, local election office"
     return_mail: "Tue, Nov 3"
+    return_mail_time: "7:30PM"
     return_mail_received: true
     return_mail_by: "Tue, Oct 27"
     return_in_person: "Tue, Nov 3"
+    return_in_person_time: "7:30PM"
     return_in_person_received: true
   OK:
     code: "OK"
@@ -712,18 +724,21 @@ states:
   PA:
     code: "PA"
     name: "Pennsylvania"
-    early_voting: true
-    ev_varies: true
-    absentee_type: "No-excuse absentee"
+    absentee_type: "No-excuse mail-in ballot"
     request_online: "Tue, Oct 27"
+    request_online_time: "5PM"
     request_mail: "Tue, Oct 27"
+    request_mail_time: "5PM"
     request_mail_received: true
     request_in_person: "Tue, Oct 27"
+    request_in_person_time: "5PM"
     return_methods: "drop box, local election office"
     return_mail: "Tue, Nov 3"
+    return_mail_time: "8PM"
     return_mail_received: true
     return_mail_by: "Tue, Oct 27"
     return_in_person: "Tue, Nov 3"
+    return_in_person_time: "8PM"
     return_in_person_received: true
   RI:
     code: "RI"
@@ -800,7 +815,8 @@ states:
     request_in_person: "Fri, Oct 23"
     return_methods: "local election office"
     return_mail: "Tue, Nov 3"
-    return_mail_received: true
+    return_mail_time: "7PM"
+    return_mail_received: false
     return_mail_by: "Tue, Oct 27"
     return_in_person: "Tue, Nov 3"
     return_in_person_received: true

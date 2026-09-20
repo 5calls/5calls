@@ -22,8 +22,8 @@ DTEND;VALUE=DATE:20261023
 SUMMARY:Request your mail ballot in Florida
 URL:https://5calls.org/midterms/
 TRANSP:TRANSPARENT
-DESCRIPTION:Deadlines:\nBy mail: Thu\, Oct 22\nIn person: Thu\, Oct 22\nOnl
- ine: Thu\, Oct 22
+DESCRIPTION:Deadlines:\nBy mail: Thu\, Oct 22\nOnline: Thu\, Oct 22\nIn per
+ son: Fri\, Oct 23
 BEGIN:VALARM
 ACTION:DISPLAY
 DESCRIPTION:Request your mail ballot in Florida

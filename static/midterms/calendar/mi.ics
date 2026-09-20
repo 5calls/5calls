@@ -5,6 +5,16 @@ CALSCALE:GREGORIAN
 METHOD:PUBLISH
 X-WR-CALNAME:Michigan voting deadlines
 BEGIN:VEVENT
+UID:wk2-mi-early@5calls.org
+DTSTAMP:20260828T000000Z
+DTSTART;VALUE=DATE:20261024
+DTEND;VALUE=DATE:20261025
+SUMMARY:Early voting opens in Michigan
+URL:https://5calls.org/midterms/
+TRANSP:TRANSPARENT
+DESCRIPTION:Early voting runs through Sun\, Nov 1.
+END:VEVENT
+BEGIN:VEVENT
 UID:wk2-mi-request@5calls.org
 DTSTAMP:20260828T000000Z
 DTSTART;VALUE=DATE:20261030
@@ -43,6 +53,7 @@ DTEND;VALUE=DATE:20261104
 SUMMARY:Ballot must be received today (Michigan)
 URL:https://5calls.org/midterms/
 TRANSP:TRANSPARENT
+DESCRIPTION:Deadline is 8PM.
 BEGIN:VALARM
 ACTION:DISPLAY
 DESCRIPTION:Ballot must be received today (Michigan)
