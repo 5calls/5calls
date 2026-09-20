@@ -532,13 +532,15 @@
                   {{- end }}
                 </div>
               {{- end }}
-              <aside class="mt-images mt-images--extra">
-                <div class="mt-images__title">{{ $ec.title }} shares</div>
-                {{- with $ec.share }}
-                  {{- /* The same art for everyone, so no state swaps these; the
-                         data-shot-extra hook keeps them out of the state
-                         switcher's reach. Locked with the week's own crops,
-                         though the box around them already is. */ -}}
+              {{- /* The same art for everyone, so no state swaps these; the
+                     data-shot-extra hook keeps them out of the state
+                     switcher's reach. Locked with the week's own crops, though
+                     the box around them already is. A week whose extra credit
+                     has no art of its own shows no panel at all: the grid is a
+                     wrapping flex row, so the ask simply grows to fill it. */ -}}
+              {{- with $ec.share }}
+                <aside class="mt-images mt-images--extra">
+                  <div class="mt-images__title">{{ $ec.title }} shares</div>
                   {{- $vert := resources.Get .vertical }}
                   {{- $horiz := resources.Get .horizontal }}
                   <div class="mt-images__set">
@@ -559,19 +561,8 @@
                       <span class="visually-hidden">{{ $d.share.hint }}</span>
                     </button>
                   </div>
-                {{- else }}
-                  {{- $fpoVert := resources.Get "images/midterms/share-vertical-fpo.png" }}
-                  {{- $fpoHoriz := resources.Get "images/midterms/share-horizontal-fpo.png" }}
-                  <div class="mt-images__set">
-                    <img class="mt-shot mt-shot--portrait" src="{{ $fpoVert.RelPermalink }}"
-                         alt="Extra credit share image, vertical crop (placeholder)"
-                         width="{{ $fpoVert.Width }}" height="{{ $fpoVert.Height }}" />
-                    <img class="mt-shot mt-shot--landscape" src="{{ $fpoHoriz.RelPermalink }}"
-                         alt="Extra credit share image, horizontal crop (placeholder)"
-                         width="{{ $fpoHoriz.Width }}" height="{{ $fpoHoriz.Height }}" />
-                  </div>
-                {{- end }}
-              </aside>
+                </aside>
+              {{- end }}
             </div>
           </details>
         </section>
