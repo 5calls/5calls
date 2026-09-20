@@ -5,6 +5,16 @@ CALSCALE:GREGORIAN
 METHOD:PUBLISH
 X-WR-CALNAME:Iowa voting deadlines
 BEGIN:VEVENT
+UID:wk2-ia-early@5calls.org
+DTSTAMP:20260828T000000Z
+DTSTART;VALUE=DATE:20261014
+DTEND;VALUE=DATE:20261015
+SUMMARY:Early voting opens in Iowa
+URL:https://5calls.org/midterms/
+TRANSP:TRANSPARENT
+DESCRIPTION:Early voting runs through Mon\, Nov 2.
+END:VEVENT
+BEGIN:VEVENT
 UID:wk2-ia-request@5calls.org
 DTSTAMP:20260828T000000Z
 DTSTART;VALUE=DATE:20261019
@@ -12,7 +22,7 @@ DTEND;VALUE=DATE:20261020
 SUMMARY:Request your mail ballot in Iowa
 URL:https://5calls.org/midterms/
 TRANSP:TRANSPARENT
-DESCRIPTION:Deadlines:\nBy mail: Mon\, Oct 19\nIn person: Mon\, Oct 19
+DESCRIPTION:Deadlines:\nBy mail: Mon\, Oct 19\nIn person: Mon\, Nov 2
 BEGIN:VALARM
 ACTION:DISPLAY
 DESCRIPTION:Request your mail ballot in Iowa
@@ -42,6 +52,7 @@ DTEND;VALUE=DATE:20261104
 SUMMARY:Ballot must be received today (Iowa)
 URL:https://5calls.org/midterms/
 TRANSP:TRANSPARENT
+DESCRIPTION:Deadline is 8PM.
 BEGIN:VALARM
 ACTION:DISPLAY
 DESCRIPTION:Ballot must be received today (Iowa)

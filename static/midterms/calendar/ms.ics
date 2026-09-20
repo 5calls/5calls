@@ -7,12 +7,12 @@ X-WR-CALNAME:Mississippi voting deadlines
 BEGIN:VEVENT
 UID:wk2-ms-request@5calls.org
 DTSTAMP:20260828T000000Z
-DTSTART;VALUE=DATE:20261102
-DTEND;VALUE=DATE:20261103
+DTSTART;VALUE=DATE:20261031
+DTEND;VALUE=DATE:20261101
 SUMMARY:Request your mail ballot in Mississippi
 URL:https://5calls.org/midterms/
 TRANSP:TRANSPARENT
-DESCRIPTION:Deadlines:\nBy mail: Mon\, Nov 2
+DESCRIPTION:Deadlines:\nIn person: Sat\, Oct 31
 BEGIN:VALARM
 ACTION:DISPLAY
 DESCRIPTION:Request your mail ballot in Mississippi

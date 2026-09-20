@@ -5,6 +5,16 @@ CALSCALE:GREGORIAN
 METHOD:PUBLISH
 X-WR-CALNAME:Kansas voting deadlines
 BEGIN:VEVENT
+UID:wk2-ks-early@5calls.org
+DTSTAMP:20260828T000000Z
+DTSTART;VALUE=DATE:20261014
+DTEND;VALUE=DATE:20261015
+SUMMARY:Early voting opens in Kansas
+URL:https://5calls.org/midterms/
+TRANSP:TRANSPARENT
+DESCRIPTION:Early voting runs through Mon\, Nov 2.
+END:VEVENT
+BEGIN:VEVENT
 UID:wk2-ks-request@5calls.org
 DTSTAMP:20260828T000000Z
 DTSTART;VALUE=DATE:20261027
@@ -12,7 +22,7 @@ DTEND;VALUE=DATE:20261028
 SUMMARY:Request your mail ballot in Kansas
 URL:https://5calls.org/midterms/
 TRANSP:TRANSPARENT
-DESCRIPTION:Deadlines:\nBy mail: Tue\, Oct 27\nIn person: Tue\, Oct 27
+DESCRIPTION:Deadlines:\nBy mail: Tue\, Oct 27\nIn person: Mon\, Nov 2
 BEGIN:VALARM
 ACTION:DISPLAY
 DESCRIPTION:Request your mail ballot in Kansas
@@ -39,12 +49,13 @@ UID:wk2-ks-return@5calls.org
 DTSTAMP:20260828T000000Z
 DTSTART;VALUE=DATE:20261103
 DTEND;VALUE=DATE:20261104
-SUMMARY:Ballot must be postmarked today (Kansas)
+SUMMARY:Ballot must be received today (Kansas)
 URL:https://5calls.org/midterms/
 TRANSP:TRANSPARENT
+DESCRIPTION:Deadline is 7PM.
 BEGIN:VALARM
 ACTION:DISPLAY
-DESCRIPTION:Ballot must be postmarked today (Kansas)
+DESCRIPTION:Ballot must be received today (Kansas)
 TRIGGER:-P1D
 END:VALARM
 END:VEVENT

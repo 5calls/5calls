@@ -111,6 +111,10 @@
     {{- $date := . -}}
     {{- with $s.return_mail_time }}{{ $date = printf "%s at %s" $date . }}{{ end -}}
     {{- $line := printf "<strong>By mail:</strong> %s by %s" $by $date -}}
+    {{- /* Where the postmark is what counts, the date it must actually turn up
+           matters just as much: without it the line reads as though arriving
+           late is fatal, which in these states it is not. */ -}}
+    {{- with $s.return_mail_received_by }}{{ $line = printf "%s, and must arrive by %s" $line . }}{{ end -}}
     {{- with $s.return_mail_by }}{{ $line = printf "%s (mail it by %s!)" $line . }}{{ end -}}
     {{- $return = $return | append $line -}}
   {{- end -}}

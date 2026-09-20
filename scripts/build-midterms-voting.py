@@ -109,7 +109,10 @@ OFFICIAL_OVERRIDES = {
     # the SOS's own wording; inactive registrations are excluded by statute.
     # Returns close with the polls. sos.ca.gov/elections/voter-registration/vote-mail
     "CA": {"absentee_type": "Automatic mail ballot to every active registered voter",
-           "return_in_person": (date(2026, 11, 3), "8PM")},
+           "return_in_person": (date(2026, 11, 3), "8PM"),
+           # EC 3020(b): postmarked on or before election day and received
+           # within seven days. sos.ca.gov key dates names Nov 10.
+           "return_mail_received_by": date(2026, 11, 10)},
     # Florida's request deadlines close at 5 p.m. (§101.62(3)(c), "5 p.m. local
     # time on the 12th day before"). In person is NOT that day: office pickup
     # runs freely through Oct 23 (§101.62(3)(d)3), then only on an emergency
@@ -118,6 +121,86 @@ OFFICIAL_OVERRIDES = {
     "FL": {"request_online": (date(2026, 10, 22), "5PM"),
            "request_mail": (date(2026, 10, 22), "5PM"),
            "request_in_person": date(2026, 10, 23)},
+    # Alabama authorises a commercial carrier alongside the post and hand
+    # delivery, and a hand-delivered ballot is due by close of business the day
+    # before — 5 p.m., not election day. §§ 17-11-9, 17-11-7, 17-9-30.
+    # sos.alabama.gov/alabama-votes/voter/absentee-voting
+    "AL": {"return_methods": "local election office, commercial carrier",
+           "return_in_person": (date(2026, 11, 2), "5PM")},
+    # Mississippi sets no closing date for a mailed application at all — the
+    # Nov 2 we carried was the snapshot's arithmetic, not a rule (§23-15-715(b)
+    # opens a 45-day window with no end). In person closes at noon on the
+    # Saturday before (§23-15-637(1)(b)). A ballot postmarked by election day
+    # counts if it reaches the clerk within five business days, which the
+    # Supreme Court upheld in Watson v. RNC in June 2026. And hand delivery is
+    # barred, but a common carrier is expressly allowed (§23-15-631(1)(c)), so
+    # upstream's "put it in the mailbox" was too narrow.
+    # sos.ms.gov/content/documents/elections/2026 Elections Calendar.pdf
+    "MS": {"request_mail": None,
+           "request_in_person": (date(2026, 10, 31), "12PM"),
+           "return_mail_received_by": date(2026, 11, 10),
+           "return_methods": "common carrier such as UPS or FedEx",
+           "return_in_person": {"note": "You cannot hand-deliver your ballot in "
+                                        "Mississippi — return it by mail or a common "
+                                        "carrier such as UPS or FedEx."}},
+    # Hawaii mails a ballot to every voter, so nothing is requested. Oct 27 is
+    # the deadline to have your ballot sent to an ALTERNATE ADDRESS, and there
+    # is no in-person request channel at all — replacements go by phone or the
+    # county website with no published deadline. Hawaii's term for an early
+    # voting place is a voter service center.
+    # elections.hawaii.gov/voting/absentee-voting/
+    "HI": {"request_mail": None, "request_in_person": None,
+           "return_methods": "drop box, voter service center",
+           "return_mail": (date(2026, 11, 3), "7PM"),
+           "return_in_person": (date(2026, 11, 3), "7PM")},
+    # Iowa's early voting is statewide, not county-set: Iowa Code 53.10(1)
+    # opens it 20 days out and 53.2(1)(a) runs it to the day before. The
+    # in-person channel runs the whole window, not to the mailed-request
+    # deadline. Ballots arriving after the polls close still count if they were
+    # mailed in time, up to the county canvass on Nov 10 (53.17A(3)(a), 50.24).
+    "IA": {"ev_start": date(2026, 10, 14), "ev_end": (date(2026, 11, 2), "5PM"),
+           "request_mail": (date(2026, 10, 19), "5PM"),
+           "request_in_person": (date(2026, 11, 2), "5PM"),
+           "return_mail": (date(2026, 11, 3), "8PM"),
+           "return_mail_received_by": date(2026, 11, 10),
+           "return_in_person": (date(2026, 11, 3), "8PM")},
+    # Illinois counts a ballot postmarked by election day that arrives within
+    # 14 days. 10 ILCS 5/19-8(c) with 18A-15(a); the SBE calendar dates it.
+    "IL": {"return_mail_received_by": date(2026, 11, 17)},
+    # Kansas repealed its postmark grace: 2025 SB 4 struck it from K.S.A.
+    # 25-1132(b), which now reads "the deadline for the receipt by mail ...
+    # shall be 7:00 p.m. on the date of the election", effective Jan 1 2026.
+    # A Douglas County injunction currently requires postmarked ballots to be
+    # counted if they arrive by the Friday after, and the Secretary's motion to
+    # stay is pending — so this is contested. We publish the statute, because
+    # "get it in by election day" is safe under either outcome and "a postmark
+    # is enough" is not. Advance voting is also a statewide window, earliest
+    # Oct 14, every county open by Oct 27, closing at noon the day before.
+    # ksrevisor.gov/statutes/chapters/ch25/025_011_0032.html
+    "KS": {"return_mail": {"date": date(2026, 11, 3), "time": "7PM", "received": True},
+           "ev_start": date(2026, 10, 14),
+           "request_in_person": (date(2026, 11, 2), "12PM"),
+           "return_methods": "drop box, local election office, polling place"},
+    # New Hampshire checked out entirely; only the hour was missing. RSA
+    # 657:15, I: the clerk provides a ballot in person "up until 5:00 p.m. on
+    # the day before the election". Not expressible here, but worth knowing:
+    # since Sept 2025 an absentee application must carry photo ID or a
+    # notarised signature (RSA 657:17-c) or no ballot is issued.
+    "NH": {"request_in_person": (date(2026, 11, 2), "5PM")},
+    # North Dakota's county-set early voting is real — counties choose whether
+    # to offer it at all, and most do not. Its postmark rule was repealed by
+    # HB 1165 in 2025, so received-by-close-of-polls is right and there is
+    # deliberately no backstop; the widely cited "postmarked the day before"
+    # is the old law. Only the hour was missing. ndlegis.gov/cencode/t16-1c01.pdf
+    "ND": {"return_mail": (date(2026, 11, 3), "7PM"),
+           "return_in_person": (date(2026, 11, 3), "7PM")},
+    # Oregon has no ballot request either — those rows described replacement
+    # ballots. ORS 254.470(6)(e)(B) counts a ballot postmarked by election day
+    # that arrives within seven days, and an unpostmarked one is presumed
+    # timely if it arrives by then. sos.oregon.gov current-elections-calendar
+    "OR": {"request_mail": None, "request_in_person": None,
+           "return_mail_received_by": date(2026, 11, 10),
+           "return_in_person": (date(2026, 11, 3), "8PM")},
     # Georgia's drop boxes live inside early voting sites and close when
     # advance voting ends, so on Election Day the registrar's office is the
     # only in-person return. O.C.G.A. § 21-2-382(c): "All drop boxes shall be
@@ -160,7 +243,11 @@ OFFICIAL_OVERRIDES = {
     # Election Day is valid if it arrives by 5 p.m. the next day. Publishing
     # "received by Nov 3" was wrong in the direction that loses ballots. The
     # Nov 4 receipt backstop cannot be expressed here. SOS form 6-26.
-    "TX": {"return_mail": {"date": date(2026, 11, 3), "time": "7PM", "received": False}},
+    "TX": {"return_mail": {"date": date(2026, 11, 3), "time": "7PM", "received": False},
+           # Postmarked by 7 p.m. on election day, received by 5 p.m. the next
+           # day. Publishing the postmark without this reads as though a ballot
+           # arriving Nov 4 is lost, when it is the rule that saves it.
+           "return_mail_received_by": date(2026, 11, 4)},
 }
 # Checked against official sources and left exactly as the snapshot counted:
 #
@@ -232,6 +319,10 @@ def override(code, prefix, cell):
     # A date, a (date, time) pair, or a dict for the rest — {"date", "time",
     # "received"} — since correcting Texas means changing the receipt basis,
     # not just the day.
+    # Prose in place of a date, where upstream's own prose is wrong rather
+    # than merely absent.
+    if isinstance(fix, dict) and "note" in fix and "date" not in fix:
+        return {"note": fix["note"]}
     if isinstance(fix, dict):
         day, when, basis = fix.get("date"), fix.get("time"), fix.get("received")
     elif isinstance(fix, tuple):
@@ -600,6 +691,16 @@ def main():
             by = datetime.strptime(raw, "%a, %b %d, %Y").date() - timedelta(days=MAIL_BY_DAYS)
             cells["return_mail_by"] = {"date": fmt(by), "iso": by.isoformat()}
             emit(out, "return_mail_by", fmt(by))
+        # The arrival deadline behind a postmark rule. Upstream does not carry
+        # one at all, so it only ever comes from a checked source: a state that
+        # counts the postmark almost always also sets a date by which the
+        # ballot must actually turn up, and "postmarked by Nov 3" alone reads
+        # as though late arrival is fatal when it is not.
+        backstop = scalar(code, "return_mail_received_by", None)
+        if backstop:
+            cells["return_mail_received_by"] = {"date": fmt(backstop),
+                                                "iso": backstop.isoformat()}
+            emit(out, "return_mail_received_by", fmt(backstop))
         cells["return_in_person"] = override(
             code, "return_in_person",
             parse_cell(row["Return_deadline_in_person"], warnings, code,
