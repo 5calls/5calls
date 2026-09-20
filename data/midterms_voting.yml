@@ -24,10 +24,10 @@ states:
     ev_start: "Mon, Oct 19"
     ev_end: "Mon, Nov 2"
     absentee_type: "No-excuse absentee"
-    request_online: "Sat, Oct 24"
+    request_online: "Mon, Nov 2"
+    request_online_time: "5PM"
     request_mail: "Sat, Oct 24"
     request_mail_received: true
-    request_in_person: "Sat, Oct 24"
     return_methods: "drop box, early voting site, local election office, polling place"
     return_mail: "Tue, Nov 3"
     return_mail_received: false

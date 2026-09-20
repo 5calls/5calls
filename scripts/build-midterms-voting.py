@@ -85,6 +85,45 @@ REPAIR_PREFIX = 40
 # or one ending in an ellipsis, is the only kind worth repairing.
 TRUNCATED_AT = 195
 
+# Dates checked against the state's own 2026 election calendar, website or
+# statute, and found to differ from the snapshot's. The snapshot counts back
+# from Election Day and applies no weekend or holiday rollover, so a date that
+# lands on a weekend is the usual reason to look; a date with no official
+# guidance to move it stays as counted. These win over the snapshot.
+# Last checked 2026-09-20.
+#
+# A value may be a date, a (date, time) pair, or None, which removes the field
+# because the option exists but carries no deadline.
+OFFICIAL_OVERRIDES = {
+    # Alaska keys the deadline to how the BALLOT is delivered, not how the
+    # application is sent, so one snapshot row cannot carry it. The 2026
+    # calendar lists both, citing AS 15.20.081(b): 10/24 "Deadline to receive
+    # absentee by-mail applications" and 11/02 "Deadline to receive absentee by
+    # electronic transmission ballot applications", the latter at 5 p.m. Alaska
+    # time. There is no in-person application deadline at all — absentee
+    # in-person voting runs from Oct 19 through Election Day.
+    # elections.alaska.gov/calendar/
+    "AK": {"request_online": (date(2026, 11, 2), "5PM"),
+           "request_in_person": None},
+}
+# Checked against official sources and left exactly as the snapshot counted:
+#
+# AK  by-mail request, Sat Oct 24. AS 01.10.080 excludes only holidays from
+#     the count and AS 44.12.010 makes Sunday a holiday but not Saturday, so
+#     nothing moves it. The Division's own calendar notes "Absentee Office is
+#     open" that day, and its REAA entry spells out the same reasoning.
+# NY  online and by-mail request, Sat Oct 24, receipt-based. Election Law
+#     §8-400(2)(c) and §8-700 both set the tenth day before the election and
+#     both say "must be received"; §1-106(1)'s weekend rollover governs
+#     candidate filings, not ballot applications. In person is Nov 2, which is
+#     what the snapshot already carried. nysenate.gov/legislation/laws/ELN/8-400
+# TN  by-mail and in-person request, Sat Oct 24, receipt-based. The state's own
+#     "Key Dates for the 2026 Election Cycle" prints the registration deadline
+#     rolled off Sunday to "Monday, October 5" while printing the absentee one
+#     as "Saturday, October 24" — and does the same for the May 2026 election —
+#     so leaving it on the Saturday is deliberate. sos.tn.gov/elections/calendar
+USED_OVERRIDES = set()
+
 
 def absent(value):
     return value.strip().lower() in ABSENT
@@ -119,6 +158,30 @@ def repair(value, full, warnings, code, column):
                         "keeping the short one" % (code, column))
         return value
     return full
+
+
+def override(code, prefix, cell):
+    """The checked date where we have one, else the cell as the snapshot had it.
+
+    The receipt basis survives an override, since correcting a date says
+    nothing about whether the thing must arrive or be postmarked.
+    """
+    fixes = OFFICIAL_OVERRIDES.get(code, {})
+    if prefix not in fixes:
+        return cell
+    USED_OVERRIDES.add((code, prefix))
+    fix = fixes[prefix]
+    if fix is None:
+        return None
+    day, when = fix if isinstance(fix, tuple) else (fix, None)
+    out = {"date": fmt(day), "iso": day.isoformat()}
+    if when:
+        out["time"] = when
+    elif cell and "time" in cell:
+        out["time"] = cell["time"]
+    if cell and "received" in cell:
+        out["received"] = cell["received"]
+    return out
 
 
 def parse_cell(value, warnings, code, column):
@@ -433,7 +496,8 @@ def main():
         for column, prefix in (("Request_deadline_online", "request_online"),
                                ("Request_deadline_mail", "request_mail"),
                                ("Request_deadline_in_person", "request_in_person")):
-            cells[prefix] = parse_cell(row[column], warnings, code, column)
+            cells[prefix] = override(code, prefix,
+                                     parse_cell(row[column], warnings, code, column))
             emit_cell(out, prefix, cells[prefix])
 
         # Sending it back.
@@ -452,6 +516,14 @@ def main():
         emit_cell(out, "return_in_person", cells["return_in_person"])
 
         calendars.append((code, row["State"], cells))
+
+    # An override that never fires is a typo in a state code or field name, and
+    # would otherwise sit here looking like a correction that had been applied.
+    for state, fixes in OFFICIAL_OVERRIDES.items():
+        for prefix in fixes:
+            if (state, prefix) not in USED_OVERRIDES:
+                warnings.append("%s: override for %s never applied — check the "
+                                "state code and field name" % (state, prefix))
 
     with open(OUT, "w", encoding="utf-8") as fh:
         fh.write("\n".join(out) + "\n")

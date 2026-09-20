@@ -74,7 +74,9 @@
   {{- with $s.absentee_type -}}
     {{- $sub := slice -}}
     {{- with $s.request_online -}}
-      {{- $sub = $sub | append (printf "<strong>Online:</strong> Request by %s" .) -}}
+      {{- $date := . -}}
+      {{- with $s.request_online_time }}{{ $date = printf "%s at %s" $date . }}{{ end -}}
+      {{- $sub = $sub | append (printf "<strong>Online:</strong> Request by %s" $date) -}}
     {{- end -}}
     {{- with $s.request_online_note -}}
       {{- $sub = $sub | append (printf "<strong>Online:</strong> %s" (markdownify .)) -}}

@@ -22,8 +22,7 @@ DTEND;VALUE=DATE:20261025
 SUMMARY:Request your mail ballot in Alaska
 URL:https://5calls.org/midterms/
 TRANSP:TRANSPARENT
-DESCRIPTION:Deadlines:\nBy mail: Sat\, Oct 24\nIn person: Sat\, Oct 24\nOnl
- ine: Sat\, Oct 24
+DESCRIPTION:Deadlines:\nBy mail: Sat\, Oct 24\nOnline: Mon\, Nov 2
 BEGIN:VALARM
 ACTION:DISPLAY
 DESCRIPTION:Request your mail ballot in Alaska

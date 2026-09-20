@@ -58,11 +58,13 @@
     {{- $line = "Dates are set by your county" -}}
     {{- with $s.ev_end -}}
       {{- $line = printf "%s, through %s" $line (partial "midterms-card-date.html" .) -}}
+      {{- with $s.ev_end_time }}{{ $line = printf "%s at %s" $line . }}{{ end -}}
     {{- end -}}
   {{- else -}}
+    {{- $end := partial "midterms-card-date.html" $s.ev_end -}}
+    {{- with $s.ev_end_time }}{{ $end = printf "%s at %s" $end . }}{{ end -}}
     {{- $line = printf "From %s to %s"
-          (partial "midterms-card-date.html" $s.ev_start)
-          (partial "midterms-card-date.html" $s.ev_end) -}}
+          (partial "midterms-card-date.html" $s.ev_start) $end -}}
   {{- end -}}
   {{- $blocks = $blocks | append
         (dict "kind" "lead" "line" (printf "**In-Person Early Voting:** %s" $line)) -}}
@@ -72,17 +74,23 @@
   {{- $blocks = $blocks | append
         (dict "kind" "lead" "line" (printf "**Absentee & Vote-by-mail:** %s" .)) -}}
   {{- with $s.request_online -}}
+    {{- $date := partial "midterms-card-date.html" . -}}
+    {{- with $s.request_online_time }}{{ $date = printf "%s at %s" $date . }}{{ end -}}
     {{- $blocks = $blocks | append (dict "kind" "bullet"
-          "line" (printf "**Online:** Request by %s" (partial "midterms-card-date.html" .))) -}}
+          "line" (printf "**Online:** Request by %s" $date)) -}}
   {{- end -}}
   {{- with $s.request_mail -}}
     {{- $by := cond (eq $s.request_mail_received false) "postmarked" "received" -}}
+    {{- $date := partial "midterms-card-date.html" . -}}
+    {{- with $s.request_mail_time }}{{ $date = printf "%s at %s" $date . }}{{ end -}}
     {{- $blocks = $blocks | append (dict "kind" "bullet"
-          "line" (printf "**By mail:** Request must be %s by %s" $by (partial "midterms-card-date.html" .))) -}}
+          "line" (printf "**By mail:** Request must be %s by %s" $by $date)) -}}
   {{- end -}}
   {{- with $s.request_in_person -}}
+    {{- $date := partial "midterms-card-date.html" . -}}
+    {{- with $s.request_in_person_time }}{{ $date = printf "%s at %s" $date . }}{{ end -}}
     {{- $blocks = $blocks | append (dict "kind" "bullet"
-          "line" (printf "**In person:** Request by %s" (partial "midterms-card-date.html" .))) -}}
+          "line" (printf "**In person:** Request by %s" $date)) -}}
   {{- end -}}
   {{- /* Upstream sometimes explains itself instead of naming a date. A short
          note earns its place on the card; a paragraph does not, and the page
@@ -97,15 +105,19 @@
 {{- $returns := slice -}}
 {{- with $s.return_mail -}}
   {{- $by := cond (eq $s.return_mail_received false) "Postmarked" "Received" -}}
-  {{- $line := printf "**By mail:** %s by %s" $by (partial "midterms-card-date.html" .) -}}
+  {{- $date := partial "midterms-card-date.html" . -}}
+  {{- with $s.return_mail_time }}{{ $date = printf "%s at %s" $date . }}{{ end -}}
+  {{- $line := printf "**By mail:** %s by %s" $by $date -}}
   {{- with $s.return_mail_by -}}
     {{- $line = printf "%s (Mail by %s!)" $line (partial "midterms-card-date.html" .) -}}
   {{- end -}}
   {{- $returns = $returns | append (dict "kind" "bullet" "line" $line) -}}
 {{- end -}}
 {{- with $s.return_in_person -}}
+  {{- $date := partial "midterms-card-date.html" . -}}
+  {{- with $s.return_in_person_time }}{{ $date = printf "%s at %s" $date . }}{{ end -}}
   {{- $returns = $returns | append (dict "kind" "bullet"
-        "line" (printf "**In person:** Received by %s" (partial "midterms-card-date.html" .))) -}}
+        "line" (printf "**In person:** Received by %s" $date)) -}}
 {{- end -}}
 {{- if $returns -}}
   {{- $where := "by mail" -}}
