@@ -1,0 +1,72 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//5 Calls//5 Minute Midterms//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+X-WR-CALNAME:Maryland voting deadlines
+BEGIN:VEVENT
+UID:wk2-md-early@5calls.org
+DTSTAMP:20260828T000000Z
+DTSTART;VALUE=DATE:20261022
+DTEND;VALUE=DATE:20261023
+SUMMARY:Early voting opens in Maryland
+URL:https://5calls.org/midterms/
+TRANSP:TRANSPARENT
+DESCRIPTION:Early voting runs through Thu\, Oct 29.
+END:VEVENT
+BEGIN:VEVENT
+UID:wk2-md-request@5calls.org
+DTSTAMP:20260828T000000Z
+DTSTART;VALUE=DATE:20261027
+DTEND;VALUE=DATE:20261028
+SUMMARY:Request your mail ballot in Maryland
+URL:https://5calls.org/midterms/
+TRANSP:TRANSPARENT
+DESCRIPTION:Deadlines:\nBy mail: Tue\, Oct 27\nOnline: Tue\, Oct 27\nIn per
+ son: Tue\, Nov 3
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Request your mail ballot in Maryland
+TRIGGER:-P1D
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:wk2-md-mailby@5calls.org
+DTSTAMP:20260828T000000Z
+DTSTART;VALUE=DATE:20261027
+DTEND;VALUE=DATE:20261028
+SUMMARY:Mail your ballot today (Maryland)
+URL:https://5calls.org/midterms/
+TRANSP:TRANSPARENT
+DESCRIPTION:Leaves a week for the post before the return deadline.
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Mail your ballot today (Maryland)
+TRIGGER:-P1D
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:wk2-md-return@5calls.org
+DTSTAMP:20260828T000000Z
+DTSTART;VALUE=DATE:20261103
+DTEND;VALUE=DATE:20261104
+SUMMARY:Ballot must be postmarked today (Maryland)
+URL:https://5calls.org/midterms/
+TRANSP:TRANSPARENT
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Ballot must be postmarked today (Maryland)
+TRIGGER:-P1D
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:wk2-md-election@5calls.org
+DTSTAMP:20260828T000000Z
+DTSTART;VALUE=DATE:20261103
+DTEND;VALUE=DATE:20261104
+SUMMARY:Election Day
+URL:https://5calls.org/midterms/
+TRANSP:TRANSPARENT
+DESCRIPTION:Polls are open today. Find yours at 5calls.org/vote/locate/.
+END:VEVENT
+END:VCALENDAR

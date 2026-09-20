@@ -40,10 +40,20 @@
 {{- if and (not $prelaunch) $week.state_deck -}}
   {{- $deck = index site.Data.midterms_states.states $d.state.abbr -}}
 {{- end -}}
+{{- /* Weeks flagged state_voting render the reader's whole set of voting
+       options — early voting, same-day registration, and the two halves of
+       voting by mail — from data/midterms_voting.yml instead. */ -}}
+{{- $voting := false -}}
+{{- if and (not $prelaunch) $week.state_voting -}}
+  {{- $voting = index site.Data.midterms_voting.states $d.state.abbr -}}
+{{- end -}}
 {{- /* On previews, flag detail fields the week has not been written with yet. */ -}}
 {{- $missing := slice -}}
 {{- $required := slice "intro" "message" "copy_cta" "rewrite_cta" "confirm" "why" -}}
 {{- if $deck }}{{ $required = slice "intro" "deck_cta" "confirm" "why" }}{{ end -}}
+{{- /* The options card draws itself from the state's own data, so the week
+       writes no card copy of its own. */ -}}
+{{- if $voting }}{{ $required = slice "intro" "confirm" "why" }}{{ end -}}
 {{- if and $preview (not $prelaunch) -}}
   {{- range $required -}}
     {{- if not (index $week .) }}{{ $missing = $missing | append . }}{{ end -}}
@@ -363,7 +373,27 @@
               {{- end }}
             {{- end }}
 
-            {{- if $deck }}
+            {{- if $voting }}
+              {{- /* The reader's voting options, drawn by midterms-voting.html.
+                     Uses the same data-deck hooks as the registration card, so
+                     the state switcher swaps this one too without knowing which
+                     kind of card it is looking at. */ -}}
+              <div class="mt-message mt-deck">
+                <div class="mt-deck__top">
+                  <div class="mt-deck__lede" data-deck="lede">
+                    {{- partial "midterms-voting.html" (dict "state" $voting "part" "lede") | safeHTML -}}
+                  </div>
+                  <a class="mt-pill mt-pill--tag" href="#mt-state" title="Change your state"
+                     data-deck="tag" data-state-change>{{ upper $voting.name }}</a>
+                </div>
+                <div class="mt-deck__body" data-deck="body">
+                  {{- partial "midterms-voting.html" (dict "state" $voting "part" "body") | safeHTML -}}
+                </div>
+                {{- with $week.deck_note }}
+                  <p class="mt-deck__foot">{{ . | markdownify }}</p>
+                {{- end }}
+              </div>
+            {{- else if $deck }}
               <div class="mt-message mt-deck">
                 {{- /* The deadline copy for the reader's state, by its tier, with the
                        state tag riding on the same top line. Drawn by
@@ -662,6 +692,14 @@
         {{- $entry = merge $entry (dict
             "lede" (partial "midterms-deck.html" (dict "state" $s "copy" $week.deck_copy "part" "lede"))
             "body" (partial "midterms-deck.html" (dict "state" $s "copy" $week.deck_copy "part" "body"))) -}}
+      {{- end -}}
+      {{- /* The options card, drawn for every state the same way, so switching
+             swaps it with no round trip. */ -}}
+      {{- if $week.state_voting -}}
+        {{- $v := index site.Data.midterms_voting.states $code -}}
+        {{- $entry = merge $entry (dict
+            "lede" (partial "midterms-voting.html" (dict "state" $v "part" "lede"))
+            "body" (partial "midterms-voting.html" (dict "state" $v "part" "body"))) -}}
       {{- end -}}
       {{- if $preview }}{{ $entry = merge $entry (dict "review" $s.review_reason) }}{{ end -}}
       {{- /* The share art for this week in this state. Drawing all 51 up front is
@@ -1177,6 +1215,13 @@
           if (tag) tag.textContent = (s.name || "").toUpperCase();
           var cta = document.querySelector("[data-deck='url']");
           if (cta && s.url) cta.href = s.url;
+
+          // The calendar link hands over the reader's own state's deadlines.
+          // It is written in the week's copy as markdown, which can't carry an
+          // attribute for the switcher to find, so it is matched on its href.
+          document.querySelectorAll('a[href*="/midterms/calendar/"]').forEach(function (a) {
+            a.href = "/midterms/calendar/" + code.toLowerCase() + ".ics";
+          });
 
           // Everywhere else the state is named.
           document.querySelectorAll("[data-state-name-upper]").forEach(function (el) {

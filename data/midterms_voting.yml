@@ -1,0 +1,947 @@
+# GENERATED FILE - do not edit by hand.
+# Source: state-voting-access.tsv
+#         state-data-full.tsv (untruncated prose)
+# Regenerate: python3 scripts/build-midterms-voting.py
+#
+# One entry per jurisdiction (50 states + DC) of week-two voting options:
+# in-person early voting, same-day registration, requesting a mail ballot
+# and returning it. Read by layouts/partials/midterms-voting.html for any
+# week flagged state_voting: true in data/midterms.yml.
+#
+# A key is absent wherever the option does not exist, so the template shows
+# a line by asking whether its key is there. Dates carry no year. Alongside
+# a date there may be a _time it falls at, a _received flag saying whether
+# the date is when the ballot must arrive (true) or be postmarked (false),
+# and a _note qualifying it. A _note with no date is prose upstream gave in
+# place of one. ev_varies marks a state whose early voting dates are set by
+# the county. return_mail_by is a week before the mail return deadline.
+
+states:
+  AK:
+    code: "AK"
+    name: "Alaska"
+    early_voting: true
+    ev_start: "Mon, Oct 19"
+    ev_end: "Mon, Nov 2"
+    absentee_type: "No-excuse absentee"
+    request_online: "Sat, Oct 24"
+    request_mail: "Sat, Oct 24"
+    request_mail_received: true
+    request_in_person: "Sat, Oct 24"
+    return_methods: "drop box, early voting site, local election office, polling place"
+    return_mail: "Tue, Nov 3"
+    return_mail_received: false
+    return_mail_by: "Tue, Oct 27"
+    return_in_person: "Tue, Nov 3"
+    return_in_person_received: true
+  AL:
+    code: "AL"
+    name: "Alabama"
+    absentee_type: "Excuse required"
+    request_mail: "Tue, Oct 27"
+    request_mail_received: true
+    request_in_person: "Thu, Oct 29"
+    return_methods: "local election office"
+    return_mail: "Tue, Nov 3"
+    return_mail_time: "12PM"
+    return_mail_received: true
+    return_mail_by: "Tue, Oct 27"
+    return_in_person: "Mon, Nov 2"
+    return_in_person_received: true
+  AR:
+    code: "AR"
+    name: "Arkansas"
+    early_voting: true
+    ev_start: "Mon, Oct 19"
+    ev_end: "Mon, Nov 2"
+    absentee_type: "Excuse required"
+    request_mail: "Tue, Oct 27"
+    request_mail_received: true
+    request_in_person: "Fri, Oct 30"
+    return_methods: "local election office"
+    return_mail: "Tue, Nov 3"
+    return_mail_received: true
+    return_mail_by: "Tue, Oct 27"
+    return_in_person: "Fri, Oct 30"
+    return_in_person_received: true
+  AZ:
+    code: "AZ"
+    name: "Arizona"
+    early_voting: true
+    ev_start: "Wed, Oct 7"
+    ev_end: "Fri, Oct 30"
+    absentee_type: "No-excuse absentee"
+    request_online: "Fri, Oct 23"
+    request_mail: "Fri, Oct 23"
+    request_mail_received: true
+    request_in_person: "Fri, Oct 23"
+    return_methods: "drop box, early voting site, local election office, polling place"
+    return_mail: "Tue, Nov 3"
+    return_mail_received: true
+    return_mail_by: "Tue, Oct 27"
+    return_in_person: "Tue, Nov 3"
+    return_in_person_received: true
+  CA:
+    code: "CA"
+    name: "California"
+    early_voting: true
+    ev_start: "Mon, Oct 5"
+    ev_end: "Mon, Nov 2"
+    same_day_reg: true
+    sdr_election_day: true
+    sdr_early_voting: true
+    sdr_locations: "Go to your [early voting location](https://caearlyvoting.sos.ca.gov/) or your [polling place on Election Day.](https://www.sos.ca.gov/elections/polling-place/)"
+    absentee_type: "Automatic mail ballot to every voter"
+    request_mail: "Tue, Oct 27"
+    request_mail_received: true
+    request_in_person: "Tue, Nov 3"
+    return_methods: "drop box, early voting site, local election office, polling place"
+    return_mail: "Tue, Nov 3"
+    return_mail_received: false
+    return_mail_by: "Tue, Oct 27"
+    return_in_person: "Tue, Nov 3"
+    return_in_person_received: true
+  CO:
+    code: "CO"
+    name: "Colorado"
+    early_voting: true
+    ev_start: "Mon, Oct 19"
+    ev_end: "Mon, Nov 2"
+    same_day_reg: true
+    sdr_election_day: true
+    sdr_early_voting: true
+    sdr_locations: "Go to a [voter service and polling center](https://www.voteamerica.com/where-to-vote/) in your county."
+    absentee_type: "Automatic mail ballot to every voter"
+    return_methods: "drop box, early voting site, local election office, polling place"
+    return_mail: "Tue, Nov 3"
+    return_mail_received: true
+    return_mail_by: "Tue, Oct 27"
+    return_in_person: "Tue, Nov 3"
+    return_in_person_received: true
+  CT:
+    code: "CT"
+    name: "Connecticut"
+    early_voting: true
+    ev_start: "Mon, Oct 19"
+    ev_end: "Sun, Nov 1"
+    same_day_reg: true
+    sdr_election_day: true
+    sdr_early_voting: true
+    sdr_locations: "Election Day Registration is only avaliable for general elections, not primary or special elections. Go to the designated Same Day Registration location in your town. [Learn more](https://portal.ct.gov/SOTS/Election-Services/Election-Day-Registration/Election-Day-Registration \"Learn more\")."
+    absentee_type: "Excuse required"
+    request_online: "Mon, Nov 2"
+    request_mail: "Mon, Nov 2"
+    request_mail_received: true
+    request_in_person: "Mon, Nov 2"
+    return_methods: "drop box, local election office"
+    return_mail: "Tue, Nov 3"
+    return_mail_received: true
+    return_mail_by: "Tue, Oct 27"
+    return_in_person: "Mon, Nov 2"
+    return_in_person_received: true
+  DC:
+    code: "DC"
+    name: "District of Columbia"
+    early_voting: true
+    ev_start: "Mon, Oct 26"
+    ev_end: "Sun, Nov 1"
+    same_day_reg: true
+    sdr_election_day: true
+    sdr_early_voting: true
+    sdr_locations: "Go to an [Early Vote Center](https://dcgis.maps.arcgis.com/apps/instant/nearby/index.html?appid=763576faa0b1470ca0559c377cf3b497&sliderDistance=1) during the early voting period or to an [Election Day vote center](https://dcgis.maps.arcgis.com/apps/instant/nearby/index.html?appid=763576faa0b1470ca0559c377cf3b497&sliderDistance=1) on Election Day."
+    absentee_type: "Automatic mail ballot to every voter"
+    request_online: "Mon, Oct 19"
+    request_mail: "Mon, Oct 19"
+    request_mail_received: true
+    request_in_person: "Mon, Oct 19"
+    return_methods: "drop box, early voting site, polling place"
+    return_mail: "Tue, Nov 3"
+    return_mail_received: false
+    return_mail_by: "Tue, Oct 27"
+    return_in_person: "Tue, Nov 3"
+    return_in_person_received: true
+  DE:
+    code: "DE"
+    name: "Delaware"
+    early_voting: true
+    ev_start: "Thu, Oct 22"
+    ev_end: "Sun, Nov 1"
+    absentee_type: "Excuse required"
+    request_online: "Fri, Oct 30"
+    request_mail: "Fri, Oct 30"
+    request_mail_received: true
+    request_in_person: "Mon, Nov 2"
+    request_in_person_time: "12PM"
+    return_methods: "local election office"
+    return_mail: "Tue, Nov 3"
+    return_mail_received: true
+    return_mail_by: "Tue, Oct 27"
+    return_in_person: "Tue, Nov 3"
+    return_in_person_received: true
+  FL:
+    code: "FL"
+    name: "Florida"
+    early_voting: true
+    ev_start: "Sat, Oct 24"
+    ev_end: "Sat, Oct 31"
+    absentee_type: "No-excuse absentee"
+    request_online: "Thu, Oct 22"
+    request_mail: "Thu, Oct 22"
+    request_mail_received: true
+    request_in_person: "Thu, Oct 22"
+    return_methods: "drop box, early voting site, local election office"
+    return_mail: "Tue, Nov 3"
+    return_mail_received: true
+    return_mail_by: "Tue, Oct 27"
+    return_in_person: "Tue, Nov 3"
+    return_in_person_received: true
+  GA:
+    code: "GA"
+    name: "Georgia"
+    early_voting: true
+    ev_start: "Tue, Oct 13"
+    ev_end: "Fri, Oct 30"
+    absentee_type: "No-excuse absentee"
+    request_online: "Fri, Oct 23"
+    request_mail: "Fri, Oct 23"
+    request_mail_received: true
+    request_in_person: "Fri, Oct 23"
+    return_methods: "drop box, local election office"
+    return_mail: "Tue, Nov 3"
+    return_mail_received: true
+    return_mail_by: "Tue, Oct 27"
+    return_in_person: "Tue, Nov 3"
+    return_in_person_received: true
+  HI:
+    code: "HI"
+    name: "Hawaii"
+    early_voting: true
+    ev_start: "Tue, Oct 20"
+    ev_end: "Mon, Nov 2"
+    same_day_reg: true
+    sdr_election_day: true
+    sdr_early_voting: true
+    sdr_locations: "Go to a [voter service center](https://elections.hawaii.gov/voter-service-centers-and-places-of-deposit/)."
+    absentee_type: "Automatic mail ballot to every voter"
+    request_mail: "Tue, Oct 27"
+    request_mail_received: true
+    request_in_person: "Tue, Oct 27"
+    return_methods: "drop box, early voting site, local election office"
+    return_mail: "Tue, Nov 3"
+    return_mail_received: true
+    return_mail_by: "Tue, Oct 27"
+    return_in_person: "Tue, Nov 3"
+    return_in_person_received: true
+  IA:
+    code: "IA"
+    name: "Iowa"
+    early_voting: true
+    ev_varies: true
+    same_day_reg: true
+    sdr_election_day: true
+    sdr_early_voting: true
+    sdr_locations: "Go to your local [polling place.](https://sos.iowa.gov/elections/voterreg/pollingplace/search.aspx)"
+    absentee_type: "No-excuse absentee"
+    request_mail: "Mon, Oct 19"
+    request_mail_received: true
+    request_in_person: "Mon, Oct 19"
+    return_methods: "drop box, local election office"
+    return_mail: "Tue, Nov 3"
+    return_mail_received: true
+    return_mail_by: "Tue, Oct 27"
+    return_in_person: "Tue, Nov 3"
+    return_in_person_received: true
+  ID:
+    code: "ID"
+    name: "Idaho"
+    early_voting: true
+    ev_start: "Tue, Oct 13"
+    ev_end: "Fri, Oct 30"
+    same_day_reg: true
+    sdr_election_day: true
+    sdr_early_voting: true
+    sdr_locations: "Go to your [polling location.](https://elections.sos.idaho.gov/ElectionLink/ElectionLink/ViewPollingLocation.aspx)"
+    absentee_type: "No-excuse absentee"
+    request_online: "Fri, Oct 23"
+    request_mail: "Fri, Oct 23"
+    request_mail_received: true
+    request_in_person: "Fri, Oct 23"
+    return_methods: "drop box, local election office"
+    return_mail: "Tue, Nov 3"
+    return_mail_received: true
+    return_mail_by: "Tue, Oct 27"
+    return_in_person: "Tue, Nov 3"
+    return_in_person_received: true
+  IL:
+    code: "IL"
+    name: "Illinois"
+    early_voting: true
+    ev_start: "Thu, Sept 24"
+    ev_end: "Mon, Nov 2"
+    same_day_reg: true
+    sdr_election_day: true
+    sdr_early_voting: true
+    sdr_locations: "Same day registration is called grace period registration in Illinois. Go to a designated [grace period registration site](https://www.elections.il.gov/VotingAndRegistrationSystems/EarlyVotingLocationsSearch.aspx) in your area."
+    absentee_type: "No-excuse absentee"
+    request_online: "Thu, Oct 29"
+    request_mail: "Thu, Oct 29"
+    request_mail_received: true
+    request_in_person: "Mon, Nov 2"
+    return_methods: "drop box, local election office"
+    return_mail: "Tue, Nov 3"
+    return_mail_received: false
+    return_mail_by: "Tue, Oct 27"
+    return_in_person: "Tue, Nov 3"
+    return_in_person_received: true
+  IN:
+    code: "IN"
+    name: "Indiana"
+    early_voting: true
+    ev_start: "Tue, Oct 6"
+    ev_end: "Sat, Oct 31"
+    absentee_type: "Excuse required"
+    request_online: "Thu, Oct 22"
+    request_mail: "Thu, Oct 22"
+    request_mail_received: true
+    request_in_person: "Thu, Oct 22"
+    return_methods: "early voting site, local election office"
+    return_mail: "Tue, Nov 3"
+    return_mail_received: true
+    return_mail_by: "Tue, Oct 27"
+    return_in_person: "Tue, Nov 3"
+    return_in_person_time: "6PM"
+    return_in_person_received: true
+  KS:
+    code: "KS"
+    name: "Kansas"
+    early_voting: true
+    ev_varies: true
+    ev_end: "Mon, Nov 2"
+    ev_end_time: "12PM"
+    absentee_type: "No-excuse absentee"
+    request_mail: "Tue, Oct 27"
+    request_mail_received: true
+    request_in_person: "Tue, Oct 27"
+    return_methods: "drop box, early voting site, local election office, polling place"
+    return_mail: "Tue, Nov 3"
+    return_mail_received: false
+    return_mail_by: "Tue, Oct 27"
+    return_in_person: "Tue, Nov 3"
+    return_in_person_received: true
+  KY:
+    code: "KY"
+    name: "Kentucky"
+    early_voting: true
+    ev_start: "Thu, Oct 29"
+    ev_end: "Sat, Oct 31"
+    absentee_type: "Excuse required"
+    request_online: "Tue, Oct 20"
+    request_in_person: "Tue, Oct 20"
+    return_methods: "drop box, local election office"
+    return_mail: "Tue, Nov 3"
+    return_mail_received: true
+    return_mail_by: "Tue, Oct 27"
+    return_in_person: "Tue, Nov 3"
+    return_in_person_received: true
+  LA:
+    code: "LA"
+    name: "Louisiana"
+    early_voting: true
+    ev_start: "Tue, Oct 20"
+    ev_end: "Tue, Oct 27"
+    absentee_type: "Excuse required"
+    request_online: "Fri, Oct 30"
+    request_mail: "Fri, Oct 30"
+    request_mail_received: true
+    request_in_person: "Fri, Oct 30"
+    return_methods: "local election office"
+    return_mail: "Mon, Nov 2"
+    return_mail_received: true
+    return_mail_by: "Mon, Oct 26"
+    return_in_person: "Mon, Nov 2"
+    return_in_person_time: "4:30PM"
+    return_in_person_received: true
+  MA:
+    code: "MA"
+    name: "Massachusetts"
+    early_voting: true
+    ev_start: "Sat, Oct 17"
+    ev_end: "Fri, Oct 30"
+    absentee_type: "No-excuse absentee"
+    request_online: "Tue, Oct 27"
+    request_mail: "Tue, Oct 27"
+    request_mail_received: true
+    request_in_person: "Tue, Oct 27"
+    return_methods: "drop box, local election office"
+    return_mail: "Tue, Nov 3"
+    return_mail_received: false
+    return_mail_by: "Tue, Oct 27"
+    return_in_person: "Tue, Nov 3"
+    return_in_person_received: true
+  MD:
+    code: "MD"
+    name: "Maryland"
+    early_voting: true
+    ev_start: "Thu, Oct 22"
+    ev_end: "Thu, Oct 29"
+    same_day_reg: true
+    sdr_election_day: true
+    sdr_early_voting: true
+    sdr_locations: "Go to an [early voting center](https://elections.maryland.gov/voting/early_voting_sites.html) in your county during early voting or to your assigned [Election Day polling place](https://voterservices.elections.maryland.gov/VoterSearch) on Election Day."
+    absentee_type: "No-excuse absentee"
+    request_online: "Tue, Oct 27"
+    request_mail: "Tue, Oct 27"
+    request_mail_received: true
+    request_in_person: "Tue, Nov 3"
+    return_methods: "drop box, early voting site, local election office, polling place"
+    return_mail: "Tue, Nov 3"
+    return_mail_received: false
+    return_mail_by: "Tue, Oct 27"
+    return_in_person: "Tue, Nov 3"
+    return_in_person_received: true
+  ME:
+    code: "ME"
+    name: "Maine"
+    early_voting: true
+    ev_start: "Fri, Sept 4"
+    ev_end: "Thu, Oct 29"
+    same_day_reg: true
+    sdr_election_day: true
+    sdr_early_voting: true
+    sdr_locations: "Go to your [polling place.](https://www.maine.gov/portal/government/edemocracy/voter_lookup.php)"
+    absentee_type: "No-excuse absentee"
+    request_online: "Thu, Oct 29"
+    request_mail: "Thu, Oct 29"
+    request_mail_received: true
+    request_in_person: "Thu, Oct 29"
+    return_methods: "drop box, local election office"
+    return_mail: "Tue, Nov 3"
+    return_mail_received: true
+    return_mail_by: "Tue, Oct 27"
+    return_in_person: "Tue, Nov 3"
+    return_in_person_received: true
+  MI:
+    code: "MI"
+    name: "Michigan"
+    early_voting: true
+    ev_varies: true
+    ev_end: "Sun, Nov 1"
+    same_day_reg: true
+    sdr_election_day: true
+    sdr_early_voting: true
+    sdr_locations: "Go to your [local clerk's office.](https://www.voteamerica.com/local-election-offices/MI/)"
+    absentee_type: "No-excuse absentee"
+    request_online: "Fri, Oct 30"
+    request_mail: "Fri, Oct 30"
+    request_mail_received: true
+    request_in_person: "Mon, Nov 2"
+    return_methods: "drop box, early voting site, local election office, polling place"
+    return_mail: "Tue, Nov 3"
+    return_mail_received: true
+    return_mail_by: "Tue, Oct 27"
+    return_in_person: "Tue, Nov 3"
+    return_in_person_received: true
+  MN:
+    code: "MN"
+    name: "Minnesota"
+    early_voting: true
+    ev_start: "Fri, Sept 18"
+    ev_end: "Mon, Nov 2"
+    same_day_reg: true
+    sdr_election_day: true
+    sdr_early_voting: true
+    sdr_locations: "Go to your local [polling place.](https://pollfinder.sos.state.mn.us/)"
+    absentee_type: "No-excuse absentee"
+    request_online: "Mon, Nov 2"
+    request_mail: "Mon, Nov 2"
+    request_mail_received: true
+    request_in_person: "Mon, Nov 2"
+    return_methods: "drop box, local election office"
+    return_mail: "Tue, Nov 3"
+    return_mail_received: true
+    return_mail_by: "Tue, Oct 27"
+    return_in_person: "Tue, Nov 3"
+    return_in_person_time: "5PM"
+    return_in_person_received: true
+  MO:
+    code: "MO"
+    name: "Missouri"
+    early_voting: true
+    ev_start: "Tue, Oct 20"
+    ev_end: "Mon, Nov 2"
+    absentee_type: "Excuse required"
+    request_mail: "Wed, Oct 21"
+    request_mail_received: true
+    request_in_person: "Mon, Nov 2"
+    return_methods: "local election office"
+    return_mail: "Tue, Nov 3"
+    return_mail_received: true
+    return_mail_by: "Tue, Oct 27"
+    return_in_person: "Tue, Nov 3"
+    return_in_person_received: true
+  MS:
+    code: "MS"
+    name: "Mississippi"
+    absentee_type: "Excuse required"
+    request_mail: "Mon, Nov 2"
+    request_mail_received: true
+    request_in_person_note: "No specified deadline"
+    return_mail: "Tue, Nov 3"
+    return_mail_received: false
+    return_mail_by: "Tue, Oct 27"
+    return_in_person_note: "You cannot hand-deliver your mail-in ballot in Mississippi. You must put your voted ballot in the mailbox."
+  MT:
+    code: "MT"
+    name: "Montana"
+    early_voting: true
+    ev_start: "Mon, Oct 5"
+    ev_end: "Mon, Nov 2"
+    ev_end_time: "12PM"
+    same_day_reg: true
+    sdr_election_day: true
+    sdr_early_voting: true
+    sdr_locations: "Go to your [local election office.](https://www.voteamerica.com/local-election-offices/MT/)"
+    absentee_type: "No-excuse absentee"
+    request_mail: "Mon, Nov 2"
+    request_mail_time: "12PM"
+    request_mail_received: true
+    request_in_person: "Mon, Nov 2"
+    request_in_person_time: "12PM"
+    return_methods: "drop box, local election office, polling place"
+    return_mail: "Tue, Nov 3"
+    return_mail_received: true
+    return_mail_by: "Tue, Oct 27"
+    return_in_person: "Tue, Nov 3"
+    return_in_person_received: true
+  NC:
+    code: "NC"
+    name: "North Carolina"
+    early_voting: true
+    ev_start: "Thu, Oct 15"
+    ev_end: "Sat, Oct 31"
+    ev_end_time: "3PM"
+    same_day_reg: true
+    sdr_election_day: false
+    sdr_early_voting: true
+    sdr_locations: "Go to your [early voting site.](https://vt.ncsbe.gov/EVSite/)"
+    absentee_type: "No-excuse absentee"
+    request_online: "Tue, Oct 27"
+    request_mail: "Tue, Oct 27"
+    request_mail_received: true
+    request_in_person: "Tue, Oct 27"
+    return_methods: "early voting site, local election office"
+    return_mail: "Tue, Nov 3"
+    return_mail_received: true
+    return_mail_by: "Tue, Oct 27"
+    return_in_person: "Tue, Nov 3"
+    return_in_person_received: true
+  ND:
+    code: "ND"
+    name: "North Dakota"
+    early_voting: true
+    ev_varies: true
+    absentee_type: "No-excuse absentee"
+    request_mail: "Mon, Nov 2"
+    request_mail_received: true
+    request_in_person: "Mon, Nov 2"
+    return_methods: "drop box, local election office"
+    return_mail: "Tue, Nov 3"
+    return_mail_received: true
+    return_mail_by: "Tue, Oct 27"
+    return_in_person: "Tue, Nov 3"
+    return_in_person_received: true
+  NE:
+    code: "NE"
+    name: "Nebraska"
+    early_voting: true
+    ev_start: "Mon, Oct 5"
+    ev_end: "Mon, Nov 2"
+    absentee_type: "No-excuse absentee"
+    request_mail: "Fri, Oct 23"
+    request_mail_received: true
+    request_in_person: "Fri, Oct 23"
+    return_methods: "drop box, local election office"
+    return_mail: "Tue, Nov 3"
+    return_mail_received: true
+    return_mail_by: "Tue, Oct 27"
+    return_in_person: "Tue, Nov 3"
+    return_in_person_received: true
+  NH:
+    code: "NH"
+    name: "New Hampshire"
+    same_day_reg: true
+    sdr_election_day: true
+    sdr_early_voting: false
+    sdr_locations: "Go to your local [polling location.](https://app.sos.nh.gov/pollingplacesampleballot)"
+    absentee_type: "Excuse required"
+    request_mail: "Mon, Nov 2"
+    request_mail_time: "12PM"
+    request_mail_received: true
+    request_in_person: "Mon, Nov 2"
+    return_methods: "local election office"
+    return_mail: "Tue, Nov 3"
+    return_mail_time: "5PM"
+    return_mail_received: true
+    return_mail_by: "Tue, Oct 27"
+    return_in_person: "Mon, Nov 2"
+    return_in_person_time: "5PM"
+    return_in_person_received: true
+  NJ:
+    code: "NJ"
+    name: "New Jersey"
+    early_voting: true
+    ev_start: "Sat, Oct 24"
+    ev_end: "Sun, Nov 1"
+    absentee_type: "No-excuse absentee"
+    request_mail: "Tue, Oct 27"
+    request_mail_received: true
+    request_in_person: "Mon, Nov 2"
+    request_in_person_time: "3PM"
+    return_methods: "drop box, local election office"
+    return_mail: "Tue, Nov 3"
+    return_mail_received: false
+    return_mail_by: "Tue, Oct 27"
+    return_in_person: "Tue, Nov 3"
+    return_in_person_received: true
+  NM:
+    code: "NM"
+    name: "New Mexico"
+    early_voting: true
+    ev_start: "Tue, Oct 6"
+    ev_end: "Sat, Oct 31"
+    same_day_reg: true
+    sdr_election_day: true
+    sdr_early_voting: true
+    sdr_locations: "Go to your [early voting polling location or Election Day polling location](https://www.voteamerica.com/where-to-vote/)."
+    absentee_type: "No-excuse absentee"
+    request_online: "Tue, Oct 20"
+    request_mail: "Tue, Oct 20"
+    request_mail_received: true
+    request_in_person: "Tue, Oct 20"
+    return_methods: "drop box, early voting site, local election office, polling place"
+    return_mail: "Tue, Nov 3"
+    return_mail_received: true
+    return_mail_by: "Tue, Oct 27"
+    return_in_person: "Tue, Nov 3"
+    return_in_person_received: true
+  NV:
+    code: "NV"
+    name: "Nevada"
+    early_voting: true
+    ev_start: "Sat, Oct 17"
+    ev_end: "Fri, Oct 30"
+    same_day_reg: true
+    sdr_election_day: true
+    sdr_early_voting: true
+    sdr_locations: "Go to your local [polling place.](https://www.nvsos.gov/elections/election-information/2026-election-information/2026-polling-locations) You may also register to vote online on Election Day if you are a Nevada resident with a valid Nevada driver’s license or ID card. If you register online on Election Day, you must vote in person at a polling location and must show your valid Nevada driver’s license, Nevada ID card, or Tribal ID to vote."
+    absentee_type: "Automatic mail ballot to every voter"
+    request_mail: "Tue, Oct 20"
+    request_mail_received: true
+    request_in_person: "Tue, Oct 20"
+    return_methods: "drop box, early voting site, local election office, polling place"
+    return_mail: "Tue, Nov 3"
+    return_mail_received: false
+    return_mail_by: "Tue, Oct 27"
+    return_in_person: "Tue, Nov 3"
+    return_in_person_received: true
+  NY:
+    code: "NY"
+    name: "New York"
+    early_voting: true
+    ev_start: "Sat, Oct 24"
+    ev_end: "Sun, Nov 1"
+    absentee_type: "No-excuse absentee"
+    request_online: "Sat, Oct 24"
+    request_mail: "Sat, Oct 24"
+    request_mail_received: true
+    request_in_person: "Mon, Nov 2"
+    return_methods: "early voting site, local election office, polling place"
+    return_mail: "Tue, Nov 3"
+    return_mail_received: false
+    return_mail_by: "Tue, Oct 27"
+    return_in_person: "Tue, Nov 3"
+    return_in_person_received: true
+  OH:
+    code: "OH"
+    name: "Ohio"
+    early_voting: true
+    ev_start: "Tue, Oct 6"
+    ev_end: "Sun, Nov 1"
+    absentee_type: "No-excuse absentee"
+    request_mail: "Tue, Oct 27"
+    request_mail_received: true
+    request_in_person: "Tue, Oct 27"
+    return_methods: "early voting site, local election office"
+    return_mail: "Tue, Nov 3"
+    return_mail_received: true
+    return_mail_by: "Tue, Oct 27"
+    return_in_person: "Tue, Nov 3"
+    return_in_person_received: true
+  OK:
+    code: "OK"
+    name: "Oklahoma"
+    early_voting: true
+    ev_start: "Wed, Oct 28"
+    ev_end: "Sat, Oct 31"
+    ev_end_time: "2PM"
+    absentee_type: "No-excuse absentee"
+    request_online: "Mon, Oct 19"
+    request_mail: "Mon, Oct 19"
+    request_mail_received: true
+    request_in_person: "Mon, Oct 19"
+    return_methods: "local election office"
+    return_mail: "Tue, Nov 3"
+    return_mail_received: true
+    return_mail_by: "Tue, Oct 27"
+    return_in_person: "Mon, Nov 2"
+    return_in_person_time: "5PM"
+    return_in_person_received: true
+  OR:
+    code: "OR"
+    name: "Oregon"
+    absentee_type: "Automatic mail ballot to every voter"
+    request_mail: "Tue, Nov 3"
+    request_mail_received: true
+    request_in_person: "Tue, Nov 3"
+    return_methods: "drop box, local election office"
+    return_mail: "Tue, Nov 3"
+    return_mail_received: false
+    return_mail_by: "Tue, Oct 27"
+    return_in_person: "Tue, Nov 3"
+    return_in_person_received: true
+  PA:
+    code: "PA"
+    name: "Pennsylvania"
+    early_voting: true
+    ev_varies: true
+    absentee_type: "No-excuse absentee"
+    request_online: "Tue, Oct 27"
+    request_mail: "Tue, Oct 27"
+    request_mail_received: true
+    request_in_person: "Tue, Oct 27"
+    return_methods: "drop box, local election office"
+    return_mail: "Tue, Nov 3"
+    return_mail_received: true
+    return_mail_by: "Tue, Oct 27"
+    return_in_person: "Tue, Nov 3"
+    return_in_person_received: true
+  RI:
+    code: "RI"
+    name: "Rhode Island"
+    early_voting: true
+    ev_start: "Wed, Oct 14"
+    ev_end: "Mon, Nov 2"
+    absentee_type: "No-excuse absentee"
+    request_online: "Tue, Oct 13"
+    request_mail: "Tue, Oct 13"
+    request_mail_received: true
+    request_in_person: "Tue, Oct 13"
+    return_methods: "drop box, polling place"
+    return_mail: "Tue, Nov 3"
+    return_mail_received: true
+    return_mail_by: "Tue, Oct 27"
+    return_in_person: "Tue, Nov 3"
+    return_in_person_received: true
+  SC:
+    code: "SC"
+    name: "South Carolina"
+    early_voting: true
+    ev_start: "Mon, Oct 19"
+    ev_end: "Sat, Oct 31"
+    absentee_type: "Excuse required"
+    request_mail: "Fri, Oct 23"
+    request_mail_received: true
+    request_in_person: "Fri, Oct 23"
+    return_methods: "local election office"
+    return_mail: "Tue, Nov 3"
+    return_mail_received: true
+    return_mail_by: "Tue, Oct 27"
+    return_in_person: "Tue, Nov 3"
+    return_in_person_received: true
+  SD:
+    code: "SD"
+    name: "South Dakota"
+    early_voting: true
+    ev_start: "Fri, Sept 18"
+    ev_end: "Mon, Nov 2"
+    absentee_type: "No-excuse absentee"
+    request_mail: "Mon, Nov 2"
+    request_mail_received: true
+    request_in_person: "Mon, Nov 2"
+    return_methods: "local election office"
+    return_mail: "Tue, Nov 3"
+    return_mail_received: true
+    return_mail_by: "Tue, Oct 27"
+    return_in_person: "Tue, Nov 3"
+    return_in_person_received: true
+  TN:
+    code: "TN"
+    name: "Tennessee"
+    early_voting: true
+    ev_start: "Wed, Oct 14"
+    ev_end: "Thu, Oct 29"
+    absentee_type: "Excuse required"
+    request_mail: "Sat, Oct 24"
+    request_mail_received: true
+    request_in_person: "Sat, Oct 24"
+    return_mail: "Tue, Nov 3"
+    return_mail_received: true
+    return_mail_by: "Tue, Oct 27"
+    return_in_person_note: "You cannot hand-deliver your mail-in ballot in Tennessee. You must put your voted ballot in the mailbox."
+  TX:
+    code: "TX"
+    name: "Texas"
+    early_voting: true
+    ev_start: "Mon, Oct 19"
+    ev_end: "Fri, Oct 30"
+    absentee_type: "Excuse required"
+    request_mail: "Fri, Oct 23"
+    request_mail_received: true
+    request_in_person: "Fri, Oct 23"
+    return_methods: "local election office"
+    return_mail: "Tue, Nov 3"
+    return_mail_received: true
+    return_mail_by: "Tue, Oct 27"
+    return_in_person: "Tue, Nov 3"
+    return_in_person_received: true
+  UT:
+    code: "UT"
+    name: "Utah"
+    early_voting: true
+    ev_varies: true
+    same_day_reg: true
+    sdr_election_day: true
+    sdr_early_voting: true
+    sdr_locations: "Go to an [early voting location or Election Day voting location](https://votesearch.utah.gov/voter-search/search/search-by-address/how-and-where-can-i-vote)."
+    absentee_type: "Automatic mail ballot to every voter"
+    request_online: "Fri, Oct 23"
+    request_mail: "Fri, Oct 23"
+    request_mail_received: true
+    request_in_person: "Fri, Oct 23"
+    return_methods: "drop box, early voting site, local election office, polling place"
+    return_mail: "Tue, Nov 3"
+    return_mail_time: "8pm"
+    return_mail_received: true
+    return_mail_by: "Tue, Oct 27"
+    return_in_person: "Tue, Nov 3"
+    return_in_person_time: "8pm"
+    return_in_person_received: true
+  VA:
+    code: "VA"
+    name: "Virginia"
+    early_voting: true
+    ev_start: "Fri, Sept 18"
+    ev_end: "Sat, Oct 31"
+    same_day_reg: true
+    sdr_election_day: true
+    sdr_early_voting: true
+    sdr_locations: "Go to the office of your [general registrar](https://vote.elections.virginia.gov/VoterInformation/PublicContactLookup) or [satellite location](https://www.elections.virginia.gov/casting-a-ballot/polling-place-lookup/) during the early voting period or to the [polling place](https://www.elections.virginia.gov/casting-a-ballot/polling-place-lookup/) for your precinct on Election Day."
+    absentee_type: "No-excuse absentee"
+    request_online: "Fri, Oct 23"
+    request_mail: "Fri, Oct 23"
+    request_mail_received: true
+    request_in_person: "Fri, Oct 23"
+    return_methods: "drop box, local election office, polling place"
+    return_mail: "Tue, Nov 3"
+    return_mail_received: false
+    return_mail_by: "Tue, Oct 27"
+    return_in_person: "Tue, Nov 3"
+    return_in_person_received: true
+  VT:
+    code: "VT"
+    name: "Vermont"
+    early_voting: true
+    ev_start: "Wed, Oct 14"
+    ev_end: "Mon, Nov 2"
+    same_day_reg: true
+    sdr_election_day: true
+    sdr_early_voting: true
+    sdr_locations: "Go to your local town or city [clerk’s office](https://outside.vermont.gov/dept/sos/Elections_Division/voters/guide_vermonts_town_clerks_treasurers_county.pdf) during the early voting period or to your [local polling place](https://sos.vermont.gov/elections/voters/polling-places/) on Election Day. If there is more than one polling place in your town, go to the location for your address."
+    absentee_type: "Automatic mail ballot to every voter"
+    request_online: "Mon, Nov 2"
+    request_mail: "Mon, Nov 2"
+    request_mail_received: true
+    request_in_person: "Mon, Nov 2"
+    return_methods: "local election office, polling place"
+    return_mail: "Tue, Nov 3"
+    return_mail_received: true
+    return_mail_by: "Tue, Oct 27"
+    return_in_person: "Tue, Nov 3"
+    return_in_person_received: true
+  WA:
+    code: "WA"
+    name: "Washington"
+    early_voting: true
+    ev_start: "Fri, Oct 16"
+    ev_end: "Mon, Nov 2"
+    same_day_reg: true
+    sdr_election_day: true
+    sdr_early_voting: true
+    sdr_locations: "Go to your [local election office or county voting center.](https://www.sos.wa.gov/elections/voters/voter-registration/county-elections-offices)"
+    absentee_type: "Automatic mail ballot to every voter"
+    request_mail: "Mon, Oct 26"
+    request_mail_received: true
+    request_in_person: "Mon, Oct 26"
+    return_methods: "drop box"
+    return_mail: "Tue, Nov 3"
+    return_mail_received: false
+    return_mail_by: "Tue, Oct 27"
+    return_in_person: "Tue, Nov 3"
+    return_in_person_received: true
+  WI:
+    code: "WI"
+    name: "Wisconsin"
+    early_voting: true
+    ev_start: "Tue, Oct 20"
+    ev_end: "Sun, Nov 1"
+    same_day_reg: true
+    sdr_election_day: true
+    sdr_early_voting: true
+    sdr_locations: "You may register and vote at all [polling places](https://myvote.wi.gov/en-us/Find-My-Polling-Place) on Election Day. You can register to vote in person at the [clerk’s office](https://www.voteamerica.org/local-election-offices/) until the Friday before Election Day. Same day registration may be available at your [early voting location](https://myvote.wi.gov/en-us/Find-My-Polling-Place) during early voting, depending on your municipality. Some municipalities may offer early voting at the municipal clerk’s office or an alternative site. Even if the clerk chooses to offer early voting on the Saturday, Sunday, or Monday before Election Day, same day registration and voting is not possible on the three days before Election Day. [Find your local election office to learn more.](https://www.voteamerica.org/local-election-offices/)"
+    absentee_type: "No-excuse absentee"
+    request_online: "Thu, Oct 29"
+    request_mail: "Thu, Oct 29"
+    request_mail_received: true
+    request_in_person_note: "The exact deadline varies by municipality. Please contact your Wisconsin clerk to find out more. [Click here to find their contact information](https://myvote.wi.gov/en-us/My-Municipal-Clerk)"
+    return_methods: "local election office, polling place"
+    return_mail: "Tue, Nov 3"
+    return_mail_received: true
+    return_mail_by: "Tue, Oct 27"
+    return_in_person: "Tue, Nov 3"
+    return_in_person_received: true
+  WV:
+    code: "WV"
+    name: "West Virginia"
+    early_voting: true
+    ev_start: "Wed, Oct 21"
+    ev_end: "Sat, Oct 31"
+    absentee_type: "Excuse required"
+    request_mail: "Wed, Oct 28"
+    request_mail_received: true
+    request_in_person: "Wed, Oct 28"
+    return_methods: "local election office"
+    return_mail: "Tue, Nov 3"
+    return_mail_received: false
+    return_mail_by: "Tue, Oct 27"
+    return_in_person: "Mon, Nov 2"
+    return_in_person_received: true
+  WY:
+    code: "WY"
+    name: "Wyoming"
+    early_voting: true
+    ev_start: "Tue, Oct 6"
+    ev_end: "Mon, Nov 2"
+    same_day_reg: true
+    sdr_election_day: true
+    sdr_early_voting: true
+    sdr_locations: "Go to your [polling location.]( https://myelectionday.sos.wyo.gov/WYVOTES/Pages/VOSearch.aspx)"
+    absentee_type: "No-excuse absentee"
+    request_mail: "Mon, Nov 2"
+    request_mail_received: true
+    request_in_person: "Mon, Nov 2"
+    return_methods: "local election office"
+    return_mail: "Tue, Nov 3"
+    return_mail_received: true
+    return_mail_by: "Tue, Oct 27"
+    return_in_person: "Tue, Nov 3"
+    return_in_person_received: true

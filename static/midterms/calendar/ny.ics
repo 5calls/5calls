@@ -1,0 +1,72 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//5 Calls//5 Minute Midterms//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+X-WR-CALNAME:New York voting deadlines
+BEGIN:VEVENT
+UID:wk2-ny-early@5calls.org
+DTSTAMP:20260828T000000Z
+DTSTART;VALUE=DATE:20261024
+DTEND;VALUE=DATE:20261025
+SUMMARY:Early voting opens in New York
+URL:https://5calls.org/midterms/
+TRANSP:TRANSPARENT
+DESCRIPTION:Early voting runs through Sun\, Nov 1.
+END:VEVENT
+BEGIN:VEVENT
+UID:wk2-ny-request@5calls.org
+DTSTAMP:20260828T000000Z
+DTSTART;VALUE=DATE:20261024
+DTEND;VALUE=DATE:20261025
+SUMMARY:Request your mail ballot in New York
+URL:https://5calls.org/midterms/
+TRANSP:TRANSPARENT
+DESCRIPTION:Deadlines:\nBy mail: Sat\, Oct 24\nOnline: Sat\, Oct 24\nIn per
+ son: Mon\, Nov 2
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Request your mail ballot in New York
+TRIGGER:-P1D
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:wk2-ny-mailby@5calls.org
+DTSTAMP:20260828T000000Z
+DTSTART;VALUE=DATE:20261027
+DTEND;VALUE=DATE:20261028
+SUMMARY:Mail your ballot today (New York)
+URL:https://5calls.org/midterms/
+TRANSP:TRANSPARENT
+DESCRIPTION:Leaves a week for the post before the return deadline.
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Mail your ballot today (New York)
+TRIGGER:-P1D
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:wk2-ny-return@5calls.org
+DTSTAMP:20260828T000000Z
+DTSTART;VALUE=DATE:20261103
+DTEND;VALUE=DATE:20261104
+SUMMARY:Ballot must be postmarked today (New York)
+URL:https://5calls.org/midterms/
+TRANSP:TRANSPARENT
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Ballot must be postmarked today (New York)
+TRIGGER:-P1D
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:wk2-ny-election@5calls.org
+DTSTAMP:20260828T000000Z
+DTSTART;VALUE=DATE:20261103
+DTEND;VALUE=DATE:20261104
+SUMMARY:Election Day
+URL:https://5calls.org/midterms/
+TRANSP:TRANSPARENT
+DESCRIPTION:Polls are open today. Find yours at 5calls.org/vote/locate/.
+END:VEVENT
+END:VCALENDAR

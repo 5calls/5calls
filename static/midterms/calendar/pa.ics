@@ -1,0 +1,62 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//5 Calls//5 Minute Midterms//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+X-WR-CALNAME:Pennsylvania voting deadlines
+BEGIN:VEVENT
+UID:wk2-pa-request@5calls.org
+DTSTAMP:20260828T000000Z
+DTSTART;VALUE=DATE:20261027
+DTEND;VALUE=DATE:20261028
+SUMMARY:Request your mail ballot in Pennsylvania
+URL:https://5calls.org/midterms/
+TRANSP:TRANSPARENT
+DESCRIPTION:Deadlines:\nBy mail: Tue\, Oct 27\nIn person: Tue\, Oct 27\nOnl
+ ine: Tue\, Oct 27
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Request your mail ballot in Pennsylvania
+TRIGGER:-P1D
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:wk2-pa-mailby@5calls.org
+DTSTAMP:20260828T000000Z
+DTSTART;VALUE=DATE:20261027
+DTEND;VALUE=DATE:20261028
+SUMMARY:Mail your ballot today (Pennsylvania)
+URL:https://5calls.org/midterms/
+TRANSP:TRANSPARENT
+DESCRIPTION:Leaves a week for the post before the return deadline.
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Mail your ballot today (Pennsylvania)
+TRIGGER:-P1D
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:wk2-pa-return@5calls.org
+DTSTAMP:20260828T000000Z
+DTSTART;VALUE=DATE:20261103
+DTEND;VALUE=DATE:20261104
+SUMMARY:Ballot must be received today (Pennsylvania)
+URL:https://5calls.org/midterms/
+TRANSP:TRANSPARENT
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Ballot must be received today (Pennsylvania)
+TRIGGER:-P1D
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:wk2-pa-election@5calls.org
+DTSTAMP:20260828T000000Z
+DTSTART;VALUE=DATE:20261103
+DTEND;VALUE=DATE:20261104
+SUMMARY:Election Day
+URL:https://5calls.org/midterms/
+TRANSP:TRANSPARENT
+DESCRIPTION:Polls are open today. Find yours at 5calls.org/vote/locate/.
+END:VEVENT
+END:VCALENDAR

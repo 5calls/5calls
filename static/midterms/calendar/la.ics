@@ -1,0 +1,72 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//5 Calls//5 Minute Midterms//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+X-WR-CALNAME:Louisiana voting deadlines
+BEGIN:VEVENT
+UID:wk2-la-early@5calls.org
+DTSTAMP:20260828T000000Z
+DTSTART;VALUE=DATE:20261020
+DTEND;VALUE=DATE:20261021
+SUMMARY:Early voting opens in Louisiana
+URL:https://5calls.org/midterms/
+TRANSP:TRANSPARENT
+DESCRIPTION:Early voting runs through Tue\, Oct 27.
+END:VEVENT
+BEGIN:VEVENT
+UID:wk2-la-request@5calls.org
+DTSTAMP:20260828T000000Z
+DTSTART;VALUE=DATE:20261030
+DTEND;VALUE=DATE:20261031
+SUMMARY:Request your mail ballot in Louisiana
+URL:https://5calls.org/midterms/
+TRANSP:TRANSPARENT
+DESCRIPTION:Deadlines:\nBy mail: Fri\, Oct 30\nIn person: Fri\, Oct 30\nOnl
+ ine: Fri\, Oct 30
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Request your mail ballot in Louisiana
+TRIGGER:-P1D
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:wk2-la-mailby@5calls.org
+DTSTAMP:20260828T000000Z
+DTSTART;VALUE=DATE:20261026
+DTEND;VALUE=DATE:20261027
+SUMMARY:Mail your ballot today (Louisiana)
+URL:https://5calls.org/midterms/
+TRANSP:TRANSPARENT
+DESCRIPTION:Leaves a week for the post before the return deadline.
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Mail your ballot today (Louisiana)
+TRIGGER:-P1D
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:wk2-la-return@5calls.org
+DTSTAMP:20260828T000000Z
+DTSTART;VALUE=DATE:20261102
+DTEND;VALUE=DATE:20261103
+SUMMARY:Ballot must be received today (Louisiana)
+URL:https://5calls.org/midterms/
+TRANSP:TRANSPARENT
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Ballot must be received today (Louisiana)
+TRIGGER:-P1D
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:wk2-la-election@5calls.org
+DTSTAMP:20260828T000000Z
+DTSTART;VALUE=DATE:20261103
+DTEND;VALUE=DATE:20261104
+SUMMARY:Election Day
+URL:https://5calls.org/midterms/
+TRANSP:TRANSPARENT
+DESCRIPTION:Polls are open today. Find yours at 5calls.org/vote/locate/.
+END:VEVENT
+END:VCALENDAR

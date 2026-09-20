@@ -1,0 +1,72 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//5 Calls//5 Minute Midterms//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+X-WR-CALNAME:New Mexico voting deadlines
+BEGIN:VEVENT
+UID:wk2-nm-early@5calls.org
+DTSTAMP:20260828T000000Z
+DTSTART;VALUE=DATE:20261006
+DTEND;VALUE=DATE:20261007
+SUMMARY:Early voting opens in New Mexico
+URL:https://5calls.org/midterms/
+TRANSP:TRANSPARENT
+DESCRIPTION:Early voting runs through Sat\, Oct 31.
+END:VEVENT
+BEGIN:VEVENT
+UID:wk2-nm-request@5calls.org
+DTSTAMP:20260828T000000Z
+DTSTART;VALUE=DATE:20261020
+DTEND;VALUE=DATE:20261021
+SUMMARY:Request your mail ballot in New Mexico
+URL:https://5calls.org/midterms/
+TRANSP:TRANSPARENT
+DESCRIPTION:Deadlines:\nBy mail: Tue\, Oct 20\nIn person: Tue\, Oct 20\nOnl
+ ine: Tue\, Oct 20
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Request your mail ballot in New Mexico
+TRIGGER:-P1D
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:wk2-nm-mailby@5calls.org
+DTSTAMP:20260828T000000Z
+DTSTART;VALUE=DATE:20261027
+DTEND;VALUE=DATE:20261028
+SUMMARY:Mail your ballot today (New Mexico)
+URL:https://5calls.org/midterms/
+TRANSP:TRANSPARENT
+DESCRIPTION:Leaves a week for the post before the return deadline.
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Mail your ballot today (New Mexico)
+TRIGGER:-P1D
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:wk2-nm-return@5calls.org
+DTSTAMP:20260828T000000Z
+DTSTART;VALUE=DATE:20261103
+DTEND;VALUE=DATE:20261104
+SUMMARY:Ballot must be received today (New Mexico)
+URL:https://5calls.org/midterms/
+TRANSP:TRANSPARENT
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Ballot must be received today (New Mexico)
+TRIGGER:-P1D
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:wk2-nm-election@5calls.org
+DTSTAMP:20260828T000000Z
+DTSTART;VALUE=DATE:20261103
+DTEND;VALUE=DATE:20261104
+SUMMARY:Election Day
+URL:https://5calls.org/midterms/
+TRANSP:TRANSPARENT
+DESCRIPTION:Polls are open today. Find yours at 5calls.org/vote/locate/.
+END:VEVENT
+END:VCALENDAR

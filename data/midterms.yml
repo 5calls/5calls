@@ -4,7 +4,7 @@
 # Which week is live right now. Weeks before this are "done", weeks after are
 # "upcoming". Set this to 0 before the program starts: the page then renders
 # the week_zero block below instead of a weekly action, and nothing unlocks.
-current_week: 1
+current_week: 2
 
 nav:
   nudge: Get reminders
@@ -195,32 +195,47 @@ weeks:
           text: of states had [lower active voter registration rates](https://www.eac.gov/sites/default/files/2025-07/2024_EAVS_Report_508.pdf) in 2024 than in 2020.
 
   - number: 2
-    short: Deadlines
-    title: Save every deadline that applies to you
+    short: Options
+    title: Know your voting options
     state_specific: true
     release: 2026-09-22T09:00:00-07:00
-    intro: >-
-      SAMPLE COPY — the deadlines week. Real text goes here: two sentences on
-      why the dates matter now, ending on the one thing to do. About this long.
-    headline: SAMPLE HEADER LINE FOR THIS WEEK
-    headline_date: Tue, Nov 3
-    message: >-
-      SAMPLE MESSAGE — placeholder standing in for this week's wording. It runs
-      about three short sentences and roughly this many words, so the card can
-      be judged at the size it will really be.
-    copy_cta: button1
-    rewrite_cta: button2
-    confirm: I did it — unlock my images
-    # FPO: placeholder copy, replace before this week ships.
+    # This week sends nobody to a voting tool: the action is reading your own
+    # state's voting options, drawn from data/midterms_voting.yml rather than
+    # the registration deck week one used.
+    state_voting: true
+    deck_cta: Review my voting options
+    deck_note: >-
+      Remember, things like polling locations can change at any time, so always
+      check with your local election commission for the most up-to-date
+      information.
+    intro:
+      - >-
+        Have you thought about whether you’ll vote in-person or by mail this
+        election? Can you vote early or will you head to the polls on Election
+        Day?
+      - >-
+        You don’t have to decide now. But it’s important that you know all your
+        options and **[add deadlines to your
+        calendar](/midterms/calendar/ca.ics)** so that you’re prepared to make
+        an informed decision.
+      - "Things to consider before making your plan to vote:"
+      - - Does your state offer early in-person voting? If so, when is it?
+        - Are you eligible to vote by mail?
+        - What’s the deadline to request an absentee ballot?
+        - What are your options for returning your ballot?
+      - >-
+        All of this varies from state to state, but we’re here to help you get
+        the answers so that nothing catches you off guard this election season.
+    confirm: I know my state’s voting options
     why:
-      heading: Every deadline is a different date, and none of them move.
+      heading: Election Day is not the only day to vote, it’s the last day to vote.
       stats:
-        - value: 3 dates
-          text: register, request a ballot, return it — all different days.
-        - value: No grace
-          text: period once a deadline passes in most states.
-        - value: 2 min
-          text: to put all three in the calendar you actually check.
+        - value: 8 states and D.C.
+          text: conduct elections [entirely by mail](https://www.ncsl.org/elections-and-campaigns/table-1-states-with-no-excuse-absentee-voting) with mail ballots automatically sent.
+        - value: 26 states
+          text: require early voting on [at least some weekend days](https://ballotpedia.org/Early_voting_dates,_2026).
+        - value: 16 states
+          text: allow citizens to [register and vote simultaneously](https://electionlab.mit.edu/research/voter-registration) during the early voting period and on Election Day.
 
   - number: 3
     short: ID check

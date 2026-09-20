@@ -15,6 +15,11 @@
 {{- $card := false -}}
 {{- if eq .week.number 1 -}}
   {{- $card = partial "midterms-card-week1.html" (dict "crop" .crop "state" .state "copy" .week.card_copy) -}}
+{{- else if .week.state_voting -}}
+  {{- /* Week two draws from the voting-options data rather than the
+         registration deck, so it takes that state's entry instead. */ -}}
+  {{- $v := index site.Data.midterms_voting.states .state.code -}}
+  {{- $card = partial "midterms-card-week2.html" (dict "crop" .crop "state" $v) -}}
 {{- else -}}
 {{- $plate := resources.Get (printf "images/midterms/share-%s-fpo.png" .crop) -}}
 {{- $font := resources.Get "fonts/BebasNeue-Regular.ttf" -}}

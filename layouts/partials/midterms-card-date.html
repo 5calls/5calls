@@ -1,0 +1,7 @@
+{{- /*
+  A date as the share cards set them: "Oct 5". Takes the date string the data
+  files carry, "Mon, Oct 5", and drops the weekday, since the cards have room
+  for the date but not for the day it falls on. The month keeps its own case,
+  as week one's card sets it. Returns a string.
+*/ -}}
+{{- return replaceRE `^[A-Za-z]+,\s*` "" . -}}

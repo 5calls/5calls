@@ -1,0 +1,467 @@
+#!/usr/bin/env python3
+"""Turn the VoteAmerica voting-access snapshot into a Hugo data file.
+
+    python3 scripts/build-midterms-voting.py [state-voting-access.tsv] [state-data-full.tsv]
+
+Writes data/midterms_voting.yml, which layouts/partials/midterms-voting.html
+reads for any week flagged `state_voting: true` in data/midterms.yml. The
+snapshot is the source of truth: re-run this after VoteAmerica publishes a new
+one rather than editing the generated file. Temporary, like the rest of
+/midterms.
+
+Week one's sibling script, build-midterms-states.py, does the same job for
+registration deadlines. This one covers the rest of a state's options: early
+voting, same-day registration, and the two halves of voting by mail — asking
+for a ballot and getting it back.
+
+Upstream puts four different shapes in one column, so every cell goes through
+parse_cell:
+
+    Tue, Nov 3, 2026                     a plain date
+    Tue, Nov 3, 2026 (received)          ... and whether it must arrive or
+    Tue, Nov 3, 2026 (12PM, received)    be postmarked, sometimes by a time
+    Tue, Oct 20, 2026 (business days;    ... or a note that qualifies it
+      holidays not applied)
+    Varies by county                     no statewide date
+    You cannot hand-deliver your         prose where a date was expected
+      mail-in ballot in Tennessee...
+    Not available / Not listed upstream  the option does not exist
+
+"Not available", "Not listed upstream" and "N/A" all become an absent key, so
+the template decides what to show by asking whether a key is there, never by
+matching prose.
+
+state-voting-access.tsv caps its prose cells at 200 characters, which cuts
+eight states' same-day registration directions and Wisconsin's in-person
+request note mid-link — a dangling "[" that would render literally on the
+page. Those two fields are therefore taken from state-data-full.tsv, which
+carries them whole. The repair only ever replaces a value with a longer one
+that starts the same way, so a snapshot that stops truncating needs no change
+here.
+"""
+
+import csv
+import os
+import re
+import sys
+from datetime import date, datetime, timedelta
+
+DEFAULT_SNAPSHOT = "../voteamerica-data/state-voting-access.tsv"
+DEFAULT_FULL = "../voteamerica-data/state-data-full.tsv"
+OUT = "data/midterms_voting.yml"
+
+# The same short months the rest of /midterms uses: September is "Sept", and
+# the short months stay whole. The snapshot writes "Sep".
+MONTHS = {
+    "Jan": "Jan", "Feb": "Feb", "Mar": "March", "Apr": "April",
+    "May": "May", "Jun": "June", "Jul": "July", "Aug": "Aug",
+    "Sep": "Sept", "Oct": "Oct", "Nov": "Nov", "Dec": "Dec",
+}
+WEEKDAYS = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
+
+# "Mail it by" leaves a week for the post, as week one's registration card does.
+MAIL_BY_DAYS = 7
+
+# Every way upstream says "this does not exist here".
+ABSENT = {"", "n/a", "not available", "not listed", "not listed upstream"}
+
+# Prose upstream gives in place of a date, which is meant and not a parse
+# failure. Anything else short enough to have been a date gets a warning.
+KNOWN_PROSE = {"no specified deadline"}
+
+DATE = r"[A-Z][a-z]{2}, [A-Z][a-z]{2,4} \d+, \d{4}"
+CELL = re.compile(r"^(?P<date>" + DATE + r")(?:\s*\((?P<qual>[^)]*)\))?$")
+# "12PM", "8pm", "4:30PM" — a time, as against a note like "business days".
+TIME = re.compile(r"^\d{1,2}(?::\d{2})?\s*[AaPp][Mm]$")
+
+# Fields the derived snapshot truncates, and the column holding them whole in
+# state-data-full.tsv.
+REPAIRS = {"SDR_locations": "sdr_locations",
+           "Request_deadline_in_person": "absentee_deadline_in_person"}
+# How much of a truncated value must match the full one for it to be the same
+# sentence rather than a different field that happens to be longer.
+REPAIR_PREFIX = 40
+# state-voting-access.tsv caps prose at 200 characters; a cell at or near that,
+# or one ending in an ellipsis, is the only kind worth repairing.
+TRUNCATED_AT = 195
+
+
+def absent(value):
+    return value.strip().lower() in ABSENT
+
+
+def fmt(day):
+    """A date the way the page writes them: "Mon, Oct 5", with no year."""
+    return "%s, %s %d" % (WEEKDAYS[day.weekday()], MONTHS[day.strftime("%b")], day.day)
+
+
+def repair(value, full, warnings, code, column):
+    """The untruncated value, where the full snapshot has one.
+
+    Only a cell that looks cut off is repaired. The two snapshots disagree by
+    design everywhere else — this one carries deadlines as dates, the full one
+    as text counted from Election Day — so comparing them generally would
+    report every state as a mismatch.
+
+    Only replaces a value with a longer one that starts the same way, so this
+    cannot quietly swap in a different field.
+    """
+    value = value.strip()
+    if not (value.endswith("...") or len(value) >= TRUNCATED_AT):
+        return value
+    full = (full or "").strip()
+    if not full or len(full) <= len(value):
+        warnings.append("%s: %s looks truncated and the full snapshot has no longer value"
+                        % (code, column))
+        return value
+    if not full.startswith(value[:REPAIR_PREFIX]):
+        warnings.append("%s: %s looks truncated but the full snapshot starts differently; "
+                        "keeping the short one" % (code, column))
+        return value
+    return full
+
+
+def parse_cell(value, warnings, code, column):
+    """One cell as a dict, or None where the option does not exist.
+
+    Returns some of: date, time, received, note, varies. Anything that is not
+    a date is carried through as prose for the template to set as its own
+    line — Mississippi's and Tennessee's in-person return cells explain that
+    you cannot hand-deliver at all, and Wisconsin's asks you to call your
+    clerk.
+    """
+    value = value.strip()
+    if absent(value):
+        return None
+    if value.lower().startswith("varies"):
+        return {"varies": True}
+    match = CELL.match(value)
+    if not match:
+        # Prose. Expected for the few states that explain themselves instead
+        # of naming a date; anything short enough to have been a date is worth
+        # a look, since it more likely means the snapshot changed shape.
+        if len(value) < 40 and value.lower() not in KNOWN_PROSE:
+            warnings.append("%s: %s is %r, neither a date nor prose" % (code, column, value))
+        return {"note": value}
+
+    day = datetime.strptime(match.group("date"), "%a, %b %d, %Y").date()
+    # iso is for the calendars only; the YAML emitter never writes it.
+    out = {"date": fmt(day), "iso": day.isoformat()}
+    for part in (match.group("qual") or "").split(","):
+        part = part.strip()
+        if not part:
+            continue
+        low = part.lower()
+        if low in ("received", "postmarked"):
+            out["received"] = low == "received"
+        elif TIME.match(part):
+            out["time"] = part
+        else:
+            # Hawaii's "business days; holidays not applied". Kept whole, and
+            # joined if upstream ever splits one across commas.
+            out["note"] = (out.get("note", "") + ", " + part).lstrip(", ")
+    return out
+
+
+def quote(value):
+    """Double-quote every string: this copy contains colons, commas and dashes."""
+    return '"' + str(value).replace("\\", "\\\\").replace('"', '\\"') + '"'
+
+
+def emit(out, key, value):
+    if value is None:
+        return
+    if isinstance(value, bool):
+        out.append("    %s: %s" % (key, "true" if value else "false"))
+    else:
+        out.append("    %s: %s" % (key, quote(value)))
+
+
+def emit_cell(out, prefix, cell):
+    """A parsed cell as its own keys, so the template never splits strings."""
+    if not cell:
+        return
+    emit(out, prefix, cell.get("date"))
+    emit(out, prefix + "_time", cell.get("time"))
+    if "received" in cell:
+        emit(out, prefix + "_received", cell["received"])
+    emit(out, prefix + "_note", cell.get("note"))
+
+
+# --------------------------------------------------------------- calendars
+#
+# One .ics per jurisdiction, written straight into static/ so Hugo serves them
+# without a custom output format. The week-two page links the reader's own
+# state's file; the state switcher rewrites the link.
+#
+# Every event is an all-day VEVENT. Several states put a time on a deadline
+# (Alabama's ballots must arrive by 12PM) and states span time zones — two of
+# them span two — so a timed event would need a TZID per state and would move
+# someone's deadline if it were wrong. The time is named in the event instead.
+
+CAL_DIR = "static/midterms/calendar"
+PRODID = "-//5 Calls//5 Minute Midterms//EN"
+# Fixed, so regenerating from an unchanged snapshot rewrites an identical file
+# rather than showing a diff on every run. It is the day the snapshot was taken.
+DTSTAMP = "20260828T000000Z"
+ELECTION_DAY = date(2026, 11, 3)
+MIDTERMS_URL = "https://5calls.org/midterms/"
+# The absentee_type of a state that mails a ballot to every voter unasked.
+AUTOMATIC = "Automatic mail ballot to every voter"
+
+
+def esc(text):
+    """Escape a text value, per RFC 5545."""
+    return (text.replace("\\", "\\\\").replace(";", "\\;")
+                .replace(",", "\\,").replace("\n", "\\n"))
+
+
+def fold(line):
+    """Fold a content line to 75 octets, continuations led by a space."""
+    raw = line.encode("utf-8")
+    if len(raw) <= 75:
+        return line
+    pieces, limit = [], 75
+    while raw:
+        cut = min(limit, len(raw))
+        # Never split a character in half.
+        while cut < len(raw) and (raw[cut] & 0xC0) == 0x80:
+            cut -= 1
+        pieces.append(raw[:cut].decode("utf-8"))
+        raw = raw[cut:]
+        limit = 74          # a continuation loses one octet to its own space
+    return "\r\n ".join(pieces)
+
+
+def vevent(uid, day, summary, description=None, alarm=False):
+    """One all-day event. DTEND is exclusive, so it is the following day."""
+    lines = ["BEGIN:VEVENT",
+             "UID:%s" % uid,
+             "DTSTAMP:%s" % DTSTAMP,
+             "DTSTART;VALUE=DATE:%s" % day.strftime("%Y%m%d"),
+             "DTEND;VALUE=DATE:%s" % (day + timedelta(days=1)).strftime("%Y%m%d"),
+             "SUMMARY:%s" % esc(summary),
+             "URL:%s" % MIDTERMS_URL,
+             "TRANSP:TRANSPARENT"]
+    if description:
+        lines.append("DESCRIPTION:%s" % esc(description))
+    if alarm:
+        lines += ["BEGIN:VALARM", "ACTION:DISPLAY",
+                  "DESCRIPTION:%s" % esc(summary), "TRIGGER:-P1D", "END:VALARM"]
+    return lines + ["END:VEVENT"]
+
+
+def calendar(code, name, cells):
+    """One state's deadlines as an iCalendar document.
+
+    UIDs are deterministic, so importing the file twice updates the events
+    rather than doubling them.
+    """
+    low = code.lower()
+
+    def day_of(key):
+        cell = cells.get(key)
+        return date.fromisoformat(cell["iso"]) if cell and "iso" in cell else None
+
+    events = []
+
+    # Early voting. A county-set state has no statewide date to put in a
+    # calendar, so it gets no event and the page carries the explanation.
+    start = day_of("ev_start")
+    if start and not cells.get("ev_varies"):
+        note = None
+        if cells.get("ev_end"):
+            note = "Early voting runs through %s." % cells["ev_end"]["date"]
+        events += vevent("wk2-%s-early@5calls.org" % low, start,
+                         "Early voting opens in %s" % name, note)
+
+    # Asking for a mail ballot. One event, on the earliest deadline of any
+    # channel, with every channel's own date in the description — so a reader
+    # who acts that day is inside all of them.
+    channels = []
+    for key, label in (("request_online", "Online"), ("request_mail", "By mail"),
+                       ("request_in_person", "In person")):
+        when = day_of(key)
+        if when:
+            channels.append((when, "%s: %s" % (label, cells[key]["date"])))
+    # The automatic-ballot states send one to every voter without being asked,
+    # so telling a reader there to request one would be wrong. Upstream still
+    # lists request deadlines for them — those are for replacements — but that
+    # is not this week's action, so they get no request event.
+    if channels and cells.get("absentee_type") != AUTOMATIC:
+        events += vevent(
+            "wk2-%s-request@5calls.org" % low, min(c[0] for c in channels),
+            "Request your mail ballot in %s" % name,
+            "Deadlines:\n" + "\n".join(line for _, line in sorted(channels)),
+            alarm=True)
+
+    # Getting it back.
+    posted = day_of("return_mail_by")
+    if posted:
+        events += vevent("wk2-%s-mailby@5calls.org" % low, posted,
+                         "Mail your ballot today (%s)" % name,
+                         "Leaves a week for the post before the return deadline.",
+                         alarm=True)
+    back = day_of("return_mail")
+    if back:
+        cell = cells["return_mail"]
+        word = "postmarked" if cell.get("received") is False else "received"
+        note = "Deadline is %s." % cell["time"] if cell.get("time") else None
+        events += vevent("wk2-%s-return@5calls.org" % low, back,
+                         "Ballot must be %s today (%s)" % (word, name), note,
+                         alarm=True)
+
+    events += vevent("wk2-%s-election@5calls.org" % low, ELECTION_DAY, "Election Day",
+                     "Polls are open today. Find yours at 5calls.org/vote/locate/.")
+
+    head = ["BEGIN:VCALENDAR", "VERSION:2.0", "PRODID:%s" % PRODID,
+            "CALSCALE:GREGORIAN", "METHOD:PUBLISH",
+            "X-WR-CALNAME:%s voting deadlines" % name]
+    return "\r\n".join(fold(l) for l in head + events + ["END:VCALENDAR"]) + "\r\n"
+
+
+def main():
+    snapshot = sys.argv[1] if len(sys.argv) > 1 else DEFAULT_SNAPSHOT
+    full_path = sys.argv[2] if len(sys.argv) > 2 else DEFAULT_FULL
+    with open(snapshot, newline="", encoding="utf-8") as fh:
+        rows = list(csv.DictReader(fh, delimiter="\t"))
+
+    full = {}
+    if os.path.exists(full_path):
+        with open(full_path, newline="", encoding="utf-8") as fh:
+            full = {r["Code"]: r for r in csv.DictReader(fh, delimiter="\t")}
+
+    rows.sort(key=lambda r: r["Code"])
+    warnings = []
+    if not full:
+        warnings.append("no %s; prose fields may be truncated mid-link"
+                        % os.path.basename(full_path))
+    repaired = 0
+
+    out = [
+        "# GENERATED FILE - do not edit by hand.",
+        "# Source: %s" % os.path.basename(snapshot),
+        "#         %s (untruncated prose)" % os.path.basename(full_path),
+        "# Regenerate: python3 scripts/build-midterms-voting.py",
+        "#",
+        "# One entry per jurisdiction (50 states + DC) of week-two voting options:",
+        "# in-person early voting, same-day registration, requesting a mail ballot",
+        "# and returning it. Read by layouts/partials/midterms-voting.html for any",
+        "# week flagged state_voting: true in data/midterms.yml.",
+        "#",
+        "# A key is absent wherever the option does not exist, so the template shows",
+        "# a line by asking whether its key is there. Dates carry no year. Alongside",
+        "# a date there may be a _time it falls at, a _received flag saying whether",
+        "# the date is when the ballot must arrive (true) or be postmarked (false),",
+        "# and a _note qualifying it. A _note with no date is prose upstream gave in",
+        "# place of one. ev_varies marks a state whose early voting dates are set by",
+        "# the county. return_mail_by is a week before the mail return deadline.",
+        "",
+        "states:",
+    ]
+
+    counts = {"early_voting": 0, "same_day_reg": 0, "request_online": 0, "varies": 0}
+    calendars = []
+    for row in rows:
+        code = row["Code"]
+        # The parsed cells, kept so the calendars can read real dates off them
+        # rather than parsing the display strings back out of the YAML.
+        cells = {}
+        # Put the untruncated prose back before anything reads these cells.
+        for column, source in REPAIRS.items():
+            fixed = repair(row[column], full.get(code, {}).get(source), warnings, code, column)
+            if fixed != row[column].strip():
+                repaired += 1
+            row[column] = fixed
+
+        out.append("  %s:" % code)
+        emit(out, "code", code)
+        emit(out, "name", row["State"])
+
+        # In-person early voting. Six states leave the dates to the county, so
+        # the period exists but has no statewide window; the template says so
+        # rather than dropping the line, since the reader still has the option.
+        if row["Early_voting"].strip().lower() == "yes":
+            counts["early_voting"] += 1
+            emit(out, "early_voting", True)
+            start = parse_cell(row["EV_start"], warnings, code, "EV_start")
+            end = parse_cell(row["EV_end"], warnings, code, "EV_end")
+            # Upstream qualifies Hawaii's start date with "business days;
+            # holidays not applied", which describes how it counted the date
+            # rather than anything the reader acts on. The date is the point.
+            for cell in (start, end):
+                if cell:
+                    cell.pop("note", None)
+            if (start and start.get("varies")) or (end and end.get("varies")):
+                counts["varies"] += 1
+                cells["ev_varies"] = True
+                emit(out, "ev_varies", True)
+            start = start if start and not start.get("varies") else None
+            end = end if end and not end.get("varies") else None
+            cells["ev_start"], cells["ev_end"] = start, end
+            emit_cell(out, "ev_start", start)
+            emit_cell(out, "ev_end", end)
+
+        # Same-day registration. The two windows are separate: New Hampshire
+        # registers on Election Day but has no early voting period at all, so
+        # neither flag can be inferred from the other.
+        if row["Same_day_reg"].strip().lower() == "yes":
+            counts["same_day_reg"] += 1
+            emit(out, "same_day_reg", True)
+            emit(out, "sdr_election_day", row["SDR_election_day"].strip().lower() == "yes")
+            emit(out, "sdr_early_voting", row["SDR_during_early_voting"].strip().lower() == "yes")
+            if not absent(row["SDR_locations"]):
+                emit(out, "sdr_locations", row["SDR_locations"].strip())
+
+        # Asking for a mail ballot. Colorado and the other automatic-ballot
+        # states have no request deadlines at all, so this block collapses to
+        # nothing and the template shows only how to send it back.
+        cells["absentee_type"] = row["Absentee_type"].strip() or None
+        emit(out, "absentee_type", cells["absentee_type"])
+        if not absent(row["Request_deadline_online"]):
+            counts["request_online"] += 1
+        for column, prefix in (("Request_deadline_online", "request_online"),
+                               ("Request_deadline_mail", "request_mail"),
+                               ("Request_deadline_in_person", "request_in_person")):
+            cells[prefix] = parse_cell(row[column], warnings, code, column)
+            emit_cell(out, prefix, cells[prefix])
+
+        # Sending it back.
+        if not absent(row["Return_methods"]):
+            emit(out, "return_methods", row["Return_methods"].strip())
+        mail_back = parse_cell(row["Return_deadline_mail"], warnings, code, "Return_deadline_mail")
+        cells["return_mail"] = mail_back
+        emit_cell(out, "return_mail", mail_back)
+        if mail_back and mail_back.get("date"):
+            raw = re.match(DATE, row["Return_deadline_mail"].strip()).group(0)
+            by = datetime.strptime(raw, "%a, %b %d, %Y").date() - timedelta(days=MAIL_BY_DAYS)
+            cells["return_mail_by"] = {"date": fmt(by), "iso": by.isoformat()}
+            emit(out, "return_mail_by", fmt(by))
+        cells["return_in_person"] = parse_cell(row["Return_deadline_in_person"], warnings,
+                                               code, "Return_deadline_in_person")
+        emit_cell(out, "return_in_person", cells["return_in_person"])
+
+        calendars.append((code, row["State"], cells))
+
+    with open(OUT, "w", encoding="utf-8") as fh:
+        fh.write("\n".join(out) + "\n")
+
+    # newline="" so the CRLFs iCalendar requires reach the file intact.
+    os.makedirs(CAL_DIR, exist_ok=True)
+    for code, name, cells in calendars:
+        path = os.path.join(CAL_DIR, code.lower() + ".ics")
+        with open(path, "w", encoding="utf-8", newline="") as fh:
+            fh.write(calendar(code, name, cells))
+    print("wrote %d calendars to %s/" % (len(calendars), CAL_DIR))
+
+    print("wrote %s: %d jurisdictions (%d with early voting, %d of those county-set, "
+          "%d with same-day registration, %d with an online ballot request); "
+          "%d truncated cell(s) restored from the full snapshot"
+          % (OUT, len(rows), counts["early_voting"], counts["varies"],
+             counts["same_day_reg"], counts["request_online"], repaired))
+    for warning in warnings:
+        print("warning:", warning)
+
+
+if __name__ == "__main__":
+    main()

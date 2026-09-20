@@ -822,6 +822,47 @@ body {
   color: rgba($ink, 0.72);
 }
 
+// Week-two voting options, drawn by midterms-voting.html. Four groups at most
+// — early voting, same-day registration, asking for a mail ballot, sending it
+// back — each a lead line with the option named in bold, and the dates that
+// qualify it in a list underneath. A state without an option has no group, so
+// the card is as long as that state's choices and no longer.
+.mt-vote {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.mt-vote__line {
+  margin: 0;
+  font-size: 16px;
+  line-height: 1.5;
+  color: rgba($ink, 0.88);
+
+  strong {
+    font-weight: 700;
+    color: $ink-solid;
+  }
+}
+
+// The dates under a lead line. Indented enough to read as belonging to it,
+// with the channel — online, by mail, in person — leading each row.
+.mt-vote__sub {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin: 8px 0 0;
+  padding-left: 20px;
+  font-size: 15px;
+  line-height: 1.5;
+  color: rgba($ink, 0.88);
+
+  strong {
+    font-weight: 700;
+    color: $ink-solid;
+  }
+}
+
 // The week's one big action, so it is sized like one.
 .mt-confirm {
   display: flex;
