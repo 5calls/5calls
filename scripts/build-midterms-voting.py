@@ -208,6 +208,11 @@ ELECTION_DAY = date(2026, 11, 3)
 MIDTERMS_URL = "https://5calls.org/midterms/"
 # The absentee_type of a state that mails a ballot to every voter unasked.
 AUTOMATIC = "Automatic mail ballot to every voter"
+# Read fresh each run, so regenerating never writes an event that has already
+# happened. Early voting is open in five states before week two even ships --
+# Maine's opened on September 4 -- and an .ics carrying that date would import
+# a dead event whose reminder fires overdue.
+TODAY = date.today()
 
 
 def esc(text):
@@ -234,7 +239,12 @@ def fold(line):
 
 
 def vevent(uid, day, summary, description=None, alarm=False):
-    """One all-day event. DTEND is exclusive, so it is the following day."""
+    """One all-day event, or nothing at all once the day has passed.
+
+    DTEND is exclusive, so it is the following day.
+    """
+    if day < TODAY:
+        return []
     lines = ["BEGIN:VEVENT",
              "UID:%s" % uid,
              "DTSTAMP:%s" % DTSTAMP,
