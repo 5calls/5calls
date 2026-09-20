@@ -194,6 +194,20 @@ OFFICIAL_OVERRIDES = {
     # is the old law. Only the hour was missing. ndlegis.gov/cencode/t16-1c01.pdf
     "ND": {"return_mail": (date(2026, 11, 3), "7PM"),
            "return_in_person": (date(2026, 11, 3), "7PM")},
+    # Utah's Oct 23 was never a ballot deadline — it is the voter registration
+    # deadline, which upstream filed under "request". The real one is Oct 27 at
+    # 5 p.m., seven days out, when the last ballots go in the post
+    # (20A-3a-202(2)(a)); the Lt. Governor's calendar names it "last day to
+    # request a ballot". Early voting is statewide too, not county-set:
+    # 20A-3a-601(2) runs it from 14 days out through the Friday before, with
+    # counties free to pick at least four days inside that. HB 300's opt-in
+    # switch is 2029, so the automatic ballot still reaches every ACTIVE voter
+    # in 2026. vote.utah.gov/current-election-information/
+    "UT": {"ev_start": date(2026, 10, 20), "ev_end": date(2026, 10, 30),
+           "absentee_type": "Automatic mail ballot to every active registered voter",
+           "request_online": (date(2026, 10, 27), "5PM"),
+           "request_mail": (date(2026, 10, 27), "5PM"),
+           "request_in_person": (date(2026, 10, 27), "5PM")},
     # Oregon has no ballot request either — those rows described replacement
     # ballots. ORS 254.470(6)(e)(B) counts a ballot postmarked by election day
     # that arrives within seven days, and an unpostmarked one is presumed

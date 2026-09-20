@@ -839,16 +839,20 @@ states:
     code: "UT"
     name: "Utah"
     early_voting: true
-    ev_varies: true
+    ev_start: "Tue, Oct 20"
+    ev_end: "Fri, Oct 30"
     same_day_reg: true
     sdr_election_day: true
     sdr_early_voting: true
     sdr_locations: "Go to an [early voting location or Election Day voting location](https://votesearch.utah.gov/voter-search/search/search-by-address/how-and-where-can-i-vote)."
-    absentee_type: "Automatic mail ballot to every voter"
-    request_online: "Fri, Oct 23"
-    request_mail: "Fri, Oct 23"
+    absentee_type: "Automatic mail ballot to every active registered voter"
+    request_online: "Tue, Oct 27"
+    request_online_time: "5PM"
+    request_mail: "Tue, Oct 27"
+    request_mail_time: "5PM"
     request_mail_received: true
-    request_in_person: "Fri, Oct 23"
+    request_in_person: "Tue, Oct 27"
+    request_in_person_time: "5PM"
     return_methods: "drop box, early voting site, local election office, polling place"
     return_mail: "Tue, Nov 3"
     return_mail_time: "8pm"
