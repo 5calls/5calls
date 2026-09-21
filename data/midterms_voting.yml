@@ -152,16 +152,18 @@ states:
     sdr_election_day: true
     sdr_early_voting: true
     sdr_locations: "Go to an [Early Vote Center](https://dcgis.maps.arcgis.com/apps/instant/nearby/index.html?appid=763576faa0b1470ca0559c377cf3b497&sliderDistance=1) during the early voting period or to an [Election Day vote center](https://dcgis.maps.arcgis.com/apps/instant/nearby/index.html?appid=763576faa0b1470ca0559c377cf3b497&sliderDistance=1) on Election Day."
-    absentee_type: "Automatic mail ballot to every voter"
+    absentee_type: "Automatic mail ballot to every active registered voter"
     request_online: "Mon, Oct 19"
     request_mail: "Mon, Oct 19"
     request_mail_received: true
     request_in_person: "Mon, Oct 19"
-    return_methods: "drop box, early voting site, polling place"
+    return_methods: "drop box, early voting site, polling place, Board's office"
     return_mail: "Tue, Nov 3"
     return_mail_received: false
     return_mail_by: "Tue, Oct 27"
+    return_mail_received_by: "Fri, Nov 13"
     return_in_person: "Tue, Nov 3"
+    return_in_person_time: "8PM"
     return_in_person_received: true
   DE:
     code: "DE"
@@ -383,14 +385,20 @@ states:
     ev_end: "Fri, Oct 30"
     absentee_type: "No-excuse absentee"
     request_online: "Tue, Oct 27"
+    request_online_time: "5PM"
     request_mail: "Tue, Oct 27"
+    request_mail_time: "5PM"
     request_mail_received: true
     request_in_person: "Tue, Oct 27"
-    return_methods: "drop box, local election office"
+    request_in_person_time: "5PM"
+    return_methods: "drop box where your town provides one, local election office, early voting site"
     return_mail: "Tue, Nov 3"
     return_mail_received: false
     return_mail_by: "Tue, Oct 27"
+    return_mail_received_by: "Fri, Nov 6"
+    return_mail_received_by_time: "5PM"
     return_in_person: "Tue, Nov 3"
+    return_in_person_time: "8PM"
     return_in_person_received: true
   MD:
     code: "MD"
@@ -411,7 +419,10 @@ states:
     return_mail: "Tue, Nov 3"
     return_mail_received: false
     return_mail_by: "Tue, Oct 27"
+    return_mail_received_by: "Fri, Nov 13"
+    return_mail_received_by_time: "10AM"
     return_in_person: "Tue, Nov 3"
+    return_in_person_time: "8PM"
     return_in_person_received: true
   ME:
     code: "ME"
@@ -615,7 +626,8 @@ states:
     early_voting: true
     ev_start: "Sat, Oct 24"
     ev_end: "Sun, Nov 1"
-    absentee_type: "No-excuse absentee"
+    absentee_type: "No-excuse vote-by-mail"
+    request_online: "Tue, Oct 27"
     request_mail: "Tue, Oct 27"
     request_mail_received: true
     request_in_person: "Mon, Nov 2"
@@ -624,7 +636,10 @@ states:
     return_mail: "Tue, Nov 3"
     return_mail_received: false
     return_mail_by: "Tue, Oct 27"
+    return_mail_received_by: "Mon, Nov 9"
+    return_mail_received_by_time: "8PM"
     return_in_person: "Tue, Nov 3"
+    return_in_person_time: "8PM"
     return_in_person_received: true
   NM:
     code: "NM"
@@ -657,15 +672,15 @@ states:
     sdr_election_day: true
     sdr_early_voting: true
     sdr_locations: "Go to your local [polling place.](https://www.nvsos.gov/elections/election-information/2026-election-information/2026-polling-locations) You may also register to vote online on Election Day if you are a Nevada resident with a valid Nevada driver’s license or ID card. If you register online on Election Day, you must vote in person at a polling location and must show your valid Nevada driver’s license, Nevada ID card, or Tribal ID to vote."
-    absentee_type: "Automatic mail ballot to every voter"
-    request_mail: "Tue, Oct 20"
-    request_mail_received: true
-    request_in_person: "Tue, Oct 20"
+    absentee_type: "Automatic mail ballot to every active registered voter"
     return_methods: "drop box, early voting site, local election office, polling place"
     return_mail: "Tue, Nov 3"
     return_mail_received: false
     return_mail_by: "Tue, Oct 27"
+    return_mail_received_by: "Sat, Nov 7"
+    return_mail_received_by_time: "5PM"
     return_in_person: "Tue, Nov 3"
+    return_in_person_time: "7PM"
     return_in_person_received: true
   NY:
     code: "NY"
@@ -867,61 +882,73 @@ states:
     early_voting: true
     ev_start: "Fri, Sept 18"
     ev_end: "Sat, Oct 31"
+    ev_end_time: "5PM"
     same_day_reg: true
     sdr_election_day: true
     sdr_early_voting: true
     sdr_locations: "Go to the office of your [general registrar](https://vote.elections.virginia.gov/VoterInformation/PublicContactLookup) or [satellite location](https://www.elections.virginia.gov/casting-a-ballot/polling-place-lookup/) during the early voting period or to the [polling place](https://www.elections.virginia.gov/casting-a-ballot/polling-place-lookup/) for your precinct on Election Day."
     absentee_type: "No-excuse absentee"
     request_online: "Fri, Oct 23"
+    request_online_time: "5PM"
     request_mail: "Fri, Oct 23"
+    request_mail_time: "5PM"
     request_mail_received: true
     request_in_person: "Fri, Oct 23"
+    request_in_person_time: "5PM"
     return_methods: "drop box, local election office, polling place"
     return_mail: "Tue, Nov 3"
     return_mail_received: false
     return_mail_by: "Tue, Oct 27"
+    return_mail_received_by: "Fri, Nov 6"
+    return_mail_received_by_time: "noon"
     return_in_person: "Tue, Nov 3"
+    return_in_person_time: "7PM"
     return_in_person_received: true
   VT:
     code: "VT"
     name: "Vermont"
     early_voting: true
-    ev_start: "Wed, Oct 14"
+    ev_start: "Sat, Sept 19"
     ev_end: "Mon, Nov 2"
     same_day_reg: true
     sdr_election_day: true
     sdr_early_voting: true
     sdr_locations: "Go to your local town or city [clerk’s office](https://outside.vermont.gov/dept/sos/Elections_Division/voters/guide_vermonts_town_clerks_treasurers_county.pdf) during the early voting period or to your [local polling place](https://sos.vermont.gov/elections/voters/polling-places/) on Election Day. If there is more than one polling place in your town, go to the location for your address."
-    absentee_type: "Automatic mail ballot to every voter"
+    absentee_type: "Automatic mail ballot to every active registered voter"
     request_online: "Mon, Nov 2"
+    request_online_time: "5PM"
     request_mail: "Mon, Nov 2"
+    request_mail_time: "5PM"
     request_mail_received: true
     request_in_person: "Mon, Nov 2"
-    return_methods: "local election office, polling place"
+    request_in_person_time: "5PM"
+    return_methods: "local election office, polling place, drop box where your town provides one"
     return_mail: "Tue, Nov 3"
+    return_mail_time: "7PM"
     return_mail_received: true
     return_mail_by: "Tue, Oct 27"
     return_in_person: "Tue, Nov 3"
+    return_in_person_time: "7PM"
     return_in_person_received: true
   WA:
     code: "WA"
     name: "Washington"
     early_voting: true
     ev_start: "Fri, Oct 16"
-    ev_end: "Mon, Nov 2"
+    ev_end: "Tue, Nov 3"
+    ev_end_time: "8PM"
     same_day_reg: true
     sdr_election_day: true
     sdr_early_voting: true
     sdr_locations: "Go to your [local election office or county voting center.](https://www.sos.wa.gov/elections/voters/voter-registration/county-elections-offices)"
     absentee_type: "Automatic mail ballot to every voter"
-    request_mail: "Mon, Oct 26"
-    request_mail_received: true
-    request_in_person: "Mon, Oct 26"
-    return_methods: "drop box"
+    return_methods: "drop box, county elections office, voting center"
     return_mail: "Tue, Nov 3"
     return_mail_received: false
     return_mail_by: "Tue, Oct 27"
+    return_mail_received_by: "Mon, Nov 23"
     return_in_person: "Tue, Nov 3"
+    return_in_person_time: "8PM"
     return_in_person_received: true
   WI:
     code: "WI"

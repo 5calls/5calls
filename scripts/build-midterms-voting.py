@@ -194,6 +194,92 @@ OFFICIAL_OVERRIDES = {
     # is the old law. Only the hour was missing. ndlegis.gov/cencode/t16-1c01.pdf
     "ND": {"return_mail": (date(2026, 11, 3), "7PM"),
            "return_in_person": (date(2026, 11, 3), "7PM")},
+    # DC's request channels are all real, unlike the other automatic-ballot
+    # states — though every active voter is mailed a ballot regardless, so Oct
+    # 19 is for redirecting it rather than a prerequisite to voting. A
+    # postmarked ballot counts until the tenth day after: DC Code
+    # § 1-1001.05(a)(10B). Ballots also go to the Board's own office.
+    "DC": {"absentee_type": "Automatic mail ballot to every active registered voter",
+           "return_methods": "drop box, early voting site, polling place, Board's office",
+           "return_mail_received_by": date(2026, 11, 13),
+           "return_in_person": (date(2026, 11, 3), "8PM")},
+    # Massachusetts keeps a three-day window for a mailed ballot (c. 54
+    # § 25B(a)(13) and § 93) and its drop boxes are "where provided", not
+    # mandated, so listing them flatly overstated them. Early voting locations
+    # take ballots too. Its same-day registration "no" is right: the VOTES Act
+    # moved the deadline from twenty days to ten, it did not create SDR.
+    "MA": {"request_online": (date(2026, 10, 27), "5PM"),
+           "request_mail": (date(2026, 10, 27), "5PM"),
+           "request_in_person": (date(2026, 10, 27), "5PM"),
+           "return_methods": "drop box where your town provides one, local election office, "
+                             "early voting site",
+           "return_mail_received_by": (date(2026, 11, 6), "5PM"),
+           "return_in_person": (date(2026, 11, 3), "8PM")},
+    # Maryland's postmarked ballots run the longest of any state checked: the
+    # local board may receive them until 10 a.m. on the second Friday after the
+    # election, and a missing postmark falls back to the date on the voter's
+    # oath. COMAR 33.11.03.08B(2). Not expressible: its early voting sites stop
+    # taking ballots when early voting ends on Oct 29, not on election day.
+    "MD": {"return_mail_received_by": (date(2026, 11, 13), "10AM"),
+           "return_in_person": (date(2026, 11, 3), "8PM")},
+    # Virginia's postmarked ballots must reach the registrar by noon on the
+    # third day. Careful reading the statute: 2026 cc. 61 and 62 move that to
+    # 5 p.m., but not until Jan 1 2027, so the version in force for this
+    # election is the noon one. § 24.2-709(B), 1VAC20-70-20(F).
+    "VA": {"ev_end": (date(2026, 10, 31), "5PM"),
+           "request_online": (date(2026, 10, 23), "5PM"),
+           "request_mail": (date(2026, 10, 23), "5PM"),
+           "request_in_person": (date(2026, 10, 23), "5PM"),
+           "return_mail_received_by": (date(2026, 11, 6), "noon"),
+           "return_in_person": (date(2026, 11, 3), "7PM")},
+    # New Jersey is the opposite of the phantom-channel problem: it gained an
+    # online mail-in application this cycle (N.J.S.A. 19:63-3(b)(2), operative
+    # Jan 1 2026) and we were not showing it. A postmarked ballot counts for
+    # 144 hours after the polls close, 19:63-22. Not expressible: an
+    # unpostmarked one delivered by USPS gets only 48 hours, to Nov 5.
+    "NJ": {"absentee_type": "No-excuse vote-by-mail",
+           "request_online": date(2026, 10, 27),
+           "return_mail_received_by": (date(2026, 11, 9), "8PM"),
+           "return_in_person": (date(2026, 11, 3), "8PM")},
+    # Nevada repealed ballot requests outright when it went all-mail in 2021 —
+    # NRS ch. 293 has no application section at all — so both request rows were
+    # phantom. Oct 20 is the cutoff to register and still be posted a ballot
+    # automatically (NRS 293.269911(1)), not a request deadline. A postmarked
+    # ballot counts until 5 p.m. on the fourth day after (NRS 293.269921(1)(b)).
+    # That day is a Saturday and NRS 293.1275(2) may or may not push it to the
+    # Monday; the statute's own date is what we publish.
+    "NV": {"request_mail": None, "request_in_person": None,
+           "absentee_type": "Automatic mail ballot to every active registered voter",
+           "return_mail_received_by": (date(2026, 11, 7), "5PM"),
+           "return_in_person": (date(2026, 11, 3), "7PM")},
+    # Vermont's early voting opens 45 days out for a statewide election, not
+    # the 20 days that governs local ones — upstream took the local rule, and
+    # Oct 14 is in fact Vermont's deadline for clerks to post sample ballots.
+    # Its request channels are all real (there is a fourth, by phone, this data
+    # cannot hold), and towns may provide drop boxes. Not expressible: the
+    # clerk's office stops taking ballots the day before, so Nov 3 belongs to
+    # the polling place alone.
+    # outside.vermont.gov/dept/sos/.../vermont_election_procedures.pdf
+    "VT": {"ev_start": date(2026, 9, 19),
+           "absentee_type": "Automatic mail ballot to every active registered voter",
+           "return_methods": "local election office, polling place, drop box where your town provides one",
+           "request_online": (date(2026, 11, 2), "5PM"),
+           "request_mail": (date(2026, 11, 2), "5PM"),
+           "request_in_person": (date(2026, 11, 2), "5PM"),
+           "return_mail": (date(2026, 11, 3), "7PM"),
+           "return_in_person": (date(2026, 11, 3), "7PM")},
+    # Washington issues a ballot to every active voter automatically
+    # (RCW 29A.40.010) and its own FAQ says "there is no need to request a
+    # ballot" — so both request rows were phantom, and Oct 26 was the online
+    # and mail REGISTRATION deadline wearing the wrong label. Its voting period
+    # runs through 8 p.m. on election day itself (RCW 29A.40.160), so ending it
+    # Nov 2 clipped the busiest day. A postmarked ballot counts until the day
+    # before certification, 21 days out (RCW 29A.60.190).
+    "WA": {"request_mail": None, "request_in_person": None,
+           "ev_end": (date(2026, 11, 3), "8PM"),
+           "return_methods": "drop box, county elections office, voting center",
+           "return_mail_received_by": date(2026, 11, 23),
+           "return_in_person": (date(2026, 11, 3), "8PM")},
     # Utah's Oct 23 was never a ballot deadline — it is the voter registration
     # deadline, which upstream filed under "request". The real one is Oct 27 at
     # 5 p.m., seven days out, when the last ballots go in the post
@@ -712,9 +798,13 @@ def main():
         # as though late arrival is fatal when it is not.
         backstop = scalar(code, "return_mail_received_by", None)
         if backstop:
-            cells["return_mail_received_by"] = {"date": fmt(backstop),
-                                                "iso": backstop.isoformat()}
-            emit(out, "return_mail_received_by", fmt(backstop))
+            # The hour matters here as much as the day: Maryland's cutoff is
+            # 10 a.m. and Virginia's is noon, so a ballot posted late misses by
+            # hours rather than days.
+            day, when = backstop if isinstance(backstop, tuple) else (backstop, None)
+            cells["return_mail_received_by"] = {"date": fmt(day), "iso": day.isoformat()}
+            emit(out, "return_mail_received_by", fmt(day))
+            emit(out, "return_mail_received_by_time", when)
         cells["return_in_person"] = override(
             code, "return_in_person",
             parse_cell(row["Return_deadline_in_person"], warnings, code,

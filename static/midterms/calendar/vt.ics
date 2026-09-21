@@ -5,14 +5,20 @@ CALSCALE:GREGORIAN
 METHOD:PUBLISH
 X-WR-CALNAME:Vermont voting deadlines
 BEGIN:VEVENT
-UID:wk2-vt-early@5calls.org
+UID:wk2-vt-request@5calls.org
 DTSTAMP:20260828T000000Z
-DTSTART;VALUE=DATE:20261014
-DTEND;VALUE=DATE:20261015
-SUMMARY:Early voting opens in Vermont
+DTSTART;VALUE=DATE:20261102
+DTEND;VALUE=DATE:20261103
+SUMMARY:Request your mail ballot in Vermont
 URL:https://5calls.org/midterms/
 TRANSP:TRANSPARENT
-DESCRIPTION:Early voting runs through Mon\, Nov 2.
+DESCRIPTION:Deadlines:\nBy mail: Mon\, Nov 2\nIn person: Mon\, Nov 2\nOnlin
+ e: Mon\, Nov 2
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Request your mail ballot in Vermont
+TRIGGER:-P1D
+END:VALARM
 END:VEVENT
 BEGIN:VEVENT
 UID:wk2-vt-mailby@5calls.org
@@ -37,6 +43,7 @@ DTEND;VALUE=DATE:20261104
 SUMMARY:Ballot must be received today (Vermont)
 URL:https://5calls.org/midterms/
 TRANSP:TRANSPARENT
+DESCRIPTION:Deadline is 7PM.
 BEGIN:VALARM
 ACTION:DISPLAY
 DESCRIPTION:Ballot must be received today (Vermont)

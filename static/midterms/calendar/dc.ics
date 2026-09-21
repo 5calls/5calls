@@ -15,6 +15,22 @@ TRANSP:TRANSPARENT
 DESCRIPTION:Early voting runs through Sun\, Nov 1.
 END:VEVENT
 BEGIN:VEVENT
+UID:wk2-dc-request@5calls.org
+DTSTAMP:20260828T000000Z
+DTSTART;VALUE=DATE:20261019
+DTEND;VALUE=DATE:20261020
+SUMMARY:Request your mail ballot in District of Columbia
+URL:https://5calls.org/midterms/
+TRANSP:TRANSPARENT
+DESCRIPTION:Deadlines:\nBy mail: Mon\, Oct 19\nIn person: Mon\, Oct 19\nOnl
+ ine: Mon\, Oct 19
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Request your mail ballot in District of Columbia
+TRIGGER:-P1D
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
 UID:wk2-dc-mailby@5calls.org
 DTSTAMP:20260828T000000Z
 DTSTART;VALUE=DATE:20261027

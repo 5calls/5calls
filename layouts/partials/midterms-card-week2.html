@@ -109,7 +109,9 @@
   {{- with $s.return_mail_time }}{{ $date = printf "%s at %s" $date . }}{{ end -}}
   {{- $line := printf "**By mail:** %s by %s" $by $date -}}
   {{- with $s.return_mail_received_by -}}
-    {{- $line = printf "%s, arrive by %s" $line (partial "midterms-card-date.html" .) -}}
+    {{- $arrive := partial "midterms-card-date.html" . -}}
+    {{- with $s.return_mail_received_by_time }}{{ $arrive = printf "%s at %s" $arrive . }}{{ end -}}
+    {{- $line = printf "%s, arrive by %s" $line $arrive -}}
   {{- end -}}
   {{- with $s.return_mail_by -}}
     {{- $line = printf "%s (Mail by %s!)" $line (partial "midterms-card-date.html" .) -}}

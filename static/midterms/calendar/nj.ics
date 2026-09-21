@@ -22,7 +22,8 @@ DTEND;VALUE=DATE:20261028
 SUMMARY:Request your mail ballot in New Jersey
 URL:https://5calls.org/midterms/
 TRANSP:TRANSPARENT
-DESCRIPTION:Deadlines:\nBy mail: Tue\, Oct 27\nIn person: Mon\, Nov 2
+DESCRIPTION:Deadlines:\nBy mail: Tue\, Oct 27\nOnline: Tue\, Oct 27\nIn per
+ son: Mon\, Nov 2
 BEGIN:VALARM
 ACTION:DISPLAY
 DESCRIPTION:Request your mail ballot in New Jersey
