@@ -388,13 +388,21 @@ OFFICIAL_OVERRIDES = {
     # it reaches the board within seven days, so Nov 10. The application is
     # receipt-based and the ballot is not, which is the pair that makes it easy
     # to record one and lose the other.
-    "NY": {"return_mail_received_by": date(2026, 11, 10)},
+    # Its in-person return closes at 9PM, the latest poll close in the country,
+    # fixed statewide by Election Law 8-100(2) and tied to every drop-off
+    # location by 8-412(1) and 8-710(1). The Nov 10 arrival takes no hour: the
+    # statute gives a day, "not later than seven days following the day of
+    # election", and the state board publishes it the same way.
+    "NY": {"return_mail_received_by": date(2026, 11, 10),
+           "return_in_person": (date(2026, 11, 3), "9PM")},
     # West Virginia had an arrival date behind its postmark like the rest of
     # them: a postmarked ballot counts until the
     # canvass convenes, the fifth day after the election excluding Sundays
     # (§ 3-3-5(g), § 3-6-9), which is Nov 9. The hour is county-set, so none is
-    # published. That closes the question at thirteen of thirteen — only Idaho
-    # takes no postmark at all. It is also the fourth state whose in-person
+    # published. It did not close the question, though this comment once said
+    # so: New York and Alaska were still bare at that point and were fixed
+    # later. The final count is fifteen of fifteen, and only Idaho takes no
+    # postmark at all. It is also the fourth state whose in-person
     # request date came from the mail rule: § 3-3-5(b) covers applications "by
     # mail" only, and in person absentee simply is early voting, through Oct 31.
     "WV": {"absentee_type": "Excuse required by mail; no excuse needed in person",
@@ -666,8 +674,16 @@ OFFICIAL_OVERRIDES = {
     "TX": {"return_mail": {"date": date(2026, 11, 3), "time": "7PM", "received": False},
            # Postmarked by 7 p.m. on election day, received by 5 p.m. the next
            # day. Publishing the postmark without this reads as though a ballot
-           # arriving Nov 4 is lost, when it is the rule that saves it.
-           "return_mail_received_by": date(2026, 11, 4)},
+           # arriving Nov 4 is lost, when it is the rule that saves it. The
+           # arrival carries a real hour, § 86.007(a)(2), not end of day.
+           "return_mail_received_by": (date(2026, 11, 4), "5PM"),
+           # Hand delivery is narrower than "local election office" suggests:
+           # § 86.006(a-1) allows it only at the early voting clerk's office,
+           # only while the polls are open on election day, only by the voter
+           # who voted the ballot, and only on showing photo ID. A voter who
+           # takes it to a polling place has to be turned away.
+           "return_methods": "early voting clerk's office only, with photo ID",
+           "return_in_person": (date(2026, 11, 3), "7PM")},
 }
 
 

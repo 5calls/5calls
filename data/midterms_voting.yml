@@ -760,6 +760,7 @@ states:
     return_mail_by: "Tue, Oct 27"
     return_mail_received_by: "Tue, Nov 10"
     return_in_person: "Tue, Nov 3"
+    return_in_person_time: "9PM"
     return_in_person_received: true
   OH:
     code: "OH"
@@ -919,13 +920,15 @@ states:
     request_mail: "Fri, Oct 23"
     request_mail_received: true
     request_in_person: "Fri, Oct 23"
-    return_methods: "local election office"
+    return_methods: "early voting clerk's office only, with photo ID"
     return_mail: "Tue, Nov 3"
     return_mail_time: "7PM"
     return_mail_received: false
     return_mail_by: "Tue, Oct 27"
     return_mail_received_by: "Wed, Nov 4"
+    return_mail_received_by_time: "5PM"
     return_in_person: "Tue, Nov 3"
+    return_in_person_time: "7PM"
     return_in_person_received: true
   UT:
     code: "UT"
