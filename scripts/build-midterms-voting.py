@@ -263,6 +263,21 @@ OFFICIAL_OVERRIDES = {
            "request_online": date(2026, 10, 27),
            "return_mail_received_by": (date(2026, 11, 9), "8PM"),
            "return_in_person": (date(2026, 11, 3), "8PM")},
+    # South Dakota got every date right, the only state in this pass that did.
+    # Forty-six days out is a fixed statutory date, not a miscount: 12-19-1.2
+    # says absentee voting begins "neither earlier nor later", so no county
+    # can move it. What was missing is hours. The Nov 2 deadlines are 5PM "or
+    # close of regular office hours, whichever is later", so a flat 5PM
+    # understates it in a county open late -- the safe direction, since it
+    # tells a voter to hurry rather than to dawdle. Returns close with the
+    # polls at 7PM. Drop boxes are a Class 2 misdemeanor under 12-19-9.3,
+    # which is why none is listed, though the auditor's office may keep a
+    # secured receptacle indoors under ARSD 5:02:16:01.01.
+    "SD": {"ev_end": (date(2026, 11, 2), "5PM"),
+           "request_mail": (date(2026, 11, 2), "5PM"),
+           "request_in_person": (date(2026, 11, 2), "5PM"),
+           "return_mail": (date(2026, 11, 3), "7PM"),
+           "return_in_person": (date(2026, 11, 3), "7PM")},
     # Wyoming's registration deadline looks like it kills same-day
     # registration on Oct 19, and it does not: the Secretary of State says
     # plainly that voters may still register in person and vote from Oct 20

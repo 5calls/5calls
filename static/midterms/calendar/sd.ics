@@ -42,6 +42,7 @@ DTEND;VALUE=DATE:20261104
 SUMMARY:Ballot must be received today (South Dakota)
 URL:https://5calls.org/midterms/
 TRANSP:TRANSPARENT
+DESCRIPTION:Deadline is 7PM.
 BEGIN:VALARM
 ACTION:DISPLAY
 DESCRIPTION:Ballot must be received today (South Dakota)
