@@ -12,7 +12,7 @@ DTEND;VALUE=DATE:20261007
 SUMMARY:Early voting opens in Indiana
 URL:https://5calls.org/midterms/
 TRANSP:TRANSPARENT
-DESCRIPTION:Early voting runs through Sat\, Oct 31.
+DESCRIPTION:Early voting runs through Mon\, Nov 2.
 END:VEVENT
 BEGIN:VEVENT
 UID:wk2-in-request@5calls.org
@@ -53,6 +53,7 @@ DTEND;VALUE=DATE:20261104
 SUMMARY:Ballot must be received today (Indiana)
 URL:https://5calls.org/midterms/
 TRANSP:TRANSPARENT
+DESCRIPTION:Deadline is 6PM.
 BEGIN:VALARM
 ACTION:DISPLAY
 DESCRIPTION:Ballot must be received today (Indiana)

@@ -270,20 +270,26 @@ states:
     early_voting: true
     ev_start: "Tue, Oct 13"
     ev_end: "Fri, Oct 30"
+    ev_end_time: "5PM"
     same_day_reg: true
     sdr_election_day: true
     sdr_early_voting: true
     sdr_locations: "Go to your [polling location.](https://elections.sos.idaho.gov/ElectionLink/ElectionLink/ViewPollingLocation.aspx)"
     absentee_type: "No-excuse absentee"
     request_online: "Fri, Oct 23"
+    request_online_time: "5PM"
     request_mail: "Fri, Oct 23"
+    request_mail_time: "5PM"
     request_mail_received: true
-    request_in_person: "Fri, Oct 23"
-    return_methods: "drop box, local election office"
+    request_in_person: "Fri, Oct 30"
+    request_in_person_time: "5PM"
+    return_methods: "drop box where your county provides one, local election office"
     return_mail: "Tue, Nov 3"
+    return_mail_time: "8PM"
     return_mail_received: true
     return_mail_by: "Tue, Oct 27"
     return_in_person: "Tue, Nov 3"
+    return_in_person_time: "8PM"
     return_in_person_received: true
   IL:
     code: "IL"
@@ -312,14 +318,19 @@ states:
     name: "Indiana"
     early_voting: true
     ev_start: "Tue, Oct 6"
-    ev_end: "Sat, Oct 31"
-    absentee_type: "Excuse required"
+    ev_end: "Mon, Nov 2"
+    ev_end_time: "12PM"
+    absentee_type: "Excuse required by mail; no excuse needed in person"
     request_online: "Thu, Oct 22"
+    request_online_time: "11:59PM"
     request_mail: "Thu, Oct 22"
+    request_mail_time: "11:59PM"
     request_mail_received: true
     request_in_person: "Thu, Oct 22"
+    request_in_person_time: "11:59PM"
     return_methods: "early voting site, local election office"
     return_mail: "Tue, Nov 3"
+    return_mail_time: "6PM"
     return_mail_received: true
     return_mail_by: "Tue, Oct 27"
     return_in_person: "Tue, Nov 3"
@@ -503,15 +514,19 @@ states:
     early_voting: true
     ev_start: "Tue, Oct 20"
     ev_end: "Mon, Nov 2"
-    absentee_type: "Excuse required"
+    ev_end_time: "5PM"
+    absentee_type: "Excuse required by mail; no excuse needed in person"
     request_mail: "Wed, Oct 21"
+    request_mail_time: "5PM"
     request_mail_received: true
     request_in_person: "Mon, Nov 2"
     return_methods: "local election office"
     return_mail: "Tue, Nov 3"
+    return_mail_time: "7PM"
     return_mail_received: true
     return_mail_by: "Tue, Oct 27"
     return_in_person: "Tue, Nov 3"
+    return_in_person_time: "7PM"
     return_in_person_received: true
   MS:
     code: "MS"

@@ -252,6 +252,48 @@ OFFICIAL_OVERRIDES = {
            "request_online": date(2026, 10, 27),
            "return_mail_received_by": (date(2026, 11, 9), "8PM"),
            "return_in_person": (date(2026, 11, 3), "8PM")},
+    # Idaho's in-person request runs a week longer than the other two: the same
+    # subsection sets mail and online at the eleventh day but in-person "not
+    # later than 5:00 p.m. on the Friday before the election" (34-1002(7)).
+    # Both land on a Friday, which is how it went unnoticed. Its Oct 23 really
+    # is the registration deadline too — two statutes independently say the
+    # eleventh day — so that coincidence is genuine, unlike Washington's.
+    # Idaho takes no postmark at all: a ballot must be in hand by 8 p.m.
+    # (34-1005), so it gets no arrival date. Not expressible: early voting is
+    # county-optional there, and drop boxes have no statutory guarantee.
+    "ID": {"ev_end": (date(2026, 10, 30), "5PM"),
+           "request_online": (date(2026, 10, 23), "5PM"),
+           "request_mail": (date(2026, 10, 23), "5PM"),
+           "request_in_person": (date(2026, 10, 30), "5PM"),
+           "return_methods": "drop box where your county provides one, local election office",
+           "return_mail": (date(2026, 11, 3), "8PM"),
+           "return_in_person": (date(2026, 11, 3), "8PM")},
+    # Indiana's early voting does not end on Oct 31 — that is only the date
+    # its clerks must open on a Saturday, which upstream mistook for the close.
+    # It runs to noon the day before the election (IC 3-11-10-26), so we were
+    # cutting two days off. Its excuse gates the by-mail ballot only; in-person
+    # early voting is open to any registered voter. Mail ballots must be in
+    # hand by 6 p.m. with no postmark grace, and applications close at 11:59
+    # p.m. in.gov/sos/elections/voter-information/ways-to-vote/absentee-voting/
+    "IN": {"absentee_type": "Excuse required by mail; no excuse needed in person",
+           "ev_end": (date(2026, 11, 2), "12PM"),
+           "request_online": (date(2026, 10, 22), "11:59PM"),
+           "request_mail": (date(2026, 10, 22), "11:59PM"),
+           "request_in_person": (date(2026, 10, 22), "11:59PM"),
+           "return_mail": (date(2026, 11, 3), "6PM")},
+    # Missouri needs an excuse to vote by mail but none to vote absentee in
+    # person from the second Tuesday before — § 115.277.1 — so the flat label
+    # was talking people out of an option they have. Its in-person period also
+    # closes at 5 p.m. the day before rather than with the polls (§ 115.279.4).
+    # Deliberately not published: its noon Nov 6 backstop is military and
+    # overseas only, and showing it as a general arrival date would give
+    # ordinary voters three days they do not have. Drop boxes are banned
+    # outright by § 115.291.5, so leaving them off is correct.
+    "MO": {"absentee_type": "Excuse required by mail; no excuse needed in person",
+           "ev_end": (date(2026, 11, 2), "5PM"),
+           "request_mail": (date(2026, 10, 21), "5PM"),
+           "return_mail": (date(2026, 11, 3), "7PM"),
+           "return_in_person": (date(2026, 11, 3), "7PM")},
     # North Carolina's request deadline is a week earlier than upstream had it,
     # and this is the one error so far that would make somebody act too late
     # rather than merely confuse them. S.B. 747 moved it in 2023 from the first

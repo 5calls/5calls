@@ -22,8 +22,8 @@ DTEND;VALUE=DATE:20261024
 SUMMARY:Request your mail ballot in Idaho
 URL:https://5calls.org/midterms/
 TRANSP:TRANSPARENT
-DESCRIPTION:Deadlines:\nBy mail: Fri\, Oct 23\nIn person: Fri\, Oct 23\nOnl
- ine: Fri\, Oct 23
+DESCRIPTION:Deadlines:\nBy mail: Fri\, Oct 23\nOnline: Fri\, Oct 23\nIn per
+ son: Fri\, Oct 30
 BEGIN:VALARM
 ACTION:DISPLAY
 DESCRIPTION:Request your mail ballot in Idaho
@@ -53,6 +53,7 @@ DTEND;VALUE=DATE:20261104
 SUMMARY:Ballot must be received today (Idaho)
 URL:https://5calls.org/midterms/
 TRANSP:TRANSPARENT
+DESCRIPTION:Deadline is 8PM.
 BEGIN:VALARM
 ACTION:DISPLAY
 DESCRIPTION:Ballot must be received today (Idaho)
