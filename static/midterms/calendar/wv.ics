@@ -22,7 +22,7 @@ DTEND;VALUE=DATE:20261029
 SUMMARY:Request your mail ballot in West Virginia
 URL:https://5calls.org/midterms/
 TRANSP:TRANSPARENT
-DESCRIPTION:Deadlines:\nBy mail: Wed\, Oct 28\nIn person: Wed\, Oct 28
+DESCRIPTION:Deadlines:\nBy mail: Wed\, Oct 28\nIn person: Sat\, Oct 31
 BEGIN:VALARM
 ACTION:DISPLAY
 DESCRIPTION:Request your mail ballot in West Virginia

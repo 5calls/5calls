@@ -252,6 +252,17 @@ OFFICIAL_OVERRIDES = {
            "request_online": date(2026, 10, 27),
            "return_mail_received_by": (date(2026, 11, 9), "8PM"),
            "return_in_person": (date(2026, 11, 3), "8PM")},
+    # West Virginia was the last state anywhere still showing a postmark with
+    # no arrival date, and it has one: a postmarked ballot counts until the
+    # canvass convenes, the fifth day after the election excluding Sundays
+    # (§ 3-3-5(g), § 3-6-9), which is Nov 9. The hour is county-set, so none is
+    # published. That closes the question at thirteen of thirteen — only Idaho
+    # takes no postmark at all. It is also the fourth state whose in-person
+    # request date came from the mail rule: § 3-3-5(b) covers applications "by
+    # mail" only, and in person absentee simply is early voting, through Oct 31.
+    "WV": {"absentee_type": "Excuse required by mail; no excuse needed in person",
+           "request_in_person": date(2026, 10, 31),
+           "return_mail_received_by": date(2026, 11, 9)},
     # Arizona is the third state, after Idaho and Nebraska, whose in-person
     # request deadline was taken from the wrong half of a sentence. A.R.S.
     # 16-542(E) sets the eleventh day for a ballot to be MAILED, then says an

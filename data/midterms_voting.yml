@@ -1026,14 +1026,15 @@ states:
     early_voting: true
     ev_start: "Wed, Oct 21"
     ev_end: "Sat, Oct 31"
-    absentee_type: "Excuse required"
+    absentee_type: "Excuse required by mail; no excuse needed in person"
     request_mail: "Wed, Oct 28"
     request_mail_received: true
-    request_in_person: "Wed, Oct 28"
+    request_in_person: "Sat, Oct 31"
     return_methods: "local election office"
     return_mail: "Tue, Nov 3"
     return_mail_received: false
     return_mail_by: "Tue, Oct 27"
+    return_mail_received_by: "Mon, Nov 9"
     return_in_person: "Mon, Nov 2"
     return_in_person_received: true
   WY:
