@@ -252,6 +252,20 @@ OFFICIAL_OVERRIDES = {
            "request_online": date(2026, 10, 27),
            "return_mail_received_by": (date(2026, 11, 9), "8PM"),
            "return_in_person": (date(2026, 11, 3), "8PM")},
+    # Arizona is the third state, after Idaho and Nebraska, whose in-person
+    # request deadline was taken from the wrong half of a sentence. A.R.S.
+    # 16-542(E) sets the eleventh day for a ballot to be MAILED, then says an
+    # elector appearing in person by 7 p.m. on the Friday before "shall be
+    # given a ballot" — so in person runs to Oct 30 and we closed it a week
+    # early. Its election-day polling-place drop-off is real, unlike Ohio's or
+    # Florida's: 16-548(A) allows deposit "at any polling place in the county".
+    "AZ": {"request_online": (date(2026, 10, 23), "5PM"),
+           "request_mail": (date(2026, 10, 23), "5PM"),
+           "request_in_person": (date(2026, 10, 30), "7PM"),
+           "return_methods": "drop box where your county provides one, early voting site, "
+                             "local election office, polling place",
+           "return_mail": (date(2026, 11, 3), "7PM"),
+           "return_in_person": (date(2026, 11, 3), "7PM")},
     # Connecticut no longer requires an excuse at all: Public Act 26-42 struck
     # the six-reason list from § 9-135, effective from passage, carrying out
     # the 2024 referendum. The reason this was missed is worth remembering —

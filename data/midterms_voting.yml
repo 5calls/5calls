@@ -73,14 +73,19 @@ states:
     ev_end: "Fri, Oct 30"
     absentee_type: "No-excuse absentee"
     request_online: "Fri, Oct 23"
+    request_online_time: "5PM"
     request_mail: "Fri, Oct 23"
+    request_mail_time: "5PM"
     request_mail_received: true
-    request_in_person: "Fri, Oct 23"
-    return_methods: "drop box, early voting site, local election office, polling place"
+    request_in_person: "Fri, Oct 30"
+    request_in_person_time: "7PM"
+    return_methods: "drop box where your county provides one, early voting site, local election office, polling place"
     return_mail: "Tue, Nov 3"
+    return_mail_time: "7PM"
     return_mail_received: true
     return_mail_by: "Tue, Oct 27"
     return_in_person: "Tue, Nov 3"
+    return_in_person_time: "7PM"
     return_in_person_received: true
   CA:
     code: "CA"
