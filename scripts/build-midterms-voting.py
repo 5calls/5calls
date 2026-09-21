@@ -252,6 +252,21 @@ OFFICIAL_OVERRIDES = {
            "request_online": date(2026, 10, 27),
            "return_mail_received_by": (date(2026, 11, 9), "8PM"),
            "return_in_person": (date(2026, 11, 3), "8PM")},
+    # North Carolina's request deadline is a week earlier than upstream had it,
+    # and this is the one error so far that would make somebody act too late
+    # rather than merely confuse them. S.B. 747 moved it in 2023 from the first
+    # Tuesday before the election to the second — G.S. 163-230.1, "not later
+    # than 5:00 P.M. on the second Tuesday before the election" — and the
+    # snapshot kept the old seven-day offset. Same-day registration runs during
+    # early voting only: the state says plainly it "is not available for most
+    # voters on Election Day", so claiming both would send people to the polls
+    # to register. ncsbe.gov/voting/upcoming-election
+    "NC": {"request_online": (date(2026, 10, 20), "5PM"),
+           "request_mail": (date(2026, 10, 20), "5PM"),
+           "request_in_person": (date(2026, 10, 20), "5PM"),
+           "sdr_election_day": False,
+           "return_mail": (date(2026, 11, 3), "7:30PM"),
+           "return_in_person": (date(2026, 11, 3), "7:30PM")},
     # Nevada repealed ballot requests outright when it went all-mail in 2021 —
     # NRS ch. 293 has no application section at all — so both request rows were
     # phantom. Oct 20 is the cutoff to register and still be posted a ballot
@@ -767,8 +782,10 @@ def main():
         if row["Same_day_reg"].strip().lower() == "yes":
             counts["same_day_reg"] += 1
             emit(out, "same_day_reg", True)
-            emit(out, "sdr_election_day", row["SDR_election_day"].strip().lower() == "yes")
-            emit(out, "sdr_early_voting", row["SDR_during_early_voting"].strip().lower() == "yes")
+            emit(out, "sdr_election_day", scalar(code, "sdr_election_day",
+                 row["SDR_election_day"].strip().lower() == "yes"))
+            emit(out, "sdr_early_voting", scalar(code, "sdr_early_voting",
+                 row["SDR_during_early_voting"].strip().lower() == "yes"))
             if not absent(row["SDR_locations"]):
                 emit(out, "sdr_locations", row["SDR_locations"].strip())
 

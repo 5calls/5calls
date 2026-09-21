@@ -17,13 +17,13 @@ END:VEVENT
 BEGIN:VEVENT
 UID:wk2-nc-request@5calls.org
 DTSTAMP:20260828T000000Z
-DTSTART;VALUE=DATE:20261027
-DTEND;VALUE=DATE:20261028
+DTSTART;VALUE=DATE:20261020
+DTEND;VALUE=DATE:20261021
 SUMMARY:Request your mail ballot in North Carolina
 URL:https://5calls.org/midterms/
 TRANSP:TRANSPARENT
-DESCRIPTION:Deadlines:\nBy mail: Tue\, Oct 27\nIn person: Tue\, Oct 27\nOnl
- ine: Tue\, Oct 27
+DESCRIPTION:Deadlines:\nBy mail: Tue\, Oct 20\nIn person: Tue\, Oct 20\nOnl
+ ine: Tue\, Oct 20
 BEGIN:VALARM
 ACTION:DISPLAY
 DESCRIPTION:Request your mail ballot in North Carolina
@@ -53,6 +53,7 @@ DTEND;VALUE=DATE:20261104
 SUMMARY:Ballot must be received today (North Carolina)
 URL:https://5calls.org/midterms/
 TRANSP:TRANSPARENT
+DESCRIPTION:Deadline is 7:30PM.
 BEGIN:VALARM
 ACTION:DISPLAY
 DESCRIPTION:Ballot must be received today (North Carolina)
