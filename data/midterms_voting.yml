@@ -28,11 +28,13 @@ states:
     request_online_time: "5PM"
     request_mail: "Sat, Oct 24"
     request_mail_received: true
-    return_methods: "drop box, early voting site, local election office, polling place"
+    return_methods: "early voting site, local election office, polling place"
     return_mail: "Tue, Nov 3"
     return_mail_received: false
     return_mail_by: "Tue, Oct 27"
+    return_mail_received_by: "Fri, Nov 13"
     return_in_person: "Tue, Nov 3"
+    return_in_person_time: "8PM"
     return_in_person_received: true
   AL:
     code: "AL"
@@ -1062,14 +1064,16 @@ states:
     same_day_reg: true
     sdr_election_day: true
     sdr_early_voting: true
-    sdr_locations: "Go to your [polling location.]( https://myelectionday.sos.wyo.gov/WYVOTES/Pages/VOSearch.aspx)"
+    sdr_locations: "Go to your county clerk's office through Nov 2, or your [polling place](https://myelectionday.sos.wyo.gov/WYVOTES/Pages/VOSearch.aspx) on Election Day."
     absentee_type: "No-excuse absentee"
     request_mail: "Mon, Nov 2"
     request_mail_received: true
     request_in_person: "Mon, Nov 2"
     return_methods: "local election office"
     return_mail: "Tue, Nov 3"
+    return_mail_time: "7PM"
     return_mail_received: true
     return_mail_by: "Tue, Oct 27"
     return_in_person: "Tue, Nov 3"
+    return_in_person_time: "7PM"
     return_in_person_received: true

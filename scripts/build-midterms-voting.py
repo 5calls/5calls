@@ -103,8 +103,19 @@ OFFICIAL_OVERRIDES = {
     # time. There is no in-person application deadline at all — absentee
     # in-person voting runs from Oct 19 through Election Day.
     # elections.alaska.gov/calendar/
+    # Alaska also closes the postmark question: AS 15.20.081(e) gives ten days,
+    # so a ballot postmarked Nov 3 counts until Nov 13. The statute says "close
+    # of business", not an hour, so no time is published. Overseas voters get
+    # fifteen days, to Nov 18, which the schema cannot say. Its drop box comes
+    # out on weaker evidence than Montana's -- no statutory bar, but no trace
+    # across the whole elections site, the pamphlet or the poll-worker manuals.
+    # Advertising a box that is not there can lose a ballot; omitting one that
+    # is there costs a trip, so the asymmetry decides it.
     "AK": {"request_online": (date(2026, 11, 2), "5PM"),
-           "request_in_person": None},
+           "request_in_person": None,
+           "return_mail_received_by": date(2026, 11, 13),
+           "return_methods": "early voting site, local election office, polling place",
+           "return_in_person": (date(2026, 11, 3), "8PM")},
     # California mails a ballot to every ACTIVE registered voter — EC 3001 and
     # the SOS's own wording; inactive registrations are excluded by statute.
     # Returns close with the polls. sos.ca.gov/elections/voter-registration/vote-mail
@@ -252,6 +263,17 @@ OFFICIAL_OVERRIDES = {
            "request_online": date(2026, 10, 27),
            "return_mail_received_by": (date(2026, 11, 9), "8PM"),
            "return_in_person": (date(2026, 11, 3), "8PM")},
+    # Wyoming's registration deadline looks like it kills same-day
+    # registration on Oct 19, and it does not: the Secretary of State says
+    # plainly that voters may still register in person and vote from Oct 20
+    # through Nov 2, and register at the polls on Nov 3. So the clerk's office
+    # belongs in the locations line, which named only the polling place.
+    # Returns close with the polls at 7PM, W.S. 22-9-118.
+    "WY": {"sdr_locations": "Go to your county clerk's office through Nov 2, or your "
+                            "[polling place](https://myelectionday.sos.wyo.gov/WYVOTES/Pages/VOSearch.aspx) "
+                            "on Election Day.",
+           "return_mail": (date(2026, 11, 3), "7PM"),
+           "return_in_person": (date(2026, 11, 3), "7PM")},
     # Montana's drop box does not exist for this election. 13-13-201(2)(f)(iv)
     # allows a "designated place of deposit" only in a mail ballot election,
     # and 13-19-104(3)(a) forbids conducting a regularly scheduled federal
@@ -595,6 +617,38 @@ OFFICIAL_OVERRIDES = {
            # arriving Nov 4 is lost, when it is the rule that saves it.
            "return_mail_received_by": date(2026, 11, 4)},
 }
+
+
+def _reject_duplicate_overrides():
+    """Refuse to run if a state appears twice above.
+
+    A dict literal keeps only the last of two identical keys, so a second
+    entry for a state drops the first one's corrections with no error and no
+    output anyone would notice. Alaska nearly shipped that way: a new entry
+    for its return rules would have silently shadowed its request deadlines.
+    The keys are only visible in the source, not in the built dict, so this
+    reads its own file.
+    """
+    import ast
+
+    tree = ast.parse(open(__file__, encoding="utf-8").read())
+    for node in ast.walk(tree):
+        if not isinstance(node, ast.Assign):
+            continue
+        if not any(getattr(t, "id", None) == "OFFICIAL_OVERRIDES" for t in node.targets):
+            continue
+        seen, dupes = set(), set()
+        for key in node.value.keys:
+            if key.value in seen:
+                dupes.add(key.value)
+            seen.add(key.value)
+        if dupes:
+            raise SystemExit(
+                "duplicate OFFICIAL_OVERRIDES keys, the later one wins and the "
+                "earlier corrections are lost: %s" % ", ".join(sorted(dupes)))
+
+
+_reject_duplicate_overrides()
 # Checked against official sources and left exactly as the snapshot counted:
 #
 # AK  by-mail request, Sat Oct 24. AS 01.10.080 excludes only holidays from
