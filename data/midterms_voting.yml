@@ -578,11 +578,13 @@ states:
     request_mail_received: true
     request_in_person: "Mon, Nov 2"
     request_in_person_time: "12PM"
-    return_methods: "drop box, local election office, polling place"
+    return_methods: "local election office, any polling place in your county"
     return_mail: "Tue, Nov 3"
+    return_mail_time: "8PM"
     return_mail_received: true
     return_mail_by: "Tue, Oct 27"
     return_in_person: "Tue, Nov 3"
+    return_in_person_time: "8PM"
     return_in_person_received: true
   NC:
     code: "NC"

@@ -252,6 +252,16 @@ OFFICIAL_OVERRIDES = {
            "request_online": date(2026, 10, 27),
            "return_mail_received_by": (date(2026, 11, 9), "8PM"),
            "return_in_person": (date(2026, 11, 3), "8PM")},
+    # Montana's drop box does not exist for this election. 13-13-201(2)(f)(iv)
+    # allows a "designated place of deposit" only in a mail ballot election,
+    # and 13-19-104(3)(a) forbids conducting a regularly scheduled federal
+    # election by mail. The state's own guidance offers two options, mail or
+    # the county office. Sending a voter to look for a drop box on Nov 3 could
+    # cost them the ballot. The polling place channel is real and wider than
+    # it looks: any polling place in the voter's county, not just their own.
+    "MT": {"return_methods": "local election office, any polling place in your county",
+           "return_mail": (date(2026, 11, 3), "8PM"),
+           "return_in_person": (date(2026, 11, 3), "8PM")},
     # New Mexico is the fifth state whose in-person request date closes early,
     # after Idaho, Nebraska, Arizona and West Virginia, though for a different
     # reason: 1-6-5(A) really does set one Oct 20 deadline for every channel.
