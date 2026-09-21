@@ -22,7 +22,8 @@ DTEND;VALUE=DATE:20261030
 SUMMARY:Request your mail ballot in Wisconsin
 URL:https://5calls.org/midterms/
 TRANSP:TRANSPARENT
-DESCRIPTION:Deadlines:\nBy mail: Thu\, Oct 29\nOnline: Thu\, Oct 29
+DESCRIPTION:Deadlines:\nBy mail: Thu\, Oct 29\nOnline: Thu\, Oct 29\nIn per
+ son: Sun\, Nov 1
 BEGIN:VALARM
 ACTION:DISPLAY
 DESCRIPTION:Request your mail ballot in Wisconsin
@@ -52,6 +53,7 @@ DTEND;VALUE=DATE:20261104
 SUMMARY:Ballot must be received today (Wisconsin)
 URL:https://5calls.org/midterms/
 TRANSP:TRANSPARENT
+DESCRIPTION:Deadline is 8PM.
 BEGIN:VALARM
 ACTION:DISPLAY
 DESCRIPTION:Ballot must be received today (Wisconsin)

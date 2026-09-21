@@ -252,6 +252,26 @@ OFFICIAL_OVERRIDES = {
            "request_online": date(2026, 10, 27),
            "return_mail_received_by": (date(2026, 11, 9), "8PM"),
            "return_in_person": (date(2026, 11, 3), "8PM")},
+    # Wisconsin's drop boxes are lawful again — the state Supreme Court
+    # overruled Teigen in July 2024 — but each municipal clerk decides whether
+    # to offer one, so they are named as a maybe rather than a fact. Its
+    # in-person request does have a statutory outer date, the Sunday before
+    # (6.86(1)(b)); upstream's "varies by municipality" prose implied none
+    # existed. Upstream's own note also offered a Monday that cannot happen,
+    # since in-person absentee ends that Sunday.
+    "WI": {"request_online": (date(2026, 10, 29), "5PM"),
+           "request_mail": (date(2026, 10, 29), "5PM"),
+           "request_in_person": date(2026, 11, 1),
+           "return_methods": "local election office, polling place, "
+                             "drop box where your municipality offers one",
+           "return_mail": (date(2026, 11, 3), "8PM"),
+           "return_in_person": (date(2026, 11, 3), "8PM"),
+           "sdr_locations": "You may register and vote at all [polling places]"
+                            "(https://myvote.wi.gov/en-us/Find-My-Polling-Place) on Election "
+                            "Day. You can register to vote in person at the [clerk’s office]"
+                            "(https://myvote.wi.gov/en-us/My-Municipal-Clerk) until 5 p.m. on "
+                            "the Friday before. Same-day registration is not available at an "
+                            "early voting site in the three days before Election Day."},
     # Idaho's in-person request runs a week longer than the other two: the same
     # subsection sets mail and online at the eleventh day but in-person "not
     # later than 5:00 p.m. on the Friday before the election" (34-1002(7)).
@@ -828,8 +848,10 @@ def main():
                  row["SDR_election_day"].strip().lower() == "yes"))
             emit(out, "sdr_early_voting", scalar(code, "sdr_early_voting",
                  row["SDR_during_early_voting"].strip().lower() == "yes"))
-            if not absent(row["SDR_locations"]):
-                emit(out, "sdr_locations", row["SDR_locations"].strip())
+            where = scalar(code, "sdr_locations",
+                           None if absent(row["SDR_locations"]) else row["SDR_locations"].strip())
+            if where:
+                emit(out, "sdr_locations", where)
 
         # Asking for a mail ballot. Colorado and the other automatic-ballot
         # states have no request deadlines at all, so this block collapses to

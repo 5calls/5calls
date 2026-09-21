@@ -983,17 +983,21 @@ states:
     same_day_reg: true
     sdr_election_day: true
     sdr_early_voting: true
-    sdr_locations: "You may register and vote at all [polling places](https://myvote.wi.gov/en-us/Find-My-Polling-Place) on Election Day. You can register to vote in person at the [clerk’s office](https://www.voteamerica.org/local-election-offices/) until the Friday before Election Day. Same day registration may be available at your [early voting location](https://myvote.wi.gov/en-us/Find-My-Polling-Place) during early voting, depending on your municipality. Some municipalities may offer early voting at the municipal clerk’s office or an alternative site. Even if the clerk chooses to offer early voting on the Saturday, Sunday, or Monday before Election Day, same day registration and voting is not possible on the three days before Election Day. [Find your local election office to learn more.](https://www.voteamerica.org/local-election-offices/)"
+    sdr_locations: "You may register and vote at all [polling places](https://myvote.wi.gov/en-us/Find-My-Polling-Place) on Election Day. You can register to vote in person at the [clerk’s office](https://myvote.wi.gov/en-us/My-Municipal-Clerk) until 5 p.m. on the Friday before. Same-day registration is not available at an early voting site in the three days before Election Day."
     absentee_type: "No-excuse absentee"
     request_online: "Thu, Oct 29"
+    request_online_time: "5PM"
     request_mail: "Thu, Oct 29"
+    request_mail_time: "5PM"
     request_mail_received: true
-    request_in_person_note: "The exact deadline varies by municipality. Please contact your Wisconsin clerk to find out more. [Click here to find their contact information](https://myvote.wi.gov/en-us/My-Municipal-Clerk)"
-    return_methods: "local election office, polling place"
+    request_in_person: "Sun, Nov 1"
+    return_methods: "local election office, polling place, drop box where your municipality offers one"
     return_mail: "Tue, Nov 3"
+    return_mail_time: "8PM"
     return_mail_received: true
     return_mail_by: "Tue, Oct 27"
     return_in_person: "Tue, Nov 3"
+    return_in_person_time: "8PM"
     return_in_person_received: true
   WV:
     code: "WV"
