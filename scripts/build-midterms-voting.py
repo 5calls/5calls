@@ -177,7 +177,12 @@ OFFICIAL_OVERRIDES = {
            "return_in_person": (date(2026, 11, 3), "8PM")},
     # Illinois counts a ballot postmarked by election day that arrives within
     # 14 days. 10 ILCS 5/19-8(c) with 18A-15(a); the SBE calendar dates it.
-    "IL": {"return_mail_received_by": date(2026, 11, 17)},
+    # Neither of those two dates carries an hour -- the postmark rule is a bare
+    # date and the 14-day count has no statutory clock -- but handing a ballot
+    # in or using a collection site closes with the polls at 7PM, 10 ILCS 5/17-1
+    # with 19-6. Only the in-person line gets a time.
+    "IL": {"return_mail_received_by": date(2026, 11, 17),
+           "return_in_person": (date(2026, 11, 3), "7PM")},
     # Kansas repealed its postmark grace: 2025 SB 4 struck it from K.S.A.
     # 25-1132(b), which now reads "the deadline for the receipt by mail ...
     # shall be 7:00 p.m. on the date of the election", effective Jan 1 2026.
@@ -262,6 +267,13 @@ OFFICIAL_OVERRIDES = {
     "NJ": {"absentee_type": "No-excuse vote-by-mail",
            "request_online": date(2026, 10, 27),
            "return_mail_received_by": (date(2026, 11, 9), "8PM"),
+           "return_in_person": (date(2026, 11, 3), "8PM")},
+    # Rhode Island is the one municipally administered state with a clean
+    # statewide hour, because mail ballots go to a single state board rather
+    # than to each town: 17-20-16 ties them to the close of polling places,
+    # and 17-18-11 keeps those open "until 8 p.m." everywhere. Drop boxes are
+    # locked at the same moment, 17-20-22.1(a).
+    "RI": {"return_mail": (date(2026, 11, 3), "8PM"),
            "return_in_person": (date(2026, 11, 3), "8PM")},
     # South Dakota got every date right, the only state in this pass that did.
     # Forty-six days out is a fixed statutory date, not a miscount: 12-19-1.2

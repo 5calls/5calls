@@ -325,6 +325,7 @@ states:
     return_mail_by: "Tue, Oct 27"
     return_mail_received_by: "Tue, Nov 17"
     return_in_person: "Tue, Nov 3"
+    return_in_person_time: "7PM"
     return_in_person_received: true
   IN:
     code: "IN"
@@ -841,9 +842,11 @@ states:
     request_in_person: "Tue, Oct 13"
     return_methods: "drop box, polling place"
     return_mail: "Tue, Nov 3"
+    return_mail_time: "8PM"
     return_mail_received: true
     return_mail_by: "Tue, Oct 27"
     return_in_person: "Tue, Nov 3"
+    return_in_person_time: "8PM"
     return_in_person_received: true
   SC:
     code: "SC"

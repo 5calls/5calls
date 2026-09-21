@@ -53,6 +53,7 @@ DTEND;VALUE=DATE:20261104
 SUMMARY:Ballot must be received today (Rhode Island)
 URL:https://5calls.org/midterms/
 TRANSP:TRANSPARENT
+DESCRIPTION:Deadline is 8PM.
 BEGIN:VALARM
 ACTION:DISPLAY
 DESCRIPTION:Ballot must be received today (Rhode Island)
