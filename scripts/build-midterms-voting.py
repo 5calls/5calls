@@ -252,6 +252,33 @@ OFFICIAL_OVERRIDES = {
            "request_online": date(2026, 10, 27),
            "return_mail_received_by": (date(2026, 11, 9), "8PM"),
            "return_in_person": (date(2026, 11, 3), "8PM")},
+    # Connecticut no longer requires an excuse at all: Public Act 26-42 struck
+    # the six-reason list from § 9-135, effective from passage, carrying out
+    # the 2024 referendum. The reason this was missed is worth remembering —
+    # cga.ct.gov's "current" statutes are revised to January 1 2026 and still
+    # print the old list verbatim, so the codified text says the opposite of
+    # the law. A drop box there counts as mailed, so it runs to 8 p.m. on
+    # election day even though handing the clerk a ballot stops the day before,
+    # and same-day registration happens at a designated town location rather
+    # than at the polls. portal.ct.gov/sots/election-services/voter-information
+    "CT": {"absentee_type": "No-excuse absentee",
+           "return_methods": "drop box open through 8PM on election day, local election office",
+           "return_mail": (date(2026, 11, 3), "8PM"),
+           "sdr_locations": "Go to your town’s designated same-day registration location — "
+                            "not your polling place. It is open during early voting and from "
+                            "6 a.m. to 8 p.m. on Election Day."},
+    # South Carolina is the fourth, and its statute is the plainest of them:
+    # § 7-13-25(A) lets a qualified elector vote early "without excuse", and
+    # Act 150 of 2022 abolished in-person absentee altogether, so the excuse
+    # now gates the mailed ballot alone. A ballot may also go back to an early
+    # voting centre while early voting runs; § 7-15-385's "only by" list rules
+    # out drop boxes and election-day polling places both.
+    "SC": {"absentee_type": "Excuse required by mail; no excuse needed in person",
+           "request_mail": (date(2026, 10, 23), "5PM"),
+           "request_in_person": (date(2026, 10, 23), "5PM"),
+           "return_methods": "local election office, early voting centre through Oct 31",
+           "return_mail": (date(2026, 11, 3), "7PM"),
+           "return_in_person": (date(2026, 11, 3), "7PM")},
     # Louisiana is the third state whose excuse gates the mail ballot only:
     # R.S. 18:1303(A) lets "any person who is qualified to vote" vote early in
     # person, and it is (B) that carries the list. Everything closes at

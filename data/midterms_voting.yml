@@ -130,14 +130,15 @@ states:
     same_day_reg: true
     sdr_election_day: true
     sdr_early_voting: true
-    sdr_locations: "Election Day Registration is only avaliable for general elections, not primary or special elections. Go to the designated Same Day Registration location in your town. [Learn more](https://portal.ct.gov/SOTS/Election-Services/Election-Day-Registration/Election-Day-Registration \"Learn more\")."
-    absentee_type: "Excuse required"
+    sdr_locations: "Go to your town’s designated same-day registration location — not your polling place. It is open during early voting and from 6 a.m. to 8 p.m. on Election Day."
+    absentee_type: "No-excuse absentee"
     request_online: "Mon, Nov 2"
     request_mail: "Mon, Nov 2"
     request_mail_received: true
     request_in_person: "Mon, Nov 2"
-    return_methods: "drop box, local election office"
+    return_methods: "drop box open through 8PM on election day, local election office"
     return_mail: "Tue, Nov 3"
+    return_mail_time: "8PM"
     return_mail_received: true
     return_mail_by: "Tue, Oct 27"
     return_in_person: "Mon, Nov 2"
@@ -827,15 +828,19 @@ states:
     early_voting: true
     ev_start: "Mon, Oct 19"
     ev_end: "Sat, Oct 31"
-    absentee_type: "Excuse required"
+    absentee_type: "Excuse required by mail; no excuse needed in person"
     request_mail: "Fri, Oct 23"
+    request_mail_time: "5PM"
     request_mail_received: true
     request_in_person: "Fri, Oct 23"
-    return_methods: "local election office"
+    request_in_person_time: "5PM"
+    return_methods: "local election office, early voting centre through Oct 31"
     return_mail: "Tue, Nov 3"
+    return_mail_time: "7PM"
     return_mail_received: true
     return_mail_by: "Tue, Oct 27"
     return_in_person: "Tue, Nov 3"
+    return_in_person_time: "7PM"
     return_in_person_received: true
   SD:
     code: "SD"
