@@ -55,12 +55,14 @@ states:
     early_voting: true
     ev_start: "Mon, Oct 19"
     ev_end: "Mon, Nov 2"
-    absentee_type: "Excuse required"
+    ev_end_time: "5PM"
+    absentee_type: "Excuse required by mail; no excuse needed in person"
     request_mail: "Tue, Oct 27"
     request_mail_received: true
     request_in_person: "Fri, Oct 30"
     return_methods: "local election office"
     return_mail: "Tue, Nov 3"
+    return_mail_time: "7:30PM"
     return_mail_received: true
     return_mail_by: "Tue, Oct 27"
     return_in_person: "Fri, Oct 30"
@@ -177,7 +179,8 @@ states:
     early_voting: true
     ev_start: "Thu, Oct 22"
     ev_end: "Sun, Nov 1"
-    absentee_type: "Excuse required"
+    ev_end_time: "7PM"
+    absentee_type: "Excuse required by mail; no excuse needed in person"
     request_online: "Fri, Oct 30"
     request_mail: "Fri, Oct 30"
     request_mail_received: true
@@ -185,9 +188,11 @@ states:
     request_in_person_time: "12PM"
     return_methods: "local election office"
     return_mail: "Tue, Nov 3"
+    return_mail_time: "8PM"
     return_mail_received: true
     return_mail_by: "Tue, Oct 27"
     return_in_person: "Tue, Nov 3"
+    return_in_person_time: "8PM"
     return_in_person_received: true
   FL:
     code: "FL"
@@ -367,14 +372,18 @@ states:
     early_voting: true
     ev_start: "Thu, Oct 29"
     ev_end: "Sat, Oct 31"
-    absentee_type: "Excuse required"
+    absentee_type: "Excuse required by mail; no excuse needed in person"
     request_online: "Tue, Oct 20"
+    request_online_time: "11:59PM"
     request_in_person: "Tue, Oct 20"
+    request_in_person_time: "11:59PM"
     return_methods: "drop box, local election office"
     return_mail: "Tue, Nov 3"
+    return_mail_time: "6PM"
     return_mail_received: true
     return_mail_by: "Tue, Oct 27"
     return_in_person: "Tue, Nov 3"
+    return_in_person_time: "6PM"
     return_in_person_received: true
   LA:
     code: "LA"
@@ -449,7 +458,7 @@ states:
     code: "ME"
     name: "Maine"
     early_voting: true
-    ev_start: "Fri, Sept 4"
+    ev_start: "Mon, Oct 5"
     ev_end: "Thu, Oct 29"
     same_day_reg: true
     sdr_election_day: true
@@ -460,11 +469,13 @@ states:
     request_mail: "Thu, Oct 29"
     request_mail_received: true
     request_in_person: "Thu, Oct 29"
-    return_methods: "drop box, local election office"
+    return_methods: "drop box (where offered), local election office"
     return_mail: "Tue, Nov 3"
+    return_mail_time: "8PM"
     return_mail_received: true
     return_mail_by: "Tue, Oct 27"
     return_in_person: "Tue, Nov 3"
+    return_in_person_time: "8PM"
     return_in_person_received: true
   MI:
     code: "MI"
@@ -734,6 +745,7 @@ states:
     return_mail: "Tue, Nov 3"
     return_mail_received: false
     return_mail_by: "Tue, Oct 27"
+    return_mail_received_by: "Tue, Nov 10"
     return_in_person: "Tue, Nov 3"
     return_in_person_received: true
   OH:

@@ -252,8 +252,56 @@ OFFICIAL_OVERRIDES = {
            "request_online": date(2026, 10, 27),
            "return_mail_received_by": (date(2026, 11, 9), "8PM"),
            "return_in_person": (date(2026, 11, 3), "8PM")},
-    # West Virginia was the last state anywhere still showing a postmark with
-    # no arrival date, and it has one: a postmarked ballot counts until the
+    # Maine was the worst of these: the snapshot doubled the window and put
+    # in-person absentee voting sixty days out, on Sept 4, a date that has
+    # already passed. 21-A M.R.S. 753-B(8) gives thirty days, and it was set
+    # there last year by PL 2025 c. 133 -- even the superseded forty-five-day
+    # figure could not produce Sept 4. Thirty days lands on Sun Oct 4, but the
+    # statute runs it "during the hours when the clerk's office is open", so
+    # Oct 5 is the first day a voter can actually go. Maine has no early voting
+    # and its Secretary of State is emphatic that in-person absentee is a
+    # different thing; the label here is the site's, not the state's. Drop
+    # boxes are discretionary under 752-B, so they are qualified.
+    "ME": {"ev_start": date(2026, 10, 5),
+           "return_methods": "drop box (where offered), local election office",
+           "return_mail": (date(2026, 11, 3), "8PM"),
+           "return_in_person": (date(2026, 11, 3), "8PM")},
+    # Arkansas keeps its excuse on the absentee application form alone; the
+    # early voting statute, Ark. Code 7-5-418, conditions nothing on a reason
+    # and the state's own manual calls early voting ordinary voting. Fifteen
+    # days were being hidden behind that label. The two Oct 30 deadlines are
+    # "close of regular business hours" at the county clerk, which is not a
+    # statewide clock time, so they stay bare.
+    "AR": {"absentee_type": "Excuse required by mail; no excuse needed in person",
+           "ev_end": (date(2026, 11, 2), "5PM"),
+           "return_mail": (date(2026, 11, 3), "7:30PM")},
+    # Delaware hides the same split across two documents: the excuse is in the
+    # state constitution, art. V sec. 4A, while early voting is a plain statute
+    # (15 Del. C. 5402) that never refers to it. Polls close at 8PM and both
+    # returns run to that hour.
+    "DE": {"absentee_type": "Excuse required by mail; no excuse needed in person",
+           "ev_end": (date(2026, 11, 1), "7PM"),
+           "return_mail": (date(2026, 11, 3), "8PM"),
+           "return_in_person": (date(2026, 11, 3), "8PM")},
+    # Kentucky is the sixth state whose excuse gates the mail ballot only:
+    # KRS 117.076(1) opens its Thursday-to-Saturday early voting to "any voter
+    # who is qualified to vote on election day". Its request really is online
+    # only for the general electorate (KRS 117.085(1)(a)), so the missing mail
+    # channel is not missing. The portal shuts at 11:59 p.m. and the polls at
+    # 6 p.m., which is early enough to matter.
+    "KY": {"absentee_type": "Excuse required by mail; no excuse needed in person",
+           "request_online": (date(2026, 10, 20), "11:59PM"),
+           "request_in_person": (date(2026, 10, 20), "11:59PM"),
+           "return_mail": (date(2026, 11, 3), "6PM"),
+           "return_in_person": (date(2026, 11, 3), "6PM")},
+    # New York's arrival date was reported early, before this field existed,
+    # and then not applied: a returned ballot is postmark-based and counts if
+    # it reaches the board within seven days, so Nov 10. The application is
+    # receipt-based and the ballot is not, which is the pair that makes it easy
+    # to record one and lose the other.
+    "NY": {"return_mail_received_by": date(2026, 11, 10)},
+    # West Virginia had an arrival date behind its postmark like the rest of
+    # them: a postmarked ballot counts until the
     # canvass convenes, the fifth day after the election excluding Sundays
     # (§ 3-3-5(g), § 3-6-9), which is Nov 9. The hour is county-set, so none is
     # published. That closes the question at thirteen of thirteen — only Idaho

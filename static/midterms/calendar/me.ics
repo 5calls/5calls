@@ -5,6 +5,16 @@ CALSCALE:GREGORIAN
 METHOD:PUBLISH
 X-WR-CALNAME:Maine voting deadlines
 BEGIN:VEVENT
+UID:wk2-me-early@5calls.org
+DTSTAMP:20260828T000000Z
+DTSTART;VALUE=DATE:20261005
+DTEND;VALUE=DATE:20261006
+SUMMARY:Early voting opens in Maine
+URL:https://5calls.org/midterms/
+TRANSP:TRANSPARENT
+DESCRIPTION:Early voting runs through Thu\, Oct 29.
+END:VEVENT
+BEGIN:VEVENT
 UID:wk2-me-request@5calls.org
 DTSTAMP:20260828T000000Z
 DTSTART;VALUE=DATE:20261029
@@ -43,6 +53,7 @@ DTEND;VALUE=DATE:20261104
 SUMMARY:Ballot must be received today (Maine)
 URL:https://5calls.org/midterms/
 TRANSP:TRANSPARENT
+DESCRIPTION:Deadline is 8PM.
 BEGIN:VALARM
 ACTION:DISPLAY
 DESCRIPTION:Ballot must be received today (Maine)
