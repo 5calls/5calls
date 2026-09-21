@@ -752,15 +752,19 @@ states:
     ev_end_time: "2PM"
     absentee_type: "No-excuse absentee"
     request_online: "Mon, Oct 19"
+    request_online_time: "5PM"
     request_mail: "Mon, Oct 19"
+    request_mail_time: "5PM"
     request_mail_received: true
     request_in_person: "Mon, Oct 19"
-    return_methods: "local election office"
+    request_in_person_time: "5PM"
+    return_methods: "local election office, private mail service"
     return_mail: "Tue, Nov 3"
+    return_mail_time: "7PM"
     return_mail_received: true
     return_mail_by: "Tue, Oct 27"
     return_in_person: "Mon, Nov 2"
-    return_in_person_time: "5PM"
+    return_in_person_time: "close of business"
     return_in_person_received: true
   OR:
     code: "OR"

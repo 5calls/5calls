@@ -252,6 +252,19 @@ OFFICIAL_OVERRIDES = {
            "request_online": date(2026, 10, 27),
            "return_mail_received_by": (date(2026, 11, 9), "8PM"),
            "return_in_person": (date(2026, 11, 3), "8PM")},
+    # Oklahoma sets one request deadline for every channel, 5 p.m. on the third
+    # Monday before (26 O.S. § 14-103). Its hand-delivery cutoff is not the
+    # 5 p.m. we were publishing: the statute says "end of regular business
+    # hours" and the state says "close of business", which varies by county, so
+    # asserting a clock time claimed a precision no source supports. Its return
+    # list is exhaustive and holds no drop box, so omitting one is right.
+    # Not expressible: a standard absentee ballot there must be notarized.
+    "OK": {"request_online": (date(2026, 10, 19), "5PM"),
+           "request_mail": (date(2026, 10, 19), "5PM"),
+           "request_in_person": (date(2026, 10, 19), "5PM"),
+           "return_methods": "local election office, private mail service",
+           "return_mail": (date(2026, 11, 3), "7PM"),
+           "return_in_person": (date(2026, 11, 2), "close of business")},
     # Wisconsin's drop boxes are lawful again — the state Supreme Court
     # overruled Teigen in July 2024 — but each municipal clerk decides whether
     # to offer one, so they are named as a maybe rather than a fact. Its
