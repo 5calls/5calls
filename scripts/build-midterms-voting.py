@@ -203,6 +203,17 @@ OFFICIAL_OVERRIDES = {
            "return_methods": "drop box, early voting site, polling place, Board's office",
            "return_mail_received_by": date(2026, 11, 13),
            "return_in_person": (date(2026, 11, 3), "8PM")},
+    # Minnesota's drop boxes are a county or city option and only about a
+    # dozen jurisdictions have one, so listing them flat overstated them. Its
+    # in-person return really does close at 5 p.m. while the polls run to 8 —
+    # a 2025 change we happened to have right. Not expressible: what we show as
+    # early voting is its 46-day in-person absentee window; Minnesota's own
+    # Early Voting is a separate channel opening Oct 16, new this year.
+    "MN": {"request_online": (date(2026, 11, 2), "5PM"),
+           "request_mail": (date(2026, 11, 2), "5PM"),
+           "request_in_person": (date(2026, 11, 2), "5PM"),
+           "return_methods": "local election office, drop box in some counties and cities",
+           "return_mail": (date(2026, 11, 3), "8PM")},
     # Massachusetts keeps a three-day window for a mailed ballot (c. 54
     # § 25B(a)(13) and § 93) and its drop boxes are "where provided", not
     # mandated, so listing them flatly overstated them. Early voting locations

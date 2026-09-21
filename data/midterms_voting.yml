@@ -483,11 +483,15 @@ states:
     sdr_locations: "Go to your local [polling place.](https://pollfinder.sos.state.mn.us/)"
     absentee_type: "No-excuse absentee"
     request_online: "Mon, Nov 2"
+    request_online_time: "5PM"
     request_mail: "Mon, Nov 2"
+    request_mail_time: "5PM"
     request_mail_received: true
     request_in_person: "Mon, Nov 2"
-    return_methods: "drop box, local election office"
+    request_in_person_time: "5PM"
+    return_methods: "local election office, drop box in some counties and cities"
     return_mail: "Tue, Nov 3"
+    return_mail_time: "8PM"
     return_mail_received: true
     return_mail_by: "Tue, Oct 27"
     return_in_person: "Tue, Nov 3"
