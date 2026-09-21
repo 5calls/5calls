@@ -276,7 +276,7 @@ OFFICIAL_OVERRIDES = {
     "SC": {"absentee_type": "Excuse required by mail; no excuse needed in person",
            "request_mail": (date(2026, 10, 23), "5PM"),
            "request_in_person": (date(2026, 10, 23), "5PM"),
-           "return_methods": "local election office, early voting centre through Oct 31",
+           "return_methods": "local election office, early voting center through Oct 31",
            "return_mail": (date(2026, 11, 3), "7PM"),
            "return_in_person": (date(2026, 11, 3), "7PM")},
     # Louisiana is the third state whose excuse gates the mail ballot only:

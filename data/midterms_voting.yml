@@ -834,7 +834,7 @@ states:
     request_mail_received: true
     request_in_person: "Fri, Oct 23"
     request_in_person_time: "5PM"
-    return_methods: "local election office, early voting centre through Oct 31"
+    return_methods: "local election office, early voting center through Oct 31"
     return_mail: "Tue, Nov 3"
     return_mail_time: "7PM"
     return_mail_received: true
