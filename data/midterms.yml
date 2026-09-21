@@ -228,7 +228,9 @@ weeks:
         the answers so that nothing catches you off guard this election season.
     confirm: I know my state’s voting options
     # More for the week, in a section below the action. Week two's has no share
-    # art of its own yet, so the panel beside it falls back to the FPO plates.
+    # art of its own, and no share key below, so the panel beside it is not
+    # drawn at all and no /midterms/share/2/extra/ page is built. Adding a
+    # share block here is what turns both back on.
     extra_credit:
       title: Extra credit
       toggle: I’m ready for more
