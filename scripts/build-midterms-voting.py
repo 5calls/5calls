@@ -252,6 +252,32 @@ OFFICIAL_OVERRIDES = {
            "request_online": date(2026, 10, 27),
            "return_mail_received_by": (date(2026, 11, 9), "8PM"),
            "return_in_person": (date(2026, 11, 3), "8PM")},
+    # Louisiana is the third state whose excuse gates the mail ballot only:
+    # R.S. 18:1303(A) lets "any person who is qualified to vote" vote early in
+    # person, and it is (B) that carries the list. Everything closes at
+    # 4:30 p.m. there — requests on Oct 30 and, unusually, the mail return on
+    # Nov 2, the day before the election, which is real and not an artifact.
+    # A commercial courier is a permitted route; a drop box is not.
+    # Not expressible: early voting runs 8:30 to 6 and skips Sunday Oct 25.
+    "LA": {"absentee_type": "Excuse required by mail; no excuse needed in person",
+           "request_online": (date(2026, 10, 30), "4:30PM"),
+           "request_mail": (date(2026, 10, 30), "4:30PM"),
+           "request_in_person": (date(2026, 10, 30), "4:30PM"),
+           "return_methods": "local election office, commercial courier",
+           "return_mail": (date(2026, 11, 2), "4:30PM")},
+    # Nebraska's Oct 23 is the last day to have a ballot POSTED to you, not the
+    # last day to ask for one. In person you obtain and vote a ballot at the
+    # county office through the day before (§ 32-942), so we were closing a
+    # channel ten days early — the same conflation Idaho had. Its Oct 23 really
+    # is also the in-person registration deadline, but by two independent
+    # statutes both landing on the second Friday, so that part is coincidence.
+    # Nebraska spans Central and Mountain time, so its election-day hours carry
+    # both. sos.nebraska.gov/sites/default/files/doc/elections/2026/2026_Election_Calendar.pdf
+    "NE": {"request_mail": (date(2026, 10, 23), "6PM"),
+           "request_in_person": date(2026, 11, 2),
+           "return_methods": "drop box, local election office, agent or courier",
+           "return_mail": (date(2026, 11, 3), "8PM CT / 7PM MT"),
+           "return_in_person": (date(2026, 11, 3), "8PM CT / 7PM MT")},
     # Oklahoma sets one request deadline for every channel, 5 p.m. on the third
     # Monday before (26 O.S. § 14-103). Its hand-delivery cutoff is not the
     # 5 p.m. we were publishing: the statute says "end of regular business

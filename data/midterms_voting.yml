@@ -376,13 +376,17 @@ states:
     early_voting: true
     ev_start: "Tue, Oct 20"
     ev_end: "Tue, Oct 27"
-    absentee_type: "Excuse required"
+    absentee_type: "Excuse required by mail; no excuse needed in person"
     request_online: "Fri, Oct 30"
+    request_online_time: "4:30PM"
     request_mail: "Fri, Oct 30"
+    request_mail_time: "4:30PM"
     request_mail_received: true
     request_in_person: "Fri, Oct 30"
-    return_methods: "local election office"
+    request_in_person_time: "4:30PM"
+    return_methods: "local election office, commercial courier"
     return_mail: "Mon, Nov 2"
+    return_mail_time: "4:30PM"
     return_mail_received: true
     return_mail_by: "Mon, Oct 26"
     return_in_person: "Mon, Nov 2"
@@ -615,13 +619,16 @@ states:
     ev_end: "Mon, Nov 2"
     absentee_type: "No-excuse absentee"
     request_mail: "Fri, Oct 23"
+    request_mail_time: "6PM"
     request_mail_received: true
-    request_in_person: "Fri, Oct 23"
-    return_methods: "drop box, local election office"
+    request_in_person: "Mon, Nov 2"
+    return_methods: "drop box, local election office, agent or courier"
     return_mail: "Tue, Nov 3"
+    return_mail_time: "8PM CT / 7PM MT"
     return_mail_received: true
     return_mail_by: "Tue, Oct 27"
     return_in_person: "Tue, Nov 3"
+    return_in_person_time: "8PM CT / 7PM MT"
     return_in_person_received: true
   NH:
     code: "NH"

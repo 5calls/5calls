@@ -53,6 +53,7 @@ DTEND;VALUE=DATE:20261103
 SUMMARY:Ballot must be received today (Louisiana)
 URL:https://5calls.org/midterms/
 TRANSP:TRANSPARENT
+DESCRIPTION:Deadline is 4:30PM.
 BEGIN:VALARM
 ACTION:DISPLAY
 DESCRIPTION:Ballot must be received today (Louisiana)
