@@ -252,6 +252,15 @@ OFFICIAL_OVERRIDES = {
            "request_online": date(2026, 10, 27),
            "return_mail_received_by": (date(2026, 11, 9), "8PM"),
            "return_in_person": (date(2026, 11, 3), "8PM")},
+    # New Mexico is the fifth state whose in-person request date closes early,
+    # after Idaho, Nebraska, Arizona and West Virginia, though for a different
+    # reason: 1-6-5(A) really does set one Oct 20 deadline for every channel.
+    # But 1-6-5.7(A)(1) lets a voter at the clerk's office subscribe the
+    # application and vote on the spot, so in person the channel runs with
+    # early voting to Oct 31. Oct 20 only ends having a ballot mailed out.
+    "NM": {"request_in_person": date(2026, 10, 31),
+           "return_mail": (date(2026, 11, 3), "7PM"),
+           "return_in_person": (date(2026, 11, 3), "7PM")},
     # Maine was the worst of these: the snapshot doubled the window and put
     # in-person absentee voting sixty days out, on Sept 4, a date that has
     # already passed. 21-A M.R.S. 753-B(8) gives thirty days, and it was set

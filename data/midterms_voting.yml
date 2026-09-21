@@ -703,12 +703,14 @@ states:
     request_online: "Tue, Oct 20"
     request_mail: "Tue, Oct 20"
     request_mail_received: true
-    request_in_person: "Tue, Oct 20"
+    request_in_person: "Sat, Oct 31"
     return_methods: "drop box, early voting site, local election office, polling place"
     return_mail: "Tue, Nov 3"
+    return_mail_time: "7PM"
     return_mail_received: true
     return_mail_by: "Tue, Oct 27"
     return_in_person: "Tue, Nov 3"
+    return_in_person_time: "7PM"
     return_in_person_received: true
   NV:
     code: "NV"

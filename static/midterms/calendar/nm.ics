@@ -22,8 +22,8 @@ DTEND;VALUE=DATE:20261021
 SUMMARY:Request your mail ballot in New Mexico
 URL:https://5calls.org/midterms/
 TRANSP:TRANSPARENT
-DESCRIPTION:Deadlines:\nBy mail: Tue\, Oct 20\nIn person: Tue\, Oct 20\nOnl
- ine: Tue\, Oct 20
+DESCRIPTION:Deadlines:\nBy mail: Tue\, Oct 20\nOnline: Tue\, Oct 20\nIn per
+ son: Sat\, Oct 31
 BEGIN:VALARM
 ACTION:DISPLAY
 DESCRIPTION:Request your mail ballot in New Mexico
@@ -53,6 +53,7 @@ DTEND;VALUE=DATE:20261104
 SUMMARY:Ballot must be received today (New Mexico)
 URL:https://5calls.org/midterms/
 TRANSP:TRANSPARENT
+DESCRIPTION:Deadline is 7PM.
 BEGIN:VALARM
 ACTION:DISPLAY
 DESCRIPTION:Ballot must be received today (New Mexico)
