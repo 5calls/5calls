@@ -126,9 +126,11 @@ states:
     absentee_type: "Automatic mail ballot to every voter"
     return_methods: "drop box, early voting site, local election office, polling place"
     return_mail: "Tue, Nov 3"
+    return_mail_time: "7PM"
     return_mail_received: true
     return_mail_by: "Tue, Oct 27"
     return_in_person: "Tue, Nov 3"
+    return_in_person_time: "7PM"
     return_in_person_received: true
   CT:
     code: "CT"
@@ -209,11 +211,13 @@ states:
     request_mail_time: "5PM"
     request_mail_received: true
     request_in_person: "Fri, Oct 23"
-    return_methods: "drop box, early voting site, local election office"
+    return_methods: "drop box (at your supervisor of elections office on Election Day; elsewhere only during early voting), local election office"
     return_mail: "Tue, Nov 3"
+    return_mail_time: "7PM"
     return_mail_received: true
     return_mail_by: "Tue, Oct 27"
     return_in_person: "Tue, Nov 3"
+    return_in_person_time: "7PM"
     return_in_person_received: true
   GA:
     code: "GA"
@@ -228,9 +232,11 @@ states:
     request_in_person: "Fri, Oct 23"
     return_methods: "drop box (inside early voting sites, through Oct 30), local election office"
     return_mail: "Tue, Nov 3"
+    return_mail_time: "7PM"
     return_mail_received: true
     return_mail_by: "Tue, Oct 27"
     return_in_person: "Tue, Nov 3"
+    return_in_person_time: "7PM"
     return_in_person_received: true
   HI:
     code: "HI"

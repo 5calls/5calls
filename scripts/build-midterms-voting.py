@@ -129,9 +129,24 @@ OFFICIAL_OVERRIDES = {
     # runs freely through Oct 23 (§101.62(3)(d)3), then only on an emergency
     # affidavit — a window this data cannot express, so the free date is what
     # we publish. files.floridados.gov 2026 Election Dates and Activities
+    # Both returns close at 7PM, §101.67(2), a fixed statutory hour rather than
+    # one borrowed from poll close. Florida spans two zones but the hour is
+    # local in each county, so 7PM is right on every voter's own clock --
+    # the opposite of Tennessee, where it would not be.
     "FL": {"request_online": (date(2026, 10, 22), "5PM"),
            "request_mail": (date(2026, 10, 22), "5PM"),
-           "request_in_person": date(2026, 10, 23)},
+           "request_in_person": date(2026, 10, 23),
+           "return_mail": (date(2026, 11, 3), "7PM"),
+           "return_in_person": (date(2026, 11, 3), "7PM"),
+           # Same trap as Georgia's drop boxes, one section over. §101.69(2)(a)
+           # lets a secure intake station be used "only during the county's
+           # early voting hours of operation", "[e]xcept for secure ballot
+           # intake stations at an office of the supervisor". So on Election
+           # Day the supervisor's office is the only one open, and a flat list
+           # sends voters to sites that have already closed.
+           "return_methods": "drop box (at your supervisor of elections office on "
+                             "Election Day; elsewhere only during early voting), "
+                             "local election office"},
     # Alabama authorises a commercial carrier alongside the post and hand
     # delivery, and a hand-delivered ballot is due by close of business the day
     # before — 5 p.m., not election day. §§ 17-11-9, 17-11-7, 17-9-30.
@@ -268,6 +283,12 @@ OFFICIAL_OVERRIDES = {
            "request_online": date(2026, 10, 27),
            "return_mail_received_by": (date(2026, 11, 9), "8PM"),
            "return_in_person": (date(2026, 11, 3), "8PM")},
+    # Colorado closes everything at 7PM and says so twice: 1-7.5-107(4)(b)(II)
+    # puts the envelopes in the clerk's hands by then and holds drop boxes open
+    # to the same minute, and 1-7-101(1) closes the polls there. The state is
+    # entirely Mountain Time, so the hour has no zone ambiguity.
+    "CO": {"return_mail": (date(2026, 11, 3), "7PM"),
+           "return_in_person": (date(2026, 11, 3), "7PM")},
     # Rhode Island is the one municipally administered state with a clean
     # statewide hour, because mail ballots go to a single state board rather
     # than to each town: 17-20-16 ties them to the close of polling places,
@@ -600,8 +621,12 @@ OFFICIAL_OVERRIDES = {
     # advance voting ends, so on Election Day the registrar's office is the
     # only in-person return. O.C.G.A. § 21-2-382(c): "All drop boxes shall be
     # closed when the advance voting period ends."
+    # Both returns close with the polls at 7PM: 21-2-386(a)(1) ties receipt to
+    # "the closing of the polls", and Georgia is one time zone throughout.
     "GA": {"return_methods": "drop box (inside early voting sites, through Oct 30), "
-                             "local election office"},
+                             "local election office",
+           "return_mail": (date(2026, 11, 3), "7PM"),
+           "return_in_person": (date(2026, 11, 3), "7PM")},
     # Michigan's early voting is a statewide constitutional minimum, not a
     # county choice: Const. Art. II §4(1)(m), nine consecutive days from the
     # second Saturday before the election. Communities may add days, which
