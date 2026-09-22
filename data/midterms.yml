@@ -441,6 +441,20 @@ weeks:
 # the same on every week, so it lives here rather than per week.
 confirm_note: unlock my share graphics
 
+# Added to the live API figure behind "total actions completed". Most people
+# who act in the VoteAmerica form never come back here to tick a box, so the
+# API on its own undercounts the program badly.
+#
+# This is a DIFFERENCE, not the VoteAmerica total. On 2026-09-21 the form had
+# 4,650 confirmed actions and api.5calls.org/v1/midterms/counts returned 2,131,
+# so the base is 4650 - 2131 = 2519 and the page reads 4,650 today.
+#
+# To refresh it: take the current VoteAmerica total, subtract whatever
+# /v1/midterms/counts returns at that moment, and store the difference. Pasting
+# the raw form total here would count the site's own tickers twice over.
+counts:
+  base: 2519
+
 images:
   # The heading over the week's share images.
   title: Show you did it

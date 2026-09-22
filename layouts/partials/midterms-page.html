@@ -740,6 +740,13 @@
         var SITE_KEY = "persist:fivecalls";
         var TOTAL = {{ $total }};
         var CURRENT = {{ $cur }};
+        // Actions taken in the VoteAmerica form, which never reach this page's
+        // API: most people who act there never come back to tick the box here.
+        // Added to the live figure so the total reflects everyone who has acted
+        // rather than only the readers who returned. It is a fixed number and
+        // goes stale as the form keeps taking actions, so counts.base in
+        // data/midterms.yml is meant to be raised again later.
+        var BASE = {{ with $d.counts }}{{ .base | default 0 }}{{ else }}0{{ end }};
         // Previews are for reading the copy, not for taking part: they show the
         // live counts but never add to them.
         var PREVIEW = {{ $preview }};
@@ -826,7 +833,7 @@
           // once rather than counting up from a placeholder. A completion
           // ticked before then is held in localTotal and included when it does.
           if (totalEl && serverTotal !== null) {
-            totalEl.textContent = (serverTotal + localTotal).toLocaleString();
+            totalEl.textContent = (BASE + serverTotal + localTotal).toLocaleString();
           }
         }
 
