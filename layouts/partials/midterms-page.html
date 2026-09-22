@@ -389,6 +389,21 @@
                 <div class="mt-deck__body" data-deck="body">
                   {{- partial "midterms-voting.html" (dict "state" $voting "part" "body") | safeHTML -}}
                 </div>
+                {{- /* The reader's own deadlines as a calendar file. No hook is
+                       needed for the state switcher: it rewrites every link to
+                       /midterms/calendar/, so this button follows the state
+                       along with the one in the intro copy. */ -}}
+                {{- with $week.calendar_cta }}
+                  <div class="mt-message__actions">
+                    <a class="mt-pill mt-pill--solid"
+                       href="/midterms/calendar/{{ lower $voting.code }}.ics">{{ . }}</a>
+                  </div>
+                {{- end }}
+                {{- /* What tapping it does differs by device, and an unexplained
+                       download looks like something went wrong. */ -}}
+                {{- with $week.calendar_note }}
+                  <p class="mt-deck__foot">{{ . | markdownify }}</p>
+                {{- end }}
                 {{- with $week.deck_note }}
                   <p class="mt-deck__foot">{{ . | markdownify }}</p>
                 {{- end }}
