@@ -534,8 +534,20 @@
               {{- with .part }}
                 <div class="mt-extra__main">
                   <h3>{{ .title }}</h3>
+                  {{- /* Each entry is a paragraph, or a {cta: {label, url}}
+                         entry for a button, which lets the button sit between
+                         two paragraphs rather than only after them. Same shape
+                         as the {h3: …} entries the week's own intro takes. The
+                         wrapping div matters: this column is a flex column, so
+                         a bare anchor would stretch the pill full width. */ -}}
                   {{- range .body }}
+                    {{- if reflect.IsMap . }}
+                      {{- with .cta }}
+                    <div><a class="mt-pill mt-pill--solid" href="{{ .url }}">{{ .label }}</a></div>
+                      {{- end }}
+                    {{- else }}
                     <p>{{ . | markdownify }}</p>
+                    {{- end }}
                   {{- end }}
                   {{- with .message }}
                     <div class="mt-message">

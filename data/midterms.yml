@@ -242,21 +242,32 @@ weeks:
       toggle: I’m ready for more
       locked_note: Confirm your voting options above to unlock
       part:
-        title: Help a college student get ready to vote
+        title: Help a student get ready to vote
+        # A {cta: …} entry renders as a button where it sits, so the tool comes
+        # after the paragraph that introduces it and before the one about
+        # texting someone else.
         body:
           - >-
             [Less than a third of students](https://tufts.app.box.com/v/democracy-counts-2022)
             and only about [23% of eligible youth voters](https://circle.tufts.edu/2022-election-center)
-            turned out to vote in the 2022 midterms. If you know a young person or
-            college student, send them a quick text to remind them to vote and help
-            them get election-ready. It only takes a minute!
+            turned out to vote in the 2022 midterms.
+          - >-
+            Are you in college? Check out this tool designed specifically to help
+            students navigate the challenges of registration and voting while in
+            school.
+          - cta:
+              label: Check out the college voter tool
+              url: /vote/college/
+          - >-
+            Do you know a college student? Send them a quick text to help them get
+            election-ready. It only takes a minute!
         message:
           label: Sample message to student
           # Our own page around VoteAmerica's college tool, and deliberately
           # without ?from=midterms: that marker offers a way back to 5 Minute
           # Midterms, and the person reading this is the student being texted,
           # not the reader running the week.
-          text: "Hi [NAME], I just wanted to see if you’re ready to vote this November! Let me know if you have any questions. And if you’re not sure where you can vote or what your options are, here’s a helpful tool just for college students: https://5calls.org/vote/college/"
+          text: "Hi [NAME], I just wanted to see if you’re ready to vote this November! If you’re not sure what your options are, here’s a helpful tool designed just for college students: https://5calls.org/vote/college/"
           copy_cta: Copy message
     why:
       heading: Election Day is not the only day to vote, it’s the last day to vote.
