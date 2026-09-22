@@ -52,3 +52,9 @@ export const CUSTOM_EVENTS = {
   LOADED_REPS: 'loadedReps',
   SEARCH_RESULTS_RENDERED: 'searchResultsRendered'
 };
+
+export const STATES_WITH_DELEGATES = ['MD', 'VA', 'WV']
+
+// Note: Wisconsin has an Assembly but uses title "Representative"
+// NJ, NV, NY more commonly use Assemblywoman/Assemblyman but we don't have gender data
+export const STATES_WITH_ASSEMBLYMEMBERS = ['CA', 'NJ', 'NV', 'NY']
