@@ -389,14 +389,28 @@
                 <div class="mt-deck__body" data-deck="body">
                   {{- partial "midterms-voting.html" (dict "state" $voting "part" "body") | safeHTML -}}
                 </div>
-                {{- /* The reader's own deadlines as a calendar file. No hook is
-                       needed for the state switcher: it rewrites every link to
-                       /midterms/calendar/, so this button follows the state
-                       along with the one in the intro copy. */ -}}
+                {{- /* The reader's own deadlines as a calendar file, offered
+                       twice over. The button is webcal://, which hands the file
+                       to whatever calendar app the machine has registered --
+                       Calendar on a Mac or iPhone, Outlook on Windows -- so it
+                       opens a subscribe prompt instead of dropping a file in
+                       Downloads that most people would not know what to do
+                       with. Nothing handles webcal:// on Android, and Windows
+                       without Outlook fails silently, so the plain .ics stays
+                       beside it rather than being replaced.
+
+                       No hook is needed for the state switcher: it matches on
+                       /midterms/calendar/ and swaps the code inside whatever
+                       href it finds, so both of these follow the state along
+                       with the link in the intro copy. */ -}}
+                {{- $ics := printf "/midterms/calendar/%s.ics" (lower $voting.code) }}
                 {{- with $week.calendar_cta }}
                   <div class="mt-message__actions">
                     <a class="mt-pill mt-pill--solid"
-                       href="/midterms/calendar/{{ lower $voting.code }}.ics">{{ . }}</a>
+                       href="webcal://{{ (urls.Parse site.BaseURL).Host }}{{ $ics }}">{{ . }}</a>
+                    {{- with $week.calendar_fallback }}
+                      <a href="{{ $ics }}" download>{{ . }}</a>
+                    {{- end }}
                   </div>
                 {{- end }}
                 {{- /* What tapping it does differs by device, and an unexplained
@@ -1257,11 +1271,22 @@
           var cta = document.querySelector("[data-deck='url']");
           if (cta && s.url) cta.href = s.url;
 
-          // The calendar link hands over the reader's own state's deadlines.
-          // It is written in the week's copy as markdown, which can't carry an
-          // attribute for the switcher to find, so it is matched on its href.
+          // The calendar links hand over the reader's own state's deadlines.
+          // One is written in the week's copy as markdown, which can't carry an
+          // attribute for the switcher to find, so they are matched on href.
+          //
+          // Only the state code is swapped, rather than the whole href: these
+          // are not all the same shape. The button is a webcal:// URL with the
+          // site's host in it, and replacing that outright would flatten it to
+          // a relative path and stop it opening a calendar app. getAttribute
+          // rather than .href for the same reason -- .href hands back the
+          // browser's resolved absolute URL, not what was authored.
           document.querySelectorAll('a[href*="/midterms/calendar/"]').forEach(function (a) {
-            a.href = "/midterms/calendar/" + code.toLowerCase() + ".ics";
+            var href = a.getAttribute("href") || "";
+            a.setAttribute(
+              "href",
+              href.replace(/\/midterms\/calendar\/[a-z]{2}\.ics/, "/midterms/calendar/" + code.toLowerCase() + ".ics")
+            );
           });
 
           // Everywhere else the state is named.

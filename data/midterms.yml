@@ -209,9 +209,10 @@ weeks:
     # over the reader's own deadlines.
     calendar_cta: Add deadlines to my calendar
     calendar_note: >-
-      On a phone this usually opens a new calendar entry for you to save. On a
-      computer it may download an .ics file instead — open it and your calendar
-      will add the dates.
+      This opens your calendar app and asks whether to add the dates — on a
+      phone, and on a computer using Apple Calendar or Outlook. If nothing
+      happens, download the file instead and open it.
+    calendar_fallback: Download the .ics file
     deck_note: >-
       Remember, things like polling locations can change at any time, so always
       check with your local election commission for the most up-to-date
