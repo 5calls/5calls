@@ -395,18 +395,24 @@
                        Calendar on a Mac or iPhone, Outlook on Windows -- so it
                        opens a subscribe prompt instead of dropping a file in
                        Downloads that most people would not know what to do
-                       with. Nothing handles webcal:// on Android, and Windows
-                       without Outlook fails silently, so calendar_note carries
-                       a plain .ics link as the way out of both.
+                       with. The script swaps this href to webcal:// on a
+                       desktop; see data-calendar below.
+
+                       The plain .ics ships in the markup because it is the one
+                       that works everywhere, so a wrong guess about the device
+                       fails toward the safe option. On a phone it is also the
+                       better behaviour outright: it opens a list of dates to
+                       add, where webcal would subscribe to a read-only
+                       calendar instead.
 
                        No hook is needed for the state switcher: it matches on
                        /midterms/calendar/ and swaps the code inside whatever
                        href it finds, so this follows the state along with the
-                       links in the copy. */ -}}
+                       links in the copy, webcal:// or not. */ -}}
                 {{- with $week.calendar_cta }}
                   <div class="mt-message__actions">
-                    <a class="mt-pill mt-pill--solid"
-                       href="webcal://{{ (urls.Parse site.BaseURL).Host }}/midterms/calendar/{{ lower $voting.code }}.ics">{{ . }}</a>
+                    <a class="mt-pill mt-pill--solid" data-calendar
+                       href="/midterms/calendar/{{ lower $voting.code }}.ics">{{ . }}</a>
                   </div>
                 {{- end }}
                 {{- /* What tapping it does differs by device, and an unexplained
@@ -1372,6 +1378,25 @@
         renderPreviewDone();
         loadCounts();
         if (modal && select) applyShareState(select.value);
+
+        // The calendar button ships as a plain .ics, the one thing every device
+        // handles. A desktop can do better: webcal:// hands the file to
+        // whatever calendar app is registered rather than leaving it in
+        // Downloads, where most people would not know what to do with it.
+        //
+        // Phones keep the .ics on purpose. It opens a list of dates to add,
+        // which is more use than subscribing to a calendar you cannot edit, and
+        // Android has no webcal handler at all.
+        //
+        // A coarse pointer means a touchscreen, so a touch laptop is read as a
+        // phone and keeps the .ics. That is the direction to be wrong in: the
+        // .ics works everywhere, while webcal can fail silently.
+        var calLink = document.querySelector("[data-calendar]");
+        if (calLink && window.matchMedia && !window.matchMedia("(any-pointer: coarse)").matches) {
+          // getAttribute, not .href, so this is the authored path rather than
+          // the browser's resolved absolute URL.
+          calLink.setAttribute("href", "webcal://" + location.host + calLink.getAttribute("href"));
+        }
 
         // On a narrow screen the strip scrolls sideways; start it on the week
         // being read rather than at week one.
