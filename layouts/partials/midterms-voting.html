@@ -13,7 +13,7 @@
   Four groups, each a lead line and an optional list under it:
 
     In-person early voting    the window, or a note that the county sets it
-    Same-day registration     when you can do it, and where
+    Same-day registration     when you can do it
     Absentee & vote-by-mail   what the state offers, then how to ask for one
     Returning your ballot     where it can go, then by when
 
@@ -62,10 +62,11 @@
     {{- if $s.sdr_election_day }}{{ $windows = $windows | append "on Election Day, Nov 3" }}{{ end -}}
     {{- $line := "Yes" -}}
     {{- with $windows }}{{ $line = printf "Yes, %s" (delimit . " and ") }}{{ end -}}
-    {{- $sub := slice -}}
-    {{- with $s.sdr_locations }}{{ $sub = $sub | append (markdownify .) }}{{ end -}}
+    {{- /* No location line: the upstream sdr_locations prose ran long and
+           repeated what the state's own site says better. The field is still
+           in data/midterms_voting.yml if it is ever wanted back. */ -}}
     {{- $groups = $groups | append
-          (dict "label" "Same-day registration" "text" $line "sub" $sub) -}}
+          (dict "label" "Same-day registration" "text" $line) -}}
   {{- end -}}
 
   {{- /* Asking for a mail ballot. The automatic-ballot states have no request
