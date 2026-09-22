@@ -436,6 +436,11 @@ weeks:
         - value: Done
           text: that's the whole program. Thanks for doing it.
 
+# The smaller second line under every week's confirm checkbox. The big line is
+# the week's own `confirm`; this one says what ticking the box does and reads
+# the same on every week, so it lives here rather than per week.
+confirm_note: unlock my share graphics
+
 images:
   # The heading over the week's share images.
   title: Show you did it

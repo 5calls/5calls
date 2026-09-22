@@ -448,9 +448,16 @@
               </div>
             {{- end }}
 
+            {{- /* The big line is the week's own confirm text. The small line
+                   under it says what ticking the box does and reads the same
+                   every week, so it comes from the global confirm_note. It is a
+                   `small` rather than a span so the 22px rule on
+                   `.mt-confirm span` does not pick it up too. */ -}}
             <label class="mt-confirm">
               <input type="checkbox" data-confirm value="{{ $cur }}" />
-              <span>{{ $week.confirm }}</span>
+              <span>{{ $week.confirm }}
+                {{- with $d.confirm_note }}<small class="mt-confirm__note">{{ . }}</small>{{ end -}}
+              </span>
             </label>
           </div>
 
