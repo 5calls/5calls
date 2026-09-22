@@ -484,9 +484,18 @@
                 <span class="visually-hidden">{{ $d.share.hint }}</span>
               </button>
             </div>
+            {{- /* The note names the week's own action, so a week may override
+                   it. Weeks that don't define one fall back to the global copy
+                   in images.locked_note, which is written for week one. */ -}}
+            {{- $lockedBeside := $d.images.locked_note }}
+            {{- $lockedStacked := $d.images.locked_note_stacked }}
+            {{- with $week.images }}
+              {{- with .locked_note }}{{ $lockedBeside = . }}{{ end }}
+              {{- with .locked_note_stacked }}{{ $lockedStacked = . }}{{ end }}
+            {{- end }}
             <p class="mt-images__note">
-              <span class="mt-images__note--beside">{{ $d.images.locked_note }}</span>
-              <span class="mt-images__note--stacked">{{ $d.images.locked_note_stacked }}</span>
+              <span class="mt-images__note--beside">{{ $lockedBeside }}</span>
+              <span class="mt-images__note--stacked">{{ $lockedStacked }}</span>
             </p>
 
           </aside>

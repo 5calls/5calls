@@ -208,6 +208,12 @@ weeks:
       Remember, things like polling locations can change at any time, so always
       check with your local election commission for the most up-to-date
       information.
+    # The share panel's locked note names this week's action rather than week
+    # one's registration check. Omit this block and a week falls back to the
+    # global images.locked_note near the foot of this file.
+    images:
+      locked_note: Confirm your voting options on the left to unlock the share images.
+      locked_note_stacked: Confirm your voting options above to unlock the share images.
     intro:
       - >-
         Have you thought about whether you’ll vote in-person or by mail this
