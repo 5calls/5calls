@@ -231,18 +231,18 @@ weeks:
         election? Can you vote early or will you head to the polls on Election
         Day?
       - >-
-        You don’t have to decide now. But it’s important that you know all your
-        options and **[add deadlines to your
+        You don’t have to decide now. But **it’s important that you know all your
+        options** and **[add deadlines to your
         calendar](/midterms/calendar/ca.ics)** so that you’re prepared to make
         an informed decision.
-      - "Things to consider before making your plan to vote:"
+      - "**Things to know:**"
       - - Does your state offer early in-person voting? If so, when is it?
         - Are you eligible to vote by mail?
         - What’s the deadline to request an absentee ballot?
         - What are your options for returning your ballot?
       - >-
         All of this varies from state to state, but we’re here to help you get
-        the answers so that nothing catches you off guard this election season.
+        the answers so that nothing **prevents you from voting** this election season.
     confirm: I know my state’s voting options
     # More for the week, in a section below the action. Week two's has no share
     # art of its own, and no share key below, so the panel beside it is not
@@ -461,7 +461,7 @@ weeks:
 # The smaller second line under every week's confirm checkbox. The big line is
 # the week's own `confirm`; this one says what ticking the box does and reads
 # the same on every week, so it lives here rather than per week.
-confirm_note: unlock my share graphics
+confirm_note: Unlock my share graphics!
 
 # Added to the live API figure behind "total actions completed". Most people
 # who act in the VoteAmerica form never come back here to tick a box, so the
@@ -479,7 +479,7 @@ counts:
 
 images:
   # The heading over the week's share images.
-  title: Show you did it
+  title: Tell your friends!
   # The panel sits beside the action on wide screens and below it once they
   # stack, so the note says which.
   locked_note: Confirm your registration on the left to unlock the share images.
