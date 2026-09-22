@@ -208,11 +208,14 @@ weeks:
     # per state and the switcher rewrites the link, so the button always hands
     # over the reader's own deadlines.
     calendar_cta: Add deadlines to my calendar
+    # The link in here is the fallback for anything that cannot open a
+    # webcal:// address. Its state code is rewritten by the switcher like every
+    # other /midterms/calendar/ link, so it hands over the reader's own dates.
     calendar_note: >-
       This opens your calendar app and asks whether to add the dates — on a
       phone, and on a computer using Apple Calendar or Outlook. If nothing
-      happens, download the file instead and open it.
-    calendar_fallback: Download the .ics file
+      happens, [download the file instead](/midterms/calendar/ca.ics) and open
+      it.
     deck_note: >-
       Remember, things like polling locations can change at any time, so always
       check with your local election commission for the most up-to-date

@@ -396,21 +396,17 @@
                        opens a subscribe prompt instead of dropping a file in
                        Downloads that most people would not know what to do
                        with. Nothing handles webcal:// on Android, and Windows
-                       without Outlook fails silently, so the plain .ics stays
-                       beside it rather than being replaced.
+                       without Outlook fails silently, so calendar_note carries
+                       a plain .ics link as the way out of both.
 
                        No hook is needed for the state switcher: it matches on
                        /midterms/calendar/ and swaps the code inside whatever
-                       href it finds, so both of these follow the state along
-                       with the link in the intro copy. */ -}}
-                {{- $ics := printf "/midterms/calendar/%s.ics" (lower $voting.code) }}
+                       href it finds, so this follows the state along with the
+                       links in the copy. */ -}}
                 {{- with $week.calendar_cta }}
                   <div class="mt-message__actions">
                     <a class="mt-pill mt-pill--solid"
-                       href="webcal://{{ (urls.Parse site.BaseURL).Host }}{{ $ics }}">{{ . }}</a>
-                    {{- with $week.calendar_fallback }}
-                      <a href="{{ $ics }}" download>{{ . }}</a>
-                    {{- end }}
+                       href="webcal://{{ (urls.Parse site.BaseURL).Host }}/midterms/calendar/{{ lower $voting.code }}.ics">{{ . }}</a>
                   </div>
                 {{- end }}
                 {{- /* What tapping it does differs by device, and an unexplained
