@@ -1,0 +1,938 @@
+# GENERATED FILE - do not edit by hand.
+# Source: voter-id-by-state.tsv
+#         voter-id-buckets.tsv
+#         state-data-full.tsv (id_laws_ballot_return, source_voter_id_info)
+# Regenerate: python3 scripts/build-midterms-id.py
+#
+# One entry per jurisdiction (50 states + DC) of week-three voter ID
+# rules. Read by layouts/partials/midterms-id.html for any week flagged
+# state_id: true in data/midterms.yml.
+#
+# bucket is A-E, weakest requirement last: A strict photo, B photo
+# requested, C strict ID with non-photo OK, D ID requested with non-photo
+# OK, E no ID. card is the bucket's one-line summary, which is what the
+# share card carries; lede is the same thing as a sentence.
+#
+# A key is absent wherever the question does not apply to the state, so
+# the template shows a line by asking whether its key is there. The
+# in-person fields were checked against state sources on 2026-09-22; mail
+# is raw VoteAmerica prose and has not been.
+# 29 of 51 entries carry a review note.
+
+states:
+  AK:
+    code: "AK"
+    name: "Alaska"
+    bucket: "D"
+    bucket_name: "ID requested, non-photo OK"
+    lede: "You must show ID when you vote"
+    accepted_groups:
+      - heading: "Acceptable photo IDs include:"
+        items:
+          - "Alaska driver's license or non-driver ID card"
+          - "Alaska hunting or fishing license with a photo"
+          - "U.S. passport or passport card"
+          - "Driver’s license from any state"
+          - "Current student ID with a photo issued by any school in any state"
+          - "Any photo ID issued by the state of Alaska, the federal government, or another state"
+    accepted_notes:
+      - "Acceptable non-photo ID includes a current utility bill, bank statement, government check, paycheck, or other government document that shows your name and address."
+    url: "https://www.elections.alaska.gov/"
+    needs_review: true
+    review_reason: "SB 64 cure bill vetoed 2026-04-30."
+  AL:
+    code: "AL"
+    name: "Alabama"
+    bucket: "B"
+    bucket_name: "Photo requested"
+    lede: "You must show a government-issued photo ID when you vote"
+    current: "Your ID must be current. AL driver's license/ID may be expired up to 60 days."
+    accepted_groups:
+      - heading: "Acceptable photo IDs include:"
+        items:
+          - "Alabama driver's license or non-driver ID card. This ID must be current or have expired within the past 60 days and must be issued to a U.S. citizen"
+          - "Digital Driver's License or non-driver ID card issued by the Alabama Law Enforcement Agency Digital (ALEA)"
+          - "U.S. passport or passport card"
+          - "Driver’s license from any state"
+          - "Pistol Permit with a photo"
+          - "Military ID with a photo"
+          - "Tribal ID with a photo"
+          - "Student ID with a photo issued by an Alabama public or private college, university, or postgraduate technical or professional school"
+          - "Alabama government employee ID card with a photo"
+          - "Federal employee ID card with a photo"
+          - "Alabama Department of Corrections Release"
+          - "Temporary ID with a photo"
+          - "Alabama Movement/Booking Sheet from Prison/Jail System with a photo"
+          - "Any photo ID card issued by the state of Alabama or the federal government"
+    url: "https://www.sos.alabama.gov/alabama-votes/voter/voter-id"
+    needs_review: true
+    review_reason: "Vouching only helps if officials know you; strangers must cure."
+  AR:
+    code: "AR"
+    name: "Arkansas"
+    bucket: "A"
+    bucket_name: "Strict photo"
+    lede: "You must show a government-issued photo ID when you vote"
+    current: "Your ID does not have to be current. May be expired up to 4 years."
+    accepted_groups:
+      - heading: "Acceptable photo IDs include:"
+        items:
+          - "Arkansas driver's license or non-driver ID card"
+          - "U.S. passport or passport card"
+          - "Arkansas public assistance card"
+          - "Student ID with a photo from an accredited Arkansas college or university"
+          - "Military ID with a photo"
+          - "Arkansas concealed carry license"
+    mail: "If you vote by mail, you must enclose a copy of your ID."
+    url: "https://www.sos.arkansas.gov/frequently-asked-questions/71"
+    needs_review: true
+    review_reason: "No affidavit option since Act 249 (2021)."
+  AZ:
+    code: "AZ"
+    name: "Arizona"
+    bucket: "C"
+    bucket_name: "Strict ID, non-photo OK"
+    lede: "You must show ID when you vote"
+    current: "Your ID must be current."
+    more_than_one_form: "Only if non-photo: 2 documents with name and address (utility bill, bank statement, vehicle registration, voter card, etc.), or a photo ID without an address plus 1 document"
+    accepted_groups:
+      - heading: "Acceptable photo IDs include:"
+        items:
+          - "Arizona driver's license or non-operating ID card"
+          - "U.S. passport or passport card"
+          - "Tribal ID with a photo"
+          - "Military ID with a photo"
+          - "Any photo ID issued by the state of Arizona, the federal government, or another state"
+    url: "https://azsos.gov/elections/voters/voting-elections"
+    needs_review: true
+    review_reason: "Statute text vs county/NCSL disagree on calendar vs business days."
+  CA:
+    code: "CA"
+    name: "California"
+    bucket: "E"
+    bucket_name: "No ID"
+    lede: "Only first-time voters must show ID when they vote"
+    accepted_groups:
+      - heading: "Acceptable forms of ID include:"
+        items:
+          - "a current and valid photo identification"
+          - "a recent utility bill, bank statement, government check, paycheck, or other government document that shows your name and current address"
+    url: "https://www.sos.ca.gov/elections/voting-resources/voting-california/where-and-how-vote/#id"
+    needs_review: true
+    review_reason: "Prop 39 (ID) on Nov 2026 ballot; would not apply to this election."
+  CO:
+    code: "CO"
+    name: "Colorado"
+    bucket: "D"
+    bucket_name: "ID requested, non-photo OK"
+    lede: "You must show ID when you vote"
+    current: "Your ID must be current. Non-photo documents must be dated within 60 days."
+    accepted_groups:
+      - heading: "Acceptable photo IDs include:"
+        items:
+          - "Colorado driver's license or non-driver ID card"
+          - "U.S. passport or passport card"
+          - "Pilot’s license issued by the FAA or other authorized U.S. agency"
+          - "Colorado government employee ID card with a photo"
+          - "Federal employee ID card with a photo"
+          - "U.S. Certificate of Naturalization"
+          - "Veteran ID card with a photo"
+          - "Tribal ID with a photo"
+          - "Military ID with a photo"
+          - "Student ID with a photo issued by a Colorado institute of higher education"
+          - "Division of Youth Corrections ID card"
+          - "County sheriff's written confirmation indicating that a voter is confined in a jail or detention facility"
+      - heading: "Acceptable non-photo ID includes:"
+        items:
+          - "Recent utility bill, bank statement, government check, paycheck, or other government document that shows your name and current address. This must be dated within the last 60 days"
+          - "Certified U.S. birth certificate"
+          - "Medicare or Medicaid card issued by the Centers for Medicare and Medicaid Services"
+          - "Certificate of Degree of Indian or Alaskan Native Blood"
+    mail: "If you are voting by mail for the first time, you may need to enclose a copy of an ID with your ballot."
+    url: "https://www.sos.state.co.us/pubs/elections/vote/acceptableFormsOfID.html"
+  CT:
+    code: "CT"
+    name: "Connecticut"
+    bucket: "D"
+    bucket_name: "ID requested, non-photo OK"
+    lede: "You must show ID when you vote"
+    more_than_one_form: "Only for first-time voters: also proof of residence (utility bill, bank statement) if the ID lacks your address"
+    accepted_groups:
+      - heading: "Acceptable IDs include:"
+        items:
+          - "Connecticut driver's license or non-driver ID card"
+          - "Social Security card"
+          - "U.S. passport or passport card"
+          - "Tribal ID with a photo"
+          - "Military ID with a photo"
+          - "Any current and valid photo identification that shows your name and address, name and signature, or name and photograph"
+    url: "https://portal.ct.gov/SOTS/Election-Services/FAQ/FAQ---Voter-Identification"
+  DC:
+    code: "DC"
+    name: "District of Columbia"
+    bucket: "E"
+    bucket_name: "No ID"
+    lede: "Only first-time voters must show ID when they vote"
+    accepted_groups:
+      - heading: "Acceptable forms of ID include:"
+        items:
+          - "a current and valid photo identification"
+          - "a recent utility bill, bank statement, government check, paycheck, or other government document that shows your name and current address"
+    mail: "If you are voting by mail for the first time, you may need to enclose a copy of an ID with your ballot."
+    url: "https://www.dcboe.org/faqs/early-voting-and-election-day"
+  DE:
+    code: "DE"
+    name: "Delaware"
+    bucket: "D"
+    bucket_name: "ID requested, non-photo OK"
+    lede: "You must show ID when you vote"
+    accepted_groups:
+      - heading: "Acceptable IDs include:"
+        items:
+          - "Delaware driver's license or non-driver ID card"
+          - "U.S. passport or passport card"
+          - "Signed Social Security card"
+          - "Signed credit card with photo"
+          - "Signed vehicle registration"
+          - "Student ID with a photo or signature"
+    url: "https://elections.delaware.gov/voter/VotingFAQ.html"
+  FL:
+    code: "FL"
+    name: "Florida"
+    bucket: "B"
+    bucket_name: "Photo requested"
+    lede: "You must show a photo ID when you vote"
+    current: "Your ID must be current."
+    more_than_one_form: "Only if the photo ID has no signature: a second ID showing your signature"
+    accepted_groups:
+      - heading: "Acceptable photo IDs include:"
+        items:
+          - "Florida driver's license or non-driver ID card"
+          - "U.S. passport or passport card"
+          - "Florida concealed weapon license"
+          - "Military ID with a photo"
+          - "Student ID with a photo and signature"
+          - "Public assistance ID card"
+          - "Veterans Health ID card issued by US Department of Veterans Affairs"
+          - "Retirement center ID with a photo"
+          - "Neighborhood association ID with a photo"
+          - "Debit or credit card with a photo"
+          - "Florida government employee ID card with a photo"
+          - "Federal employee ID card with a photo"
+    url: "https://dos.fl.gov/elections/for-voters/voting/election-day-voting/"
+    needs_review: true
+    review_reason: "HB 991 narrows ID list from 2027-01-01."
+  GA:
+    code: "GA"
+    name: "Georgia"
+    bucket: "A"
+    bucket_name: "Strict photo"
+    lede: "You must show a government-issued photo ID when you vote"
+    current: "Your ID must be current, except a GA driver's license may be expired."
+    accepted_groups:
+      - heading: "Acceptable photo IDs include:"
+        items:
+          - "Physical Georgia driver's license. This ID can be used even if expired"
+          - "Physical Georgia non-driver ID card"
+          - "Physical Driver’s license from any state"
+          - "U.S. passport or passport card"
+          - "Student ID with a photo from a Georgia public college or university"
+          - "Military ID with a photo"
+          - "Tribal ID with a photo"
+          - "Georgia government employee ID card with a photo"
+          - "Federal employee ID card with a photo"
+          - "Any photo ID card issued by the state of Georgia, the federal government, or another state"
+    url: "https://sos.ga.gov/page/georgia-voter-identification-requirements"
+    needs_review: true
+    review_reason: "Religious/indigency affidavit may be available in cure window (unverified)."
+  HI:
+    code: "HI"
+    name: "Hawaii"
+    bucket: "E"
+    bucket_name: "No ID"
+    lede: "Only first-time voters must show ID when they vote"
+    accepted_groups:
+      - heading: "Acceptable forms of ID include:"
+        items:
+          - "a current and valid photo identification"
+          - "a recent utility bill, bank statement, government check, paycheck, or other government document that shows your name and current address"
+    url: "https://elections.hawaii.gov/register-to-vote/registration/"
+  IA:
+    code: "IA"
+    name: "Iowa"
+    bucket: "C"
+    bucket_name: "Strict ID, non-photo OK"
+    lede: "You must show ID when you vote"
+    current: "Your ID must usually be current. IA driver's license/ID may be expired up to 90 days; student IDs must be current."
+    more_than_one_form: "Only if the photo ID lacks your current address: also a document with your address (utility bill, lease, bank statement, paycheck) dated within 45 days"
+    accepted_groups:
+      - heading: "Acceptable photo IDs include:"
+        items:
+          - "Iowa driver's license or non-operator ID card. This ID must be current or expired within the last 90 days"
+          - "U.S. passport or passport card"
+          - "Veteran ID with a photo"
+          - "Tribal ID with a photo"
+          - "Current student ID with a photo and expiration date issued by Iowa high schools and colleges"
+    url: "https://sos.iowa.gov/voters/voter-id-faq"
+    needs_review: true
+    review_reason: "Upstream type disagrees HF 2501 (2026) repealed vouching by another voter. Upstream text may still describe it."
+  ID:
+    code: "ID"
+    name: "Idaho"
+    bucket: "B"
+    bucket_name: "Photo requested"
+    lede: "You must show a government-issued photo ID when you vote"
+    accepted_groups:
+      - heading: "Acceptable photo IDs include:"
+        items:
+          - "government-issued"
+          - "tribal and ID concealed weapons license"
+    url: "https://voteidaho.gov/guide-to-vote-in-person/"
+    needs_review: true
+    review_reason: "SB 1322 (2026) adds DOB/DL number check to affidavit."
+  IL:
+    code: "IL"
+    name: "Illinois"
+    bucket: "E"
+    bucket_name: "No ID"
+    lede: "Only first-time voters must show ID when they vote"
+    accepted_groups:
+      - heading: "Acceptable forms of ID include:"
+        items:
+          - "a current and valid photo identification"
+          - "a recent utility bill, bank statement, government check, paycheck, or other government document that shows your name and current address"
+    url: "https://www.elections.il.gov/Main/FAQ.aspx#VoterRegistration-q04"
+  IN:
+    code: "IN"
+    name: "Indiana"
+    bucket: "A"
+    bucket_name: "Strict photo"
+    lede: "You must show a government-issued photo ID when you vote"
+    current: "Your ID must be current, or expired after Nov 5, 2024."
+    accepted_groups:
+      - heading: "Acceptable photo IDs include:"
+        items:
+          - "Indiana driver's license or non-driver ID card"
+          - "U.S. passport or passport card"
+          - "Tribal ID with a photo"
+          - "Military ID with a photo"
+    url: "https://www.in.gov/sos/elections/voter-information/photo-id-law/"
+    needs_review: true
+    review_reason: "Student IDs no longer accepted since 2025-07-01."
+  KS:
+    code: "KS"
+    name: "Kansas"
+    bucket: "A"
+    bucket_name: "Strict photo"
+    lede: "You must show a government-issued photo ID when you vote"
+    current: "Your ID must be current; voters 65+ may use expired ID."
+    accepted_groups:
+      - heading: "Acceptable photo IDs include:"
+        items:
+          - "Kansas driver's license or non-driver ID card"
+          - "Driver’s license from any state"
+          - "U.S. passport or passport card"
+          - "Kansas concealed carry license"
+          - "Tribal ID with a photo"
+          - "Military ID with a photo"
+          - "Kansas government employee ID card with a photo"
+          - "Federal employee ID card with a photo"
+          - "Any employee ID issued by a government office with a photo"
+          - "Concealed carry license with a photo issued by another state"
+          - "Public assistance ID card with a photo issued by a government office"
+          - "Current student ID with a photo issued by an accredited college or university in Kansas. If your student ID does not show an expiration date, it is considered current"
+    url: "https://www.sos.ks.gov/elections/photo-id.html"
+  KY:
+    code: "KY"
+    name: "Kentucky"
+    bucket: "A"
+    bucket_name: "Strict photo"
+    lede: "You must show a photo ID when you vote"
+    accepted_groups:
+      - heading: "Acceptable photo IDs include:"
+        items:
+          - "Kentucky driver's license or non-driver ID card"
+          - "U.S. passport or passport card"
+          - "Military ID issued with a photo by Kentucky National Guard, U.S. Military, or U.S. Merchant Marine"
+          - "Student ID with photo issued by colleges, universities, or postgraduate technical or professional schools in any state"
+          - "Any photo ID issued by a local government in Kentucky"
+          - "Any photo ID issued by the state of Kentucky or the federal government"
+    url: "https://elect.ky.gov/Voters/Pages/Absentee-Excused-In-Person.aspx"
+    needs_review: true
+    review_reason: "HB 139 (eff. 2026-07-15) removed SSN/SNAP card backups and poll-worker vouching. Upstream text predates this."
+  LA:
+    code: "LA"
+    name: "Louisiana"
+    bucket: "B"
+    bucket_name: "Photo requested"
+    lede: "You must show a photo ID when you vote"
+    accepted_groups:
+      - heading: "Acceptable photo IDs include:"
+        items:
+          - "Louisiana driver's license or special ID"
+          - "Louisiana Wallet digital driver's license"
+          - "U.S. passport or passport card"
+          - "Military ID with a photo"
+          - "Tribal ID with a photo"
+          - "Any photo ID that contains your name and signature"
+    url: "https://www.sos.la.gov/elections-voting/ways-to-vote"
+    needs_review: true
+    review_reason: "Act 5 (2026) replaces affidavit with conditional ballot + 2-day cure from 2027-07-01."
+  MA:
+    code: "MA"
+    name: "Massachusetts"
+    bucket: "E"
+    bucket_name: "No ID"
+    lede: "Only first-time voters must show ID when they vote"
+    accepted_groups:
+      - heading: "Acceptable forms of ID include:"
+        items:
+          - "a current and valid photo identification"
+          - "a recent utility bill, bank statement, government check, paycheck, or other government document that shows your name and current address"
+    url: "https://www.sec.state.ma.us/divisions/elections/voting-information/identification-requirements.htm"
+  MD:
+    code: "MD"
+    name: "Maryland"
+    bucket: "E"
+    bucket_name: "No ID"
+    lede: "Only first-time voters must show ID when they vote"
+    accepted_groups:
+      - heading: "Acceptable forms of ID include:"
+        items:
+          - "a current and valid photo identification"
+          - "a recent utility bill, bank statement, government check, paycheck, or other government document that shows your name and current address"
+    url: "https://elections.maryland.gov/voting/election_day_questions.html"
+  ME:
+    code: "ME"
+    name: "Maine"
+    bucket: "E"
+    bucket_name: "No ID"
+    lede: "Only first-time voters must show ID when they vote"
+    accepted_groups:
+      - heading: "Acceptable forms of ID include:"
+        items:
+          - "a current and valid photo identification"
+          - "a recent utility bill, bank statement, government check, paycheck, or other government document that shows your name and current address"
+    url: "https://www.maine.gov/sos/elections-voting/your-right-to-vote-in-maine"
+    needs_review: true
+    review_reason: "2025 photo ID referendum (Q1) failed."
+  MI:
+    code: "MI"
+    name: "Michigan"
+    bucket: "B"
+    bucket_name: "Photo requested"
+    lede: "You must show a photo ID when you vote"
+    current: "Your ID must be current."
+    accepted_groups:
+      - heading: "Acceptable photo IDs include:"
+        items:
+          - "Michigan driver’s license or non-driver ID card"
+          - "Driver’s license from any state"
+          - "U.S. passport or passport card"
+          - "Military ID with a photo"
+          - "Tribal ID with a photo"
+          - "Current student ID with a photo from any school in the U.S"
+          - "Any photo ID issued by the state of Michigan, local government, or federal government"
+    url: "https://mvic.sos.state.mi.us/Home/VoteInPerson#id-required"
+    needs_review: true
+    review_reason: "Citizenship/photo-ID amendment did not make Nov 2026 ballot."
+  MN:
+    code: "MN"
+    name: "Minnesota"
+    bucket: "E"
+    bucket_name: "No ID"
+    lede: "Only first-time voters must show ID when they vote"
+    accepted_groups:
+      - heading: "Acceptable forms of ID include:"
+        items:
+          - "a current and valid photo identification"
+          - "a recent utility bill, bank statement, government check, paycheck, or other government document that shows your name and current address"
+    url: "https://www.sos.state.mn.us/elections-voting/election-day-voting/do-i-need-to-bring-id/"
+    needs_review: true
+    review_reason: "EDR proof of residence is registration, not voting ID."
+  MO:
+    code: "MO"
+    name: "Missouri"
+    bucket: "B"
+    bucket_name: "Photo requested"
+    lede: "You must show a government-issued photo ID when you vote"
+    current: "Your ID must be current, or expired after Nov 5, 2024."
+    accepted_groups:
+      - heading: "Acceptable photo IDs include:"
+        items:
+          - "Missouri driver's license or non-driver ID card. This ID must be current or have expired after Nov 5, 2024"
+          - "U.S. passport or passport card"
+          - "Any other photo ID card issued by the state of Missouri or the federal government. This ID must be current or have expired after Nov 5, 2024"
+    url: "https://www.sos.mo.gov/voterid"
+    needs_review: true
+    review_reason: "Often classed strict elsewhere; here B because a signature match counts the ballot with no return trip."
+  MS:
+    code: "MS"
+    name: "Mississippi"
+    bucket: "A"
+    bucket_name: "Strict photo"
+    lede: "You must show a government-issued photo ID when you vote"
+    current: "Government IDs may be expired up to 10 years; others must be current."
+    accepted_groups:
+      - heading: "Acceptable photo IDs include:"
+        items:
+          - "Mississippi driver's license or non-driver ID card"
+          - "Driver’s license from any state"
+          - "U.S. passport or passport card"
+          - "Mississippi firearms license"
+          - "Military ID with a photo"
+          - "Tribal ID with a photo"
+          - "Student ID with a photo from a Mississippi-accredited university, college or community/junior college"
+          - "Mississippi government employee ID card with a photo"
+          - "Federal employee ID card with a photo"
+          - "Any photo ID card issued by the state of Mississippi, the federal government, or another state"
+    url: "https://www.sos.ms.gov/voter-id"
+  MT:
+    code: "MT"
+    name: "Montana"
+    bucket: "B"
+    bucket_name: "Photo requested"
+    lede: "You must show a photo ID when you vote"
+    current: "Your ID must be current."
+    more_than_one_form: "Only if using a non-photo document (utility bill, bank statement): it must be paired with a photo ID showing your name"
+    accepted_groups:
+      - heading: "Acceptable photo IDs include:"
+        items:
+          - "Montana driver's license or non-driver ID card"
+          - "Montana concealed carry permit"
+          - "U.S. passport or passport card"
+          - "Military ID with a photo"
+          - "Tribal ID with a photo"
+          - "Student ID with a photo issued by a Montana univeristy or NAIA school"
+    accepted_notes:
+      - "Acceptable non-photo ID includes a recent utility bill, bank statement, government check, paycheck, or other government document that shows your name and current address."
+    url: "https://votemt.gov/voter-identification/"
+    needs_review: true
+    review_reason: "Upstream type disagrees SB 276 (2025): non-photo docs only alongside a photo ID; reasonable-impediment repealed. Challenge pending."
+  NC:
+    code: "NC"
+    name: "North Carolina"
+    bucket: "B"
+    bucket_name: "Photo requested"
+    lede: "You must show a photo ID when you vote"
+    current: "Your ID must be current, or expired up to 1 year; 65+ may use ID that was unexpired on their 65th birthday."
+    accepted_groups:
+      - heading: "Acceptable photo IDs include:"
+        items:
+          - "North Carolina driver’s license or non-driver ID"
+          - "Driver’s license or non-driver ID from another state, District of Columbia, or U.S. territory (only if voter registered in North Carolina within 90 days of the election)*"
+          - "U.S. passport or passport card"
+          - "Student ID issued by a [college or university approved by the State Board of Elections](https://www.ncsbe.gov/voting/voter-id/student-and-public-employee-ids-approved-voting)"
+          - "Military ID with a photo"
+          - "Tribal ID with a photo"
+          - "[North Carolina government employee ID card with a photo approved by the State Board of Elections](https://www.ncsbe.gov/voting/voter-id/student-and-public-employee-ids-approved-voting)"
+    mail: "If you vote by mail, you must enclose a copy of your ID."
+    url: "https://www.ncsbe.gov/Voter-ID"
+    needs_review: true
+    review_reason: "Upstream type disagrees Upstream lists as non-photo. NCSBE site says 5 business days (anticipated vetoed HB 958); statute says 3."
+  ND:
+    code: "ND"
+    name: "North Dakota"
+    bucket: "C"
+    bucket_name: "Strict ID, non-photo OK"
+    lede: "You must show ID when you vote"
+    current: "Your ID must be current; must show current name, ND address and date of birth."
+    more_than_one_form: "Only if the ID is missing current info: add a bank statement, utility bill, pay stub or government check"
+    accepted_groups:
+      - heading: "Acceptable IDs include:"
+        items:
+          - "Physical North Dakota driver’s license or non-driver ID"
+          - "Tribal ID or Tribal letter"
+          - "Long Term Care Certificate issued by a facility in North Dakota"
+    url: "https://www.sos.nd.gov/elections/voter/voting-north-dakota/forms-voter-id"
+  NE:
+    code: "NE"
+    name: "Nebraska"
+    bucket: "A"
+    bucket_name: "Strict photo"
+    lede: "You must show a photo ID when you vote"
+    current: "Your ID does not have to be current. Expired IDs accepted."
+    accepted_groups:
+      - heading: "Acceptable photo IDs include:"
+        items:
+          - "Nebraska driver's license or non-driver ID card"
+          - "U.S. passport or passport card"
+          - "Military ID with a photo"
+          - "Tribal ID with a photo"
+          - "Hospital, assisted-living facility, nursing home, or any other skilled care facility ID with a photo"
+          - "Student ID with a photo issued by a Nebraska public school district or postsecondary institution"
+          - "Any photo ID issued by the state of Nebraska or a local government in Nebraska"
+    url: "https://sos.nebraska.gov/voter-id"
+    needs_review: true
+    review_reason: "LB 1075 cuts cure to 3 days, but not until 2027-01-01."
+  NH:
+    code: "NH"
+    name: "New Hampshire"
+    bucket: "B"
+    bucket_name: "Photo requested"
+    lede: "You must show a photo ID when you vote"
+    current: "Your ID does not have to be current. May be expired up to 5 years (any age if 65+)."
+    accepted_groups:
+      - heading: "Acceptable photo IDs include:"
+        items:
+          - "New Hampshire driver's license or non-driver ID card"
+          - "Driver’s license issued by any state"
+          - "U.S. passport or passport card"
+          - "U.S. armed services ID card"
+    url: "https://www.sos.nh.gov/election-day-voting"
+    needs_review: true
+    review_reason: "HB 1569 affidavit repeal enjoined (1st Cir. declined stay 2026-09-04). HB 323 removed student IDs."
+  NJ:
+    code: "NJ"
+    name: "New Jersey"
+    bucket: "E"
+    bucket_name: "No ID"
+    lede: "Only first-time voters must show ID when they vote"
+    accepted_groups:
+      - heading: "Acceptable forms of ID include:"
+        items:
+          - "a current and valid photo identification"
+          - "a recent utility bill, bank statement, government check, paycheck, or other government document that shows your name and current address"
+    url: "https://nj.gov/state/elections/voter-registration.shtml"
+  NM:
+    code: "NM"
+    name: "New Mexico"
+    bucket: "E"
+    bucket_name: "No ID"
+    lede: "Only first-time voters must show ID when they vote"
+    accepted_groups:
+      - heading: "Acceptable forms of ID include:"
+        items:
+          - "a current and valid photo identification"
+          - "a recent utility bill, bank statement, government check, paycheck, or other government document that shows your name and current address"
+    url: "https://www.sos.state.nm.us/voting-and-elections/voting-faqs/voting/"
+  NV:
+    code: "NV"
+    name: "Nevada"
+    bucket: "E"
+    bucket_name: "No ID"
+    lede: "Only first-time voters must show ID when they vote"
+    accepted_groups:
+      - heading: "Acceptable forms of ID include:"
+        items:
+          - "a current and valid photo identification"
+          - "a recent utility bill, bank statement, government check, paycheck, or other government document that shows your name and current address"
+    url: "https://www.nvsos.gov/sos/sos-information/office-facts/faqs-all-division/elections"
+    needs_review: true
+    review_reason: "Question 7 second vote Nov 2026; implementation 2027+."
+  NY:
+    code: "NY"
+    name: "New York"
+    bucket: "E"
+    bucket_name: "No ID"
+    lede: "Only first-time voters must show ID when they vote"
+    accepted_groups:
+      - heading: "Acceptable forms of ID include:"
+        items:
+          - "a current and valid photo identification"
+          - "a recent utility bill, bank statement, government check, paycheck, or other government document that shows your name and current address"
+    url: "https://elections.ny.gov/election-security#identity-confirmation"
+  OH:
+    code: "OH"
+    name: "Ohio"
+    bucket: "A"
+    bucket_name: "Strict photo"
+    lede: "You must show a government-issued photo ID when you vote"
+    current: "Your ID must be current."
+    accepted_groups:
+      - heading: "Acceptable photo IDs include:"
+        items:
+          - "Ohio driver's license or non-driver ID card"
+          - "Interim ID form issued by the Ohio Bureau of Motor Vehicles"
+          - "U.S. passport or passport card"
+          - "Military ID with a photo"
+          - "Ohio National Guard ID card with a photo"
+          - "U.S. Department of Veterans Affairs ID card"
+    mail: "If you vote by mail and have neither an ID number nor a Social Security number to write on the envelope, you must enclose a copy of a photo ID."
+    url: "https://www.ohiosos.gov/elections/voters/id-requirements/"
+    needs_review: true
+    review_reason: "Issue 3 on Nov 2026 ballot would constitutionalize photo ID; no effect this election."
+  OK:
+    code: "OK"
+    name: "Oklahoma"
+    bucket: "D"
+    bucket_name: "ID requested, non-photo OK"
+    lede: "You must show ID when you vote"
+    current: "Your ID must be current, photo ID must expire after Election Day."
+    accepted_groups:
+      - heading: "Acceptable photo IDs include:"
+        items:
+          - "Oklahoma driver's license or non-driver ID card"
+          - "U.S. passport or passport card"
+          - "Tribal ID with a photo"
+          - "Military ID with a photo"
+    url: "https://oklahoma.gov/elections/voters/proof-of-identity.html"
+    needs_review: true
+    review_reason: "SQ 846 (passed 2026-08-25) constitutionalizes voter ID; no confirmed Nov 2026 effect."
+  OR:
+    code: "OR"
+    name: "Oregon"
+    bucket: "E"
+    bucket_name: "No ID"
+    lede: "Only first-time voters must show ID when they vote"
+    accepted_groups:
+      - heading: "Acceptable forms of ID include:"
+        items:
+          - "a current and valid photo identification"
+          - "a recent utility bill, bank statement, government check, paycheck, or other government document that shows your name and current address"
+    url: "https://sos.oregon.gov/elections/Pages/voteinor.aspx"
+  PA:
+    code: "PA"
+    name: "Pennsylvania"
+    bucket: "E"
+    bucket_name: "No ID"
+    lede: "You must show ID the first time you vote at a polling place"
+    accepted_groups:
+      - heading: "Acceptable forms of ID include:"
+        items:
+          - "a current and valid photo identification"
+          - "a recent utility bill, bank statement, government check, paycheck, or other government document that shows your name and current address. This requirement applies if you are voting in Pennsylvania for the first time or if you are voting at a new polling place"
+    url: "https://www.vote.pa.gov/Register-to-Vote/Pages/Voter-ID-for-First-Time-Voters.aspx"
+    needs_review: true
+    review_reason: "Any voter shows ID first time at a new polling place (photo or non-photo)."
+  RI:
+    code: "RI"
+    name: "Rhode Island"
+    bucket: "B"
+    bucket_name: "Photo requested"
+    lede: "You must show a photo ID when you vote"
+    current: "Your ID does not have to be current. May be expired up to 6 months."
+    accepted_groups:
+      - heading: "Accepted photo IDs include:"
+        items:
+          - "Rhode Island driver's license, permit, or non-driver ID card"
+          - "U.S. passport or passport card"
+          - "Military ID with a photo"
+          - "Tribal ID with a photo"
+          - "Any photo ID card issued by the state of Rhode Island or the federal government"
+          - "Government-issued medical card with a photo"
+          - "Student ID with a photo from any school in the U.S"
+    url: "https://vote.sos.ri.gov/Content/Pdfs/voter_id_information.pdf"
+  SC:
+    code: "SC"
+    name: "South Carolina"
+    bucket: "B"
+    bucket_name: "Photo requested"
+    lede: "You must show a government-issued photo ID when you vote"
+    current: "Your ID must be current."
+    accepted_groups:
+      - heading: "Acceptable photo IDs include:"
+        items:
+          - "South Carolina driver's license or non-driver ID card"
+          - "U.S. passport or passport card"
+          - "South Carolina concealed weapons permit"
+          - "U.S. Military ID with a photo"
+    url: "https://scvotes.gov/voters/photo-id-requirements/"
+    needs_review: true
+    review_reason: "Split: strict for voters with no voter card."
+  SD:
+    code: "SD"
+    name: "South Dakota"
+    bucket: "B"
+    bucket_name: "Photo requested"
+    lede: "You must show a photo ID when you vote"
+    current: "No expiry rule is specified; student IDs must be current."
+    accepted_groups:
+      - heading: "Acceptable photo IDs include:"
+        items:
+          - "South Dakota driver's license or non-driver ID card"
+          - "U.S. passport or passport card"
+          - "U.S. Armed Forces ID with a photo"
+          - "Tribal ID with a photo"
+          - "Any photo ID issued by the federal government"
+          - "Current student ID with a photo from South Dakota high schools and South Dakota-accredited institutions of higher education"
+    url: "https://sdsos.gov/elections-voting/voting/default.aspx"
+  TN:
+    code: "TN"
+    name: "Tennessee"
+    bucket: "A"
+    bucket_name: "Strict photo"
+    lede: "You must show a government-issued photo ID when you vote"
+    current: "Your ID does not have to be current. Expired IDs accepted."
+    accepted_groups:
+      - heading: "Acceptable photo IDs include:"
+        items:
+          - "Physical Tennessee driver's license or non-driver ID card"
+          - "U.S. passport or passport card"
+          - "Tennessee handgun carry permit with a photo"
+          - "Military ID with a photo"
+          - "Any photo ID issued by the state of Tennessee or federal government"
+    url: "https://sos.tn.gov/products/elections/what-id-required-when-voting"
+    needs_review: true
+    review_reason: "Out-of-state and college IDs not accepted."
+  TX:
+    code: "TX"
+    name: "Texas"
+    bucket: "B"
+    bucket_name: "Photo requested"
+    lede: "You must show a government-issued photo ID when you vote"
+    current: "Your ID does not have to be current. May be expired up to 4 years (any age if 70+)."
+    more_than_one_form: "Only if using the no-photo option: a supporting document plus a signed declaration"
+    accepted_groups:
+      - heading: "Acceptable photo IDs include:"
+        items:
+          - "Texas driver's license or non-driver ID card"
+          - "U.S. passport or passport card"
+          - "Military ID with a photo"
+          - "Texas Election ID certificate"
+          - "Texas Handgun License"
+          - "U.S. Citizenship Certificate"
+    url: "https://www.votetexas.gov/voting/need-id.html"
+    needs_review: true
+    review_reason: "Split: strict for voters with no document at all."
+  UT:
+    code: "UT"
+    name: "Utah"
+    bucket: "C"
+    bucket_name: "Strict ID, non-photo OK"
+    lede: "You must show ID when you vote"
+    more_than_one_form: "Only if non-photo: 2 documents that together prove name and address (utility bill, bank statement, Social Security card, vehicle registration, birth certificate, etc.)"
+    accepted_groups:
+      - heading: "Acceptable photo IDs include:"
+        items:
+          - "Utah driver's license or non-driver ID card"
+          - "U.S. passport or passport card"
+          - "Utah concealed carry permit"
+          - "Tribal ID. This ID does not require a photograph"
+          - "Military ID with a photo"
+          - "Any photo ID issued by the state of Utah or the federal government"
+      - heading: "Acceptable documents includes:"
+        items:
+          - "Check issued by the state of Utah or the federal government"
+          - "Current Utah vehicle registration"
+          - "Social Security card"
+          - "Certified U.S. birth certificate"
+          - "Utah hunting or fishing license"
+          - "Indian census card"
+          - "Bureau of Indian Affairs card"
+          - "Tribal treaty card"
+          - "Any ID issued by a local government in Utah"
+          - "Medicare or Medicaid card or Electronic Benefits Transfer card"
+          - "Employee ID"
+          - "Certified naturalization documents. This does not include a green card"
+          - "Student ID issued by a Utah college, university, technical school, or professional school"
+    url: "https://vote.utah.gov/voter-id-requirements/"
+  VA:
+    code: "VA"
+    name: "Virginia"
+    bucket: "D"
+    bucket_name: "ID requested, non-photo OK"
+    lede: "You must show ID when you vote"
+    current: "Your ID must be current, or expired up to 1 year (VA driver's license: any expiration); non-photo docs dated within 1 year."
+    accepted_groups:
+      - heading: "Acceptable photo IDs include:"
+        items:
+          - "Virginia driver's license. This ID can be current or expired, with no restrictions on expiration date"
+          - "Virginia non-driver ID card"
+          - "U.S. passport or passport card"
+          - "Tribal ID with a photo. This ID must be issued by one of the 11 tribes recognized by Virginia"
+          - "Military ID with a photo"
+          - "Employee ID with a photo"
+          - "Student ID with a photo issued by a Virginia public or private high school or any higher education institution in the U.S. This ID must be current or expired within 12 months"
+          - "Any photo ID issued by the state of Virginia, local government, or the federal government"
+    accepted_notes:
+      - "Acceptable non-photo ID includes a recent utility bill, bank statement, government check, paycheck, or other government document that shows your name and current address. These must be dated within one year."
+    mail: "If you are voting by mail for the first time, you may need to enclose a copy of an ID with your ballot."
+    url: "https://www.elections.virginia.gov/registration/voterid/index.html"
+  VT:
+    code: "VT"
+    name: "Vermont"
+    bucket: "E"
+    bucket_name: "No ID"
+    lede: "Only first-time voters must show ID when they vote"
+    accepted_groups:
+      - heading: "Acceptable forms of ID include:"
+        items:
+          - "a current and valid photo identification"
+          - "a recent utility bill, bank statement, government check, paycheck, or other government document that shows your name and current address"
+    url: "https://sos.vermont.gov/elections/voters/voter-faqs/#q3"
+  WA:
+    code: "WA"
+    name: "Washington"
+    bucket: "D"
+    bucket_name: "ID requested, non-photo OK"
+    lede: "You must show ID when you vote"
+    current: "Your ID must be current (if showing ID)."
+    accepted_groups:
+      - heading: "Acceptable photo IDs include:"
+        items:
+          - "Washington driver's license, permit, or non-driver ID card"
+          - "U.S. passport or passport card"
+          - "Tribal ID with a photo"
+          - "Student ID with a photo"
+    url: "https://www.sos.wa.gov/elections/register.aspx"
+    needs_review: true
+    review_reason: "Mostly vote-by-mail; in person = county voting center."
+  WI:
+    code: "WI"
+    name: "Wisconsin"
+    bucket: "A"
+    bucket_name: "Strict photo"
+    lede: "You must show a photo ID when you vote"
+    current: "License/passport/military: current or expired after Nov 5, 2024; tribal ID any; college ID must be current."
+    more_than_one_form: "Only for an expired student ID: also proof of current enrollment"
+    accepted_groups:
+      - heading: "Acceptable photo IDs include:"
+        items:
+          - "Wisconsin driver's license or non-driver ID card. This ID must be current or have expired after Nov 5, 2024"
+          - "U.S. passport or passport card. This ID must be current or have expired after Nov 5, 2024"
+          - "Military ID with a photo. This ID must be current or have expired after Nov 5, 2024"
+          - "Tribal ID with a photo. This ID can be used even if it expired before Nov 5, 2024"
+          - "Current Veterans Affairs Card"
+          - "U.S. Certificate of Naturalization issued within 2 years"
+          - "Current ID card receipt from the Wisconsin Department of Transportation (dated within 45 days)"
+          - "Current driving receipt issued by the Wisconsin Department of Transportation"
+          - "Current identification card receipt issued by the Wisconsin Department of Transportation"
+          - "Student ID with a photo from a Wisconsin accredited university or college. It must show your name, photo, signature, an issue date and an expiration date"
+    url: "https://bringit.wi.gov/do-i-have-right-photo-id"
+  WV:
+    code: "WV"
+    name: "West Virginia"
+    bucket: "B"
+    bucket_name: "Photo requested"
+    lede: "You must show a photo ID when you vote"
+    current: "Your ID must be current; 65+ may use ID that expired after their 65th birthday."
+    accepted_groups:
+      - heading: "Acceptable photo IDs include:"
+        items:
+          - "West Virginia driver's license or non-driver ID card"
+          - "Driver's license issued by another state"
+          - "U.S. passport or passport card"
+          - "Current West Virginia higher education or high school student ID with photo"
+          - "West Virginia government employee ID with photo"
+          - "Federal employee ID with photo"
+          - "U.S. Military ID with photo"
+          - "West Virginia voter registartion card with photo"
+    accepted_notes:
+      - "If you are a first-time voter, you must show a current photo ID; or recent utility bill, bank statement, government check, paycheck, or other official government document that shows your name and current address."
+    mail: "If you are voting by mail for the first time, you may need to enclose a copy of an ID with your ballot."
+    url: "https://sos.wv.gov/be-registered-and-ready"
+    needs_review: true
+    review_reason: "Upstream type disagrees HB 3016 (eff. 2025-07-11) made photo ID mandatory; utility bills etc. no longer count. Upstream still lists non-photo."
+  WY:
+    code: "WY"
+    name: "Wyoming"
+    bucket: "C"
+    bucket_name: "Strict ID, non-photo OK"
+    lede: "You must show ID when you vote"
+    current: "Passport, firearm permit, and Medicare/Medicaid cards must be current."
+    accepted_groups:
+      - heading: "Acceptable photo IDs include:"
+        items:
+          - "Wyoming driver's license or non-driver ID card"
+          - "Driver’s license from another state"
+          - "U.S. passport or passport card. This ID must be current"
+          - "Tribal ID with a photo"
+          - "Military ID with a photo"
+          - "Wyoming Concealed Firearm Permit. This ID must be current"
+          - "Student ID with a photo from the University of Wyoming, Wyoming Community College, or a Wyoming public school"
+      - heading: "Acceptable non-photo IDs include:"
+        items:
+          - "Medicare insurance card. This ID must be current"
+          - "Medicaid insurance card. This ID must be current"
+    url: "https://sos.wyo.gov/Elections/VoterID/"

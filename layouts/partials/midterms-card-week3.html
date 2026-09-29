@@ -1,0 +1,157 @@
+{{- /*
+  Week three's share card for one state: the vertical Instagram crop
+  (1080x1350) or the horizontal link-preview one (1200x630). Takes
+  (dict "crop" "vertical"|"horizontal" "state" STATE) where STATE is an entry
+  from data/midterms_id.yml, and returns the image resource.
+
+  Built like weeks one and two. The plate carries everything that doesn't
+  change by state — including this week's "VOTER ID REQUIREMENTS" heading on
+  the vertical crop, which is why nothing here draws it; laid over it:
+
+  - The state name, standing on the plate's diagonal with its letters tapering
+    up along it. The name layers are week two's: the two weeks place the name
+    identically, and every one of the 102 came out byte-for-byte the same, so
+    they are read from week2-names rather than a duplicate set being checked
+    in. See scripts/build-midterms-names2.py.
+  - Three paragraphs in DM Sans: the answer in bold, then the expiry rule and
+    the no-ID fallback in regular, stepping down in size until they fit.
+
+  The bold answer is set larger than the body, as the comps have it, so a row
+  carries its own scale and the line advance is taken from the row above it
+  rather than from one size for the whole block.
+
+  As on the page, the card never lists which documents a state accepts. It
+  gives the shape of the rule; the reader's own election office has the list.
+*/ -}}
+{{- /* Measured off each crop's designed California comp: the text column, the
+       line the first row's ink starts at, the line nothing may hang below,
+       the design's line pitch and sizes, how much extra a new paragraph
+       opens, and how much larger the bold answer sets than the body. */ -}}
+{{- $m := dict "x" 60.0 "indent" 0.85 "right" 1020.0 "inkTop" 819.0 "floor" 1300.0
+      "sizes" (slice 47 45 43 41 39 37 35 33 31 29) "pitch" 59.0
+      "blockGap" 0.55 "leadScale" 1.19 -}}
+{{- if eq .crop "horizontal" -}}
+  {{- $m = dict "x" 660.0 "indent" 0.85 "right" 1176.0 "inkTop" 231.0 "floor" 596.0
+        "sizes" (slice 32 31 30 29 28 27 26 25 24 23 22 21 20) "pitch" 39.0
+        "blockGap" 0.65 "leadScale" 1.16 -}}
+{{- end -}}
+{{- $plate := resources.Get (printf "images/midterms/share-%s-week3.png" .crop) -}}
+{{- $regular := resources.Get "fonts/DMSans-Regular.ttf" -}}
+{{- $bold := resources.Get "fonts/DMSans-Bold.ttf" -}}
+{{- $ink := "#000000" -}}
+{{- $filters := slice -}}
+{{- $s := .state -}}
+
+{{- /* State name: a card-sized layer, so it lands at 0, 0. A missing one fails
+       the build rather than shipping a card without a name. */ -}}
+{{- $namePath := printf "images/midterms/week2-names/%s/%s.png" .crop (lower $s.code) -}}
+{{- with resources.Get $namePath -}}
+  {{- $filters = $filters | append (images.Overlay . 0 0) -}}
+{{- else -}}
+  {{- errorf "midterms week 3 card: no name layer at assets/%s; run scripts/build-midterms-names2.py" $namePath -}}
+{{- end -}}
+
+{{- /* Two paragraphs, the same shape in every state: what the state asks
+       for, and where to go for the list of documents that satisfy it.
+
+       The card deliberately stops there. It carries no expiry rule and no
+       account of what happens to a voter who turns up with nothing: an
+       affidavit or a provisional ballot is far harder at the polls than it
+       reads on a card, so the card's job is to say "bring your ID" and hand
+       the detail to the page. */ -}}
+{{- $blocks := slice (dict "text" (printf "%s." $s.lede) "bold" true) -}}
+{{- with .week.card_note -}}
+  {{- $blocks = $blocks | append (dict "text" . "bold" false "bullet" true) -}}
+{{- end -}}
+
+{{- /* images.Text wraps any text that runs within 20px of the image's right
+       edge, drawing the overflow over the next row, so rows stop short of that
+       with a couple of pixels to spare. */ -}}
+{{- $right := math.Min $m.right (sub $plate.Width 22) -}}
+{{- $ratio := div $m.pitch (index $m.sizes 0) -}}
+{{- /* DM Sans, in ems: ascender and descender ink, and the line-box ascent
+       images.Text measures its y from. */ -}}
+{{- $ascInk := 0.71 -}}
+{{- $descInk := 0.20 -}}
+{{- $lineAscent := 0.992 -}}
+
+{{- /* Wrap the paragraphs word by word at the design size, and if they won't
+       fit, at each smaller size until they do. */ -}}
+{{- $layout := dict -}}
+{{- range $size := $m.sizes -}}
+  {{- $rows := slice -}}
+  {{- $first := true -}}
+  {{- range $b := $blocks -}}
+    {{- $scale := cond $b.bold $m.leadScale 1.0 -}}
+    {{- $rowSize := int (math.Round (mul $size $scale)) -}}
+    {{- $font := cond $b.bold "bold" "regular" -}}
+    {{- /* A bulleted block hangs: the dot sits on the left margin and every
+           row of the block, wrapped ones included, starts inside it. */ -}}
+    {{- $x0 := $m.x -}}
+    {{- if $b.bullet }}{{ $x0 = add $m.x (mul $m.indent $rowSize) }}{{ end -}}
+    {{- $maxWidth := sub $right $x0 -}}
+    {{- $line := "" -}}
+    {{- $firstRow := true -}}
+    {{- range $w := split $b.text " " -}}
+      {{- with $w -}}
+        {{- $try := cond (eq $line "") . (printf "%s %s" $line .) -}}
+        {{- $width := partial "midterms-text-width.html"
+              (dict "text" $try "font" $font "size" $rowSize) -}}
+        {{- if and (ne $line "") (gt $width $maxWidth) -}}
+          {{- $rows = $rows | append (dict "text" $line "size" $rowSize
+                "bold" $b.bold "x0" $x0 "dot" (and $firstRow $b.bullet)
+                "gap" (and $firstRow (not $first))) -}}
+          {{- $firstRow = false -}}
+          {{- $line = . -}}
+        {{- else -}}
+          {{- $line = $try -}}
+        {{- end -}}
+      {{- end -}}
+    {{- end -}}
+    {{- $rows = $rows | append (dict "text" $line "size" $rowSize
+          "bold" $b.bold "x0" $x0 "dot" (and $firstRow $b.bullet)
+          "gap" (and $firstRow (not $first))) -}}
+    {{- $first = false -}}
+  {{- end -}}
+
+  {{- /* A row advances by its own predecessor's size, so the step down out of
+         the bold answer is the bold line's, not the body's. */ -}}
+  {{- $firstBase := add $m.inkTop (mul $ascInk (index $rows 0).size) -}}
+  {{- $total := 0.0 -}}
+  {{- $prev := 0 -}}
+  {{- range $i, $row := $rows -}}
+    {{- if gt $i 0 -}}
+      {{- $advance := mul $ratio $prev -}}
+      {{- if $row.gap }}{{ $advance = add $advance (mul $size $m.blockGap) }}{{ end -}}
+      {{- $total = add $total $advance -}}
+    {{- end -}}
+    {{- $prev = $row.size -}}
+  {{- end -}}
+  {{- $last := (index $rows (sub (len $rows) 1)).size -}}
+  {{- $room := sub (sub $m.floor (mul $descInk $last)) $firstBase -}}
+  {{- if or (le $total $room) (eq $size (index $m.sizes (sub (len $m.sizes) 1))) -}}
+    {{- $layout = dict "rows" $rows "firstBase" $firstBase -}}
+    {{- break -}}
+  {{- end -}}
+{{- end -}}
+
+{{- $baseline := $layout.firstBase -}}
+{{- $prev := 0 -}}
+{{- range $i, $row := $layout.rows -}}
+  {{- if gt $i 0 -}}
+    {{- $advance := mul $ratio $prev -}}
+    {{- if $row.gap }}{{ $advance = add $advance (mul $row.size $m.blockGap) }}{{ end -}}
+    {{- $baseline = add $baseline $advance -}}
+  {{- end -}}
+  {{- $y := int (math.Round (sub $baseline (mul $lineAscent $row.size))) -}}
+  {{- if $row.dot -}}
+    {{- $filters = $filters | append (images.Text "\u2022" (dict
+          "x" (int $m.x) "y" $y "size" $row.size "color" $ink "font" $regular)) -}}
+  {{- end -}}
+  {{- $filters = $filters | append (images.Text $row.text (dict
+        "x" (int (math.Round $row.x0)) "y" $y "size" $row.size "color" $ink
+        "font" (cond $row.bold $bold $regular))) -}}
+  {{- $prev = $row.size -}}
+{{- end -}}
+
+{{- return $plate.Filter $filters -}}

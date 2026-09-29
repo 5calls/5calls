@@ -822,11 +822,15 @@ body {
   color: rgba($ink, 0.72);
 }
 
-// Week-two voting options, drawn by midterms-voting.html. Four groups at most
-// — early voting, same-day registration, asking for a mail ballot, sending it
-// back — each a lead line with the option named in bold, and the dates that
-// qualify it in a list underneath. A state without an option has no group, so
-// the card is as long as that state's choices and no longer.
+// A state's own rules as a run of labelled groups: a lead line with the thing
+// named in bold, and whatever qualifies it in a list underneath. A state the
+// question does not apply to has no group, so a card is as long as that
+// state's rules and no longer.
+//
+// Shared by the two weeks built this way — week two's voting options
+// (midterms-voting.html: early voting, same-day registration, asking for a
+// mail ballot, sending it back) and week three's ID rules (midterms-id.html:
+// what counts at the polls, expiry, the no-ID fallback, mail envelopes).
 .mt-vote {
   display: flex;
   flex-direction: column;

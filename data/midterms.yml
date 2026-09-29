@@ -4,7 +4,7 @@
 # Which week is live right now. Weeks before this are "done", weeks after are
 # "upcoming". Set this to 0 before the program starts: the page then renders
 # the week_zero block below instead of a weekly action, and nothing unlocks.
-current_week: 2
+current_week: 3
 
 nav:
   nudge: Get reminders
@@ -292,31 +292,88 @@ weeks:
 
   - number: 3
     short: ID check
-    title: Check your ID rules, recheck your registration
+    title: Check your ID requirements
     state_specific: true
     release: 2026-09-29T09:00:00-07:00
-    intro: >-
-      SAMPLE COPY — the ID and re-check week. Real text goes here: two sentences
-      on what changed and who it catches out, ending on the one thing to do.
-    headline: SAMPLE HEADER LINE FOR THIS WEEK
-    headline_date: Tue, Nov 3
-    message: >-
-      SAMPLE MESSAGE — placeholder standing in for this week's wording. It runs
-      about three short sentences and roughly this many words, so the card can
-      be judged at the size it will really be.
-    copy_cta: button1
-    rewrite_cta: button2
-    confirm: I did it — unlock my images
-    # FPO: placeholder copy, replace before this week ships.
+    # Like week two, this week sends nobody to a copy-and-paste message: the
+    # action is reading your own state's ID rules, drawn from
+    # data/midterms_id.yml. The button goes to that state's own election
+    # office, which is a different page in every state, so its href comes
+    # from the data rather than from here.
+    state_id: true
+    deck_cta: Learn more about my state's ID requirements
+    deck_note: >-
+      If you have any questions, you should contact your local election
+      commission for the most up-to-date information.
+    # The share panel's locked note names this week's action.
+    images:
+      locked_note: Confirm your ID requirements on the left to unlock the share images.
+      locked_note_stacked: Confirm your ID requirements above to unlock the share images.
+    intro:
+      - >-
+        There's no single set of rules here. Every state has different
+        requirements and some are more strict than others. **Most states require
+        some form of identification to vote, and others only require it for
+        first-time voters.** Voter ID laws are also subject to change, so even if
+        you think you know your state's rules, it's important to check!
+      - "**Things to know:**"
+      - - Does your state require a government-issued photo ID, photo ID, or non-photo ID? Or is ID only required for first-time voters?
+        - Does your ID need to be current or will they accept an expired ID?
+    # The share card's second line, under the bold requirement. The same in
+    # every state: the card names what is needed, the page lists what counts.
+    card_note: Learn more about accepted ID types at 5calls.org/midterms
+    # A last line under the "things to know" list. The link goes to the
+    # reader's own state's ID page -- the same one the card's button uses, and
+    # the state switcher moves both together -- so only the words are here.
+    intro_link:
+      text: >-
+        If you don’t have an acceptable ID, learn more about your backup
+        options
+      label: from your Secretary of State
+    confirm: I have the ID I need to vote
+    # More for the week, in a section below the action. Like week two's, this
+    # one has no share art of its own and no share key, so the panel beside it
+    # is not drawn and no /midterms/share/3/extra/ page is built. Adding a
+    # share block here is what turns both back on.
+    extra_credit:
+      title: Extra credit
+      toggle: I’m ready for more
+      locked_note: Confirm your ID requirements above to unlock
+      part:
+        title: Help a voter get the necessary ID
+        # Two asks, in order: get yourself an ID through VoteRiders, then pass
+        # the same offer on. The {cta: …} button sits between them, so the
+        # paragraph after it is what the sample message answers.
+        body:
+          - >-
+            Voter ID laws might not sound like an obstacle to voting, but many
+            Americans lack the identification required by their state. For
+            example, [18% of U.S. citizens over the age of 65, 16% of Latino
+            voters, 25% of Black voters, and 15% of low-income Americans](https://indivisible.org/resource/voter-id-101-right-vote-shouldnt-come-barriers/)
+            do not have an acceptable photo ID.
+          - >-
+            Do you need to get an ID before voting in this election?
+            [VoteRiders](https://voteriders.org/freehelp/) provides free
+            one-on-one help to individuals who need to secure an accepted form
+            of ID to vote.
+          - cta:
+              label: Request help from VoteRiders
+              url: https://voteriders.org/freehelp/
+          - Do you know someone who needs help getting an ID? Send them a quick text to help them get election-ready. It only takes a minute!
+        message:
+          label: Sample message
+          # Pasted into a chat as plain text, so no markdown and a bare URL.
+          text: "Hi [NAME], I just wanted to see if you need any help getting an ID! VoteRiders offers free one-on-one assistance to individuals who need to secure an accepted ID to vote. Here’s the link: https://voteriders.org/freehelp"
+          copy_cta: Copy message
     why:
-      heading: ID rules changed in a lot of places, and nobody sends a notice.
+      heading: Most states require some form of ID to vote.
       stats:
-        - value: Varies
-          text: by state — some ask for photo ID, some ask for nothing.
-        - value: Free
-          text: voter ID is available in every state that requires one.
-        - value: 2 min
-          text: to confirm what you'll be asked for at the table.
+        - value: 36 states
+          text: have laws [requesting or requiring voters](https://www.ncsl.org/elections-and-campaigns/voter-id) to show some form of ID at the polls.
+        - value: At least 9 states
+          text: have [enacted new stricter voter ID requirements](https://www.brennancenter.org/our-work/research-reports/state-state-guide-restrictive-changes-voter-id-mail-voting-and-ballot) since 2020.
+        - value: At least 6 states
+          text: have [voter ID measures on the ballot](https://voteriders.org/article/voters-across-the-country-will-decide-whether-to-enact-new-and-stricter-voter-id-laws-this-year/) in the 2026 election, the highest number ever.
 
   - number: 4
     short: Ballot

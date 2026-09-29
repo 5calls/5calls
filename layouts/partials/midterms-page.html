@@ -47,6 +47,13 @@
 {{- if and (not $prelaunch) $week.state_voting -}}
   {{- $voting = index site.Data.midterms_voting.states $d.state.abbr -}}
 {{- end -}}
+{{- /* Weeks flagged state_id render the reader's voter ID rules — what the
+       state asks for at the polls, whether it may be expired, and which
+       documents count — from data/midterms_id.yml instead. */ -}}
+{{- $idrules := false -}}
+{{- if and (not $prelaunch) $week.state_id -}}
+  {{- $idrules = index site.Data.midterms_id.states $d.state.abbr -}}
+{{- end -}}
 {{- /* On previews, flag detail fields the week has not been written with yet. */ -}}
 {{- $missing := slice -}}
 {{- $required := slice "intro" "message" "copy_cta" "rewrite_cta" "confirm" "why" -}}
@@ -54,6 +61,9 @@
 {{- /* The options card draws itself from the state's own data, so the week
        writes no card copy of its own. */ -}}
 {{- if $voting }}{{ $required = slice "intro" "confirm" "why" }}{{ end -}}
+{{- /* The ID card draws its detail from the state's own data, but the week
+       still writes the button's words. */ -}}
+{{- if $idrules }}{{ $required = slice "intro" "deck_cta" "confirm" "why" }}{{ end -}}
 {{- if and $preview (not $prelaunch) -}}
   {{- range $required -}}
     {{- if not (index $week .) }}{{ $missing = $missing | append . }}{{ end -}}
@@ -155,9 +165,15 @@
         {{- with $missing }}
           <em>Not written yet: {{ delimit . ", " }}</em>
         {{- end }}
-        {{- if $deck }}
-          <em data-state-review{{ if not $deck.needs_review }} hidden{{ end }}>
-            {{- if $deck.needs_review }}{{ $d.state.abbr }} deck flagged upstream: {{ $deck.review_reason }}{{ end -}}
+        {{- /* Whichever per-state file this week draws from carries its own
+               caveats: the registration deck's are upstream's, the ID data's
+               are the compiler's notes on a state whose rules moved or whose
+               bucket the snapshot gets wrong. Either way the reviewer wants
+               the one belonging to the card in front of them. */ -}}
+        {{- $flagged := or $deck $idrules }}
+        {{- if $flagged }}
+          <em data-state-review{{ if not $flagged.needs_review }} hidden{{ end }}>
+            {{- if $flagged.needs_review }}{{ $d.state.abbr }} deck flagged upstream: {{ $flagged.review_reason }}{{ end -}}
           </em>
         {{- end }}
         {{- /* Completion normally accrues a week at a time from the confirm
@@ -372,6 +388,17 @@
               <p class="mt-action__intro">{{ . | markdownify }}</p>
               {{- end }}
             {{- end }}
+            {{- /* A last line under the intro, for a week whose action sends
+                   the reader to their own state's page: the same URL the card's
+                   button uses, carrying the same data-deck hook so the state
+                   switcher moves both together. The words live in the week's
+                   copy; only the href comes from the state's data. */ -}}
+            {{- if $idrules }}
+              {{- with $week.intro_link }}
+              <p class="mt-action__intro">{{ .text }}
+                <a href="{{ $idrules.url }}" rel="noopener" data-deck="url">{{ .label }}</a>.</p>
+              {{- end }}
+            {{- end }}
 
             {{- if $voting }}
               {{- /* The reader's voting options, drawn by midterms-voting.html.
@@ -420,6 +447,31 @@
                 {{- with $week.calendar_note }}
                   <p class="mt-deck__foot">{{ . | markdownify }}</p>
                 {{- end }}
+                {{- with $week.deck_note }}
+                  <p class="mt-deck__foot">{{ . | markdownify }}</p>
+                {{- end }}
+              </div>
+            {{- else if $idrules }}
+              {{- /* The reader's ID rules, drawn by midterms-id.html. Same
+                     data-deck hooks again, so the state switcher swaps this
+                     card without knowing which kind it is looking at — and
+                     the button with it, since every state's rules live on a
+                     different page of a different election office. */ -}}
+              <div class="mt-message mt-deck">
+                <div class="mt-deck__top">
+                  <div class="mt-deck__lede" data-deck="lede">
+                    {{- partial "midterms-id.html" (dict "state" $idrules "part" "lede") | safeHTML -}}
+                  </div>
+                  <a class="mt-pill mt-pill--tag" href="#mt-state" title="Change your state"
+                     data-deck="tag" data-state-change>{{ upper $idrules.name }}</a>
+                </div>
+                <div class="mt-deck__body" data-deck="body">
+                  {{- partial "midterms-id.html" (dict "state" $idrules "part" "body") | safeHTML -}}
+                </div>
+                <div class="mt-message__actions">
+                  <a class="mt-pill mt-pill--solid" href="{{ $idrules.url }}" rel="noopener"
+                     data-deck="url">{{ $week.deck_cta }}</a>
+                </div>
                 {{- with $week.deck_note }}
                   <p class="mt-deck__foot">{{ . | markdownify }}</p>
                 {{- end }}
@@ -574,7 +626,11 @@
                   {{- range .body }}
                     {{- if reflect.IsMap . }}
                       {{- with .cta }}
-                    <div><a class="mt-pill mt-pill--solid" href="{{ .url }}">{{ .label }}</a></div>
+                    {{- /* A button off the site gets rel="noopener", like every
+                           other outbound link here; one pointing at our own
+                           /vote/ pages does not need it. */ -}}
+                    <div><a class="mt-pill mt-pill--solid" href="{{ .url }}"
+                       {{- if hasPrefix .url "http" }} rel="noopener"{{ end }}>{{ .label }}</a></div>
                       {{- end }}
                     {{- else }}
                     <p>{{ . | markdownify }}</p>
@@ -751,7 +807,21 @@
             "lede" (partial "midterms-voting.html" (dict "state" $v "part" "lede"))
             "body" (partial "midterms-voting.html" (dict "state" $v "part" "body"))) -}}
       {{- end -}}
-      {{- if $preview }}{{ $entry = merge $entry (dict "review" $s.review_reason) }}{{ end -}}
+      {{- /* The ID card. Its button goes to that state's own election office
+             rather than the registration site every other week uses, so the
+             entry's url is replaced along with the copy. */ -}}
+      {{- $reviewOf := $s -}}
+      {{- if $week.state_id -}}
+        {{- $i := index site.Data.midterms_id.states $code -}}
+        {{- $reviewOf = $i -}}
+        {{- $entry = merge $entry (dict
+            "url" $i.url
+            "lede" (partial "midterms-id.html" (dict "state" $i "part" "lede"))
+            "body" (partial "midterms-id.html" (dict "state" $i "part" "body"))) -}}
+      {{- end -}}
+      {{- /* The caveat that belongs to the card being swapped in, not to week
+             one's registration deck. */ -}}
+      {{- if $preview }}{{ $entry = merge $entry (dict "review" $reviewOf.review_reason) }}{{ end -}}
       {{- /* The share art for this week in this state. Drawing all 51 up front is
              what lets the switcher swap them with no round trip; the same
              resources back the /midterms/share/ cards, so they are drawn once. */ -}}
@@ -1270,8 +1340,14 @@
           if (body && s.body) body.innerHTML = s.body;
           var tag = document.querySelector("[data-deck='tag']");
           if (tag) tag.textContent = (s.name || "").toUpperCase();
-          var cta = document.querySelector("[data-deck='url']");
-          if (cta && s.url) cta.href = s.url;
+          // Plural: the ID week carries two of these -- the button under the
+          // card, and the link in the copy above it that offers the state's
+          // own page on backup options. Both go to the same place.
+          if (s.url) {
+            document.querySelectorAll("[data-deck='url']").forEach(function (a) {
+              a.href = s.url;
+            });
+          }
 
           // The calendar links hand over the reader's own state's deadlines.
           // One is written in the week's copy as markdown, which can't carry an

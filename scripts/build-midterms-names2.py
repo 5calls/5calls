@@ -9,6 +9,12 @@ one per entry in data/midterms_voting.yml. Each is a transparent layer the
 size of its card that layouts/partials/midterms-card-week2.html lays over the
 plate at 0, 0.
 
+Week three's plates place the name identically -- checked against the
+designer's comps, every one of the 102 layers came out byte-for-byte the same
+-- so midterms-card-week3.html reads these too rather than keeping a second
+copy of them. Changing the layout numbers below therefore moves week three's
+names as well; if the two weeks ever diverge, week three needs its own set.
+
 Week one's build-midterms-names.py does the same job for that week's plates.
 The treatment is the same one: the name stands on the plate's diagonal in
 Bebas Neue, stretched tall, bottoms flat and tops running up along the

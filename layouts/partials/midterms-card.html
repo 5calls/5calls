@@ -20,6 +20,10 @@
          registration deck, so it takes that state's entry instead. */ -}}
   {{- $v := index site.Data.midterms_voting.states .state.code -}}
   {{- $card = partial "midterms-card-week2.html" (dict "crop" .crop "state" $v) -}}
+{{- else if .week.state_id -}}
+  {{- /* Week three, from the voter ID data. */ -}}
+  {{- $i := index site.Data.midterms_id.states .state.code -}}
+  {{- $card = partial "midterms-card-week3.html" (dict "crop" .crop "state" $i "week" .week) -}}
 {{- else -}}
 {{- $plate := resources.Get (printf "images/midterms/share-%s-fpo.png" .crop) -}}
 {{- $font := resources.Get "fonts/BebasNeue-Regular.ttf" -}}
