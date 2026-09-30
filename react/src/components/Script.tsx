@@ -35,8 +35,12 @@ class Script extends React.Component<WithLocationProps, State> {
         title = 'Senator ';
         break;
       case 'StateLower':
+        if (Constants.STATES_WITH_DELEGATES.includes(contact.state)) title = 'Delegate ';
+        else if (Constants.STATES_WITH_ASSEMBLYMEMBERS.includes(contact.state)) title = 'Assemblymember ';
+        else title = 'Rep. ';
+        break;
       case 'StateUpper':
-        title = 'Legislator ';
+        title = 'Senator ';
         break;
       case 'Governor':
         title = 'Governor ';
