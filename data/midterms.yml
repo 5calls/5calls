@@ -4,7 +4,7 @@
 # Which week is live right now. Weeks before this are "done", weeks after are
 # "upcoming". Set this to 0 before the program starts: the page then renders
 # the week_zero block below instead of a weekly action, and nothing unlocks.
-current_week: 3
+current_week: 4
 
 nav:
   nudge: Get reminders
@@ -377,31 +377,49 @@ weeks:
 
   - number: 4
     short: Ballot
-    title: Find out what's actually on your ballot
+    title: Know your ballot
     state_specific: true
     release: 2026-10-06T09:00:00-07:00
-    intro: >-
-      Most people meet their ballot for the first time in the booth, then guess
-      on the down-ballot races. A sample ballot is published weeks ahead — read
-      yours now, while there's time to look anything up.
+    # One finished share image for every state, used as is. Only the vertical
+    # (Instagram) crop is in; the horizontal one is still the FPO plate until
+    # it arrives, then goes here as `horizontal:`.
+    card:
+      vertical: images/midterms/share-vertical-week4.png
+    intro:
+      - >-
+        Election Day is right around the corner, and if you're voting early or
+        by mail, it’s even sooner! It's time to decide who and what you're
+        voting for. (We’re not procrastinating this time!)
+      - >-
+        You probably know how you're voting at the top of the ticket, but we
+        want to help you get familiar with the issues and candidates all the way
+        down the ballot because state and local races have a huge impact on your
+        day-to-day life.
+      - >-
+        BallotReady allows you to explore what’s on your ballot, research
+        candidates, and make informed decisions so that you know exactly what to
+        do when it comes time to vote. Once you have your sample ballot
+        prepared, voting becomes an open book test. Easy breezy!
+      - >-
+        All you need to do is enter your address (the one used to register to
+        vote) and you’ll get a personalized ballot for your district that you
+        can fill out and save to reference later.
     headline: SAMPLE HEADER LINE FOR THIS WEEK
     headline_date: Tue, Nov 3
     message: >-
-      Heads up: your sample ballot is already out. Ours has races and measures
-      most people have never heard of — here's the California lookup. Worth five
-      minutes now instead of guessing in the booth.
+      No text yet
     copy_cta: button1
     rewrite_cta: button2
-    confirm: I read my ballot — unlock my images
+    confirm: I prepared my ballot - unlock my graphics!
     why:
-      heading: The races people skip are the ones closest to their daily life.
+      heading: Voting is important. Informing your vote is critical.
       stats:
-        - value: 1 in 5
-          text: voters leave down-ballot races blank on their ballot.
-        - value: Weeks
-          text: ahead of the election your sample ballot is already public.
-        - value: 5 min
-          text: is all any week asks of you. That is the whole design.
+        - value: Over 6,100
+          text: state legislative seats across 46 states [are up for election in 2026](https://organizations.ballotready.org/research/2026-state-legislatures), enough to swing partisan majorities in almost every chamber next year.
+        - value: Lower turnout
+          text: is frequently a result of a [lack of awareness of the candidates and issues](https://www.lwv.org/blog/local-candidates-must-fill-out-voter-guides-have-yours).
+        - value: Nearly 50%
+          text: of the members of Congress previously [served in state legislatures](https://www.ncsl.org/state-legislatures-news/details/flow-of-state-lawmakers-to-congress-remains-strong).
 
   - number: 5
     short: Plan
