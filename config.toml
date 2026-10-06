@@ -7,8 +7,6 @@ title = "5 Calls"
 [params]
   description = "Spend 5 minutes. Make 5 calls. Make your voice heard."
   voteamericaSubscriber = "5-calls-civic-action-pvqlhyxb"
-  # How BallotReady counts /vote/ballot/ traffic as ours. No spaces.
-  ballotreadyCampaign = "partner-5calls"
 [permalinks]
   done = "/issue/:contentbasename/done/"
   issue = "/issue/:contentbasename/"

@@ -10,9 +10,11 @@
     {{ with .Content }}<div class="vote-intro">{{ . }}</div>{{ end }}
 
     <ul class="vote-tools">
+      {{- /* A tool with a `link` lives on another site, so the entry goes
+             there instead of to a page of ours. */}}
       {{ range .Pages }}
         <li>
-          <a href="{{ .RelPermalink }}">
+          <a href="{{ .Params.link | default .RelPermalink }}"{{ with .Params.link }} rel="noopener"{{ end }}>
             <h2 class="vote-tool-title">{{ .Title }}</h2>
             {{ with .Params.subhead }}<p class="vote-tool-desc">{{ . }}</p>{{ end }}
           </a>
