@@ -4,7 +4,7 @@
 # Which week is live right now. Weeks before this are "done", weeks after are
 # "upcoming". Set this to 0 before the program starts: the page then renders
 # the week_zero block below instead of a weekly action, and nothing unlocks.
-current_week: 4
+current_week: 5
 
 nav:
   nudge: Get reminders
@@ -482,15 +482,103 @@ weeks:
     intro: >-
       SAMPLE COPY — the plan week. Real text goes here: two sentences on why a
       named day and time beats good intentions, ending on the one thing to do.
-    headline: SAMPLE HEADER LINE FOR THIS WEEK
-    headline_date: Tue, Nov 3
-    message: >-
-      SAMPLE MESSAGE — placeholder standing in for this week's wording. It runs
-      about three short sentences and roughly this many words, so the card can
-      be judged at the size it will really be.
-    copy_cta: button1
-    rewrite_cta: button2
-    confirm: I did it — unlock my images
+    # The action is a fill-in-the-blanks plan, drawn by midterms-plan.html
+    # instead of a message card. Nothing is sent anywhere: the answers stay in
+    # this browser and can be copied out as plain text. Each step's `text` is a
+    # sentence with {name} slots; `fields` says what fills each slot:
+    #   when    a date and am/pm. `rule` says which days the picker offers,
+    #           from the reader's state: vote, fill or return (see
+    #           midterms-plan-rules.html)
+    #   text    free text, with a placeholder
+    #   choice  one of `options`. With a `rule`, options are {key, label} and
+    #           the reader's state decides which keys are offered, and may
+    #           put a line under the sentence (see midterms-plan-rules.html)
+    # A step's `warn` shows its note under the sentence while the slot holds
+    # that value; its `state_warn` names a warning from the reader's state,
+    # shown whenever the state has one.
+    plan:
+      question: How I am voting
+      ways:
+        - key: person
+          label: In person
+        - key: mail
+          label: By mail
+      prompt: Pick one to start your plan.
+      copy_cta: Copy my plan
+      copied: Copied
+      # Under a date blank, from the state's own voting data: see
+      # midterms-plan-rules.html. {state} and {date} are filled in.
+      notes:
+        county: Your county sets early voting dates and hours, so check yours before you pick a day.
+        no_early: "{state} has no in-person early voting, so Election Day is the day."
+        mail_by: "We recommend returning your ballot by {date}, a week before the deadline."
+        # Under the return date when it's handed in rather than mailed. There's
+        # no transit time, so these give the deadline and nothing else.
+        # {deadline} is the day, with a time where the state sets one.
+        drop_box: "Drop boxes in {state} take ballots until {deadline}."
+        in_person: "{state} takes ballots handed in until {deadline}."
+        in_person_id: "Bring a photo ID: {state} asks for one when you hand in a ballot."
+        # In place of the prompt in a state that only votes by mail.
+        mail_only: "{state} votes by mail, so your plan is about getting your ballot back."
+        # Under a mailed return date once one is picked: in the last week before
+        # the deadline, or earlier. {date} is the week-early date for the state.
+        return_late: "That's close to the deadline. We recommend returning your ballot by {date} so it has time to arrive."
+        return_early: Good job! That's before the deadline, with time to spare.
+      calendar:
+        unavailable: "Greyed-out days aren't open to voters in {state}."
+        late: Shaded days are the last week before the deadline. We recommend returning your ballot a week early.
+        late_label: last week before the deadline
+        election_day: Election Day
+        previous: Previous month
+        next: Next month
+      steps:
+        person:
+          - text: "I'll go vote on {when}"
+            fields:
+              when: { type: when, rule: vote, placeholder: pick a day }
+          - text: "My polling place is {where}"
+            fields:
+              where: { type: text, placeholder: address or place name }
+          - text: "I'll get there {how}"
+            fields:
+              how: { type: choice, options: [on foot, by car, by bike, by bus] }
+          - text: "I'm going with {who}"
+            fields:
+              who: { type: text, placeholder: "a friend, my family, just me" }
+          # A state that asks every voter for ID drops "none"; the line under
+          # the sentence is the state's week-three summary.
+          - text: "About ID: {id}"
+            fields:
+              id:
+                type: choice
+                rule: id
+                options:
+                  - { key: have, label: "I need one, and I have it" }
+                  - { key: getting, label: "I need one, and I'm still getting it" }
+                  - { key: none, label: "I don't need one" }
+        mail:
+          - text: "I'll fill out my ballot on {when}"
+            fields:
+              when: { type: when, rule: fill, placeholder: pick a day }
+          # The way back comes first: it decides which days the date offers.
+          - text: "I'll return it {how} on {when}"
+            fields:
+              how:
+                type: choice
+                rule: return_how
+                options:
+                  - { key: mail, label: by mail }
+                  - { key: dropbox, label: at a drop box }
+                  - { key: office, label: in person }
+              when: { type: when, rule: return, placeholder: pick a day }
+          - text: "I signed and dated my ballot and envelope: {signed}"
+            fields:
+              signed: { type: choice, options: ["Yes", "No"] }
+            warn:
+              value: "No"
+              text: An unsigned ballot can be rejected. Sign and date it before you return it.
+            state_warn: envelope
+    confirm: I made my voting plan - unlock my achievement graphics!
     # FPO: placeholder copy, replace before this week ships.
     why:
       heading: People who pick a day and a time are the ones who show up.

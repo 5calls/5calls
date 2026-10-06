@@ -65,6 +65,8 @@
 {{- /* The ID card draws its detail from the state's own data, but the week
        still writes the button's words. */ -}}
 {{- if $idrules }}{{ $required = slice "intro" "deck_cta" "confirm" "why" }}{{ end -}}
+{{- /* The plan is a form drawn from the week's own `plan` block. */ -}}
+{{- if and (not $prelaunch) $week.plan }}{{ $required = slice "intro" "plan" "confirm" "why" }}{{ end -}}
 {{- if and $preview (not $prelaunch) -}}
   {{- range $required -}}
     {{- if not (index $week .) }}{{ $missing = $missing | append . }}{{ end -}}
@@ -401,7 +403,9 @@
               {{- end }}
             {{- end }}
 
-            {{- if $voting }}
+            {{- if $week.plan }}
+              {{- partial "midterms-plan.html" $week.plan }}
+            {{- else if $voting }}
               {{- /* The reader's voting options, drawn by midterms-voting.html.
                      Uses the same data-deck hooks as the registration card, so
                      the state switcher swaps this one too without knowing which
@@ -826,6 +830,11 @@
       {{- with $week.state_note -}}
         {{- $entry = merge $entry (dict "note" (partial "midterms-state-note.html" (dict "note" . "code" $code "name" $s.name))) -}}
       {{- end -}}
+      {{- /* Which days the voting plan's date picker offers in this state. */ -}}
+      {{- with $week.plan -}}
+        {{- $v := index site.Data.midterms_voting.states $code -}}
+        {{- $entry = merge $entry (dict "plan" (partial "midterms-plan-rules.html" (dict "state" $v "notes" .notes))) -}}
+      {{- end -}}
       {{- /* The ID card. Its button goes to that state's own election office
              rather than the registration site every other week uses, so the
              entry's url is replaced along with the copy. */ -}}
@@ -1064,6 +1073,436 @@
               });
             });
           });
+        }
+
+        // ── Week five's voting plan ──────────────────────────────────────
+        // The blanks are plain form controls, except the dates: those open a
+        // small calendar that only offers the days the reader's state allows
+        // (rules come from the state payload, built from the week-two data).
+        // This also shows the branch the reader picked, keeps their answers in
+        // this browser, and copies the finished sentences as text. Nothing
+        // leaves the page.
+        var planRefresh = null;
+        var plan = document.querySelector("[data-plan]");
+        if (plan) {
+          var PLAN_KEY = "mt-plan";
+          var ELECTION = "2026-11-03";
+          var MONTHS = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+          var planWay = plan.querySelectorAll("[data-plan-way]");
+          var planCopy = plan.querySelector("[data-plan-copy]");
+          var planPrompt = plan.querySelector("[data-plan-prompt]");
+          var planPromptText = planPrompt.textContent;
+
+          function isoOf(d) {
+            return d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0");
+          }
+          function dateOf(iso) {
+            return new Date(iso + "T12:00:00");
+          }
+          function prettyDate(iso) {
+            return dateOf(iso).toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric" });
+          }
+          function planState() {
+            return states[currentState()] || null;
+          }
+          // A return date follows the way back picked beside it: a drop box or
+          // the county office can have different days from the mail.
+          function planRules(field) {
+            var s = planState();
+            if (!s || !s.plan) return null;
+            var rule = field.dataset.rule;
+            if (rule === "return") {
+              var how = planChoice(field, "return_how");
+              if (how && s.plan["return_" + how]) return s.plan["return_" + how];
+            }
+            return s.plan[rule];
+          }
+          function planChoice(field, rule) {
+            var on = field.closest("[data-plan-steps]").querySelector('[data-choice-rule="' + rule + '"] input:checked');
+            return on ? on.value : "";
+          }
+          // The earliest day a field may take: today, or for a return date, the
+          // day the ballot was filled out.
+          function planMin(field) {
+            var min = isoOf(new Date());
+            if (field.dataset.rule === "return") {
+              var fill = field.closest("[data-plan-steps]").querySelector("[data-rule=fill] [data-date-value]");
+              if (fill && fill.value > min) min = fill.value;
+            }
+            return min;
+          }
+          function dayAllowed(field, iso) {
+            var min = planMin(field);
+            if (iso < min || iso > ELECTION) return false;
+            var rules = planRules(field);
+            if (!rules) return true;
+            return rules.ranges.some(function (r) {
+              return iso >= (r.from || min) && iso <= r.to;
+            });
+          }
+          function planLastDay(field) {
+            var rules = planRules(field);
+            var last = ELECTION;
+            if (rules) {
+              last = rules.ranges.reduce(function (m, r) {
+                return r.to > m ? r.to : m;
+              }, "");
+            }
+            return last || ELECTION;
+          }
+
+          function whenValue(field) {
+            return field.querySelector("[data-date-value]").value;
+          }
+          function setWhen(field, iso) {
+            field.querySelector("[data-date-value]").value = iso;
+            var trigger = field.querySelector("[data-date-trigger]");
+            trigger.textContent = iso ? prettyDate(iso) : trigger.dataset.placeholder;
+            trigger.classList.toggle("is-set", !!iso);
+          }
+
+          // ── The calendar ─────────────────────────────────────────────
+          var openCal = null;
+          function closeCal(restoreFocus) {
+            if (!openCal) return;
+            var field = openCal;
+            openCal = null;
+            var cal = field.querySelector("[data-cal]");
+            cal.hidden = true;
+            cal.textContent = "";
+            var trigger = field.querySelector("[data-date-trigger]");
+            trigger.setAttribute("aria-expanded", "false");
+            if (restoreFocus) trigger.focus();
+          }
+          function button(cls, label, text) {
+            var b = document.createElement("button");
+            b.type = "button";
+            b.className = cls;
+            if (label) b.setAttribute("aria-label", label);
+            b.textContent = text;
+            return b;
+          }
+          function drawCal(field, year, month) {
+            var cal = field.querySelector("[data-cal]");
+            cal.textContent = "";
+            var min = planMin(field);
+            var first = new Date(year, month, 1);
+            var lastDay = planLastDay(field);
+            var minMonth = dateOf(min).getFullYear() * 12 + dateOf(min).getMonth();
+            var maxMonth = dateOf(lastDay).getFullYear() * 12 + dateOf(lastDay).getMonth();
+            var here = year * 12 + month;
+
+            var head = document.createElement("div");
+            head.className = "mt-cal__head";
+            var prev = button("mt-cal__nav", plan.dataset.calPrev, "‹");
+            var next = button("mt-cal__nav", plan.dataset.calNext, "›");
+            prev.disabled = here <= minMonth;
+            next.disabled = here >= maxMonth;
+            prev.addEventListener("click", function () {
+              drawCal(field, month === 0 ? year - 1 : year, month === 0 ? 11 : month - 1);
+              cal.querySelector(".mt-cal__nav:not(:disabled)") && cal.querySelector(".mt-cal__nav:not(:disabled)").focus();
+            });
+            next.addEventListener("click", function () {
+              drawCal(field, month === 11 ? year + 1 : year, month === 11 ? 0 : month + 1);
+              var navs = cal.querySelectorAll(".mt-cal__nav:not(:disabled)");
+              if (navs.length) navs[navs.length - 1].focus();
+            });
+            var title = document.createElement("div");
+            title.className = "mt-cal__title";
+            title.setAttribute("aria-live", "polite");
+            title.textContent = MONTHS[month] + " " + year;
+            head.append(prev, title, next);
+            cal.append(head);
+
+            var grid = document.createElement("div");
+            grid.className = "mt-cal__grid";
+            grid.setAttribute("role", "group");
+            grid.setAttribute("aria-label", MONTHS[month] + " " + year);
+            ["S", "M", "T", "W", "T", "F", "S"].forEach(function (d) {
+              var h = document.createElement("div");
+              h.className = "mt-cal__dow";
+              h.setAttribute("aria-hidden", "true");
+              h.textContent = d;
+              grid.append(h);
+            });
+            for (var i = 0; i < first.getDay(); i++) grid.append(document.createElement("span"));
+            var picked = whenValue(field);
+            var rules = planRules(field);
+            var anyLate = false;
+            var days = new Date(year, month + 1, 0).getDate();
+            for (var day = 1; day <= days; day++) {
+              var iso = isoOf(new Date(year, month, day));
+              var b = button("mt-cal__day", prettyDate(iso), String(day));
+              b.dataset.iso = iso;
+              b.disabled = !dayAllowed(field, iso);
+              // The last week before the deadline is shaded, and says so to a
+              // screen reader too rather than leaning on colour alone.
+              if (rules && rules.late_from && iso >= rules.late_from && !b.disabled) {
+                b.classList.add("is-late");
+                b.setAttribute("aria-label", prettyDate(iso) + ", " + plan.dataset.calLateLabel);
+                anyLate = true;
+              }
+              if (iso === ELECTION) {
+                b.classList.add("is-election");
+                b.title = plan.dataset.calElection;
+              }
+              if (iso === picked) {
+                b.classList.add("is-picked");
+                b.setAttribute("aria-pressed", "true");
+              }
+              b.addEventListener("click", function (e) {
+                setWhen(field, e.currentTarget.dataset.iso);
+                closeCal(true);
+                field.dispatchEvent(new Event("change", { bubbles: true }));
+              });
+              grid.append(b);
+            }
+            cal.append(grid);
+
+            var foot = document.createElement("div");
+            foot.className = "mt-cal__foot";
+            var s = planState();
+            foot.textContent = (plan.dataset.calUnavailable || "").replace("{state}", s ? s.name : "your state");
+            cal.append(foot);
+            if (anyLate) {
+              var late = document.createElement("div");
+              late.className = "mt-cal__foot mt-cal__foot--late";
+              late.textContent = plan.dataset.calLate;
+              cal.append(late);
+            }
+            if (rules && rules.note && !anyLate) {
+              var note = document.createElement("div");
+              note.className = "mt-cal__foot";
+              note.textContent = rules.note;
+              cal.append(note);
+            }
+          }
+          function showCal(field) {
+            closeCal(false);
+            openCal = field;
+            var min = dateOf(planMin(field));
+            var start = whenValue(field) ? dateOf(whenValue(field)) : min;
+            if (!whenValue(field)) {
+              // Open on the first month that has a day to pick.
+              for (var t = new Date(min); isoOf(t) <= ELECTION; t.setDate(t.getDate() + 1)) {
+                if (dayAllowed(field, isoOf(t))) {
+                  start = new Date(t);
+                  break;
+                }
+              }
+            }
+            drawCal(field, start.getFullYear(), start.getMonth());
+            field.querySelector("[data-cal]").hidden = false;
+            field.querySelector("[data-date-trigger]").setAttribute("aria-expanded", "true");
+            var target = field.querySelector(".mt-cal__day.is-picked:not(:disabled)") || field.querySelector(".mt-cal__day:not(:disabled)");
+            if (target) target.focus();
+          }
+          plan.querySelectorAll("[data-when]").forEach(function (field) {
+            field.querySelector("[data-date-trigger]").addEventListener("click", function () {
+              if (openCal === field) closeCal(true);
+              else showCal(field);
+            });
+            field.addEventListener("keydown", function (e) {
+              if (e.key === "Escape" && openCal === field) {
+                e.stopPropagation();
+                closeCal(true);
+                return;
+              }
+              var day = e.target.closest && e.target.closest(".mt-cal__day");
+              var step = { ArrowLeft: -1, ArrowRight: 1, ArrowUp: -7, ArrowDown: 7 }[e.key];
+              if (!day || !step) return;
+              e.preventDefault();
+              var n = dateOf(day.dataset.iso);
+              n.setDate(n.getDate() + step);
+              var to = field.querySelector('[data-iso="' + isoOf(n) + '"]');
+              if (to && !to.disabled) to.focus();
+            });
+          });
+          // The path is read from the event rather than asking contains() about
+          // its target: the month arrows redraw the calendar, so by the time
+          // this runs the button that was clicked is no longer in the page.
+          document.addEventListener("click", function (e) {
+            if (openCal && e.composedPath().indexOf(openCal) === -1) closeCal(false);
+          });
+
+          // ── Keeping answers valid and saved ──────────────────────────
+          // The reader's state decides which ways and options are on offer.
+          // An answer it doesn't offer is cleared, and where it offers only
+          // one, that one is picked.
+          function planLimit() {
+            var s = planState();
+            var p = s && s.plan;
+            function limit(label, allowed) {
+              var off = !!allowed && allowed.indexOf(label.dataset.choice) === -1;
+              label.hidden = off;
+              if (off) label.querySelector("input").checked = false;
+            }
+            planWay.forEach(function (r) {
+              limit(r.closest("[data-choice]"), p && p.ways);
+            });
+            if (p && p.ways.length === 1) {
+              plan.querySelector('[data-plan-way][value="' + p.ways[0] + '"]').checked = true;
+            }
+            plan.querySelectorAll("[data-choice-rule]").forEach(function (group) {
+              var allowed = p && p.choices[group.dataset.choiceRule];
+              group.querySelectorAll("[data-choice]").forEach(function (label) {
+                limit(label, allowed);
+              });
+              if (allowed && allowed.length === 1) {
+                group.querySelector('[data-choice="' + allowed[0] + '"] input').checked = true;
+              }
+            });
+            plan.querySelectorAll("[data-plan-state-warn]").forEach(function (warn) {
+              var text = (p && p.warn[warn.dataset.planStateWarn]) || "";
+              warn.textContent = text;
+              warn.hidden = !text;
+            });
+          }
+          // The line under a sentence: for a date, what the state's rules mean
+          // for it; for a ruled choice, the state's own line about it.
+          function planHint(step) {
+            var field = step.querySelector("[data-when]");
+            if (!field) {
+              var s = planState();
+              var group = step.querySelector("[data-choice-rule]");
+              return { text: (s && s.plan && group && s.plan.hints[group.dataset.choiceRule]) || "", kind: "" };
+            }
+            var iso = whenValue(field);
+            var rules = planRules(field);
+            // Once a mailed return date is picked the hint says how it sits
+            // against the deadline: a warning inside the last week, praise
+            // before it. Handing a ballot in has no late week.
+            if (iso && rules && rules.late_from) {
+              var kind = iso >= rules.late_from ? "late" : "early";
+              return { text: (kind === "late" ? plan.dataset.returnLate : plan.dataset.returnEarly).replace("{date}", rules.by || ""), kind: kind };
+            }
+            return { text: rules && rules.note ? rules.note : "", kind: "" };
+          }
+          // A state change can strand a date it no longer offers, and a return
+          // date can no longer come before the day it is filled out, or fall
+          // outside the days its way back allows.
+          planRefresh = function () {
+            planLimit();
+            plan.querySelectorAll("[data-when]").forEach(function (field) {
+              var iso = whenValue(field);
+              if (iso && !dayAllowed(field, iso)) setWhen(field, "");
+            });
+            plan.querySelectorAll("[data-plan-hint]").forEach(function (hint) {
+              var h = planHint(hint.closest(".mt-plan__step"));
+              hint.textContent = h.text;
+              hint.classList.toggle("is-warn", h.kind === "late");
+              hint.classList.toggle("is-good", h.kind === "early");
+              hint.hidden = !h.text;
+            });
+            planRender();
+          };
+
+          function planWayValue() {
+            var on = plan.querySelector("[data-plan-way]:checked");
+            return on ? on.value : "";
+          }
+          function planFieldValue(el) {
+            if (el.hasAttribute("data-when")) {
+              var iso = whenValue(el);
+              var ampm = el.querySelector("select").value;
+              if (!iso) return "";
+              var text = prettyDate(iso);
+              return ampm ? text + " " + ampm : text;
+            }
+            if (el.matches("input")) return el.value.trim();
+            var picked = el.querySelector("input:checked");
+            return picked ? picked.dataset.label || picked.value : "";
+          }
+          function planSave() {
+            var saved = { way: planWayValue(), fields: {} };
+            plan.querySelectorAll("[data-plan-field]").forEach(function (el) {
+              if (el.hasAttribute("data-when")) {
+                saved.fields[el.dataset.planField] = [whenValue(el), el.querySelector("select").value];
+              } else {
+                saved.fields[el.dataset.planField] = planFieldValue(el);
+              }
+            });
+            try {
+              localStorage.setItem(PLAN_KEY, JSON.stringify(saved));
+            } catch (e) {}
+          }
+          function planRender() {
+            var way = planWayValue();
+            plan.querySelectorAll("[data-plan-steps]").forEach(function (list) {
+              list.hidden = list.dataset.planSteps !== way;
+            });
+            // A state with one way to vote swaps the prompt for a line saying
+            // so, and keeps it showing.
+            var s = planState();
+            var only = s && s.plan && s.plan.ways.length === 1 ? plan.dataset.mailOnly.replace("{state}", s.name) : "";
+            planPrompt.textContent = only || planPromptText;
+            planPrompt.hidden = !!way && !only;
+            planCopy.disabled = !way;
+            plan.querySelectorAll("[data-plan-warn]").forEach(function (warn) {
+              var step = warn.closest(".mt-plan__step");
+              var picked = step.querySelector("input[type=radio]:checked");
+              warn.hidden = !(picked && picked.value === warn.dataset.planWarn);
+            });
+          }
+          function planText() {
+            var lines = [];
+            plan.querySelectorAll("[data-plan-steps]:not([hidden]) [data-plan-sentence]").forEach(function (p) {
+              var out = "";
+              p.childNodes.forEach(function (node) {
+                if (node.nodeType === 3) {
+                  out += node.textContent;
+                } else if (node.dataset && node.dataset.planField) {
+                  out += planFieldValue(node) || "____";
+                }
+              });
+              lines.push(out.replace(/\s+/g, " ").replace(/\s+([.,])/g, "$1").trim());
+            });
+            return lines.join("\n");
+          }
+
+          try {
+            var stored = JSON.parse(localStorage.getItem(PLAN_KEY));
+            if (stored) {
+              planWay.forEach(function (r) {
+                r.checked = r.value === stored.way;
+              });
+              plan.querySelectorAll("[data-plan-field]").forEach(function (el) {
+                var v = stored.fields && stored.fields[el.dataset.planField];
+                if (v == null) return;
+                if (el.hasAttribute("data-when")) {
+                  setWhen(el, v[0] || "");
+                  el.querySelector("select").value = v[1] || "";
+                } else if (el.matches("input")) {
+                  el.value = v;
+                } else {
+                  el.querySelectorAll("input").forEach(function (r) {
+                    r.checked = r.value === v;
+                  });
+                }
+              });
+            }
+          } catch (e) {}
+          plan.addEventListener("input", function () {
+            planSave();
+            planRefresh();
+          });
+          plan.addEventListener("change", function () {
+            planRefresh();
+            planSave();
+          });
+          if (navigator.clipboard) {
+            var planLabel = planCopy.textContent;
+            planCopy.addEventListener("click", function () {
+              navigator.clipboard.writeText(planText()).then(function () {
+                planCopy.textContent = planCopy.dataset.copied;
+                setTimeout(function () {
+                  planCopy.textContent = planLabel;
+                }, 2000);
+              });
+            });
+          } else {
+            planCopy.hidden = true;
+          }
         }
 
         var confirmBox = document.querySelector("[data-confirm]");
@@ -1422,6 +1861,7 @@
             if (next) img.src = next;
           });
           applyShareState(code);
+          if (planRefresh) planRefresh();
 
           var review = document.querySelector("[data-state-review]");
           if (review) {
@@ -1492,6 +1932,7 @@
         renderPreviewDone();
         loadCounts();
         if (modal && select) applyShareState(select.value);
+        if (planRefresh) planRefresh();
 
         // The calendar button ships as a plain .ics, the one thing every device
         // handles. A desktop can do better: webcal:// hands the file to

@@ -1,0 +1,47 @@
+# Hand-maintained: what week five's voting plan needs about getting a mail
+# ballot back that data/midterms_voting.yml (generated) doesn't carry in a
+# shape a template can use. Read by layouts/partials/midterms-plan-rules.html.
+#
+# Source: VoteAmerica state-data-full.tsv (id_laws_ballot_return,
+# ballot_return_locations), read 2026-10-04. Which ways a state takes a ballot
+# back and its deadlines still come from midterms_voting.yml; this file only
+# adds exceptions to them.
+
+# Every voter gets a ballot in the mail and there are no polling places, so
+# the plan only offers the mail branch.
+mail_only: [OR]
+
+# Drop boxes whose days differ from the in-person return deadline, which is
+# what a drop box otherwise gets. Dates are written the way the voting data
+# writes them; an absent `from` means today.
+drop_box:
+  # Only inside early voting sites, while early voting is open.
+  GA: { from: "Tue, Oct 13", to: "Fri, Oct 30" }
+  # Open through Election Day, a day past the in-person deadline.
+  CT: { to: "Tue, Nov 3", time: "8PM" }
+
+# Handing a ballot in yourself means showing photo ID.
+in_person_id: [OK, SC, TX]
+
+# What a ballot needs besides the voter's signature, shown under the plan's
+# "I signed" step. States with nothing here only ask for a signature.
+envelope:
+  AK: "Alaska also needs a notary to sign your envelope (or a witness 18 or older if no notary is available), plus an ID number, your date of birth, or the last 4 digits of your Social Security number."
+  AL: "Alabama also needs your envelope notarized, or signed by two witnesses 18 or older."
+  AR: "Arkansas also needs a copy of your photo ID in the envelope."
+  CO: "If this is your first time voting in Colorado, you may need to put a copy of your ID in the envelope."
+  DC: "If this is your first time voting in DC, put a copy of a photo ID or a recent document with your name and address in the envelope."
+  GA: "Georgia also needs your driver's license number, state ID number, or the last 4 digits of your Social Security number on the envelope."
+  LA: "Louisiana also needs a witness to watch you sign and sign the envelope too."
+  MN: "Minnesota also needs a witness (a registered Minnesota voter or a notary) to sign, plus your driver's license, state ID, or passport number, or the last 4 digits of your Social Security number."
+  MO: "Missouri also needs your envelope notarized, unless you're voting absentee because of a disability or illness."
+  MS: "Mississippi also needs your envelope notarized, unless you have a disability, in which case a witness 18 or older can sign."
+  NC: "North Carolina also needs a notary or two witnesses 18 or older to watch you sign, plus a copy of your photo ID in the envelope."
+  NM: "New Mexico also needs the last 4 digits of your Social Security number on the envelope."
+  OH: "Ohio also needs your driver's license number or the last 4 digits of your Social Security number on the envelope. With neither, put a copy of your photo ID in it."
+  OK: "Oklahoma also needs your envelope notarized, or signed by two witnesses if you're physically incapacitated."
+  SC: "South Carolina also needs a witness 18 or older to watch you sign and sign the envelope too."
+  TX: "Texas also needs your driver's license, state ID, or election ID certificate number, or the last 4 digits of your Social Security number, on the envelope."
+  VA: "Virginia also needs the last 4 digits of your Social Security number and your year of birth on the envelope."
+  WI: "Wisconsin also needs a witness, a U.S. citizen 18 or older, to watch you sign and sign the certificate too."
+  WV: "If this is your first time voting in West Virginia, put a copy of a photo ID or a recent document with your name and address in the envelope."

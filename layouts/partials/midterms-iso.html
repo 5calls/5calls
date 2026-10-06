@@ -1,0 +1,12 @@
+{{- /*
+  "Mon, Oct 19" -> "2026-10-19". The voting data carries dates the way a card
+  prints them, with no year, and all of them are this November's election.
+  Months are spelled the /midterms way ("Sept", "March", "June"), which is
+  how scripts/build-midterms-voting.py writes them; an unknown one fails the
+  build rather than producing a date the picker can't compare.
+*/ -}}
+{{- $mon := dict "Jan" 1 "Feb" 2 "March" 3 "April" 4 "May" 5 "June" 6 "July" 7 "Aug" 8 "Sept" 9 "Oct" 10 "Nov" 11 "Dec" 12 -}}
+{{- $p := split (replace . "," "") " " -}}
+{{- $m := index $mon (index $p 1) -}}
+{{- if not $m }}{{ errorf "midterms-iso: unknown month in %q" . }}{{ end -}}
+{{- return printf "2026-%02d-%02d" $m (int (index $p 2)) -}}

@@ -1648,3 +1648,331 @@ body {
   // still about 195px wide, which is most of a phone. Scale it with the
   // viewport so the mark gives up width at the same rate the screen does.
 }
+
+// Week five's voting plan: sentences with real form controls in the blanks.
+// Sits inside .mt-message, so the card chrome is the other weeks' own.
+.mt-plan {
+  gap: 20px;
+}
+
+.mt-plan__way {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+
+  legend {
+    float: left;
+    width: 100%;
+    margin-bottom: 10px;
+    padding: 0;
+  }
+}
+
+.mt-plan__chips,
+.mt-plan__choices {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  vertical-align: middle;
+}
+
+// A choice is a radio with its own label as the pill. The radio is hidden but
+// stays focusable, so the keyboard ring is drawn on the pill beside it.
+.mt-chip {
+  position: relative;
+  cursor: pointer;
+
+  input {
+    position: absolute;
+    opacity: 0;
+    inset: 0;
+    margin: 0;
+    cursor: pointer;
+  }
+
+  span {
+    display: inline-block;
+    padding: 10px 20px;
+    border: 1.5px solid rgba($ink, 0.55);
+    border-radius: 999px;
+    background: #fff;
+    font-size: 17px;
+    font-weight: 600;
+    line-height: 1.2;
+    color: $ink;
+    transition: background 0.12s, color 0.12s, border-color 0.12s;
+  }
+
+  &:hover span {
+    border-color: $blue;
+  }
+
+  input:checked + span {
+    border-color: $blue;
+    background: $blue;
+    color: #fff;
+  }
+
+  input:focus-visible + span {
+    outline: 3px solid $blue;
+    outline-offset: 3px;
+  }
+
+  &--small span {
+    padding: 4px 14px;
+    font-size: 16px;
+  }
+}
+
+.mt-plan__prompt {
+  margin: 0;
+  font-size: 17px;
+  color: rgba($ink, 0.7);
+}
+
+.mt-plan__steps {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+
+  &[hidden] {
+    display: none;
+  }
+}
+
+.mt-plan__sentence {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 600;
+  line-height: 2.1;
+  color: $ink-solid;
+}
+
+// A blank: an underlined strip of tinted paper rather than a boxed input, so
+// the sentence still reads as a sentence.
+.mt-plan__input {
+  max-width: 100%;
+  padding: 2px 8px;
+  border: 0;
+  border-bottom: 2px solid $orange;
+  border-radius: 4px 4px 0 0;
+  background: rgba($orange, 0.1);
+  font: inherit;
+  font-size: 20px;
+  color: $ink-solid;
+
+  &::placeholder {
+    color: rgba($ink, 0.5);
+    font-weight: 400;
+  }
+
+  &:focus-visible {
+    outline: 3px solid $blue;
+    outline-offset: 2px;
+  }
+
+  &--text {
+    width: 17em;
+  }
+}
+
+.mt-plan__when {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.mt-plan__warn {
+  margin: 0;
+  padding: 10px 14px;
+  border-left: 4px solid $orange;
+  background: rgba($orange, 0.1);
+  font-size: 16px;
+  line-height: 1.45;
+  color: $ink-solid;
+
+  &[hidden] {
+    display: none;
+  }
+}
+
+// The plan's date blank is a button that opens the calendar, so it keeps the
+// blank's look and reads as unfilled until a day is picked.
+.mt-plan__date {
+  cursor: pointer;
+  text-align: left;
+  color: rgba($ink, 0.5);
+  font-weight: 400;
+
+  &.is-set {
+    color: $ink-solid;
+    font-weight: 600;
+  }
+}
+
+.mt-plan__when {
+  position: relative;
+}
+
+// Under a sentence that asks for a date: what the state's own rules mean for it.
+.mt-plan__hint {
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.45;
+  color: rgba($ink, 0.75);
+
+  // Picked inside the last week before the deadline: the same orange-barred
+  // warning the yes/no answers use. Picked before it: the same bar in blue.
+  &.is-warn,
+  &.is-good {
+    padding: 10px 14px;
+    border-left: 4px solid $orange;
+    background: rgba($orange, 0.1);
+    font-size: 16px;
+    color: $ink-solid;
+  }
+
+  &.is-good {
+    border-left-color: $blue;
+    background: rgba($blue, 0.08);
+  }
+
+  &[hidden] {
+    display: none;
+  }
+}
+
+// The calendar. Drawn by the script into the blank's own span, so it opens
+// right under the date it is for.
+.mt-cal {
+  position: absolute;
+  z-index: 5;
+  top: calc(100% + 6px);
+  left: 0;
+  width: 320px;
+  max-width: calc(100vw - 2 * #{$gutter});
+  padding: 14px;
+  border: 1px solid rgba($ink, 0.25);
+  border-radius: 10px;
+  background: #fff;
+  box-shadow: 0 12px 32px rgba($ink-solid, 0.18);
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1.2;
+
+  &[hidden] {
+    display: none;
+  }
+}
+
+.mt-cal__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.mt-cal__title {
+  font-weight: 700;
+  color: $ink-solid;
+}
+
+.mt-cal__nav {
+  width: 36px;
+  height: 36px;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  font-size: 22px;
+  line-height: 1;
+
+  &:hover:not(:disabled) {
+    background: rgba($blue, 0.12);
+  }
+
+  &:disabled {
+    opacity: 0.25;
+    cursor: default;
+  }
+}
+
+.mt-cal__grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 2px;
+}
+
+.mt-cal__dow {
+  padding: 4px 0;
+  text-align: center;
+  font-size: 13px;
+  color: rgba($ink, 0.6);
+}
+
+.mt-cal__day {
+  aspect-ratio: 1;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  font-size: 16px;
+  font-weight: 600;
+  color: $ink-solid;
+
+  &:hover:not(:disabled) {
+    background: rgba($blue, 0.14);
+  }
+
+  // The last week before the deadline.
+  &.is-late:not(:disabled):not(.is-picked) {
+    background: rgba($orange, 0.3);
+    color: $orange-dark;
+
+    &:hover {
+      background: rgba($orange, 0.5);
+    }
+  }
+
+  &:disabled {
+    color: rgba($ink, 0.28);
+    font-weight: 400;
+    cursor: default;
+  }
+
+  &.is-election:not(.is-picked) {
+    box-shadow: inset 0 0 0 2px $blue;
+  }
+
+  &.is-picked {
+    background: $blue;
+    color: #fff;
+  }
+
+  &:focus-visible {
+    outline: 3px solid $blue;
+    outline-offset: 1px;
+  }
+}
+
+.mt-cal__foot--late::before {
+  content: "";
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  margin-right: 6px;
+  border-radius: 50%;
+  background: rgba($orange, 0.5);
+}
+
+.mt-cal__foot {
+  margin-top: 10px;
+  font-size: 13px;
+  line-height: 1.4;
+  color: rgba($ink, 0.7);
+}

@@ -1,0 +1,130 @@
+{{- /*
+  What the voting plan offers, for one state.
+
+  Takes (dict "state" VOTING_ENTRY "notes" PLAN.notes) and returns a dict.
+  First, one entry per kind of date the plan asks for:
+
+    vote            the day you go: the early voting window, and Election Day
+    fill            the day you fill out a mail ballot
+    return          the day you send it back, before you've said how
+    return_mail     ... by mail
+    return_dropbox  ... at a drop box
+    return_office   ... in person
+
+  Each is {ranges: [{from, to}, ...], note}, and return_mail adds late_from,
+  the first day of the last week before the deadline, and by, the week-early
+  date we recommend. A range is two ISO dates, and an empty `from` means
+  "today", which only the reader's browser knows; the picker clips every range
+  to today as well. Election Day is the fixed last day, and the one day a state
+  with no early voting offers.
+
+  Then what the rest of the form needs from the state:
+
+    ways     which of the plan's ways (person, mail) the state has
+    choices  for a choice blank with a `rule`, the option keys the state allows
+    hints    for a choice blank with a `rule`, the line shown under it
+    warn     for a step with a `state_warn`, the warning shown under it
+
+  Dates come from data/midterms_voting.yml, so a state's picker follows the
+  same dates its week-two card prints, with the exceptions in
+  data/midterms_return.yml. ID needs come from week three's
+  data/midterms_id.yml.
+*/ -}}
+{{- $s := .state -}}
+{{- $notes := .notes -}}
+{{- $extra := site.Data.midterms_return -}}
+{{- $idData := index site.Data.midterms_id.states $s.code -}}
+{{- $election := "2026-11-03" -}}
+
+{{- $vote := slice -}}
+{{- $voteNote := "" -}}
+{{- if $s.early_voting -}}
+  {{- if $s.ev_varies -}}
+    {{- $end := "2026-11-02" -}}
+    {{- with $s.ev_end }}{{ $end = partial "midterms-iso.html" . }}{{ end -}}
+    {{- $vote = $vote | append (slice (dict "from" "" "to" $end)) -}}
+    {{- $voteNote = $notes.county -}}
+  {{- else if and $s.ev_start $s.ev_end -}}
+    {{- $vote = $vote | append (slice (dict "from" (partial "midterms-iso.html" $s.ev_start) "to" (partial "midterms-iso.html" $s.ev_end))) -}}
+  {{- end -}}
+{{- else -}}
+  {{- $voteNote = replace $notes.no_early "{state}" $s.name -}}
+{{- end -}}
+{{- $vote = $vote | append (slice (dict "from" $election "to" $election)) -}}
+
+{{- /* By mail: until the mail deadline. We ask people to return a ballot a
+       week early, so the picker shades the last seven days ending on it.
+       return_mail_by is that same week-early date; late_from is the day
+       after. */ -}}
+{{- $mailLast := partial "midterms-iso.html" $s.return_mail -}}
+{{- $mailDeadline := time.AsTime (printf "%sT12:00:00Z" $mailLast) -}}
+{{- $mailNote := "" -}}
+{{- with $s.return_mail_by }}{{ $mailNote = replace $notes.mail_by "{date}" . }}{{ end -}}
+{{- $returnMail := dict
+      "ranges" (slice (dict "from" "" "to" $mailLast))
+      "note" $mailNote
+      "late_from" ($mailDeadline.AddDate 0 0 -6 | time.Format "2006-01-02")
+      "by" $s.return_mail_by -}}
+{{- $ways := slice "mail" -}}
+{{- $returns := dict "mail" $returnMail -}}
+{{- $last := $mailLast -}}
+
+{{- /* In person: until the in-person deadline, in states that take a ballot
+       by hand at all. Handing it in has no transit time, so there's no late
+       week, just the deadline. */ -}}
+{{- with $s.return_in_person -}}
+  {{- $to := partial "midterms-iso.html" . -}}
+  {{- $deadline := . -}}
+  {{- with $s.return_in_person_time }}{{ $deadline = printf "%s at %s" $deadline . }}{{ end -}}
+  {{- $note := replace (replace $notes.in_person "{state}" $s.name) "{deadline}" $deadline -}}
+  {{- if in $extra.in_person_id $s.code }}{{ $note = printf "%s %s" $note (replace $notes.in_person_id "{state}" $s.name) }}{{ end -}}
+  {{- $returns = merge $returns (dict "office" (dict "ranges" (slice (dict "from" "" "to" $to)) "note" $note)) -}}
+  {{- $ways = $ways | append "office" -}}
+  {{- if gt $to $last }}{{ $last = $to }}{{ end -}}
+{{- end -}}
+
+{{- /* At a drop box: wherever the state lists one, on the in-person days
+       unless midterms_return.yml says otherwise. */ -}}
+{{- if in (lower (string $s.return_methods)) "drop box" -}}
+  {{- $o := index $extra.drop_box $s.code | default dict -}}
+  {{- $date := $s.return_mail -}}
+  {{- $time := "" -}}
+  {{- with $s.return_in_person }}{{ $date = . }}{{ $time = $s.return_in_person_time | default "" }}{{ end -}}
+  {{- with $o.to }}{{ $date = . }}{{ $time = $o.time | default "" }}{{ end -}}
+  {{- $from := "" -}}
+  {{- with $o.from }}{{ $from = partial "midterms-iso.html" . }}{{ end -}}
+  {{- $to := partial "midterms-iso.html" $date -}}
+  {{- $deadline := $date -}}
+  {{- with $time }}{{ $deadline = printf "%s at %s" $deadline . }}{{ end -}}
+  {{- $note := replace (replace $notes.drop_box "{state}" $s.name) "{deadline}" $deadline -}}
+  {{- $returns = merge $returns (dict "dropbox" (dict "ranges" (slice (dict "from" $from "to" $to)) "note" $note)) -}}
+  {{- $ways = $ways | append "dropbox" -}}
+  {{- if gt $to $last }}{{ $last = $to }}{{ end -}}
+{{- end -}}
+
+{{- /* Before a way back is picked, any day one of them allows. */ -}}
+{{- $window := slice (dict "from" "" "to" $last) -}}
+
+{{- /* ID at the polls. Bucket E states only ask first-time voters, so
+       "I don't need one" stays on offer there and nowhere else. The keys are
+       the ID blank's option keys in data/midterms.yml. */ -}}
+{{- $id := slice "have" "getting" -}}
+{{- $idHint := "" -}}
+{{- with $idData -}}
+  {{- if eq .bucket "E" }}{{ $id = $id | append "none" }}{{ end -}}
+  {{- $idHint = printf "%s." .lede -}}
+{{- end -}}
+
+{{- $planWays := cond (in $extra.mail_only $s.code) (slice "mail") (slice "person" "mail") -}}
+
+{{- return dict
+      "vote" (dict "ranges" $vote "note" $voteNote)
+      "fill" (dict "ranges" $window "note" "")
+      "return" (dict "ranges" $window "note" "")
+      "return_mail" $returnMail
+      "return_office" (index $returns "office")
+      "return_dropbox" (index $returns "dropbox")
+      "ways" $planWays
+      "choices" (dict "return_how" $ways "id" $id)
+      "hints" (dict "id" $idHint)
+      "warn" (dict "envelope" (index $extra.envelope $s.code | default "")) -}}
