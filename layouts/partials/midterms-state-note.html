@@ -1,0 +1,24 @@
+{{- /*
+  A week's line about one state, from its `state_note` block in
+  data/midterms.yml. Takes (dict "note" WEEK.state_note "code" "AL" "name"
+  "Alabama") and returns {text, until}: until is the ISO date after which the
+  line no longer applies, empty when it has none. A state the block doesn't
+  list gets empty text.
+*/ -}}
+{{- $text := "" -}}
+{{- $until := "" -}}
+{{- with .note -}}
+  {{- $v := index .states $.code -}}
+  {{- if eq $v "soon" -}}
+    {{- $text = replace .soon "{state}" $.name -}}
+  {{- else if $v -}}
+    {{- $text = replace (replace .dated "{state}" $.name) "{date}" $v -}}
+    {{- /* "Tue, Oct 6" -> "2026-10-06". The notes all fall in this election's
+           October and November. */ -}}
+    {{- $p := split (replace $v "," "") " " -}}
+    {{- $m := index (dict "Oct" 10 "Nov" 11) (index $p 1) -}}
+    {{- if not $m }}{{ errorf "midterms-state-note: expected an Oct or Nov date, got %q" $v }}{{ end -}}
+    {{- $until = printf "2026-%02d-%02d" $m (int (index $p 2)) -}}
+  {{- end -}}
+{{- end -}}
+{{- return dict "text" $text "until" $until -}}

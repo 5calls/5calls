@@ -380,23 +380,24 @@ weeks:
     title: Know your ballot
     state_specific: true
     release: 2026-10-06T09:00:00-07:00
-    # One finished share image for every state, used as is. Only the vertical
-    # (Instagram) crop is in; the horizontal one is still the FPO plate until
-    # it arrives, then goes here as `horizontal:`.
+    # One finished share image per crop for every state, used as is.
     card:
       vertical: images/midterms/share-vertical-week4.png
+      horizontal: images/midterms/share-horizontal-week4.png
     intro:
       - >-
         Election Day is right around the corner, and if you're voting early or
-        by mail, it’s even sooner! It's time to decide who and what you're
-        voting for. (We’re not procrastinating this time!)
+        by mail, it’s even sooner! It's time to **decide who and what you're
+        voting for**. We’re not procrastinating this time! By the way, if your
+        state offers early voting we strongly suggest you vote early if
+        possible.
       - >-
         You probably know how you're voting at the top of the ticket, but we
-        want to help you get familiar with the issues and candidates all the way
-        down the ballot because state and local races have a huge impact on your
+        want to help you **get familiar with the issues and candidates all the way
+        down the ballot** because state and local races have a huge impact on your
         day-to-day life.
       - >-
-        BallotReady allows you to explore what’s on your ballot, research
+        [BallotReady](https://www.ballotready.org/) allows you to **explore what’s on your ballot**, research
         candidates, and make informed decisions so that you know exactly what to
         do when it comes time to vote. Once you have your sample ballot
         prepared, voting becomes an open book test. Easy breezy!
@@ -404,13 +405,65 @@ weeks:
         All you need to do is enter your address (the one used to register to
         vote) and you’ll get a personalized ballot for your district that you
         can fill out and save to reference later.
-    headline: SAMPLE HEADER LINE FOR THIS WEEK
-    headline_date: Tue, Nov 3
+    headline: REVIEW YOUR BALLOT
     message: >-
-      No text yet
-    copy_cta: button1
-    rewrite_cta: button2
-    confirm: I prepared my ballot - unlock my graphics!
+      Go to BallotReady to review what’s on your ballot.
+    # BallotReady is still loading some states' ballots. A state listed here
+    # gets a line under the message, swapped with the state picker: `dated`
+    # for a state with a date, `soon` for one marked soon. A dated line stops
+    # showing once its day has passed. Dates are written the way the voting
+    # data writes them.
+    state_note:
+      dated: "BallotReady expects {state}’s ballot information to be ready on {date}."
+      soon: "BallotReady expects {state}’s ballot information to be ready shortly."
+      states:
+        AL: Tue, Oct 6
+        AK: Thu, Oct 8
+        AR: Fri, Oct 9
+        CT: Fri, Oct 9
+        DE: Fri, Oct 9
+        IN: Wed, Oct 7
+        MI: Wed, Oct 7
+        MN: Tue, Oct 6
+        MS: Fri, Oct 9
+        NE: Mon, Oct 12
+        NH: Fri, Oct 9
+        OK: Fri, Oct 9
+        RI: Mon, Oct 12
+        VT: Tue, Oct 6
+        IA: soon
+        MA: soon
+        NY: soon
+        TN: soon
+        TX: soon
+    # One button out to BallotReady in place of copy and rewrite.
+    link_cta:
+      label: See what’s on my ballot
+      url: https://www.ballotready.org/
+    confirm: I know my ballot - unlock my graphics!
+    # More for the week, in a section below the action. Like weeks two and
+    # three, no share art of its own and no share key, so no share panel and
+    # no /midterms/share/4/extra/ page.
+    extra_credit:
+      title: Extra credit
+      toggle: I’m ready for more
+      locked_note: Confirm your ballot prep above to unlock
+      part:
+        title: Help friends with their ballot prep
+        body:
+          - >-
+            Plenty of voters fill in the top of the ticket and leave the rest
+            blank. In the 2022 midterms, [roughly 1 in 10 voters](https://stateswin.org/research/down-ballot-roll-off-patterns-in-2022/)
+            in battleground-state districts voted for governor or Senate but
+            skipped their state legislative race entirely. Those down-ballot
+            races decide who runs your schools, courts, and statehouse, and a
+            sample ballot makes it easy to vote all the way down.
+          - Do you know someone who could use a little help with their research?
+        message:
+          label: Sample message
+          # Pasted into a chat as plain text, so no markdown and a bare URL.
+          text: "Hi [NAME]! I just reviewed everything on my ballot using 5 Minute Midterms including the local races I knew very little about. If you need help prepping your ballot before you vote you should check it out too! Here's the link: https://5calls.org/midterms"
+          copy_cta: Copy message
     why:
       heading: Voting is important. Informing your vote is critical.
       stats:

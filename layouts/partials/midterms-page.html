@@ -58,6 +58,7 @@
 {{- $missing := slice -}}
 {{- $required := slice "intro" "message" "copy_cta" "rewrite_cta" "confirm" "why" -}}
 {{- if $deck }}{{ $required = slice "intro" "deck_cta" "confirm" "why" }}{{ end -}}
+{{- if $week.link_cta }}{{ $required = slice "intro" "message" "link_cta" "confirm" "why" }}{{ end -}}
 {{- /* The options card draws itself from the state's own data, so the week
        writes no card copy of its own. */ -}}
 {{- if $voting }}{{ $required = slice "intro" "confirm" "why" }}{{ end -}}
@@ -523,10 +524,24 @@
                   </div>
                 {{- end }}
                 <p class="mt-message__text" data-message>{{ $week.message }}</p>
+                {{- /* The reader's state's line, if the week has one for it.
+                       Drawn for the default state and swapped by the state
+                       picker; the script hides a dated line once its day has
+                       passed. */ -}}
+                {{- with $week.state_note }}
+                  {{- $n := partial "midterms-state-note.html" (dict "note" . "code" $d.state.abbr "name" $d.state.name) }}
+                  <p class="mt-message__text" data-state-note data-until="{{ $n.until }}"{{ if not $n.text }} hidden{{ end }}>{{ $n.text }}</p>
+                {{- end }}
                 <div class="mt-message__actions">
-                  <button type="button" class="mt-pill mt-pill--solid" data-copy>{{ $week.copy_cta }}</button>
-                  <!-- FPO: rewrite tool is not built yet. -->
-                  <span class="mt-pill mt-pill--blue">{{ $week.rewrite_cta }}</span>
+                  {{- /* A week whose action happens on another site links
+                         there instead of offering the message to copy. */ -}}
+                  {{- with $week.link_cta }}
+                    <a class="mt-pill mt-pill--solid" href="{{ .url }}" rel="noopener">{{ .label }}</a>
+                  {{- else }}
+                    <button type="button" class="mt-pill mt-pill--solid" data-copy>{{ $week.copy_cta }}</button>
+                    <!-- FPO: rewrite tool is not built yet. -->
+                    <span class="mt-pill mt-pill--blue">{{ $week.rewrite_cta }}</span>
+                  {{- end }}
                 </div>
               </div>
             {{- end }}
@@ -806,6 +821,10 @@
         {{- $entry = merge $entry (dict
             "lede" (partial "midterms-voting.html" (dict "state" $v "part" "lede"))
             "body" (partial "midterms-voting.html" (dict "state" $v "part" "body"))) -}}
+      {{- end -}}
+      {{- /* The week's line about this state, under the message. */ -}}
+      {{- with $week.state_note -}}
+        {{- $entry = merge $entry (dict "note" (partial "midterms-state-note.html" (dict "note" . "code" $code "name" $s.name))) -}}
       {{- end -}}
       {{- /* The ID card. Its button goes to that state's own election office
              rather than the registration site every other week uses, so the
@@ -1328,6 +1347,17 @@
           });
         }
 
+        // A dated state line stops applying the day after its date, which a
+        // static page only learns from the reader's clock.
+        function showNote(note) {
+          var d = new Date();
+          var today = d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0");
+          var until = note.dataset.until;
+          note.hidden = !note.textContent || (!!until && today > until);
+        }
+        var stateNote = document.querySelector("[data-state-note]");
+        if (stateNote) showNote(stateNote);
+
         function applyState(code) {
           var s = states[code];
           if (!s) return;
@@ -1366,6 +1396,14 @@
               href.replace(/\/midterms\/calendar\/[a-z]{2}\.ics/, "/midterms/calendar/" + code.toLowerCase() + ".ics")
             );
           });
+
+          // The week's line about this state, if it has one.
+          var note = document.querySelector("[data-state-note]");
+          if (note && s.note) {
+            note.textContent = s.note.text;
+            note.dataset.until = s.note.until;
+            showNote(note);
+          }
 
           // Everywhere else the state is named.
           document.querySelectorAll("[data-state-name-upper]").forEach(function (el) {
