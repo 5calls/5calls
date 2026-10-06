@@ -1,9 +1,22 @@
 <footer class="vote-footer">
   <div class="content">
+    {{- /* Each tool page credits the organisation whose form the reader just
+           filled in; the index, which lists both, credits them together. */ -}}
     <p class="vote-footer-credit">
-      Voting tools provided by
-      <a href="https://voteamerica.org/" rel="noopener">VoteAmerica</a>, a
-      non-partisan non-profit.
+      {{- if .IsSection -}}
+        Voting tools provided by
+        <a href="https://voteamerica.org/" rel="noopener">VoteAmerica</a> and
+        <a href="https://www.ballotready.org/" rel="noopener">BallotReady</a>,
+        both non-partisan.
+      {{- else if eq .Params.provider "ballotready" -}}
+        Ballot information provided by
+        <a href="https://www.ballotready.org/" rel="noopener">BallotReady</a>, a
+        non-partisan election data company.
+      {{- else -}}
+        Voting tools provided by
+        <a href="https://voteamerica.org/" rel="noopener">VoteAmerica</a>, a
+        non-partisan non-profit.
+      {{- end }}
     </p>
     <nav class="vote-footer-links">
       <a href="/">Make calls</a>

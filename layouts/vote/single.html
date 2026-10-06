@@ -1,39 +1,50 @@
 {{ define "bodyclass" }}vote{{ end }}
 
 {{ define "head" }}
-  <script src="https://cdn.voteamerica.org/embed/tools.js" async></script>
-  {{- /* Readers sent from 5 Minute Midterms (?from=midterms) are offered a way
-         back there once the form finishes, but never sent automatically.
-         VoteAmerica's action-finish fires the same whether or not the verify
-         tool found the reader, and a reader who wasn't found needs to keep the
-         page and its next steps, so going back is theirs to choose. The notice
-         shows once and can be closed, since it sits over the bottom of the
-         form. Everyone else never sees it.
+  {{- if eq .Params.provider "ballotready" -}}
+    {{- /* BallotReady's embed swaps our <div class="civicengine-address"> for an
+           iframe on window load and sizes it to its contents from then on, so
+           the script belongs in the head where it can be fetched early.
+           embed.css only styles the modal the widget throws over the page when
+           it hands the reader on to their guide -- without it that modal has no
+           overlay and no close button, so it isn't optional. */ -}}
+    <script src="https://app.voterguide.ballotready.org/embed.js" async defer></script>
+    <link rel="stylesheet" media="screen" href="https://app.voterguide.ballotready.org/embed.css" />
+  {{- else -}}
+    <script src="https://cdn.voteamerica.org/embed/tools.js" async></script>
+    {{- /* Readers sent from 5 Minute Midterms (?from=midterms) are offered a way
+           back there once the form finishes, but never sent automatically.
+           VoteAmerica's action-finish fires the same whether or not the verify
+           tool found the reader, and a reader who wasn't found needs to keep the
+           page and its next steps, so going back is theirs to choose. The notice
+           shows once and can be closed, since it sits over the bottom of the
+           form. Everyone else never sees it.
 
-         ?preview-return shows it two seconds after load, with no form to fill
-         in, for working on how it looks. */}}
-  <script>
-    (function () {
-      var params = new URLSearchParams(window.location.search);
-      var preview = params.has("preview-return");
-      if (!preview && params.get("from") !== "midterms") return;
-      var shown = false;
-      function show() {
-        var notice = document.querySelector("[data-midterms-return]");
-        if (!notice || shown) return;
-        shown = true;
-        notice.hidden = false;
-        notice.querySelector("[data-midterms-close]").addEventListener("click", function () {
-          notice.hidden = true;
+           ?preview-return shows it two seconds after load, with no form to fill
+           in, for working on how it looks. */}}
+    <script>
+      (function () {
+        var params = new URLSearchParams(window.location.search);
+        var preview = params.has("preview-return");
+        if (!preview && params.get("from") !== "midterms") return;
+        var shown = false;
+        function show() {
+          var notice = document.querySelector("[data-midterms-return]");
+          if (!notice || shown) return;
+          shown = true;
+          notice.hidden = false;
+          notice.querySelector("[data-midterms-close]").addEventListener("click", function () {
+            notice.hidden = true;
+          });
+        }
+        if (preview) setTimeout(show, 2000);
+        window.addEventListener("VoteAmericaEvent", function (evt) {
+          var data = evt.detail && evt.detail.data;
+          if (data && data.event === "action-finish") show();
         });
-      }
-      if (preview) setTimeout(show, 2000);
-      window.addEventListener("VoteAmericaEvent", function (evt) {
-        var data = evt.detail && evt.detail.data;
-        if (data && data.event === "action-finish") show();
-      });
-    })();
-  </script>
+      })();
+    </script>
+  {{- end -}}
 {{ end }}
 
 {{ define "header" }}{{ partial "vote-header.html" . }}{{ end }}
@@ -42,34 +53,51 @@
   <main class="vote-main">
     {{ with .Content }}<div class="content vote-intro">{{ . }}</div>{{ end }}
 
-    <div class="vote-embed">
-      <div
-        class="voteamerica-embed"
-        data-subscriber="{{ .Site.Params.voteamericaSubscriber }}"
-        data-tool="{{ .Params.tool }}"
-      ></div>
-    </div>
+    {{ if eq .Params.provider "ballotready" }}
+      {{- /* BallotReady's widget is an address form a couple of hundred pixels
+             tall rather than a whole tool, so it sits in a narrower column than
+             a VoteAmerica tool gets. The reader's guide then opens in the
+             widget's own modal over the top of the page.
 
-    {{- /* Week one's Instagram share leads the notice, so it looks like the
-           thing it offers, rising from the card's bottom edge as a share
-           rather than laid in as a backdrop. The crop runs well past what
-           shows, since the card crops it again from the top to fit, but stops
-           just above the plate's orange state panel so no sliver of it shows
-           along the bottom. */ -}}
-    {{- $plate := resources.Get "images/midterms/share-vertical-week1.png" -}}
-    {{- $art := ($plate.Crop "1080x915 TopLeft").Resize "640x webp q82" -}}
-    <div class="vote-return" data-midterms-return role="status" hidden>
-      <div class="vote-return__art">
-        <img class="vote-return__shot" src="{{ $art.RelPermalink }}" alt=""
-             width="{{ $art.Width }}" height="{{ $art.Height }}" />
+             data-utm-campaign is how BallotReady counts the traffic as ours, and
+             the one attribute the embed needs. Adding data-input-locale="yes"
+             would offer English, Spanish and Mandarin on the form. */ -}}
+      <div class="vote-embed vote-embed-narrow">
+        <div
+          class="civicengine-address"
+          data-utm-campaign="{{ .Site.Params.ballotreadyCampaign }}"
+        ></div>
       </div>
-      <div class="vote-return__body">
-        <p class="vote-return__title">Come back to get your shares</p>
-        <p class="vote-return__text">Tick “I confirmed my registration” on 5 Minute Midterms to unlock your share images.</p>
-        <a class="vote-return__back" href="/midterms/">Get my shares</a>
+    {{ else }}
+      <div class="vote-embed">
+        <div
+          class="voteamerica-embed"
+          data-subscriber="{{ .Site.Params.voteamericaSubscriber }}"
+          data-tool="{{ .Params.tool }}"
+        ></div>
       </div>
-      <button type="button" class="vote-return__close" data-midterms-close aria-label="Close">×</button>
-    </div>
+
+      {{- /* Week one's Instagram share leads the notice, so it looks like the
+             thing it offers, rising from the card's bottom edge as a share
+             rather than laid in as a backdrop. The crop runs well past what
+             shows, since the card crops it again from the top to fit, but stops
+             just above the plate's orange state panel so no sliver of it shows
+             along the bottom. */ -}}
+      {{- $plate := resources.Get "images/midterms/share-vertical-week1.png" -}}
+      {{- $art := ($plate.Crop "1080x915 TopLeft").Resize "640x webp q82" -}}
+      <div class="vote-return" data-midterms-return role="status" hidden>
+        <div class="vote-return__art">
+          <img class="vote-return__shot" src="{{ $art.RelPermalink }}" alt=""
+               width="{{ $art.Width }}" height="{{ $art.Height }}" />
+        </div>
+        <div class="vote-return__body">
+          <p class="vote-return__title">Come back to get your shares</p>
+          <p class="vote-return__text">Tick “I confirmed my registration” on 5 Minute Midterms to unlock your share images.</p>
+          <a class="vote-return__back" href="/midterms/">Get my shares</a>
+        </div>
+        <button type="button" class="vote-return__close" data-midterms-close aria-label="Close">×</button>
+      </div>
+    {{ end }}
   </main>
 {{ end }}
 

@@ -104,6 +104,25 @@
   }
 }
 
+// BallotReady's embed replaces the .civicengine-address div with an iframe of
+// its own, transparent and sized to the form inside it, so -- like the
+// VoteAmerica embed -- it only needs room and no chrome of ours. It asks one
+// question rather than running a whole tool, so the column it sits in is held to
+// a readable width. The width has to be set here rather than on the iframe: the
+// embed gives that min-width: 100% inline, which a max-width of ours would lose
+// to. The min-height is roughly the loaded form's, so the page doesn't jump when
+// the iframe arrives.
+.vote-embed-narrow {
+  max-width: 34rem;
+  margin: 0 auto;
+
+  .civicengine-address,
+  .civicengine-embed-loaded {
+    display: block;
+    min-height: 10rem;
+  }
+}
+
 // Shown to readers sent here from 5 Minute Midterms once the form finishes: a
 // card in that page's own colours, led by a strip of week one's share art, that
 // springs up from the bottom of the screen so it gets noticed. Pinned there,
