@@ -191,6 +191,11 @@
             </label>
           {{- end }}
           <button type="button" data-preview-clear>clear</button>
+          {{- /* Week five: forget the voting plan and this week's done mark,
+                 so the page shows what a first-time reader sees. */}}
+          {{- if $week.plan }}
+            <button type="button" data-preview-plan-reset>reset plan</button>
+          {{- end }}
         </fieldset>
         <nav>
           {{- range seq 0 $total }}
@@ -1079,9 +1084,9 @@
         // The blanks are plain form controls, except the dates: those open a
         // small calendar that only offers the days the reader's state allows
         // (rules come from the state payload, built from the week-two data).
-        // This also shows the branch the reader picked, keeps their answers in
-        // this browser, and copies the finished sentences as text. Nothing
-        // leaves the page.
+        // This also shows the questions the reader's answers lead to, keeps
+        // the answers in this browser, and once they're done, folds the form
+        // into a summary they can screenshot or copy. Nothing leaves the page.
         var planRefresh = null;
         var plan = document.querySelector("[data-plan]");
         if (plan) {
@@ -1090,6 +1095,11 @@
           var MONTHS = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
           var planWay = plan.querySelectorAll("[data-plan-way]");
           var planCopy = plan.querySelector("[data-plan-copy]");
+          var planDone = plan.querySelector("[data-plan-done]");
+          var planForm = plan.querySelector("[data-plan-form]");
+          var planSummary = plan.querySelector("[data-plan-summary]");
+          var planHeadline = plan.querySelector("[data-plan-headline]");
+          var planFinished = false;
           var planPrompt = plan.querySelector("[data-plan-prompt]");
           var planPromptText = planPrompt.textContent;
 
@@ -1358,14 +1368,14 @@
               warn.hidden = !text;
             });
           }
-          // The line under a sentence: for a date, what the state's rules mean
-          // for it; for a ruled choice, the state's own line about it.
+          // The line under a question: for a date, what the state's rules mean
+          // for it; for a step with a hint, the state's own line about it.
           function planHint(step) {
             var field = step.querySelector("[data-when]");
             if (!field) {
               var s = planState();
-              var group = step.querySelector("[data-choice-rule]");
-              return { text: (s && s.plan && group && s.plan.hints[group.dataset.choiceRule]) || "", kind: "" };
+              var key = step.dataset.hint;
+              return { text: (s && s.plan && key && s.plan.hints[key]) || "", kind: "" };
             }
             var iso = whenValue(field);
             var rules = planRules(field);
@@ -1404,32 +1414,55 @@
           function planFieldValue(el) {
             if (el.hasAttribute("data-when")) {
               var iso = whenValue(el);
+              return iso ? prettyDate(iso) : "";
+            }
+            if (el.hasAttribute("data-time")) {
+              var time = el.querySelector("input").value.trim();
               var ampm = el.querySelector("select").value;
-              if (!iso) return "";
-              var text = prettyDate(iso);
-              return ampm ? text + " " + ampm : text;
+              return time && ampm ? time + " " + ampm : time;
             }
             if (el.matches("input")) return el.value.trim();
             var picked = el.querySelector("input:checked");
             return picked ? picked.dataset.label || picked.value : "";
           }
           function planSave() {
-            var saved = { way: planWayValue(), fields: {} };
+            var saved = { way: planWayValue(), done: planFinished, fields: {} };
             plan.querySelectorAll("[data-plan-field]").forEach(function (el) {
               if (el.hasAttribute("data-when")) {
-                saved.fields[el.dataset.planField] = [whenValue(el), el.querySelector("select").value];
+                saved.fields[el.dataset.planField] = whenValue(el);
+              } else if (el.hasAttribute("data-time")) {
+                saved.fields[el.dataset.planField] = [el.querySelector("input").value, el.querySelector("select").value];
               } else {
-                saved.fields[el.dataset.planField] = planFieldValue(el);
+                var picked = el.matches("input") ? null : el.querySelector("input:checked");
+                saved.fields[el.dataset.planField] = picked ? picked.value : planFieldValue(el);
               }
             });
             try {
               localStorage.setItem(PLAN_KEY, JSON.stringify(saved));
             } catch (e) {}
           }
+          function planPicked(id) {
+            var on = plan.querySelector('[data-plan-field="' + id + '"] input:checked');
+            return on ? on.value : "";
+          }
+          // A step shows while the answer it follows holds its value. A step
+          // whose only answer is a choice the state narrows to one is skipped:
+          // the answer is already picked, so it still counts in the summary.
+          function stepShown(step) {
+            return !step.dataset.showField || planPicked(step.dataset.showField) === step.dataset.showValue;
+          }
+          function stepSkipped(step) {
+            var groups = step.querySelectorAll("[data-plan-field]");
+            if (groups.length !== 1 || !groups[0].hasAttribute("data-choice-rule")) return false;
+            return groups[0].querySelectorAll("[data-choice]:not([hidden])").length <= 1;
+          }
           function planRender() {
             var way = planWayValue();
             plan.querySelectorAll("[data-plan-steps]").forEach(function (list) {
               list.hidden = list.dataset.planSteps !== way;
+            });
+            plan.querySelectorAll("[data-plan-step]").forEach(function (step) {
+              step.hidden = !stepShown(step) || stepSkipped(step);
             });
             // A state with one way to vote swaps the prompt for a line saying
             // so, and keeps it showing.
@@ -1437,32 +1470,76 @@
             var only = s && s.plan && s.plan.ways.length === 1 ? plan.dataset.mailOnly.replace("{state}", s.name) : "";
             planPrompt.textContent = only || planPromptText;
             planPrompt.hidden = !!way && !only;
-            planCopy.disabled = !way;
             plan.querySelectorAll("[data-plan-warn]").forEach(function (warn) {
               var step = warn.closest(".mt-plan__step");
               var picked = step.querySelector("input[type=radio]:checked");
               warn.hidden = !(picked && picked.value === warn.dataset.planWarn);
             });
+            if (planFinished && !way) planFinished = false;
+            planDone.disabled = !way;
+            planDone.textContent = planFinished ? planDone.dataset.edit : planDone.dataset.done;
+            planForm.hidden = planFinished;
+            planSummary.hidden = !planFinished;
+            planCopy.hidden = !planFinished || !navigator.clipboard;
+            planHeadline.textContent = planFinished ? plan.dataset.summaryHeadline : plan.dataset.headline;
+            if (planFinished) drawSummary();
+          }
+          // The answers the plan is made of: how they're voting, then each
+          // labelled step the reader's answers lead to, with whatever warnings
+          // are showing under it. Unanswered steps are left out.
+          function planRows() {
+            var way = plan.querySelector("[data-plan-way]:checked");
+            var rows = [];
+            if (way) rows.push({ label: plan.dataset.wayLabel, value: way.dataset.label, warn: [] });
+            var list = way && plan.querySelector('[data-plan-steps="' + way.value + '"]');
+            if (!list) return rows;
+            list.querySelectorAll("[data-plan-step][data-summary]").forEach(function (step) {
+              if (!stepShown(step)) return;
+              var values = [];
+              step.querySelectorAll("[data-plan-field]").forEach(function (el) {
+                var v = planFieldValue(el);
+                if (v) values.push(v);
+              });
+              if (!values.length) return;
+              var warn = [];
+              step.querySelectorAll(".mt-plan__warn:not([hidden])").forEach(function (w) {
+                warn.push(w.textContent);
+              });
+              rows.push({ label: step.dataset.summary, value: values.join(", "), warn: warn });
+            });
+            return rows;
+          }
+          function drawSummary() {
+            planSummary.textContent = "";
+            planRows().forEach(function (row) {
+              var item = document.createElement("div");
+              item.className = "mt-plan__row";
+              var dt = document.createElement("dt");
+              dt.textContent = row.label;
+              var dd = document.createElement("dd");
+              dd.textContent = row.value;
+              item.append(dt, dd);
+              row.warn.forEach(function (text) {
+                var w = document.createElement("dd");
+                w.className = "mt-plan__warn";
+                w.textContent = text;
+                item.append(w);
+              });
+              planSummary.append(item);
+            });
           }
           function planText() {
-            var lines = [];
-            plan.querySelectorAll("[data-plan-steps]:not([hidden]) [data-plan-sentence]").forEach(function (p) {
-              var out = "";
-              p.childNodes.forEach(function (node) {
-                if (node.nodeType === 3) {
-                  out += node.textContent;
-                } else if (node.dataset && node.dataset.planField) {
-                  out += planFieldValue(node) || "____";
-                }
-              });
-              lines.push(out.replace(/\s+/g, " ").replace(/\s+([.,])/g, "$1").trim());
-            });
-            return lines.join("\n");
+            return planRows()
+              .map(function (row) {
+                return row.label + ": " + row.value;
+              })
+              .join("\n");
           }
 
           try {
             var stored = JSON.parse(localStorage.getItem(PLAN_KEY));
             if (stored) {
+              planFinished = !!stored.done;
               planWay.forEach(function (r) {
                 r.checked = r.value === stored.way;
               });
@@ -1470,7 +1547,9 @@
                 var v = stored.fields && stored.fields[el.dataset.planField];
                 if (v == null) return;
                 if (el.hasAttribute("data-when")) {
-                  setWhen(el, v[0] || "");
+                  setWhen(el, typeof v === "string" ? v : "");
+                } else if (el.hasAttribute("data-time")) {
+                  el.querySelector("input").value = v[0] || "";
                   el.querySelector("select").value = v[1] || "";
                 } else if (el.matches("input")) {
                   el.value = v;
@@ -1490,19 +1569,24 @@
             planRefresh();
             planSave();
           });
-          if (navigator.clipboard) {
-            var planLabel = planCopy.textContent;
-            planCopy.addEventListener("click", function () {
-              navigator.clipboard.writeText(planText()).then(function () {
-                planCopy.textContent = planCopy.dataset.copied;
-                setTimeout(function () {
-                  planCopy.textContent = planLabel;
-                }, 2000);
-              });
+          // Done folds the form into the summary, and the same button opens it
+          // again. The card gets much shorter, so bring its top back into view.
+          planDone.addEventListener("click", function () {
+            planFinished = !planFinished;
+            closeCal(false);
+            planRender();
+            planSave();
+            if (plan.getBoundingClientRect().top < 0) plan.scrollIntoView({ behavior: "smooth", block: "start" });
+          });
+          var planLabel = planCopy.textContent;
+          planCopy.addEventListener("click", function () {
+            navigator.clipboard.writeText(planText()).then(function () {
+              planCopy.textContent = planCopy.dataset.copied;
+              setTimeout(function () {
+                planCopy.textContent = planLabel;
+              }, 2000);
             });
-          } else {
-            planCopy.hidden = true;
-          }
+          });
         }
 
         var confirmBox = document.querySelector("[data-confirm]");
@@ -1572,6 +1656,18 @@
             renderUnlock();
           });
         });
+        var previewPlanReset = document.querySelector("[data-preview-plan-reset]");
+        if (previewPlanReset) {
+          previewPlanReset.addEventListener("click", function () {
+            var at = done.indexOf(CURRENT);
+            if (at > -1) done.splice(at, 1);
+            write(done);
+            try {
+              localStorage.removeItem("mt-plan");
+            } catch (e) {}
+            location.reload();
+          });
+        }
         var previewClear = document.querySelector("[data-preview-clear]");
         if (previewClear) {
           previewClear.addEventListener("click", function () {

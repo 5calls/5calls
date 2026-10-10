@@ -4,7 +4,8 @@
   Takes (dict "state" VOTING_ENTRY "notes" PLAN.notes) and returns a dict.
   First, one entry per kind of date the plan asks for:
 
-    vote            the day you go: the early voting window, and Election Day
+    early           the day you vote early: the early voting window, without
+                    Election Day, which the plan asks about on its own
     fill            the day you fill out a mail ballot
     return          the day you send it back, before you've said how
     return_mail     ... by mail
@@ -15,14 +16,15 @@
   the first day of the last week before the deadline, and by, the week-early
   date we recommend. A range is two ISO dates, and an empty `from` means
   "today", which only the reader's browser knows; the picker clips every range
-  to today as well. Election Day is the fixed last day, and the one day a state
-  with no early voting offers.
+  to today as well. Election Day is the fixed last day.
 
   Then what the rest of the form needs from the state:
 
     ways     which of the plan's ways (person, mail) the state has
     choices  for a choice blank with a `rule`, the option keys the state allows
-    hints    for a choice blank with a `rule`, the line shown under it
+             (a state with no early voting allows only Election Day, so the
+             form picks it and skips the question)
+    hints    for a step with a `hint`, the line shown under it
     warn     for a step with a `state_warn`, the warning shown under it
 
   Dates come from data/midterms_voting.yml, so a state's picker follows the
@@ -36,21 +38,25 @@
 {{- $idData := index site.Data.midterms_id.states $s.code -}}
 {{- $election := "2026-11-03" -}}
 
-{{- $vote := slice -}}
-{{- $voteNote := "" -}}
+{{- /* Early voting: the state's window, or for a state whose counties set
+       their own, any day up to its last. The line under the early-or-Election-
+       Day question gives the dates; a state without them votes on the day. */ -}}
+{{- $early := slice -}}
+{{- $earlyHint := "" -}}
+{{- $electionHint := "" -}}
 {{- if $s.early_voting -}}
   {{- if $s.ev_varies -}}
     {{- $end := "2026-11-02" -}}
     {{- with $s.ev_end }}{{ $end = partial "midterms-iso.html" . }}{{ end -}}
-    {{- $vote = $vote | append (slice (dict "from" "" "to" $end)) -}}
-    {{- $voteNote = $notes.county -}}
+    {{- $early = $early | append (slice (dict "from" "" "to" $end)) -}}
+    {{- $earlyHint = $notes.county -}}
   {{- else if and $s.ev_start $s.ev_end -}}
-    {{- $vote = $vote | append (slice (dict "from" (partial "midterms-iso.html" $s.ev_start) "to" (partial "midterms-iso.html" $s.ev_end))) -}}
+    {{- $early = $early | append (slice (dict "from" (partial "midterms-iso.html" $s.ev_start) "to" (partial "midterms-iso.html" $s.ev_end))) -}}
+    {{- $earlyHint = replace (replace (replace $notes.early_dates "{state}" $s.name) "{from}" $s.ev_start) "{to}" $s.ev_end -}}
   {{- end -}}
-{{- else -}}
-  {{- $voteNote = replace $notes.no_early "{state}" $s.name -}}
 {{- end -}}
-{{- $vote = $vote | append (slice (dict "from" $election "to" $election)) -}}
+{{- $voteWhen := slice "election" -}}
+{{- if $early }}{{ $voteWhen = slice "early" "election" }}{{ else }}{{ $electionHint = replace $notes.no_early "{state}" $s.name }}{{ end -}}
 
 {{- /* By mail: until the mail deadline. We ask people to return a ballot a
        week early, so the picker shades the last seven days ending on it.
@@ -118,13 +124,13 @@
 {{- $planWays := cond (in $extra.mail_only $s.code) (slice "mail") (slice "person" "mail") -}}
 
 {{- return dict
-      "vote" (dict "ranges" $vote "note" $voteNote)
+      "early" (dict "ranges" $early "note" "")
       "fill" (dict "ranges" $window "note" "")
       "return" (dict "ranges" $window "note" "")
       "return_mail" $returnMail
       "return_office" (index $returns "office")
       "return_dropbox" (index $returns "dropbox")
       "ways" $planWays
-      "choices" (dict "return_how" $ways "id" $id)
-      "hints" (dict "id" $idHint)
+      "choices" (dict "return_how" $ways "id" $id "vote_when" $voteWhen)
+      "hints" (dict "id" $idHint "vote_when" $earlyHint "election" $electionHint)
       "warn" (dict "envelope" (index $extra.envelope $s.code | default "")) -}}

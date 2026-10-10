@@ -479,24 +479,42 @@ weeks:
     title: Make your voting plan
     state_specific: true
     release: 2026-10-13T09:00:00-07:00
-    intro: >-
-      SAMPLE COPY — the plan week. Real text goes here: two sentences on why a
-      named day and time beats good intentions, ending on the one thing to do.
-    # The action is a fill-in-the-blanks plan, drawn by midterms-plan.html
-    # instead of a message card. Nothing is sent anywhere: the answers stay in
-    # this browser and can be copied out as plain text. Each step's `text` is a
-    # sentence with {name} slots; `fields` says what fills each slot:
-    #   when    a date and am/pm. `rule` says which days the picker offers,
-    #           from the reader's state: vote, fill or return (see
+    intro:
+      - >-
+        Election Day is only a few weeks out and Early Voting is already
+        underway in some states! It's time to talk specifics. People who make a
+        concrete plan to vote are more likely to actually follow through on
+        their intention, so let's nail down the HOW, the WHEN, and the WHERE.
+      - >-
+        Speaking of WHEN, we strongly encourage you to vote early if you have
+        the option. If there's an issue with your registration, your ID, or
+        your mail ballot, it’s best that you find out before November 3rd.
+        Voting early also protects your vote from the unexpected. You never
+        know what might happen on Election Day, and you don’t want a sick kid,
+        a broken-down car, or bad weather to keep you from voting.
+    # The action is a list of questions, drawn by midterms-plan.html instead
+    # of a message card. Nothing is sent anywhere: the answers stay in this
+    # browser. Once the reader says they're done, the questions fold into
+    # their answers, laid out to screenshot, and can be copied as plain text.
+    #
+    # Each step is a `question` and its `fields`, answered in order:
+    #   date    a day from a small calendar. `rule` says which days it offers,
+    #           from the reader's state: early, fill or return (see
     #           midterms-plan-rules.html)
+    #   time    a time and am/pm
     #   text    free text, with a placeholder
-    #   choice  one of `options`. With a `rule`, options are {key, label} and
-    #           the reader's state decides which keys are offered, and may
-    #           put a line under the sentence (see midterms-plan-rules.html)
-    # A step's `warn` shows its note under the sentence while the slot holds
-    # that value; its `state_warn` names a warning from the reader's state,
-    # shown whenever the state has one.
+    #   choice  one of `options`, each {key, label}. With a `rule`, the
+    #           reader's state decides which keys are offered; where it offers
+    #           only one, that one is picked and the question is skipped
+    # A field's `name` is what a later step's `show` looks at: the step only
+    # appears while that field holds that key. `hint` puts the state's line
+    # under the question, `note` puts a fixed one there, `warn` shows its text
+    # while the step's choice holds that key, and `state_warn` names a warning
+    # from the reader's state, shown whenever the state has one. `summary`
+    # labels the answer in the finished plan; a step without one is left out.
     plan:
+      headline: MAKE YOUR VOTING PLAN
+      summary_headline: MY VOTING PLAN
       question: How I am voting
       ways:
         - key: person
@@ -504,11 +522,14 @@ weeks:
         - key: mail
           label: By mail
       prompt: Pick one to start your plan.
+      done_cta: I made my plan
+      edit_cta: Edit my plan
       copy_cta: Copy my plan
       copied: Copied
-      # Under a date blank, from the state's own voting data: see
-      # midterms-plan-rules.html. {state} and {date} are filled in.
+      # Under a question or date, from the state's own voting data: see
+      # midterms-plan-rules.html. {state}, {from}, {to} and {date} are filled in.
       notes:
+        early_dates: "Early voting in {state} runs {from} to {to}."
         county: Your county sets early voting dates and hours, so check yours before you pick a day.
         no_early: "{state} has no in-person early voting, so Election Day is the day."
         mail_by: "We recommend returning your ballot by {date}, a week before the deadline."
@@ -533,62 +554,110 @@ weeks:
         next: Next month
       steps:
         person:
-          - text: "I'll go vote on {when}"
+          - question: Will you vote early or on Election Day?
+            hint: vote_when
             fields:
-              when: { type: when, rule: vote, placeholder: pick a day }
-          - text: "My polling place is {where}"
+              - name: when
+                type: choice
+                rule: vote_when
+                options:
+                  - { key: early, label: Early }
+                  - { key: election, label: On Election Day }
+          - question: What day and time will you go?
+            show: { when: early }
+            summary: Voting early
             fields:
-              where: { type: text, placeholder: address or place name }
-          - text: "I'll get there {how}"
+              - { name: early_day, type: date, rule: early, placeholder: pick a day }
+              - { name: early_time, type: time, placeholder: "10:00" }
+          - question: Where is your early voting site?
+            show: { when: early }
+            summary: Where
             fields:
-              how: { type: choice, options: [on foot, by car, by bike, by bus] }
-          - text: "I'm going with {who}"
+              - { name: early_site, type: text, placeholder: address or place name }
+          - question: What time will you go on Nov 3rd?
+            show: { when: election }
+            hint: election
+            summary: Election Day, Nov 3
             fields:
-              who: { type: text, placeholder: "a friend, my family, just me" }
+              - { name: election_time, type: time, placeholder: "10:00" }
+          - question: Where is your polling location?
+            show: { when: election }
+            summary: Where
+            fields:
+              - { name: polling_place, type: text, placeholder: address or place name }
+          - question: How will you get there?
+            summary: Getting there
+            fields:
+              - name: how
+                type: choice
+                options:
+                  - { key: walk, label: Walk }
+                  - { key: drive, label: Drive }
+                  - { key: bike, label: Bike }
+                  - { key: bus, label: Bus }
+                  - { key: other, label: Other }
+          - question: Who is going with you?
+            summary: Going with
+            fields:
+              - { name: who, type: text, placeholder: "a friend, my family, just me" }
           # A state that asks every voter for ID drops "none"; the line under
-          # the sentence is the state's week-three summary.
-          - text: "About ID: {id}"
+          # the question is the state's week-three summary.
+          - question: Do you need an ID?
+            hint: id
+            summary: ID
             fields:
-              id:
+              - name: id
                 type: choice
                 rule: id
                 options:
-                  - { key: have, label: "I need one, and I have it" }
-                  - { key: getting, label: "I need one, and I'm still getting it" }
-                  - { key: none, label: "I don't need one" }
+                  - { key: have, label: "Yes, and I have it" }
+                  - { key: getting, label: "Yes, and I'm still getting it" }
+                  - { key: none, label: "No" }
         mail:
-          - text: "I'll fill out my ballot on {when}"
+          - question: "I'll fill out my ballot by:"
+            summary: Filling out my ballot by
             fields:
-              when: { type: when, rule: fill, placeholder: pick a day }
-          # The way back comes first: it decides which days the date offers.
-          - text: "I'll return it {how} on {when}"
+              - { name: fill_day, type: date, rule: fill, placeholder: pick a day }
+          # The return date offers any day a way back allows until one is
+          # picked below, then narrows to that way's days.
+          - question: When will you return your ballot?
+            summary: Returning it
             fields:
-              how:
+              - { name: return_day, type: date, rule: return, placeholder: pick a day }
+              - { name: return_time, type: time, placeholder: "10:00" }
+          - question: How will you return your ballot?
+            note: Return your ballot at least a week before the deadline, so it has time to arrive and be counted.
+            summary: Returning it by
+            fields:
+              - name: return_how
                 type: choice
                 rule: return_how
                 options:
-                  - { key: mail, label: by mail }
-                  - { key: dropbox, label: at a drop box }
-                  - { key: office, label: in person }
-              when: { type: when, rule: return, placeholder: pick a day }
-          - text: "I signed and dated my ballot and envelope: {signed}"
-            fields:
-              signed: { type: choice, options: ["Yes", "No"] }
+                  - { key: mail, label: Mail }
+                  - { key: dropbox, label: Drop box }
+                  - { key: office, label: County election office }
+          - question: Did you sign and date your ballot and/or envelope?
+            summary: Signed and dated
             warn:
-              value: "No"
+              value: "no"
               text: An unsigned ballot can be rejected. Sign and date it before you return it.
             state_warn: envelope
+            fields:
+              - name: signed
+                type: choice
+                options:
+                  - { key: "yes", label: "Yes" }
+                  - { key: "no", label: "No" }
     confirm: I made my voting plan - unlock my achievement graphics!
-    # FPO: placeholder copy, replace before this week ships.
     why:
-      heading: People who pick a day and a time are the ones who show up.
+      heading: A voting plan helps you follow through on your intention to vote.
       stats:
-        - value: Day + time
-          text: written down somewhere is the entire plan.
-        - value: Moved
-          text: polling places are common — last cycle's may be gone.
-        - value: 3 min
-          text: to pick your slot and check where you're going.
+        - value: Over 4%
+          text: is how much [turnout increases](https://pubmed.ncbi.nlm.nih.gov/20424044/) when voters are encouraged to form a logistical voting plan.
+        - value: About 40%
+          text: of the eligible voting population [has voted in midterm elections in recent decades](https://fairvote.org/resources/voter-turnout/?section=turnout-in-the-united-states), with 2018 marking the highest midterm turnout in over a century.
+        - value: 10+ points lower
+          text: is how young people ages 18 to 29 typically [turn out](https://fairvote.org/resources/voter-turnout/?section=what-affects-voter-turnout) compared with those who are 30 and older.
 
   - number: 6
     short: Vote early

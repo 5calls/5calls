@@ -1,16 +1,16 @@
 {{- /*
-  Week five's action: a fill-in-the-blanks voting plan.
+  Week five's action: a voting plan, asked as a list of questions.
 
   Takes the week's `plan` block from data/midterms.yml. The reader picks in
-  person or by mail, and the sentences for that way appear. Every blank is a
+  person or by mail, and the questions for that way appear. Every answer is a
   real form control, so the page works with a keyboard and a screen reader; the
-  script only shows and hides the two branches, saves the answers in this
-  browser, and copies the finished sentences as plain text.
+  script shows and hides the branches, saves the answers in this browser, and
+  once the reader says they're done, folds the questions into a summary of
+  their answers to screenshot or copy.
 
-  A step's text is split on its {name} slots, and each slot is drawn from the
-  step's own `fields`, so the words stay in the data file. Everything is drawn
-  for every state; the script hides the ways, options and warnings the
-  reader's state doesn't have (see midterms-plan-rules.html).
+  Everything is drawn for every state; the script hides the ways, options,
+  questions and warnings the reader's state doesn't have (see
+  midterms-plan-rules.html).
 */ -}}
 {{- $plan := . -}}
 <div class="mt-message mt-plan" data-plan
@@ -18,96 +18,110 @@
      data-return-late="{{ $plan.notes.return_late }}" data-return-early="{{ $plan.notes.return_early }}"
      data-mail-only="{{ $plan.notes.mail_only }}"
      data-cal-late="{{ $plan.calendar.late }}" data-cal-late-label="{{ $plan.calendar.late_label }}"
-     data-cal-prev="{{ $plan.calendar.previous }}" data-cal-next="{{ $plan.calendar.next }}">
+     data-cal-prev="{{ $plan.calendar.previous }}" data-cal-next="{{ $plan.calendar.next }}"
+     data-headline="{{ $plan.headline }}" data-summary-headline="{{ $plan.summary_headline }}"
+     data-way-label="{{ $plan.question }}">
   {{- /* The reader's state, in the same place the other weeks put it. The
          dates below follow it, so changing it goes back up to the picker. */ -}}
   <div class="mt-deck__top">
     <div class="mt-deck__lede">
-      <div class="mt-deck__detail" id="mt-plan-question">{{ $plan.question }}</div>
+      <div class="mt-deck__detail" data-plan-headline>{{ $plan.headline }}</div>
     </div>
     <a class="mt-pill mt-pill--tag" href="#mt-state" title="Change your state"
        data-deck="tag" data-state-change>{{ upper site.Data.midterms.state.name }}</a>
   </div>
-  <fieldset class="mt-plan__way" aria-labelledby="mt-plan-question">
-    <div class="mt-plan__chips">
-      {{- range $plan.ways }}
-        <label class="mt-chip" data-choice="{{ .key }}">
-          <input type="radio" name="plan-way" value="{{ .key }}" data-plan-way />
-          <span>{{ .label }}</span>
-        </label>
-      {{- end }}
-    </div>
-  </fieldset>
 
-  <p class="mt-plan__prompt" data-plan-prompt>{{ $plan.prompt }}</p>
+  <div class="mt-plan__form" data-plan-form>
+    <fieldset class="mt-plan__way">
+      <legend class="mt-plan__question">{{ $plan.question }}</legend>
+      <div class="mt-plan__chips">
+        {{- range $plan.ways }}
+          <label class="mt-chip" data-choice="{{ .key }}">
+            <input type="radio" name="plan-way" value="{{ .key }}" data-label="{{ .label }}" data-plan-way />
+            <span>{{ .label }}</span>
+          </label>
+        {{- end }}
+      </div>
+    </fieldset>
 
-  {{- range $way := $plan.ways }}
-    {{- $key := .key }}
-    <ol class="mt-plan__steps" data-plan-steps="{{ $key }}" hidden>
-      {{- range $i, $step := index $plan.steps $key }}
-        <li class="mt-plan__step">
-          <p class="mt-plan__sentence" data-plan-sentence>
-            {{- range findRE `\{\w+\}|[^{}]+` $step.text -}}
-              {{- if hasPrefix . "{" -}}
-                {{- $name := strings.Trim . "{}" -}}
-                {{- $f := index $step.fields $name -}}
-                {{- $id := printf "plan-%s-%d-%s" $key $i $name -}}
-                {{- if eq $f.type "when" -}}
+    <p class="mt-plan__prompt" data-plan-prompt>{{ $plan.prompt }}</p>
+
+    {{- range $way := $plan.ways }}
+      {{- $key := .key }}
+      <ol class="mt-plan__steps" data-plan-steps="{{ $key }}" hidden>
+        {{- range $i, $step := index $plan.steps $key }}
+          {{- $qid := printf "plan-%s-q%d" $key $i }}
+          <li class="mt-plan__step" data-plan-step
+              {{- range $name, $value := $step.show }} data-show-field="plan-{{ $key }}-{{ $name }}" data-show-value="{{ $value }}"{{ end }}
+              {{- with $step.hint }} data-hint="{{ . }}"{{ end }}
+              {{- with $step.summary }} data-summary="{{ . }}"{{ end }}>
+            <p class="mt-plan__question" id="{{ $qid }}">{{ $step.question }}</p>
+            <div class="mt-plan__answer" role="group" aria-labelledby="{{ $qid }}">
+              {{- range $step.fields }}
+                {{- $f := . }}
+                {{- $id := printf "plan-%s-%s" $key $f.name }}
+                {{- if eq $f.type "date" }}
                   {{- /* A custom picker rather than a date input, because the
                          days on offer depend on the reader's state. The script
-                         draws the calendar into the empty span. */ -}}
+                         draws the calendar into the empty span. */}}
                   <span class="mt-plan__when" data-plan-field="{{ $id }}" data-when data-rule="{{ $f.rule }}">
                     <button type="button" class="mt-plan__input mt-plan__date" id="{{ $id }}"
                             aria-haspopup="dialog" aria-expanded="false" data-date-trigger
                             data-placeholder="{{ $f.placeholder }}">{{ $f.placeholder }}</button>
                     <input type="hidden" data-date-value />
+                    <span class="mt-cal" role="dialog" aria-label="Choose a date" hidden data-cal></span>
+                  </span>
+                {{- else if eq $f.type "time" }}
+                  <span class="mt-plan__when" data-plan-field="{{ $id }}" data-time>
+                    <input type="text" class="mt-plan__input mt-plan__input--time" id="{{ $id }}"
+                           placeholder="{{ $f.placeholder }}" aria-label="Time" autocomplete="off" />
                     <select class="mt-plan__input" aria-label="AM or PM">
                       <option value="">am/pm</option>
                       <option>AM</option>
                       <option>PM</option>
                     </select>
-                    <span class="mt-cal" role="dialog" aria-label="Choose a date" hidden data-cal></span>
                   </span>
-                {{- else if eq $f.type "text" -}}
+                {{- else if eq $f.type "text" }}
                   <input type="text" class="mt-plan__input mt-plan__input--text" id="{{ $id }}" data-plan-field="{{ $id }}"
                          placeholder="{{ $f.placeholder }}" aria-label="{{ $f.placeholder }}" autocomplete="off" />
-                {{- else -}}
-                  {{- /* With a rule, each option is {key, label}: the radio
-                         carries the key, so the state can say which are on
-                         offer, and the plan copies out the label. */ -}}
+                {{- else }}
+                  {{- /* The radio carries the key, so the state can say which
+                         are on offer and a later step can follow it, and the
+                         summary shows the label. */}}
                   <span class="mt-plan__choices" role="radiogroup" data-plan-field="{{ $id }}"
                         {{- with $f.rule }} data-choice-rule="{{ . }}"{{ end }}>
                     {{- range $f.options }}
-                      {{- $key := . }}{{ $label := . }}
-                      {{- if reflect.IsMap . }}{{ $key = .key }}{{ $label = .label }}{{ end }}
-                      <label class="mt-chip mt-chip--small" data-choice="{{ $key }}">
-                        <input type="radio" name="{{ $id }}" value="{{ $key }}" data-label="{{ $label }}" />
-                        <span>{{ $label }}</span>
+                      <label class="mt-chip mt-chip--small" data-choice="{{ .key }}">
+                        <input type="radio" name="{{ $id }}" value="{{ .key }}" data-label="{{ .label }}" />
+                        <span>{{ .label }}</span>
                       </label>
                     {{- end }}
                   </span>
-                {{- end -}}
-              {{- else -}}
-                {{ . }}
-              {{- end -}}
-            {{- end -}}
-          </p>
-          {{- $ruled := false }}
-          {{- range $step.fields }}{{ if .rule }}{{ $ruled = true }}{{ end }}{{ end }}
-          {{- if $ruled }}
+                {{- end }}
+              {{- end }}
+            </div>
             <p class="mt-plan__hint" data-plan-hint hidden></p>
-          {{- end }}
-          {{- with $step.warn }}
-            <p class="mt-plan__warn" data-plan-warn="{{ .value }}" hidden>{{ .text }}</p>
-          {{- end }}
-          {{- with $step.state_warn }}
-            <p class="mt-plan__warn" data-plan-state-warn="{{ . }}" hidden></p>
-          {{- end }}
-        </li>
-      {{- end }}
-    </ol>
-  {{- end }}
+            {{- with $step.note }}
+              <p class="mt-plan__hint">{{ . }}</p>
+            {{- end }}
+            {{- with $step.warn }}
+              <p class="mt-plan__warn" data-plan-warn="{{ .value }}" hidden>{{ .text }}</p>
+            {{- end }}
+            {{- with $step.state_warn }}
+              <p class="mt-plan__warn" data-plan-state-warn="{{ . }}" hidden></p>
+            {{- end }}
+          </li>
+        {{- end }}
+      </ol>
+    {{- end }}
+  </div>
+
+  {{- /* The finished plan, drawn by the script from the answers. */}}
+  <dl class="mt-plan__summary" data-plan-summary hidden></dl>
 
   <div class="mt-message__actions">
-    <button type="button" class="mt-pill mt-pill--solid" data-plan-copy data-copied="{{ $plan.copied }}" disabled>{{ $plan.copy_cta }}</button>  </div>
+    <button type="button" class="mt-pill mt-pill--solid" data-plan-done
+            data-done="{{ $plan.done_cta }}" data-edit="{{ $plan.edit_cta }}" disabled>{{ $plan.done_cta }}</button>
+    <button type="button" class="mt-pill" data-plan-copy data-copied="{{ $plan.copied }}" hidden>{{ $plan.copy_cta }}</button>
+  </div>
 </div>

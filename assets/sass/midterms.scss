@@ -1649,10 +1649,32 @@ body {
   // viewport so the mark gives up width at the same rate the screen does.
 }
 
-// Week five's voting plan: sentences with real form controls in the blanks.
+// Week five's voting plan: a list of questions, each answered with real form
+// controls, that folds into a summary of the answers once the reader is done.
 // Sits inside .mt-message, so the card chrome is the other weeks' own.
 .mt-plan {
   gap: 20px;
+
+  // Only the done button is solid; copy sits beside it as an outline.
+  button.mt-pill:not(.mt-pill--solid) {
+    background: #fff;
+  }
+
+  button.mt-pill--solid:disabled {
+    opacity: 0.45;
+    box-shadow: none;
+    cursor: default;
+  }
+}
+
+.mt-plan__form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+
+  &[hidden] {
+    display: none;
+  }
 }
 
 .mt-plan__way {
@@ -1667,7 +1689,7 @@ body {
   legend {
     float: left;
     width: 100%;
-    margin-bottom: 10px;
+    margin-bottom: 4px;
     padding: 0;
   }
 }
@@ -1747,12 +1769,74 @@ body {
   }
 }
 
-.mt-plan__sentence {
+.mt-plan__step {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+
+  &[hidden] {
+    display: none;
+  }
+}
+
+.mt-plan__question {
   margin: 0;
-  font-size: 22px;
+  font-size: 20px;
   font-weight: 600;
-  line-height: 2.1;
+  line-height: 1.3;
   color: $ink-solid;
+}
+
+.mt-plan__answer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 12px;
+  align-items: center;
+}
+
+// The finished plan: each answer under a small label, set large enough to
+// read in a screenshot.
+.mt-plan__summary {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin: 0;
+
+  &[hidden] {
+    display: none;
+  }
+
+  dt {
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: rgba($ink, 0.65);
+  }
+
+  dd {
+    margin: 2px 0 0;
+    font-size: 22px;
+    font-weight: 600;
+    line-height: 1.3;
+    color: $ink-solid;
+  }
+
+  dd.mt-plan__warn {
+    margin-top: 8px;
+    font-size: 16px;
+    font-weight: 400;
+  }
+}
+
+.mt-plan__row {
+  padding-bottom: 14px;
+  border-bottom: 1px solid rgba($ink, 0.12);
+
+  &:last-child {
+    padding-bottom: 0;
+    border-bottom: 0;
+  }
 }
 
 // A blank: an underlined strip of tinted paper rather than a boxed input, so
@@ -1780,6 +1864,10 @@ body {
 
   &--text {
     width: 17em;
+  }
+
+  &--time {
+    width: 5em;
   }
 }
 
