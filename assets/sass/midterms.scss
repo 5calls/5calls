@@ -885,6 +885,12 @@ body {
     accent-color: $orange;
   }
 
+  // Week five, before the plan is finished.
+  &:has(input:disabled) {
+    opacity: 0.45;
+    cursor: default;
+  }
+
   span {
     flex: 1;
     min-width: 200px;

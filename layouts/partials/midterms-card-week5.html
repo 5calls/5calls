@@ -1,0 +1,118 @@
+{{- /*
+  Week five's share card for one voting plan: the vertical Instagram crop
+  (1080x1350) or the horizontal link-preview one (1200x630). Takes
+  (dict "crop" "vertical"|"horizontal" "text" STR) where STR is a sentence from
+  midterms-plan-cards.html, and returns the image resource.
+
+  The plate carries everything that doesn't change by plan, including "I made
+  a plan to vote!"; scripts/build-midterms-plates5.py cuts it from the
+  designer's comps with their sample sentence painted out. Laid over it, the
+  reader's sentence in DM Sans, centred in the panel the way the comps set it:
+  the words in black, the reader's answers ({braces} in the sentence) in blue
+  bold italic and underlined, a phrase's underline running on through the
+  spaces inside it. It steps down in size until it fits the panel.
+*/ -}}
+{{- /* Measured off each crop's comp: the panel's centre line and the widest a
+       row may run, the rows the sentence may use (below the headline, above
+       the panel's bottom edge), the design size and the sizes to step down
+       through, and the line pitch as a share of the size. */ -}}
+{{- $m := dict "center" 576.0 "max" 880.0 "top" 470.0 "bottom" 805.0
+      "sizes" (slice 54 51 48 45 42 39 36) "pitch" 1.463 -}}
+{{- if eq .crop "horizontal" -}}
+  {{- $m = dict "center" 739.0 "max" 830.0 "top" 250.0 "bottom" 396.0
+        "sizes" (slice 36 34 32 30 28 26) "pitch" 1.306 -}}
+{{- end -}}
+{{- $plate := resources.Get (printf "images/midterms/share-%s-week5.png" .crop) -}}
+{{- $line := resources.Get "images/midterms/week5-underline.png" -}}
+{{- $fonts := dict
+      "regular" (resources.Get "fonts/DMSans-Regular.ttf")
+      "bolditalic" (resources.Get "fonts/DMSans-BoldItalic.ttf") -}}
+{{- $ink := "#000000" -}}
+{{- $blue := "#1875d1" -}}
+{{- /* DM Sans, in ems: cap height and descender ink, the line-box ascent
+       images.Text measures its y from, the space, and where the comps put
+       the underline and how thick. */ -}}
+{{- $capInk := 0.70 -}}
+{{- $descInk := 0.20 -}}
+{{- $lineAscent := 0.992 -}}
+{{- $space := 0.2 -}}
+{{- $ulOffset := 0.1 -}}
+{{- $ulThick := 0.07 -}}
+
+{{- /* The sentence as words, each knowing whether it is an answer, which
+       answer (so an underline only bridges spaces inside one), and whether a
+       space comes before it. "Day." splits into "Day" and a "." with no
+       space, so the full stop stays black. */ -}}
+{{- $words := slice -}}
+{{- $spaced := false -}}
+{{- range $i, $seg := findRE `\{[^}]*\}|[^{}]+` .text -}}
+  {{- $em := hasPrefix $seg "{" -}}
+  {{- $body := cond $em (strings.TrimSuffix "}" (strings.TrimPrefix "{" $seg)) $seg -}}
+  {{- range $j, $w := split $body " " -}}
+    {{- if gt $j 0 }}{{ $spaced = true }}{{ end -}}
+    {{- with $w -}}
+      {{- $words = $words | append (dict "text" . "em" $em "phrase" $i "space" (and $spaced (gt (len $words) 0))) -}}
+      {{- $spaced = false -}}
+    {{- end -}}
+  {{- end -}}
+{{- end -}}
+
+{{- /* Wrap at the design size, and if the rows won't fit the panel, at each
+       smaller size until they do. A word with no space before it never
+       starts a row. */ -}}
+{{- $layout := dict -}}
+{{- range $size := $m.sizes -}}
+  {{- $rows := slice -}}
+  {{- $row := slice -}}
+  {{- $width := 0.0 -}}
+  {{- range $w := $words -}}
+    {{- $font := cond $w.em "bolditalic" "regular" -}}
+    {{- $ww := partial "midterms-text-width.html" (dict "text" $w.text "font" $font "size" $size) -}}
+    {{- $gap := cond $w.space (mul $space $size) 0.0 -}}
+    {{- if and (gt (len $row) 0) $w.space (gt (add (add $width $gap) $ww) $m.max) -}}
+      {{- $rows = $rows | append (slice (dict "row" $row "width" $width)) -}}
+      {{- $row = slice -}}
+      {{- $width = 0.0 -}}
+      {{- $gap = 0.0 -}}
+    {{- end -}}
+    {{- $row = $row | append (merge $w (dict "width" $ww "gap" $gap "font" $font)) -}}
+    {{- $width = add (add $width $gap) $ww -}}
+  {{- end -}}
+  {{- $rows = $rows | append (slice (dict "row" $row "width" $width)) -}}
+  {{- $height := add (mul (mul (sub (len $rows) 1) $m.pitch) $size) (mul (add $capInk $descInk) $size) -}}
+  {{- if or (le $height (sub $m.bottom $m.top)) (eq $size (index $m.sizes (sub (len $m.sizes) 1))) -}}
+    {{- $layout = dict "rows" $rows "size" $size "height" $height -}}
+    {{- break -}}
+  {{- end -}}
+{{- end -}}
+
+{{- /* Centre the block in the panel's free rows, and each row on the panel's
+       centre line. */ -}}
+{{- $size := $layout.size -}}
+{{- $baseline := add (sub (div (add $m.top $m.bottom) 2) (div $layout.height 2)) (mul $capInk $size) -}}
+{{- $thick := math.Max 2 (math.Round (mul $ulThick $size)) -}}
+{{- $filters := slice -}}
+{{- range $r := $layout.rows -}}
+  {{- $x := sub $m.center (div $r.width 2) -}}
+  {{- $y := int (math.Round (sub $baseline (mul $lineAscent $size))) -}}
+  {{- $prev := dict -}}
+  {{- range $w := $r.row -}}
+    {{- /* An underline starts at its word, or back at the space before it
+           when that space is inside the same answer. */ -}}
+    {{- $from := add $x $w.gap -}}
+    {{- if and $w.em $prev.em (eq $prev.phrase $w.phrase) }}{{ $from = $x }}{{ end -}}
+    {{- $x = add $x $w.gap -}}
+    {{- $filters = $filters | append (images.Text $w.text (dict
+          "x" (int (math.Round $x)) "y" $y "size" $size
+          "color" (cond $w.em $blue $ink) "font" (index $fonts $w.font))) -}}
+    {{- $x = add $x $w.width -}}
+    {{- if $w.em -}}
+      {{- $ul := $line.Resize (printf "%dx%d" (int (math.Round (sub $x $from))) (int $thick)) -}}
+      {{- $filters = $filters | append (images.Overlay $ul (int (math.Round $from))
+            (int (math.Round (add $baseline (mul $ulOffset $size))))) -}}
+    {{- end -}}
+    {{- $prev = $w -}}
+  {{- end -}}
+  {{- $baseline = add $baseline (mul $m.pitch $size) -}}
+{{- end -}}
+{{- return $plate.Filter $filters -}}

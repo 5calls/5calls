@@ -12,12 +12,32 @@
   A week whose extra credit has its own share art also gets one page for it,
   /midterms/share/1/extra/. That art is the same in every state, so there is
   one page rather than 51.
+
+  Week five's art follows the reader's voting plan rather than their state, so
+  that week gets one page per plan instead, /midterms/share/5/mail-dropbox-yes/,
+  keyed as midterms-plan-cards.html keys them.
 */ -}}
 {{- $d := site.Data.midterms -}}
 {{- range $d.weeks }}
   {{- if le .number $d.current_week }}
     {{- $week := . }}
-    {{- range site.Data.midterms_states.states }}
+    {{- with $week.plan_card }}
+      {{- range $key, $text := partial "midterms-plan-cards.html" . }}
+        {{- $.AddPage (dict
+          "kind" "page"
+          "path" (printf "%d/%s" $week.number $key)
+          "title" (printf "My voting plan: week %d" $week.number)
+          "params" (dict
+            "share" true
+            "week" $week.number
+            "plan" $key
+            "description" $week.title
+          )
+          "build" (dict "list" "never" "render" "always")
+        ) }}
+      {{- end }}
+    {{- end }}
+    {{- range cond (isset $week "plan_card") slice site.Data.midterms_states.states }}
       {{- $.AddPage (dict
         "kind" "page"
         "path" (printf "%d/%s" $week.number (lower .code))

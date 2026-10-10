@@ -512,6 +512,9 @@ weeks:
     # while the step's choice holds that key, and `state_warn` names a warning
     # from the reader's state, shown whenever the state has one. `summary`
     # labels the answer in the finished plan; a step without one is left out.
+    images:
+      locked_note: Finish your plan and confirm it on the left to unlock the share images.
+      locked_note_stacked: Finish your plan and confirm it above to unlock the share images.
     plan:
       headline: MAKE YOUR VOTING PLAN
       summary_headline: MY VOTING PLAN
@@ -648,6 +651,39 @@ weeks:
                 options:
                   - { key: "yes", label: "Yes" }
                   - { key: "no", label: "No" }
+    # The share art follows the reader's plan rather than their state: one
+    # card per combination of the answers below, drawn by
+    # midterms-card-week5.html onto the designed plates, with its own share
+    # page at /midterms/share/5/<key>/. Each card is one sentence, built from
+    # the parts below in order; {braces} mark the reader's answers, set in
+    # blue and underlined. A part that starts with punctuation joins the one
+    # before it without a space.
+    plan_card:
+      # Until the reader finishes their plan.
+      default: "I know {how}, {when} and {where} I’m voting."
+      person:
+        when:
+          early: "I’m gonna vote {in person early}. I will get to {my early voting site}"
+          election: "I’m gonna vote {in person on Election Day}. I will get to {my polling location}"
+        how:
+          walk: "{on foot},"
+          drive: "by {car},"
+          bike: "by {bike},"
+          bus: "by {bus},"
+          other: "{my own way},"
+        # The plan's two "yes" answers share a card.
+        id:
+          "yes": "and {I’ll have my ID}."
+          "no": "and {I don’t need an ID}."
+      mail:
+        way: "I’m gonna vote {by mail}."
+        return_how:
+          mail: "I will return my ballot {by USPS}"
+          dropbox: "I will return my ballot {at a drop box}"
+          office: "I will return my ballot {to the election office}"
+        signed:
+          "yes": ", and {I’ll sign and date my envelope}."
+          "no": "."
     confirm: I made my voting plan - unlock my achievement graphics!
     why:
       heading: A voting plan helps you follow through on your intention to vote.

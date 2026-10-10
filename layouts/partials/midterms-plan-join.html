@@ -1,0 +1,13 @@
+{{- /*
+  Joins the parts of a week-five card sentence: a space between parts, except
+  before one that starts with punctuation. Takes a slice of strings.
+*/ -}}
+{{- $out := "" -}}
+{{- range . -}}
+  {{- if or (eq $out "") (findRE `^[.,;:!?]` . 1) -}}
+    {{- $out = printf "%s%s" $out . -}}
+  {{- else -}}
+    {{- $out = printf "%s %s" $out . -}}
+  {{- end -}}
+{{- end -}}
+{{- return $out -}}

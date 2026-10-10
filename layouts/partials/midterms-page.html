@@ -577,6 +577,12 @@
             {{- $cardState := index site.Data.midterms_states.states $d.state.abbr }}
             {{- $vert := partial "midterms-card.html" (dict "crop" "vertical" "week" $week "state" $cardState) }}
             {{- $horiz := partial "midterms-card.html" (dict "crop" "horizontal" "week" $week "state" $cardState) }}
+            {{- /* Week five's art follows the plan, not the state: the generic
+                   card until the reader finishes theirs. */}}
+            {{- with $week.plan_card }}
+              {{- $vert = partial "midterms-card-week5.html" (dict "crop" "vertical" "text" .default) }}
+              {{- $horiz = partial "midterms-card-week5.html" (dict "crop" "horizontal" "text" .default) }}
+            {{- end }}
             {{- /* Each crop opens the share modal. Buttons rather than images
                    alone, so they are reachable by keyboard and can be disabled
                    while the week is still locked. */ -}}
@@ -858,7 +864,7 @@
       {{- /* The share art for this week in this state. Drawing all 51 up front is
              what lets the switcher swap them with no round trip; the same
              resources back the /midterms/share/ cards, so they are drawn once. */ -}}
-      {{- if not $prelaunch -}}
+      {{- if and (not $prelaunch) (not $week.plan_card) -}}
         {{- $entry = merge $entry (dict
             "vert" (partial "midterms-card.html" (dict "crop" "vertical" "week" $week "state" $s)).RelPermalink
             "horiz" (partial "midterms-card.html" (dict "crop" "horizontal" "week" $week "state" $s)).RelPermalink) -}}
@@ -1088,6 +1094,9 @@
         // the answers in this browser, and once they're done, folds the form
         // into a summary they can screenshot or copy. Nothing leaves the page.
         var planRefresh = null;
+        var planCardKey = null;
+        var planShotsChanged = null;
+        var planUnlockChanged = null;
         var plan = document.querySelector("[data-plan]");
         if (plan) {
           var PLAN_KEY = "mt-plan";
@@ -1476,14 +1485,38 @@
               warn.hidden = !(picked && picked.value === warn.dataset.planWarn);
             });
             if (planFinished && !way) planFinished = false;
-            planDone.disabled = !way;
+            // Every question the reader's answers lead to needs an answer
+            // before the plan is done, since the share art is drawn from them.
+            planDone.disabled = !way || (!planFinished && !planComplete());
             planDone.textContent = planFinished ? planDone.dataset.edit : planDone.dataset.done;
             planForm.hidden = planFinished;
             planSummary.hidden = !planFinished;
             planCopy.hidden = !planFinished || !navigator.clipboard;
             planHeadline.textContent = planFinished ? plan.dataset.summaryHeadline : plan.dataset.headline;
             if (planFinished) drawSummary();
+            if (planShotsChanged) planShotsChanged();
+            if (planUnlockChanged) planUnlockChanged();
           }
+          function planComplete() {
+            var list = plan.querySelector('[data-plan-steps="' + planWayValue() + '"]');
+            if (!list) return false;
+            return [].every.call(list.querySelectorAll("[data-plan-step]:not([hidden]) [data-plan-field]"), function (el) {
+              if (el.hasAttribute("data-time")) return !!(el.querySelector("input").value.trim() && el.querySelector("select").value);
+              return !!planFieldValue(el);
+            });
+          }
+          // Which share card the finished plan earns: see
+          // midterms-plan-cards.html for the keys. Both of the ID question's
+          // "yes" answers share a card.
+          planCardKey = function () {
+            var way = planWayValue();
+            if (!planFinished || !way) return "default";
+            if (way === "mail") {
+              return ["mail", planPicked("plan-mail-return_how"), planPicked("plan-mail-signed")].join("-");
+            }
+            var id = planPicked("plan-person-id");
+            return ["person", planPicked("plan-person-when"), planPicked("plan-person-how"), id === "none" ? "no" : "yes"].join("-");
+          };
           // The answers the plan is made of: how they're voting, then each
           // labelled step the reader's answers lead to, with whatever warnings
           // are showing under it. Unanswered steps are left out.
@@ -1593,9 +1626,19 @@
         var images = document.querySelector("[data-images]");
         var extra = document.querySelector("[data-extra]");
         var extraToggle = extra && extra.querySelector("summary");
+        // Week five's art is drawn from the plan, so nothing unlocks without a
+        // finished one: the confirm box waits for "I made my plan", and
+        // reopening the plan to edit it locks things again until it's done.
+        // The done mark itself stays, so finishing again restores it.
+        function planGate() {
+          return !plan || planFinished;
+        }
         function renderUnlock() {
-          var unlocked = done.indexOf(CURRENT) > -1;
-          if (confirmBox) confirmBox.checked = unlocked;
+          var unlocked = done.indexOf(CURRENT) > -1 && planGate();
+          if (confirmBox) {
+            confirmBox.checked = unlocked;
+            confirmBox.disabled = !planGate();
+          }
           if (images) images.classList.toggle("is-unlocked", unlocked);
           // Extra credit stays shut until the week is done. Unticking the
           // confirm box shuts it again.
@@ -1615,6 +1658,8 @@
             if (extra.classList.contains("is-locked")) e.preventDefault();
           });
         }
+
+        planUnlockChanged = renderUnlock;
 
         if (confirmBox) {
           confirmBox.addEventListener("change", function () {
@@ -1708,6 +1753,18 @@
         // Extra credit's art, when the week has any: one image per crop for
         // everyone, linked through its own share page rather than a state's.
         var EXTRA = {{ $extraShare }};
+        {{- $planCards := dict }}
+        {{- with $week.plan_card }}
+          {{- $pc := . }}
+          {{- range $key, $text := partial "midterms-plan-cards.html" $pc }}
+            {{- $planCards = merge $planCards (dict $key (dict
+                "vert" (partial "midterms-card-week5.html" (dict "crop" "vertical" "text" $text)).RelPermalink
+                "horiz" (partial "midterms-card-week5.html" (dict "crop" "horizontal" "text" $text)).RelPermalink)) }}
+          {{- end }}
+        {{- end }}
+        // Week five's art, one card per plan, keyed by planCardKey(). Each
+        // has its own share page, so a posted link carries the sharer's plan.
+        var PLAN_CARDS = {{ $planCards }};
         // Which set of crops the modal is showing: the week's or extra credit's.
         var openSet = "week";
         var SHARE_BASE = modal ? modal.getAttribute("data-share-base") : "";
@@ -1718,15 +1775,32 @@
           return select ? select.value : "";
         }
 
+        function planCard() {
+          var key = planCardKey ? planCardKey() : "default";
+          return PLAN_CARDS[key] ? key : "default";
+        }
+
         function shareUrlFor(code) {
           var page = openSet === "extra" ? "extra" : String(code).toLowerCase();
+          if (openSet !== "extra" && PLAN_CARDS.default) page = planCard();
           return new URL(SHARE_BASE + page + "/", location.href).href;
         }
 
         function cardUrl(crop) {
           if (openSet === "extra") return EXTRA[crop === "vert" ? "vert" : "horiz"] || null;
+          if (PLAN_CARDS.default) return PLAN_CARDS[planCard()][crop === "vert" ? "vert" : "horiz"];
           var s = states[currentState()];
           return s ? s[crop === "vert" ? "vert" : "horiz"] : null;
+        }
+
+        // A finished or edited plan swaps the week's share art for its own.
+        if (PLAN_CARDS.default) {
+          planShotsChanged = function () {
+            var card = PLAN_CARDS[planCard()];
+            document.querySelectorAll("[data-shot]").forEach(function (img) {
+              img.src = card[img.getAttribute("data-shot") === "vert" ? "vert" : "horiz"];
+            });
+          };
         }
 
         // Fetched before the click that shares it: on iOS, reaching share()

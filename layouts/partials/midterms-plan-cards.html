@@ -1,0 +1,28 @@
+{{- /*
+  Every share card week five can show, keyed the way the page's script names
+  the reader's plan. Takes the week's `plan_card` block from data/midterms.yml
+  and returns a dict of key to the card's sentence, {braces} and all:
+
+    default                    until the plan is finished
+    person-WHEN-HOW-ID         e.g. person-early-walk-yes
+    mail-RETURN-SIGNED         e.g. mail-dropbox-no
+*/ -}}
+{{- $c := . -}}
+{{- $out := dict "default" $c.default -}}
+{{- $p := $c.person -}}
+{{- range $when, $whenPart := $p.when -}}
+  {{- range $how, $howPart := $p.how -}}
+    {{- range $id, $idPart := $p.id -}}
+      {{- $key := printf "person-%s-%s-%s" $when $how $id -}}
+      {{- $out = merge $out (dict $key (partial "midterms-plan-join.html" (slice $whenPart $howPart $idPart))) -}}
+    {{- end -}}
+  {{- end -}}
+{{- end -}}
+{{- $m := $c.mail -}}
+{{- range $how, $howPart := $m.return_how -}}
+  {{- range $signed, $signedPart := $m.signed -}}
+    {{- $key := printf "mail-%s-%s" $how $signed -}}
+    {{- $out = merge $out (dict $key (partial "midterms-plan-join.html" (slice $m.way $howPart $signedPart))) -}}
+  {{- end -}}
+{{- end -}}
+{{- return $out -}}

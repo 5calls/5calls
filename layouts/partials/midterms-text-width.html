@@ -1,11 +1,12 @@
 {{- /*
   Width in pixels of `text` set in DM Sans at `size`. Takes
-  (dict "text" STR "font" "regular"|"bold" "size" NUM).
+  (dict "text" STR "font" "regular"|"bold"|"bolditalic" "size" NUM).
 
   Hugo draws text but can't measure it, so these are the fonts' own advance
-  widths, in thousandths of an em, read out of assets/fonts/DMSans-Regular.ttf
-  and DMSans-Bold.ttf with fontTools. Hugo doesn't kern, so plain sums are what
-  it draws. Anything not listed counts as an average lowercase letter.
+  widths, in thousandths of an em, read out of assets/fonts/DMSans-Regular.ttf,
+  DMSans-Bold.ttf and DMSans-BoldItalic.ttf with fontTools. Hugo doesn't kern,
+  so plain sums are what it draws. Anything not listed counts as an average
+  lowercase letter.
 */ -}}
 {{- $regular := dict
   " " 200 "!" 181 "\"" 283 "#" 791 "$" 538 "%" 773 "&" 691 "'" 157 "(" 327
@@ -35,11 +36,28 @@
   "z" 459 "{" 366 "|" 225 "}" 366 "~" 579 "·" 237 "—" 922 "–" 700 "‘" 245
   "’" 245 "“" 443 "”" 443 "•" 394 "…" 670
 -}}
+{{- $boldItalic := dict
+  " " 200 "!" 238 "\"" 378 "#" 867 "$" 563 "%" 887 "&" 716 "'" 214 "(" 370
+  ")" 370 "*" 475 "+" 579 "," 211 "-" 493 "." 236 "/" 427 "0" 693 "1" 316
+  "2" 537 "3" 565 "4" 620 "5" 559 "6" 590 "7" 528 "8" 587 "9" 590 ":" 238
+  ";" 238 "<" 579 "=" 579 ">" 579 "?" 530 "@" 1026 "A" 674 "B" 602 "C" 721
+  "D" 682 "E" 536 "F" 516 "G" 755 "H" 666 "I" 225 "J" 509 "K" 612 "L" 502
+  "M" 845 "N" 682 "O" 773 "P" 579 "Q" 773 "R" 587 "S" 563 "T" 554 "U" 640
+  "V" 674 "W" 994 "X" 619 "Y" 617 "Z" 496 "[" 318 "\\" 742 "]" 318 "^" 657
+  "_" 651 "`" 229 "a" 541 "b" 610 "c" 556 "d" 610 "e" 555 "f" 327 "g" 579
+  "h" 572 "i" 247 "j" 249 "k" 549 "l" 225 "m" 896 "n" 567 "o" 564 "p" 611
+  "q" 610 "r" 364 "s" 479 "t" 363 "u" 567 "v" 533 "w" 789 "x" 547 "y" 570
+  "z" 459 "{" 366 "|" 225 "}" 366 "~" 579 "·" 240 "—" 835 "–" 613 "‘" 255
+  "’" 255 "“" 453 "”" 453 "•" 399 "…" 694
+-}}
 {{- $adv := $regular -}}
 {{- $fallback := 478 -}}
 {{- if eq .font "bold" -}}
   {{- $adv = $bold -}}
   {{- $fallback = 520 -}}
+{{- else if eq .font "bolditalic" -}}
+  {{- $adv = $boldItalic -}}
+  {{- $fallback = 521 -}}
 {{- end -}}
 {{- $units := 0 -}}
 {{- range split .text "" -}}
