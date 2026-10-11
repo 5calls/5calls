@@ -8,9 +8,11 @@
   a plan to vote!"; scripts/build-midterms-plates5.py cuts it from the
   designer's comps with their sample sentence painted out. Laid over it, the
   reader's sentence in DM Sans, centred in the panel the way the comps set it:
-  the words in black, the reader's answers ({braces} in the sentence) in blue
-  bold italic and underlined, a phrase's underline running on through the
-  spaces inside it. It steps down in size until it fits the panel.
+  the words in black, the reader's answers ({braces} in the sentence) in black
+  bold italic on a light orange highlighter stroke, which runs on through the
+  spaces inside an answer. A highlight rather than the comps' blue underline,
+  so the answers don't read as links. It steps down in size until it fits the
+  panel.
 */ -}}
 {{- /* Measured off each crop's comp: the panel's centre line and the widest a
        row may run, the rows the sentence may use (below the headline, above
@@ -23,24 +25,25 @@
         "sizes" (slice 36 34 32 30 28 26) "pitch" 1.306 -}}
 {{- end -}}
 {{- $plate := resources.Get (printf "images/midterms/share-%s-week5.png" .crop) -}}
-{{- $line := resources.Get "images/midterms/week5-underline.png" -}}
+{{- $mark := resources.Get "images/midterms/week5-highlight.png" -}}
 {{- $fonts := dict
       "regular" (resources.Get "fonts/DMSans-Regular.ttf")
       "bolditalic" (resources.Get "fonts/DMSans-BoldItalic.ttf") -}}
 {{- $ink := "#000000" -}}
-{{- $blue := "#1875d1" -}}
 {{- /* DM Sans, in ems: cap height and descender ink, the line-box ascent
-       images.Text measures its y from, the space, and where the comps put
-       the underline and how thick. */ -}}
+       images.Text measures its y from, and the space. Then the highlight:
+       how far above the baseline it starts, how tall it is, and how far it
+       runs past an answer's ends. */ -}}
 {{- $capInk := 0.70 -}}
 {{- $descInk := 0.20 -}}
 {{- $lineAscent := 0.992 -}}
 {{- $space := 0.2 -}}
-{{- $ulOffset := 0.1 -}}
-{{- $ulThick := 0.07 -}}
+{{- $hlTop := 0.86 -}}
+{{- $hlHeight := 1.12 -}}
+{{- $hlPad := 0.05 -}}
 
 {{- /* The sentence as words, each knowing whether it is an answer, which
-       answer (so an underline only bridges spaces inside one), and whether a
+       answer (so a highlight only bridges spaces inside one), and whether a
        space comes before it. "Day." splits into "Day" and a "." with no
        space, so the full stop stays black. */ -}}
 {{- $words := slice -}}
@@ -90,29 +93,30 @@
        centre line. */ -}}
 {{- $size := $layout.size -}}
 {{- $baseline := add (sub (div (add $m.top $m.bottom) 2) (div $layout.height 2)) (mul $capInk $size) -}}
-{{- $thick := math.Max 2 (math.Round (mul $ulThick $size)) -}}
+{{- $marks := slice -}}
 {{- $filters := slice -}}
 {{- range $r := $layout.rows -}}
   {{- $x := sub $m.center (div $r.width 2) -}}
   {{- $y := int (math.Round (sub $baseline (mul $lineAscent $size))) -}}
   {{- $prev := dict -}}
   {{- range $w := $r.row -}}
-    {{- /* An underline starts at its word, or back at the space before it
-           when that space is inside the same answer. */ -}}
-    {{- $from := add $x $w.gap -}}
+    {{- /* A highlight starts a little before its word, or back at the space
+           before it when that space is inside the same answer. */ -}}
+    {{- $from := sub (add $x $w.gap) (mul $hlPad $size) -}}
     {{- if and $w.em $prev.em (eq $prev.phrase $w.phrase) }}{{ $from = $x }}{{ end -}}
     {{- $x = add $x $w.gap -}}
     {{- $filters = $filters | append (images.Text $w.text (dict
           "x" (int (math.Round $x)) "y" $y "size" $size
-          "color" (cond $w.em $blue $ink) "font" (index $fonts $w.font))) -}}
+          "color" $ink "font" (index $fonts $w.font))) -}}
     {{- $x = add $x $w.width -}}
     {{- if $w.em -}}
-      {{- $ul := $line.Resize (printf "%dx%d" (int (math.Round (sub $x $from))) (int $thick)) -}}
-      {{- $filters = $filters | append (images.Overlay $ul (int (math.Round $from))
-            (int (math.Round (add $baseline (mul $ulOffset $size))))) -}}
+      {{- $hl := $mark.Resize (printf "%dx%d" (int (math.Round (add (sub $x $from) (mul $hlPad $size)))) (int (math.Round (mul $hlHeight $size)))) -}}
+      {{- $marks = $marks | append (images.Overlay $hl (int (math.Round $from))
+            (int (math.Round (sub $baseline (mul $hlTop $size))))) -}}
     {{- end -}}
     {{- $prev = $w -}}
   {{- end -}}
   {{- $baseline = add $baseline (mul $m.pitch $size) -}}
 {{- end -}}
-{{- return $plate.Filter $filters -}}
+{{- /* Highlights first, so the words sit on them. */ -}}
+{{- return $plate.Filter ($marks | append $filters) -}}

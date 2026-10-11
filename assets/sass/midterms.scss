@@ -1661,6 +1661,11 @@ body {
 .mt-plan {
   gap: 20px;
 
+  // The plan's own title, larger than the other weeks' deck detail.
+  .mt-deck__detail {
+    font-size: 34px;
+  }
+
   // Only the done button is solid; copy sits beside it as an outline.
   button.mt-pill:not(.mt-pill--solid) {
     background: #fff;

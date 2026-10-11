@@ -6,7 +6,7 @@
   real form control, so the page works with a keyboard and a screen reader; the
   script shows and hides the branches, saves the answers in this browser, and
   once the reader says they're done, folds the questions into a summary of
-  their answers to screenshot or copy.
+  their answers to screenshot or download as an image.
 
   Everything is drawn for every state; the script hides the ways, options,
   questions and warnings the reader's state doesn't have (see
@@ -14,13 +14,15 @@
 */ -}}
 {{- $plan := . -}}
 <div class="mt-message mt-plan" data-plan
-     data-cal-unavailable="{{ $plan.calendar.unavailable }}" data-cal-election="{{ $plan.calendar.election_day }}"
+     data-cal-available="{{ $plan.calendar.available }}" data-cal-available-one="{{ $plan.calendar.available_one }}"
+     data-cal-today="{{ $plan.calendar.today }}" data-cal-election="{{ $plan.calendar.election_day }}"
      data-return-late="{{ $plan.notes.return_late }}" data-return-early="{{ $plan.notes.return_early }}"
+     data-return-before-fill="{{ $plan.notes.return_before_fill }}" data-id-link="{{ $plan.notes.id_link }}"
      data-mail-only="{{ $plan.notes.mail_only }}"
      data-cal-late="{{ $plan.calendar.late }}" data-cal-late-label="{{ $plan.calendar.late_label }}"
      data-cal-prev="{{ $plan.calendar.previous }}" data-cal-next="{{ $plan.calendar.next }}"
      data-headline="{{ $plan.headline }}" data-summary-headline="{{ $plan.summary_headline }}"
-     data-way-label="{{ $plan.question }}">
+     data-way-label="{{ $plan.summary_way }}">
   {{- /* The reader's state, in the same place the other weeks put it. The
          dates below follow it, so changing it goes back up to the picker. */ -}}
   <div class="mt-deck__top">
@@ -54,7 +56,8 @@
           <li class="mt-plan__step" data-plan-step
               {{- range $name, $value := $step.show }} data-show-field="plan-{{ $key }}-{{ $name }}" data-show-value="{{ $value }}"{{ end }}
               {{- with $step.hint }} data-hint="{{ . }}"{{ end }}
-              {{- with $step.summary }} data-summary="{{ . }}"{{ end }}>
+              {{- with $step.summary }} data-summary="{{ . }}"{{ end }}
+              {{- with $step.summary_prefix }} data-summary-prefix="{{ . }}"{{ end }}>
             <p class="mt-plan__question" id="{{ $qid }}">{{ $step.question }}</p>
             <div class="mt-plan__answer" role="group" aria-labelledby="{{ $qid }}">
               {{- range $step.fields }}
@@ -122,6 +125,7 @@
   <div class="mt-message__actions">
     <button type="button" class="mt-pill mt-pill--solid" data-plan-done
             data-done="{{ $plan.done_cta }}" data-edit="{{ $plan.edit_cta }}" disabled>{{ $plan.done_cta }}</button>
-    <button type="button" class="mt-pill" data-plan-copy data-copied="{{ $plan.copied }}" hidden>{{ $plan.copy_cta }}</button>
+    <button type="button" class="mt-pill" data-plan-download
+            data-file="{{ $plan.download_file }}" data-url="{{ $plan.download_url }}" hidden>{{ $plan.download_cta }}</button>
   </div>
 </div>

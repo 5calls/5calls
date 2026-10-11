@@ -13,8 +13,9 @@
     return_office   ... in person
 
   Each is {ranges: [{from, to}, ...], note}, and return_mail adds late_from,
-  the first day of the last week before the deadline, and by, the week-early
-  date we recommend. A range is two ISO dates, and an empty `from` means
+  the first day of the last week before the deadline, by, the week-early
+  date we recommend, and deadline, the state's rule ("arrive by Tue, Nov 3 at
+  8PM"). A range is two ISO dates, and an empty `from` means
   "today", which only the reader's browser knows; the picker clips every range
   to today as well. Election Day is the fixed last day.
 
@@ -26,6 +27,9 @@
              form picks it and skips the question)
     hints    for a step with a `hint`, the line shown under it
     warn     for a step with a `state_warn`, the warning shown under it
+    id_url   the state's ID page from week three, linked after any line above
+             that is about ID: the ID hint, a hand-in note marked id_link,
+             and an envelope warning named in id_warn
 
   Dates come from data/midterms_voting.yml, so a state's picker follows the
   same dates its week-two card prints, with the exceptions in
@@ -65,12 +69,18 @@
 {{- $mailLast := partial "midterms-iso.html" $s.return_mail -}}
 {{- $mailDeadline := time.AsTime (printf "%sT12:00:00Z" $mailLast) -}}
 {{- $mailNote := "" -}}
+{{- /* The mail deadline as the late warning states it: arrive by, or be
+       postmarked by, the day and time. */ -}}
+{{- $mailWhen := $s.return_mail -}}
+{{- with $s.return_mail_time }}{{ $mailWhen = printf "%s at %s" $mailWhen . }}{{ end -}}
+{{- $mailRule := cond (eq $s.return_mail_received true) $notes.deadline_received $notes.deadline_postmarked -}}
 {{- with $s.return_mail_by }}{{ $mailNote = replace $notes.mail_by "{date}" . }}{{ end -}}
 {{- $returnMail := dict
       "ranges" (slice (dict "from" "" "to" $mailLast))
       "note" $mailNote
       "late_from" ($mailDeadline.AddDate 0 0 -6 | time.Format "2006-01-02")
-      "by" $s.return_mail_by -}}
+      "by" $s.return_mail_by
+      "deadline" (replace $mailRule "{date}" $mailWhen) -}}
 {{- $ways := slice "mail" -}}
 {{- $returns := dict "mail" $returnMail -}}
 {{- $last := $mailLast -}}
@@ -83,8 +93,9 @@
   {{- $deadline := . -}}
   {{- with $s.return_in_person_time }}{{ $deadline = printf "%s at %s" $deadline . }}{{ end -}}
   {{- $note := replace (replace $notes.in_person "{state}" $s.name) "{deadline}" $deadline -}}
-  {{- if in $extra.in_person_id $s.code }}{{ $note = printf "%s %s" $note (replace $notes.in_person_id "{state}" $s.name) }}{{ end -}}
-  {{- $returns = merge $returns (dict "office" (dict "ranges" (slice (dict "from" "" "to" $to)) "note" $note)) -}}
+  {{- $idNote := in $extra.in_person_id $s.code -}}
+  {{- if $idNote }}{{ $note = printf "%s %s" $note (replace $notes.in_person_id "{state}" $s.name) }}{{ end -}}
+  {{- $returns = merge $returns (dict "office" (dict "ranges" (slice (dict "from" "" "to" $to)) "note" $note "id_link" $idNote)) -}}
   {{- $ways = $ways | append "office" -}}
   {{- if gt $to $last }}{{ $last = $to }}{{ end -}}
 {{- end -}}
@@ -111,16 +122,19 @@
 {{- /* Before a way back is picked, any day one of them allows. */ -}}
 {{- $window := slice (dict "from" "" "to" $last) -}}
 
-{{- /* ID at the polls. Bucket E states only ask first-time voters, so
-       "I don't need one" stays on offer there and nowhere else. The keys are
-       the ID blank's option keys in data/midterms.yml. */ -}}
-{{- $id := slice "have" "getting" -}}
+{{- /* ID at the polls. Buckets A-D ask voters for ID, so the plan asks
+       whether the reader has it, with the state's line under the question.
+       Bucket E asks no one but first-time voters, so it allows only "none"
+       and the question is skipped. The keys are the ID blank's option keys
+       in data/midterms.yml. */ -}}
+{{- $id := slice "none" -}}
 {{- $idHint := "" -}}
 {{- with $idData -}}
-  {{- if eq .bucket "E" }}{{ $id = $id | append "none" }}{{ end -}}
+  {{- if ne .bucket "E" }}{{ $id = slice "yes" "no" }}{{ end -}}
   {{- $idHint = printf "%s." .lede -}}
 {{- end -}}
 
+{{- $envelope := index $extra.envelope $s.code | default "" -}}
 {{- $planWays := cond (in $extra.mail_only $s.code) (slice "mail") (slice "person" "mail") -}}
 
 {{- return dict
@@ -133,4 +147,6 @@
       "ways" $planWays
       "choices" (dict "return_how" $ways "id" $id "vote_when" $voteWhen)
       "hints" (dict "id" $idHint "vote_when" $earlyHint "election" $electionHint)
-      "warn" (dict "envelope" (index $extra.envelope $s.code | default "")) -}}
+      "warn" (dict "envelope" $envelope)
+      "id_warn" (dict "envelope" (findRE `\bID\b` $envelope | len | lt 0))
+      "id_url" (cond (isset $idData "url") (index $idData "url") "") -}}

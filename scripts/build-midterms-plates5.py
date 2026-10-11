@@ -8,8 +8,8 @@ The comps carry a sample plan sentence in the cream panel, under "I made a
 plan to vote!". This paints that sentence out with the panel's own cream and
 writes the result to assets/images/midterms/share-{vertical,horizontal}-week5.png,
 where layouts/partials/midterms-card-week5.html sets each reader's plan into
-the same space. Also writes the 1x1 swatch that card stretches into its
-underlines.
+the same space. Also writes the 1x1 swatch that card stretches into the
+highlight behind each answer.
 
 Only the panel is painted, row by row from its own left edge to its right, so
 the art around it (the pin above, the car below, the panel's shadow) is left
@@ -22,7 +22,9 @@ import sys
 from PIL import Image
 
 CREAM = (255, 245, 232)
-BLUE = (24, 117, 209)
+# The highlight behind the reader's answers: a light orange, so the answers
+# stand out without reading as links.
+HIGHLIGHT = (255, 205, 160)
 
 # The body text's rows on each comp, below the headline's descenders and above
 # the panel's bottom edge, and a column known to be inside the panel.
@@ -69,8 +71,8 @@ def main():
         out = os.path.join(OUT, f"share-{crop}-week5.png")
         blank(path, crop).save(out, optimize=True)
         print("wrote", os.path.normpath(out))
-    swatch = os.path.join(OUT, "week5-underline.png")
-    Image.new("RGB", (1, 1), BLUE).save(swatch)
+    swatch = os.path.join(OUT, "week5-highlight.png")
+    Image.new("RGB", (1, 1), HIGHLIGHT).save(swatch)
     print("wrote", os.path.normpath(swatch))
 
 

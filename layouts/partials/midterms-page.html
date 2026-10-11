@@ -1103,7 +1103,7 @@
           var ELECTION = "2026-11-03";
           var MONTHS = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
           var planWay = plan.querySelectorAll("[data-plan-way]");
-          var planCopy = plan.querySelector("[data-plan-copy]");
+          var planDownload = plan.querySelector("[data-plan-download]");
           var planDone = plan.querySelector("[data-plan-done]");
           var planForm = plan.querySelector("[data-plan-form]");
           var planSummary = plan.querySelector("[data-plan-summary]");
@@ -1140,24 +1140,32 @@
             var on = field.closest("[data-plan-steps]").querySelector('[data-choice-rule="' + rule + '"] input:checked');
             return on ? on.value : "";
           }
-          // The earliest day a field may take: today, or for a return date, the
-          // day the ballot was filled out.
-          function planMin(field) {
-            var min = isoOf(new Date());
-            if (field.dataset.rule === "return") {
-              var fill = field.closest("[data-plan-steps]").querySelector("[data-rule=fill] [data-date-value]");
-              if (fill && fill.value > min) min = fill.value;
-            }
-            return min;
+          // Every date picker starts today. A return date may still be picked
+          // before the fill-out date; planHint flags that rather than hiding
+          // the days.
+          function planMin() {
+            return isoOf(new Date());
           }
           function dayAllowed(field, iso) {
-            var min = planMin(field);
+            var min = planMin();
             if (iso < min || iso > ELECTION) return false;
             var rules = planRules(field);
             if (!rules) return true;
             return rules.ranges.some(function (r) {
               return iso >= (r.from || min) && iso <= r.to;
             });
+          }
+          // The first and last day the picker allows, or null if none is left.
+          function openSpan(field) {
+            var first = null;
+            var last = null;
+            for (var d = dateOf(planMin()); isoOf(d) <= ELECTION; d.setDate(d.getDate() + 1)) {
+              var iso = isoOf(d);
+              if (!dayAllowed(field, iso)) continue;
+              if (!first) first = iso;
+              last = iso;
+            }
+            return first ? { from: first, to: last } : null;
           }
           function planLastDay(field) {
             var rules = planRules(field);
@@ -1204,7 +1212,7 @@
           function drawCal(field, year, month) {
             var cal = field.querySelector("[data-cal]");
             cal.textContent = "";
-            var min = planMin(field);
+            var min = planMin();
             var first = new Date(year, month, 1);
             var lastDay = planLastDay(field);
             var minMonth = dateOf(min).getFullYear() * 12 + dateOf(min).getMonth();
@@ -1281,8 +1289,18 @@
             var foot = document.createElement("div");
             foot.className = "mt-cal__foot";
             var s = planState();
-            foot.textContent = (plan.dataset.calUnavailable || "").replace("{state}", s ? s.name : "your state");
-            cal.append(foot);
+            var span = openSpan(field);
+            if (span) {
+              var short = function (iso) {
+                if (iso === isoOf(new Date())) return plan.dataset.calToday;
+                return dateOf(iso).toLocaleDateString("en-US", { month: "short", day: "numeric" });
+              };
+              var text = span.from === span.to
+                ? plan.dataset.calAvailableOne.replace("{date}", short(span.from))
+                : plan.dataset.calAvailable.replace("{from}", short(span.from)).replace("{to}", short(span.to));
+              foot.textContent = text.replace("{state}", s ? s.name : "your state");
+              cal.append(foot);
+            }
             if (anyLate) {
               var late = document.createElement("div");
               late.className = "mt-cal__foot mt-cal__foot--late";
@@ -1292,14 +1310,14 @@
             if (rules && rules.note && !anyLate) {
               var note = document.createElement("div");
               note.className = "mt-cal__foot";
-              note.textContent = rules.note;
+              planSetText(note, rules.note, rules.id_link);
               cal.append(note);
             }
           }
           function showCal(field) {
             closeCal(false);
             openCal = field;
-            var min = dateOf(planMin(field));
+            var min = dateOf(planMin());
             var start = whenValue(field) ? dateOf(whenValue(field)) : min;
             if (!whenValue(field)) {
               // Open on the first month that has a day to pick.
@@ -1373,9 +1391,24 @@
             });
             plan.querySelectorAll("[data-plan-state-warn]").forEach(function (warn) {
               var text = (p && p.warn[warn.dataset.planStateWarn]) || "";
-              warn.textContent = text;
+              planSetText(warn, text, p && p.id_warn[warn.dataset.planStateWarn]);
               warn.hidden = !text;
             });
+          }
+          // A line about ID ends with a link to the state's ID page. The text
+          // alone stays in data-text, for the summary and its image.
+          function planSetText(el, text, link) {
+            var s = planState();
+            var url = link && s && s.plan && s.plan.id_url;
+            el.textContent = text;
+            el.dataset.text = text;
+            if (!text || !url) return;
+            var a = document.createElement("a");
+            a.href = url;
+            a.rel = "noopener";
+            a.target = "_blank";
+            a.textContent = plan.dataset.idLink;
+            el.append(" ", a, ".");
           }
           // The line under a question: for a date, what the state's rules mean
           // for it; for a step with a hint, the state's own line about it.
@@ -1384,22 +1417,30 @@
             if (!field) {
               var s = planState();
               var key = step.dataset.hint;
-              return { text: (s && s.plan && key && s.plan.hints[key]) || "", kind: "" };
+              return { text: (s && s.plan && key && s.plan.hints[key]) || "", kind: "", link: key === "id" };
             }
             var iso = whenValue(field);
             var rules = planRules(field);
+            // A return date before the fill-out date is a mix-up, and says so
+            // ahead of anything about the deadline.
+            if (iso && field.dataset.rule === "return") {
+              var fill = field.closest("[data-plan-steps]").querySelector("[data-rule=fill] [data-date-value]");
+              if (fill && fill.value && iso < fill.value) {
+                return { text: plan.dataset.returnBeforeFill.replace("{date}", prettyDate(fill.value)), kind: "late" };
+              }
+            }
             // Once a mailed return date is picked the hint says how it sits
             // against the deadline: a warning inside the last week, praise
             // before it. Handing a ballot in has no late week.
             if (iso && rules && rules.late_from) {
               var kind = iso >= rules.late_from ? "late" : "early";
-              return { text: (kind === "late" ? plan.dataset.returnLate : plan.dataset.returnEarly).replace("{date}", rules.by || ""), kind: kind };
+              var text = kind === "late" ? plan.dataset.returnLate : plan.dataset.returnEarly;
+              return { text: text.replace("{deadline}", rules.deadline || "").replace("{date}", rules.by || ""), kind: kind };
             }
-            return { text: rules && rules.note ? rules.note : "", kind: "" };
+            return { text: rules && rules.note ? rules.note : "", kind: "", link: !!(rules && rules.id_link) };
           }
           // A state change can strand a date it no longer offers, and a return
-          // date can no longer come before the day it is filled out, or fall
-          // outside the days its way back allows.
+          // date can fall outside the days its way back allows.
           planRefresh = function () {
             planLimit();
             plan.querySelectorAll("[data-when]").forEach(function (field) {
@@ -1408,7 +1449,7 @@
             });
             plan.querySelectorAll("[data-plan-hint]").forEach(function (hint) {
               var h = planHint(hint.closest(".mt-plan__step"));
-              hint.textContent = h.text;
+              planSetText(hint, h.text, h.link);
               hint.classList.toggle("is-warn", h.kind === "late");
               hint.classList.toggle("is-good", h.kind === "early");
               hint.hidden = !h.text;
@@ -1491,7 +1532,7 @@
             planDone.textContent = planFinished ? planDone.dataset.edit : planDone.dataset.done;
             planForm.hidden = planFinished;
             planSummary.hidden = !planFinished;
-            planCopy.hidden = !planFinished || !navigator.clipboard;
+            planDownload.hidden = !planFinished;
             planHeadline.textContent = planFinished ? plan.dataset.summaryHeadline : plan.dataset.headline;
             if (planFinished) drawSummary();
             if (planShotsChanged) planShotsChanged();
@@ -1514,8 +1555,7 @@
             if (way === "mail") {
               return ["mail", planPicked("plan-mail-return_how"), planPicked("plan-mail-signed")].join("-");
             }
-            var id = planPicked("plan-person-id");
-            return ["person", planPicked("plan-person-when"), planPicked("plan-person-how"), id === "none" ? "no" : "yes"].join("-");
+            return ["person", planPicked("plan-person-when"), planPicked("plan-person-how"), planPicked("plan-person-id")].join("-");
           };
           // The answers the plan is made of: how they're voting, then each
           // labelled step the reader's answers lead to, with whatever warnings
@@ -1534,9 +1574,10 @@
                 if (v) values.push(v);
               });
               if (!values.length) return;
+              if (step.dataset.summaryPrefix) values.unshift(step.dataset.summaryPrefix);
               var warn = [];
               step.querySelectorAll(".mt-plan__warn:not([hidden])").forEach(function (w) {
-                warn.push(w.textContent);
+                warn.push(w.dataset.text || w.textContent);
               });
               rows.push({ label: step.dataset.summary, value: values.join(", "), warn: warn });
             });
@@ -1561,12 +1602,141 @@
               planSummary.append(item);
             });
           }
-          function planText() {
-            return planRows()
-              .map(function (row) {
-                return row.label + ": " + row.value;
-              })
-              .join("\n");
+          // The finished plan as an image, drawn the way the summary is set on
+          // the page: the headline and state tag over the rows, in a white
+          // card on the page's cream, with the site's URL under it. Laid out
+          // once to measure, then drawn at twice the size for a sharp image.
+          var PLAN_IMAGE = {
+            width: 540, margin: 28, pad: 24, gap: 16,
+            cream: "#fdf1e3", ink: "#4a4a4a", inkSolid: "#2a2a2a", orange: "#f98033", blue: "#2f6690",
+            body: "Archivo, system-ui, sans-serif", display: '"Bebas Neue", Impact, sans-serif'
+          };
+          function planWrap(ctx, text, width) {
+            var lines = [];
+            var line = "";
+            text.split(" ").forEach(function (word) {
+              var next = line ? line + " " + word : word;
+              if (line && ctx.measureText(next).width > width) {
+                lines.push(line);
+                line = word;
+              } else {
+                line = next;
+              }
+            });
+            if (line) lines.push(line);
+            return lines;
+          }
+          function planPaint(ctx, draw) {
+            var P = PLAN_IMAGE;
+            var left = P.margin + P.pad;
+            var inner = P.width - 2 * (P.margin + P.pad);
+            var y = P.margin + 22;
+            var s = planState();
+            var rows = planRows();
+            var cardTop = P.margin;
+            var ink = function (a) { return "rgba(74, 74, 74, " + a + ")"; };
+
+            // The headline, with the state tag on the right.
+            ctx.font = "34px " + P.display;
+            ctx.textBaseline = "alphabetic";
+            if (draw) {
+              ctx.fillStyle = ink(0.7);
+              ctx.fillText(plan.dataset.summaryHeadline, left, y + 29);
+            }
+            if (s) {
+              ctx.font = "600 15px " + P.body;
+              var tag = s.name.toUpperCase();
+              var tw = ctx.measureText(tag).width + 28;
+              if (draw) {
+                ctx.fillStyle = "rgba(47, 102, 144, 0.12)";
+                ctx.beginPath();
+                ctx.roundRect(left + inner - tw, y, tw, 34, 17);
+                ctx.fill();
+                ctx.fillStyle = P.blue;
+                ctx.fillText(tag, left + inner - tw + 14, y + 22);
+              }
+            }
+            y += 34 + 20;
+
+            rows.forEach(function (row, i) {
+              ctx.font = "600 13px " + P.body;
+              if (draw) {
+                ctx.fillStyle = ink(0.65);
+                ctx.fillText(row.label.toUpperCase(), left, y + 13);
+              }
+              y += 13 + 6;
+              ctx.font = "600 22px " + P.body;
+              planWrap(ctx, row.value, inner).forEach(function (line) {
+                if (draw) {
+                  ctx.fillStyle = P.inkSolid;
+                  ctx.fillText(line, left, y + 21);
+                }
+                y += 29;
+              });
+              row.warn.forEach(function (text) {
+                y += 8;
+                ctx.font = "16px " + P.body;
+                var lines = planWrap(ctx, text, inner - 32);
+                var h = lines.length * 23 + 20;
+                if (draw) {
+                  ctx.fillStyle = "rgba(249, 128, 51, 0.1)";
+                  ctx.fillRect(left, y, inner, h);
+                  ctx.fillStyle = P.orange;
+                  ctx.fillRect(left, y, 4, h);
+                  ctx.fillStyle = P.inkSolid;
+                  lines.forEach(function (line, j) {
+                    ctx.fillText(line, left + 18, y + 10 + 17 + j * 23);
+                  });
+                }
+                y += h;
+              });
+              if (i < rows.length - 1) {
+                y += 14;
+                if (draw) {
+                  ctx.fillStyle = ink(0.12);
+                  ctx.fillRect(left, y, inner, 1);
+                }
+                y += 1 + P.gap;
+              }
+            });
+            y += 22;
+            var cardBottom = y;
+
+            if (draw) {
+              // The card goes under what's already drawn.
+              ctx.save();
+              ctx.globalCompositeOperation = "destination-over";
+              ctx.fillStyle = "#fff";
+              ctx.strokeStyle = ink(0.2);
+              ctx.lineWidth = 1;
+              ctx.beginPath();
+              ctx.roundRect(P.margin + 0.5, cardTop + 0.5, P.width - 2 * P.margin - 1, cardBottom - cardTop - 1, 10);
+              ctx.stroke();
+              ctx.fill();
+              ctx.fillStyle = P.cream;
+              ctx.fillRect(0, 0, P.width, ctx.canvas.height);
+              ctx.restore();
+            }
+            y += 30;
+            ctx.font = "26px " + P.display;
+            if (draw) {
+              ctx.fillStyle = P.orange;
+              ctx.textAlign = "center";
+              ctx.fillText(planDownload.dataset.url, P.width / 2, y);
+              ctx.textAlign = "start";
+            }
+            return y + P.margin - 6;
+          }
+          function planImage(done) {
+            var scale = 2;
+            var canvas = document.createElement("canvas");
+            var ctx = canvas.getContext("2d");
+            var height = planPaint(ctx, false);
+            canvas.width = PLAN_IMAGE.width * scale;
+            canvas.height = Math.ceil(height * scale);
+            ctx.scale(scale, scale);
+            planPaint(ctx, true);
+            canvas.toBlob(done, "image/png");
           }
 
           try {
@@ -1611,13 +1781,27 @@
             planSave();
             if (plan.getBoundingClientRect().top < 0) plan.scrollIntoView({ behavior: "smooth", block: "start" });
           });
-          var planLabel = planCopy.textContent;
-          planCopy.addEventListener("click", function () {
-            navigator.clipboard.writeText(planText()).then(function () {
-              planCopy.textContent = planCopy.dataset.copied;
-              setTimeout(function () {
-                planCopy.textContent = planLabel;
-              }, 2000);
+          // Wait for the page's fonts, so the canvas draws in them rather than
+          // a fallback, then save the image.
+          planDownload.addEventListener("click", function () {
+            var fonts = document.fonts
+              ? Promise.all(["34px", "600 22px", "16px"].map(function (f, i) {
+                  return document.fonts.load(f + (i ? " Archivo" : ' "Bebas Neue"'));
+                })).catch(function () {})
+              : Promise.resolve();
+            fonts.then(function () {
+              planImage(function (blob) {
+                if (!blob) return;
+                var a = document.createElement("a");
+                a.href = URL.createObjectURL(blob);
+                a.download = planDownload.dataset.file;
+                document.body.append(a);
+                a.click();
+                a.remove();
+                setTimeout(function () {
+                  URL.revokeObjectURL(a.href);
+                }, 1000);
+              });
             });
           });
         }
@@ -1970,6 +2154,9 @@
         function applyState(code) {
           var s = states[code];
           if (!s) return;
+          // First, so everything below that asks for the current state,
+          // the voting plan included, gets this one.
+          if (select && select.value !== code) select.value = code;
 
           // The deadline card. Each state's copy is drawn at build time, so it
           // is swapped in whole.
@@ -2038,8 +2225,6 @@
             review.textContent = s.review ? code + " deck flagged upstream: " + s.review : "";
             review.hidden = !s.review;
           }
-
-          if (select && select.value !== code) select.value = code;
         }
 
         function remember(code) {
