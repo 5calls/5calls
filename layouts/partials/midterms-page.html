@@ -644,8 +644,16 @@
               </span>
             </summary>
             <div class="mt-extra__grid">
-              {{- with .part }}
+              {{- /* One part, or under `parts` several, each with its own
+                     heading, in the one column. */ -}}
+              {{- with .parts | default (cond (isset . "part") (slice .part) slice) }}
                 <div class="mt-extra__main">
+                {{- range . }}
+                {{- /* A part with a `preview` shows that image beside its
+                       words, linked to the same file as its button. */ -}}
+                {{- $preview := .preview }}
+                <div class="mt-extra__part{{ with $preview }} mt-extra__part--preview{{ end }}">
+                  <div class="mt-extra__part-text">
                   <h3>{{ .title }}</h3>
                   {{- /* Each entry is a paragraph, or a {cta: {label, url}}
                          entry for a button, which lets the button sit between
@@ -659,8 +667,11 @@
                     {{- /* A button off the site gets rel="noopener", like every
                            other outbound link here; one pointing at our own
                            /vote/ pages does not need it. */ -}}
+                    {{- /* `download` names the saved file, so the browser
+                           saves it rather than opening it to print. */ -}}
                     <div><a class="mt-pill mt-pill--solid" href="{{ .url }}"
-                       {{- if hasPrefix .url "http" }} rel="noopener"{{ end }}>{{ .label }}</a></div>
+                       {{- if hasPrefix .url "http" }} rel="noopener"{{ end }}
+                       {{- with .download }} download="{{ . }}"{{ end }}>{{ .label }}</a></div>
                       {{- end }}
                     {{- else }}
                     <p>{{ . | markdownify }}</p>
@@ -675,6 +686,17 @@
                       </div>
                     </div>
                   {{- end }}
+                  </div>
+                  {{- with $preview }}
+                    {{- $img := resources.Get .image }}
+                    {{- $img = $img.Resize "480x" }}
+                    <a class="mt-extra__preview" href="{{ .url }}"{{ with .download }} download="{{ . }}"{{ end }}>
+                      <img src="{{ $img.RelPermalink }}" alt="{{ .alt }}"
+                           width="{{ $img.Width }}" height="{{ $img.Height }}" loading="lazy" />
+                    </a>
+                  {{- end }}
+                </div>
+                {{- end }}
                 </div>
               {{- end }}
               {{- /* The same art for everyone, so no state swaps these; the
@@ -1454,6 +1476,17 @@
               hint.classList.toggle("is-good", h.kind === "early");
               hint.hidden = !h.text;
             });
+            // The week-early advice under how a ballot goes back is about the
+            // mail. Picking a drop box or the office swaps in that way's own
+            // deadline instead.
+            plan.querySelectorAll("[data-plan-note]").forEach(function (note) {
+              var step = note.closest(".mt-plan__step");
+              var on = step.querySelector('[data-choice-rule="return_how"] input:checked');
+              var s = planState();
+              var way = on && on.value !== "mail" && s && s.plan && s.plan["return_" + on.value];
+              if (way && way.note) planSetText(note, way.note, !!way.id_link);
+              else planSetText(note, note.dataset.default, false);
+            });
             planRender();
           };
 
@@ -1576,7 +1609,7 @@
               if (!values.length) return;
               if (step.dataset.summaryPrefix) values.unshift(step.dataset.summaryPrefix);
               var warn = [];
-              step.querySelectorAll(".mt-plan__warn:not([hidden])").forEach(function (w) {
+              step.querySelectorAll(".mt-plan__warn:not([hidden]):not([data-form-only])").forEach(function (w) {
                 warn.push(w.dataset.text || w.textContent);
               });
               rows.push({ label: step.dataset.summary, value: values.join(", "), warn: warn });
@@ -1779,6 +1812,13 @@
             closeCal(false);
             planRender();
             planSave();
+            // Finishing the plan is the week's action, so it ticks the confirm
+            // box too, through its own handler, which counts it and unlocks
+            // the art. Reopening the plan leaves the tick alone.
+            if (planFinished && confirmBox && !confirmBox.checked) {
+              confirmBox.checked = true;
+              confirmBox.dispatchEvent(new Event("change"));
+            }
             if (plan.getBoundingClientRect().top < 0) plan.scrollIntoView({ behavior: "smooth", block: "start" });
           });
           // Wait for the page's fonts, so the canvas draws in them rather than

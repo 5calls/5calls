@@ -13,7 +13,8 @@ highlight behind each answer.
 
 Only the panel is painted, row by row from its own left edge to its right, so
 the art around it (the pin above, the car below, the panel's shadow) is left
-as it was. Re-run if the comps change. Temporary, like the rest of /midterms.
+as it was. Comps that come with the panel already blank pass through
+unchanged. Re-run if the comps change. Temporary, like the rest of /midterms.
 """
 
 import os

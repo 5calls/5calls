@@ -487,7 +487,7 @@ weeks:
         their intention](https://marketing.wharton.upenn.edu/wp-content/uploads/2016/10/nickerson20and20rogers_FINAL.pdf),
         so let's nail down the **HOW**, the **WHEN**, and the **WHERE**.
       - >-
-        Speaking of WHEN, we strongly encourage you to vote early if you have
+        Speaking of WHEN, **we strongly encourage you to vote early** if you have
         the option. If there's an issue with your registration, your ID, or
         your mail ballot, it’s best that you find out before November 3rd.
         Voting early also protects your vote from the unexpected. You never
@@ -519,7 +519,7 @@ weeks:
     plan:
       headline: MAKE YOUR VOTING PLAN
       summary_headline: MY VOTING PLAN
-      question: How I am voting
+      question: How are you voting?
       # The first row of the finished plan; each step's own row is its
       # `summary`, with `summary_prefix` before the answers where they need it.
       summary_way: How I’m voting
@@ -565,7 +565,7 @@ weeks:
         # Under the return date when it comes before the fill-out date. Both
         # pickers offer every valid day; this only flags the mix-up. {date} is
         # the fill-out date.
-        return_before_fill: "That's before {date}, when you plan to fill out your ballot."
+        return_before_fill: "That's before {date}, the date you plan to fill out your ballot."
       calendar:
         # Under the calendar, the days that can be picked: {from} and {to} are
         # the first and last open day, {from} reading "today" when it is.
@@ -597,6 +597,12 @@ weeks:
           - question: Do you know where you’re going to vote?
             show: { when: early }
             summary: I know where I’m voting
+            # Shown while the plan is being made, not in the saved summary.
+            warn:
+              value: "no"
+              text: Look up your polling place before you go.
+              link: { label: Find where to vote, url: "https://www.voteamerica.org/where-to-vote/" }
+              form_only: true
             fields:
               - name: early_site
                 type: choice
@@ -613,6 +619,12 @@ weeks:
           - question: Do you know where you’re going to vote?
             show: { when: election }
             summary: I know where I’m voting
+            # Shown while the plan is being made, not in the saved summary.
+            warn:
+              value: "no"
+              text: Look up your polling place before you go.
+              link: { label: Find where to vote, url: "https://www.voteamerica.org/where-to-vote/" }
+              form_only: true
             fields:
               - name: polling_place
                 type: choice
@@ -629,15 +641,11 @@ weeks:
                   - { key: drive, label: Drive }
                   - { key: bike, label: Bike }
                   - { key: bus, label: Bus }
-                  - { key: other, label: Other }
-          - question: Is anyone going with you?
-            summary: I’m going with someone else
+                  - { key: other, label: My own way }
+          - question: Who is going with you?
+            summary: Who I’m going with
             fields:
-              - name: who
-                type: choice
-                options:
-                  - { key: "yes", label: "Yes" }
-                  - { key: "no", label: "No" }
+              - { name: who, type: text, placeholder: "a friend, my family, just me" }
           # Asked only in states that ask voters for ID; the line under it is
           # the state's week-three summary. Elsewhere the state allows only
           # "none", so the form picks it and skips the question.
@@ -653,7 +661,7 @@ weeks:
                   - { key: "no", label: "No" }
                   - { key: none, label: "Not needed" }
         mail:
-          - question: "I'll fill out my ballot by:"
+          - question: When will you fill out your ballot?
             summary: Filling out my ballot by
             fields:
               - { name: fill_day, type: date, rule: fill, placeholder: pick a day }
@@ -675,7 +683,7 @@ weeks:
                   - { key: mail, label: Mail }
                   - { key: dropbox, label: Drop box }
                   - { key: office, label: County election office }
-          - question: Did you sign and date your ballot and/or envelope?
+          - question: Will you sign and date your ballot and/or envelope?
             summary: Signed and dated
             warn:
               value: "no"
@@ -721,6 +729,41 @@ weeks:
           "yes": ", and {I’ll sign and date my envelope}."
           "no": "."
     confirm: I made my voting plan - unlock my achievement graphics!
+    extra_credit:
+      title: Extra credit
+      toggle: I’m ready for more
+      locked_note: Confirm your voting plan above to unlock
+      # Two asks, each with its own heading: send a friend the link, then hand
+      # out the printable worksheet. `parts` takes a list of what `part` takes.
+      parts:
+        - title: Encourage friends to make a voting plan
+          body:
+            - Now that you’ve made your voting plan, it’s time to share the love (of democracy).
+          message:
+            label: Sample message
+            # Pasted into a chat as plain text, so no markdown.
+            text: "Hi [NAME]! I just made my plan to vote using 5 Minute Midterms. You should make your plan too! Here’s the link: 5calls.org/midterms"
+            copy_cta: Copy message
+        - title: Encourage your community to make a voting plan
+          body:
+            - >-
+              If you have access to a printer, print out 5–10 pages of our Make
+              Your Voting Plan handout, cut on the dotted lines (there are 4
+              blank plans per page), and set them out at your local coffee
+              shop, bring them to a No Kings rally, or put a stack in the break
+              room at work. The more people who make a voting plan, the better!
+            - cta:
+                label: Download voting plan handout
+                url: /midterms/voting-plan.pdf
+                download: 5calls-voting-plan.pdf
+          # One worksheet off the PDF's first page, rendered with
+          #   pdftoppm -r 200 -x 0 -y 0 -W 848 -H 1098 -png -singlefile \
+          #     static/midterms/voting-plan.pdf assets/images/midterms/voting-plan-preview
+          preview:
+            image: images/midterms/voting-plan-preview.png
+            alt: One of the four blank voting plans on the handout page
+            url: /midterms/voting-plan.pdf
+            download: 5calls-voting-plan.pdf
     why:
       heading: A voting plan helps you follow through on your intention to vote.
       stats:

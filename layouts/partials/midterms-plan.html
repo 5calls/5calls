@@ -26,8 +26,12 @@
   {{- /* The reader's state, in the same place the other weeks put it. The
          dates below follow it, so changing it goes back up to the picker. */ -}}
   <div class="mt-deck__top">
-    <div class="mt-deck__lede">
+    {{- /* The 5 Calls logotype, stars and all, beside the headline. A
+           sibling rather than inside it, since the script swaps the
+           headline's text once the plan is done. */ -}}
+    <div class="mt-deck__lede mt-plan__brand">
       <div class="mt-deck__detail" data-plan-headline>{{ $plan.headline }}</div>
+      <img class="mt-plan__logo" src="{{ "img/5calls-logotype.png" | relURL }}" alt="5 Calls" width="1135" height="316" />
     </div>
     <a class="mt-pill mt-pill--tag" href="#mt-state" title="Change your state"
        data-deck="tag" data-state-change>{{ upper site.Data.midterms.state.name }}</a>
@@ -105,10 +109,14 @@
             </div>
             <p class="mt-plan__hint" data-plan-hint hidden></p>
             {{- with $step.note }}
-              <p class="mt-plan__hint">{{ . }}</p>
+              <p class="mt-plan__hint" data-plan-note data-default="{{ . }}">{{ . }}</p>
             {{- end }}
+            {{- /* A warning can end in a link out, and one marked form_only
+                   stays out of the saved summary. */ -}}
             {{- with $step.warn }}
-              <p class="mt-plan__warn" data-plan-warn="{{ .value }}" hidden>{{ .text }}</p>
+              <p class="mt-plan__warn" data-plan-warn="{{ .value }}" data-text="{{ .text }}"
+                 {{- if .form_only }} data-form-only{{ end }} hidden>{{ .text }}
+                {{- with .link }} <a href="{{ .url }}" rel="noopener" target="_blank">{{ .label }}</a>.{{ end }}</p>
             {{- end }}
             {{- with $step.state_warn }}
               <p class="mt-plan__warn" data-plan-state-warn="{{ . }}" hidden></p>

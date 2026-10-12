@@ -78,12 +78,12 @@ ROWS = [
     ("q", "Where I'll vote:", "line"),
     ("q", "How I'll get there:", ["Walk", "Drive", "Bike", "Bus", "Other"]),
     ("q", "Who's going with me:", "line"),
-    ("q", "Do I need an ID?", ["Yes, I have it", "Yes, still getting it", "No"]),
+    ("q", "I need and have my ID:", ["Yes", "No"]),
     ("h", "IF BY MAIL"),
     ("q", "I'll fill out my ballot by:", "line"),
-    ("q", "Day and time I'll return it:", "line"),
-    ("note", "If returning via US Postal Service, mail it at least a week before the deadline."),
     ("q", "How I'll return it:", ["Mail", "Drop box", "County election office"]),
+    ("note", "If returning via US Postal Service, mail it by Oct 27, a week before the deadline."),
+    ("q", "Day and time I'll return it:", "line"),
     ("q", "I will sign and date my ballot and envelope:", ["Yes", "No"]),
 ]
 
