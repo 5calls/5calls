@@ -1723,9 +1723,15 @@ body {
     height: 26px;
   }
 
-  // Only the done button is solid; copy sits beside it as an outline.
+  // Only the done button is solid; download sits beside it as an outline.
   button.mt-pill:not(.mt-pill--solid) {
     background: #fff;
+  }
+
+  // Download waits for a finished plan; the pill's display would otherwise
+  // override the hidden attribute.
+  button.mt-pill[hidden] {
+    display: none;
   }
 
   button.mt-pill--solid:disabled {
