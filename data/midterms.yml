@@ -665,13 +665,6 @@ weeks:
             summary: Filling out my ballot by
             fields:
               - { name: fill_day, type: date, rule: fill, placeholder: pick a day }
-          # The return date offers any day a way back allows until one is
-          # picked below, then narrows to that way's days.
-          - question: When will you return your ballot?
-            summary: Returning it
-            fields:
-              - { name: return_day, type: date, rule: return, placeholder: pick a day }
-              - { name: return_time, type: time, placeholder: "10:00" }
           - question: How will you return your ballot?
             note: Return your ballot at least a week before the deadline, so it has time to arrive and be counted.
             summary: Returning it by
@@ -683,6 +676,13 @@ weeks:
                   - { key: mail, label: Mail }
                   - { key: dropbox, label: Drop box }
                   - { key: office, label: County election office }
+          # The return date offers any day a way back allows until one is
+          # picked above, then narrows to that way's days.
+          - question: When will you return your ballot?
+            summary: Returning it
+            fields:
+              - { name: return_day, type: date, rule: return, placeholder: pick a day }
+              - { name: return_time, type: time, placeholder: "10:00" }
           - question: Will you sign and date your ballot and/or envelope?
             summary: Signed and dated
             warn:
