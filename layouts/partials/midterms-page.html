@@ -532,6 +532,14 @@
                     {{- end }}
                   </div>
                 {{- end }}
+                {{- /* Week six: the reader's state's ways to vote. Drawn for the
+                       default state and swapped by the state picker. It comes ahead of the
+                       message, so the message sits right above the button. */ -}}
+                {{- with $week.where }}
+                  <div class="mt-deck__body" data-state-where>
+                    {{- partial "midterms-where.html" (dict "state" (index site.Data.midterms_voting.states $d.state.abbr) "copy" .) | safeHTML -}}
+                  </div>
+                {{- end }}
                 <p class="mt-message__text" data-message>{{ $week.message }}</p>
                 {{- /* The reader's state's line, if the week has one for it.
                        Drawn for the default state and swapped by the state
@@ -586,6 +594,7 @@
             {{- /* Each crop opens the share modal. Buttons rather than images
                    alone, so they are reachable by keyboard and can be disabled
                    while the week is still locked. */ -}}
+            {{- with $week.early_cards }}<div class="mt-images__label">{{ .week_label }}</div>{{ end }}
             <div class="mt-images__set">
               <button type="button" class="mt-shot-btn mt-shot-btn--portrait" data-shot-open="vert"
                       title="{{ $d.share.hint }}" disabled>
@@ -604,6 +613,32 @@
                 <span class="visually-hidden">{{ $d.share.hint }}</span>
               </button>
             </div>
+            {{- /* Week six's second set, "I voted early!": the same state's
+                   rules on other plates, swapped with the state like the first
+                   through data-shot-early, and shared from its own pages. */ -}}
+            {{- with $week.early_cards }}
+              {{- $ev := partial "midterms-card.html" (dict "crop" "vertical" "week" $week "state" $cardState "set" "early") }}
+              {{- $eh := partial "midterms-card.html" (dict "crop" "horizontal" "week" $week "state" $cardState "set" "early") }}
+              <div class="mt-images__label">{{ .label }}</div>
+              <div class="mt-images__set">
+                <button type="button" class="mt-shot-btn mt-shot-btn--portrait" data-shot-open="vert" data-shot-set="early"
+                        title="{{ $d.share.hint }}" disabled>
+                  <img class="mt-shot mt-shot--portrait" src="{{ $ev.RelPermalink }}"
+                       alt="{{ .label }} share image, vertical crop" data-shot-early="vert"
+                       width="{{ $ev.Width }}" height="{{ $ev.Height }}" />
+                  <span class="mt-shot__hint">{{ partial "midterms-icon.html" (dict "name" "expand" "size" 15) }}</span>
+                  <span class="visually-hidden">{{ $d.share.hint }}</span>
+                </button>
+                <button type="button" class="mt-shot-btn" data-shot-open="horiz" data-shot-set="early"
+                        title="{{ $d.share.hint }}" disabled>
+                  <img class="mt-shot mt-shot--landscape" src="{{ $eh.RelPermalink }}"
+                       alt="{{ .label }} share image, horizontal crop" data-shot-early="horiz"
+                       width="{{ $eh.Width }}" height="{{ $eh.Height }}" />
+                  <span class="mt-shot__hint">{{ partial "midterms-icon.html" (dict "name" "expand" "size" 15) }}</span>
+                  <span class="visually-hidden">{{ $d.share.hint }}</span>
+                </button>
+              </div>
+            {{- end }}
             {{- /* The note names the week's own action, so a week may override
                    it. Weeks that don't define one fall back to the global copy
                    in images.locked_note, which is written for week one. */ -}}
@@ -729,6 +764,28 @@
                     </button>
                   </div>
                 </aside>
+              {{- else }}
+              {{- /* Week six's voter handbook: one vertical card per state, so
+                     unlike the art above the state switcher swaps it, through
+                     data-shot-handbook. There is no horizontal crop, so the
+                     modal offers every platform from the vertical one, and
+                     links post that state's handbook page. */ -}}
+              {{- with $ec.handbook }}
+                <aside class="mt-images mt-images--extra">
+                  <div class="mt-images__title">{{ $ec.title }} shares</div>
+                  {{- $vert := partial "midterms-card-week6.html" (dict "code" $d.state.abbr "copy" .) }}
+                  <div class="mt-images__set">
+                    <button type="button" class="mt-shot-btn mt-shot-btn--portrait" data-shot-open="vert" data-shot-set="extra"
+                            title="{{ $d.share.hint }}" disabled>
+                      <img class="mt-shot mt-shot--portrait" src="{{ $vert.RelPermalink }}"
+                           alt="Your state's voter handbook" data-shot-extra="vert" data-shot-handbook
+                           width="{{ $vert.Width }}" height="{{ $vert.Height }}" />
+                      <span class="mt-shot__hint">{{ partial "midterms-icon.html" (dict "name" "expand" "size" 15) }}</span>
+                      <span class="visually-hidden">{{ $d.share.hint }}</span>
+                    </button>
+                  </div>
+                </aside>
+              {{- end }}
               {{- end }}
             </div>
           </details>
@@ -890,7 +947,20 @@
         {{- $entry = merge $entry (dict
             "vert" (partial "midterms-card.html" (dict "crop" "vertical" "week" $week "state" $s)).RelPermalink
             "horiz" (partial "midterms-card.html" (dict "crop" "horizontal" "week" $week "state" $s)).RelPermalink) -}}
+        {{- if $week.early_cards -}}
+          {{- $entry = merge $entry (dict
+              "early_vert" (partial "midterms-card.html" (dict "crop" "vertical" "week" $week "state" $s "set" "early")).RelPermalink
+              "early_horiz" (partial "midterms-card.html" (dict "crop" "horizontal" "week" $week "state" $s "set" "early")).RelPermalink) -}}
+        {{- end -}}
       {{- end -}}
+      {{- with $week.where -}}
+        {{- $entry = merge $entry (dict
+            "where" (partial "midterms-where.html" (dict "state" (index site.Data.midterms_voting.states $code) "copy" .))) -}}
+      {{- end -}}
+      {{- with $week.extra_credit }}{{ with .handbook -}}
+        {{- $entry = merge $entry (dict
+            "handbook" (partial "midterms-card-week6.html" (dict "code" $code "copy" .)).RelPermalink) -}}
+      {{- end }}{{ end -}}
       {{- $payload = merge $payload (dict $code $entry) -}}
     {{- end }}
     <script type="application/json" id="mt-states">{{ $payload | jsonify | safeJS }}</script>
@@ -1973,9 +2043,13 @@
               "vert" (resources.Get .vertical).RelPermalink
               "horiz" (resources.Get .horizontal).RelPermalink
               "text" (or .text dict) }}
-        {{- end }}{{ end }}
+        {{- else }}{{ with .handbook }}
+          {{- $extraShare = dict "handbook" true "text" (or $week.extra_credit.share_text dict) }}
+        {{- end }}{{ end }}{{ end }}
         // Extra credit's art, when the week has any: one image per crop for
         // everyone, linked through its own share page rather than a state's.
+        // Week six's handbook instead is the reader's state's, vertical only,
+        // and its links go to that state's handbook page.
         var EXTRA = {{ $extraShare }};
         {{- $planCards := dict }}
         {{- with $week.plan_card }}
@@ -1989,7 +2063,10 @@
         // Week five's art, one card per plan, keyed by planCardKey(). Each
         // has its own share page, so a posted link carries the sharer's plan.
         var PLAN_CARDS = {{ $planCards }};
-        // Which set of crops the modal is showing: the week's or extra credit's.
+        // Week six's second set's prefilled words, when the week has one.
+        var EARLY_TEXT = {{ with $week.early_cards }}{{ or .text dict }}{{ else }}{{ dict }}{{ end }};
+        // Which set of crops the modal is showing: the week's, week six's
+        // "early" set, or extra credit's.
         var openSet = "week";
         var SHARE_BASE = modal ? modal.getAttribute("data-share-base") : "";
         var shareFile = null;
@@ -2006,12 +2083,22 @@
 
         function shareUrlFor(code) {
           var page = openSet === "extra" ? "extra" : String(code).toLowerCase();
+          if (openSet === "extra" && EXTRA.handbook) page = "handbook-" + String(code).toLowerCase();
+          if (openSet === "early") page = "early-" + String(code).toLowerCase();
           if (openSet !== "extra" && PLAN_CARDS.default) page = planCard();
           return new URL(SHARE_BASE + page + "/", location.href).href;
         }
 
         function cardUrl(crop) {
+          if (openSet === "extra" && EXTRA.handbook) {
+            var hb = states[currentState()];
+            return crop === "vert" && hb ? hb.handbook : null;
+          }
           if (openSet === "extra") return EXTRA[crop === "vert" ? "vert" : "horiz"] || null;
+          if (openSet === "early") {
+            var es = states[currentState()];
+            return es ? es[crop === "vert" ? "early_vert" : "early_horiz"] : null;
+          }
           if (PLAN_CARDS.default) return PLAN_CARDS[planCard()][crop === "vert" ? "vert" : "horiz"];
           var s = states[currentState()];
           return s ? s[crop === "vert" ? "vert" : "horiz"] : null;
@@ -2058,7 +2145,7 @@
         function applyShareState(code) {
           var url = shareUrlFor(code);
           var textFor = function (name) {
-            var words = openSet === "extra" ? EXTRA.text || {} : SHARE_TEXT;
+            var words = openSet === "extra" ? EXTRA.text || {} : openSet === "early" ? EARLY_TEXT : SHARE_TEXT;
             return words[name] || CAPTION;
           };
           var set = function (name, href) {
@@ -2088,14 +2175,16 @@
           openCrop = crop;
           var card = cardUrl(crop);
           var img = document.querySelector(
-            (openSet === "extra" ? "[data-shot-extra='" : "[data-shot='") + crop + "']"
+            (openSet === "extra" ? "[data-shot-extra='" : openSet === "early" ? "[data-shot-early='" : "[data-shot='") + crop + "']"
           );
           if (modalImg && card) {
             modalImg.src = card;
             modalImg.alt = img ? img.alt : "";
           }
+          // The handbook has only its vertical crop, so every target goes with it.
+          var all = openSet === "extra" && EXTRA.handbook;
           cropTargets.forEach(function (el) {
-            el.hidden = el.getAttribute("data-crop") !== crop;
+            el.hidden = !all && el.getAttribute("data-crop") !== crop;
           });
           applyShareState(currentState());
           primeShareFile(card);
@@ -2106,6 +2195,8 @@
           btn.addEventListener("click", function () {
             if (!modal) return;
             openSet = btn.getAttribute("data-shot-set") || "week";
+            // The handbook has no horizontal crop to switch to.
+            if (switchBtn) switchBtn.hidden = openSet === "extra" && EXTRA.handbook;
             setCrop(btn.getAttribute("data-shot-open"));
             modal.showModal();
           });
@@ -2256,6 +2347,15 @@
           document.querySelectorAll("[data-shot]").forEach(function (img) {
             var next = s[img.getAttribute("data-shot") === "vert" ? "vert" : "horiz"];
             if (next) img.src = next;
+          });
+          document.querySelectorAll("[data-shot-early]").forEach(function (img) {
+            var next = s[img.getAttribute("data-shot-early") === "vert" ? "early_vert" : "early_horiz"];
+            if (next) img.src = next;
+          });
+          var where = document.querySelector("[data-state-where]");
+          if (where && s.where) where.innerHTML = s.where;
+          document.querySelectorAll("[data-shot-handbook]").forEach(function (img) {
+            if (s.handbook) img.src = s.handbook;
           });
           applyShareState(code);
           if (planRefresh) planRefresh();

@@ -1,12 +1,16 @@
 {{- /*
-  Width in pixels of `text` set in DM Sans at `size`. Takes
-  (dict "text" STR "font" "regular"|"bold"|"bolditalic" "size" NUM).
+  Width in pixels of `text` set in DM Sans at `size`, or in Bebas Neue for the
+  share cards' state names. Takes (dict "text" STR "font"
+  "regular"|"italic"|"bold"|"bolditalic"|"bebas" "size" NUM).
 
   Hugo draws text but can't measure it, so these are the fonts' own advance
   widths, in thousandths of an em, read out of assets/fonts/DMSans-Regular.ttf,
-  DMSans-Bold.ttf and DMSans-BoldItalic.ttf with fontTools. Hugo doesn't kern,
-  so plain sums are what it draws. Anything not listed counts as an average
-  lowercase letter.
+  DMSans-Bold.ttf, DMSans-BoldItalic.ttf and BebasNeue-Regular.ttf with
+  fontTools. DMSans-Italic.ttf is measured as the regular: its letters advance
+  the same, and the few marks that differ are off by a pixel or two. Hugo
+  doesn't kern, so plain sums are what it draws. Anything not listed counts as
+  an average lowercase letter, or for Bebas, which only sets capitals, an
+  average capital.
 */ -}}
 {{- $regular := dict
   " " 200 "!" 181 "\"" 283 "#" 791 "$" 538 "%" 773 "&" 691 "'" 157 "(" 327
@@ -50,6 +54,13 @@
   "z" 459 "{" 366 "|" 225 "}" 366 "~" 579 "·" 240 "—" 835 "–" 613 "‘" 255
   "’" 255 "“" 453 "”" 453 "•" 399 "…" 694
 -}}
+{{- /* Capitals and the punctuation a state's name can carry. */ -}}
+{{- $bebas := dict
+  " " 160 "A" 401 "B" 404 "C" 383 "D" 406 "E" 363 "F" 344 "G" 391 "H" 420
+  "I" 192 "J" 265 "K" 414 "L" 344 "M" 538 "N" 427 "O" 400 "P" 386 "Q" 400
+  "R" 403 "S" 372 "T" 364 "U" 402 "V" 382 "W" 557 "X" 406 "Y" 394 "Z" 362
+  "." 188 "," 188 "-" 270 "'" 188 "’" 188
+-}}
 {{- $adv := $regular -}}
 {{- $fallback := 478 -}}
 {{- if eq .font "bold" -}}
@@ -58,6 +69,9 @@
 {{- else if eq .font "bolditalic" -}}
   {{- $adv = $boldItalic -}}
   {{- $fallback = 521 -}}
+{{- else if eq .font "bebas" -}}
+  {{- $adv = $bebas -}}
+  {{- $fallback = 390 -}}
 {{- end -}}
 {{- $units := 0 -}}
 {{- range split .text "" -}}

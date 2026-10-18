@@ -18,7 +18,15 @@
   The card is deliberately shorter than the page's own list — same-day
   registration and the "where to go" notes are left to the page, so the card
   stays readable at the size it is actually seen.
+
+  Week six's cards are drawn here too, passing "week" 6: the same treatment
+  on new plates, with only early voting and returning a mail ballot -- the
+  ways to get a vote in now. The week has two sets of plates, "I know where
+  I'm voting" and, with "set" "early", "I voted early!"; the rules sit in the
+  same place on both. Their plates come from scripts/build-midterms-plates6.py
+  and their names from build-midterms-names6.py.
 */ -}}
+{{- $wk := .week | default 2 -}}
 {{- /* Each crop's text layout, measured off the designed California card: the
        lead margin, the bullet's dot and text x, the widest a row may run,
        where the first row's ascenders sit, the line nothing may hang below,
@@ -31,7 +39,21 @@
         "inkTop" 222.0 "floor" 600.0 "blockGap" 0.50
         "sizes" (slice 23 22 21 20 19 18 17 16 15 14) "pitch" 36.0 -}}
 {{- end -}}
-{{- $plate := resources.Get (printf "images/midterms/share-%s-week2.png" .crop) -}}
+{{- /* Week six's, off its California comps. Its lines run on without a gap
+       between blocks, as the comps set them. */ -}}
+{{- if eq $wk 6 -}}
+  {{- $m = dict "leadX" 136.0 "dotX" 174 "textX" 219.0 "right" 1040.0
+        "inkTop" 947.0 "floor" 1240.0 "blockGap" 0.0
+        "sizes" (slice 36 35 34 33 32 31 30 29 28 27 26 25 24 23 22) "pitch" 54.5 -}}
+  {{- if eq .crop "horizontal" -}}
+    {{- $m = dict "leadX" 165.0 "dotX" 189 "textX" 225.0 "right" 1035.0
+          "inkTop" 421.0 "floor" 615.0 "blockGap" 0.0
+          "sizes" (slice 25 24 23 22 21 20 19 18 17 16 15 14) "pitch" 39.0 -}}
+  {{- end -}}
+{{- end -}}
+{{- $plateName := printf "share-%s-week%d" .crop $wk -}}
+{{- with .set }}{{ $plateName = printf "%s-%s" $plateName . }}{{ end -}}
+{{- $plate := resources.Get (printf "images/midterms/%s.png" $plateName) -}}
 {{- $regular := resources.Get "fonts/DMSans-Regular.ttf" -}}
 {{- $bold := resources.Get "fonts/DMSans-Bold.ttf" -}}
 {{- $ink := "#000000" -}}
@@ -40,11 +62,11 @@
 
 {{- /* State name: a card-sized layer, so it lands at 0, 0. A missing one fails
        the build rather than shipping a card without a name. */ -}}
-{{- $namePath := printf "images/midterms/week2-names/%s/%s.png" .crop (lower $s.code) -}}
+{{- $namePath := printf "images/midterms/week%d-names/%s/%s.png" $wk .crop (lower $s.code) -}}
 {{- with resources.Get $namePath -}}
   {{- $filters = $filters | append (images.Overlay . 0 0) -}}
 {{- else -}}
-  {{- errorf "midterms week 2 card: no name layer at assets/%s; run scripts/build-midterms-names2.py" $namePath -}}
+  {{- errorf "midterms week %d card: no name layer at assets/%s; run scripts/build-midterms-names%d.py" $wk $namePath $wk -}}
 {{- end -}}
 
 {{- /* The lines, in order. A "lead" starts a block at the left margin; a
@@ -70,7 +92,7 @@
         (dict "kind" "lead" "line" (printf "**In-Person Early Voting:** %s" $line)) -}}
 {{- end -}}
 
-{{- with $s.absentee_type -}}
+{{- with and (ne $wk 6) $s.absentee_type -}}
   {{- $blocks = $blocks | append
         (dict "kind" "lead" "line" (printf "**Absentee & Vote-by-mail:** %s" .)) -}}
   {{- with $s.request_online -}}

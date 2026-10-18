@@ -867,6 +867,15 @@ body {
   }
 }
 
+// Between week six's two ways to vote.
+.mt-vote__or {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: rgba($ink, 0.6);
+}
+
 // The week's one big action, so it is sized like one.
 .mt-confirm {
   display: flex;
@@ -1177,6 +1186,14 @@ body {
   flex-direction: column;
   gap: 14px;
   opacity: 0.42;
+}
+
+// Heads each set when a week has two, as week six does.
+.mt-images__label {
+  margin-bottom: -6px;
+  font-size: 15px;
+  font-weight: 700;
+  color: rgba($ink, 0.8);
 }
 
 .mt-images__note {

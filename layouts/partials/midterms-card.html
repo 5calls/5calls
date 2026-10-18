@@ -10,7 +10,9 @@
   the shrink-to-fit, since the copy varies from "Tue, Nov 3" to North Dakota's
   "Just bring your ID on Election Day".
 
-  Week one has its real art, drawn by midterms-card-week1.html.
+  Week one has its real art, drawn by midterms-card-week1.html. Week six has
+  two sets, picked by an optional "set": none for "I know where I'm voting",
+  "early" for "I voted early!".
 
   A week with a `card` block in data/midterms.yml has one finished image per
   crop, the same for every state (week four), used as is. A crop it does not
@@ -22,6 +24,10 @@
   {{- $card = resources.Get $art -}}
 {{- else if eq .week.number 1 -}}
   {{- $card = partial "midterms-card-week1.html" (dict "crop" .crop "state" .state "copy" .week.card_copy) -}}
+{{- else if eq .week.number 6 -}}
+  {{- /* Week six: week two's card on its own plates, one set per `set`. */ -}}
+  {{- $v := index site.Data.midterms_voting.states .state.code -}}
+  {{- $card = partial "midterms-card-week2.html" (dict "crop" .crop "state" $v "week" 6 "set" .set) -}}
 {{- else if .week.state_voting -}}
   {{- /* Week two draws from the voting-options data rather than the
          registration deck, so it takes that state's entry instead. */ -}}

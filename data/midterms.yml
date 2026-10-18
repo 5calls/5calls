@@ -4,7 +4,7 @@
 # Which week is live right now. Weeks before this are "done", weeks after are
 # "upcoming". Set this to 0 before the program starts: the page then renders
 # the week_zero block below instead of a weekly action, and nothing unlocks.
-current_week: 5
+current_week: 6
 
 nav:
   nudge: Get reminders
@@ -775,32 +775,146 @@ weeks:
           text: between the ages of 18 and 29 typically [turn out at a rate 10+ points lower](https://fairvote.org/resources/voter-turnout/?section=what-affects-voter-turnout) than those who are 30 and older.
 
   - number: 6
-    short: Vote early
-    title: Vote early, or get your ballot in the mail
+    short: Location
+    title: Find your voting location (and vote!)
     state_specific: true
     release: 2026-10-20T09:00:00-07:00
-    intro: >-
-      SAMPLE COPY — the early and mail voting week. Real text goes here: two
-      sentences on getting it done ahead of the day, ending on what to do.
-    headline: SAMPLE HEADER LINE FOR THIS WEEK
-    headline_date: Tue, Nov 3
+    intro:
+      - >-
+        Last week you made your plan to vote, so you should know **HOW** and **WHEN**
+        you’re voting. The last piece is knowing exactly **WHERE** to go. Whether
+        you’re voting by mail, early in-person, or on Election Day, you can’t
+        assume it's the same place as last time. Polling places and dropboxes
+        can change from one election to the next, and Early Voting sites are
+        often different from Election Day locations. Take a few minutes now to
+        make sure you know where you’re headed. And vote early if you can!!
+      - >-
+        Do you have your mail ballot? It’s time to start filling it out if you
+        haven’t already! As Election Day approaches, returning your ballot to an
+        official dropbox or directly to the election office is the best
+        guarantee that it arrives in time. Check your state's deadlines, find
+        your dropbox or election office, and turn it in. If you're mailing your
+        ballot, **we highly recommend returning it by Tuesday, October 27th at the
+        latest**. [Due to recent changes, the USPS may not postmark your ballot
+        the day it’s received,](https://www.npr.org/2026/10/09/nx-s1-5984981/mail-in-ballot-usps-postmark)
+        so you don’t want to cut it close!
+    headline: FIND WHERE TO VOTE
+    # FPO: the copy doc has no message line for this week yet.
     message: >-
-      SAMPLE MESSAGE — placeholder standing in for this week's wording. It runs
-      about three short sentences and roughly this many words, so the card can
-      be judged at the size it will really be.
-    copy_cta: button1
-    rewrite_cta: button2
-    confirm: I did it — unlock my images
-    # FPO: placeholder copy, replace before this week ships.
+      Go to VoteAmerica to find your polling place, early voting site, or
+      ballot dropbox.
+    # The reader's state's ways to vote, under the message: early voting where
+    # the state has it, or Election Day where it doesn't, then OR and how to
+    # return a mail ballot. Drawn by layouts/partials/midterms-where.html from
+    # data/midterms_voting.yml. **Bold** sets a line's label.
+    where:
+      early: "**In-person early voting:** {start} to {end}"
+      early_varies: "**In-person early voting:** Dates are set by your county"
+      early_varies_end: "**In-person early voting:** Dates are set by your county, through {end}"
+      election_day: "**In-person voting** on Election Day, Tue, Nov 3"
+      or: OR
+      return: "**How to return your mail-in ballot:** {methods}"
+      return_mail_received: "**By mail:** Received by {date}"
+      return_mail_postmarked: "**By mail:** Postmarked by {date}"
+      return_mail_arrive: ", and must arrive by {date}"
+      return_mail_by: " (mail it by {date}!)"
+      return_in_person: "**In person:** Received by {date}"
+    # The share modal's prefilled words for the week's own cards ("I know where
+    # I'm voting"), as for week one. FPO: placeholder wording.
+    share_text:
+      threads: "I know where I'm voting — find your voting location with @5calls and 5 Minute Midterms"
+      bsky: "I know where I'm voting — find your voting location with @5calls.org and 5 Minute Midterms"
+      x: "I know where I'm voting — find your voting location with @make5calls and 5 Minute Midterms"
+    # A second set of share cards beside the week's own, "I voted early!", on
+    # their own plates with the same state rules. Each state's link goes to
+    # /midterms/share/6/early-ca/, whose card is that set's. `label` heads each
+    # set in the share panel; `text` is that set's prefilled words.
+    # FPO: placeholder wording.
+    early_cards:
+      week_label: I know where I'm voting
+      label: I voted early!
+      text:
+        threads: "I voted early! Find your voting location with @5calls and 5 Minute Midterms"
+        bsky: "I voted early! Find your voting location with @5calls.org and 5 Minute Midterms"
+        x: "I voted early! Find your voting location with @make5calls and 5 Minute Midterms"
+    # One button out to VoteAmerica's lookup in place of copy and rewrite.
+    link_cta:
+      label: Find where to vote
+      url: https://www.voteamerica.org/where-to-vote/
+    confirm: I found my voting location - unlock my achievement graphics!
+    # FPO: placeholder extra credit until the real copy lands. Like week four,
+    # no share art or share key, so no share panel and no extra share page.
+    extra_credit:
+      title: Extra credit
+      toggle: I’m ready for more
+      locked_note: Confirm your voting location above to unlock
+      part:
+        title: Review the handbook
+        body:
+          - >-
+            SAMPLE COPY — placeholder standing in for this week's extra credit.
+            Real text goes here: a couple of sentences on what to do next.
+        message:
+          label: Sample message
+          # Pasted into a chat as plain text, so no markdown and a bare URL.
+          text: "SAMPLE MESSAGE — placeholder for a message to send a friend. Here's the link: https://5calls.org/midterms"
+          copy_cta: Copy message
+      # The words the share modal's text platforms prefill when sharing the
+      # handbook, as for a week's share_text; that state's handbook page,
+      # /midterms/share/6/handbook-ca/, follows them.
+      # FPO: placeholder wording.
+      share_text:
+        threads: "I just reviewed my state's voter handbook with @5calls and 5 Minute Midterms — check yours"
+        bsky: "I just reviewed my state's voter handbook with @5calls.org and 5 Minute Midterms — check yours"
+        x: "I just reviewed my state's voter handbook with @make5calls and 5 Minute Midterms — check yours"
+      # The voter handbook: one card per state, drawn by
+      # layouts/partials/midterms-card-week6.html onto the plate cut by
+      # scripts/build-midterms-plate6.py. Its three sections reuse the share
+      # cards' copy from weeks one (registration), two (voting options) and
+      # three (ID), filled from the same data files. **Bold** opens a line with
+      # its label; *italic* sets the rest of the line in italic.
+      handbook:
+        registration:
+          # Tier A, one deadline for every channel.
+          same_day:
+            lede: "The deadline to register online, in-person, or by mail is {date}"
+            mail_postmarked: "If you choose to register by mail, mail your form by {mail_by} to ensure a valid postmark."
+            mail_received: "If you choose to register by mail, mail your form by {mail_by} so it arrives in time."
+          # Tiers B, C1 and C2: a bullet per way to register. Tier B's in-person
+          # deadline is Election Day itself.
+          online: "**Online:** Register by {date}"
+          in_person: "**In person:** Register by {date}"
+          in_person_same_day: "**In person:** Register by {date} (same-day registration)"
+          mail_postmarked: "**By-mail:** Postmark by {date} (mail it by {mail_by})"
+          mail_received: "**By-mail:** Must arrive by {date} (mail it by {mail_by})"
+          # North Dakota. Week one's second line lists ND's IDs, which the ID
+          # section below already covers.
+          no_registration: "North Dakota does not require voter registration, but you must bring a valid form of ID when you go to the polls."
+        voting:
+          early: "**In-person early voting:** {start} to {end}"
+          early_varies: "**In-person early voting:** Dates are set by your county"
+          early_varies_end: "**In-person early voting:** Dates are set by your county, through {end}"
+          absentee: "**Absentee & vote-by-mail:** *{type}*"
+          request_online: "**Online:** Request by {date}"
+          request_mail_received: "**By mail:** Request must be received by {date}"
+          request_mail_postmarked: "**By mail:** Request must be postmarked by {date}"
+          request_in_person: "**In person:** Request by {date}"
+          return: "**Return your mail ballot:** {methods}"
+          return_mail_received: "**By mail:** Received by {date}"
+          return_mail_postmarked: "**By mail:** Postmarked by {date}"
+          return_mail_arrive: ", and must arrive by {date}"
+          return_mail_by: " (mail it by {date}!)"
+          return_in_person: "**In person:** Received by {date}"
     why:
+      # FPO: the copy doc has no heading for this week yet.
       heading: Voting early takes one problem off election day.
       stats:
-        - value: Days
-          text: of early voting in most states, weekends included.
-        - value: Postmarks
-          text: aren't enough everywhere — some states must receive it.
-        - value: 1 trip
-          text: and the rest of the week is yours.
+        - value: 100,000
+          text: '[fewer Election Day polling places now](https://www.route-fifty.com/management/2024/03/there-are-100000-fewer-election-day-polling-places-2024/394959/) than there were in 2018.'
+        - value: Nearly 500,000
+          text: '[mail-in ballots were rejected](https://www.ap.org/news-highlights/elections/2026/nearly-150000-mail-ballots-rejected-in-californias-primary-despite-efforts-to-count-every-vote/) in the 2026 California primary, mostly because they arrived too late.'
+        - value: "16"
+          text: states allow citizens to [register and vote simultaneously](https://electionlab.mit.edu/research/voter-registration) during the early voting period and Election Day.
 
   - number: 7
     short: Recheck
