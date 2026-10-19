@@ -693,6 +693,14 @@ body {
   color: $ink;
 }
 
+// Week six's call to action, under the ways to vote and right above the
+// button, so it reads as the step to take rather than more detail.
+.mt-message__text--lead {
+  font-size: 19px;
+  font-weight: 700;
+  line-height: 1.4;
+}
+
 .mt-message__actions {
   display: flex;
   flex-wrap: wrap;

@@ -801,8 +801,8 @@ weeks:
     headline: FIND WHERE TO VOTE
     # FPO: the copy doc has no message line for this week yet.
     message: >-
-      Go to VoteAmerica to find your polling place, early voting site, or
-      ballot dropbox.
+      Find your polling place, early voting site, or
+      ballot dropbox:
     # The reader's state's ways to vote, under the message: early voting where
     # the state has it, or Election Day where it doesn't, then OR and how to
     # return a mail ballot. Drawn by layouts/partials/midterms-where.html from
@@ -849,15 +849,18 @@ weeks:
       toggle: I’m ready for more
       locked_note: Confirm your voting location above to unlock
       part:
-        title: Review the handbook
+        title: Share the 5 Calls Voter Handbook
         body:
           - >-
-            SAMPLE COPY — placeholder standing in for this week's extra credit.
-            Real text goes here: a couple of sentences on what to do next.
+            Deadlines, voting options, and ID rules vary by state, and a lot of
+            people don't know theirs. Find the 5 Calls Voter Handbook for your
+            state on our social channels to remind your friends exactly how and
+            when they can vote.
         message:
-          label: Sample message
-          # Pasted into a chat as plain text, so no markdown and a bare URL.
-          text: "SAMPLE MESSAGE — placeholder for a message to send a friend. Here's the link: https://5calls.org/midterms"
+          label: Sample post
+          # Pasted into a post as plain text, so no markdown and a bare URL.
+          # {state} becomes the reader's state, and follows the switcher.
+          text: "Election Day is Tuesday, Nov 3. Here's everything you need to know to vote in {state}: deadlines, early voting, mail ballots, and ID rules. Make your plan at 5calls.org/midterms"
           copy_cta: Copy message
       # The words the share modal's text platforms prefill when sharing the
       # handbook, as for a week's share_text; that state's handbook page,

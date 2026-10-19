@@ -540,7 +540,7 @@
                     {{- partial "midterms-where.html" (dict "state" (index site.Data.midterms_voting.states $d.state.abbr) "copy" .) | safeHTML -}}
                   </div>
                 {{- end }}
-                <p class="mt-message__text" data-message>{{ $week.message }}</p>
+                <p class="mt-message__text{{ if $week.where }} mt-message__text--lead{{ end }}" data-message>{{ $week.message }}</p>
                 {{- /* The reader's state's line, if the week has one for it.
                        Drawn for the default state and swapped by the state
                        picker; the script hides a dated line once its day has
@@ -715,7 +715,9 @@
                   {{- with .message }}
                     <div class="mt-message">
                       <div class="mt-deck__detail">{{ .label }}</div>
-                      <p class="mt-message__text" data-message>{{ .text }}</p>
+                      {{- /* {state} names the reader's state, and the
+                             switcher keeps it current through data-state-label. */}}
+                      <p class="mt-message__text" data-message>{{ replace (.text | htmlEscape) "{state}" (printf `<span data-state-label>%s</span>` $d.state.name) | safeHTML }}</p>
                       <div class="mt-message__actions">
                         <button type="button" class="mt-pill mt-pill--solid" data-copy>{{ .copy_cta }}</button>
                       </div>
