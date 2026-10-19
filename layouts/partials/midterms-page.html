@@ -744,7 +744,7 @@
                      wrapping flex row, so the ask simply grows to fill it. */ -}}
               {{- with $ec.share }}
                 <aside class="mt-images mt-images--extra">
-                  <div class="mt-images__title">{{ $ec.title }} shares</div>
+                  <div class="mt-images__title">{{ $ec.share_title | default (printf "%s shares" $ec.title) }}</div>
                   {{- $vert := resources.Get .vertical }}
                   {{- $horiz := resources.Get .horizontal }}
                   <div class="mt-images__set">
@@ -774,7 +774,7 @@
                      links post that state's handbook page. */ -}}
               {{- with $ec.handbook }}
                 <aside class="mt-images mt-images--extra">
-                  <div class="mt-images__title">{{ $ec.title }} shares</div>
+                  <div class="mt-images__title">{{ $ec.share_title | default (printf "%s shares" $ec.title) }}</div>
                   {{- $vert := partial "midterms-card-week6.html" (dict "code" $d.state.abbr "copy" .) }}
                   <div class="mt-images__set">
                     <button type="button" class="mt-shot-btn mt-shot-btn--portrait" data-shot-open="vert" data-shot-set="extra"

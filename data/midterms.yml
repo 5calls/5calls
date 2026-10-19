@@ -848,14 +848,15 @@ weeks:
       title: Extra credit
       toggle: I’m ready for more
       locked_note: Confirm your voting location above to unlock
+      # The heading over the handbook card, in place of "Extra credit shares".
+      share_title: Tell your friends!
       part:
         title: Share the 5 Calls Voter Handbook
         body:
           - >-
             Deadlines, voting options, and ID rules vary by state, and a lot of
-            people don't know theirs. Find the 5 Calls Voter Handbook for your
-            state on our social channels to remind your friends exactly how and
-            when they can vote.
+            people don't know theirs. Share the 5 Calls Voter Handbook for your state on your social
+            channels to remind your friends exactly how and where they can vote.
         message:
           label: Sample post
           # Pasted into a post as plain text, so no markdown and a bare URL.
