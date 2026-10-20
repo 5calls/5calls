@@ -1,0 +1,293 @@
+{{- /*
+  Week six's voter handbook for one state: one vertical card (1080x1350)
+  gathering the share cards' rules from weeks one to three. Takes
+  (dict "code" STATE_CODE "copy" WEEK.extra_credit.handbook) and returns the
+  image resource.
+
+  The plate is the designer's comp with its body painted out, cut by
+  scripts/build-midterms-plate6.py; it keeps the frame, "2026 VOTER HANDBOOK"
+  and the footer. Laid over it:
+
+  - The state's name in Bebas Neue, centred under the title.
+  - Three sections, each under its heading: registration from
+    data/midterms_states.yml, voting options from midterms_voting.yml, and ID
+    from midterms_id.yml. The headings are strips cut from the comp, laid in
+    wherever the rules above them end. The rules are DM Sans: a bold label
+    leading each line, an italic line where the copy says so, wrapped to the
+    card and stepping down in size until the last line clears the footer.
+
+  Unlike week two's card, dates keep their weekday: the handbook is the one
+  card meant to be kept, and has the room.
+*/ -}}
+{{- /* Measured off the comp: the lead margin, the bullets' dot and text x at
+       each level, the widest a row may run, where the first heading's caps
+       start, the line nothing may hang below, the sizes to try, the
+       design's first, and its row pitch. In pixels at the design size: from a
+       heading's cap top to its first row's ink, from a section's last row's
+       ink to the next heading, and the space a new block opens. */ -}}
+{{- $m := dict "leadX" 59.0 "dotX" 82 "textX" 114.0 "subDotX" 95 "subTextX" 125.0
+      "right" 1036.0 "headTop" 255.0 "floor" 1252.0
+      "sizes" (slice 37 36 35 34 33 32 31 30 29 28 27 26) "pitch" 54.0
+      "headBelow" 57.0 "headAbove" 42.0 "blockGap" 12.0
+      "nameTop" 124.0 "nameCap" 57.0 "nameMax" 960.0 -}}
+{{- /* Each heading strip's top sits this far above its caps. */ -}}
+{{- $stripInset := 5.0 -}}
+{{- $plate := resources.Get "images/midterms/handbook-plate.png" -}}
+{{- $regular := resources.Get "fonts/DMSans-Regular.ttf" -}}
+{{- $italic := resources.Get "fonts/DMSans-Italic.ttf" -}}
+{{- $bold := resources.Get "fonts/DMSans-Bold.ttf" -}}
+{{- $bebas := resources.Get "fonts/BebasNeue-Regular.ttf" -}}
+{{- $ink := "#565656" -}}
+{{- $filters := slice -}}
+{{- $c := .copy -}}
+{{- $reg := index site.Data.midterms_states.states .code -}}
+{{- $v := index site.Data.midterms_voting.states .code -}}
+{{- $id := index site.Data.midterms_id.states .code -}}
+
+{{- /* The state's name, centred on the card, shrunk to fit if it must be,
+       with its caps centred on the comp's. */ -}}
+{{- $name := upper $reg.name -}}
+{{- $nameSize := int (math.Round (div $m.nameCap 0.7)) -}}
+{{- $nameWidth := partial "midterms-text-width.html" (dict "text" $name "font" "bebas" "size" $nameSize) -}}
+{{- if gt $nameWidth $m.nameMax -}}
+  {{- $nameSize = int (math.Floor (mul $nameSize (div $m.nameMax $nameWidth))) -}}
+  {{- $nameWidth = partial "midterms-text-width.html" (dict "text" $name "font" "bebas" "size" $nameSize) -}}
+{{- end -}}
+{{- /* Bebas: caps 0.7 em, the line box's ascent 0.9 em above the baseline. */ -}}
+{{- $capTop := add $m.nameTop (div (sub $m.nameCap (mul 0.7 $nameSize)) 2) -}}
+{{- $filters = $filters | append (images.Text $name (dict
+      "x" (int (math.Round (div (sub $plate.Width $nameWidth) 2)))
+      "y" (int (math.Round (sub $capTop (mul 0.2 $nameSize))))
+      "size" $nameSize "color" $ink "font" $bebas)) -}}
+
+{{- /* The items, in order. A "heading" is one of the cut strips; a "lead"
+       starts a block at the margin; a "bullet" is a dot and a line indented
+       under it, and a "sub" the same, one level in, under a lead. */ -}}
+{{- $items := slice (dict "kind" "heading" "key" "registration") -}}
+
+{{- $r := $c.registration -}}
+{{- if eq $reg.tier "ND" -}}
+  {{- $items = $items | append (dict "kind" "bullet" "line" $r.no_registration) -}}
+{{- else if eq $reg.tier "A" -}}
+  {{- $mail := cond $reg.mail_received $r.same_day.mail_received $r.same_day.mail_postmarked -}}
+  {{- $items = $items | append
+        (dict "kind" "bullet" "line" (replace $r.same_day.lede "{date}" (or $reg.online $reg.in_person)))
+        (dict "kind" "bullet" "line" (replace $mail "{mail_by}" $reg.mail_by)) -}}
+{{- else -}}
+  {{- with $reg.online -}}
+    {{- $items = $items | append (dict "kind" "bullet" "line" (replace $r.online "{date}" .)) -}}
+  {{- end -}}
+  {{- $inPerson := cond (eq $reg.tier "B") $r.in_person_same_day $r.in_person -}}
+  {{- $items = $items | append (dict "kind" "bullet" "line" (replace $inPerson "{date}" $reg.in_person)) -}}
+  {{- $mail := cond $reg.mail_received $r.mail_received $r.mail_postmarked -}}
+  {{- $items = $items | append (dict "kind" "bullet"
+        "line" (replace (replace $mail "{date}" $reg.mail_date) "{mail_by}" $reg.mail_by)) -}}
+{{- end -}}
+
+{{- /* Voting options: week two's card, with its wording. */ -}}
+{{- $o := $c.voting -}}
+{{- $items = $items | append (dict "kind" "heading" "key" "voting") -}}
+{{- if $v.early_voting -}}
+  {{- $end := $v.ev_end -}}
+  {{- with $v.ev_end_time }}{{ $end = printf "%s at %s" $end . }}{{ end -}}
+  {{- $line := "" -}}
+  {{- if $v.ev_varies -}}
+    {{- $line = cond (ne $v.ev_end nil) (replace $o.early_varies_end "{end}" $end) $o.early_varies -}}
+  {{- else -}}
+    {{- $line = replace (replace $o.early "{start}" $v.ev_start) "{end}" $end -}}
+  {{- end -}}
+  {{- $items = $items | append (dict "kind" "lead" "line" $line) -}}
+{{- end -}}
+
+{{- with $v.absentee_type -}}
+  {{- $items = $items | append (dict "kind" "lead" "line" (replace $o.absentee "{type}" .)) -}}
+  {{- with $v.request_online -}}
+    {{- $date := . -}}
+    {{- with $v.request_online_time }}{{ $date = printf "%s at %s" $date . }}{{ end -}}
+    {{- $items = $items | append (dict "kind" "sub" "line" (replace $o.request_online "{date}" $date)) -}}
+  {{- end -}}
+  {{- with $v.request_mail -}}
+    {{- $date := . -}}
+    {{- with $v.request_mail_time }}{{ $date = printf "%s at %s" $date . }}{{ end -}}
+    {{- $line := cond (eq $v.request_mail_received false) $o.request_mail_postmarked $o.request_mail_received -}}
+    {{- $items = $items | append (dict "kind" "sub" "line" (replace $line "{date}" $date)) -}}
+  {{- end -}}
+  {{- with $v.request_in_person -}}
+    {{- $date := . -}}
+    {{- with $v.request_in_person_time }}{{ $date = printf "%s at %s" $date . }}{{ end -}}
+    {{- $items = $items | append (dict "kind" "sub" "line" (replace $o.request_in_person "{date}" $date)) -}}
+  {{- end -}}
+  {{- /* As on week two's card: a short note earns its place, a paragraph is
+         left to the page. */ -}}
+  {{- with $v.request_in_person_note -}}
+    {{- if lt (len .) 40 -}}
+      {{- $items = $items | append (dict "kind" "sub" "line" (printf "**In person:** %s" .)) -}}
+    {{- end -}}
+  {{- end -}}
+{{- end -}}
+
+{{- $returns := slice -}}
+{{- with $v.return_mail -}}
+  {{- $date := . -}}
+  {{- with $v.return_mail_time }}{{ $date = printf "%s at %s" $date . }}{{ end -}}
+  {{- $line := cond (eq $v.return_mail_received false) $o.return_mail_postmarked $o.return_mail_received -}}
+  {{- $line = replace $line "{date}" $date -}}
+  {{- with $v.return_mail_received_by -}}
+    {{- $arrive := . -}}
+    {{- with $v.return_mail_received_by_time }}{{ $arrive = printf "%s at %s" $arrive . }}{{ end -}}
+    {{- $line = printf "%s%s" $line (replace $o.return_mail_arrive "{date}" $arrive) -}}
+  {{- end -}}
+  {{- with $v.return_mail_by -}}
+    {{- $line = printf "%s%s" $line (replace $o.return_mail_by "{date}" .) -}}
+  {{- end -}}
+  {{- $returns = $returns | append (dict "kind" "sub" "line" $line) -}}
+{{- end -}}
+{{- with $v.return_in_person -}}
+  {{- $date := . -}}
+  {{- with $v.return_in_person_time }}{{ $date = printf "%s at %s" $date . }}{{ end -}}
+  {{- $returns = $returns | append (dict "kind" "sub" "line" (replace $o.return_in_person "{date}" $date)) -}}
+{{- end -}}
+{{- if $returns -}}
+  {{- $where := "by mail" -}}
+  {{- with $v.return_methods }}{{ $where = printf "%s, or by mail" . }}{{ end -}}
+  {{- $items = $items | append (dict "kind" "lead" "line" (replace $o.return "{methods}" $where)) -}}
+  {{- $items = $items | append $returns -}}
+{{- end -}}
+
+{{- /* ID: week three's card, its bold answer as a plain bullet. */ -}}
+{{- $items = $items | append
+      (dict "kind" "heading" "key" "id")
+      (dict "kind" "bullet" "line" (printf "%s." $id.lede)) -}}
+
+{{- /* images.Text wraps any text that runs within 20px of the image's right
+       edge, drawing the overflow over the next row, so rows stop short of that
+       with a couple of pixels to spare. */ -}}
+{{- $right := math.Min $m.right (sub $plate.Width 22) -}}
+{{- $base := index $m.sizes 0 -}}
+{{- /* DM Sans, in ems: ascender and descender ink, and the line-box ascent
+       images.Text measures its y from. */ -}}
+{{- $ascInk := 0.71 -}}
+{{- $descInk := 0.20 -}}
+{{- $lineAscent := 0.992 -}}
+
+{{- /* Lay everything out top-down at the design size, and if the last row
+       hangs into the footer, at each smaller size until it doesn't. The
+       headings keep their size; the space around them scales with the type.
+       Every row and heading gets a `top`: a row's ink top, a heading's caps. */ -}}
+{{- $layout := dict -}}
+{{- range $size := $m.sizes -}}
+  {{- $k := div (float $size) $base -}}
+  {{- $pitch := mul $m.pitch $k -}}
+  {{- $placed := slice -}}
+  {{- $top := $m.headTop -}}
+  {{- $prev := "" -}}
+  {{- $bottom := 0.0 -}}
+  {{- range $it := $items -}}
+    {{- if eq $it.kind "heading" -}}
+      {{- if $prev }}{{ $top = add $bottom (mul $m.headAbove $k) }}{{ end -}}
+      {{- $placed = $placed | append (dict "kind" "heading" "key" $it.key "top" $top) -}}
+      {{- $top = add $top (mul $m.headBelow $k) -}}
+      {{- $prev = "heading" -}}
+      {{- continue -}}
+    {{- end -}}
+    {{- /* A row after a heading starts where the heading put it; a lead after
+           anything but a heading opens a gap. */ -}}
+    {{- if and (ne $prev "heading") (ne $prev "") -}}
+      {{- $top = add $top $pitch -}}
+      {{- if eq $it.kind "lead" }}{{ $top = add $top (mul $m.blockGap $k) }}{{ end -}}
+    {{- end -}}
+    {{- $x0 := $m.leadX -}}
+    {{- $dotX := 0 -}}
+    {{- if eq $it.kind "bullet" }}{{ $x0 = $m.textX }}{{ $dotX = $m.dotX }}{{ end -}}
+    {{- if eq $it.kind "sub" }}{{ $x0 = $m.subTextX }}{{ $dotX = $m.subDotX }}{{ end -}}
+    {{- $maxWidth := sub $right $x0 -}}
+
+    {{- $label := "" -}}
+    {{- $text := $it.line -}}
+    {{- with findRESubmatch `^\*\*(.+?)\*\*\s*(.*)$` $it.line 1 -}}
+      {{- $label = index (index . 0) 1 -}}
+      {{- $text = index (index . 0) 2 -}}
+    {{- end -}}
+    {{- $restFont := "regular" -}}
+    {{- with findRESubmatch `^\*(.+)\*$` $text 1 -}}
+      {{- $text = index (index . 0) 1 -}}
+      {{- $restFont = "italic" -}}
+    {{- end -}}
+    {{- $words := slice -}}
+    {{- range split $label " " }}{{ with . }}{{ $words = $words | append (dict "w" . "font" "bold") }}{{ end }}{{ end -}}
+    {{- /* A date is one word, so a wrap never leaves "Tue," and "Nov 3"
+           apart: its spaces are held as no-break spaces through the split,
+           then put back. */ -}}
+    {{- $text = replaceRE `(Sun|Mon|Tue|Wed|Thu|Fri|Sat), (\S+) (\d+)` "$1, $2 $3" $text -}}
+    {{- range split $text " " }}{{ with . }}{{ $words = $words | append (dict "w" (replace . " " " ") "font" $restFont) }}{{ end }}{{ end -}}
+
+    {{- $runs := slice -}}
+    {{- $cur := "" -}}
+    {{- $curFont := "" -}}
+    {{- $curX := 0.0 -}}
+    {{- $x := 0.0 -}}
+    {{- $used := false -}}
+    {{- $firstRow := true -}}
+    {{- range $words -}}
+      {{- $width := partial "midterms-text-width.html" (dict "text" .w "font" .font "size" $size) -}}
+      {{- $start := 0.0 -}}
+      {{- if $used -}}
+        {{- $start = add $x (partial "midterms-text-width.html" (dict "text" " " "font" .font "size" $size)) -}}
+      {{- end -}}
+      {{- if and $used (gt (add $start $width) $maxWidth) -}}
+        {{- $runs = $runs | append (dict "text" $cur "font" $curFont "x" $curX) -}}
+        {{- $placed = $placed | append (dict "kind" "row" "runs" $runs "x0" $x0
+              "dotX" (cond $firstRow $dotX 0) "top" $top "size" $size) -}}
+        {{- $top = add $top $pitch -}}
+        {{- $runs = slice -}}
+        {{- $cur = "" -}}
+        {{- $firstRow = false -}}
+        {{- $start = 0.0 -}}
+      {{- end -}}
+      {{- if and (ne $cur "") (ne .font $curFont) -}}
+        {{- $runs = $runs | append (dict "text" $cur "font" $curFont "x" $curX) -}}
+        {{- $cur = "" -}}
+      {{- end -}}
+      {{- if eq $cur "" -}}
+        {{- $cur = .w -}}
+        {{- $curFont = .font -}}
+        {{- $curX = $start -}}
+      {{- else -}}
+        {{- $cur = printf "%s %s" $cur .w -}}
+      {{- end -}}
+      {{- $x = add $start $width -}}
+      {{- $used = true -}}
+    {{- end -}}
+    {{- $runs = $runs | append (dict "text" $cur "font" $curFont "x" $curX) -}}
+    {{- $placed = $placed | append (dict "kind" "row" "runs" $runs "x0" $x0
+          "dotX" (cond $firstRow $dotX 0) "top" $top "size" $size) -}}
+    {{- $bottom = add $top (mul (add $ascInk $descInk) $size) -}}
+    {{- $prev = $it.kind -}}
+  {{- end -}}
+  {{- if or (le $bottom $m.floor) (eq $size (index $m.sizes (sub (len $m.sizes) 1))) -}}
+    {{- $layout = dict "placed" $placed -}}
+    {{- break -}}
+  {{- end -}}
+{{- end -}}
+
+{{- $fonts := dict "regular" $regular "italic" $italic "bold" $bold -}}
+{{- range $layout.placed -}}
+  {{- if eq .kind "heading" -}}
+    {{- $strip := resources.Get (printf "images/midterms/handbook-heading-%s.png" .key) -}}
+    {{- $filters = $filters | append (images.Overlay $strip 9 (int (math.Round (sub .top $stripInset)))) -}}
+  {{- else -}}
+    {{- $row := . -}}
+    {{- $y := int (math.Round (sub (add .top (mul $ascInk .size)) (mul $lineAscent .size))) -}}
+    {{- if .dotX -}}
+      {{- $filters = $filters | append (images.Text "•" (dict
+            "x" .dotX "y" $y "size" .size "color" $ink "font" $bold)) -}}
+    {{- end -}}
+    {{- range .runs -}}
+      {{- $filters = $filters | append (images.Text .text (dict
+            "x" (int (math.Round (add $row.x0 .x))) "y" $y "size" $row.size
+            "color" $ink "font" (index $fonts .font))) -}}
+    {{- end -}}
+  {{- end -}}
+{{- end -}}
+
+{{- return $plate.Filter $filters -}}

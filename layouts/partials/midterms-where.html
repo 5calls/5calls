@@ -1,0 +1,59 @@
+{{- /*
+  Week six's ways to vote in one state, as HTML, for the box under the week's
+  message. Takes (dict "state" STATE "copy" WEEK.where), where STATE is an
+  entry from data/midterms_voting.yml, and returns a string, so the page can
+  print the reader's state and the state switcher carry every other state's,
+  drawn by the same code.
+
+  Two groups with OR between them, in week two's markup: early voting where
+  the state has it (or Election Day where it doesn't), then how to return a
+  mail ballot, with the dates for each way under it.
+*/ -}}
+{{- $s := .state -}}
+{{- $c := .copy -}}
+
+{{- /* The first way: early voting, or Election Day. */ -}}
+{{- $first := "" -}}
+{{- if $s.early_voting -}}
+  {{- $end := $s.ev_end -}}
+  {{- with $s.ev_end_time }}{{ $end = printf "%s at %s" $end . }}{{ end -}}
+  {{- if $s.ev_varies -}}
+    {{- $first = cond (ne $s.ev_end nil) (replace $c.early_varies_end "{end}" $end) $c.early_varies -}}
+  {{- else -}}
+    {{- $first = replace (replace $c.early "{start}" $s.ev_start) "{end}" $end -}}
+  {{- end -}}
+{{- else -}}
+  {{- $first = $c.election_day -}}
+{{- end -}}
+{{- $out := printf `<div class="mt-vote__group"><p class="mt-vote__line">%s</p></div>` ($first | markdownify) -}}
+
+{{- /* The second: sending a mail ballot back, by when for each way. */ -}}
+{{- $items := "" -}}
+{{- with $s.return_mail -}}
+  {{- $date := . -}}
+  {{- with $s.return_mail_time }}{{ $date = printf "%s at %s" $date . }}{{ end -}}
+  {{- $l := cond (eq $s.return_mail_received false) $c.return_mail_postmarked $c.return_mail_received -}}
+  {{- $l = replace $l "{date}" $date -}}
+  {{- with $s.return_mail_received_by -}}
+    {{- $arrive := . -}}
+    {{- with $s.return_mail_received_by_time }}{{ $arrive = printf "%s at %s" $arrive . }}{{ end -}}
+    {{- $l = printf "%s%s" $l (replace $c.return_mail_arrive "{date}" $arrive) -}}
+  {{- end -}}
+  {{- with $s.return_mail_by -}}
+    {{- $l = printf "%s%s" $l (replace $c.return_mail_by "{date}" .) -}}
+  {{- end -}}
+  {{- $items = printf "%s<li>%s</li>" $items ($l | markdownify) -}}
+{{- end -}}
+{{- with $s.return_in_person -}}
+  {{- $date := . -}}
+  {{- with $s.return_in_person_time }}{{ $date = printf "%s at %s" $date . }}{{ end -}}
+  {{- $items = printf "%s<li>%s</li>" $items (replace $c.return_in_person "{date}" $date | markdownify) -}}
+{{- end -}}
+{{- if $items -}}
+  {{- $where := "by mail" -}}
+  {{- with $s.return_methods }}{{ $where = printf "%s, or by mail" . }}{{ end -}}
+  {{- $out = printf `%s<p class="mt-vote__or">%s</p><div class="mt-vote__group"><p class="mt-vote__line">%s</p><ul class="mt-vote__sub">%s</ul></div>`
+        $out $c.or (replace $c.return "{methods}" $where | markdownify) $items -}}
+{{- end -}}
+
+{{- return printf `<div class="mt-vote">%s</div>` $out -}}

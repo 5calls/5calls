@@ -11,7 +11,9 @@
   301 here would hand them the destination's card and lose the per-state one.
 
   An extra credit page (params.extra) works the same way, but its card is the
-  extra credit art as it is, with no state in it. A plan page (params.plan,
+  extra credit art as it is, with no state in it. A handbook page
+  (params.handbook, week six's extra credit) carries that state's vertical
+  voter handbook, there being no horizontal one. A plan page (params.plan,
   week five) carries the card for that voting plan, with no state in it either.
 */ -}}
 {{- $d := site.Data.midterms -}}
@@ -33,7 +35,13 @@
 {{- $card := false -}}
 {{- $description := "" -}}
 {{- $alt := "" -}}
-{{- if .Params.extra -}}
+{{- if .Params.handbook -}}
+  {{- $state := index site.Data.midterms_states.states .Params.state -}}
+  {{- $card = partial "midterms-card-week6.html" (dict "code" $state.code "copy" $week.extra_credit.handbook) -}}
+  {{- $title = printf "2026 Voter Handbook: %s" $state.name -}}
+  {{- $description = printf "Registration deadlines, voting options and ID requirements for %s." $state.name -}}
+  {{- $alt = $title -}}
+{{- else if .Params.extra -}}
   {{- $ec := $week.extra_credit -}}
   {{- $card = resources.Get $ec.share.horizontal -}}
   {{- $title = printf "%s: %s" $ec.title $ec.part.title -}}
@@ -47,7 +55,10 @@
   {{- $alt = printf "I made a plan to vote! %s" $description -}}
 {{- else -}}
   {{- $state := index site.Data.midterms_states.states .Params.state -}}
-  {{- $card = partial "midterms-card.html" (dict "crop" "horizontal" "week" $week "state" $state) -}}
+  {{- /* Week six's "I voted early!" set, on its own pages. */ -}}
+  {{- $set := cond (.Params.early | default false) "early" "" -}}
+  {{- $card = partial "midterms-card.html" (dict "crop" "horizontal" "week" $week "state" $state "set" $set) -}}
+  {{- if $set }}{{ with $week.early_cards }}{{ $title = .label }}{{ end }}{{ end -}}
   {{- $description = printf "%s: %s %s." $state.name ($state.headline | lower) (or $state.hero_date $state.channels) -}}
   {{- $alt = printf "%s: %s" $state.name $week.title -}}
 {{- end -}}

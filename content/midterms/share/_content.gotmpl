@@ -13,6 +13,13 @@
   /midterms/share/1/extra/. That art is the same in every state, so there is
   one page rather than 51.
 
+  Week six also has a second set of cards, "I voted early!", so it gets one
+  more page per state for them, /midterms/share/6/early-ca/.
+
+  Week six's extra credit is a voter handbook per state, vertical only, so it
+  gets one page per state, /midterms/share/6/handbook-ca/, whose card is that
+  handbook.
+
   Week five's art follows the reader's voting plan rather than their state, so
   that week gets one page per plan instead, /midterms/share/5/mail-dropbox-yes/,
   keyed as midterms-plan-cards.html keys them.
@@ -51,7 +58,42 @@
         "build" (dict "list" "never" "render" "always")
       ) }}
     {{- end }}
+    {{- if $week.early_cards }}
+      {{- range site.Data.midterms_states.states }}
+        {{- $.AddPage (dict
+          "kind" "page"
+          "path" (printf "%d/early-%s" $week.number (lower .code))
+          "title" (printf "%s: week %d, voted early" .name $week.number)
+          "params" (dict
+            "share" true
+            "early" true
+            "week" $week.number
+            "state" .code
+            "description" $week.title
+          )
+          "build" (dict "list" "never" "render" "always")
+        ) }}
+      {{- end }}
+    {{- end }}
     {{- with $week.extra_credit }}
+      {{- $ec := . }}
+      {{- with .handbook }}
+        {{- range site.Data.midterms_states.states }}
+          {{- $.AddPage (dict
+            "kind" "page"
+            "path" (printf "%d/handbook-%s" $week.number (lower .code))
+            "title" (printf "%s voter handbook" .name)
+            "params" (dict
+              "share" true
+              "handbook" true
+              "week" $week.number
+              "state" .code
+              "description" $ec.part.title
+            )
+            "build" (dict "list" "never" "render" "always")
+          ) }}
+        {{- end }}
+      {{- end }}
       {{- if .share }}
         {{- $.AddPage (dict
           "kind" "page"
