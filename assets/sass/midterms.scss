@@ -1100,7 +1100,8 @@ body {
     color: $ink-solid;
   }
 
-  .mt-extra__part-text > p {
+  .mt-extra__part-text > p,
+  .mt-extra__part-text > ul {
     max-width: 60ch;
     margin: 0;
     font-size: 17px;

@@ -4,7 +4,7 @@
 # Which week is live right now. Weeks before this are "done", weeks after are
 # "upcoming". Set this to 0 before the program starts: the page then renders
 # the week_zero block below instead of a weekly action, and nothing unlocks.
-current_week: 6
+current_week: 7
 
 nav:
   nudge: Get reminders
@@ -922,31 +922,98 @@ weeks:
 
   - number: 7
     short: Recheck
-    title: Recheck your work
-    state_specific: false
+    title: Check your work (and vote!)
+    state_specific: true
     release: 2026-10-27T09:00:00-07:00
-    intro: >-
-      SAMPLE COPY — the re-check week. Real text goes here: two sentences on the
-      things that get ballots rejected and how little time curing takes.
-    headline: SAMPLE HEADER LINE FOR THIS WEEK
+    intro:
+      - h3: Already voted by mail?
+      - >-
+        You’re not done yet! Most states let you track your ballot online or
+        sign up for text/email alerts. If ballot tracking is available to you,
+        take a few minutes to confirm that yours was received and counted. If
+        there is a problem, like a missing signature, your state may let you
+        fix it, but only for a limited time. Catching it now gives you time to
+        act!
+      - h3: Still need to return your mail ballot?
+      - >-
+        What are you waiting for?! [Due to recent changes, the USPS may not
+        postmark your ballot the day it’s received](https://www.npr.org/2026/10/09/nx-s1-5984981/mail-in-ballot-usps-postmark),
+        so from here on out (after October 27th) we strongly encourage you to
+        deliver your ballot to an approved drop box, local election office, or
+        voting site if possible!
+      - h3: Planning to vote in-person?
+      - >-
+        If Early Voting is still happening in your state, get yourself to the
+        polls before November 3rd if you can! Life happens, and you wouldn’t
+        want an unexpected illness or emergency to keep you from casting a
+        ballot. And remember to double-check the hours for your Early Voting
+        location before you head out, since they can change.
+      - >-
+        If you can’t vote early, try to get to the polls early on Tuesday,
+        November 3rd. Confirm your polling place, make sure you have the
+        required ID (if needed), and block off the time on your calendar.
+    headline: MAKE SURE MY VOTE COUNTS
     headline_date: Tue, Nov 3
+    # FPO: the copy doc only notes the direction for this message: the last
+    # chance to safely mail a ballot, maybe drop box or hand delivery only now.
     message: >-
       SAMPLE MESSAGE — placeholder standing in for this week's wording. It runs
       about three short sentences and roughly this many words, so the card can
       be judged at the size it will really be.
     copy_cta: button1
     rewrite_cta: button2
-    confirm: I did it — unlock my images
-    # FPO: placeholder copy, replace before this week ships.
+    # The share modal's prefilled words for the week's own cards ("I tracked
+    # my ballot"), as for week six. FPO: placeholder wording.
+    share_text:
+      threads: "I tracked my ballot! Make sure your vote counts with @5calls and 5 Minute Midterms"
+      bsky: "I tracked my ballot! Make sure your vote counts with @5calls.org and 5 Minute Midterms"
+      x: "I tracked my ballot! Make sure your vote counts with @make5calls and 5 Minute Midterms"
+    # A second set of share cards beside the week's own, "I'm ready to vote!",
+    # on week six's "I voted early!" plumbing: each state's link goes to
+    # /midterms/share/7/early-ca/. FPO: placeholder wording.
+    early_cards:
+      week_label: I tracked my ballot
+      label: I’m ready to vote!
+      text:
+        threads: "I'm ready to vote! Make sure your vote counts with @5calls and 5 Minute Midterms"
+        bsky: "I'm ready to vote! Make sure your vote counts with @5calls.org and 5 Minute Midterms"
+        x: "I'm ready to vote! Make sure your vote counts with @make5calls and 5 Minute Midterms"
+    confirm: I checked my work - unlock my achievement graphics!
+    # Like week four, no share art or share key, so no share panel and no
+    # extra share page.
+    extra_credit:
+      title: Extra credit
+      toggle: I’m ready for more
+      locked_note: Confirm you checked your work above to unlock
+      part:
+        title: Save the Election Protection Hotline Number(s)
+        body:
+          - >-
+            If you have any questions about voting or experience any
+            difficulties at the polls, call or text the Election Protection
+            Hotline at **866-OUR-VOTE**. (That’s 866-687-8683.) You’ll be able to
+            speak to a trained volunteer who can provide assistance if you
+            encounter long lines, problems with voting machines, or any other
+            obstacles to voting (like voter intimidation or poll worker
+            misconduct.)
+          - >-
+            They also provide language assistance and maintain [voter
+            assistance hotlines in multiple languages.](https://protectthevote.net/what-to-share-with-your-community/)
+          - - "**888-VE-Y-VOTA** (888-839-8682) – Spanish language hotline"
+            - "**888-API-VOTE** (888-274-8683) – Chinese, Vietnamese, Korean, Bengali, Hindi, Urdu and Tagalog hotline"
+            - "**844-YALLA-US** (844-925-5287) – Arabic language hotline"
+            - "**301-818-VOTE** (301-818-8683) – American Sign Language (video)"
+          - Add these numbers to your phone and share them with your friends!
     why:
+      # FPO: the copy doc has no heading for this week yet.
       heading: Ballots get rejected for fixable things, if you catch them in time.
       stats:
-        - value: Signature
-          text: mismatches are the most common reason a ballot is tossed.
-        - value: Cure
-          text: windows exist in most states, but they close fast.
-        - value: 2 min
-          text: to track your ballot and confirm it was accepted.
+        - value: Only 27
+          text: states allow ballots to be [cured after Election Day](https://ballotpedia.org/Cure_period_for_absentee_and_mail-in_ballots).
+        - value: "5"
+          text: 'states had the [highest percentage of rejected mail-in ballots](https://ballotpedia.org/Election_results,_2024:_Analysis_of_rejected_ballots) in 2024: Arkansas, Delaware, Oklahoma, Texas, Kentucky. States with the lowest: Indiana, Maine, Vermont, Kansas, Maryland.'
+        - value: 40.7%
+          text: of rejected mail-in ballots in 2024 were [rejected due to signature mismatching](https://ballotpedia.org/Election_results,_2024:_Analysis_of_rejected_ballots), making it the most common reason.
 
   - number: 8
     short: Vote

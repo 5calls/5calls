@@ -690,10 +690,11 @@
                 <div class="mt-extra__part{{ with $preview }} mt-extra__part--preview{{ end }}">
                   <div class="mt-extra__part-text">
                   <h3>{{ .title }}</h3>
-                  {{- /* Each entry is a paragraph, or a {cta: {label, url}}
-                         entry for a button, which lets the button sit between
-                         two paragraphs rather than only after them. Same shape
-                         as the {h3: …} entries the week's own intro takes. The
+                  {{- /* Each entry is a paragraph, a nested list for
+                         bullets, or a {cta: {label, url}} entry for a button,
+                         which lets the button sit between two paragraphs
+                         rather than only after them. Same shape as the
+                         {h3: …} entries the week's own intro takes. The
                          wrapping div matters: this column is a flex column, so
                          a bare anchor would stretch the pill full width. */ -}}
                   {{- range .body }}
@@ -708,6 +709,12 @@
                        {{- if hasPrefix .url "http" }} rel="noopener"{{ end }}
                        {{- with .download }} download="{{ . }}"{{ end }}>{{ .label }}</a></div>
                       {{- end }}
+                    {{- else if reflect.IsSlice . }}
+                    <ul class="mt-action__list">
+                      {{- range . }}
+                      <li>{{ . | markdownify }}</li>
+                      {{- end }}
+                    </ul>
                     {{- else }}
                     <p>{{ . | markdownify }}</p>
                     {{- end }}

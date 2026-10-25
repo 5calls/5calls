@@ -25,6 +25,11 @@
   I'm voting" and, with "set" "early", "I voted early!"; the rules sit in the
   same place on both. Their plates come from scripts/build-midterms-plates6.py
   and their names from build-midterms-names6.py.
+
+  Week seven is week six again on new art ("I tracked my ballot" and, as its
+  "early" set, "I'm ready to vote"), from build-midterms-plates7.py. Its name
+  sits where week six's does, so it borrows week six's name layers; only the
+  horizontal rules move, up above the footer bar the comps put at the bottom.
 */ -}}
 {{- $wk := .week | default 2 -}}
 {{- /* Each crop's text layout, measured off the designed California card: the
@@ -41,7 +46,7 @@
 {{- end -}}
 {{- /* Week six's, off its California comps. Its lines run on without a gap
        between blocks, as the comps set them. */ -}}
-{{- if eq $wk 6 -}}
+{{- if ge $wk 6 -}}
   {{- $m = dict "leadX" 136.0 "dotX" 174 "textX" 219.0 "right" 1040.0
         "inkTop" 947.0 "floor" 1240.0 "blockGap" 0.0
         "sizes" (slice 36 35 34 33 32 31 30 29 28 27 26 25 24 23 22) "pitch" 54.5 -}}
@@ -49,6 +54,7 @@
     {{- $m = dict "leadX" 165.0 "dotX" 189 "textX" 225.0 "right" 1035.0
           "inkTop" 421.0 "floor" 615.0 "blockGap" 0.0
           "sizes" (slice 25 24 23 22 21 20 19 18 17 16 15 14) "pitch" 39.0 -}}
+    {{- if eq $wk 7 }}{{ $m = merge $m (dict "inkTop" 374.0 "floor" 574.0) }}{{ end -}}
   {{- end -}}
 {{- end -}}
 {{- $plateName := printf "share-%s-week%d" .crop $wk -}}
@@ -62,11 +68,12 @@
 
 {{- /* State name: a card-sized layer, so it lands at 0, 0. A missing one fails
        the build rather than shipping a card without a name. */ -}}
-{{- $namePath := printf "images/midterms/week%d-names/%s/%s.png" $wk .crop (lower $s.code) -}}
+{{- $nameWk := cond (eq $wk 7) 6 $wk -}}
+{{- $namePath := printf "images/midterms/week%d-names/%s/%s.png" $nameWk .crop (lower $s.code) -}}
 {{- with resources.Get $namePath -}}
   {{- $filters = $filters | append (images.Overlay . 0 0) -}}
 {{- else -}}
-  {{- errorf "midterms week %d card: no name layer at assets/%s; run scripts/build-midterms-names%d.py" $wk $namePath $wk -}}
+  {{- errorf "midterms week %d card: no name layer at assets/%s; run scripts/build-midterms-names%d.py" $wk $namePath $nameWk -}}
 {{- end -}}
 
 {{- /* The lines, in order. A "lead" starts a block at the left margin; a
@@ -92,7 +99,7 @@
         (dict "kind" "lead" "line" (printf "**In-Person Early Voting:** %s" $line)) -}}
 {{- end -}}
 
-{{- with and (ne $wk 6) $s.absentee_type -}}
+{{- with and (lt $wk 6) $s.absentee_type -}}
   {{- $blocks = $blocks | append
         (dict "kind" "lead" "line" (printf "**Absentee & Vote-by-mail:** %s" .)) -}}
   {{- with $s.request_online -}}
