@@ -1,0 +1,24 @@
+{{- /*
+  Week seven's ways to still vote in one state, as HTML, for the top of the
+  week's action box. Takes (dict "state" STATE "copy" WEEK.vote_now), where
+  STATE is an entry from data/midterms_voting.yml, and returns a string, so
+  the page can print the reader's state and the state switcher carry every
+  other state's, as midterms-where.html does for week six.
+
+  When the state's early voting is still open on copy.early_from, a line says
+  when it ends; a state whose county sets the dates with no end given has
+  nothing to name, so it gets none. Every state then gets the Election Day
+  line, or its own from copy.election_day_states.
+*/ -}}
+{{- $s := .state -}}
+{{- $c := .copy -}}
+{{- $out := "" -}}
+{{- if and $s.early_voting $s.ev_end -}}
+  {{- if ge (partial "midterms-iso.html" $s.ev_end) $c.early_from -}}
+    {{- $end := $s.ev_end -}}
+    {{- with $s.ev_end_time }}{{ $end = printf "%s at %s" $end . }}{{ end -}}
+    {{- $out = printf `<p class="mt-message__text mt-message__text--lead">%s</p>` (replace $c.early "{date}" $end | markdownify) -}}
+  {{- end -}}
+{{- end -}}
+{{- $out = printf `%s<p class="mt-message__text mt-message__text--lead">%s</p>` $out (index ($c.election_day_states | default dict) $s.code | default $c.election_day | markdownify) -}}
+{{- return $out -}}

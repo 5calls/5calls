@@ -928,8 +928,8 @@ weeks:
     intro:
       - h3: Already voted by mail?
       - >-
-        You’re not done yet! Most states let you track your ballot online or
-        sign up for text/email alerts. If ballot tracking is available to you,
+        You’re not done yet! **[Most states let you track your ballot online or
+        sign up for text/email alerts](https://www.voteamerica.org/ballot-tracker/).** If ballot tracking is available to you,
         take a few minutes to confirm that yours was received and counted. If
         there is a problem, like a missing signature, your state may let you
         fix it, but only for a limited time. Catching it now gives you time to
@@ -938,13 +938,14 @@ weeks:
       - >-
         What are you waiting for?! [Due to recent changes, the USPS may not
         postmark your ballot the day it’s received](https://www.npr.org/2026/10/09/nx-s1-5984981/mail-in-ballot-usps-postmark),
-        so from here on out (after October 27th) we strongly encourage you to
-        deliver your ballot to an approved drop box, local election office, or
+        so from here on out (**after October 27th**) we strongly encourage you to
+        **deliver your ballot to an approved drop box**, local election office, or
         voting site if possible!
       - h3: Planning to vote in-person?
       - >-
         If Early Voting is still happening in your state, get yourself to the
-        polls before November 3rd if you can! Life happens, and you wouldn’t
+        polls now if you can! Some states don’t have early voting through
+        Election Day. Life happens, and you wouldn’t
         want an unexpected illness or emergency to keep you from casting a
         ballot. And remember to double-check the hours for your Early Voting
         location before you head out, since they can change.
@@ -954,14 +955,28 @@ weeks:
         required ID (if needed), and block off the time on your calendar.
     headline: MAKE SURE MY VOTE COUNTS
     headline_date: Tue, Nov 3
-    # FPO: the copy doc only notes the direction for this message: the last
-    # chance to safely mail a ballot, maybe drop box or hand delivery only now.
-    message: >-
-      SAMPLE MESSAGE — placeholder standing in for this week's wording. It runs
-      about three short sentences and roughly this many words, so the card can
-      be judged at the size it will really be.
-    copy_cta: button1
-    rewrite_cta: button2
+    # The top of the action box: when the reader's state still lets them vote.
+    # Drawn by layouts/partials/midterms-vote-now.html from
+    # data/midterms_voting.yml. `early` shows only for a state whose early
+    # voting is still open on `early_from`; every state gets `election_day`, or
+    # its own line from `election_day_states`.
+    vote_now:
+      early_from: "2026-10-27"
+      early: "Early voting ends on {date}"
+      election_day: You can still vote in person on Nov 3rd
+      # In place of election_day for a state whose Election Day works
+      # differently. Oregon votes by mail and has no polling places, only
+      # county elections offices.
+      election_day_states:
+        OR: You can still vote in person at your county elections office until 8PM on Nov 3rd, or drop off your ballot at an official drop box.
+    # Under it, in place of a message to copy: each line with a button out.
+    links:
+      - text: Find out where to vote on Election Day or your dropbox location.
+        label: Find where to vote
+        url: https://www.voteamerica.org/where-to-vote/
+      - text: Already mailed your ballot? Track the status of your absentee or mail ballot.
+        label: Track my ballot
+        url: https://www.voteamerica.org/ballot-tracker/
     # The share modal's prefilled words for the week's own cards ("I tracked
     # my ballot"), as for week six. FPO: placeholder wording.
     share_text:

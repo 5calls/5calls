@@ -67,6 +67,8 @@
 {{- if $idrules }}{{ $required = slice "intro" "deck_cta" "confirm" "why" }}{{ end -}}
 {{- /* The plan is a form drawn from the week's own `plan` block. */ -}}
 {{- if and (not $prelaunch) $week.plan }}{{ $required = slice "intro" "plan" "confirm" "why" }}{{ end -}}
+{{- /* Week seven's box is lines of text, each with its own button. */ -}}
+{{- if $week.links }}{{ $required = slice "intro" "links" "confirm" "why" }}{{ end -}}
 {{- if and $preview (not $prelaunch) -}}
   {{- range $required -}}
     {{- if not (index $week .) }}{{ $missing = $missing | append . }}{{ end -}}
@@ -540,6 +542,23 @@
                     {{- partial "midterms-where.html" (dict "state" (index site.Data.midterms_voting.states $d.state.abbr) "copy" .) | safeHTML -}}
                   </div>
                 {{- end }}
+                {{- /* Week seven: when the reader's state still lets them
+                       vote, swapped by the state picker the same way. */ -}}
+                {{- with $week.vote_now }}
+                  <div class="mt-deck__body" data-state-where>
+                    {{- partial "midterms-vote-now.html" (dict "state" (index site.Data.midterms_voting.states $d.state.abbr) "copy" .) | safeHTML -}}
+                  </div>
+                {{- end }}
+                {{- /* Week seven: in place of a message and its buttons, a
+                       line of text and a button out for each of `links`. */ -}}
+                {{- with $week.links }}
+                  {{- range . }}
+                  <p class="mt-message__text">{{ .text | markdownify }}</p>
+                  <div class="mt-message__actions">
+                    <a class="mt-pill mt-pill--solid" href="{{ .url }}" rel="noopener">{{ .label }}</a>
+                  </div>
+                  {{- end }}
+                {{- else }}
                 <p class="mt-message__text{{ if $week.where }} mt-message__text--lead{{ end }}" data-message>{{ $week.message }}</p>
                 {{- /* The reader's state's line, if the week has one for it.
                        Drawn for the default state and swapped by the state
@@ -560,6 +579,7 @@
                     <span class="mt-pill mt-pill--blue">{{ $week.rewrite_cta }}</span>
                   {{- end }}
                 </div>
+                {{- end }}
               </div>
             {{- end }}
 
@@ -965,6 +985,10 @@
       {{- with $week.where -}}
         {{- $entry = merge $entry (dict
             "where" (partial "midterms-where.html" (dict "state" (index site.Data.midterms_voting.states $code) "copy" .))) -}}
+      {{- end -}}
+      {{- with $week.vote_now -}}
+        {{- $entry = merge $entry (dict
+            "where" (partial "midterms-vote-now.html" (dict "state" (index site.Data.midterms_voting.states $code) "copy" .))) -}}
       {{- end -}}
       {{- with $week.extra_credit }}{{ with .handbook -}}
         {{- $entry = merge $entry (dict
