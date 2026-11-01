@@ -30,6 +30,11 @@
   "early" set, "I'm ready to vote"), from build-midterms-plates7.py. Its name
   sits where week six's does, so it borrows week six's name layers; only the
   horizontal rules move, up above the footer bar the comps put at the bottom.
+
+  Week eight, "I voted!", passes "copy" too, its card_copy from
+  data/midterms.yml: same-day registration and returning a mail ballot as
+  they stand on Election Day. Plates from build-midterms-plates8.py, vertical
+  names from build-midterms-names8.py; the horizontal name is week two's.
 */ -}}
 {{- $wk := .week | default 2 -}}
 {{- /* Each crop's text layout, measured off the designed California card: the
@@ -57,6 +62,18 @@
     {{- if eq $wk 7 }}{{ $m = merge $m (dict "inkTop" 374.0 "floor" 574.0) }}{{ end -}}
   {{- end -}}
 {{- end -}}
+{{- /* Week eight's, off its California comps: a taller panel, with a gap
+       between the same-day registration line and the return block. */ -}}
+{{- if eq $wk 8 -}}
+  {{- $m = dict "leadX" 56.0 "dotX" 103 "textX" 142.0 "right" 1030.0
+        "inkTop" 887.0 "floor" 1332.0 "blockGap" 0.5 "center" true
+        "sizes" (slice 38 37 36 35 34 33 32 31 30 29 28 27 26 25 24 23 22) "pitch" 57.0 -}}
+  {{- if eq .crop "horizontal" -}}
+    {{- $m = dict "leadX" 657.0 "dotX" 686 "textX" 717.0 "right" 1185.0
+          "inkTop" 230.0 "floor" 590.0 "blockGap" 0.5 "center" true
+          "sizes" (slice 24 23 22 21 20 19 18 17 16 15 14) "pitch" 36.0 -}}
+  {{- end -}}
+{{- end -}}
 {{- $plateName := printf "share-%s-week%d" .crop $wk -}}
 {{- with .set }}{{ $plateName = printf "%s-%s" $plateName . }}{{ end -}}
 {{- $plate := resources.Get (printf "images/midterms/%s.png" $plateName) -}}
@@ -69,6 +86,8 @@
 {{- /* State name: a card-sized layer, so it lands at 0, 0. A missing one fails
        the build rather than shipping a card without a name. */ -}}
 {{- $nameWk := cond (eq $wk 7) 6 $wk -}}
+{{- /* Week eight's horizontal name sits exactly where week two's does. */ -}}
+{{- if and (eq $wk 8) (eq .crop "horizontal") }}{{ $nameWk = 2 }}{{ end -}}
 {{- $namePath := printf "images/midterms/week%d-names/%s/%s.png" $nameWk .crop (lower $s.code) -}}
 {{- with resources.Get $namePath -}}
   {{- $filters = $filters | append (images.Overlay . 0 0) -}}
@@ -80,6 +99,37 @@
        "bullet" is a dot and a line indented under it. A **bold** opening
        becomes the label. */ -}}
 {{- $blocks := slice -}}
+
+{{- if eq $wk 8 -}}
+  {{- /* Election Day: same-day registration where the state has it at all
+         today, then how a mail ballot still out can get back. By mail is
+         now too late in a state that wants it received, and a gamble where
+         a postmark counts, so the line says so and points to a drop-off
+         when there is one still open today. */ -}}
+  {{- $c := .copy -}}
+  {{- if $s.sdr_election_day -}}
+    {{- $where := index ($c.sdr_where_states | default dict) $s.code | default $c.sdr_where -}}
+    {{- $blocks = $blocks | append (dict "kind" "lead"
+          "line" (replace (replace $c.sdr "{state}" $s.name) "{where}" $where)) -}}
+  {{- end -}}
+  {{- $inPerson := index ($c.in_person_states | default dict) $s.code -}}
+  {{- if and (not $inPerson) (eq $s.return_in_person "Tue, Nov 3") -}}
+    {{- $date := partial "midterms-card-date.html" $s.return_in_person -}}
+    {{- with $s.return_in_person_time }}{{ $date = printf "%s at %s" $date . }}{{ end -}}
+    {{- $inPerson = replace $c.in_person "{date}" $date -}}
+  {{- end -}}
+  {{- $date := partial "midterms-card-date.html" $s.return_mail -}}
+  {{- with $s.return_mail_time }}{{ $date = printf "%s at %s" $date . }}{{ end -}}
+  {{- $mail := cond (eq $s.return_mail_received false) "mail_postmarked" "mail_received" -}}
+  {{- if not $inPerson }}{{ $mail = printf "%s_no_dropoff" $mail }}{{ end -}}
+  {{- $where := "by mail" -}}
+  {{- with $s.return_methods }}{{ $where = printf "%s, by mail" . }}{{ end -}}
+  {{- $blocks = $blocks | append (dict "kind" "lead" "line" (replace $c.return "{methods}" $where)) -}}
+  {{- $blocks = $blocks | append (dict "kind" "bullet" "line" (replace (index $c $mail) "{date}" $date)) -}}
+  {{- with $inPerson -}}
+    {{- $blocks = $blocks | append (dict "kind" "bullet" "line" .) -}}
+  {{- end -}}
+{{- else -}}
 
 {{- if $s.early_voting -}}
   {{- $line := "" -}}
@@ -159,6 +209,7 @@
   {{- $blocks = $blocks | append
         (dict "kind" "lead" "line" (printf "**Return your absentee/by-mail ballot:** %s" $where)) -}}
   {{- $blocks = $blocks | append $returns -}}
+{{- end -}}
 {{- end -}}
 
 {{- /* images.Text wraps any text that runs within 20px of the image's right
@@ -251,6 +302,12 @@
   {{- end -}}
   {{- $room := sub (sub $m.floor (mul $descInk $size)) $firstBase -}}
   {{- if or (le $total $room) (eq $size (index $m.sizes (sub (len $m.sizes) 1))) -}}
+    {{- /* Week eight's lines run from two to eight, so a short block sits
+           in the middle of the panel rather than at its top. */ -}}
+    {{- if $m.center -}}
+      {{- $slack := sub $room $total -}}
+      {{- if gt $slack 0 }}{{ $firstBase = add $firstBase (div $slack 2) }}{{ end -}}
+    {{- end -}}
     {{- $layout = dict "rows" $rows "size" $size "firstBase" $firstBase -}}
     {{- break -}}
   {{- end -}}

@@ -13,7 +13,8 @@
   Week one has its real art, drawn by midterms-card-week1.html. Week six has
   two sets, picked by an optional "set": none for "I know where I'm voting",
   "early" for "I voted early!". Week seven is laid out the same: none for "I
-  tracked my ballot", "early" for "I'm ready to vote".
+  tracked my ballot", "early" for "I'm ready to vote". Week eight has one set,
+  "I voted!".
 
   A week with a `card` block in data/midterms.yml has one finished image per
   crop, the same for every state (week four), used as is. A crop it does not
@@ -30,6 +31,11 @@
          per `set`. */ -}}
   {{- $v := index site.Data.midterms_voting.states .state.code -}}
   {{- $card = partial "midterms-card-week2.html" (dict "crop" .crop "state" $v "week" .week.number "set" .set) -}}
+{{- else if eq .week.number 8 -}}
+  {{- /* Week eight: "I voted!", the same card again, with the rules that
+         still matter on Election Day, worded by the week's card_copy. */ -}}
+  {{- $v := index site.Data.midterms_voting.states .state.code -}}
+  {{- $card = partial "midterms-card-week2.html" (dict "crop" .crop "state" $v "week" 8 "copy" .week.card_copy) -}}
 {{- else if .week.state_voting -}}
   {{- /* Week two draws from the voting-options data rather than the
          registration deck, so it takes that state's entry instead. */ -}}

@@ -4,7 +4,7 @@
 # Which week is live right now. Weeks before this are "done", weeks after are
 # "upcoming". Set this to 0 before the program starts: the page then renders
 # the week_zero block below instead of a weekly action, and nothing unlocks.
-current_week: 7
+current_week: 8
 
 nav:
   nudge: Get reminders
@@ -1032,31 +1032,93 @@ weeks:
 
   - number: 8
     short: Vote
-    title: Vote
+    title: "Last Call: VOTE!"
     state_specific: false
     release: 2026-11-03T09:00:00-08:00
-    intro: >-
-      SAMPLE COPY — election day. Real text goes here: two sentences that carry
-      eight weeks of small things over the line, ending on the one thing to do.
-    headline: SAMPLE HEADER LINE FOR THIS WEEK
+    intro:
+      - >-
+        You’ve done most of the hard work already, so it’s time to bring it
+        home. Here are your Election Day marching orders:
+      - >-
+        **Voting in-person?** Double check your polling location, grab your ID
+        if your state requires one, and go! And we know you’ve heard it a
+        million times before, but if you’re still in line when the polls close,
+        **STAY IN LINE**. You have the right to vote. Don’t let anyone tell you
+        otherwise, and don’t leave.
+      - >-
+        **Any questions about voting or issues at the polls?** Call the Election
+        Protection Hotline at **866-OUR-VOTE**. (That’s 866-687-8683.) Save the
+        number in your phone before you head out.
+      - >-
+        **Already mailed your ballot?** [Track it.](https://www.voteamerica.org/ballot-tracker/)
+        Most states let you confirm that your ballot was received and counted.
+        If there’s a problem, you may still be able to fix it.
+      - >-
+        **Still holding onto your mail ballot?** What are you doing??! Drop it
+        off ASAP! It’s too late to mail it, so take it to an official drop box
+        or your local election office before the polls close.
+      - >-
+        **Think you can’t vote because you missed the registration deadline?**
+        Not necessarily! Some states offer same-day voter registration, right
+        at the polls.
+    headline: Get ready for Election Day
     headline_date: Tue, Nov 3
-    message: >-
-      SAMPLE MESSAGE — placeholder standing in for this week's wording. It runs
-      about three short sentences and roughly this many words, so the card can
-      be judged at the size it will really be.
-    copy_cta: button1
-    rewrite_cta: button2
-    confirm: I did it — unlock my images
-    # FPO: placeholder copy, replace before this week ships.
+    # The copy doc leaves the box's message blank, so week seven's lines with a
+    # button out stand in for it. FPO: these lines are ours, not the doc's.
+    links:
+      - text: Find your polling place, or the nearest drop box for your ballot.
+        label: Find where to vote
+        url: https://www.voteamerica.org/where-to-vote/
+      - text: Already mailed your ballot? Make sure it was received and counted.
+        label: Track my ballot
+        url: https://www.voteamerica.org/ballot-tracker/
+    confirm: I voted - unlock my achievement graphics!
+    # The share modal's prefilled words for the week's cards ("I voted!").
+    # FPO: placeholder wording.
+    share_text:
+      threads: "I voted! Join me with @5calls and 5 Minute Midterms"
+      bsky: "I voted! Join me with @5calls.org and 5 Minute Midterms"
+      x: "I voted! Join me with @make5calls and 5 Minute Midterms"
+    # The "I voted!" cards' copy, set by layouts/partials/midterms-card-week2.html
+    # from each state's data/midterms_voting.yml entry as it stands on Election
+    # Day. **Bold** sets a line's label; a line all in bold is bold throughout.
+    card_copy:
+      # Only for a state with same-day registration on Election Day itself.
+      # {where} is sdr_where, or the state's own from sdr_where_states where
+      # it doesn't happen at the polling place.
+      sdr: "**{state} has same-day registration, register to vote {where}!**"
+      sdr_where: at the polls
+      sdr_where_states:
+        CT: at your town’s same-day registration location
+        HI: at a voter service center
+        IL: at a grace period registration site
+        MI: at your local clerk’s office
+        MT: at your local election office
+        WA: at your county elections office or voting center
+      return: "**Return your absentee/by-mail ballot:** {methods}"
+      # By mail, by whether the deadline is a postmark or the ballot arriving,
+      # and whether there's still somewhere to drop it off on Election Day.
+      mail_postmarked: "By mail: Postmarked by {date} (Highly discouraged, use a drop-off location!)"
+      mail_postmarked_no_dropoff: "By mail: Postmarked by {date} (Take it to a post office today!)"
+      mail_received: "By mail: Received by {date} (Too late to mail, use a drop-off location!)"
+      mail_received_no_dropoff: "By mail: Received by {date} (Too late to mail!)"
+      # Only where in-person return is still open on Election Day.
+      in_person: "In person: Received by {date}"
+      # Connecticut's clerks stop taking ballots the day before, but its drop
+      # boxes stay open until the polls close.
+      in_person_states:
+        CT: "Drop box: Received by Nov 3 at 8PM"
+    # No extra credit this week.
     why:
-      heading: Eight weeks of small things end with the one that counts.
+      # FPO: the copy doc has no heading for this week.
+      heading: Early voters are already breaking records.
       stats:
-        - value: Poll hours
-          text: vary by state — check yours before you head out.
-        - value: In line
-          text: when polls close still means you get to vote.
-        - value: Done
-          text: that's the whole program. Thanks for doing it.
+        - value: North Carolina
+          text: has witnessed the [highest early voting participation in 26 years](https://www.wral.com/video/record-early-voting-turnout-in-north-carolina-midterms-october-2026/).
+        - value: Georgia
+          text: voters have [broken the state’s record for in-person early voting](https://www.wabe.org/georgia-breaks-early-in-person-voting-record-for-midterm-election/) in a midterm election.
+        - value: Texas
+          text: is [on track for record voter turnout](https://www.nbcdfw.com/news/local/record-texas-turnout-possible-as-early-voting-points-to-a-close-election/4096611/) with a surge of early voting.
 
 # The smaller second line under every week's confirm checkbox. The big line is
 # the week's own `confirm`; this one says what ticking the box does and reads

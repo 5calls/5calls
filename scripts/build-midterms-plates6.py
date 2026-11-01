@@ -77,7 +77,7 @@ def plate(comp, c):
     px = img.load()
     left, right = c["name"]
     for x in range(left, right + 1):
-        for y in range(int(top_at(c, x)) - 4, c["base"] + 1):
+        for y in range(max(0, int(top_at(c, x)) - 4), c["base"] + 1):
             if on_blend(px[x, y], ORANGE, CREAM):
                 px[x, y] = CREAM
     x0, y0, x1, y1 = c["rules"]
