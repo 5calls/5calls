@@ -549,6 +549,13 @@
                     {{- partial "midterms-vote-now.html" (dict "state" (index site.Data.midterms_voting.states $d.state.abbr) "copy" .) | safeHTML -}}
                   </div>
                 {{- end }}
+                {{- /* Week eight: the "I voted!" cards' lines for the reader's
+                       state, swapped by the state picker the same way. */ -}}
+                {{- with $week.card_copy }}
+                  <div class="mt-deck__body" data-state-where>
+                    {{- partial "midterms-voted-html.html" (dict "state" (index site.Data.midterms_voting.states $d.state.abbr) "copy" .) | safeHTML -}}
+                  </div>
+                {{- end }}
                 {{- /* Week seven: in place of a message and its buttons, a
                        line of text and a button out for each of `links`. */ -}}
                 {{- with $week.links }}
@@ -989,6 +996,10 @@
       {{- with $week.vote_now -}}
         {{- $entry = merge $entry (dict
             "where" (partial "midterms-vote-now.html" (dict "state" (index site.Data.midterms_voting.states $code) "copy" .))) -}}
+      {{- end -}}
+      {{- with $week.card_copy -}}
+        {{- $entry = merge $entry (dict
+            "where" (partial "midterms-voted-html.html" (dict "state" (index site.Data.midterms_voting.states $code) "copy" .))) -}}
       {{- end -}}
       {{- with $week.extra_credit }}{{ with .handbook -}}
         {{- $entry = merge $entry (dict

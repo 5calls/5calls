@@ -1033,32 +1033,33 @@ weeks:
   - number: 8
     short: Vote
     title: "Last Call: VOTE!"
-    state_specific: false
+    state_specific: true
     release: 2026-11-03T09:00:00-08:00
     intro:
       - >-
         You’ve done most of the hard work already, so it’s time to bring it
         home. Here are your Election Day marching orders:
+      - h3: Voting in-person?
       - >-
-        **Voting in-person?** Double check your polling location, grab your ID
-        if your state requires one, and go! And we know you’ve heard it a
-        million times before, but if you’re still in line when the polls close,
-        **STAY IN LINE**. You have the right to vote. Don’t let anyone tell you
+        Double check your polling location, grab your ID if your state requires
+        one, and go! And we know you’ve heard it a million times before, but if
+        you’re still in line when the polls close, **STAY IN LINE**. You have the right to vote. Don’t let anyone tell you
         otherwise, and don’t leave.
+      - h3: Any questions about voting or issues at the polls?
       - >-
-        **Any questions about voting or issues at the polls?** Call the Election
-        Protection Hotline at **866-OUR-VOTE**. (That’s 866-687-8683.) Save the
-        number in your phone before you head out.
+        Call the Election Protection Hotline at **866-OUR-VOTE**. (That’s
+        866-687-8683.) Save the number in your phone before you head out.
+      - h3: Already mailed your ballot?
       - >-
-        **Already mailed your ballot?** [Track it.](https://www.voteamerica.org/ballot-tracker/)
+        [Track it.](https://www.voteamerica.org/ballot-tracker/)
         Most states let you confirm that your ballot was received and counted.
         If there’s a problem, you may still be able to fix it.
+      - h3: Still holding onto your mail ballot?
       - >-
-        **Still holding onto your mail ballot?** What are you doing??! Drop it
-        off ASAP! It’s too late to mail it, so take it to an official drop box
+        What are you doing??! Drop it off ASAP! It’s too late to mail it, so take it to an official drop box
         or your local election office before the polls close.
+      - h3: Think you can’t vote because you missed the registration deadline?
       - >-
-        **Think you can’t vote because you missed the registration deadline?**
         Not necessarily! Some states offer same-day voter registration, right
         at the polls.
     headline: Get ready for Election Day

@@ -101,34 +101,8 @@
 {{- $blocks := slice -}}
 
 {{- if eq $wk 8 -}}
-  {{- /* Election Day: same-day registration where the state has it at all
-         today, then how a mail ballot still out can get back. By mail is
-         now too late in a state that wants it received, and a gamble where
-         a postmark counts, so the line says so and points to a drop-off
-         when there is one still open today. */ -}}
-  {{- $c := .copy -}}
-  {{- if $s.sdr_election_day -}}
-    {{- $where := index ($c.sdr_where_states | default dict) $s.code | default $c.sdr_where -}}
-    {{- $blocks = $blocks | append (dict "kind" "lead"
-          "line" (replace (replace $c.sdr "{state}" $s.name) "{where}" $where)) -}}
-  {{- end -}}
-  {{- $inPerson := index ($c.in_person_states | default dict) $s.code -}}
-  {{- if and (not $inPerson) (eq $s.return_in_person "Tue, Nov 3") -}}
-    {{- $date := partial "midterms-card-date.html" $s.return_in_person -}}
-    {{- with $s.return_in_person_time }}{{ $date = printf "%s at %s" $date . }}{{ end -}}
-    {{- $inPerson = replace $c.in_person "{date}" $date -}}
-  {{- end -}}
-  {{- $date := partial "midterms-card-date.html" $s.return_mail -}}
-  {{- with $s.return_mail_time }}{{ $date = printf "%s at %s" $date . }}{{ end -}}
-  {{- $mail := cond (eq $s.return_mail_received false) "mail_postmarked" "mail_received" -}}
-  {{- if not $inPerson }}{{ $mail = printf "%s_no_dropoff" $mail }}{{ end -}}
-  {{- $where := "by mail" -}}
-  {{- with $s.return_methods }}{{ $where = printf "%s, by mail" . }}{{ end -}}
-  {{- $blocks = $blocks | append (dict "kind" "lead" "line" (replace $c.return "{methods}" $where)) -}}
-  {{- $blocks = $blocks | append (dict "kind" "bullet" "line" (replace (index $c $mail) "{date}" $date)) -}}
-  {{- with $inPerson -}}
-    {{- $blocks = $blocks | append (dict "kind" "bullet" "line" .) -}}
-  {{- end -}}
+  {{- /* Election Day's lines, shared with the week's action box. */ -}}
+  {{- $blocks = partial "midterms-voted.html" (dict "state" $s "copy" .copy) -}}
 {{- else -}}
 
 {{- if $s.early_voting -}}
