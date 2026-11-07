@@ -34,6 +34,12 @@ from = "/more"
 status = 301
 to = "/all/"
 
+# 5 Minute Midterms ran Sep-Nov 2026; send old and shared links home
+[[redirects]]
+from = "/midterms/*"
+status = 301
+to = "/"
+
 # fake dynamic paths for group pages
 [[redirects]]
 from = "/groups/*"
