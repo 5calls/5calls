@@ -11,6 +11,7 @@ import { getContacts, postOutcomeData } from '../utils/api';
 import ContactUtils from '../utils/contactUtils';
 import { useSettings } from '../utils/useSettings';
 import ActiveContact from './ActiveContact';
+import RepNotice from './RepNotice';
 import stateNameFromAbbr from '../utils/stateNames';
 import * as Constants from '../common/constants';
 
@@ -442,6 +443,7 @@ class Reps extends React.Component<
 
     return (
       <div ref={this.componentRef}>
+        <RepNotice notice={this.state.contactList.notice} />
         <ul>
           {targetedContacts.map((contact, index) =>
             this.contactComponent(

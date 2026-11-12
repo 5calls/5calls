@@ -10,12 +10,21 @@ export enum ContactArea {
   StateLower = 'StateLower'
 }
 
+// A message from the API shown above the reps, e.g. explaining that newly
+// elected reps appear once they're sworn in. Set and removed server-side.
+export interface RepNotice {
+  id: number;
+  text: string;
+  expiresAt: string | null;
+}
+
 export class ContactList {
   public location: string;
   public lowAccuracy: boolean;
   public state: string;
   public district: string;
   public representatives: Contact[];
+  public notice?: RepNotice;
 
   constructor() {
     this.location = '';

@@ -4,7 +4,7 @@ import * as querystring from 'querystring';
 import OneSignal from 'react-onesignal';
 
 import { Contact } from '../common/models/contact';
-import { ContactList } from '../common/models/contactList';
+import { ContactList, RepNotice } from '../common/models/contactList';
 import * as Constants from '../common/constants';
 import {
   OutcomeData,
@@ -21,6 +21,7 @@ interface ContactResponse {
   state: string;
   district: string;
   representatives: Contact[];
+  notice?: RepNotice | null;
 }
 
 export const getContacts = async (
@@ -52,6 +53,7 @@ export const getContacts = async (
       contactList.representatives = result.data.representatives;
       contactList.state = result.data.state;
       contactList.district = result.data.district;
+      contactList.notice = result.data.notice ?? undefined;
       if (contactList.generalizedLocationID() !== '-') {
         const districtId = contactList.generalizedLocationID();
         OneSignal.sendTag('districtID', districtId);
