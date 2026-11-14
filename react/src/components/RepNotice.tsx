@@ -6,14 +6,12 @@ interface Props {
   notice?: RepNoticeModel;
 }
 
-// Shows the API's rep notice above the reps list. What's shown, and when, is
-// controlled server-side; the expiry check here only covers a response that
-// was cached somewhere past the notice's end.
 const RepNotice = ({ notice }: Props) => {
   if (!notice || notice.text.trim() === '') {
     return null;
   }
 
+  // the API stops sending a notice when it expires, but a cached response can outlive it
   if (notice.expiresAt && new Date(notice.expiresAt).getTime() <= Date.now()) {
     return null;
   }

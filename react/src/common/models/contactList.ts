@@ -10,8 +10,6 @@ export enum ContactArea {
   StateLower = 'StateLower'
 }
 
-// A message from the API shown above the reps, e.g. explaining that newly
-// elected reps appear once they're sworn in. Set and removed server-side.
 export interface RepNotice {
   id: number;
   text: string;
