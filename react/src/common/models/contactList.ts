@@ -10,12 +10,19 @@ export enum ContactArea {
   StateLower = 'StateLower'
 }
 
+export interface RepNotice {
+  id: number;
+  text: string;
+  expiresAt: string | null;
+}
+
 export class ContactList {
   public location: string;
   public lowAccuracy: boolean;
   public state: string;
   public district: string;
   public representatives: Contact[];
+  public notice?: RepNotice;
 
   constructor() {
     this.location = '';

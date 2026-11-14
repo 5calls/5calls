@@ -148,6 +148,23 @@ body.issue {
     }
   }
 
+  .rep-notice {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    margin: 0 0 8px 0;
+    padding: 8px 10px;
+    font-size: 15px;
+    line-height: 1.4;
+    background-color: var(--c-info-box);
+    border-left: 3px solid var(--c-warning);
+
+    i {
+      color: var(--c-warning);
+      margin-top: 3px;
+    }
+  }
+
   .contact-warning {
     font-size: 1rem;
     color: var(--c-red);
