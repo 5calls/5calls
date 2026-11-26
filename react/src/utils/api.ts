@@ -230,7 +230,11 @@ export const postReferral = (
 // tracks user search terms for analytics
 export const postSearchTerm = async (searchTerm: string) => {
   try {
-    await axios.post(Constants.SEARCH_TERM_API_URL, { query: searchTerm });
+    await axios.post(Constants.SEARCH_TERM_API_URL, {
+      query: searchTerm,
+      via: 'web',
+      callerid: uuid.callerID()
+    });
   } catch (error) {
     // Silently fail - we don't want to disrupt the user experience
     console.debug('Failed to track search term:', error);
